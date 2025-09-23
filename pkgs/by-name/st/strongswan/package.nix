@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  bison,
-  flex,
-  curl,
-  perl,
-  gperf,
-  openssl,
-  pcsclite,
-  networkmanager,
-  openresolv,
-  glib,
-  systemd,
-  tpm2-tss,
-  libxml2,
-  pam,
-  iptables,
-  trousers,
-  sqlite,
-  unbound,
-  ldns,
-  gmp,
-  nixosTests,
-  enableNetworkManager ? false,
-  enableTNC ? false,
-  enableTPM2 ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, bison
+, flex
+, curl
+, perl
+, gperf
+, openssl
+, pcsclite
+, networkmanager
+, openresolv
+, glib
+, systemd
+, tpm2-tss
+, libxml2
+, pam
+, iptables
+, trousers
+, sqlite
+, unbound
+, ldns
+, gmp
+, nixosTests
+, enableNetworkManager ? false
+, enableTNC ? false
+, enableTPM2 ? false
+,
 }:
 let
   features = rec {
@@ -170,8 +170,10 @@ stdenv.mkDerivation rec {
   configureFlags = (lib.mapAttrsToList (lib.flip lib.enableFeature)) features ++ [
     "--sysconfdir=/etc"
     (lib.withFeatureAs (features.nm or false) "nm-ca-dir" "/etc/ssl/certs")
-    (lib.withFeatureAs (features.systemd or false
-    ) "systemdsystemunitdir" "${placeholder "out"}/etc/systemd/system")
+    (lib.withFeatureAs
+      (
+        features.systemd or false
+      ) "systemdsystemunitdir" "${placeholder "out"}/etc/systemd/system")
   ];
 
   installFlags = [

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  repeated-test,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, repeated-test
+,
 }:
 
 buildPythonPackage rec {

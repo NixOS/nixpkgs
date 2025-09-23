@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildDotnetModule,
-  fetchFromGitHub,
-  nodejs,
-  npmHooks,
-  fetchNpmDeps,
-  dotnetCorePackages,
+{ lib
+, stdenv
+, buildDotnetModule
+, fetchFromGitHub
+, nodejs
+, npmHooks
+, fetchNpmDeps
+, dotnetCorePackages
+,
 }:
 
 buildDotnetModule (finalAttrs: {

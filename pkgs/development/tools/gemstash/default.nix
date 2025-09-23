@@ -1,8 +1,8 @@
-{
-  lib,
-  bundlerApp,
-  bundlerUpdateScript,
-  nixosTests,
+{ lib
+, bundlerApp
+, bundlerUpdateScript
+, nixosTests
+,
 }:
 
 bundlerApp rec {

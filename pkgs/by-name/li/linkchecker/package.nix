@@ -1,9 +1,9 @@
-{
-  python3Packages,
-  lib,
-  fetchFromGitHub,
-  gettext,
-  pdfSupport ? true,
+{ python3Packages
+, lib
+, fetchFromGitHub
+, gettext
+, pdfSupport ? true
+,
 }:
 
 python3Packages.buildPythonApplication rec {

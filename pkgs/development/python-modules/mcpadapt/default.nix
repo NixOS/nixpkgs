@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  jsonref,
-  langchain,
-  langgraph,
-  llama-index,
-  mcp,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-dotenv,
-  smolagents,
-  soundfile,
-  torchaudio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, jsonref
+, langchain
+, langgraph
+, llama-index
+, mcp
+, pytest-asyncio
+, pytestCheckHook
+, python-dotenv
+, smolagents
+, soundfile
+, torchaudio
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  udev,
-  buildPackages,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, udev
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

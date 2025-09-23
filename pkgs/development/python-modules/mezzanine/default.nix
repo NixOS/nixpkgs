@@ -1,26 +1,26 @@
-{
-  lib,
-  beautifulsoup4,
-  bleach,
-  buildPythonPackage,
-  chardet,
-  django,
-  django-contrib-comments,
-  fetchFromGitHub,
-  filebrowser-safe,
-  grappelli-safe,
-  isPyPy,
-  pillow,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-django,
-  pythonOlder,
-  pytz,
-  requests,
-  requests-oauthlib,
-  requirements-parser,
-  setuptools,
-  tzlocal,
+{ lib
+, beautifulsoup4
+, bleach
+, buildPythonPackage
+, chardet
+, django
+, django-contrib-comments
+, fetchFromGitHub
+, filebrowser-safe
+, grappelli-safe
+, isPyPy
+, pillow
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-django
+, pythonOlder
+, pytz
+, requests
+, requests-oauthlib
+, requirements-parser
+, setuptools
+, tzlocal
+,
 }:
 
 buildPythonPackage rec {

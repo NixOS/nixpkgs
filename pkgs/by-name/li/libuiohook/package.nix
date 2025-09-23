@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nixosTests,
-  cmake,
-  pkg-config,
-  libX11,
-  libxcb,
-  libxkbcommon,
-  xinput,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, cmake
+, pkg-config
+, libX11
+, libxcb
+, libxkbcommon
+, xinput
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

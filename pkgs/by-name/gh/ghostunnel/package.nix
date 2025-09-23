@@ -1,14 +1,14 @@
-{
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  nixosTests,
-  ghostunnel,
-  apple-sdk_12,
-  darwinMinVersionHook,
-  writeScript,
-  runtimeShell,
+{ stdenv
+, buildGoModule
+, fetchFromGitHub
+, lib
+, nixosTests
+, ghostunnel
+, apple-sdk_12
+, darwinMinVersionHook
+, writeScript
+, runtimeShell
+,
 }:
 
 buildGoModule rec {

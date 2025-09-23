@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  makeImpureTest,
-  fetchFromGitHub,
-  clr,
-  cmake,
-  pkg-config,
-  glew,
-  libglut,
-  opencl-headers,
-  ocl-icd,
+{ lib
+, stdenv
+, makeImpureTest
+, fetchFromGitHub
+, clr
+, cmake
+, pkg-config
+, glew
+, libglut
+, opencl-headers
+, ocl-icd
+,
 }:
 
 let

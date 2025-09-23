@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  config,
-  acceptLicense ? config.joypixels.acceptLicense or false,
+{ lib
+, stdenv
+, fetchurl
+, config
+, acceptLicense ? config.joypixels.acceptLicense or false
+,
 }:
 
 let
@@ -16,8 +16,7 @@ let
         capitalized = systemTag;
         fontFile = "JoyPixels-SBIX.ttf";
       };
-    }
-    .${kernel.name} or {
+    }.${kernel.name} or {
       systemTag = "nixos";
       capitalized = "NixOS";
       fontFile = "joypixels-android.ttf";
@@ -78,8 +77,7 @@ stdenv.mkDerivation rec {
       sha256 =
         {
           darwin = "sha256-muUxXzz8BePyPsiZocYvM0ebM1H+u84ysN5YUvsMLiU=";
-        }
-        .${kernel.name} or "sha256-pmGsVgYSK/c5OlhOXhNlRBs/XppMXmsHcZeSmIkuED4=";
+        }.${kernel.name} or "sha256-pmGsVgYSK/c5OlhOXhNlRBs/XppMXmsHcZeSmIkuED4=";
     };
 
   dontUnpack = true;

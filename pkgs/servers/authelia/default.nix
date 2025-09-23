@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  nodejs,
-  pnpm,
-  fetchFromGitHub,
-  buildGoModule,
-  installShellFiles,
-  callPackage,
-  nixosTests,
-  authelia-web ? callPackage ./web.nix { inherit nodejs pnpm fetchFromGitHub; },
+{ lib
+, stdenv
+, nodejs
+, pnpm
+, fetchFromGitHub
+, buildGoModule
+, installShellFiles
+, callPackage
+, nixosTests
+, authelia-web ? callPackage ./web.nix { inherit nodejs pnpm fetchFromGitHub; }
+,
 }:
 
 let

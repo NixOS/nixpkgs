@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  earley,
-  timed,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, earley
+, timed
+,
 }:
 
 buildDunePackage rec {

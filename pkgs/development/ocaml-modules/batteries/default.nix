@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  ocaml,
-  ounit,
-  qtest,
-  qcheck,
-  num,
-  camlp-streams,
-  doCheck ? lib.versionAtLeast ocaml.version "4.08",
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ocaml
+, ounit
+, qtest
+, qcheck
+, num
+, camlp-streams
+, doCheck ? lib.versionAtLeast ocaml.version "4.08"
+,
 }:
 
 buildDunePackage rec {

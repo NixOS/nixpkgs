@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  SDL2,
-  libGL,
-  cmake,
-  makeWrapper,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, libGL
+, cmake
+, makeWrapper
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

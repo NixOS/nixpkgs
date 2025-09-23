@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  zlib,
-  lz4,
-  bzip2,
-  zstd,
-  spdlog,
-  tbb_2022,
-  openssl,
-  boost,
-  libpqxx,
-  clang-tools,
-  catch2_3,
-  python3,
-  doxygen,
-  fixDarwinDylibNames,
-  gtest,
-  rapidcheck,
-  libpng,
-  file,
-  runCommand,
-  curl,
-  capnproto,
-  useAVX2 ? stdenv.hostPlatform.avx2Support,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, zlib
+, lz4
+, bzip2
+, zstd
+, spdlog
+, tbb_2022
+, openssl
+, boost
+, libpqxx
+, clang-tools
+, catch2_3
+, python3
+, doxygen
+, fixDarwinDylibNames
+, gtest
+, rapidcheck
+, libpng
+, file
+, runCommand
+, curl
+, capnproto
+, useAVX2 ? stdenv.hostPlatform.avx2Support
+,
 }:
 
 let

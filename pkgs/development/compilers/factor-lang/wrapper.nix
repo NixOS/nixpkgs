@@ -1,38 +1,38 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  buildEnv,
-  factor-unwrapped,
-  cairo,
-  freealut,
-  gdk-pixbuf,
-  glib,
-  gnome2,
-  gtk2-x11,
-  libGL,
-  libGLU,
-  librsvg,
-  graphviz,
-  libogg,
-  libvorbis,
-  openal,
-  openssl,
-  pango,
-  pcre,
-  udis86,
-  zlib,
-  # Enable factor GUI support
-  guiSupport ? true,
-  # Libraries added to ld.so.cache
-  extraLibs ? [ ],
-  # Packages added to path (and ld.so.cache)
-  binPackages ? [ ],
-  # Extra vocabularies added to out/lib/factor
-  extraVocabs ? [ ],
-  # Enable default libs and bins to run most of the standard library code.
-  enableDefaults ? true,
-  doInstallCheck ? true,
+{ lib
+, stdenv
+, makeWrapper
+, buildEnv
+, factor-unwrapped
+, cairo
+, freealut
+, gdk-pixbuf
+, glib
+, gnome2
+, gtk2-x11
+, libGL
+, libGLU
+, librsvg
+, graphviz
+, libogg
+, libvorbis
+, openal
+, openssl
+, pango
+, pcre
+, udis86
+, zlib
+, # Enable factor GUI support
+  guiSupport ? true
+, # Libraries added to ld.so.cache
+  extraLibs ? [ ]
+, # Packages added to path (and ld.so.cache)
+  binPackages ? [ ]
+, # Extra vocabularies added to out/lib/factor
+  extraVocabs ? [ ]
+, # Enable default libs and bins to run most of the standard library code.
+  enableDefaults ? true
+, doInstallCheck ? true
+,
 }:
 let
   inherit (lib) optional optionals optionalString;

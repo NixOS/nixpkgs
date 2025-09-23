@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pillow,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitLab
+, pillow
+, pytestCheckHook
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "pypillowfight";

@@ -1,15 +1,15 @@
-{
-  lib,
-  ocaml,
-  fetchurl,
-  buildDunePackage,
-  eqaf,
-  alcotest,
-  astring,
-  bos,
-  crowbar,
-  findlib,
-  fpath,
+{ lib
+, ocaml
+, fetchurl
+, buildDunePackage
+, eqaf
+, alcotest
+, astring
+, bos
+, crowbar
+, findlib
+, fpath
+,
 }:
 
 buildDunePackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  recode,
-  perl,
-  rinutils,
-  fortune,
-  withOffensive ? false,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, recode
+, perl
+, rinutils
+, fortune
+, withOffensive ? false
+,
 }:
 
 stdenv.mkDerivation rec {

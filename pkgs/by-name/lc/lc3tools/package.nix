@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  flex,
-  tk,
-  ncurses,
-  readline,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, flex
+, tk
+, ncurses
+, readline
+,
 }:
 
 stdenv.mkDerivation {

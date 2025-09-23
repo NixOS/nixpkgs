@@ -1,25 +1,23 @@
-{
-  callPackage,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-
-  # Runtime dependencies
-  coreutils,
-  dmidecode,
-  gnugrep,
-  inetutils,
-  openssh,
-  pciutils,
-  perl,
-  procps,
-  rpm,
-  util-linux,
-  xterm,
-
-  # Dependencies
-  ipmitool,
+{ callPackage
+, lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, # Runtime dependencies
+  coreutils
+, dmidecode
+, gnugrep
+, inetutils
+, openssh
+, pciutils
+, perl
+, procps
+, rpm
+, util-linux
+, xterm
+, # Dependencies
+  ipmitool
+,
 }:
 
 let

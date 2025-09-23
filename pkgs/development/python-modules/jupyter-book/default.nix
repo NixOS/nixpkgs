@@ -1,39 +1,36 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  click,
-  jinja2,
-  jsonschema,
-  linkify-it-py,
-  myst-nb,
-  myst-parser,
-  pyyaml,
-  sphinx,
-  sphinx-comments,
-  sphinx-copybutton,
-  sphinx-external-toc,
-  sphinx-jupyterbook-latex,
-  sphinx-design,
-  sphinx-thebe,
-  sphinx-book-theme,
-  sphinx-togglebutton,
-  sphinxcontrib-bibtex,
-  sphinx-multitoc-numbering,
-
-  # tests
-  jupytext,
-  pytest-regressions,
-  pytest-xdist,
-  pytestCheckHook,
-  sphinx-inline-tabs,
-  texsoup,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  click
+, jinja2
+, jsonschema
+, linkify-it-py
+, myst-nb
+, myst-parser
+, pyyaml
+, sphinx
+, sphinx-comments
+, sphinx-copybutton
+, sphinx-external-toc
+, sphinx-jupyterbook-latex
+, sphinx-design
+, sphinx-thebe
+, sphinx-book-theme
+, sphinx-togglebutton
+, sphinxcontrib-bibtex
+, sphinx-multitoc-numbering
+, # tests
+  jupytext
+, pytest-regressions
+, pytest-xdist
+, pytestCheckHook
+, sphinx-inline-tabs
+, texsoup
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

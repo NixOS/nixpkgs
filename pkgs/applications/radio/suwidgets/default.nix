@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qmake,
-  qtbase,
-  pkg-config,
-  sigutils,
-  fftwSinglePrec,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, qtbase
+, pkg-config
+, sigutils
+, fftwSinglePrec
+,
 }:
 
 stdenv.mkDerivation {

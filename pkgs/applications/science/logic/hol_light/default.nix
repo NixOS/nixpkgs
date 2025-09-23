@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  runtimeShell,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
-  num,
-  zarith,
-  camlp5,
-  camlp-streams,
+{ lib
+, stdenv
+, runtimeShell
+, fetchFromGitHub
+, ocaml
+, findlib
+, num
+, zarith
+, camlp5
+, camlp-streams
+,
 }:
 
 let

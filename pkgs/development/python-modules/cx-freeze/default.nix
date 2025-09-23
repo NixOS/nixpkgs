@@ -1,29 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  filelock,
-  packaging,
-  tomli,
-
-  distutils,
-  pythonOlder,
-  ncurses,
-  patchelf,
-  dmgbuild,
-
-  # tests
-  ensureNewerSourcesForZipFilesHook,
-  pytest-mock,
-  pytestCheckHook,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  filelock
+, packaging
+, tomli
+, distutils
+, pythonOlder
+, ncurses
+, patchelf
+, dmgbuild
+, # tests
+  ensureNewerSourcesForZipFilesHook
+, pytest-mock
+, pytestCheckHook
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

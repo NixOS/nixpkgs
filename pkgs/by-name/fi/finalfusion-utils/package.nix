@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  blas,
-  gfortran,
-  lapack,
-  openssl,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, blas
+, gfortran
+, lapack
+, openssl
+,
 }:
 
 rustPlatform.buildRustPackage rec {

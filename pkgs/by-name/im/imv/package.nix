@@ -1,24 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromSourcehut,
-  fetchpatch,
-  asciidoc,
-  cmocka,
-  docbook_xsl,
-  libxslt,
-  meson,
-  ninja,
-  pkg-config,
-  icu75,
-  pango,
-  inih,
-  withWindowSystem ? if stdenv.hostPlatform.isLinux then "all" else "x11",
-  xorg,
-  libxkbcommon,
-  libGLU,
-  wayland,
-  withBackends ? [
+{ stdenv
+, lib
+, fetchFromSourcehut
+, fetchpatch
+, asciidoc
+, cmocka
+, docbook_xsl
+, libxslt
+, meson
+, ninja
+, pkg-config
+, icu75
+, pango
+, inih
+, withWindowSystem ? if stdenv.hostPlatform.isLinux then "all" else "x11"
+, xorg
+, libxkbcommon
+, libGLU
+, wayland
+, withBackends ? [
     "libjxl"
     "libtiff"
     "libjpeg"
@@ -26,15 +25,16 @@
     "librsvg"
     "libheif"
     "libnsgif"
-  ],
-  freeimage,
-  libtiff,
-  libjpeg_turbo,
-  libjxl,
-  libpng,
-  librsvg,
-  netsurf,
-  libheif,
+  ]
+, freeimage
+, libtiff
+, libjpeg_turbo
+, libjxl
+, libpng
+, librsvg
+, netsurf
+, libheif
+,
 }:
 
 let
@@ -61,17 +61,21 @@ let
     inherit (netsurf) libnsgif;
   };
 
-  backendFlags = builtins.map (
-    b: if builtins.elem b withBackends then "-D${b}=enabled" else "-D${b}=disabled"
-  ) (builtins.attrNames backends);
+  backendFlags = builtins.map
+    (
+      b: if builtins.elem b withBackends then "-D${b}=enabled" else "-D${b}=disabled"
+    )
+    (builtins.attrNames backends);
 in
 
 # check that given window system is valid
 assert lib.assertOneOf "withWindowSystem" withWindowSystem (builtins.attrNames windowSystems);
 # check that every given backend is valid
-assert builtins.all (
-  b: lib.assertOneOf "each backend" b (builtins.attrNames backends)
-) withBackends;
+assert builtins.all
+  (
+    b: lib.assertOneOf "each backend" b (builtins.attrNames backends)
+  )
+  withBackends;
 
 stdenv.mkDerivation rec {
   pname = "imv";

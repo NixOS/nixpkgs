@@ -1,9 +1,10 @@
-{
-  makeSetupHook,
-  teensy-cmake-macros,
+{ makeSetupHook
+, teensy-cmake-macros
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "teensy-cmake-macros-hook";
 
   propagatedBuildInputs = [ teensy-cmake-macros ];

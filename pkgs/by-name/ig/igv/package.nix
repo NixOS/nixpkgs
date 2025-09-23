@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  jdk17,
-  testers,
-  wrapGAppsHook3,
-  igv,
+{ lib
+, stdenv
+, fetchzip
+, jdk17
+, testers
+, wrapGAppsHook3
+, igv
+,
 }:
 
 stdenv.mkDerivation rec {

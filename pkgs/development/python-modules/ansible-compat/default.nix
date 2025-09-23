@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  pyyaml,
-  subprocess-tee,
-
-  # tests
-  coreutils,
-  ansible-core,
-  flaky,
-  pytest-mock,
-  pytest-instafail,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  pyyaml
+, subprocess-tee
+, # tests
+  coreutils
+, ansible-core
+, flaky
+, pytest-mock
+, pytest-instafail
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

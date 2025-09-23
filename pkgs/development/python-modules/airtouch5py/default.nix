@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  bitarray,
-  crc,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  bitarray
+, crc
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

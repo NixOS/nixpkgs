@@ -1,53 +1,47 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  flit-core,
-
-  # extras: babel
-  babel,
-  flask-babel,
-
-  # extras: common
-  argon2-cffi,
-  bcrypt,
-  bleach,
-  flask-mailman,
-
-  # extras: fsqla
-  flask-sqlalchemy,
-  sqlalchemy,
-  sqlalchemy-utils,
-
-  # extras: mfa
-  cryptography,
-  phonenumberslite,
-  webauthn,
-  qrcode,
-
-  # propagates
-  email-validator,
-  flask,
-  flask-login,
-  flask-principal,
-  flask-wtf,
-  libpass,
-  markupsafe,
-  passlib,
-  importlib-resources,
-  wtforms,
-
-  # tests
-  authlib,
-  flask-sqlalchemy-lite,
-  freezegun,
-  mongoengine,
-  mongomock,
-  peewee,
-  pytestCheckHook,
-  requests,
-  zxcvbn,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, flit-core
+, # extras: babel
+  babel
+, flask-babel
+, # extras: common
+  argon2-cffi
+, bcrypt
+, bleach
+, flask-mailman
+, # extras: fsqla
+  flask-sqlalchemy
+, sqlalchemy
+, sqlalchemy-utils
+, # extras: mfa
+  cryptography
+, phonenumberslite
+, webauthn
+, qrcode
+, # propagates
+  email-validator
+, flask
+, flask-login
+, flask-principal
+, flask-wtf
+, libpass
+, markupsafe
+, passlib
+, importlib-resources
+, wtforms
+, # tests
+  authlib
+, flask-sqlalchemy-lite
+, freezegun
+, mongoengine
+, mongomock
+, peewee
+, pytestCheckHook
+, requests
+, zxcvbn
+,
 }:
 
 buildPythonPackage rec {

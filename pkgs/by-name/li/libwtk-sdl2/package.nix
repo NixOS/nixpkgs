@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  boost,
-  SDL2,
-  SDL2_ttf,
-  SDL2_image,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, boost
+, SDL2
+, SDL2_ttf
+, SDL2_image
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

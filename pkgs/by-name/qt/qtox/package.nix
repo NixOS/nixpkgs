@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  perl,
-  kdePackages,
-  libtoxcore,
-  libpthreadstubs,
-  libXdmcp,
-  libXScrnSaver,
-  ffmpeg,
-  filter-audio,
-  libexif,
-  libsodium,
-  libopus,
-  libvpx,
-  openal,
-  pcre,
-  qrencode,
-  qt6,
-  sqlcipher,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, perl
+, kdePackages
+, libtoxcore
+, libpthreadstubs
+, libXdmcp
+, libXScrnSaver
+, ffmpeg
+, filter-audio
+, libexif
+, libsodium
+, libopus
+, libvpx
+, openal
+, pcre
+, qrencode
+, qt6
+, sqlcipher
+,
 }:
 
 stdenv.mkDerivation rec {

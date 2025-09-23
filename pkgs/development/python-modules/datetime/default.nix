@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  pytz,
-  zope-interface,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, pytz
+, zope-interface
+,
 }:
 
 buildPythonPackage rec {

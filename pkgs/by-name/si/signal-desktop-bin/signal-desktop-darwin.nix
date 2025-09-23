@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  _7zz,
+{ stdenv
+, lib
+, fetchurl
+, _7zz
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "signal-desktop-bin";

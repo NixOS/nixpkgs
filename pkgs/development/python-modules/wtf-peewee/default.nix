@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  peewee,
-  wtforms,
-  python,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, peewee
+, wtforms
+, python
+,
 }:
 
 buildPythonPackage rec {

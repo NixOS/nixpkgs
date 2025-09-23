@@ -1,11 +1,11 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  gzip,
-  gnutar,
-  lzfse,
-  nix-update-script,
+{ lib
+, python3
+, fetchFromGitHub
+, gzip
+, gnutar
+, lzfse
+, nix-update-script
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

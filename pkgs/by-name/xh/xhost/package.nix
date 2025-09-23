@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  xorgproto,
-  libx11,
-  libxau,
-  libxmu,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, xorgproto
+, libx11
+, libxau
+, libxmu
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xhost";

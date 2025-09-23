@@ -1,22 +1,22 @@
-{
-  buildDotnetModule,
-  cargo-about,
-  cargo-tauri,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  glib-networking,
-  lib,
-  libsoup_3,
-  makeBinaryWrapper,
-  nodejs,
-  npmHooks,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  wrapGAppsHook4,
-  webkitgtk_4_1,
+{ buildDotnetModule
+, cargo-about
+, cargo-tauri
+, dotnetCorePackages
+, fetchFromGitHub
+, fetchNpmDeps
+, glib-networking
+, lib
+, libsoup_3
+, makeBinaryWrapper
+, nodejs
+, npmHooks
+, openssl
+, pkg-config
+, rustPlatform
+, stdenv
+, wrapGAppsHook4
+, webkitgtk_4_1
+,
 }:
 let
   pname = "alcom";

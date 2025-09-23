@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  prometheus-client,
-  pyserial,
-  pythonOlder,
-  pyyaml,
-  legacy-cgi,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, prometheus-client
+, pyserial
+, pythonOlder
+, pyyaml
+, legacy-cgi
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

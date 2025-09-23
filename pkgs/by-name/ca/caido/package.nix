@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  appimageTools,
-  makeWrapper,
-  autoPatchelfHook,
-  libgcc,
-  appVariants ? [ ],
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, makeWrapper
+, autoPatchelfHook
+, libgcc
+, appVariants ? [ ]
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libevent,
-  libtirpc,
+{ lib
+, stdenv
+, fetchurl
+, libevent
+, libtirpc
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  aiohttp,
-  aresponses,
-  async-timeout,
-  backoff,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  sigstore,
-  writableTmpDirAsHomeHook,
+{ lib
+, aiohttp
+, aresponses
+, async-timeout
+, backoff
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, sigstore
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

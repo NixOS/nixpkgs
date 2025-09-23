@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  fetchPypi,
-  numpy,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, cython
+, fetchPypi
+, numpy
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

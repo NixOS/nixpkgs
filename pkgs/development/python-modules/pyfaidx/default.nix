@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  glibcLocales,
-  importlib-metadata,
-  packaging,
-  htslib,
-  fsspec,
-  pytestCheckHook,
-  biopython,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, glibcLocales
+, importlib-metadata
+, packaging
+, htslib
+, fsspec
+, pytestCheckHook
+, biopython
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

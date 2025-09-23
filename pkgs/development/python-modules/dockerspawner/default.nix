@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  jupyterhub,
-  escapism,
-  docker,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, jupyterhub
+, escapism
+, docker
+,
 }:
 
 buildPythonPackage rec {

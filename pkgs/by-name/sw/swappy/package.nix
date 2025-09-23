@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  wayland,
-  cairo,
-  pango,
-  gtk3,
-  pkg-config,
-  scdoc,
-  libnotify,
-  glib,
-  wrapGAppsHook3,
-  hicolor-icon-theme,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, wayland
+, cairo
+, pango
+, gtk3
+, pkg-config
+, scdoc
+, libnotify
+, glib
+, wrapGAppsHook3
+, hicolor-icon-theme
+,
 }:
 
 stdenv.mkDerivation rec {

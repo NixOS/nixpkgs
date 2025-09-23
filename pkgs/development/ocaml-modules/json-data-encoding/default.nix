@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitLab,
-  buildDunePackage,
-  hex,
-  uri,
+{ lib
+, fetchFromGitLab
+, buildDunePackage
+, hex
+, uri
+,
 }:
 
 buildDunePackage rec {

@@ -1,24 +1,24 @@
-{
-  lib,
-  runCommand,
-  clippy-unwrapped,
-  rustc-unwrapped,
-  makeWrapper,
+{ lib
+, runCommand
+, clippy-unwrapped
+, rustc-unwrapped
+, makeWrapper
+,
 }:
 
 runCommand "${clippy-unwrapped.pname}-wrapper-${clippy-unwrapped.version}"
-  {
-    preferLocalBuild = true;
-    strictDeps = true;
-    inherit (clippy-unwrapped) outputs;
+{
+  preferLocalBuild = true;
+  strictDeps = true;
+  inherit (clippy-unwrapped) outputs;
 
-    nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-    meta = clippy-unwrapped.meta // {
-      description = "${clippy-unwrapped.meta.description} (wrapper script)";
-      priority = 10;
-    };
-  }
+  meta = clippy-unwrapped.meta // {
+    description = "${clippy-unwrapped.meta.description} (wrapper script)";
+    priority = 10;
+  };
+}
 
   ''
     mkdir -p $out/bin

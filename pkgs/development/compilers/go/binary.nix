@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  version,
-  hashes,
+{ lib
+, stdenv
+, fetchurl
+, version
+, hashes
+,
 }:
 let
   platform = with stdenv.hostPlatform.go; "${GOOS}-${if GOARCH == "arm" then "armv6l" else GOARCH}";

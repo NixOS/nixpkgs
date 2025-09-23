@@ -4,9 +4,8 @@
 { pkgs }:
 
 # The module
-{
-  lib,
-  ...
+{ lib
+, ...
 }:
 let
   inherit (lib) mkOption types;

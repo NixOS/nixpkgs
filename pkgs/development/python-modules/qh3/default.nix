@@ -1,14 +1,14 @@
-{
-  buildPythonPackage,
-  cmake,
-  cryptography,
-  fetchFromGitHub,
-  lib,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  rustPlatform,
-  stdenv,
+{ buildPythonPackage
+, cmake
+, cryptography
+, fetchFromGitHub
+, lib
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, rustPlatform
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

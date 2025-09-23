@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  desktop-file-utils,
-  gjs,
-  gobject-introspection,
-  gtksourceview5,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  wrapGAppsHook4,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, desktop-file-utils
+, gjs
+, gobject-introspection
+, gtksourceview5
+, gtk4
+, libadwaita
+, meson
+, ninja
+, wrapGAppsHook4
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

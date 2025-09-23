@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  certifi,
-  cryptography,
-  fetchPypi,
-  openssl,
-  pylsqpack,
-  pyopenssl,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  service-identity,
+{ lib
+, buildPythonPackage
+, certifi
+, cryptography
+, fetchPypi
+, openssl
+, pylsqpack
+, pyopenssl
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, service-identity
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wheel,
-  more-itertools,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wheel
+, more-itertools
+, numpy
+,
 }:
 
 buildPythonPackage rec {

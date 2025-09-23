@@ -1,15 +1,15 @@
-{
-  lib,
-  adal,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpretty,
-  mock,
-  msrest,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, adal
+, buildPythonPackage
+, fetchFromGitHub
+, httpretty
+, mock
+, msrest
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

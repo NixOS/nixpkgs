@@ -1,12 +1,12 @@
-{
-  callPackage,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitMinimal,
-  zsh,
-  zlib,
-  runtimeShell,
+{ callPackage
+, lib
+, stdenv
+, fetchFromGitHub
+, gitMinimal
+, zsh
+, zlib
+, runtimeShell
+,
 }:
 stdenv.mkDerivation rec {
   pname = "gitstatus";

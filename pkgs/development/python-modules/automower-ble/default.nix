@@ -1,11 +1,11 @@
-{
-  lib,
-  bleak,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, bleak
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

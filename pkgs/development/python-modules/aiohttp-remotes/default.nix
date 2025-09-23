@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  pytest-aiohttp,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, pytest-aiohttp
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

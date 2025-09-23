@@ -1,19 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  file,
-  docbook-xsl-nons,
-  gtk-doc ? null,
-  buildDevDoc ? gtk-doc != null,
-
-  # for passthru.tests
-  gnuradio,
-  gst_all_1,
-  qt6,
-  vips,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, file
+, docbook-xsl-nons
+, gtk-doc ? null
+, buildDevDoc ? gtk-doc != null
+, # for passthru.tests
+  gnuradio
+, gst_all_1
+, qt6
+, vips
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenv,
-  installShellFiles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+, installShellFiles
+,
 }:
 
 buildGoModule (finalAttrs: {

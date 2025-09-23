@@ -1,34 +1,34 @@
-{
-  appstream-glib,
-  applyPatches,
-  cairo,
-  cargo,
-  desktop-file-utils,
-  fetchFromGitLab,
-  gdb,
-  gdk-pixbuf,
-  git,
-  glib,
-  gtk4,
-  gtksourceview5,
-  lib,
-  libadwaita,
-  libgit2,
-  libusb1,
-  meson,
-  ninja,
-  nix-update-script,
-  openssl,
-  openxr-loader,
-  pango,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  stdenv,
-  vte-gtk4,
-  versionCheckHook,
-  wrapGAppsHook4,
-  zlib,
+{ appstream-glib
+, applyPatches
+, cairo
+, cargo
+, desktop-file-utils
+, fetchFromGitLab
+, gdb
+, gdk-pixbuf
+, git
+, glib
+, gtk4
+, gtksourceview5
+, lib
+, libadwaita
+, libgit2
+, libusb1
+, meson
+, ninja
+, nix-update-script
+, openssl
+, openxr-loader
+, pango
+, pkg-config
+, rustPlatform
+, rustc
+, stdenv
+, vte-gtk4
+, versionCheckHook
+, wrapGAppsHook4
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

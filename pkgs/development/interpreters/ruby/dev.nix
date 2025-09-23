@@ -3,11 +3,11 @@
   together. This avoids version conflicts where each is using a different
   version of each-other.
 */
-{
-  buildEnv,
-  ruby,
-  bundler,
-  bundix,
+{ buildEnv
+, ruby
+, bundler
+, bundix
+,
 }:
 let
   bundler_ = bundler.override {

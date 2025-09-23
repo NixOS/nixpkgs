@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  runCommand,
-  cargo,
-  meson,
-  ninja,
-  pkg-config,
-  gst_all_1,
-  protobuf,
-  libspelling,
-  libsecret,
-  libadwaita,
-  gtksourceview5,
-  rustPlatform,
-  rustc,
-  yq,
-  appstream,
-  blueprint-compiler,
-  desktop-file-utils,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchFromGitLab
+, runCommand
+, cargo
+, meson
+, ninja
+, pkg-config
+, gst_all_1
+, protobuf
+, libspelling
+, libsecret
+, libadwaita
+, gtksourceview5
+, rustPlatform
+, rustc
+, yq
+, appstream
+, blueprint-compiler
+, desktop-file-utils
+, wrapGAppsHook4
+,
 }:
 
 let
@@ -54,8 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
       };
     in
     # Replace with simpler solution:
-    # https://github.com/NixOS/nixpkgs/pull/432651#discussion_r2312796706
-    # depending on sqlx release and update in flare-signal
+      # https://github.com/NixOS/nixpkgs/pull/432651#discussion_r2312796706
+      # depending on sqlx release and update in flare-signal
     runCommand "${finalAttrs.pname}-${finalAttrs.version}-vendor-patched" { inherit cargoDeps; }
       # https://github.com/flathub/de.schmidhuberj.Flare/commit/b1352087beaf299569c798bc69e31660712853db
       # bash

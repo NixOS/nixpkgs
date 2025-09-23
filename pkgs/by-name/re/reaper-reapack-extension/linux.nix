@@ -1,21 +1,20 @@
-{
-  boost,
-  catch2_3,
-  cmake,
-  curl,
-  fetchFromGitHub,
-  git,
-  libxml2,
-  openssl,
-  php,
-  ruby,
-  sqlite,
-  stdenv,
-  zlib,
-
-  pname,
-  version,
-  meta,
+{ boost
+, catch2_3
+, cmake
+, curl
+, fetchFromGitHub
+, git
+, libxml2
+, openssl
+, php
+, ruby
+, sqlite
+, stdenv
+, zlib
+, pname
+, version
+, meta
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

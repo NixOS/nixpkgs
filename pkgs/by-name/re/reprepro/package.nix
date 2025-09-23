@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  versionCheckHook,
-  nix-update-script,
-  bzip2,
-  db,
-  gpgme,
-  libarchive,
-  xz,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, versionCheckHook
+, nix-update-script
+, bzip2
+, db
+, gpgme
+, libarchive
+, xz
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

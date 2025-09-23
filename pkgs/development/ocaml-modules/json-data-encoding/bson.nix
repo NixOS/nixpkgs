@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  json-data-encoding,
-  ocplib-endian,
-  crowbar,
-  alcotest,
+{ buildDunePackage
+, json-data-encoding
+, ocplib-endian
+, crowbar
+, alcotest
+,
 }:
 
 buildDunePackage {

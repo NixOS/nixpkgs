@@ -1,16 +1,16 @@
-{
-  lib,
-  pkg-config,
-  python3Packages,
-  meson,
-  ninja,
-  appstream-glib,
-  desktop-file-utils,
-  glib,
-  gtk3,
-  gobject-introspection,
-  wrapGAppsHook3,
-  fetchFromGitHub,
+{ lib
+, pkg-config
+, python3Packages
+, meson
+, ninja
+, appstream-glib
+, desktop-file-utils
+, glib
+, gtk3
+, gobject-introspection
+, wrapGAppsHook3
+, fetchFromGitHub
+,
 }:
 
 python3Packages.buildPythonApplication rec {

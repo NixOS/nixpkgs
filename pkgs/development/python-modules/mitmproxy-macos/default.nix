@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mitmproxy-rs,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mitmproxy-rs
+,
 }:
 
 buildPythonPackage rec {

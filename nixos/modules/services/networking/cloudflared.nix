@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.cloudflared;
@@ -303,83 +302,91 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.targets = lib.mapAttrs' (
-      name: tunnel:
-      lib.nameValuePair "cloudflared-tunnel-${name}" {
-        description = "Cloudflare tunnel '${name}' target";
-        requires = [ "cloudflared-tunnel-${name}.service" ];
-        after = [ "cloudflared-tunnel-${name}.service" ];
-        unitConfig.StopWhenUnneeded = true;
-      }
-    ) config.services.cloudflared.tunnels;
+    systemd.targets = lib.mapAttrs'
+      (
+        name: tunnel:
+          lib.nameValuePair "cloudflared-tunnel-${name}" {
+            description = "Cloudflare tunnel '${name}' target";
+            requires = [ "cloudflared-tunnel-${name}.service" ];
+            after = [ "cloudflared-tunnel-${name}.service" ];
+            unitConfig.StopWhenUnneeded = true;
+          }
+      )
+      config.services.cloudflared.tunnels;
 
-    systemd.services = lib.mapAttrs' (
-      name: tunnel:
-      let
-        filterConfig = lib.attrsets.filterAttrsRecursive (
-          _: v:
-          !builtins.elem v [
-            null
-            [ ]
-            { }
-          ]
-        );
+    systemd.services = lib.mapAttrs'
+      (
+        name: tunnel:
+          let
+            filterConfig = lib.attrsets.filterAttrsRecursive (
+              _: v:
+                !builtins.elem v [
+                  null
+                  [ ]
+                  { }
+                ]
+            );
 
-        filterIngressSet = lib.filterAttrs (_: v: builtins.typeOf v == "set");
-        filterIngressStr = lib.filterAttrs (_: v: builtins.typeOf v == "string");
+            filterIngressSet = lib.filterAttrs (_: v: builtins.typeOf v == "set");
+            filterIngressStr = lib.filterAttrs (_: v: builtins.typeOf v == "string");
 
-        ingressesSet = filterIngressSet tunnel.ingress;
-        ingressesStr = filterIngressStr tunnel.ingress;
+            ingressesSet = filterIngressSet tunnel.ingress;
+            ingressesStr = filterIngressStr tunnel.ingress;
 
-        fullConfig = filterConfig {
-          tunnel = name;
-          credentials-file = "/run/credentials/cloudflared-tunnel-${name}.service/credentials.json";
-          warp-routing = filterConfig tunnel.warp-routing;
-          originRequest = filterConfig tunnel.originRequest;
-          ingress =
-            (map (
-              key:
-              {
-                hostname = key;
-              }
-              // lib.getAttr key (filterConfig (filterConfig ingressesSet))
-            ) (lib.attrNames ingressesSet))
-            ++ (map (key: {
-              hostname = key;
-              service = lib.getAttr key ingressesStr;
-            }) (lib.attrNames ingressesStr))
-            ++ [ { service = tunnel.default; } ];
-        };
+            fullConfig = filterConfig {
+              tunnel = name;
+              credentials-file = "/run/credentials/cloudflared-tunnel-${name}.service/credentials.json";
+              warp-routing = filterConfig tunnel.warp-routing;
+              originRequest = filterConfig tunnel.originRequest;
+              ingress =
+                (map
+                  (
+                    key:
+                    {
+                      hostname = key;
+                    }
+                    // lib.getAttr key (filterConfig (filterConfig ingressesSet))
+                  )
+                  (lib.attrNames ingressesSet))
+                ++ (map
+                  (key: {
+                    hostname = key;
+                    service = lib.getAttr key ingressesStr;
+                  })
+                  (lib.attrNames ingressesStr))
+                ++ [{ service = tunnel.default; }];
+            };
 
-        mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
-        certFile = if (tunnel.certificateFile != null) then tunnel.certificateFile else cfg.certificateFile;
-      in
-      lib.nameValuePair "cloudflared-tunnel-${name}" {
-        after = [
-          "network.target"
-          "network-online.target"
-        ];
-        wants = [
-          "network.target"
-          "network-online.target"
-        ];
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          RuntimeDirectory = "cloudflared-tunnel-${name}";
-          RuntimeDirectoryMode = "0400";
-          LoadCredential = [
-            "credentials.json:${tunnel.credentialsFile}"
-          ]
-          ++ (lib.optional (certFile != null) "cert.pem:${certFile}");
+            mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
+            certFile = if (tunnel.certificateFile != null) then tunnel.certificateFile else cfg.certificateFile;
+          in
+          lib.nameValuePair "cloudflared-tunnel-${name}" {
+            after = [
+              "network.target"
+              "network-online.target"
+            ];
+            wants = [
+              "network.target"
+              "network-online.target"
+            ];
+            wantedBy = [ "multi-user.target" ];
+            serviceConfig = {
+              RuntimeDirectory = "cloudflared-tunnel-${name}";
+              RuntimeDirectoryMode = "0400";
+              LoadCredential = [
+                "credentials.json:${tunnel.credentialsFile}"
+              ]
+              ++ (lib.optional (certFile != null) "cert.pem:${certFile}");
 
-          ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
-          Restart = "on-failure";
-          DynamicUser = true;
-        };
+              ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
+              Restart = "on-failure";
+              DynamicUser = true;
+            };
 
-        environment.TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) ''%d/cert.pem'';
-      }
-    ) config.services.cloudflared.tunnels;
+            environment.TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) ''%d/cert.pem'';
+          }
+      )
+      config.services.cloudflared.tunnels;
   };
 
   meta.maintainers = with lib.maintainers; [

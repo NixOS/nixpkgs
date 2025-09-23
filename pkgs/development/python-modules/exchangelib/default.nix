@@ -1,27 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  cached-property,
-  defusedxml,
-  dnspython,
-  fetchFromGitHub,
-  isodate,
-  lxml,
-  oauthlib,
-  psutil,
-  pygments,
-  python-dateutil,
-  pythonOlder,
-  pytz,
-  pyyaml,
-  requests,
-  requests-ntlm,
-  requests-gssapi,
-  requests-oauthlib,
-  requests-mock,
-  setuptools,
-  tzdata,
-  tzlocal,
+{ lib
+, buildPythonPackage
+, cached-property
+, defusedxml
+, dnspython
+, fetchFromGitHub
+, isodate
+, lxml
+, oauthlib
+, psutil
+, pygments
+, python-dateutil
+, pythonOlder
+, pytz
+, pyyaml
+, requests
+, requests-ntlm
+, requests-gssapi
+, requests-oauthlib
+, requests-mock
+, setuptools
+, tzdata
+, tzlocal
+,
 }:
 
 buildPythonPackage rec {

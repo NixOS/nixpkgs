@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  apricot-select,
-  numba,
-  numpy,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-learn,
-  scipy,
-  setuptools,
-  torchvision,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, apricot-select
+, numba
+, numpy
+, pytestCheckHook
+, pythonOlder
+, scikit-learn
+, scipy
+, setuptools
+, torchvision
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

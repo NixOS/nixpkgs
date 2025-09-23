@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  beautifulsoup4,
-  pythonOlder,
-  pandas,
-  python,
-  numpy,
-  scikit-learn,
-  scipy,
-  lxml,
-  matplotlib,
-  sarge,
-  unittestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, beautifulsoup4
+, pythonOlder
+, pandas
+, python
+, numpy
+, scikit-learn
+, scipy
+, lxml
+, matplotlib
+, sarge
+, unittestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage {

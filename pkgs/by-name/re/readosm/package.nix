@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  expat,
-  zlib,
-  validatePkgConfig,
+{ lib
+, stdenv
+, fetchurl
+, expat
+, zlib
+, validatePkgConfig
+,
 }:
 
 stdenv.mkDerivation rec {

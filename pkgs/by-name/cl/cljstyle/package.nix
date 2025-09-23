@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGraalvmNativeImage,
-  fetchMavenArtifact,
-  fetchurl,
-  versionCheckHook,
+{ lib
+, buildGraalvmNativeImage
+, fetchMavenArtifact
+, fetchurl
+, versionCheckHook
+,
 }:
 
 buildGraalvmNativeImage (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  pkg-config,
-  cabextract ? null,
-  cdrkit ? null,
-  mtools ? null,
-  fuse3 ? null,
-  ntfs3g ? null,
-  syslinux ? null,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, cabextract ? null
+, cdrkit ? null
+, mtools ? null
+, fuse3 ? null
+, ntfs3g ? null
+, syslinux ? null
+,
 }:
 
 stdenv.mkDerivation rec {

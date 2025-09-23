@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  libassuan,
-  libgpg-error,
-  popt,
-  bemenu,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libassuan
+, libgpg-error
+, popt
+, bemenu
+,
 }:
 
 stdenv.mkDerivation rec {

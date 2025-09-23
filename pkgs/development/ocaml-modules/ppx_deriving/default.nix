@@ -1,27 +1,26 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  ocaml,
-  findlib,
-  cppo,
-  ppxlib,
-  ppx_derivers,
-  result,
-  ounit,
-  ounit2,
-  ocaml-migrate-parsetree,
-  version ?
-    if lib.versionAtLeast ppxlib.version "0.36" then
-      "6.1.1"
-    else if lib.versionAtLeast ppxlib.version "0.32" then
-      "6.0.3"
-    else if lib.versionAtLeast ppxlib.version "0.20" then
-      "5.2.1"
-    else if lib.versionAtLeast ppxlib.version "0.15" then
-      "5.1"
-    else
-      "5.0",
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, findlib
+, cppo
+, ppxlib
+, ppx_derivers
+, result
+, ounit
+, ounit2
+, ocaml-migrate-parsetree
+, version ? if lib.versionAtLeast ppxlib.version "0.36" then
+    "6.1.1"
+  else if lib.versionAtLeast ppxlib.version "0.32" then
+    "6.0.3"
+  else if lib.versionAtLeast ppxlib.version "0.20" then
+    "5.2.1"
+  else if lib.versionAtLeast ppxlib.version "0.15" then
+    "5.1"
+  else
+    "5.0"
+,
 }:
 
 let
@@ -32,8 +31,7 @@ let
       "5.2.1" = "sha256:11h75dsbv3rs03pl67hdd3lbim7wjzh257ij9c75fcknbfr5ysz9";
       "5.1" = "sha256:1i64fd7qrfzbam5hfbl01r0sx4iihsahcwqj13smmrjlnwi3nkxh";
       "5.0" = "sha256:0fkzrn4pdyvf1kl0nwvhqidq01pnq3ql8zk1jd56hb0cxaw851w3";
-    }
-    ."${version}";
+    }."${version}";
 in
 
 buildDunePackage rec {

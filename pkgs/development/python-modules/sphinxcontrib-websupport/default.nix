@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  jinja2,
-  sphinxcontrib-serializinghtml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, jinja2
+, sphinxcontrib-serializinghtml
+,
 }:
 
 buildPythonPackage rec {

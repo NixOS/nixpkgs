@@ -1,9 +1,8 @@
-{
-  name,
-  pkgs,
-  testBase,
-  system,
-  ...
+{ name
+, pkgs
+, testBase
+, system
+, ...
 }:
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };

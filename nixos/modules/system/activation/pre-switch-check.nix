@@ -1,20 +1,21 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 let
   preSwitchCheckScript = lib.concatLines (
-    lib.mapAttrsToList (name: text: ''
-      # pre-switch check ${name}
-      if ! (
-        ${text}
-      ) >&2 ; then
-        echo "Pre-switch check '${name}' failed" >&2
-        exit 1
-      fi
-    '') config.system.preSwitchChecks
+    lib.mapAttrsToList
+      (name: text: ''
+        # pre-switch check ${name}
+        if ! (
+          ${text}
+        ) >&2 ; then
+          echo "Pre-switch check '${name}' failed" >&2
+          exit 1
+        fi
+      '')
+      config.system.preSwitchChecks
   );
 in
 {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.castopod;
@@ -13,16 +12,16 @@ let
   # https://docs.castopod.org/getting-started/install.html#requirements
   phpPackage = pkgs.php82.withExtensions (
     { enabled, all }:
-    with all;
-    [
-      intl
-      curl
-      mbstring
-      gd
-      exif
-      mysqlnd
-    ]
-    ++ enabled
+      with all;
+      [
+        intl
+        curl
+        mbstring
+        gd
+        exif
+        mysqlnd
+      ]
+      ++ enabled
   );
 in
 {

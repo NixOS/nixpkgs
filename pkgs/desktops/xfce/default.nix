@@ -1,10 +1,10 @@
-{
-  config,
-  lib,
-  linuxPackages,
-  pkgs,
-  generateSplicesForMkScope,
-  makeScopeWithSplicing',
+{ config
+, lib
+, linuxPackages
+, pkgs
+, generateSplicesForMkScope
+, makeScopeWithSplicing'
+,
 }:
 
 makeScopeWithSplicing' {

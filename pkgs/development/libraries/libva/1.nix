@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  libX11,
-  pkg-config,
-  libXext,
-  libdrm,
-  libXfixes,
-  wayland,
-  wayland-scanner,
-  libffi,
-  libGL,
-  mesa,
-  minimal ? false,
-  libva1-minimal,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, libX11
+, pkg-config
+, libXext
+, libdrm
+, libXfixes
+, wayland
+, wayland-scanner
+, libffi
+, libGL
+, mesa
+, minimal ? false
+, libva1-minimal
+,
 }:
 
 stdenv.mkDerivation rec {

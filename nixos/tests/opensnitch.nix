@@ -26,44 +26,48 @@ in
     };
   }
   // (lib.listToAttrs (
-    map (
-      m:
-      lib.nameValuePair "client_blocked_${m}" {
-        services.opensnitch = {
-          enable = true;
-          settings.DefaultAction = "deny";
-          settings.ProcMonitorMethod = m;
-          settings.LogLevel = 1;
-        };
-      }
-    ) monitorMethods
+    map
+      (
+        m:
+        lib.nameValuePair "client_blocked_${m}" {
+          services.opensnitch = {
+            enable = true;
+            settings.DefaultAction = "deny";
+            settings.ProcMonitorMethod = m;
+            settings.LogLevel = 1;
+          };
+        }
+      )
+      monitorMethods
   ))
   // (lib.listToAttrs (
-    map (
-      m:
-      lib.nameValuePair "client_allowed_${m}" {
-        services.opensnitch = {
-          enable = true;
-          settings.DefaultAction = "deny";
-          settings.ProcMonitorMethod = m;
-          settings.LogLevel = 1;
-          rules = {
-            curl = {
-              name = "curl";
-              enabled = true;
-              action = "allow";
-              duration = "always";
-              operator = {
-                type = "simple";
-                sensitive = false;
-                operand = "process.path";
-                data = "${pkgs.curl}/bin/curl";
+    map
+      (
+        m:
+        lib.nameValuePair "client_allowed_${m}" {
+          services.opensnitch = {
+            enable = true;
+            settings.DefaultAction = "deny";
+            settings.ProcMonitorMethod = m;
+            settings.LogLevel = 1;
+            rules = {
+              curl = {
+                name = "curl";
+                enabled = true;
+                action = "allow";
+                duration = "always";
+                operator = {
+                  type = "simple";
+                  sensitive = false;
+                  operand = "process.path";
+                  data = "${pkgs.curl}/bin/curl";
+                };
               };
             };
           };
-        };
-      }
-    ) monitorMethods
+        }
+      )
+      monitorMethods
   ));
 
   testScript = ''
@@ -72,15 +76,18 @@ in
     server.wait_for_open_port(80)
   ''
   + (
-    lib.concatLines (
-      map (m: ''
-        client_blocked_${m}.wait_for_unit("opensnitchd.service")
-        client_blocked_${m}.fail("curl http://server")
+    lib.concatLines
+      (
+        map
+          (m: ''
+            client_blocked_${m}.wait_for_unit("opensnitchd.service")
+            client_blocked_${m}.fail("curl http://server")
 
-        client_allowed_${m}.wait_for_unit("opensnitchd.service")
-        client_allowed_${m}.succeed("curl http://server")
-      '') monitorMethods
-    )
+            client_allowed_${m}.wait_for_unit("opensnitchd.service")
+            client_allowed_${m}.succeed("curl http://server")
+          '')
+          monitorMethods
+      )
     + ''
       # make sure the kernel modules were actually properly loaded
       client_blocked_ebpf.succeed(r"journalctl -u opensnitchd --grep '\[eBPF\] module loaded: /nix/store/.*/etc/opensnitchd/opensnitch\.o'")

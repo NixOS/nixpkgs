@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  cmake,
-  ninja,
-  libarchive,
-  libz,
-  cef-binary,
-  luajit,
-  xorg,
-  libgbm,
-  glib,
-  jdk17,
-  pango,
-  cairo,
-  buildFHSEnv,
-  makeDesktopItem,
-  copyDesktopItems,
-  enableRS3 ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, cmake
+, ninja
+, libarchive
+, libz
+, cef-binary
+, luajit
+, xorg
+, libgbm
+, glib
+, jdk17
+, pango
+, cairo
+, buildFHSEnv
+, makeDesktopItem
+, copyDesktopItems
+, enableRS3 ? false
+,
 }:
 let
   cef = cef-binary.overrideAttrs (oldAttrs: {
@@ -31,8 +31,7 @@ let
       {
         aarch64-linux = "sha256-Ni5aEbI+WuMnbT8gPWMONN5NkTySw7xJvnM6U44Njao=";
         x86_64-linux = "sha256-YwND4zsndvmygJxwmrCvaFuxjJO704b6aDVSJqpEOKc=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   });
 in
 let

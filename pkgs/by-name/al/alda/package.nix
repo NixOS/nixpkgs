@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildGoModule,
-  gradle,
-  makeWrapper,
-  jre,
-  symlinkJoin,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, gradle
+, makeWrapper
+, jre
+, symlinkJoin
+,
 }:
 let
   pname = "alda";

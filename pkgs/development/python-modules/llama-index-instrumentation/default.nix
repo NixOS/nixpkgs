@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  deprecated,
-  fetchPypi,
-  hatchling,
-  pydantic,
+{ lib
+, buildPythonPackage
+, deprecated
+, fetchPypi
+, hatchling
+, pydantic
+,
 }:
 
 buildPythonPackage rec {

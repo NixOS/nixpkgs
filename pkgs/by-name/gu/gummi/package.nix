@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  pkgs,
-  glib,
-  gtk3,
-  gtksourceview3,
-  gtkspell3,
-  poppler,
-  texlive,
-  pkg-config,
-  intltool,
-  autoreconfHook,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, pkgs
+, glib
+, gtk3
+, gtksourceview3
+, gtkspell3
+, poppler
+, texlive
+, pkg-config
+, intltool
+, autoreconfHook
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,7 +1,7 @@
-{
-  buildAstalModule,
-  json-glib,
-  gdk-pixbuf,
+{ buildAstalModule
+, json-glib
+, gdk-pixbuf
+,
 }:
 buildAstalModule {
   name = "notifd";

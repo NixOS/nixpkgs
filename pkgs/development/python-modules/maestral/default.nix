@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  makePythonPath,
-  pythonOlder,
-  python,
-  click,
-  dbus-python,
-  desktop-notifier,
-  dropbox,
-  fasteners,
-  importlib-metadata,
-  keyring,
-  keyrings-alt,
-  packaging,
-  pathspec,
-  pyro5,
-  requests,
-  rich,
-  rubicon-objc,
-  setuptools,
-  survey,
-  typing-extensions,
-  watchdog,
-  xattr,
-  pytestCheckHook,
-  nixosTests,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, makePythonPath
+, pythonOlder
+, python
+, click
+, dbus-python
+, desktop-notifier
+, dropbox
+, fasteners
+, importlib-metadata
+, keyring
+, keyrings-alt
+, packaging
+, pathspec
+, pyro5
+, requests
+, rich
+, rubicon-objc
+, setuptools
+, survey
+, typing-extensions
+, watchdog
+, xattr
+, pytestCheckHook
+, nixosTests
+,
 }:
 
 buildPythonPackage rec {

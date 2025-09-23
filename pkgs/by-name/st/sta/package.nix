@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  cxxtest,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, cxxtest
+,
 }:
 
 stdenv.mkDerivation {

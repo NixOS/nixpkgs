@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  appimageTools,
-  fetchurl,
-  makeWrapper,
-  _7zz,
+{ lib
+, stdenv
+, appimageTools
+, fetchurl
+, makeWrapper
+, _7zz
+,
 }:
 
 let
@@ -20,8 +20,7 @@ let
       aarch64-linux = "linux_arm64.AppImage";
       x86_64-darwin = "mac_x64.dmg";
       aarch64-darwin = "mac_arm64.dmg";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   src = fetchurl {
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
@@ -31,8 +30,7 @@ let
         aarch64-linux = "sha256-UQFySvvs+paCzt2XSrbYiChEQJIbef3rCOST1r+zZx8=";
         x86_64-darwin = "sha256-42US8m6ZbGTUNkU0p4y0pgXKiSsjZZHlQhwv2/LDlO4=";
         aarch64-darwin = "sha256-eJVyuL5nBGMr8WhOK4NOMNSMYBASQZbsbLPLgug7ZNs=";
-      }
-      .${system} or throwSystem;
+      }.${system} or throwSystem;
   };
 
   appimageContents = appimageTools.extractType2 {

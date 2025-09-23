@@ -1,45 +1,45 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  docbook_xml_dtd_42,
-  docbook-xsl-nons,
-  glib,
-  gobject-introspection,
-  gtk3,
-  intltool,
-  ipset,
-  iptables,
-  kdePackages,
-  kmod,
-  libnotify,
-  librsvg,
-  libxml2,
-  libxslt,
-  networkmanager,
-  networkmanagerapplet,
-  pkg-config,
-  python3,
-  qt6,
-  sysctl,
-  wrapGAppsNoGuiHook,
-  withGui ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, docbook_xml_dtd_42
+, docbook-xsl-nons
+, glib
+, gobject-introspection
+, gtk3
+, intltool
+, ipset
+, iptables
+, kdePackages
+, kmod
+, libnotify
+, librsvg
+, libxml2
+, libxslt
+, networkmanager
+, networkmanagerapplet
+, pkg-config
+, python3
+, qt6
+, sysctl
+, wrapGAppsNoGuiHook
+, withGui ? false
+,
 }:
 
 let
   pythonPath = python3.withPackages (
     ps:
-    with ps;
-    [
-      dbus-python
-      nftables
-      pygobject3
-    ]
-    ++ lib.optionals withGui [
-      pyqt6
-    ]
+      with ps;
+      [
+        dbus-python
+        nftables
+        pygobject3
+      ]
+      ++ lib.optionals withGui [
+        pyqt6
+      ]
   );
 in
 stdenv.mkDerivation rec {

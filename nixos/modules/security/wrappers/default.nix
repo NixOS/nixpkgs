@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -121,14 +120,13 @@ let
 
   ###### Activation script for the setcap wrappers
   mkSetcapProgram =
-    {
-      program,
-      capabilities,
-      source,
-      owner,
-      group,
-      permissions,
-      ...
+    { program
+    , capabilities
+    , source
+    , owner
+    , group
+    , permissions
+    , ...
     }:
     ''
       cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
@@ -148,15 +146,14 @@ let
 
   ###### Activation script for the setuid wrappers
   mkSetuidProgram =
-    {
-      program,
-      source,
-      owner,
-      group,
-      setuid,
-      setgid,
-      permissions,
-      ...
+    { program
+    , source
+    , owner
+    , group
+    , setuid
+    , setgid
+    , permissions
+    , ...
     }:
     ''
       cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
@@ -168,9 +165,11 @@ let
       chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$wrapperDir/${program}"
     '';
 
-  mkWrappedPrograms = builtins.map (
-    opts: if opts.capabilities != "" then mkSetcapProgram opts else mkSetuidProgram opts
-  ) (lib.attrValues wrappers);
+  mkWrappedPrograms = builtins.map
+    (
+      opts: if opts.capabilities != "" then mkSetcapProgram opts else mkSetuidProgram opts
+    )
+    (lib.attrValues wrappers);
 in
 {
   imports = [
@@ -247,13 +246,15 @@ in
   ###### implementation
   config = lib.mkIf config.security.enableWrappers {
 
-    assertions = lib.mapAttrsToList (name: opts: {
-      assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
-      message = ''
-        The security.wrappers.${name} wrapper is not valid:
-            setuid/setgid and capabilities are mutually exclusive.
-      '';
-    }) wrappers;
+    assertions = lib.mapAttrsToList
+      (name: opts: {
+        assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
+        message = ''
+          The security.wrappers.${name} wrapper is not valid:
+              setuid/setgid and capabilities are mutually exclusive.
+        '';
+      })
+      wrappers;
 
     security.wrappers =
       let
@@ -277,17 +278,19 @@ in
       export PATH="${wrapperDir}:$PATH"
     '';
 
-    security.apparmor.includes = lib.mapAttrs' (
-      wrapName: wrap:
-      lib.nameValuePair "nixos/security.wrappers/${wrapName}" ''
-        include "${
-          pkgs.apparmorRulesFromClosure { name = "security.wrappers.${wrapName}"; } [
-            (securityWrapper wrap.source)
-          ]
-        }"
-        mrpx ${wrap.source},
-      ''
-    ) wrappers;
+    security.apparmor.includes = lib.mapAttrs'
+      (
+        wrapName: wrap:
+          lib.nameValuePair "nixos/security.wrappers/${wrapName}" ''
+            include "${
+              pkgs.apparmorRulesFromClosure { name = "security.wrappers.${wrapName}"; } [
+                (securityWrapper wrap.source)
+              ]
+            }"
+            mrpx ${wrap.source},
+          ''
+      )
+      wrappers;
 
     systemd.mounts = [
       {

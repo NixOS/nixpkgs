@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook4,
-  cairo,
-  gdk-pixbuf,
-  glib,
-  gtk4,
-  pango,
-  wayland,
-  gtk4-layer-shell,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook4
+, cairo
+, gdk-pixbuf
+, glib
+, gtk4
+, pango
+, wayland
+, gtk4-layer-shell
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

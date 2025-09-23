@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchurl,
-  python3,
-  blas,
-  lapack,
-  gfortran,
-  suitesparse,
-  lapackSupport ? true,
-  kluSupport ? true,
+{ lib
+, stdenv
+, cmake
+, fetchurl
+, python3
+, blas
+, lapack
+, gfortran
+, suitesparse
+, lapackSupport ? true
+, kluSupport ? true
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,15 +35,15 @@ stdenv.mkDerivation rec {
     python3
   ]
   ++
-    lib.optionals (lapackSupport)
-      # Check that the same index size is used for both libraries
-      (
-        assert (blas.isILP64 == lapack.isILP64);
-        [
-          blas
-          lapack
-        ]
-      )
+  lib.optionals (lapackSupport)
+    # Check that the same index size is used for both libraries
+    (
+      assert (blas.isILP64 == lapack.isILP64);
+      [
+        blas
+        lapack
+      ]
+    )
   # KLU support is based on Suitesparse. It is tested upstream according to the
   # section 1.1.4.2 of INSTALL_GUIDE.pdf found in the source tarball.
   ++ lib.optionals (kluSupport) [

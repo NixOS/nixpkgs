@@ -1,25 +1,24 @@
-{
-  lib,
-  callPackage,
-  runCommandLocal,
-  writeScript,
-  stdenv,
-  coreutils,
+{ lib
+, callPackage
+, runCommandLocal
+, writeScript
+, stdenv
+, coreutils
+,
 }:
 
 let
   buildFHSEnv = callPackage ./env.nix { };
 in
 
-args@{
-  name,
-  version ? null,
-  runScript ? "bash",
-  nativeBuildInputs ? [ ],
-  extraInstallCommands ? "",
-  meta ? { },
-  passthru ? { },
-  ...
+args@{ name
+, version ? null
+, runScript ? "bash"
+, nativeBuildInputs ? [ ]
+, extraInstallCommands ? ""
+, meta ? { }
+, passthru ? { }
+, ...
 }:
 
 let
@@ -57,25 +56,25 @@ let
 
 in
 runCommandLocal nameAndVersion
-  {
-    inherit nativeBuildInputs meta;
+{
+  inherit nativeBuildInputs meta;
 
-    passthru = passthru // {
-      env =
-        runCommandLocal "${name}-shell-env"
-          {
-            shellHook = ''
-              exec ${chrootenv}/bin/chrootenv ${init runScript} "$(pwd)"
-            '';
-          }
-          ''
-            echo >&2 ""
-            echo >&2 "*** User chroot 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
-            echo >&2 ""
-            exit 1
+  passthru = passthru // {
+    env =
+      runCommandLocal "${name}-shell-env"
+        {
+          shellHook = ''
+            exec ${chrootenv}/bin/chrootenv ${init runScript} "$(pwd)"
           '';
-    };
-  }
+        }
+        ''
+          echo >&2 ""
+          echo >&2 "*** User chroot 'env' attributes are intended for interactive nix-shell sessions, not for building! ***"
+          echo >&2 ""
+          exit 1
+        '';
+  };
+}
   ''
     mkdir -p $out/bin
     cat <<EOF >$out/bin/${name}

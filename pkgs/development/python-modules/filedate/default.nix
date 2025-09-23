@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  python-dateutil,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, python-dateutil
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "filedate";

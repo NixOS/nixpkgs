@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  fetchpatch2,
-  poetry-core,
-  snowballstemmer,
-  tomli,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, fetchpatch2
+, poetry-core
+, snowballstemmer
+, tomli
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

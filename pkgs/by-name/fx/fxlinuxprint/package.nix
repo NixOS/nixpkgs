@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  dpkg,
-  autoPatchelfHook,
-  cups,
+{ stdenv
+, lib
+, fetchzip
+, dpkg
+, autoPatchelfHook
+, cups
+,
 }:
 let
   debPlatform =

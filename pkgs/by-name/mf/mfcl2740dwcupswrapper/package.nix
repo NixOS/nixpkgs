@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  makeWrapper,
-  coreutils,
-  gnugrep,
-  gnused,
-  perl,
-  mfcl2740dwlpr,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, coreutils
+, gnugrep
+, gnused
+, perl
+, mfcl2740dwlpr
+,
 }:
 
 stdenv.mkDerivation rec {

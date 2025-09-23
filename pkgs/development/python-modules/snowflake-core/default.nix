@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pydantic,
-  python-dateutil,
-  requests,
-  snowflake-connector-python,
-  pyyaml,
-  urllib3,
-  fetchPypi,
-  pythonOlder,
-  hatchling,
+{ lib
+, buildPythonPackage
+, pydantic
+, python-dateutil
+, requests
+, snowflake-connector-python
+, pyyaml
+, urllib3
+, fetchPypi
+, pythonOlder
+, hatchling
+,
 }:
 
 buildPythonPackage rec {

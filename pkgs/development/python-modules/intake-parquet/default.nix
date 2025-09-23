@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  dask,
-  fastparquet,
-  fetchFromGitHub,
-  pandas,
-  pyarrow,
-  pythonOlder,
-  setuptools,
-  versioneer,
+{ lib
+, buildPythonPackage
+, dask
+, fastparquet
+, fetchFromGitHub
+, pandas
+, pyarrow
+, pythonOlder
+, setuptools
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

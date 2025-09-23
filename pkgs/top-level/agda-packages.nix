@@ -1,8 +1,8 @@
-{
-  pkgs,
-  lib,
-  newScope,
-  Agda,
+{ pkgs
+, lib
+, newScope
+, Agda
+,
 }:
 
 let

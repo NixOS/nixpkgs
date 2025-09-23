@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  rustPlatform,
-  cargo,
-  pkg-config,
-  rustc,
-  rustfmt,
-  setuptools-rust,
-  openssl,
-  msgpack,
-  fetchpatch,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, rustPlatform
+, cargo
+, pkg-config
+, rustc
+, rustfmt
+, setuptools-rust
+, openssl
+, msgpack
+, fetchpatch
+, nixosTests
+,
 }:
 
 buildPythonPackage rec {

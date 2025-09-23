@@ -1,13 +1,13 @@
-{
-  lib,
-  buildNpmPackage,
-  stdenv,
-  fetchYarnDeps,
-  yarnConfigHook,
-  fetchFromGitHub,
-  typescript,
-  jq,
-  fetchpatch,
+{ lib
+, buildNpmPackage
+, stdenv
+, fetchYarnDeps
+, yarnConfigHook
+, fetchFromGitHub
+, typescript
+, jq
+, fetchpatch
+,
 }:
 let
   # Instead of the build script that spectral-language-server provides (ref: https://github.com/luizcorreia/spectral-language-server/blob/master/script/vscode-spectral-build.sh), we build vscode-spectral manually.

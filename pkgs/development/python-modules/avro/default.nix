@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  setuptools,
-  fetchPypi,
-  typing-extensions,
-  pytest7CheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, setuptools
+, fetchPypi
+, typing-extensions
+, pytest7CheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  qt5,
-  secp256k1,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, qt5
+, secp256k1
+,
 }:
 
 python3Packages.buildPythonApplication rec {

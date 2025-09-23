@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  gtk3,
-  libepoxy,
-  wayland,
-  wayland-scanner,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gtk3
+, libepoxy
+, wayland
+, wayland-scanner
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

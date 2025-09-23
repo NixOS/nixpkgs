@@ -1,11 +1,11 @@
-{
-  lib,
-  pkgs,
-  stdenv,
-  buildPythonPackage,
-  foma,
-  icu,
-  swig,
+{ lib
+, pkgs
+, stdenv
+, buildPythonPackage
+, foma
+, icu
+, swig
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools,
-  basemap,
+{ lib
+, buildPythonPackage
+, setuptools
+, basemap
+,
 }:
 
 buildPythonPackage rec {

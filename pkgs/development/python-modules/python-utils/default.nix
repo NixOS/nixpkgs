@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  loguru,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, loguru
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

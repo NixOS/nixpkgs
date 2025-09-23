@@ -1,68 +1,64 @@
-{
-  lib,
-  stdenv,
-  testers,
-  fetchgit,
-  fetchpatch,
-  replaceVars,
-
-  # Xen
-  acpica-tools,
-  autoPatchelfHook,
-  binutils-unwrapped-all-targets,
-  bison,
-  bzip2,
-  cmake,
-  dev86,
-  e2fsprogs,
-  flex,
-  libnl,
-  libuuid,
-  lzo,
-  ncurses,
-  ocamlPackages,
-  perl,
-  pkg-config,
-  python3Packages,
-  systemd,
-  xz,
-  yajl,
-  zlib,
-  zstd,
-
-  # Optional Components
-  withFlask ? false,
-  checkpolicy,
-  withIPXE ? true,
-  ipxe,
-  withOVMF ? true,
-  OVMF,
-  withSeaBIOS ? true,
-  seabios-qemu,
-
-  # Documentation
-  pandoc,
-
-  # Scripts
-  bash,
-  bridge-utils,
-  coreutils,
-  diffutils,
-  drbd,
-  gawk,
-  gnugrep,
-  gnused,
-  inetutils,
-  iproute2,
-  iptables,
-  kmod,
-  multipath-tools,
-  nbd,
-  openiscsi,
-  openvswitch,
-  psmisc,
-  util-linux,
-  which,
+{ lib
+, stdenv
+, testers
+, fetchgit
+, fetchpatch
+, replaceVars
+, # Xen
+  acpica-tools
+, autoPatchelfHook
+, binutils-unwrapped-all-targets
+, bison
+, bzip2
+, cmake
+, dev86
+, e2fsprogs
+, flex
+, libnl
+, libuuid
+, lzo
+, ncurses
+, ocamlPackages
+, perl
+, pkg-config
+, python3Packages
+, systemd
+, xz
+, yajl
+, zlib
+, zstd
+, # Optional Components
+  withFlask ? false
+, checkpolicy
+, withIPXE ? true
+, ipxe
+, withOVMF ? true
+, OVMF
+, withSeaBIOS ? true
+, seabios-qemu
+, # Documentation
+  pandoc
+, # Scripts
+  bash
+, bridge-utils
+, coreutils
+, diffutils
+, drbd
+, gawk
+, gnugrep
+, gnused
+, inetutils
+, iproute2
+, iptables
+, kmod
+, multipath-tools
+, nbd
+, openiscsi
+, openvswitch
+, psmisc
+, util-linux
+, which
+,
 }:
 
 let
@@ -104,7 +100,8 @@ let
       "XEN_SCRIPT_DIR"
       "qemu_xen_systemd"
       "sbindir"
-    ] (_: null))
+    ]
+      (_: null))
     // (mkTools coreutils [
       "basename"
       "cat"

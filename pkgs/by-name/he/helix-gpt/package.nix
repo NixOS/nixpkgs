@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  bun,
-  makeBinaryWrapper,
+{ stdenv
+, lib
+, fetchFromGitHub
+, bun
+, makeBinaryWrapper
+,
 }:
 let
   pin = lib.importJSON ./pin.json;

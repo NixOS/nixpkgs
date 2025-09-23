@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  librime,
-  rime-data,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, librime
+, rime-data
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rime-ls";

@@ -1,20 +1,20 @@
-{
-  fetchFromGitLab,
-  lib,
-  stdenv,
-  pkg-config,
-  intltool,
-  libpulseaudio,
-  gtkmm4,
-  libsigcxx,
-  # Since version 6.1, libcanberra is optional
-  withLibcanberra ? true,
-  libcanberra-gtk3,
-  json-glib,
-  adwaita-icon-theme,
-  wrapGAppsHook4,
-  meson,
-  ninja,
+{ fetchFromGitLab
+, lib
+, stdenv
+, pkg-config
+, intltool
+, libpulseaudio
+, gtkmm4
+, libsigcxx
+, # Since version 6.1, libcanberra is optional
+  withLibcanberra ? true
+, libcanberra-gtk3
+, json-glib
+, adwaita-icon-theme
+, wrapGAppsHook4
+, meson
+, ninja
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

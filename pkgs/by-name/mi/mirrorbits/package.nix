@@ -1,11 +1,11 @@
-{
-  lib,
-  versionCheckHook,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  zlib,
-  geoip,
+{ lib
+, versionCheckHook
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, zlib
+, geoip
+,
 }:
 
 buildGoModule (finalAttrs: {

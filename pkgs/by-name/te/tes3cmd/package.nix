@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  perlPackages,
-  fetchFromGitHub,
+{ stdenv
+, lib
+, perlPackages
+, fetchFromGitHub
+,
 }:
 
 stdenv.mkDerivation {

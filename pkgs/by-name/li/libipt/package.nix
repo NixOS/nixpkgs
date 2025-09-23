@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  freebsd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, freebsd
+,
 }:
 
 stdenv.mkDerivation rec {

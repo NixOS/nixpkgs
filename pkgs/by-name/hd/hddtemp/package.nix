@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
+{ lib
+, stdenv
+, fetchurl
+,
 }:
 let
   db = fetchurl {

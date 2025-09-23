@@ -158,10 +158,12 @@ rec {
       list
     else
       tail (
-        lib.concatMap (x: [
-          separator
-          x
-        ]) list
+        lib.concatMap
+          (x: [
+            separator
+            x
+          ])
+          list
       );
 
   /**
@@ -473,9 +475,9 @@ rec {
     :::
   */
   trimWith =
-    {
-      start ? false,
-      end ? false,
+    { start ? false
+    , end ? false
+    ,
     }:
     let
       # Define our own whitespace character class instead of using
@@ -815,7 +817,7 @@ rec {
       lenSuffix = stringLength suffix;
     in
     # Before 23.05, paths would be copied to the store before converting them
-    # to strings and comparing. This was surprising and confusing.
+      # to strings and comparing. This was surprising and confusing.
     warnIf (isPath suffix)
       ''
         lib.strings.hasSuffix: The first argument (${toString suffix}) is a path value, but only strings are supported.
@@ -1571,19 +1573,26 @@ rec {
     str:
     lib.throwIfNot (isString str) "toCamelCase does only accepts string values, but got ${typeOf str}" (
       let
-        separators = splitStringBy (
-          prev: curr:
-          elem curr [
-            "-"
-            "_"
-            " "
-          ]
-        ) false str;
+        separators = splitStringBy
+          (
+            prev: curr:
+              elem curr [
+                "-"
+                "_"
+                " "
+              ]
+          )
+          false
+          str;
 
         parts = lib.flatten (
-          map (splitStringBy (
-            prev: curr: match "[a-z]" prev != null && match "[A-Z]" curr != null
-          ) true) separators
+          map
+            (splitStringBy
+              (
+                prev: curr: match "[a-z]" prev != null && match "[A-Z]" curr != null
+              )
+              true)
+            separators
         );
 
         first = if length parts > 0 then toLower (head parts) else "";
@@ -1763,14 +1772,14 @@ rec {
             isSplit = predicate prevChar currChar;
           in
           if isSplit then
-            # Split here - add current part to results and start a new one
+          # Split here - add current part to results and start a new one
             let
               newResult = result ++ [ currentPart ];
               newCurrentPart = if keepSplit then currChar else "";
             in
             go (pos + 1) newCurrentPart newResult
           else
-            # Keep building current part
+          # Keep building current part
             go (pos + 1) (currentPart + currChar) result;
     in
     if len == 0 then [ (addContextFrom str "") ] else map (addContextFrom str) (go 0 "" [ ]);
@@ -1820,7 +1829,7 @@ rec {
           preLen = stringLength prefix;
         in
         if substring 0 preLen str == prefix then
-          # -1 will take the string until the end
+        # -1 will take the string until the end
           substring preLen (-1) str
         else
           str
@@ -2102,10 +2111,10 @@ rec {
       ];
     in
     type: feature: value:
-    assert (elem (toUpper type) types);
-    assert (isString feature);
-    assert (isString value);
-    "-D${feature}:${toUpper type}=${value}";
+      assert (elem (toUpper type) types);
+      assert (isString feature);
+      assert (isString value);
+      "-D${feature}:${toUpper type}=${value}";
 
   /**
     Create a -D<condition>={TRUE,FALSE} string that can be passed to typical
@@ -2138,9 +2147,9 @@ rec {
   */
   cmakeBool =
     condition: flag:
-    assert (lib.isString condition);
-    assert (lib.isBool flag);
-    cmakeOptionType "bool" condition (lib.toUpper (lib.boolToString flag));
+      assert (lib.isString condition);
+      assert (lib.isBool flag);
+      cmakeOptionType "bool" condition (lib.toUpper (lib.boolToString flag));
 
   /**
     Create a -D<feature>:STRING=<value> string that can be passed to typical
@@ -2174,9 +2183,9 @@ rec {
   */
   cmakeFeature =
     feature: value:
-    assert (lib.isString feature);
-    assert (lib.isString value);
-    cmakeOptionType "string" feature value;
+      assert (lib.isString feature);
+      assert (lib.isString value);
+      cmakeOptionType "string" feature value;
 
   /**
     Create a -D<feature>=<value> string that can be passed to typical Meson
@@ -2209,9 +2218,9 @@ rec {
   */
   mesonOption =
     feature: value:
-    assert (lib.isString feature);
-    assert (lib.isString value);
-    "-D${feature}=${value}";
+      assert (lib.isString feature);
+      assert (lib.isString value);
+      "-D${feature}=${value}";
 
   /**
     Create a -D<condition>={true,false} string that can be passed to typical
@@ -2246,9 +2255,9 @@ rec {
   */
   mesonBool =
     condition: flag:
-    assert (lib.isString condition);
-    assert (lib.isBool flag);
-    mesonOption condition (lib.boolToString flag);
+      assert (lib.isString condition);
+      assert (lib.isBool flag);
+      mesonOption condition (lib.boolToString flag);
 
   /**
     Create a -D<feature>={enabled,disabled} string that can be passed to
@@ -2283,9 +2292,9 @@ rec {
   */
   mesonEnable =
     feature: flag:
-    assert (lib.isString feature);
-    assert (lib.isBool flag);
-    mesonOption feature (if flag then "enabled" else "disabled");
+      assert (lib.isString feature);
+      assert (lib.isBool flag);
+      mesonOption feature (if flag then "enabled" else "disabled");
 
   /**
     Create an --{enable,disable}-<feature> string that can be passed to
@@ -2320,9 +2329,9 @@ rec {
   */
   enableFeature =
     flag: feature:
-    assert lib.isBool flag;
-    assert lib.isString feature; # e.g. passing openssl instead of "openssl"
-    "--${if flag then "enable" else "disable"}-${feature}";
+      assert lib.isBool flag;
+      assert lib.isString feature; # e.g. passing openssl instead of "openssl"
+      "--${if flag then "enable" else "disable"}-${feature}";
 
   /**
     Create an --{enable-<feature>=<value>,disable-<feature>} string that can be passed to
@@ -2395,8 +2404,8 @@ rec {
   */
   withFeature =
     flag: feature:
-    assert isString feature; # e.g. passing openssl instead of "openssl"
-    "--${if flag then "with" else "without"}-${feature}";
+      assert isString feature; # e.g. passing openssl instead of "openssl"
+      "--${if flag then "with" else "without"}-${feature}";
 
   /**
     Create an --{with-<feature>=<value>,without-<feature>} string that can be passed to
@@ -2857,13 +2866,13 @@ rec {
   */
   readPathsFromFile = lib.warn "lib.readPathsFromFile is deprecated, use a list instead." (
     rootPath: file:
-    let
-      lines = lib.splitString "\n" (readFile file);
-      removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
-      relativePaths = removeComments lines;
-      absolutePaths = map (path: rootPath + "/${path}") relativePaths;
-    in
-    absolutePaths
+      let
+        lines = lib.splitString "\n" (readFile file);
+        removeComments = lib.filter (line: line != "" && !(lib.hasPrefix "#" line));
+        relativePaths = removeComments lines;
+        absolutePaths = map (path: rootPath + "/${path}") relativePaths;
+      in
+      absolutePaths
   );
 
   /**
@@ -3141,8 +3150,8 @@ rec {
           ydell = substring 1 (ylen - 1) y;
         in
         # A length difference of 2 can only be gotten with 2 delete edits,
-        # which have to have happened at the start and end of x
-        # Example: "abcdef" -> "bcde"
+          # which have to have happened at the start and end of x
+          # Example: "abcdef" -> "bcde"
         if diff == 2 then
           xinfix == y
         # A length difference of 1 can only be gotten with a deletion on the

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  numpy,
-  razdel,
-  navec,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, numpy
+, razdel
+, navec
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  installShellFiles,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, installShellFiles
+,
 }:
 
 buildNpmPackage rec {

@@ -1,17 +1,15 @@
-{
-  lib,
-  callPackage,
-  crystal,
-  fetchFromGitHub,
-  librsvg,
-  pkg-config,
-  libxml2,
-  openssl,
-  shards,
-  sqlite,
-  nixosTests,
-
-  # All versions, revisions, and checksums are stored in ./versions.json.
+{ lib
+, callPackage
+, crystal
+, fetchFromGitHub
+, librsvg
+, pkg-config
+, libxml2
+, openssl
+, shards
+, sqlite
+, nixosTests
+, # All versions, revisions, and checksums are stored in ./versions.json.
   # The update process is the following:
   #   * pick the latest tag
   #   * update .invidious.version, .invidious.date, .invidious.commit and .invidious.hash
@@ -22,7 +20,8 @@
   #     * recreate shards.nix by running crystal2nix
   # Broken versions:
   #   * 20250517 (`Missing hash key: "videoDetails" (KeyError)`)
-  versions ? lib.importJSON ./versions.json,
+  versions ? lib.importJSON ./versions.json
+,
 }:
 let
   # normally video.js is downloaded at build time

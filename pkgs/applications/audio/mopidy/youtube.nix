@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  pythonPackages,
-  mopidy,
-  pkgs,
-  extraPkgs ? pkgs: [ ],
+{ lib
+, fetchFromGitHub
+, pythonPackages
+, mopidy
+, pkgs
+, extraPkgs ? pkgs: [ ]
+,
 }:
 
 pythonPackages.buildPythonApplication rec {

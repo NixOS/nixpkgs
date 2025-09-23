@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  colorama,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  regex,
-  setuptools,
+{ lib
+, buildPythonPackage
+, colorama
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, regex
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

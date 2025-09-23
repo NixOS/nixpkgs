@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  autoPatchelfHook,
-  udev,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, autoPatchelfHook
+, udev
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

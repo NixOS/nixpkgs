@@ -1,10 +1,10 @@
-{
-  buildDunePackage,
-  httpun-types,
-  angstrom,
-  bigstringaf,
-  faraday,
-  alcotest,
+{ buildDunePackage
+, httpun-types
+, angstrom
+, bigstringaf
+, faraday
+, alcotest
+,
 }:
 
 buildDunePackage {

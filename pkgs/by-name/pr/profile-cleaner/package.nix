@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  parallel,
-  sqlite,
-  bc,
-  file,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, parallel
+, sqlite
+, bc
+, file
+,
 }:
 
 stdenv.mkDerivation rec {

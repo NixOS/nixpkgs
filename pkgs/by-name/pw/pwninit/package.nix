@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  openssl,
-  elfutils,
-  makeBinaryWrapper,
-  pkg-config,
-  xz,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, openssl
+, elfutils
+, makeBinaryWrapper
+, pkg-config
+, xz
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,8 +1,7 @@
-{
-  lib,
-  python3Packages,
-
-  withGUI ? true,
+{ lib
+, python3Packages
+, withGUI ? true
+,
 }:
 let
   mandown' = python3Packages.mandown.overridePythonAttrs (prev: {
@@ -11,7 +10,7 @@ let
   mandownApp = python3Packages.toPythonApplication mandown';
 in
 mandownApp
-// {
+  // {
   meta = mandownApp.meta // {
     mainProgram = "mandown";
   };

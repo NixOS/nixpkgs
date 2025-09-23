@@ -1,12 +1,12 @@
-{
-  lib,
-  cni-plugins,
-  buildGoModule,
-  firecracker,
-  containerd,
-  runc,
-  makeWrapper,
-  fetchFromGitHub,
+{ lib
+, cni-plugins
+, buildGoModule
+, firecracker
+, containerd
+, runc
+, makeWrapper
+, fetchFromGitHub
+,
 }:
 
 buildGoModule rec {

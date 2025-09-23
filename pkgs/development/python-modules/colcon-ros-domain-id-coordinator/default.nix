@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  colcon,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-repeat,
-  pytest-rerunfailures,
-  scspell,
-  setuptools,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, colcon
+, fetchFromGitHub
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-repeat
+, pytest-rerunfailures
+, scspell
+, setuptools
+, writableTmpDirAsHomeHook
+,
 }:
 buildPythonPackage {
   pname = "colcon-ros-domain-id-coordinator";

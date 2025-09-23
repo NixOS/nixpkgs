@@ -1,30 +1,30 @@
-{
-  ansicolors,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  grpcio,
-  grpcio-tools,
-  grpcio-reflection,
-  jinja2,
-  lib,
-  mock,
-  openssh,
-  pexpect,
-  psutil,
-  pyserial,
-  pytestCheckHook,
-  pytest-benchmark,
-  pytest-dependency,
-  pytest-mock,
-  pyudev,
-  pyusb,
-  pyyaml,
-  requests,
-  setuptools,
-  setuptools-scm,
-  xmodem,
+{ ansicolors
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, grpcio
+, grpcio-tools
+, grpcio-reflection
+, jinja2
+, lib
+, mock
+, openssh
+, pexpect
+, psutil
+, pyserial
+, pytestCheckHook
+, pytest-benchmark
+, pytest-dependency
+, pytest-mock
+, pyudev
+, pyusb
+, pyyaml
+, requests
+, setuptools
+, setuptools-scm
+, xmodem
+,
 }:
 
 buildPythonPackage rec {

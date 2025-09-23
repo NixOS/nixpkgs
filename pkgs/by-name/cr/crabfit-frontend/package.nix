@@ -1,16 +1,16 @@
-{
-  lib,
-  nixosTests,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  fetchpatch,
-  nodejs,
-  yarn,
-  fixup-yarn-lock,
-  google-fonts,
-  api_url ? "http://127.0.0.1:3000",
-  frontend_url ? "crab.fit",
+{ lib
+, nixosTests
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, fetchpatch
+, nodejs
+, yarn
+, fixup-yarn-lock
+, google-fonts
+, api_url ? "http://127.0.0.1:3000"
+, frontend_url ? "crab.fit"
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

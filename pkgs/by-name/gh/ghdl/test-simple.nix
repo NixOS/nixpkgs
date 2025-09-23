@@ -1,9 +1,9 @@
-{
-  stdenv,
-  ghdl-llvm,
-  ghdl-mcode,
-  ghdl-gcc,
-  backend,
+{ stdenv
+, ghdl-llvm
+, ghdl-mcode
+, ghdl-gcc
+, backend
+,
 }:
 
 let

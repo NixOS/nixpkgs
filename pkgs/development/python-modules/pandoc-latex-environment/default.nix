@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  panflute,
-  pytestCheckHook,
-  pandoc,
-  hatchling,
-  hatch-vcs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, panflute
+, pytestCheckHook
+, pandoc
+, hatchling
+, hatch-vcs
+,
 }:
 
 buildPythonPackage rec {

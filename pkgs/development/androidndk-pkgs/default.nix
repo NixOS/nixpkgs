@@ -1,10 +1,10 @@
-{
-  lib,
-  androidenv,
-  buildPackages,
-  pkgs,
-  targetPackages,
-  config,
+{ lib
+, androidenv
+, buildPackages
+, pkgs
+, targetPackages
+, config
+,
 }:
 
 let

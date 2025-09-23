@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  gtest,
-  libtorrent,
-  ncurses,
-  jsonRpcSupport ? true,
-  nlohmann_json,
-  xmlRpcSupport ? true,
-  xmlrpc_c,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, curl
+, gtest
+, libtorrent
+, ncurses
+, jsonRpcSupport ? true
+, nlohmann_json
+, xmlRpcSupport ? true
+, xmlrpc_c
+,
 }:
 
 stdenv.mkDerivation rec {

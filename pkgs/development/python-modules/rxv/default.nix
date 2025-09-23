@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  defusedxml,
-  fetchFromGitHub,
-  mock,
-  pytest-asyncio,
-  pytest-timeout,
-  pytest-vcr,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-mock,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, defusedxml
+, fetchFromGitHub
+, mock
+, pytest-asyncio
+, pytest-timeout
+, pytest-vcr
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-
-  # nativeBuildInputs
-  pkg-config,
-  protobuf,
-
-  # buildInputs
-  fontconfig,
-  openssl,
-
-  redis,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, # nativeBuildInputs
+  pkg-config
+, protobuf
+, # buildInputs
+  fontconfig
+, openssl
+, redis
+, versionCheckHook
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "golem";

@@ -1,40 +1,36 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  aiohttp,
-  eth-abi,
-  eth-account,
-  eth-hash,
-  eth-typing,
-  eth-utils,
-  hexbytes,
-  jsonschema,
-  lru-dict,
-  protobuf,
-  pydantic,
-  requests,
-  types-requests,
-  websockets,
-
-  # optional-dependencies
-  ipfshttpclient,
-
-  # tests
-  eth-tester,
-  flaky,
-  hypothesis,
-  py-evm,
-  pytest-asyncio_0_21,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
-  pyunormalize,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  aiohttp
+, eth-abi
+, eth-account
+, eth-hash
+, eth-typing
+, eth-utils
+, hexbytes
+, jsonschema
+, lru-dict
+, protobuf
+, pydantic
+, requests
+, types-requests
+, websockets
+, # optional-dependencies
+  ipfshttpclient
+, # tests
+  eth-tester
+, flaky
+, hypothesis
+, py-evm
+, pytest-asyncio_0_21
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, pyunormalize
+,
 }:
 
 buildPythonPackage rec {

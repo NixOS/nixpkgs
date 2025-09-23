@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  ziafont,
-  pytestCheckHook,
-  nbval,
-  latex2mathml,
-  writableTmpDirAsHomeHook,
-  fetchurl,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, ziafont
+, pytestCheckHook
+, nbval
+, latex2mathml
+, writableTmpDirAsHomeHook
+, fetchurl
+,
 }:
 buildPythonPackage rec {
   pname = "ziamath";

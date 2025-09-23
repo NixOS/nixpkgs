@@ -1,23 +1,23 @@
-{
-  stdenvNoCC,
-  callPackage,
-  fetchFromGitHub,
-  buildPackages,
-  lib,
-  enableMalloc ? false,
-  noPackedStructs ? false,
-  maxRequiredFields ? null,
-  field32bit ? false,
-  noErrmsg ? false,
-  bufferOnly ? false,
-  systemHeader ? null,
-  without64bit ? false,
-  encodeArraysUnpacked ? false,
-  convertDoubleFloat ? false,
-  validateUtf8 ? false,
-  littleEndian8bit ? false,
-  c99StaticAssert ? false,
-  noStaticAssert ? false,
+{ stdenvNoCC
+, callPackage
+, fetchFromGitHub
+, buildPackages
+, lib
+, enableMalloc ? false
+, noPackedStructs ? false
+, maxRequiredFields ? null
+, field32bit ? false
+, noErrmsg ? false
+, bufferOnly ? false
+, systemHeader ? null
+, without64bit ? false
+, encodeArraysUnpacked ? false
+, convertDoubleFloat ? false
+, validateUtf8 ? false
+, littleEndian8bit ? false
+, c99StaticAssert ? false
+, noStaticAssert ? false
+,
 }:
 stdenvNoCC.mkDerivation (
   self:

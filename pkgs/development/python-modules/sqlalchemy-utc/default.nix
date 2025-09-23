@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  sqlalchemy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

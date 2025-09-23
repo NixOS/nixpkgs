@@ -1,22 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  pythonOlder,
-
-  # build-system, dependencies
-  meson,
-  ninja,
-  pyproject-metadata,
-  tomli,
-
-  # tests
-  cython,
-  gitMinimal,
-  pytestCheckHook,
-  pytest-mock,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, pythonOlder
+, # build-system, dependencies
+  meson
+, ninja
+, pyproject-metadata
+, tomli
+, # tests
+  cython
+, gitMinimal
+, pytestCheckHook
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

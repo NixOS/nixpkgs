@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  isPyPy,
-  pkgs,
-  six,
-  pytestCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, isPyPy
+, pkgs
+, six
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

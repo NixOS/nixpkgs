@@ -1,26 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  calmjs,
-  django-appconf,
-  jinja2,
-  rcssmin,
-  rjsmin,
-
-  # tests
-  beautifulsoup4,
-  brotli,
-  csscompressor,
-  django-sekizai,
-  pytestCheckHook,
-  pytest-django,
-
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  calmjs
+, django-appconf
+, jinja2
+, rcssmin
+, rjsmin
+, # tests
+  beautifulsoup4
+, brotli
+, csscompressor
+, django-sekizai
+, pytestCheckHook
+, pytest-django
+,
 }:
 
 buildPythonPackage rec {

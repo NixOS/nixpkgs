@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPackages,
-  pcre2,
-  pkg-config,
-  libsepol,
-  enablePython ? false,
-  swig ? null,
-  python3 ? null,
-  python3Packages ? null,
-  fts,
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, pcre2
+, pkg-config
+, libsepol
+, enablePython ? false
+, swig ? null
+, python3 ? null
+, python3Packages ? null
+, fts
+,
 }:
 
 assert enablePython -> swig != null && python3 != null;
@@ -90,10 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-Wno-error -D_FILE_OFFSET_BITS=64";
   }
   //
-    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
-      {
-        NIX_LDFLAGS = "--undefined-version";
-      };
+  lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+    {
+      NIX_LDFLAGS = "--undefined-version";
+    };
 
   makeFlags = [
     "PREFIX=$(out)"

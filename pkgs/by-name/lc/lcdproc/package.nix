@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  makeWrapper,
-  pkg-config,
-  doxygen,
-  freetype,
-  libX11,
-  libftdi,
-  libusb-compat-0_1,
-  libusb1,
-  ncurses,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, makeWrapper
+, pkg-config
+, doxygen
+, freetype
+, libX11
+, libftdi
+, libusb-compat-0_1
+, libusb1
+, ncurses
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

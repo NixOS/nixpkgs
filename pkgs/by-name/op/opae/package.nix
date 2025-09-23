@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libuuid,
-  json_c,
-  doxygen,
-  perl,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libuuid
+, json_c
+, doxygen
+, perl
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

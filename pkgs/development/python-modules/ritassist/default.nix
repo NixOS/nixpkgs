@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  ciso8601,
-  fetchPypi,
-  geopy,
-  pythonOlder,
-  requests,
-  sseclient,
+{ lib
+, buildPythonPackage
+, ciso8601
+, fetchPypi
+, geopy
+, pythonOlder
+, requests
+, sseclient
+,
 }:
 
 buildPythonPackage rec {

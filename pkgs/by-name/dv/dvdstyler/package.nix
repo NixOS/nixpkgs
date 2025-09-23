@@ -1,35 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bison,
-  cdrtools,
-  docbook_xml_dtd_412,
-  docbook-xsl-nons,
-  dvdauthor,
-  dvdplusrwtools,
-  ffmpeg,
-  flex,
-  fontconfig,
-  gettext,
-  glib,
-  gobject-introspection,
-  libexif,
-  libjpeg,
-  pkg-config,
-  wrapGAppsHook3,
-  wxGTK32,
-  wxSVG,
-  xine-ui,
-  xmlto,
-  zip,
-
-  dvdisasterSupport ? true,
-  dvdisaster ? null,
-  udevSupport ? true,
-  udev ? null,
-  dbusSupport ? true,
-  dbus ? null,
+{ lib
+, stdenv
+, fetchurl
+, bison
+, cdrtools
+, docbook_xml_dtd_412
+, docbook-xsl-nons
+, dvdauthor
+, dvdplusrwtools
+, ffmpeg
+, flex
+, fontconfig
+, gettext
+, glib
+, gobject-introspection
+, libexif
+, libjpeg
+, pkg-config
+, wrapGAppsHook3
+, wxGTK32
+, wxSVG
+, xine-ui
+, xmlto
+, zip
+, dvdisasterSupport ? true
+, dvdisaster ? null
+, udevSupport ? true
+, udev ? null
+, dbusSupport ? true
+, dbus ? null
+,
 }:
 
 let

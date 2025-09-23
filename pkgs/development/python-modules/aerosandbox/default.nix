@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  numpy,
-  scipy,
-  pandas,
-  matplotlib,
-  seaborn,
-  tqdm,
-  sortedcontainers,
-  dill,
-  casadi,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, numpy
+, scipy
+, pandas
+, matplotlib
+, seaborn
+, tqdm
+, sortedcontainers
+, dill
+, casadi
+,
 }:
 
 buildPythonPackage rec {

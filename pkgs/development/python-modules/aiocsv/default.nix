@@ -1,14 +1,14 @@
-{
-  lib,
-  aiofiles,
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ lib
+, aiofiles
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

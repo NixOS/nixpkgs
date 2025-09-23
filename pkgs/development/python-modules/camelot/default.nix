@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  chardet,
-  openpyxl,
-  charset-normalizer,
-  fetchPypi,
-  pythonOlder,
-  pandas,
-  tabulate,
-  click,
-  pdfminer-six,
-  pypdf,
-  opencv4,
-  setuptools,
+{ lib
+, buildPythonPackage
+, chardet
+, openpyxl
+, charset-normalizer
+, fetchPypi
+, pythonOlder
+, pandas
+, tabulate
+, click
+, pdfminer-six
+, pypdf
+, opencv4
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,6 +1,6 @@
-{
-  unrar,
-  fetchzip,
+{ unrar
+, fetchzip
+,
 }:
 
 unrar.overrideAttrs (

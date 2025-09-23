@@ -1,29 +1,29 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  gitUpdater,
-  testers,
-  cmake,
-  cmake-extras,
-  dbus,
-  doxygen,
-  glibcLocales,
-  gsettings-qt,
-  gtest,
-  intltool,
-  json-glib,
-  libapparmor,
-  libqtdbustest,
-  pkg-config,
-  qdjango,
-  qtbase,
-  qtdeclarative,
-  qtxmlpatterns,
-  ubports-click,
-  validatePkgConfig,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, gitUpdater
+, testers
+, cmake
+, cmake-extras
+, dbus
+, doxygen
+, glibcLocales
+, gsettings-qt
+, gtest
+, intltool
+, json-glib
+, libapparmor
+, libqtdbustest
+, pkg-config
+, qdjango
+, qtbase
+, qtdeclarative
+, qtxmlpatterns
+, ubports-click
+, validatePkgConfig
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

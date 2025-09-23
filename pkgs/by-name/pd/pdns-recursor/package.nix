@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  boost,
-  nixosTests,
-  openssl,
-  systemd,
-  lua,
-  luajit,
-  protobuf,
-  libsodium,
-  curl,
-  rustPlatform,
-  cargo,
-  rustc,
-  enableProtoBuf ? false,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, boost
+, nixosTests
+, openssl
+, systemd
+, lua
+, luajit
+, protobuf
+, libsodium
+, curl
+, rustPlatform
+, cargo
+, rustc
+, enableProtoBuf ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

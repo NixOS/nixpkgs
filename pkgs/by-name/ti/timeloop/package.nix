@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  scons,
-  libconfig,
-  boost,
-  libyaml,
-  yaml-cpp,
-  ncurses,
-  gpm,
-  enableAccelergy ? true,
-  enableISL ? false,
-  accelergy,
+{ lib
+, stdenv
+, fetchFromGitHub
+, scons
+, libconfig
+, boost
+, libyaml
+, yaml-cpp
+, ncurses
+, gpm
+, enableAccelergy ? true
+, enableISL ? false
+, accelergy
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  django,
-  django-stubs-ext,
-  typing-extensions,
-  mysqlclient,
-  psycopg,
-  dj-database-url,
-  django-rq,
-  fakeredis,
-  pytestCheckHook,
-  pytest-django,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, django
+, django-stubs-ext
+, typing-extensions
+, mysqlclient
+, psycopg
+, dj-database-url
+, django-rq
+, fakeredis
+, pytestCheckHook
+, pytest-django
+,
 }:
 
 buildPythonPackage rec {

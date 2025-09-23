@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  fetchCrate,
-  pkg-config,
-  openssl,
-  withLsp ? true,
-  installShellFiles,
+{ stdenv
+, lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, openssl
+, withLsp ? true
+, installShellFiles
+,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,8 +37,8 @@ rustPlatform.buildRustPackage rec {
       (
         stdenv.buildPlatform.canExecute stdenv.hostPlatform
         &&
-          # Creation of the completions fails on Darwin platforms.
-          !stdenv.hostPlatform.isDarwin
+        # Creation of the completions fails on Darwin platforms.
+        !stdenv.hostPlatform.isDarwin
       )
       ''
         installShellCompletion --cmd taplo \

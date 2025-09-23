@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pkginfo,
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pkginfo
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

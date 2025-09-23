@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools-scm,
-  pythonOlder,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pytest-xdist,
-  numpy,
-  numba,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, setuptools-scm
+, pythonOlder
+, fetchFromGitHub
+, pytestCheckHook
+, pytest-xdist
+, numpy
+, numba
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

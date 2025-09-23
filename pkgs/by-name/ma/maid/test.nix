@@ -1,9 +1,9 @@
 { runCommandLocal, maid }:
 
 runCommandLocal "test-maid-run"
-  {
-    nativeBuildInputs = [ maid ];
-  }
+{
+  nativeBuildInputs = [ maid ];
+}
   ''
     mkdir -p $out/test
     export HOME=$out

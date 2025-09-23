@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  zlib,
-  bash,
-  buildPackages,
-  nix-update-script,
-  pkgsCross,
-  pkgsStatic,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, zlib
+, bash
+, buildPackages
+, nix-update-script
+, pkgsCross
+, pkgsStatic
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

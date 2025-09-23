@@ -1,20 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildGoModule,
-
-  cmake,
-  curl,
-  go,
-  unzip,
-  zip,
-
-  catch2,
-  cxxopts,
-  fmt,
-
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, cmake
+, curl
+, go
+, unzip
+, zip
+, catch2
+, cxxopts
+, fmt
+, versionCheckHook
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "protonmail-export";

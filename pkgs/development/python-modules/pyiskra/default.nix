@@ -1,10 +1,10 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pymodbus,
-  setuptools,
+{ aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, pymodbus
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

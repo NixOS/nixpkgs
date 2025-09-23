@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  mpi,
-  metis,
-  python3Packages,
-  pythonSupport ? false,
-  isILP64 ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, mpi
+, metis
+, python3Packages
+, pythonSupport ? false
+, isILP64 ? false
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kahip";

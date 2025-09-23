@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  autoreconfHook,
-  xorg,
-  freetype,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, autoreconfHook
+, xorg
+, freetype
+,
 }:
 
 stdenv.mkDerivation rec {

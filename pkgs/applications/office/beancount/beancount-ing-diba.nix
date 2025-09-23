@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  beangulp,
-  beancount,
+{ lib
+, python3
+, fetchFromGitHub
+, beangulp
+, beancount
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

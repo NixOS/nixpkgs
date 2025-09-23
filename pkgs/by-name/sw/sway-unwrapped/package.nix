@@ -1,36 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  swaybg,
-  meson,
-  ninja,
-  pkg-config,
-  wayland-scanner,
-  scdoc,
-  libGL,
-  wayland,
-  libxkbcommon,
-  pcre2,
-  json_c,
-  libevdev,
-  pango,
-  cairo,
-  libinput,
-  gdk-pixbuf,
-  librsvg,
-  wlroots,
-  wayland-protocols,
-  libdrm,
-  nixosTests,
-  # Used by the NixOS module:
-  isNixOS ? false,
-  enableXWayland ? true,
-  xorg,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  trayEnabled ? systemdSupport,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, swaybg
+, meson
+, ninja
+, pkg-config
+, wayland-scanner
+, scdoc
+, libGL
+, wayland
+, libxkbcommon
+, pcre2
+, json_c
+, libevdev
+, pango
+, cairo
+, libinput
+, gdk-pixbuf
+, librsvg
+, wlroots
+, wayland-protocols
+, libdrm
+, nixosTests
+, # Used by the NixOS module:
+  isNixOS ? false
+, enableXWayland ? true
+, xorg
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, trayEnabled ? systemdSupport
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

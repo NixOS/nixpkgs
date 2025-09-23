@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  pkgconfig,
-  setuptools,
-  wheel,
-  pytestCheckHook,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, pkgconfig
+, setuptools
+, wheel
+, pytestCheckHook
+, python
+,
 }:
 
 buildPythonPackage rec {

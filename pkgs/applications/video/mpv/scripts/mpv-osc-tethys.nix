@@ -1,7 +1,7 @@
-{
-  lib,
-  buildLua,
-  fetchFromGitHub,
+{ lib
+, buildLua
+, fetchFromGitHub
+,
 }:
 buildLua (finalAttrs: {
   pname = "mpv-osc-tethys";

@@ -1,30 +1,30 @@
-{
-  buildVersion,
-  dev ? false,
-  aarch64sha256,
-  x64sha256,
+{ buildVersion
+, dev ? false
+, aarch64sha256
+, x64sha256
+,
 }:
 
-{
-  fetchurl,
-  lib,
-  stdenv,
-  xorg,
-  glib,
-  libGL,
-  glibcLocales,
-  gtk3,
-  cairo,
-  pango,
-  libredirect,
-  makeWrapper,
-  wrapGAppsHook3,
-  pkexecPath ? "/run/wrappers/bin/pkexec",
-  writeShellScript,
-  common-updater-scripts,
-  curl,
-  gnugrep,
-  coreutils,
+{ fetchurl
+, lib
+, stdenv
+, xorg
+, glib
+, libGL
+, glibcLocales
+, gtk3
+, cairo
+, pango
+, libredirect
+, makeWrapper
+, wrapGAppsHook3
+, pkexecPath ? "/run/wrappers/bin/pkexec"
+, writeShellScript
+, common-updater-scripts
+, curl
+, gnugrep
+, coreutils
+,
 }:
 
 let

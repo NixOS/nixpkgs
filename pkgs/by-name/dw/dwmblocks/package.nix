@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libX11,
-  patches ? [ ],
-  writeText,
-  conf ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+, patches ? [ ]
+, writeText
+, conf ? null
+,
 }:
 
 stdenv.mkDerivation {

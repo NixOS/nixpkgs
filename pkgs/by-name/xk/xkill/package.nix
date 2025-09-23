@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xorgproto,
-  libx11,
-  libxmu,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorgproto
+, libx11
+, libxmu
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xkill";

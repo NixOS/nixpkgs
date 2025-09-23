@@ -1,7 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  pkgs ? import ../.. { inherit system; },
-  lib ? pkgs.lib,
+{ system ? builtins.currentSystem
+, pkgs ? import ../.. { inherit system; }
+, lib ? pkgs.lib
+,
 }:
 
 let
@@ -32,10 +32,10 @@ let
     '';
 
   mkTest =
-    {
-      name,
-      extraServerConfig ? { },
-      checkFirewallClosed ? true,
+    { name
+    , extraServerConfig ? { }
+    , checkFirewallClosed ? true
+    ,
     }:
     makeTest {
       inherit name;

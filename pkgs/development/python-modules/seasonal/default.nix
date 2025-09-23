@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  numpy,
-  scipy,
-  pandas,
-  matplotlib,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, numpy
+, scipy
+, pandas
+, matplotlib
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,30 +1,26 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-
-  # buildInputs
-  gdk-pixbuf,
-  gtk4,
-  libadwaita,
-  vulkan-tools,
-
-  # wrapper
-  python3,
-  clinfo,
-  lsb-release,
-  mesa-demos,
-  vdpauinfo,
-
-  # passthru
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, # nativeBuildInputs
+  gobject-introspection
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, # buildInputs
+  gdk-pixbuf
+, gtk4
+, libadwaita
+, vulkan-tools
+, # wrapper
+  python3
+, clinfo
+, lsb-release
+, mesa-demos
+, vdpauinfo
+, # passthru
+  nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

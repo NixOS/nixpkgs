@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -41,14 +40,14 @@ let
 
   # Perform substitutions in all udev rules files.
   udevRulesFor =
-    {
-      name,
-      udevPackages,
-      udevPath,
-      udev,
-      systemd,
-      binPackages,
-      initrdBin ? null,
+    { name
+    , udevPackages
+    , udevPath
+    , udev
+    , systemd
+    , binPackages
+    , initrdBin ? null
+    ,
     }:
     pkgs.runCommand name
       {

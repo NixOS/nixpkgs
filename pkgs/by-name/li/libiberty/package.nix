@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  staticBuild ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, buildPackages
+, staticBuild ? stdenv.hostPlatform.isStatic
+,
 }:
 
 let

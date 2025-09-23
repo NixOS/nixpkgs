@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  fftw,
-  liblo,
-  libsndfile,
-  makeDesktopItem,
-  portaudio,
-  qmake,
-  qtbase,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, fftw
+, liblo
+, libsndfile
+, makeDesktopItem
+, portaudio
+, qmake
+, qtbase
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

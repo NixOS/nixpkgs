@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  darwin,
-  fetchFromGitHub,
-  rustPlatform,
-  nixosTests,
-  nix-update-script,
-  autoPatchelfHook,
-  cmake,
-  ncurses,
-  pkg-config,
-  gcc-unwrapped,
-  fontconfig,
-  libGL,
-  vulkan-loader,
-  libxkbcommon,
-  withX11 ? !stdenv.hostPlatform.isDarwin,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libxcb,
-  withWayland ? !stdenv.hostPlatform.isDarwin,
-  wayland,
-  testers,
-  rio,
+{ lib
+, stdenv
+, darwin
+, fetchFromGitHub
+, rustPlatform
+, nixosTests
+, nix-update-script
+, autoPatchelfHook
+, cmake
+, ncurses
+, pkg-config
+, gcc-unwrapped
+, fontconfig
+, libGL
+, vulkan-loader
+, libxkbcommon
+, withX11 ? !stdenv.hostPlatform.isDarwin
+, libX11
+, libXcursor
+, libXi
+, libXrandr
+, libxcb
+, withWayland ? !stdenv.hostPlatform.isDarwin
+, wayland
+, testers
+, rio
+,
 }:
 let
   rlinkLibs =

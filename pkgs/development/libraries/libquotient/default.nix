@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  olm,
-  openssl,
-  qtbase,
-  qtmultimedia,
-  qtkeychain,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, olm
+, openssl
+, qtbase
+, qtmultimedia
+, qtkeychain
+,
 }:
 
 stdenv.mkDerivation rec {

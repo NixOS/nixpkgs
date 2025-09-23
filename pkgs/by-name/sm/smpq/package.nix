@@ -1,9 +1,9 @@
-{
-  lib,
-  cmake,
-  fetchurl,
-  stdenv,
-  stormlib,
+{ lib
+, cmake
+, fetchurl
+, stdenv
+, stormlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

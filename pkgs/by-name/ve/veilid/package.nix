@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitLab,
-  rustPlatform,
-  protobuf,
-  capnproto,
-  cmake,
-  testers,
-  veilid,
-  gitUpdater,
+{ lib
+, fetchFromGitLab
+, rustPlatform
+, protobuf
+, capnproto
+, cmake
+, testers
+, veilid
+, gitUpdater
+,
 }:
 
 rustPlatform.buildRustPackage rec {

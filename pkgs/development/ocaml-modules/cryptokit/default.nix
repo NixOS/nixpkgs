@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  zlib,
-  dune-configurator,
-  zarith,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, zlib
+, dune-configurator
+, zarith
+,
 }:
 
 buildDunePackage rec {

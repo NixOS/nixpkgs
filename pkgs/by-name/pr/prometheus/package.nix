@@ -1,34 +1,34 @@
-{
-  stdenv,
-  lib,
-  go,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchurl,
-  nixosTests,
-  enableAWS ? true,
-  enableAzure ? true,
-  enableConsul ? true,
-  enableDigitalOcean ? true,
-  enableDNS ? true,
-  enableEureka ? true,
-  enableGCE ? true,
-  enableHetzner ? true,
-  enableIONOS ? true,
-  enableKubernetes ? true,
-  enableLinode ? true,
-  enableMarathon ? true,
-  enableMoby ? true,
-  enableNomad ? true,
-  enableOpenstack ? true,
-  enableOVHCloud ? true,
-  enablePuppetDB ? true,
-  enableScaleway ? true,
-  enableTriton ? true,
-  enableUyuni ? true,
-  enableVultr ? true,
-  enableXDS ? true,
-  enableZookeeper ? true,
+{ stdenv
+, lib
+, go
+, buildGoModule
+, fetchFromGitHub
+, fetchurl
+, nixosTests
+, enableAWS ? true
+, enableAzure ? true
+, enableConsul ? true
+, enableDigitalOcean ? true
+, enableDNS ? true
+, enableEureka ? true
+, enableGCE ? true
+, enableHetzner ? true
+, enableIONOS ? true
+, enableKubernetes ? true
+, enableLinode ? true
+, enableMarathon ? true
+, enableMoby ? true
+, enableNomad ? true
+, enableOpenstack ? true
+, enableOVHCloud ? true
+, enablePuppetDB ? true
+, enableScaleway ? true
+, enableTriton ? true
+, enableUyuni ? true
+, enableVultr ? true
+, enableXDS ? true
+, enableZookeeper ? true
+,
 }:
 
 buildGoModule (finalAttrs: {

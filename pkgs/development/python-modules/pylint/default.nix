@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  astroid,
-  buildPythonPackage,
-  dill,
-  fetchFromGitHub,
-  gitpython,
-  isort,
-  mccabe,
-  platformdirs,
-  py,
-  pytest-timeout,
-  pytest-xdist,
-  pytest7CheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  tomli,
-  tomlkit,
-  typing-extensions,
+{ lib
+, stdenv
+, astroid
+, buildPythonPackage
+, dill
+, fetchFromGitHub
+, gitpython
+, isort
+, mccabe
+, platformdirs
+, py
+, pytest-timeout
+, pytest-xdist
+, pytest7CheckHook
+, pythonOlder
+, requests
+, setuptools
+, tomli
+, tomlkit
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

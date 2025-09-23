@@ -1,11 +1,11 @@
-{
-  lib,
-  pythonOlder,
-  flit-core,
-  fetchPypi,
-  buildPythonPackage,
-  betterproto,
-  pydantic,
+{ lib
+, pythonOlder
+, flit-core
+, fetchPypi
+, buildPythonPackage
+, betterproto
+, pydantic
+,
 }:
 
 buildPythonPackage rec {

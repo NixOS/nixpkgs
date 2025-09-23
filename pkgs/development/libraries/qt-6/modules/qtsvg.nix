@@ -1,13 +1,13 @@
-{
-  qtModule,
-  qtbase,
-  libwebp,
-  jasper,
-  libmng,
-  zlib,
-  pkg-config,
-  lib,
-  stdenv,
+{ qtModule
+, qtbase
+, libwebp
+, jasper
+, libmng
+, zlib
+, pkg-config
+, lib
+, stdenv
+,
 }:
 
 qtModule {

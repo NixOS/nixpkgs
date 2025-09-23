@@ -1,17 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  makeWrapper,
-
-  fontconfig,
-  libGL,
-  libxkbcommon,
-  openssl,
-  wayland,
-  xorg,
-
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, makeWrapper
+, fontconfig
+, libGL
+, libxkbcommon
+, openssl
+, wayland
+, xorg
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flax,
-  jax,
-  jaxlib,
-  transformers,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flax
+, jax
+, jaxlib
+, transformers
+,
 }:
 
 buildPythonPackage {

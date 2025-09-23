@@ -1,13 +1,13 @@
-{
-  lib,
-  callPackage,
-  fetchFromGitHub,
-  makeWrapper,
-  nixosTests,
-  python3Packages,
-  nltk-data,
-  writeShellScript,
-  nix-update-script,
+{ lib
+, callPackage
+, fetchFromGitHub
+, makeWrapper
+, nixosTests
+, python3Packages
+, nltk-data
+, writeShellScript
+, nix-update-script
+,
 }:
 
 let

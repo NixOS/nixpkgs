@@ -1,14 +1,13 @@
-{
-  lts ? false,
-  meta,
-  patches,
-  src,
-  vendorHash,
-  version,
-
-  lib,
-  buildGoModule,
-  installShellFiles,
+{ lts ? false
+, meta
+, patches
+, src
+, vendorHash
+, version
+, lib
+, buildGoModule
+, installShellFiles
+,
 }:
 let
   pname = "incus${lib.optionalString lts "-lts"}-client";

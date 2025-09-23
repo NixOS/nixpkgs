@@ -1,54 +1,53 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  fetchurl,
-  pkg-config,
-  gettext,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
-  gtk-doc,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  python3,
-  makeWrapper,
-  shared-mime-info,
-  isocodes,
-  expat,
-  glib,
-  cairo,
-  pango,
-  gdk-pixbuf,
-  atk,
-  at-spi2-atk,
-  gobject-introspection,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages,
-  fribidi,
-  xorg,
-  libepoxy,
-  libxkbcommon,
-  libxml2,
-  gnome,
-  gsettings-desktop-schemas,
-  sassc,
-  trackerSupport ? stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform),
-  tinysparql,
-  x11Support ? stdenv.hostPlatform.isLinux,
-  waylandSupport ? stdenv.hostPlatform.isLinux,
-  libGL,
-  wayland,
-  wayland-protocols,
-  xineramaSupport ? stdenv.hostPlatform.isLinux,
-  cupsSupport ? stdenv.hostPlatform.isLinux,
-  cups,
-  broadwaySupport ? true,
-  wayland-scanner,
-  testers,
+{ lib
+, stdenv
+, replaceVars
+, fetchurl
+, pkg-config
+, gettext
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, gtk-doc
+, meson
+, mesonEmulatorHook
+, ninja
+, python3
+, makeWrapper
+, shared-mime-info
+, isocodes
+, expat
+, glib
+, cairo
+, pango
+, gdk-pixbuf
+, atk
+, at-spi2-atk
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, fribidi
+, xorg
+, libepoxy
+, libxkbcommon
+, libxml2
+, gnome
+, gsettings-desktop-schemas
+, sassc
+, trackerSupport ? stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
+, tinysparql
+, x11Support ? stdenv.hostPlatform.isLinux
+, waylandSupport ? stdenv.hostPlatform.isLinux
+, libGL
+, wayland
+, wayland-protocols
+, xineramaSupport ? stdenv.hostPlatform.isLinux
+, cupsSupport ? stdenv.hostPlatform.isLinux
+, cups
+, broadwaySupport ? true
+, wayland-scanner
+, testers
+,
 }:
 
 let
@@ -120,11 +119,11 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
   ]
   ++
-    lib.optionals
-      ((withIntrospection || compileSchemas) && !stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-      [
-        mesonEmulatorHook
-      ]
+  lib.optionals
+    ((withIntrospection || compileSchemas) && !stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+    [
+      mesonEmulatorHook
+    ]
   ++ lib.optionals waylandSupport [
     wayland-scanner
   ];

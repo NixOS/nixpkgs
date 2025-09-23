@@ -1,15 +1,12 @@
-{
-  lib,
-  mkMesonLibrary,
+{ lib
+, mkMesonLibrary
+, nix-util
+, nix-util-c
+, rapidcheck
+, # Configuration Options
 
-  nix-util,
-  nix-util-c,
-
-  rapidcheck,
-
-  # Configuration Options
-
-  version,
+  version
+,
 }:
 
 mkMesonLibrary (finalAttrs: {

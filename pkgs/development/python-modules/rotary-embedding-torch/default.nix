@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  wheel,
-
-  # dependencies
-  beartype,
-  einops,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, wheel
+, # dependencies
+  beartype
+, einops
+, torch
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  equihash,
-  setuptools,
-  python,
+{ lib
+, stdenv
+, buildPythonPackage
+, equihash
+, setuptools
+, python
+,
 }:
 
 buildPythonPackage rec {

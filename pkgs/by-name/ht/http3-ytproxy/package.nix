@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  libwebp,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, libwebp
+,
 }:
 buildGoModule {
   pname = "http3-ytproxy";

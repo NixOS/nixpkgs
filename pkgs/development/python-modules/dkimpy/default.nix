@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchPypi,
-  openssl,
-  buildPythonPackage,
-  pytest,
-  dnspython,
-  pynacl,
-  authres,
-  python,
+{ lib
+, fetchPypi
+, openssl
+, buildPythonPackage
+, pytest
+, dnspython
+, pynacl
+, authres
+, python
+,
 }:
 
 buildPythonPackage rec {

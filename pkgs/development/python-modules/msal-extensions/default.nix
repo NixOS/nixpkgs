@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  msal,
-  portalocker,
-  setuptools,
-  stdenv,
-  pythonOlder,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, msal
+, portalocker
+, setuptools
+, stdenv
+, pythonOlder
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools,
-  chardet,
-  cryptography,
-  feedparser,
-  fetchPypi,
-  mock,
-  pysocks,
-  pytestCheckHook,
-  python-dateutil,
-  python-gnupg,
-  pythonOlder,
-  pytz,
+{ lib
+, buildPythonPackage
+, setuptools
+, chardet
+, cryptography
+, feedparser
+, fetchPypi
+, mock
+, pysocks
+, pytestCheckHook
+, python-dateutil
+, python-gnupg
+, pythonOlder
+, pytz
+,
 }:
 
 buildPythonPackage rec {

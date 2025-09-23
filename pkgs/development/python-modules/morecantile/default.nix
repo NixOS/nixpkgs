@@ -1,18 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-
-  attrs,
-  click,
-  flit,
-  mercantile,
-  pydantic,
-  pyproj,
-  rasterio,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, attrs
+, click
+, flit
+, mercantile
+, pydantic
+, pyproj
+, rasterio
+,
 }:
 
 buildPythonPackage rec {

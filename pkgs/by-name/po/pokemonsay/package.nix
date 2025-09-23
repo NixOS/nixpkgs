@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchpatch,
-  cowsay,
-  coreutils,
-  findutils,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchpatch
+, cowsay
+, coreutils
+, findutils
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

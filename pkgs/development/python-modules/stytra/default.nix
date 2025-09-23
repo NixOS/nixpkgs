@@ -1,34 +1,34 @@
-{
-  lib,
-  anytree,
-  arrayqueues,
-  av,
-  buildPythonPackage,
-  colorspacious,
-  fetchPypi,
-  flammkuchen,
-  git,
-  gitpython,
-  imageio,
-  imageio-ffmpeg,
-  lightparam,
-  matplotlib,
-  numba,
-  numpy,
-  opencv4,
-  pandas,
-  pims,
-  pyqt5,
-  pyqtgraph,
-  pyserial,
-  pytestCheckHook,
-  pythonOlder,
-  qdarkstyle,
-  qimage2ndarray,
-  scikit-image,
-  scipy,
-  setuptools,
-  tables,
+{ lib
+, anytree
+, arrayqueues
+, av
+, buildPythonPackage
+, colorspacious
+, fetchPypi
+, flammkuchen
+, git
+, gitpython
+, imageio
+, imageio-ffmpeg
+, lightparam
+, matplotlib
+, numba
+, numpy
+, opencv4
+, pandas
+, pims
+, pyqt5
+, pyqtgraph
+, pyserial
+, pytestCheckHook
+, pythonOlder
+, qdarkstyle
+, qimage2ndarray
+, scikit-image
+, scipy
+, setuptools
+, tables
+,
 }:
 
 buildPythonPackage rec {

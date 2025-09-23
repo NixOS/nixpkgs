@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGo125Module,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  pluginsDir ? null,
+{ lib
+, buildGo125Module
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, pluginsDir ? null
+,
 }:
 
 buildGo125Module rec {

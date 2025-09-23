@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  autoreconfHook,
-  check,
-  pkg-config,
-  file,
-  protobufc,
-  withWolfSSL ? false,
-  wolfssl,
-  withGnuTLS ? false,
-  gnutls,
-  withJSON ? true,
-  json_c,
+{ lib
+, stdenv
+, fetchFromGitea
+, autoreconfHook
+, check
+, pkg-config
+, file
+, protobufc
+, withWolfSSL ? false
+, wolfssl
+, withGnuTLS ? false
+, gnutls
+, withJSON ? true
+, json_c
+,
 }:
 
 stdenv.mkDerivation rec {

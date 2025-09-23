@@ -1,14 +1,14 @@
-{
-  lib,
-  boost,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  curl,
-  nlohmann_json,
-  pkg-config,
-  stdenv,
-  nixComponents,
+{ lib
+, boost
+, fetchFromGitHub
+, meson
+, ninja
+, curl
+, nlohmann_json
+, pkg-config
+, stdenv
+, nixComponents
+,
 }:
 stdenv.mkDerivation rec {
   pname = "nix-eval-jobs";

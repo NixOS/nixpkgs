@@ -1,19 +1,18 @@
-{
-  commonMeta,
-  multipass_src,
-  multipassd,
-  version,
-
-  autoPatchelfHook,
-  flutter332,
-  gtkmm3,
-  keybinder3,
-  lib,
-  libayatana-appindicator,
-  libnotify,
-  protobuf,
-  protoc-gen-dart,
-  qt6,
+{ commonMeta
+, multipass_src
+, multipassd
+, version
+, autoPatchelfHook
+, flutter332
+, gtkmm3
+, keybinder3
+, lib
+, libayatana-appindicator
+, libnotify
+, protobuf
+, protoc-gen-dart
+, qt6
+,
 }:
 flutter332.buildFlutterApplication {
   inherit version;

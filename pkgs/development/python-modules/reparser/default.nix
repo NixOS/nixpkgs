@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  isPy27,
-  fetchFromGitHub,
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchFromGitHub
+,
 }:
 
 buildPythonPackage rec {

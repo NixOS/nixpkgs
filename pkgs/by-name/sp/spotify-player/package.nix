@@ -1,39 +1,37 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  openssl,
-  cmake,
-  installShellFiles,
-  writableTmpDirAsHomeHook,
-
-  # deps for audio backends
-  alsa-lib,
-  libpulseaudio,
-  portaudio,
-  libjack2,
-  SDL2,
-  gst_all_1,
-  dbus,
-  fontconfig,
-  libsixel,
-
-  # build options
-  withStreaming ? true,
-  withDaemon ? true,
-  withAudioBackend ? "rodio", # alsa, pulseaudio, rodio, portaudio, jackaudio, rodiojack, sdl
-  withMediaControl ? true,
-  withImage ? true,
-  withNotify ? true,
-  withSixel ? true,
-  withFuzzy ? true,
-  stdenv,
-  makeBinaryWrapper,
-
-  # passthru
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, openssl
+, cmake
+, installShellFiles
+, writableTmpDirAsHomeHook
+, # deps for audio backends
+  alsa-lib
+, libpulseaudio
+, portaudio
+, libjack2
+, SDL2
+, gst_all_1
+, dbus
+, fontconfig
+, libsixel
+, # build options
+  withStreaming ? true
+, withDaemon ? true
+, withAudioBackend ? "rodio"
+, # alsa, pulseaudio, rodio, portaudio, jackaudio, rodiojack, sdl
+  withMediaControl ? true
+, withImage ? true
+, withNotify ? true
+, withSixel ? true
+, withFuzzy ? true
+, stdenv
+, makeBinaryWrapper
+, # passthru
+  nix-update-script
+,
 }:
 
 assert lib.assertOneOf "withAudioBackend" withAudioBackend [

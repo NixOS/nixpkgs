@@ -1,9 +1,9 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  effects,
-  lib,
-  pkgs,
+{ build-idris-package
+, fetchFromGitHub
+, effects
+, lib
+, pkgs
+,
 }:
 build-idris-package {
   pname = "glfw";

@@ -1,19 +1,19 @@
-{
-  lib,
-  apple-sdk,
-  bzip2,
-  copyfile,
-  less,
-  libmd,
-  libutil,
-  libxo,
-  mkAppleDerivation,
-  pkg-config,
-  removefile,
-  shell_cmds,
-  stdenvNoCC,
-  xz,
-  zlib,
+{ lib
+, apple-sdk
+, bzip2
+, copyfile
+, less
+, libmd
+, libutil
+, libxo
+, mkAppleDerivation
+, pkg-config
+, removefile
+, shell_cmds
+, stdenvNoCC
+, xz
+, zlib
+,
 }:
 
 let

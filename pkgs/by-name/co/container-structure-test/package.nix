@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  testers,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  container-structure-test,
+{ lib
+, stdenv
+, testers
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, container-structure-test
+,
 }:
 buildGoModule rec {
   version = "1.19.3";

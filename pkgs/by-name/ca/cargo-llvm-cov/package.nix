@@ -13,13 +13,13 @@
 # [0]: https://github.com/taiki-e/cargo-llvm-cov/issues/242
 # [1]: https://github.com/NixOS/nixpkgs/pull/197478
 
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  llvmPackages_19,
-  gitMinimal,
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, llvmPackages_19
+, gitMinimal
+,
 }:
 
 let

@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  rustPlatform,
-  pop-gtk-theme,
-  adw-gtk3,
-  pkg-config,
-  libpulseaudio,
-  geoclue2-with-demo-agent,
-  libinput,
-  udev,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, stdenv
+, rustPlatform
+, pop-gtk-theme
+, adw-gtk3
+, pkg-config
+, libpulseaudio
+, geoclue2-with-demo-agent
+, libinput
+, udev
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

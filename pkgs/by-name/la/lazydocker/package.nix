@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  lazydocker,
-  testers,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, lazydocker
+, testers
+,
 }:
 
 buildGoModule rec {

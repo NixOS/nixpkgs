@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  docutils,
-  pip,
-  requests,
-  tomli-w,
-
-  # tests
-  pytestCheckHook,
-  testpath,
-  responses,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit-core
+, # dependencies
+  docutils
+, pip
+, requests
+, tomli-w
+, # tests
+  pytestCheckHook
+, testpath
+, responses
+,
 }:
 
 # Flit is actually an application to build universal wheels.

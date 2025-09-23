@@ -1,32 +1,32 @@
-{
-  lib,
-  aiohttp,
-  anyio,
-  buildPythonPackage,
-  click,
-  dirty-equals,
-  distro,
-  fetchPypi,
-  fire,
-  hatch-fancy-pypi-readme,
-  hatchling,
-  httpx-aiohttp,
-  httpx,
-  nest-asyncio,
-  pandas,
-  prompt-toolkit,
-  pyaml,
-  pydantic,
-  pytest-asyncio,
-  pytest-xdist,
-  pytestCheckHook,
-  requests,
-  respx,
-  rich,
-  sniffio,
-  termcolor,
-  tqdm,
-  typing-extensions,
+{ lib
+, aiohttp
+, anyio
+, buildPythonPackage
+, click
+, dirty-equals
+, distro
+, fetchPypi
+, fire
+, hatch-fancy-pypi-readme
+, hatchling
+, httpx-aiohttp
+, httpx
+, nest-asyncio
+, pandas
+, prompt-toolkit
+, pyaml
+, pydantic
+, pytest-asyncio
+, pytest-xdist
+, pytestCheckHook
+, requests
+, respx
+, rich
+, sniffio
+, termcolor
+, tqdm
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

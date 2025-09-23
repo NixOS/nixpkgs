@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, udevCheckHook
+,
 }:
 
 ## Usage

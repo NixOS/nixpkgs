@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  ocaml,
-  stdlib-shims,
-  uutf,
-  uucp,
-  alcotest,
-  fmt,
+{ lib
+, buildDunePackage
+, fetchurl
+, ocaml
+, stdlib-shims
+, uutf
+, uucp
+, alcotest
+, fmt
+,
 }:
 
 buildDunePackage rec {

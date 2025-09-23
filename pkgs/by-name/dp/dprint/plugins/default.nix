@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  dprint,
-  writableTmpDirAsHomeHook,
+{ lib
+, fetchurl
+, stdenv
+, dprint
+, writableTmpDirAsHomeHook
+,
 }:
 let
   mkDprintPlugin =
-    {
-      url,
-      hash,
-      pname,
-      version,
-      description,
-      initConfig,
-      updateUrl,
-      license ? lib.licenses.mit,
-      maintainers ? [ lib.maintainers.phanirithvij ],
+    { url
+    , hash
+    , pname
+    , version
+    , description
+    , initConfig
+    , updateUrl
+    , license ? lib.licenses.mit
+    , maintainers ? [ lib.maintainers.phanirithvij ]
+    ,
     }:
     stdenv.mkDerivation (finalAttrs: {
       inherit pname version;
@@ -63,13 +63,17 @@ let
     nameValuePair
     removeSuffix
     ;
-  files = filterAttrs (
-    name: type: type == "regular" && name != "default.nix" && lib.hasSuffix ".nix" name
-  ) (builtins.readDir ./.);
-  plugins = mapAttrs' (
-    name: _:
-    nameValuePair (removeSuffix ".nix" name) (import (./. + "/${name}") { inherit mkDprintPlugin; })
-  ) files;
+  files = filterAttrs
+    (
+      name: type: type == "regular" && name != "default.nix" && lib.hasSuffix ".nix" name
+    )
+    (builtins.readDir ./.);
+  plugins = mapAttrs'
+    (
+      name: _:
+        nameValuePair (removeSuffix ".nix" name) (import (./. + "/${name}") { inherit mkDprintPlugin; })
+    )
+    files;
   # Expects a function that receives the dprint plugin set as an input
   # and returns a list of plugins
   # Example:

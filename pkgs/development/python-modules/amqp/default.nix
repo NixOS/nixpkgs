@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pytest-rerunfailures,
-  pythonOlder,
-  vine,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pytest-rerunfailures
+, pythonOlder
+, vine
+,
 }:
 
 buildPythonPackage rec {

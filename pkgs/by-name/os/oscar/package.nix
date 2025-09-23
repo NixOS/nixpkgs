@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  qt5,
-  fetchFromGitLab,
-  libGLU,
-  nix-update-script,
+{ lib
+, stdenv
+, qt5
+, fetchFromGitLab
+, libGLU
+, nix-update-script
+,
 }:
 stdenv.mkDerivation rec {
   pname = "oscar";

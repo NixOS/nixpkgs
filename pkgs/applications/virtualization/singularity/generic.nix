@@ -1,16 +1,17 @@
 # Configurations that should only be overrided by
 # overrideAttrs
-{
-  pname,
-  version,
-  src,
-  projectName, # "apptainer" or "singularity"
-  vendorHash ? null,
-  deleteVendor ? false,
-  proxyVendor ? false,
-  extraConfigureFlags ? [ ],
-  extraDescription ? "",
-  extraMeta ? { },
+{ pname
+, version
+, src
+, projectName
+, # "apptainer" or "singularity"
+  vendorHash ? null
+, deleteVendor ? false
+, proxyVendor ? false
+, extraConfigureFlags ? [ ]
+, extraDescription ? ""
+, extraMeta ? { }
+,
 }:
 
 let
@@ -22,68 +23,67 @@ let
     inherit vendorHash deleteVendor proxyVendor;
   };
 in
-{
-  lib,
-  buildGoModule,
-  runCommandLocal,
-  replaceVars,
-  # Native build inputs
-  addDriverRunpath,
-  makeWrapper,
-  pkg-config,
-  util-linux,
-  which,
-  # Build inputs
-  bash,
-  callPackage,
-  conmon,
-  coreutils,
-  cryptsetup,
-  e2fsprogs,
-  fakeroot,
-  fuse2fs ? e2fsprogs.fuse2fs,
-  go,
-  gpgme,
-  libseccomp,
-  libuuid,
-  mount,
-  versionCheckHook,
-  # This is for nvidia-container-cli
-  nvidia-docker,
-  openssl,
-  squashfsTools,
-  squashfuse,
-  # Test dependencies
-  singularity-tools,
-  cowsay,
-  hello,
-  # Overridable configurations
-  enableNvidiaContainerCli ? true,
-  # --nvccli currently requires extra privileges:
+{ lib
+, buildGoModule
+, runCommandLocal
+, replaceVars
+, # Native build inputs
+  addDriverRunpath
+, makeWrapper
+, pkg-config
+, util-linux
+, which
+, # Build inputs
+  bash
+, callPackage
+, conmon
+, coreutils
+, cryptsetup
+, e2fsprogs
+, fakeroot
+, fuse2fs ? e2fsprogs.fuse2fs
+, go
+, gpgme
+, libseccomp
+, libuuid
+, mount
+, versionCheckHook
+, # This is for nvidia-container-cli
+  nvidia-docker
+, openssl
+, squashfsTools
+, squashfuse
+, # Test dependencies
+  singularity-tools
+, cowsay
+, hello
+, # Overridable configurations
+  enableNvidiaContainerCli ? true
+, # --nvccli currently requires extra privileges:
   # https://github.com/apptainer/apptainer/issues/1893#issuecomment-1881240800
-  forceNvcCli ? false,
-  # Compile with seccomp support
+  forceNvcCli ? false
+, # Compile with seccomp support
   # SingularityCE 3.10.0 and above requires explicit --without-seccomp when libseccomp is not available.
-  enableSeccomp ? true,
-  # Whether the configure script treat SUID support as default
+  enableSeccomp ? true
+, # Whether the configure script treat SUID support as default
   # When equal to enableSuid, it suppress the --with-suid / --without-suid build flag
   # It can be set to `null` to always pass either --with-suid or --without-suided
   # Type: null or boolean
-  defaultToSuid ? true,
-  # Whether to compile with SUID support
-  enableSuid ? false,
-  starterSuidPath ? null,
-  # Extra system-wide /**/bin paths to prefix,
+  defaultToSuid ? true
+, # Whether to compile with SUID support
+  enableSuid ? false
+, starterSuidPath ? null
+, # Extra system-wide /**/bin paths to prefix,
   # useful to specify directories containing binaries with SUID bit set.
   # The paths take higher precedence over the FHS system PATH specified
   # inside the upstream source code.
   # Include "/run/wrappers/bin" by default for the convenience of NixOS users.
-  systemBinPaths ? [ "/run/wrappers/bin" ],
-  # External LOCALSTATEDIR
-  externalLocalStateDir ? null,
-  # Remove the symlinks to `singularity*` when projectName != "singularity"
-  removeCompat ? false,
-  # The defaultPath values to substitute in each source files.
+  systemBinPaths ? [ "/run/wrappers/bin" ]
+, # External LOCALSTATEDIR
+  externalLocalStateDir ? null
+, # Remove the symlinks to `singularity*` when projectName != "singularity"
+  removeCompat ? false
+, # The defaultPath values to substitute in each source files.
   #
   # `defaultPath` are PATH variables hard-coded inside Apptainer/Singularity
   # binaries to search for third-party utilities, as a hardening for
@@ -96,12 +96,13 @@ in
   # {
   #   "path/to/source/file1" = [ "<originalDefaultPath11>" "<originalDefaultPath12>" ... ];
   # }
-  sourceFilesWithDefaultPaths ? { },
-  # Placeholders for the obsolete workaround of #86349
+  sourceFilesWithDefaultPaths ? { }
+, # Placeholders for the obsolete workaround of #86349
   # TODO(@ShamrockLee): Remove after the Nixpkgs 25.05 branch-off.
-  vendorHash ? null,
-  deleteVendor ? null,
-  proxyVendor ? null,
+  vendorHash ? null
+, deleteVendor ? null
+, proxyVendor ? null
+,
 }@args:
 
 let
@@ -347,35 +348,39 @@ in
         gpuChecks = lib.optionalAttrs (projectName == "apptainer") {
           # Should be in tests, but Ofborg would skip image-hello-cowsay because
           # saxpy is unfree.
-          image-saxpy = callPackage (
-            { singularity-tools, cudaPackages }:
-            singularity-tools.buildImage {
-              name = "saxpy";
-              contents = [ cudaPackages.saxpy ];
-              memSize = 2048;
-              diskSize = 2048;
-              singularity = finalAttrs.finalPackage;
-            }
-          ) { };
-          saxpy = callPackage (
-            { runCommand, writeShellScriptBin }:
-            let
-              unwrapped = writeShellScriptBin "apptainer-cuda-saxpy" ''
-                ${lib.getExe finalAttrs.finalPackage} exec --nv $@ ${finalAttrs.passthru.gpuChecks.image-saxpy} saxpy
-              '';
-            in
-            runCommand "run-apptainer-cuda-saxpy"
-              {
-                requiredSystemFeatures = [ "cuda" ];
-                nativeBuildInputs = [ unwrapped ];
-                passthru = {
-                  inherit unwrapped;
-                };
+          image-saxpy = callPackage
+            (
+              { singularity-tools, cudaPackages }:
+              singularity-tools.buildImage {
+                name = "saxpy";
+                contents = [ cudaPackages.saxpy ];
+                memSize = 2048;
+                diskSize = 2048;
+                singularity = finalAttrs.finalPackage;
               }
-              ''
-                apptainer-cuda-saxpy
-              ''
-          ) { };
+            )
+            { };
+          saxpy = callPackage
+            (
+              { runCommand, writeShellScriptBin }:
+              let
+                unwrapped = writeShellScriptBin "apptainer-cuda-saxpy" ''
+                  ${lib.getExe finalAttrs.finalPackage} exec --nv $@ ${finalAttrs.passthru.gpuChecks.image-saxpy} saxpy
+                '';
+              in
+              runCommand "run-apptainer-cuda-saxpy"
+                {
+                  requiredSystemFeatures = [ "cuda" ];
+                  nativeBuildInputs = [ unwrapped ];
+                  passthru = {
+                    inherit unwrapped;
+                  };
+                }
+                ''
+                  apptainer-cuda-saxpy
+                ''
+            )
+            { };
         };
       };
     }

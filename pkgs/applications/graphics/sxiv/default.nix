@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libXft,
-  imlib2,
-  giflib,
-  libexif,
-  conf ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libXft
+, imlib2
+, giflib
+, libexif
+, conf ? null
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  buildFHSEnv,
-  appimageTools,
-  fetchurl,
-  desktop-file-utils,
-  dpkg,
-  webkitgtk_4_0,
-  runScript ? "BitComet",
+{ lib
+, stdenvNoCC
+, buildFHSEnv
+, appimageTools
+, fetchurl
+, desktop-file-utils
+, dpkg
+, webkitgtk_4_0
+, runScript ? "BitComet"
+,
 }:
 
 let
@@ -34,8 +34,8 @@ let
       let
         selectSystem =
           attrs:
-          attrs.${stdenvNoCC.hostPlatform.system}
-            or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+            attrs.${stdenvNoCC.hostPlatform.system}
+              or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
         arch = selectSystem {
           x86_64-linux = "x86_64";
           aarch64-linux = "arm64";

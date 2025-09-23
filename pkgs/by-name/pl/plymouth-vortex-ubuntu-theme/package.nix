@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  fetchFromGitHub,
-  lib,
-  unstableGitUpdater,
+{ stdenvNoCC
+, fetchFromGitHub
+, lib
+, unstableGitUpdater
+,
 }:
 
 stdenvNoCC.mkDerivation {

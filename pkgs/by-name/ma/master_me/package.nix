@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libGL,
-  libX11,
-  libXext,
-  libXrandr,
-  pkg-config,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libGL
+, libX11
+, libXext
+, libXrandr
+, pkg-config
+, python3
+,
 }:
 stdenv.mkDerivation rec {
   pname = "master_me";

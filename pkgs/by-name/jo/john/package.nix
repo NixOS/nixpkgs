@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  nss,
-  nspr,
-  libkrb5,
-  gmp,
-  zlib,
-  libpcap,
-  re2,
-  gcc,
-  python3Packages,
-  perl,
-  perlPackages,
-  withOpenCL ? true,
-  opencl-headers,
-  ocl-icd,
-  # include non-free ClamAV unrar code
-  enableUnfree ? false,
-  replaceVars,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, nss
+, nspr
+, libkrb5
+, gmp
+, zlib
+, libpcap
+, re2
+, gcc
+, python3Packages
+, perl
+, perlPackages
+, withOpenCL ? true
+, opencl-headers
+, ocl-icd
+, # include non-free ClamAV unrar code
+  enableUnfree ? false
+, replaceVars
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation {

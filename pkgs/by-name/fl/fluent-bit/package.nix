@@ -1,30 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nixosTests,
-
-  arrow-glib,
-  bison,
-  c-ares,
-  cmake,
-  flex,
-  jemalloc,
-  libbacktrace,
-  libbpf,
-  libpq,
-  libyaml,
-  luajit,
-  msgpack-c,
-  nghttp2,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  rdkafka,
-  sqlite,
-  systemd,
-  versionCheckHook,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, arrow-glib
+, bison
+, c-ares
+, cmake
+, flex
+, jemalloc
+, libbacktrace
+, libbpf
+, libpq
+, libyaml
+, luajit
+, msgpack-c
+, nghttp2
+, nix-update-script
+, openssl
+, pkg-config
+, rdkafka
+, sqlite
+, systemd
+, versionCheckHook
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

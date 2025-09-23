@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  pythonAtLeast,
-  fetchFromGitHub,
-  poetry-core,
-  colorlog,
-  dataclasses-json,
-  nltk,
-  numpy,
-  pandas,
-  psutil,
-  py3langid,
-  pytestCheckHook,
-  python-dateutil,
-  scipy,
-  toml,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, pythonAtLeast
+, fetchFromGitHub
+, poetry-core
+, colorlog
+, dataclasses-json
+, nltk
+, numpy
+, pandas
+, psutil
+, py3langid
+, pytestCheckHook
+, python-dateutil
+, scipy
+, toml
+,
 }:
 let
   testNltkData = nltk.dataDir (d: [

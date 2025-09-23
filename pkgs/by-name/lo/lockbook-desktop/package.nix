@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  gtk3,
-  glib,
-  gobject-introspection,
-  gdk-pixbuf,
-  libxkbcommon,
-  vulkan-loader,
-  makeDesktopItem,
-  autoPatchelfHook,
-  copyDesktopItems,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, gtk3
+, glib
+, gobject-introspection
+, gdk-pixbuf
+, libxkbcommon
+, vulkan-loader
+, makeDesktopItem
+, autoPatchelfHook
+, copyDesktopItems
+,
 }:
 let
   desc = "Private, polished note-taking platform";

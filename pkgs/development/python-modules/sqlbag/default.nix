@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  psycopg2,
-  pymysql,
-  sqlalchemy,
-  six,
-  flask,
-  pendulum,
-  packaging,
-  setuptools,
-  poetry-core,
-  pytestCheckHook,
-  pytest-xdist,
-  pytest-sugar,
-  postgresql,
-  postgresqlTestHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, psycopg2
+, pymysql
+, sqlalchemy
+, six
+, flask
+, pendulum
+, packaging
+, setuptools
+, poetry-core
+, pytestCheckHook
+, pytest-xdist
+, pytest-sugar
+, postgresql
+, postgresqlTestHook
+,
 }:
 buildPythonPackage {
   pname = "sqlbag";

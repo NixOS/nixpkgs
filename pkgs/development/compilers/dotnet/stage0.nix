@@ -1,25 +1,24 @@
-{
-  stdenv,
-  callPackage,
-  lib,
-  writeShellScript,
-  mkNugetDeps,
-  nix,
-  cacert,
-  nuget-to-json,
-  jq,
-  dotnetCorePackages,
-  xmlstarlet,
-  patchNupkgs,
-  symlinkJoin,
-  openssl,
-
-  baseName ? "dotnet",
-  releaseManifestFile,
-  tarballHash,
-  depsFile,
-  fallbackTargetPackages,
-  bootstrapSdk,
+{ stdenv
+, callPackage
+, lib
+, writeShellScript
+, mkNugetDeps
+, nix
+, cacert
+, nuget-to-json
+, jq
+, dotnetCorePackages
+, xmlstarlet
+, patchNupkgs
+, symlinkJoin
+, openssl
+, baseName ? "dotnet"
+, releaseManifestFile
+, tarballHash
+, depsFile
+, fallbackTargetPackages
+, bootstrapSdk
+,
 }:
 
 let
@@ -28,12 +27,14 @@ let
 
   sdkPackages = symlinkJoin {
     name = "${bootstrapSdk.name}-packages";
-    paths = map (
-      p:
-      p.override {
-        installable = true;
-      }
-    ) bootstrapSdk.packages;
+    paths = map
+      (
+        p:
+        p.override {
+          installable = true;
+        }
+      )
+      bootstrapSdk.packages;
   };
 
   vmr =

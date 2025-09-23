@@ -1,52 +1,52 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nixosTests,
-  testers,
-  cmake,
-  pkg-config,
-  python3,
-  boost,
-  egl-wayland,
-  freetype,
-  glib,
-  glm,
-  libapparmor,
-  libdisplay-info,
-  libdrm,
-  libepoxy,
-  libevdev,
-  libglvnd,
-  libinput,
-  libuuid,
-  libxcb,
-  libxkbcommon,
-  libxmlxx,
-  yaml-cpp,
-  lttng-ust,
-  libgbm,
-  mesa,
-  nettle,
-  pixman,
-  udev,
-  wayland,
-  wayland-scanner,
-  xorg,
-  xwayland,
-  dbus,
-  gobject-introspection,
-  gtest,
-  umockdev,
-  wlcs,
-  validatePkgConfig,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nixosTests
+, testers
+, cmake
+, pkg-config
+, python3
+, boost
+, egl-wayland
+, freetype
+, glib
+, glm
+, libapparmor
+, libdisplay-info
+, libdrm
+, libepoxy
+, libevdev
+, libglvnd
+, libinput
+, libuuid
+, libxcb
+, libxkbcommon
+, libxmlxx
+, yaml-cpp
+, lttng-ust
+, libgbm
+, mesa
+, nettle
+, pixman
+, udev
+, wayland
+, wayland-scanner
+, xorg
+, xwayland
+, dbus
+, gobject-introspection
+, gtest
+, umockdev
+, wlcs
+, validatePkgConfig
+,
 }:
 
-{
-  version,
-  pinned ? false,
-  hash,
-  patches ? [ ],
+{ version
+, pinned ? false
+, hash
+, patches ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -96,12 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     (python3.withPackages (
       ps:
-      with ps;
-      [ pillow ]
-      ++ lib.optionals finalAttrs.finalPackage.doCheck [
-        pygobject3
-        python-dbusmock
-      ]
+        with ps;
+        [ pillow ]
+        ++ lib.optionals finalAttrs.finalPackage.doCheck [
+          pygobject3
+          python-dbusmock
+        ]
     ))
     validatePkgConfig
     wayland-scanner

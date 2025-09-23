@@ -1,17 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  writeShellScript,
-  dash,
-  php,
-  phpCfg ? null,
-  withPostgreSQL ? true, # “strongly recommended” according to docs
-  withMariaDB ? false,
-  minifyStaticFiles ? false, # default files are often not minified
-  esbuild,
-  lightningcss,
-  scour,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, writeShellScript
+, dash
+, php
+, phpCfg ? null
+, withPostgreSQL ? true
+, # “strongly recommended” according to docs
+  withMariaDB ? false
+, minifyStaticFiles ? false
+, # default files are often not minified
+  esbuild
+, lightningcss
+, scour
+, nixosTests
+,
 }:
 
 let
@@ -125,30 +127,30 @@ php.buildComposerProject2 (finalAttrs: {
           ''}
       ''
     +
-      lib.optionalString minify.style.enable
-        # sh
-        ''
-          find ./public -type f -iname "*.css" -print0 \
-            | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_style_minify" ''
-              export BROWSERLIST="${lib.escapeShellArg minify.style.browserslist}"
-              file="$1"
-              tmp="$(mktemp)"
-              lightningcss $file --minify --browserslist --output-file=$tmp
-              [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
-            ''}
-        ''
+    lib.optionalString minify.style.enable
+      # sh
+      ''
+        find ./public -type f -iname "*.css" -print0 \
+          | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_style_minify" ''
+            export BROWSERLIST="${lib.escapeShellArg minify.style.browserslist}"
+            file="$1"
+            tmp="$(mktemp)"
+            lightningcss $file --minify --browserslist --output-file=$tmp
+            [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
+          ''}
+      ''
     +
-      lib.optionalString minify.svg.enable
-        # sh
-        ''
-          find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" -print0 \
-            | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_svg_minify" ''
-              file="$1"
-              tmp="$(mktemp)"
-              scour -i $file -o $tmp --disable-style-to-xml --enable-comment-stripping --enable-viewboxing --indent=tab
-              [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
-            ''}
-        '';
+    lib.optionalString minify.svg.enable
+      # sh
+      ''
+        find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" -print0 \
+          | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_svg_minify" ''
+            file="$1"
+            tmp="$(mktemp)"
+            scour -i $file -o $tmp --disable-style-to-xml --enable-comment-stripping --enable-viewboxing --indent=tab
+            [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
+          ''}
+      '';
 
   postInstall = ''
     mkdir -p $out/bin

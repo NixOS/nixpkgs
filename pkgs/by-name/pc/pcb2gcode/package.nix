@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  boost,
-  glibmm,
-  gtkmm2,
-  gerbv,
-  librsvg,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, boost
+, glibmm
+, gtkmm2
+, gerbv
+, librsvg
+,
 }:
 
 stdenv.mkDerivation rec {

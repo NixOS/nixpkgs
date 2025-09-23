@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  unittestCheckHook,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, unittestCheckHook
+, setuptools
+, setuptools-scm
+,
 }:
 
 let

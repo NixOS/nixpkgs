@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  fontconfig,
-  icu,
-  libdrm,
-  libGL,
-  libinput,
-  libX11,
-  libXcursor,
-  libxkbcommon,
-  libgbm,
-  pixman,
-  seatd,
-  srm-cuarzo,
-  udev,
-  wayland,
-  xorgproto,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, fontconfig
+, icu
+, libdrm
+, libGL
+, libinput
+, libX11
+, libXcursor
+, libxkbcommon
+, libgbm
+, pixman
+, seatd
+, srm-cuarzo
+, udev
+, wayland
+, xorgproto
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "louvre";

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  kernel,
-  perl,
-  kmod,
-  elfutils,
+{ lib
+, stdenv
+, fetchurl
+, kernel
+, perl
+, kmod
+, elfutils
+,
 }:
 let
   version = "1.63";

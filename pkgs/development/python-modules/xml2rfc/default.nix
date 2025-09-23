@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  configargparse,
-  decorator,
-  dict2xml,
-  fetchFromGitHub,
-  google-i18n-address,
-  intervaltree,
-  jinja2,
-  lxml,
-  platformdirs,
-  pycairo,
-  pycountry,
-  pypdf,
-  pytestCheckHook,
-  python-fontconfig,
-  pythonOlder,
-  pyyaml,
-  requests,
-  setuptools,
-  wcwidth,
+{ lib
+, buildPythonPackage
+, configargparse
+, decorator
+, dict2xml
+, fetchFromGitHub
+, google-i18n-address
+, intervaltree
+, jinja2
+, lxml
+, platformdirs
+, pycairo
+, pycountry
+, pypdf
+, pytestCheckHook
+, python-fontconfig
+, pythonOlder
+, pyyaml
+, requests
+, setuptools
+, wcwidth
+,
 }:
 
 buildPythonPackage rec {

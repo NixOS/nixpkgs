@@ -1,19 +1,19 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  file,
-  pkg-config,
-  intltool,
-  glib,
-  dbus-glib,
-  json-glib,
-  gobject-introspection,
-  vala,
-  gtkVersion ? null,
-  gtk2,
-  gtk3,
-  testers,
+{ stdenv
+, fetchurl
+, lib
+, file
+, pkg-config
+, intltool
+, glib
+, dbus-glib
+, json-glib
+, gobject-introspection
+, vala
+, gtkVersion ? null
+, gtk2
+, gtk3
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,12 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
   ]
   ++
-    lib.optional (gtkVersion != null)
-      {
-        "2" = gtk2;
-        "3" = gtk3;
-      }
-      .${gtkVersion} or (throw "unknown GTK version ${gtkVersion}");
+  lib.optional (gtkVersion != null)
+    {
+      "2" = gtk2;
+      "3" = gtk3;
+    }.${gtkVersion} or (throw "unknown GTK version ${gtkVersion}");
 
   patches = [
     ./requires-glib.patch

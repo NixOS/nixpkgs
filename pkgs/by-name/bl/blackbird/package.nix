@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  gtk-engine-murrine,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gtk-engine-murrine
+,
 }:
 
 stdenv.mkDerivation {

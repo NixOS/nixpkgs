@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  domdf-python-tools,
-  fetchFromGitHub,
-  lib,
-  typing-extensions,
-  whey,
+{ buildPythonPackage
+, domdf-python-tools
+, fetchFromGitHub
+, lib
+, typing-extensions
+, whey
+,
 }:
 
 buildPythonPackage rec {

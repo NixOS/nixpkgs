@@ -1,22 +1,22 @@
-{
-  lib,
-  rustPlatform,
-  fetchgit,
-  pkg-config,
-  protobuf,
-  python3,
-  wayland-scanner,
-  libcap,
-  libdrm,
-  libepoxy,
-  minijail,
-  virglrenderer,
-  wayland,
-  wayland-protocols,
-  writeShellScript,
-  unstableGitUpdater,
-  nix-update,
-  pkgsCross,
+{ lib
+, rustPlatform
+, fetchgit
+, pkg-config
+, protobuf
+, python3
+, wayland-scanner
+, libcap
+, libdrm
+, libepoxy
+, minijail
+, virglrenderer
+, wayland
+, wayland-protocols
+, writeShellScript
+, unstableGitUpdater
+, nix-update
+, pkgsCross
+,
 }:
 
 rustPlatform.buildRustPackage {

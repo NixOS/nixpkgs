@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitea,
-  pkg-config,
-  installShellFiles,
-  writableTmpDirAsHomeHook,
-  libgit2,
-  oniguruma,
-  openssl,
-  zlib,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitea
+, pkg-config
+, installShellFiles
+, writableTmpDirAsHomeHook
+, libgit2
+, oniguruma
+, openssl
+, zlib
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";

@@ -1,7 +1,7 @@
-{
-  lib,
-  beamPackages,
-  overrides ? (x: y: { }),
+{ lib
+, beamPackages
+, overrides ? (x: y: { })
+,
 }:
 
 let

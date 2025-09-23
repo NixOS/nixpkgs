@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  django,
-  typing-extensions,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-django,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, django
+, typing-extensions
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-django
+,
 }:
 
 buildPythonPackage rec {

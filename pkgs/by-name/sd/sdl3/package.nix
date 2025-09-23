@@ -1,63 +1,63 @@
-{
-  lib,
-  stdenv,
-  config,
-  alsa-lib,
-  apple-sdk_11,
-  cmake,
-  darwinMinVersionHook,
-  dbus,
-  fetchFromGitHub,
-  ibusMinimal,
-  installShellFiles,
-  libGL,
-  libayatana-appindicator,
-  libdecor,
-  libdrm,
-  libjack2,
-  libpulseaudio,
-  libusb1,
-  libxkbcommon,
-  libgbm,
-  ninja,
-  nix-update-script,
-  nixosTests,
-  pipewire,
-  sndio,
-  systemdLibs,
-  testers,
-  validatePkgConfig,
-  vulkan-headers,
-  vulkan-loader,
-  wayland,
-  wayland-scanner,
-  xorg,
-  zenity,
-  # for passthru.tests
-  SDL_compat,
-  sdl2-compat,
-  sdl3-image,
-  sdl3-ttf,
-  alsaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  dbusSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  drmSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  ibusSupport ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin,
-  jackSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  libdecorSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  openglSupport ? lib.meta.availableOn stdenv.hostPlatform libGL,
-  pipewireSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  pulseaudioSupport ?
-    config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  libudevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  sndioSupport ? false,
-  traySupport ? true,
-  waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
+{ lib
+, stdenv
+, config
+, alsa-lib
+, apple-sdk_11
+, cmake
+, darwinMinVersionHook
+, dbus
+, fetchFromGitHub
+, ibusMinimal
+, installShellFiles
+, libGL
+, libayatana-appindicator
+, libdecor
+, libdrm
+, libjack2
+, libpulseaudio
+, libusb1
+, libxkbcommon
+, libgbm
+, ninja
+, nix-update-script
+, nixosTests
+, pipewire
+, sndio
+, systemdLibs
+, testers
+, validatePkgConfig
+, vulkan-headers
+, vulkan-loader
+, wayland
+, wayland-scanner
+, xorg
+, zenity
+, # for passthru.tests
+  SDL_compat
+, sdl2-compat
+, sdl3-image
+, sdl3-ttf
+, alsaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid
+, dbusSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid
+, drmSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid
+, ibusSupport ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin
+, jackSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid
+, libdecorSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid
+, openglSupport ? lib.meta.availableOn stdenv.hostPlatform libGL
+, pipewireSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid
+, libudevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid
+, sndioSupport ? false
+, traySupport ? true
+, waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid
+, x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows
+,
 }:
 
-assert lib.assertMsg (
-  waylandSupport -> openglSupport
-) "SDL3 requires OpenGL support to enable Wayland";
+assert lib.assertMsg
+  (
+    waylandSupport -> openglSupport
+  ) "SDL3 requires OpenGL support to enable Wayland";
 assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to enable ibus";
 
 stdenv.mkDerivation (finalAttrs: {
@@ -125,9 +125,11 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals stdenv.hostPlatform.isLinux [
       libusb1
     ]
-    ++ lib.optional (
-      stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin && traySupport
-    ) libayatana-appindicator
+    ++ lib.optional
+      (
+        stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin && traySupport
+      )
+      libayatana-appindicator
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional dbusSupport dbus
     ++ lib.optionals drmSupport [
@@ -191,9 +193,10 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     # Many dependencies are not directly linked to, but dlopen()'d at runtime. Adding them to the RPATH
     # helps them be found
-    NIX_LDFLAGS = lib.optionalString (
-      stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so"
-    ) "-rpath ${lib.makeLibraryPath (finalAttrs.dlopenBuildInputs)}";
+    NIX_LDFLAGS = lib.optionalString
+      (
+        stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so"
+      ) "-rpath ${lib.makeLibraryPath (finalAttrs.dlopenBuildInputs)}";
   };
 
   postInstall = ''

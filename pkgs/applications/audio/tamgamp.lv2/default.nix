@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  lv2,
-  zita-resampler,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, lv2
+, zita-resampler
+,
 }:
 
 stdenv.mkDerivation rec {

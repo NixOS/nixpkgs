@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  cohttp,
-  dispatch,
-  ptime,
-  ounit,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, cohttp
+, dispatch
+, ptime
+, ounit
+,
 }:
 
 buildDunePackage rec {

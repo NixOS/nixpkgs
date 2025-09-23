@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchzip,
-  nodejs,
-  stdenvNoCC,
-  testers,
-  gitUpdater,
-  withNode ? true,
+{ lib
+, fetchFromGitHub
+, fetchzip
+, nodejs
+, stdenvNoCC
+, testers
+, gitUpdater
+, withNode ? true
+,
 }:
 
 let

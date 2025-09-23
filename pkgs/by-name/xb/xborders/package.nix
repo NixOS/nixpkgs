@@ -1,13 +1,13 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  libwnck,
-  gtk3,
-  libnotify,
-  wrapGAppsHook3,
-  gobject-introspection,
-  replaceVars,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, libwnck
+, gtk3
+, libnotify
+, wrapGAppsHook3
+, gobject-introspection
+, replaceVars
+,
 }:
 
 python3Packages.buildPythonPackage rec {

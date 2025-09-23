@@ -1,30 +1,30 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  ninja,
-  writeScriptBin,
-  perl,
-  XMLLibXML,
-  XMLLibXSLT,
-  makeWrapper,
-  zlib,
-  enableStoneSense ? false,
-  allegro5,
-  libGLU,
-  libGL,
-  SDL,
-  SDL2,
-  coreutils,
-  util-linux,
-  ncurses,
-  strace,
-  binutils,
-  gnused,
-  dfVersion,
-  dfVersions,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ninja
+, writeScriptBin
+, perl
+, XMLLibXML
+, XMLLibXSLT
+, makeWrapper
+, zlib
+, enableStoneSense ? false
+, allegro5
+, libGLU
+, libGL
+, SDL
+, SDL2
+, coreutils
+, util-linux
+, ncurses
+, strace
+, binutils
+, gnused
+, dfVersion
+, dfVersions
+,
 }:
 
 let
@@ -99,13 +99,14 @@ stdenv.mkDerivation {
   };
 
   patches =
-    optional (versionOlder version "0.44.12-r3") (fetchpatch {
-      name = "fix-stonesense.patch";
-      url = "https://github.com/DFHack/stonesense/commit/f5be6fe5fb192f01ae4551ed9217e97fd7f6a0ae.patch";
-      extraPrefix = "plugins/stonesense/";
-      stripLen = 1;
-      hash = "sha256-wje6Mkct29eyMOcJnbdefwBOLJko/s4JcJe52ojuW+8=";
-    })
+    optional (versionOlder version "0.44.12-r3")
+      (fetchpatch {
+        name = "fix-stonesense.patch";
+        url = "https://github.com/DFHack/stonesense/commit/f5be6fe5fb192f01ae4551ed9217e97fd7f6a0ae.patch";
+        extraPrefix = "plugins/stonesense/";
+        stripLen = 1;
+        hash = "sha256-wje6Mkct29eyMOcJnbdefwBOLJko/s4JcJe52ojuW+8=";
+      })
     ++ optional (versionOlder version "0.47.04-r1") (fetchpatch {
       name = "fix-protobuf.patch";
       url = "https://github.com/DFHack/dfhack/commit/7bdf958518d2892ee89a7173224a069c4a2190d8.patch";

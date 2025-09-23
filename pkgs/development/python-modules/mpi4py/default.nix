@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  setuptools,
-  mpi,
-  toPythonModule,
-  pytestCheckHook,
-  mpiCheckPhaseHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, setuptools
+, mpi
+, toPythonModule
+, pytestCheckHook
+, mpiCheckPhaseHook
+,
 }:
 
 buildPythonPackage rec {

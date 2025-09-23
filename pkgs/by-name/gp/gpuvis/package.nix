@@ -1,14 +1,14 @@
-{
-  fetchFromGitHub,
-  freetype,
-  gtk3,
-  lib,
-  meson,
-  ninja,
-  pkg-config,
-  SDL2,
-  stdenv,
-  wrapGAppsHook3,
+{ fetchFromGitHub
+, freetype
+, gtk3
+, lib
+, meson
+, ninja
+, pkg-config
+, SDL2
+, stdenv
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

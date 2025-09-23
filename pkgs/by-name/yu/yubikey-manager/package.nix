@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  installShellFiles,
-  procps,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, installShellFiles
+, procps
+,
 }:
 
 python3Packages.buildPythonPackage rec {

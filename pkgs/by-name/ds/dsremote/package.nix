@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  libsForQt5,
+{ lib
+, stdenv
+, fetchFromGitLab
+, libsForQt5
+,
 }:
 stdenv.mkDerivation {
   pname = "dsremote";

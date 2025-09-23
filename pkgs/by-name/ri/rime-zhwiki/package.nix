@@ -1,7 +1,7 @@
-{
-  fetchurl,
-  stdenvNoCC,
-  lib,
+{ fetchurl
+, stdenvNoCC
+, lib
+,
 }:
 stdenvNoCC.mkDerivation {
   pname = "rime-zhwiki";

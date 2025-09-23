@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cffi,
-  piexif,
-  pillow,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cffi
+, piexif
+, pillow
+,
 }:
 
 buildPythonPackage rec {

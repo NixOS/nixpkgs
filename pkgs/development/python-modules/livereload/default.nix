@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  pytestCheckHook,
-  tornado,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, pytestCheckHook
+, tornado
+, six
+,
 }:
 
 buildPythonPackage rec {

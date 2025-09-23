@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libX11,
-  libXft,
-  libXrandr,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libX11
+, libXft
+, libXrandr
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

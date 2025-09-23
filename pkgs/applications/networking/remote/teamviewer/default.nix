@@ -1,26 +1,26 @@
-{
-  mkDerivation,
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  makeWrapper,
-  xdg-utils,
-  dbus,
-  getconf,
-  glibc,
-  libXrandr,
-  libX11,
-  libXext,
-  libXdamage,
-  libXtst,
-  libSM,
-  libXfixes,
-  coreutils,
-  wrapQtAppsHook,
-  icu63,
-  nss,
-  minizip,
+{ mkDerivation
+, lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, makeWrapper
+, xdg-utils
+, dbus
+, getconf
+, glibc
+, libXrandr
+, libX11
+, libXext
+, libXdamage
+, libXtst
+, libSM
+, libXfixes
+, coreutils
+, wrapQtAppsHook
+, icu63
+, nss
+, minizip
+,
 }:
 
 mkDerivation rec {
@@ -36,17 +36,16 @@ mkDerivation rec {
     let
       base_url = "https://dl.teamviewer.com/download/linux/version_${lib.versions.major version}x";
     in
-    {
-      x86_64-linux = fetchurl {
-        url = "${base_url}/teamviewer_${version}_amd64.deb";
-        hash = "sha256-GNGmqgiu4Vk0X+KndCkEoryFHG/Vv/P2xYdlzUJT1wo=";
-      };
-      aarch64-linux = fetchurl {
-        url = "${base_url}/teamviewer_${version}_arm64.deb";
-        hash = "sha256-M6Q6HIp7TgtqzVduMJM1au0i4/hDUUwdIoe3q36YA/0=";
-      };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      {
+        x86_64-linux = fetchurl {
+          url = "${base_url}/teamviewer_${version}_amd64.deb";
+          hash = "sha256-GNGmqgiu4Vk0X+KndCkEoryFHG/Vv/P2xYdlzUJT1wo=";
+        };
+        aarch64-linux = fetchurl {
+          url = "${base_url}/teamviewer_${version}_arm64.deb";
+          hash = "sha256-M6Q6HIp7TgtqzVduMJM1au0i4/hDUUwdIoe3q36YA/0=";
+        };
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   unpackPhase = ''
     ar x $src

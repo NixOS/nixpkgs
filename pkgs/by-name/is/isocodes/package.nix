@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  python3,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, python3
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

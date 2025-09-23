@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pycountry,
-  repoze-lru,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pycountry
+, repoze-lru
+,
 }:
 
 buildPythonPackage rec {

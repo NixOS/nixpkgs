@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  bison,
-  flex,
-  openssl,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, bison
+, flex
+, openssl
+,
 }:
 
 stdenv.mkDerivation {

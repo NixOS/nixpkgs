@@ -1,13 +1,13 @@
-{
-  cargo,
-  meson,
-  ninja,
-  oo7,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  stdenv,
-  systemdLibs,
+{ cargo
+, meson
+, ninja
+, oo7
+, pkg-config
+, rustPlatform
+, rustc
+, stdenv
+, systemdLibs
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "oo7-portal";

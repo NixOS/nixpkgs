@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  installShellFiles,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, installShellFiles
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  boost,
-  zlib,
-  libevent,
-  openssl,
-  python3,
-  cmake,
-  pkg-config,
-  bison,
-  flex,
-  static ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, boost
+, zlib
+, libevent
+, openssl
+, python3
+, cmake
+, pkg-config
+, bison
+, flex
+, static ? stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
     pkg-config
     (python3.withPackages (
       ps:
-      with ps;
-      [
-        setuptools
-        six
-      ]
-      ++ lib.optionals (!static) [
-        twisted
-      ]
+        with ps;
+        [
+          setuptools
+          six
+        ]
+        ++ lib.optionals (!static) [
+          twisted
+        ]
     ))
   ];
 

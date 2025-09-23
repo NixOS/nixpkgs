@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  fontconfig,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, fontconfig
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

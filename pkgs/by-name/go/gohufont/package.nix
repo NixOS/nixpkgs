@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  xorg,
-  bdf2psf,
-  bdftopcf,
-  libfaketime,
+{ lib
+, stdenv
+, fetchFromGitHub
+, xorg
+, bdf2psf
+, bdftopcf
+, libfaketime
+,
 }:
 
 stdenv.mkDerivation {

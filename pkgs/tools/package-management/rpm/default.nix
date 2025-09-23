@@ -1,38 +1,37 @@
-{
-  stdenv,
-  lib,
-  pkg-config,
-  cmake,
-  fetchurl,
-  zlib,
-  bzip2,
-  file,
-  elfutils,
-  libarchive,
-  readline,
-  audit,
-  popt,
-  xz,
-  python3,
-  lua,
-  llvmPackages,
-  sqlite,
-  zstd,
-  libcap,
-  apple-sdk_13,
-  darwinMinVersionHook,
-  openssl,
-  #, libselinux
-  rpm-sequoia,
-  gettext,
-  systemd,
-  bubblewrap,
-  autoconf,
-  gnupg,
-
-  # Disable the unshare RPM plugin, which can be useful if
+{ stdenv
+, lib
+, pkg-config
+, cmake
+, fetchurl
+, zlib
+, bzip2
+, file
+, elfutils
+, libarchive
+, readline
+, audit
+, popt
+, xz
+, python3
+, lua
+, llvmPackages
+, sqlite
+, zstd
+, libcap
+, apple-sdk_13
+, darwinMinVersionHook
+, openssl
+, #, libselinux
+  rpm-sequoia
+, gettext
+, systemd
+, bubblewrap
+, autoconf
+, gnupg
+, # Disable the unshare RPM plugin, which can be useful if
   # RPM is ran within the Nix sandbox.
-  disableUnshare ? true,
+  disableUnshare ? true
+,
 }:
 
 stdenv.mkDerivation rec {

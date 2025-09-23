@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  lib,
-  pkg-config,
-  check,
+{ stdenv
+, fetchFromGitHub
+, cmake
+, lib
+, pkg-config
+, check
+,
 }:
 stdenv.mkDerivation rec {
   pname = "libcork";

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  netcdf,
-  hdf5,
-  curl,
-  cmake,
-  ninja,
+{ lib
+, stdenv
+, fetchFromGitHub
+, netcdf
+, hdf5
+, curl
+, cmake
+, ninja
+,
 }:
 stdenv.mkDerivation rec {
   pname = "netcdf-cxx4";

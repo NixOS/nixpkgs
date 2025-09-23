@@ -1,13 +1,13 @@
-{
-  diffutils,
-  lib,
-  replaceVarsWith,
-  runtimeShell,
-  stdenv,
-  # PostgreSQL package
-  finalPackage,
-  # PostgreSQL package's outputs
-  outputs,
+{ diffutils
+, lib
+, replaceVarsWith
+, runtimeShell
+, stdenv
+, # PostgreSQL package
+  finalPackage
+, # PostgreSQL package's outputs
+  outputs
+,
 }:
 
 replaceVarsWith {

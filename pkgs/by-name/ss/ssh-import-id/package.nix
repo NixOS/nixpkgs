@@ -1,10 +1,10 @@
-{
-  lib,
-  extraHandlers ? [ ],
-  fetchgit,
-  installShellFiles,
-  makeWrapper,
-  python3Packages,
+{ lib
+, extraHandlers ? [ ]
+, fetchgit
+, installShellFiles
+, makeWrapper
+, python3Packages
+,
 }:
 
 python3Packages.buildPythonApplication rec {

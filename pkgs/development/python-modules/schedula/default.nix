@@ -1,26 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # optional-dependencies
-  dill,
-  flask,
-  graphviz,
-  multiprocess,
-  regex,
-  requests,
-  sphinx,
-  sphinx-click,
-
-  # tests
-  pytestCheckHook,
-  ddt,
-  cryptography,
-  schedula,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # optional-dependencies
+  dill
+, flask
+, graphviz
+, multiprocess
+, regex
+, requests
+, sphinx
+, sphinx-click
+, # tests
+  pytestCheckHook
+, ddt
+, cryptography
+, schedula
+,
 }:
 
 buildPythonPackage rec {

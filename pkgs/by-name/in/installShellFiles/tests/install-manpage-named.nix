@@ -1,14 +1,14 @@
-{
-  lib,
-  installShellFiles,
-  runCommandLocal,
+{ lib
+, installShellFiles
+, runCommandLocal
+,
 }:
 
 runCommandLocal "install-shell-files--install-manpage"
-  {
-    nativeBuildInputs = [ installShellFiles ];
-    meta.platforms = lib.platforms.all;
-  }
+{
+  nativeBuildInputs = [ installShellFiles ];
+  meta.platforms = lib.platforms.all;
+}
   ''
     echo foo > foo.1
 

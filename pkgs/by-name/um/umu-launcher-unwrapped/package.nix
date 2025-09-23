@@ -1,15 +1,15 @@
-{
-  bash,
-  cargo,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  python3Packages,
-  rustPlatform,
-  scdoc,
-  writableTmpDirAsHomeHook,
-  withTruststore ? true,
-  withDeltaUpdates ? true,
+{ bash
+, cargo
+, fetchFromGitHub
+, lib
+, nix-update-script
+, python3Packages
+, rustPlatform
+, scdoc
+, writableTmpDirAsHomeHook
+, withTruststore ? true
+, withDeltaUpdates ? true
+,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "umu-launcher-unwrapped";

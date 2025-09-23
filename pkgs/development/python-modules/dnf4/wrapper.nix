@@ -1,11 +1,11 @@
-{
-  lib,
-  wrapPython,
-  python,
-  stdenv,
-  dnf4,
-  dnf-plugins-core,
-  plugins ? [ dnf-plugins-core ],
+{ lib
+, wrapPython
+, python
+, stdenv
+, dnf4
+, dnf-plugins-core
+, plugins ? [ dnf-plugins-core ]
+,
 }:
 let
   pluginPaths = map (p: "${p}/${python.sitePackages}/dnf-plugins") plugins;
@@ -29,9 +29,10 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ dnf4-unwrapped ] ++ plugins;
 
-  makeWrapperArgs = lib.optional (
-    plugins != [ ]
-  ) ''--add-flags "--setopt=pluginpath=${lib.concatStringsSep "," pluginPaths}"'';
+  makeWrapperArgs = lib.optional
+    (
+      plugins != [ ]
+    ) ''--add-flags "--setopt=pluginpath=${lib.concatStringsSep "," pluginPaths}"'';
 
   installPhase = ''
     runHook preInstall

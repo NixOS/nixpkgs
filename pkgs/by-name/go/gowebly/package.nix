@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGo124Module,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildGo124Module
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 buildGo124Module rec {

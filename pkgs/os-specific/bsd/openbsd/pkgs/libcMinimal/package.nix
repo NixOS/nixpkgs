@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenvNoLibc,
-  mkDerivation,
-  fetchpatch,
-  bsdSetupHook,
-  openbsdSetupHook,
-  makeMinimal,
-  install,
-  flex,
-  byacc,
-  gencat,
-  lorder,
-  tsort,
-  rpcgen,
-  csu,
-  include,
+{ lib
+, stdenvNoLibc
+, mkDerivation
+, fetchpatch
+, bsdSetupHook
+, openbsdSetupHook
+, makeMinimal
+, install
+, flex
+, byacc
+, gencat
+, lorder
+, tsort
+, rpcgen
+, csu
+, include
+,
 }:
 
 mkDerivation {
@@ -64,9 +64,10 @@ mkDerivation {
 
   # Suppress lld >= 16 undefined version errors
   # https://github.com/freebsd/freebsd-src/commit/2ba84b4bcdd6012e8cfbf8a0d060a4438623a638
-  env.NIX_LDFLAGS = lib.optionalString (
-    stdenvNoLibc.hostPlatform.linker == "lld"
-  ) "--undefined-version";
+  env.NIX_LDFLAGS = lib.optionalString
+    (
+      stdenvNoLibc.hostPlatform.linker == "lld"
+    ) "--undefined-version";
 
   makeFlags = [
     "COMPILER_VERSION=clang"

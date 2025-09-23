@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  varnish,
-  docutils,
-  removeReferencesTo,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, varnish
+, docutils
+, removeReferencesTo
+,
 }:
 let
   common =
-    {
-      version,
-      hash,
-      extraNativeBuildInputs ? [ ],
+    { version
+    , hash
+    , extraNativeBuildInputs ? [ ]
+    ,
     }:
     stdenv.mkDerivation rec {
       pname = "${varnish.name}-modules";

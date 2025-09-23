@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGhidraExtension,
-  ghidra,
-  python3,
+{ lib
+, buildGhidraExtension
+, ghidra
+, python3
+,
 }:
 
 buildGhidraExtension {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  sphinx,
-  pytestCheckHook,
-  lxml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, sphinx
+, pytestCheckHook
+, lxml
+,
 }:
 
 buildPythonPackage rec {

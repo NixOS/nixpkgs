@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pnpm,
-  nodejs,
-  nix-update-script,
-  makeBinaryWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pnpm
+, nodejs
+, nix-update-script
+, makeBinaryWrapper
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";

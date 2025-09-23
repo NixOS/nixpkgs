@@ -1,27 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # buildInputs
-  libXScrnSaver,
-  magic-enum,
-
-  # nativeBuildInputs
-  qtbase,
-  qtconnectivity,
-  qtlanguageserver,
-  qttools,
-  range-v3,
-  spdlog,
-  qtwayland,
-
-  # nativeBuildInputs
-  cmake,
-  wrapQtAppsHook,
-
-  # passthru
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # buildInputs
+  libXScrnSaver
+, magic-enum
+, # nativeBuildInputs
+  qtbase
+, qtconnectivity
+, qtlanguageserver
+, qttools
+, range-v3
+, spdlog
+, qtwayland
+, # nativeBuildInputs
+  cmake
+, wrapQtAppsHook
+, # passthru
+  nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

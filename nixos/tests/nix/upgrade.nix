@@ -1,8 +1,7 @@
-{
-  pkgs,
-  nixVersions,
-  system,
-  ...
+{ pkgs
+, nixVersions
+, system
+, ...
 }:
 let
   lib = pkgs.lib;

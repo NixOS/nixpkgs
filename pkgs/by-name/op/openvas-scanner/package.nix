@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  bison,
-  cmake,
-  curl,
-  doxygen,
-  fetchFromGitHub,
-  git,
-  glib,
-  gnutls,
-  gpgme,
-  gvm-libs,
-  json-glib,
-  libbsd,
-  libclang,
-  libgcrypt,
-  libksba,
-  libpcap,
-  libsepol,
-  libssh,
-  libtasn1,
-  net-snmp,
-  p11-kit,
-  paho-mqtt-c,
-  pandoc,
-  pcre2,
-  pkg-config,
-  util-linux,
+{ lib
+, stdenv
+, bison
+, cmake
+, curl
+, doxygen
+, fetchFromGitHub
+, git
+, glib
+, gnutls
+, gpgme
+, gvm-libs
+, json-glib
+, libbsd
+, libclang
+, libgcrypt
+, libksba
+, libpcap
+, libsepol
+, libssh
+, libtasn1
+, net-snmp
+, p11-kit
+, paho-mqtt-c
+, pandoc
+, pcre2
+, pkg-config
+, util-linux
+,
 }:
 
 stdenv.mkDerivation rec {

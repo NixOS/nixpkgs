@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  autoconf-archive,
-  autoreconfHook,
-  pkg-config,
-  curlWithGnuTls,
-  libev,
-  libunwind,
-  sqlite,
+{ lib
+, stdenv
+, fetchzip
+, autoconf-archive
+, autoreconfHook
+, pkg-config
+, curlWithGnuTls
+, libev
+, libunwind
+, sqlite
+,
 }:
 
 stdenv.mkDerivation rec {

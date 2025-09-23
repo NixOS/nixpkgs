@@ -1,13 +1,13 @@
-{
-  lib,
-  SDL,
-  SDL_mixer,
-  fetchpatch,
-  fetchurl,
-  libintl,
-  libpng,
-  stdenv,
-  zlib,
+{ lib
+, SDL
+, SDL_mixer
+, fetchpatch
+, fetchurl
+, libintl
+, libpng
+, stdenv
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

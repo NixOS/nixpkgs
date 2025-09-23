@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  awscli,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, awscli
+,
 }:
 
 python3Packages.buildPythonApplication rec {

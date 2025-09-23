@@ -1,15 +1,15 @@
-{
-  lib,
-  mkCoqDerivation,
-  mathcomp,
-  mathcomp-finmap,
-  mathcomp-bigenough,
-  hierarchy-builder,
-  stdlib,
-  single ? false,
-  coqPackages,
-  coq,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, mathcomp
+, mathcomp-finmap
+, mathcomp-bigenough
+, hierarchy-builder
+, stdlib
+, single ? false
+, coqPackages
+, coq
+, version ? null
+,
 }@args:
 
 let
@@ -124,7 +124,8 @@ let
           case = "analysis-stdlib";
           out = "analysis_stdlib";
         }
-      ] package;
+      ]
+        package;
       pname = if package == "single" then "mathcomp-analysis-single" else "mathcomp-${package}";
       derivation = mkCoqDerivation ({
         inherit
@@ -143,23 +144,31 @@ let
 
         propagatedBuildInputs =
           intra-deps
-          ++ lib.optionals (lib.elem package [
-            "classical"
-            "single"
-          ]) classical-deps
-          ++ lib.optionals (lib.elem package [
-            "experimental-reals"
-            "single"
-          ]) experimental-reals-deps
-          ++ lib.optionals (lib.elem package [
-            "analysis"
-            "single"
-          ]) analysis-deps
-          ++ lib.optional (lib.elem package [
-            "reals-stdlib"
-            "analysis-stdlib"
-            "single"
-          ]) stdlib;
+          ++ lib.optionals
+            (lib.elem package [
+              "classical"
+              "single"
+            ])
+            classical-deps
+          ++ lib.optionals
+            (lib.elem package [
+              "experimental-reals"
+              "single"
+            ])
+            experimental-reals-deps
+          ++ lib.optionals
+            (lib.elem package [
+              "analysis"
+              "single"
+            ])
+            analysis-deps
+          ++ lib.optional
+            (lib.elem package [
+              "reals-stdlib"
+              "analysis-stdlib"
+              "single"
+            ])
+            stdlib;
 
         preBuild = ''
           cd ${pkgpath}
@@ -192,13 +201,15 @@ let
       );
       patched-derivation2 = patched-derivation1.overrideAttrs (
         o:
-        lib.optionalAttrs (
-          o.pname != null
-          && o.pname == "mathcomp-analysis"
-          && o.version != null
-          && o.version != "dev"
-          && lib.versions.isLt "0.6" o.version
-        ) { preBuild = ""; }
+        lib.optionalAttrs
+          (
+            o.pname != null
+            && o.pname == "mathcomp-analysis"
+            && o.version != null
+            && o.version != "dev"
+            && lib.versions.isLt "0.6" o.version
+          )
+          { preBuild = ""; }
       );
       # only packages classical and analysis existed before 1.7, so building nothing in that case
       patched-derivation3 = patched-derivation2.overrideAttrs (

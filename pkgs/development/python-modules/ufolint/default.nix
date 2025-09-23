@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  commandlines,
-  fonttools,
-  fs,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, commandlines
+, fonttools
+, fs
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

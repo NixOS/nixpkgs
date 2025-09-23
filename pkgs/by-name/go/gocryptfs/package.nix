@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fuse,
-  makeWrapper,
-  openssl,
-  pandoc,
-  pkg-config,
-  libfido2,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fuse
+, makeWrapper
+, openssl
+, pandoc
+, pkg-config
+, libfido2
+,
 }:
 
 buildGoModule rec {

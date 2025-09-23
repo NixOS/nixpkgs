@@ -1,22 +1,22 @@
-{
-  lib,
-  azure-storage-blob,
-  boto3,
-  buildPythonPackage,
-  cryptography,
-  django,
-  dropbox,
-  fetchFromGitHub,
-  fetchpatch,
-  google-cloud-storage,
-  libcloud,
-  moto,
-  paramiko,
-  pynacl,
-  pytestCheckHook,
-  pythonOlder,
-  rsa,
-  setuptools,
+{ lib
+, azure-storage-blob
+, boto3
+, buildPythonPackage
+, cryptography
+, django
+, dropbox
+, fetchFromGitHub
+, fetchpatch
+, google-cloud-storage
+, libcloud
+, moto
+, paramiko
+, pynacl
+, pytestCheckHook
+, pythonOlder
+, rsa
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

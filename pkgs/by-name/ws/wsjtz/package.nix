@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchzip,
-  wsjtx,
+{ lib
+, fetchzip
+, wsjtx
+,
 }:
 
 wsjtx.overrideAttrs (

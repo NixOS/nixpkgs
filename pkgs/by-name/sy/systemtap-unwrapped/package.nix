@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  pkg-config,
-  gettext,
-  cpio,
-  elfutils,
-  python3,
+{ lib
+, stdenv
+, fetchgit
+, pkg-config
+, gettext
+, cpio
+, elfutils
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

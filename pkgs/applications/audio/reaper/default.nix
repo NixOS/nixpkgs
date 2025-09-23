@@ -1,27 +1,25 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  makeWrapper,
-  undmg,
-
-  alsa-lib,
-  curl,
-  gtk3,
-  lame,
-  libxml2,
-  ffmpeg,
-  vlc,
-  xdg-utils,
-  xdotool,
-  which,
-
-  jackSupport ? stdenv.hostPlatform.isLinux,
-  jackLibrary,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
-  libpulseaudio,
+{ config
+, lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, makeWrapper
+, undmg
+, alsa-lib
+, curl
+, gtk3
+, lame
+, libxml2
+, ffmpeg
+, vlc
+, xdg-utils
+, xdotool
+, which
+, jackSupport ? stdenv.hostPlatform.isLinux
+, jackLibrary
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
+, libpulseaudio
+,
 }:
 
 let
@@ -49,8 +47,7 @@ stdenv.mkDerivation rec {
         {
           x86_64-linux = "sha256-pOPL8HoAAFNDq6L3SC/OygDtqqYVvfkWwVA6qv1xZPs=";
           aarch64-linux = "sha256-rclLjAiG8aLsVinghpPZJiPU4Iq5jQ6s2H0+du+a9Ts=";
-        }
-        .${stdenv.hostPlatform.system};
+        }.${stdenv.hostPlatform.system};
   };
 
   nativeBuildInputs = [

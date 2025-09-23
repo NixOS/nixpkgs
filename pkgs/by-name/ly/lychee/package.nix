@@ -1,11 +1,11 @@
-{
-  callPackage,
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  testers,
+{ callPackage
+, lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage rec {

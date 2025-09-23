@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libsaneUDevRuleNumber ? "49",
+{ lib
+, stdenv
+, fetchurl
+, libsaneUDevRuleNumber ? "49"
+,
 }:
 
 stdenv.mkDerivation rec {

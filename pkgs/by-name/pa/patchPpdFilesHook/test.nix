@@ -1,8 +1,8 @@
-{
-  replaceVars,
-  diffutils,
-  stdenv,
-  patchPpdFilesHook,
+{ replaceVars
+, diffutils
+, stdenv
+, patchPpdFilesHook
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  lib,
-  libconfuse,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  help2man,
+{ lib
+, libconfuse
+, stdenv
+, fetchFromGitHub
+, cmake
+, help2man
+,
 }:
 
 stdenv.mkDerivation rec {

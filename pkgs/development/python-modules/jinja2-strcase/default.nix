@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  freezegun,
-  jinja2,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, freezegun
+, jinja2
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

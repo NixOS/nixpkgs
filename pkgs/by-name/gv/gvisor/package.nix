@@ -1,13 +1,13 @@
-{
-  lib,
-  nixosTests,
-  buildGoModule,
-  fetchFromGitHub,
-  iproute2,
-  iptables,
-  makeWrapper,
-  procps,
-  glibc,
+{ lib
+, nixosTests
+, buildGoModule
+, fetchFromGitHub
+, iproute2
+, iptables
+, makeWrapper
+, procps
+, glibc
+,
 }:
 
 buildGoModule {

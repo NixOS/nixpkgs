@@ -2,11 +2,10 @@
 # cfg.configFile contains secrets such as proxy servers' credential!
 # we dont want plaintext secrets in world-readable `/nix/store`.
 
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 let
   cfg = config.services.mihomo;

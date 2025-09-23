@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  qmake,
-  qtwebengine,
-  qtxmlpatterns,
-  qttools,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, qmake
+, qtwebengine
+, qtxmlpatterns
+, qttools
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

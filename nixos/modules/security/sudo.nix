@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -17,13 +16,15 @@ let
   toCommandsString =
     commands:
     lib.concatStringsSep ", " (
-      map (
-        command:
-        if (lib.isString command) then
-          command
-        else
-          "${toCommandOptionsString command.options}${command.command}"
-      ) commands
+      map
+        (
+          command:
+          if (lib.isString command) then
+            command
+          else
+            "${toCommandOptionsString command.options}${command.command}"
+        )
+        commands
     );
 
 in
@@ -229,10 +230,10 @@ in
     security.sudo.extraRules =
       let
         defaultRule =
-          {
-            users ? [ ],
-            groups ? [ ],
-            opts ? [ ],
+          { users ? [ ]
+          , groups ? [ ]
+          , opts ? [ ]
+          ,
           }:
           [
             {
@@ -270,12 +271,16 @@ in
         (lib.pipe cfg.extraRules [
           (lib.filter (rule: lib.length rule.commands != 0))
           (map (rule: [
-            (map (
-              user: "${toUserString user}     ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}"
-            ) rule.users)
-            (map (
-              group: "${toGroupString group}  ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}"
-            ) rule.groups)
+            (map
+              (
+                user: "${toUserString user}     ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}"
+              )
+              rule.users)
+            (map
+              (
+                group: "${toGroupString group}  ${rule.host}=(${rule.runAs})    ${toCommandsString rule.commands}"
+              )
+              rule.groups)
           ]))
           lib.flatten
           (lib.concatStringsSep "\n")

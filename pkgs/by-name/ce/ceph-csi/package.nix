@@ -1,9 +1,9 @@
-{
-  ceph,
-  fetchFromGitHub,
-  go,
-  lib,
-  stdenv,
+{ ceph
+, fetchFromGitHub
+, go
+, lib
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

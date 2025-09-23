@@ -1,7 +1,7 @@
-{
-  lib,
-  rustPlatform,
-  fetchgit,
+{ lib
+, rustPlatform
+, fetchgit
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "taler-depolymerization";

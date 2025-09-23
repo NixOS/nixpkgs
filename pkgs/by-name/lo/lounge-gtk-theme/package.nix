@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  sassc,
-  gtk3,
-  gnome-shell,
-  gdk-pixbuf,
-  librsvg,
-  gtk-engine-murrine,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, sassc
+, gtk3
+, gnome-shell
+, gdk-pixbuf
+, librsvg
+, gtk-engine-murrine
+,
 }:
 
 stdenv.mkDerivation rec {

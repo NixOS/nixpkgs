@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  numpy,
-  libdynd,
-  fetchpatch,
-  cmake,
-  fetchFromGitHub,
-  pythonAtLeast,
+{ lib
+, buildPythonPackage
+, cython
+, numpy
+, libdynd
+, fetchpatch
+, cmake
+, fetchFromGitHub
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

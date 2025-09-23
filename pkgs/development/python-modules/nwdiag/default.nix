@@ -1,11 +1,11 @@
-{
-  lib,
-  blockdiag,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pytestCheckHook,
-  setuptools,
-  pythonOlder,
+{ lib
+, blockdiag
+, fetchFromGitHub
+, buildPythonPackage
+, pytestCheckHook
+, setuptools
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

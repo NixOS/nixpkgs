@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  acme,
-  certbot,
-  google-api-python-client,
-  google-auth,
-  pytestCheckHook,
-  setuptools,
+{ buildPythonPackage
+, acme
+, certbot
+, google-api-python-client
+, google-auth
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

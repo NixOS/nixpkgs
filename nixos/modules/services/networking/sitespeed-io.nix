@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 let
   cfg = config.services.sitespeed-io;
@@ -105,12 +104,14 @@ in
       };
       preStart = "chmod u+w -R ${cfg.dataDir}"; # Make sure things are writable
       script =
-        (lib.concatMapStrings (run: ''
-          ${lib.getExe cfg.package} \
-            --config ${format.generate "sitespeed.json" run.settings} \
-            ${lib.escapeShellArgs run.extraArgs} \
-            ${builtins.toFile "urls.txt" (lib.concatLines run.urls)} &
-        '') cfg.runs)
+        (lib.concatMapStrings
+          (run: ''
+            ${lib.getExe cfg.package} \
+              --config ${format.generate "sitespeed.json" run.settings} \
+              ${lib.escapeShellArgs run.extraArgs} \
+              ${builtins.toFile "urls.txt" (lib.concatLines run.urls)} &
+          '')
+          cfg.runs)
         + ''
           wait
         '';

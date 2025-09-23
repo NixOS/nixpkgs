@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  bzip2,
-  cmake,
-  fetchFromGitHub,
-  ncurses,
-  python3,
-  readline,
+{ lib
+, stdenv
+, bzip2
+, cmake
+, fetchFromGitHub
+, ncurses
+, python3
+, readline
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  makeWrapper,
-  electron,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, makeWrapper
+, electron
+,
 }:
 
 buildNpmPackage {

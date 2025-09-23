@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  marisa-trie,
-  pythonOlder,
-  fetchPypi,
-  pytestCheckHook,
-  language-data,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, marisa-trie
+, pythonOlder
+, fetchPypi
+, pytestCheckHook
+, language-data
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  leveldb,
-  geos,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, leveldb
+, geos
+,
 }:
 
 buildGoModule rec {

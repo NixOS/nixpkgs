@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  stdenv,
-  wayland,
-  libxkbcommon,
-  fontconfig,
-  pkg-config,
-  autoPatchelfHook,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, stdenv
+, wayland
+, libxkbcommon
+, fontconfig
+, pkg-config
+, autoPatchelfHook
+,
 }:
 
 rustPlatform.buildRustPackage {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeDesktopItem,
-  makeWrapper,
-  wrapGAppsHook3,
-  stripJavaArchivesHook,
-  ant,
-  jdk,
-  jre,
-  gtk2,
-  glib,
-  libXtst,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, wrapGAppsHook3
+, stripJavaArchivesHook
+, ant
+, jdk
+, jre
+, gtk2
+, glib
+, libXtst
+,
 }:
 
 let

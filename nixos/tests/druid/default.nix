@@ -232,7 +232,7 @@ let
             services.mysql = {
               enable = true;
               package = pkgs.mariadb;
-              initialDatabases = [ { name = "druid"; } ];
+              initialDatabases = [{ name = "druid"; }];
               initialScript = pkgs.writeText "mysql-init.sql" ''
                 CREATE USER 'druid'@'%' IDENTIFIED BY 'druid';
                 GRANT ALL PRIVILEGES ON druid.* TO 'druid'@'%';

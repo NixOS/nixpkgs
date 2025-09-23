@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchpatch,
-  pkg-config,
-  swift,
-  swiftpm,
-  swiftpm2nix,
-  Foundation,
-  XCTest,
-  sqlite,
-  ncurses,
+{ lib
+, stdenv
+, callPackage
+, fetchpatch
+, pkg-config
+, swift
+, swiftpm
+, swiftpm2nix
+, Foundation
+, XCTest
+, sqlite
+, ncurses
+,
 }:
 let
   sources = callPackage ../sources.nix { };

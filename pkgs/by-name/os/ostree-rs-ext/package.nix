@@ -1,18 +1,18 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  makeWrapper,
-  glib,
-  openssl,
-  zlib,
-  ostree,
-  stdenv,
-  util-linux,
-  skopeo,
-  gnutar,
-  ima-evm-utils,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, makeWrapper
+, glib
+, openssl
+, zlib
+, ostree
+, stdenv
+, util-linux
+, skopeo
+, gnutar
+, ima-evm-utils
+,
 }:
 
 rustPlatform.buildRustPackage rec {

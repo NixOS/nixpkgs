@@ -1,11 +1,11 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  aiofiles,
-  bcrypt,
-  jinja2,
-  python-jose,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, aiofiles
+, bcrypt
+, jinja2
+, python-jose
+,
 }:
 
 buildHomeAssistantComponent rec {

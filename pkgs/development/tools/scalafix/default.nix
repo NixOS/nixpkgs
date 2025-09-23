@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  jre,
-  coursier,
-  makeWrapper,
-  installShellFiles,
-  setJavaClassPath,
-  testers,
+{ lib
+, stdenv
+, jre
+, coursier
+, makeWrapper
+, installShellFiles
+, setJavaClassPath
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "scalafix";

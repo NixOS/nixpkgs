@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jaxtyping,
-  pytestCheckHook,
-  scipy,
-  setuptools,
-  setuptools-scm,
-  torch,
-  typeguard,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jaxtyping
+, pytestCheckHook
+, scipy
+, setuptools
+, setuptools-scm
+, torch
+, typeguard
+,
 }:
 
 buildPythonPackage rec {

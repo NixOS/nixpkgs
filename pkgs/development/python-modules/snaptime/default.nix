@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  python-dateutil,
-  pytz,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, python-dateutil
+, pytz
+,
 }:
 
 buildPythonPackage rec {

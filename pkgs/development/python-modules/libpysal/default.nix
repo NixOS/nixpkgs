@@ -1,23 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-
-  beautifulsoup4,
-  fiona,
-  geodatasets,
-  geopandas,
-  numpy,
-  packaging,
-  pandas,
-  platformdirs,
-  requests,
-  scikit-learn,
-  scipy,
-  setuptools-scm,
-  shapely,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, beautifulsoup4
+, fiona
+, geodatasets
+, geopandas
+, numpy
+, packaging
+, pandas
+, platformdirs
+, requests
+, scikit-learn
+, scipy
+, setuptools-scm
+, shapely
+,
 }:
 
 buildPythonPackage rec {

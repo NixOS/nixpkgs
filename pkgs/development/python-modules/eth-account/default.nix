@@ -1,28 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  bitarray,
-  ckzg,
-  eth-abi,
-  eth-keyfile,
-  eth-keys,
-  eth-rlp,
-  eth-utils,
-  hexbytes,
-  rlp,
-  websockets,
-
-  # tests
-  hypothesis,
-  pydantic,
-  pytestCheckHook,
-  pytest-xdist,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  bitarray
+, ckzg
+, eth-abi
+, eth-keyfile
+, eth-keys
+, eth-rlp
+, eth-utils
+, hexbytes
+, rlp
+, websockets
+, # tests
+  hypothesis
+, pydantic
+, pytestCheckHook
+, pytest-xdist
+,
 }:
 
 buildPythonPackage rec {

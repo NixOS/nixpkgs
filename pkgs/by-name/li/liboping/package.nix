@@ -1,11 +1,11 @@
-{
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  ncurses ? null,
-  perl ? null,
-  pkg-config,
-  lib,
+{ stdenv
+, fetchurl
+, fetchpatch
+, ncurses ? null
+, perl ? null
+, pkg-config
+, lib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

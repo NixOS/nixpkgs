@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  buildFHSEnv,
-  copyDesktopItems,
-  fetchurl,
-  gsettings-desktop-schemas,
-  makeDesktopItem,
-  makeWrapper,
-  opensc,
-  writeTextDir,
-  configText ? "",
+{ stdenv
+, lib
+, buildFHSEnv
+, copyDesktopItems
+, fetchurl
+, gsettings-desktop-schemas
+, makeDesktopItem
+, makeWrapper
+, opensc
+, writeTextDir
+, configText ? ""
+,
 }:
 let
   version = "2506";

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  glfw3,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  wayland,
-  libgbm,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, glfw3
+, nix-update-script
+, pkg-config
+, rustPlatform
+, wayland
+, libgbm
+,
 }:
 
 rustPlatform.buildRustPackage rec {

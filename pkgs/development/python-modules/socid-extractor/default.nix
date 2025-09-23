@@ -1,12 +1,12 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
-  requests,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, python-dateutil
+, pythonOlder
+, setuptools
+, requests
+,
 }:
 
 buildPythonPackage rec {

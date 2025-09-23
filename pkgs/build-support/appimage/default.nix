@@ -1,14 +1,14 @@
-{
-  lib,
-  bash,
-  binutils-unwrapped,
-  coreutils,
-  gawk,
-  libarchive,
-  pv,
-  squashfsTools,
-  buildFHSEnv,
-  pkgs,
+{ lib
+, bash
+, binutils-unwrapped
+, coreutils
+, gawk
+, libarchive
+, pv
+, squashfsTools
+, buildFHSEnv
+, pkgs
+,
 }:
 
 rec {
@@ -31,26 +31,26 @@ rec {
   };
 
   extract =
-    args@{
-      pname,
-      version,
-      name ? null,
-      postExtract ? "",
-      src,
-      ...
+    args@{ pname
+    , version
+    , name ? null
+    , postExtract ? ""
+    , src
+    , ...
     }:
-    assert lib.assertMsg (
-      name == null
-    ) "The `name` argument is deprecated. Use `pname` and `version` instead to construct the name.";
-    pkgs.runCommand "${pname}-${version}-extracted"
-      {
-        nativeBuildInputs = [ appimage-exec ];
-        strictDeps = true;
-      }
-      ''
-        appimage-exec.sh -x $out ${src}
-        ${postExtract}
-      '';
+      assert lib.assertMsg
+        (
+          name == null
+        ) "The `name` argument is deprecated. Use `pname` and `version` instead to construct the name.";
+      pkgs.runCommand "${pname}-${version}-extracted"
+        {
+          nativeBuildInputs = [ appimage-exec ];
+          strictDeps = true;
+        }
+        ''
+          appimage-exec.sh -x $out ${src}
+          ${postExtract}
+        '';
 
   # for compatibility, deprecated
   extractType1 = extract;
@@ -58,11 +58,10 @@ rec {
   wrapType1 = wrapType2;
 
   wrapAppImage =
-    args@{
-      src,
-      extraPkgs ? pkgs: [ ],
-      meta ? { },
-      ...
+    args@{ src
+    , extraPkgs ? pkgs: [ ]
+    , meta ? { }
+    , ...
     }:
     buildFHSEnv (
       defaultFhsEnvArgs
@@ -80,24 +79,25 @@ rec {
     );
 
   wrapType2 =
-    args@{
-      src,
-      extraPkgs ? pkgs: [ ],
-      ...
+    args@{ src
+    , extraPkgs ? pkgs: [ ]
+    , ...
     }:
     wrapAppImage (
       args
       // {
         inherit extraPkgs;
         src = extract (
-          lib.filterAttrs (
-            key: value:
-            builtins.elem key [
-              "pname"
-              "version"
-              "src"
-            ]
-          ) args
+          lib.filterAttrs
+            (
+              key: value:
+                builtins.elem key [
+                  "pname"
+                  "version"
+                  "src"
+                ]
+            )
+            args
         );
 
         # passthru src to make nix-update work

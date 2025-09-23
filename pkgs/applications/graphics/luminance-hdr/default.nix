@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  boost,
-  exiv2,
-  fftwFloat,
-  gsl,
-  ilmbase,
-  lcms2,
-  libraw,
-  libtiff,
-  openexr,
-  libsForQt5,
-  eigen,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, boost
+, exiv2
+, fftwFloat
+, gsl
+, ilmbase
+, lcms2
+, libraw
+, libtiff
+, openexr
+, libsForQt5
+, eigen
+,
 }:
 
 stdenv.mkDerivation rec {

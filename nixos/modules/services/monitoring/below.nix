@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.below;
@@ -113,7 +112,7 @@ in
               ++ lib.optional cfg.compression.enable "--compress"
               ++
 
-                lib.optional (cfg.retention.size != null) "--store-size-limit ${toString cfg.retention.size}"
+              lib.optional (cfg.retention.size != null) "--store-size-limit ${toString cfg.retention.size}"
               ++ lib.optional (cfg.retention.time != null) "--retain-for-s ${toString cfg.retention.time}"
             ))
           )

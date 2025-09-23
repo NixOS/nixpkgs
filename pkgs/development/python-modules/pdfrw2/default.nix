@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pillow,
-  pycryptodome,
-  reportlab,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pillow
+, pycryptodome
+, reportlab
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

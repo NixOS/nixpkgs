@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  gperf,
-  arpa2cm,
-  quickder,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, gperf
+, arpa2cm
+, quickder
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

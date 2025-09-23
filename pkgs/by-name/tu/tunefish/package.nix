@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  python3,
-  alsa-lib,
-  curl,
-  freetype,
-  gtk3,
-  libGL,
-  libX11,
-  libXext,
-  libXinerama,
-  webkitgtk_4_0,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, python3
+, alsa-lib
+, curl
+, freetype
+, gtk3
+, libGL
+, libX11
+, libXext
+, libXinerama
+, webkitgtk_4_0
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

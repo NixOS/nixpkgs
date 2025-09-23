@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  flask,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, flask
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-
-  # build-system
-  pretix-plugin-build,
-  setuptools,
-
-  # runtime
-  openssl,
-
-  # dependencies
-  googlemaps,
-  wallet-py3k,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, # build-system
+  pretix-plugin-build
+, setuptools
+, # runtime
+  openssl
+, # dependencies
+  googlemaps
+, wallet-py3k
+,
 }:
 
 buildPythonPackage rec {

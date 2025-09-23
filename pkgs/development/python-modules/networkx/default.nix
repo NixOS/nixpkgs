@@ -1,29 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # optional-dependencies
-  lxml,
-  matplotlib,
-  numpy,
-  pandas,
-  pydot,
-  pygraphviz,
-  scipy,
-  sympy,
-
-  # tests
-  pytest-xdist,
-  pytestCheckHook,
-
-  # reverse dependency
-  sage,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, pythonOlder
+, # build-system
+  setuptools
+, # optional-dependencies
+  lxml
+, matplotlib
+, numpy
+, pandas
+, pydot
+, pygraphviz
+, scipy
+, sympy
+, # tests
+  pytest-xdist
+, pytestCheckHook
+, # reverse dependency
+  sage
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  nixosTests,
-  postgresql,
-  postgresqlTestHook,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+, postgresql
+, postgresqlTestHook
+,
 }:
 
 buildGoModule rec {

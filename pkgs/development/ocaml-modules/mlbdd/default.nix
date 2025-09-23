@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  ounit,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ounit
+,
 }:
 
 buildDunePackage {

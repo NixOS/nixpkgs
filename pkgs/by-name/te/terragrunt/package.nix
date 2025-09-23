@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGo125Module,
-  fetchFromGitHub,
-  versionCheckHook,
-  mockgen,
+{ lib
+, buildGo125Module
+, fetchFromGitHub
+, versionCheckHook
+, mockgen
+,
 }:
 buildGo125Module (finalAttrs: {
   pname = "terragrunt";

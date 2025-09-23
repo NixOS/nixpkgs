@@ -1,17 +1,17 @@
-{
-  lib,
-  mkKdeDerivation,
-  pkg-config,
-  plymouth,
-  imagemagick,
-  netpbm,
-  perl,
-  logoName ? null,
-  logoFile ? null,
-  osName ? null,
-  osVersion ? null,
-  topColor ? "black",
-  bottomColor ? "black",
+{ lib
+, mkKdeDerivation
+, pkg-config
+, plymouth
+, imagemagick
+, netpbm
+, perl
+, logoName ? null
+, logoFile ? null
+, osName ? null
+, osVersion ? null
+, topColor ? "black"
+, bottomColor ? "black"
+,
 }:
 let
   validColors = [

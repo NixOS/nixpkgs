@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  nix-update-script,
-  fetchgit,
-  ncurses,
+{ lib
+, stdenv
+, nix-update-script
+, fetchgit
+, ncurses
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

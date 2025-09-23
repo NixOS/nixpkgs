@@ -1,40 +1,39 @@
-{
-  buildDunePackage,
-  lib,
-  cppo,
-  stdlib-shims,
-  ppx_yojson_conv_lib,
-  ocaml-syntax-shims,
-  jsonrpc,
-  omd,
-  octavius,
-  dune-build-info,
-  dune-rpc,
-  uutf,
-  dyn,
-  re,
-  stdune,
-  chrome-trace,
-  csexp,
-  result,
-  pp,
-  cmdliner,
-  ordering,
-  ocamlformat-rpc-lib,
-  ocaml,
-  version ?
-    if lib.versionAtLeast ocaml.version "5.3" then
-      "1.23.0"
-    else if lib.versionAtLeast ocaml.version "5.2" then
-      "1.21.0"
-    else if lib.versionAtLeast ocaml.version "4.14" then
-      "1.18.0"
-    else if lib.versionAtLeast ocaml.version "4.13" then
-      "1.10.5"
-    else if lib.versionAtLeast ocaml.version "4.12" then
-      "1.9.0"
-    else
-      "1.4.1",
+{ buildDunePackage
+, lib
+, cppo
+, stdlib-shims
+, ppx_yojson_conv_lib
+, ocaml-syntax-shims
+, jsonrpc
+, omd
+, octavius
+, dune-build-info
+, dune-rpc
+, uutf
+, dyn
+, re
+, stdune
+, chrome-trace
+, csexp
+, result
+, pp
+, cmdliner
+, ordering
+, ocamlformat-rpc-lib
+, ocaml
+, version ? if lib.versionAtLeast ocaml.version "5.3" then
+    "1.23.0"
+  else if lib.versionAtLeast ocaml.version "5.2" then
+    "1.21.0"
+  else if lib.versionAtLeast ocaml.version "4.14" then
+    "1.18.0"
+  else if lib.versionAtLeast ocaml.version "4.13" then
+    "1.10.5"
+  else if lib.versionAtLeast ocaml.version "4.12" then
+    "1.9.0"
+  else
+    "1.4.1"
+,
 }:
 
 let

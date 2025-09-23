@@ -1,12 +1,12 @@
-{
-  fetchurl,
-  fetchzip,
-  lib,
-  stdenv,
-  callPackage,
-  autoPatchelfHook,
-  glib,
-  darwin,
+{ fetchurl
+, fetchzip
+, lib
+, stdenv
+, callPackage
+, autoPatchelfHook
+, glib
+, darwin
+,
 }:
 
 let
@@ -55,17 +55,21 @@ let
       pluginsJson.plugins."${id}".builds."${build}";
 
   byId = builtins.listToAttrs (
-    map (id: {
-      name = id;
-      value = ide: build: mkPlugin id (selectFile id ide build);
-    }) ids
+    map
+      (id: {
+        name = id;
+        value = ide: build: mkPlugin id (selectFile id ide build);
+      })
+      ids
   );
 
   byName = builtins.listToAttrs (
-    map (id: {
-      name = pluginsJson.plugins."${id}".name;
-      value = byId."${id}";
-    }) ids
+    map
+      (id: {
+        name = pluginsJson.plugins."${id}".name;
+        value = byId."${id}";
+      })
+      ids
   );
 in
 {

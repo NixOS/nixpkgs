@@ -1,8 +1,7 @@
-{
-  config,
-  options,
-  lib,
-  ...
+{ config
+, options
+, lib
+, ...
 }:
 let
   inherit (lib) mkIf mkOption types;

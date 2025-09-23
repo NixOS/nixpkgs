@@ -1,93 +1,78 @@
-{
-  buildPackages,
-  pkgsBuildBuild,
-  callPackage,
-  perl,
-  bison ? null,
-  flex ? null,
-  gmp ? null,
-  libmpc ? null,
-  mpfr ? null,
-  pahole,
-  lib,
-  stdenv,
-  rustc-unwrapped,
-  rustPlatform,
-  rust-bindgen-unwrapped,
-  # testing
-  emptyFile,
-  nixos,
-  nixosTests,
+{ buildPackages
+, pkgsBuildBuild
+, callPackage
+, perl
+, bison ? null
+, flex ? null
+, gmp ? null
+, libmpc ? null
+, mpfr ? null
+, pahole
+, lib
+, stdenv
+, rustc-unwrapped
+, rustPlatform
+, rust-bindgen-unwrapped
+, # testing
+  emptyFile
+, nixos
+, nixosTests
+,
 }@args':
 
 let
   overridableKernel = lib.makeOverridable (
     # The kernel source tarball.
-    {
-      src,
-
-      # The kernel version.
-      version,
-
-      # Allows overriding the default defconfig
-      defconfig ? null,
-
-      # Legacy overrides to the intermediate kernel config, as string
-      extraConfig ? "",
-
-      # Additional make flags passed to kbuild
-      extraMakeFlags ? [ ],
-
-      # enables the options in ./common-config.nix and lib/systems/platform.nix;
+    { src
+    , # The kernel version.
+      version
+    , # Allows overriding the default defconfig
+      defconfig ? null
+    , # Legacy overrides to the intermediate kernel config, as string
+      extraConfig ? ""
+    , # Additional make flags passed to kbuild
+      extraMakeFlags ? [ ]
+    , # enables the options in ./common-config.nix and lib/systems/platform.nix;
       # if `false` then only `structuredExtraConfig` is used
       enableCommonConfig ? true
 
-      , # kernel intermediate config overrides, as a set
-      structuredExtraConfig ? { },
-
-      # The version number used for the module directory
+    , # kernel intermediate config overrides, as a set
+      structuredExtraConfig ? { }
+    , # The version number used for the module directory
       # If unspecified, this is determined automatically from the version.
-      modDirVersion ? null,
-
-      # An attribute set whose attributes express the availability of
+      modDirVersion ? null
+    , # An attribute set whose attributes express the availability of
       # certain features in this kernel.  E.g. `{ia32Emulation = true;}'
       # indicates a kernel that provides Intel wireless support.  Used in
       # NixOS to implement kernel-specific behaviour.
-      features ? { },
-
-      # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
+      features ? { }
+    , # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
       # automatically extended with extra per-version and per-config values.
-      randstructSeed ? "",
-
-      # A list of patches to apply to the kernel.  Each element of this list
+      randstructSeed ? ""
+    , # A list of patches to apply to the kernel.  Each element of this list
       # should be an attribute set {name, patch} where `name' is a
       # symbolic name and `patch' is the actual patch.  The patch may
       # optionally be compressed with gzip or bzip2.
-      kernelPatches ? [ ],
-      ignoreConfigErrors ?
-        !lib.elem stdenv.hostPlatform.linux-kernel.name [
-          "aarch64-multiplatform"
-          "pc"
-        ],
-      extraMeta ? { },
-      extraPassthru ? { },
-
-      isLTS ? false,
-      isZen ? false,
-      isLibre ? false,
-      isHardened ? false,
-
-      # easy overrides to stdenv.hostPlatform.linux-kernel members
-      autoModules ? stdenv.hostPlatform.linux-kernel.autoModules,
-      preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false,
-      kernelArch ? stdenv.hostPlatform.linuxArch,
-      kernelTests ? { },
-
-      stdenv ? args'.stdenv,
-      buildPackages ? args'.buildPackages,
-      pkgsBuildBuild ? args'.pkgsBuildBuild,
-
-      ...
+      kernelPatches ? [ ]
+    , ignoreConfigErrors ? !lib.elem stdenv.hostPlatform.linux-kernel.name [
+        "aarch64-multiplatform"
+        "pc"
+      ]
+    , extraMeta ? { }
+    , extraPassthru ? { }
+    , isLTS ? false
+    , isZen ? false
+    , isLibre ? false
+    , isHardened ? false
+    , # easy overrides to stdenv.hostPlatform.linux-kernel members
+      autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
+    , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
+    , kernelArch ? stdenv.hostPlatform.linuxArch
+    , kernelTests ? { }
+    , stdenv ? args'.stdenv
+    , buildPackages ? args'.buildPackages
+    , pkgsBuildBuild ? args'.pkgsBuildBuild
+    , ...
     }@args:
 
     # Note: this package is used for bootstrapping fetchurl, and thus
@@ -105,25 +90,29 @@ let
       #
       # For further context, see https://github.com/NixOS/nixpkgs/pull/143113#issuecomment-953319957
       basicArgs = builtins.removeAttrs args (
-        lib.filter (
-          x:
-          !(builtins.elem x [
-            "version"
-            "pname"
-            "src"
-          ])
-        ) (lib.attrNames args)
+        lib.filter
+          (
+            x:
+              !(builtins.elem x [
+                "version"
+                "pname"
+                "src"
+              ])
+          )
+          (lib.attrNames args)
       );
 
       # Combine the `features' attribute sets of all the kernel patches.
-      kernelFeatures = lib.foldr (x: y: (x.features or { }) // y) (
-        {
-          efiBootStub = true;
-          netfilterRPFilter = true;
-          ia32Emulation = true;
-        }
-        // features
-      ) kernelPatches;
+      kernelFeatures = lib.foldr (x: y: (x.features or { }) // y)
+        (
+          {
+            efiBootStub = true;
+            netfilterRPFilter = true;
+            ia32Emulation = true;
+          }
+          // features
+        )
+        kernelPatches;
 
       commonStructuredConfig = import ./common-config.nix {
         inherit lib stdenv version;
@@ -139,34 +128,36 @@ let
         # need the 'or ""' at the end in case enableCommonConfig = true and extraConfig is not present
         + lib.optionalString enableCommonConfig stdenv.hostPlatform.linux-kernel.extraConfig or "";
 
-      structuredConfigFromPatches = map (
-        {
-          structuredExtraConfig ? { },
-          ...
-        }@args:
-        if args ? extraStructuredConfig then
-          throw ''
-            Passing `extraStructuredConfig` to the Linux kernel (e.g.
-            via `boot.kernelPatches` in NixOS) is not supported anymore. Use
-            `structuredExtraConfig` instead.
-          ''
-        else
-          {
-            settings = structuredExtraConfig;
-          }
-      ) kernelPatches;
+      structuredConfigFromPatches = map
+        (
+          { structuredExtraConfig ? { }
+          , ...
+          }@args:
+          if args ? extraStructuredConfig then
+            throw ''
+              Passing `extraStructuredConfig` to the Linux kernel (e.g.
+              via `boot.kernelPatches` in NixOS) is not supported anymore. Use
+              `structuredExtraConfig` instead.
+            ''
+          else
+            {
+              settings = structuredExtraConfig;
+            }
+        )
+        kernelPatches;
 
       # appends kernel patches extraConfig
       kernelConfigFun =
         baseConfigStr:
         let
-          configFromPatches = map (
-            {
-              extraConfig ? "",
-              ...
-            }:
-            extraConfig
-          ) kernelPatches;
+          configFromPatches = map
+            (
+              { extraConfig ? ""
+              , ...
+              }:
+              extraConfig
+            )
+            kernelPatches;
         in
         lib.concatStringsSep "\n" ([ baseConfigStr ] ++ configFromPatches);
 
@@ -357,10 +348,12 @@ let
                 overridableKernel = finalAttrs.finalPackage // {
                   override =
                     args:
-                    lib.warn (
-                      "override is stubbed for NixOS kernel tests, not applying changes these arguments: "
-                      + toString (lib.attrNames (lib.toFunction args { }))
-                    ) overridableKernel;
+                    lib.warn
+                      (
+                        "override is stubbed for NixOS kernel tests, not applying changes these arguments: "
+                        + toString (lib.attrNames (lib.toFunction args { }))
+                      )
+                      overridableKernel;
                 };
                 /*
                   Certain arguments must be evaluated lazily; so that only the output(s) depend on them.

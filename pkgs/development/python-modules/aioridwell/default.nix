@@ -1,20 +1,20 @@
-{
-  lib,
-  aiohttp,
-  aresponses,
-  buildPythonPackage,
-  certifi,
-  fetchFromGitHub,
-  freezegun,
-  poetry-core,
-  pyjwt,
-  pytest-aiohttp,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  titlecase,
-  types-pytz,
+{ lib
+, aiohttp
+, aresponses
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
+, freezegun
+, poetry-core
+, pyjwt
+, pytest-aiohttp
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, pytz
+, titlecase
+, types-pytz
+,
 }:
 
 buildPythonPackage rec {

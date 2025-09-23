@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchPypi,
-  python3Packages,
-  versionCheckHook,
+{ lib
+, fetchPypi
+, python3Packages
+, versionCheckHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

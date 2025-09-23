@@ -1,8 +1,8 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, nix-update-script
+,
 }:
 buildGoModule {
   pname = "jqfmt";

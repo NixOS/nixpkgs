@@ -1,20 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  asciidoc,
-  pkg-config,
-  inetutils,
-  tcl,
-
-  sqlite,
-  readline,
-  SDL2,
-  SDL2_gfx,
-  openssl,
-
-  SDLSupport ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, asciidoc
+, pkg-config
+, inetutils
+, tcl
+, sqlite
+, readline
+, SDL2
+, SDL2_gfx
+, openssl
+, SDLSupport ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  bzip2,
-  zstd,
-  rocksdb,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, bzip2
+, zstd
+, rocksdb
+,
 }:
 
 rustPlatform.buildRustPackage rec {

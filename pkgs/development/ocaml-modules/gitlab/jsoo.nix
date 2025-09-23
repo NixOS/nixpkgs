@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  gitlab,
-  cohttp,
-  cohttp-lwt-jsoo,
-  js_of_ocaml-lwt,
+{ buildDunePackage
+, gitlab
+, cohttp
+, cohttp-lwt-jsoo
+, js_of_ocaml-lwt
+,
 }:
 
 buildDunePackage {

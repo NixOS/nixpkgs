@@ -1,10 +1,10 @@
 let
   mkNode =
-    {
-      id,
-      wgPriv,
-      wgPeerPubKey,
-      wgPeerId,
+    { id
+    , wgPriv
+    , wgPeerPubKey
+    , wgPeerId
+    ,
     }:
     (
       { pkgs, ... }:

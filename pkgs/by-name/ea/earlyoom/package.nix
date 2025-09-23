@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  pandoc,
-  stdenv,
-  nixosTests,
-  fetchpatch,
-  # The man page requires pandoc to build and resides in a separate "man"
+{ lib
+, fetchFromGitHub
+, pandoc
+, stdenv
+, nixosTests
+, fetchpatch
+, # The man page requires pandoc to build and resides in a separate "man"
   # output which is pulled in on-demand. There is no need to disabled it unless
   # pandoc is hard to build on your platform.
-  withManpage ? true,
+  withManpage ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

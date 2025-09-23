@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  patchelf,
-  makeWrapper,
-  libusb1,
-  avahi-compat,
-  glib,
-  libredirect,
-  nixosTests,
-  udevCheckHook,
+{ stdenv
+, lib
+, fetchurl
+, patchelf
+, makeWrapper
+, libusb1
+, avahi-compat
+, glib
+, libredirect
+, nixosTests
+, udevCheckHook
+,
 }:
 let
   myPatchElf = file: ''
@@ -33,8 +33,7 @@ stdenv.mkDerivation rec {
         url = "https://download.brother.com/welcome/dlf104033/${pname}-${version}.amd64.deb";
         hash = "sha256-0UMbXMBlyiZI90WG5FWEP2mIZEBsxXd11dtgtyuSDnY=";
       };
-    }
-    ."${system}" or (throw "Unsupported system: ${system}");
+    }."${system}" or (throw "Unsupported system: ${system}");
 
   unpackPhase = ''
     ar x $src

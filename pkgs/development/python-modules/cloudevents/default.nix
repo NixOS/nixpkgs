@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  deprecation,
-  flask,
-  pydantic,
-  pytestCheckHook,
-  requests,
-  sanic,
-  sanic-testing,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, deprecation
+, flask
+, pydantic
+, pytestCheckHook
+, requests
+, sanic
+, sanic-testing
+,
 }:
 
 buildPythonPackage rec {

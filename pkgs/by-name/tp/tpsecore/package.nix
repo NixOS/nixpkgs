@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitLab,
-  rustPlatform,
-  rustc,
-  wasm-pack,
-  wasm-bindgen-cli_0_2_95,
-  binaryen,
+{ lib
+, fetchFromGitLab
+, rustPlatform
+, rustc
+, wasm-pack
+, wasm-bindgen-cli_0_2_95
+, binaryen
+,
 }:
 
 let

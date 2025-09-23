@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -171,10 +170,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = mapAttrsToList (name: c: {
-      assertion = (c.encrypt -> !c.decrypt) || (c.decrypt -> c.encrypt);
-      message = "A pipe must either encrypt or decrypt";
-    }) cfg.config;
+    assertions = mapAttrsToList
+      (name: c: {
+        assertion = (c.encrypt -> !c.decrypt) || (c.decrypt -> c.encrypt);
+        message = "A pipe must either encrypt or decrypt";
+      })
+      cfg.config;
 
     users.groups.spiped.gid = config.ids.gids.spiped;
     users.users.spiped = {
@@ -198,22 +199,24 @@ in
     };
 
     # Setup spiped config files
-    environment.etc = mapAttrs' (
-      name: cfg:
-      nameValuePair "spiped/${name}.spec" {
-        text = concatStringsSep " " [
-          (if cfg.encrypt then "-e" else "-d") # Mode
-          "-s ${cfg.source}" # Source
-          "-t ${cfg.target}" # Target
-          "-k ${cfg.keyfile}" # Keyfile
-          "-n ${toString cfg.maxConns}" # Max number of conns
-          "-o ${toString cfg.timeout}" # Timeout
-          (optionalString cfg.waitForDNS "-D") # Wait for DNS
-          (optionalString cfg.weakHandshake "-f") # No PFS
-          (optionalString cfg.disableKeepalives "-j") # Keepalives
-          (if cfg.disableReresolution then "-R" else "-r ${toString cfg.resolveRefresh}")
-        ];
-      }
-    ) cfg.config;
+    environment.etc = mapAttrs'
+      (
+        name: cfg:
+          nameValuePair "spiped/${name}.spec" {
+            text = concatStringsSep " " [
+              (if cfg.encrypt then "-e" else "-d") # Mode
+              "-s ${cfg.source}" # Source
+              "-t ${cfg.target}" # Target
+              "-k ${cfg.keyfile}" # Keyfile
+              "-n ${toString cfg.maxConns}" # Max number of conns
+              "-o ${toString cfg.timeout}" # Timeout
+              (optionalString cfg.waitForDNS "-D") # Wait for DNS
+              (optionalString cfg.weakHandshake "-f") # No PFS
+              (optionalString cfg.disableKeepalives "-j") # Keepalives
+              (if cfg.disableReresolution then "-R" else "-r ${toString cfg.resolveRefresh}")
+            ];
+          }
+      )
+      cfg.config;
   };
 }

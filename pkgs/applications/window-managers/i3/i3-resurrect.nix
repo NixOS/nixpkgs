@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonApplication,
-  click,
-  i3ipc,
-  psutil,
-  natsort,
-  fetchPypi,
-  xprop,
-  xdotool,
-  importlib-metadata,
+{ lib
+, buildPythonApplication
+, click
+, i3ipc
+, psutil
+, natsort
+, fetchPypi
+, xprop
+, xdotool
+, importlib-metadata
+,
 }:
 
 buildPythonApplication rec {

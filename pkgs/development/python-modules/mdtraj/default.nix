@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  llvmPackages,
-  zlib,
-  cython,
-  numpy,
-  setuptools,
-  versioneer,
-  wheel,
-  astunparse,
-  netcdf4,
-  packaging,
-  pyparsing,
-  scipy,
-  gsd,
-  networkx,
-  pandas,
-  pytest-xdist,
-  pytestCheckHook,
-  tables,
-  pythonAtLeast,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, llvmPackages
+, zlib
+, cython
+, numpy
+, setuptools
+, versioneer
+, wheel
+, astunparse
+, netcdf4
+, packaging
+, pyparsing
+, scipy
+, gsd
+, networkx
+, pandas
+, pytest-xdist
+, pytestCheckHook
+, tables
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

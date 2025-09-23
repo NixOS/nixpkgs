@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  meson,
-  ninja,
-  gnome,
+{ lib
+, stdenvNoCC
+, fetchurl
+, meson
+, ninja
+, gnome
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

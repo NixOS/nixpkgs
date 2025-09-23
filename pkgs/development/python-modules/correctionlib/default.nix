@@ -1,31 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pybind11,
-  scikit-build-core,
-  setuptools-scm,
-
-  # nativeBuildInputs
-  cmake,
-  ninja,
-
-  # buildInputs
-  zlib,
-
-  # dependencies
-  numpy,
-  packaging,
-  pydantic,
-  rich,
-
-  # tests
-  addBinToPathHook,
-  awkward,
-  pytestCheckHook,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pybind11
+, scikit-build-core
+, setuptools-scm
+, # nativeBuildInputs
+  cmake
+, ninja
+, # buildInputs
+  zlib
+, # dependencies
+  numpy
+, packaging
+, pydantic
+, rich
+, # tests
+  addBinToPathHook
+, awkward
+, pytestCheckHook
+, scipy
+,
 }:
 
 buildPythonPackage rec {

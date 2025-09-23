@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, writableTmpDirAsHomeHook
+, versionCheckHook
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tukai";

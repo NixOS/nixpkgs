@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  libarchive,
-  p7zip,
-  testers,
-  mas,
+{ lib
+, stdenvNoCC
+, fetchurl
+, libarchive
+, p7zip
+, testers
+, mas
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

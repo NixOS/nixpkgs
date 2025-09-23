@@ -1,33 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkgsBuildBuild,
-  pkg-config,
-  cmake,
-  ninja,
-  libxml2,
-  libxcrypt,
-  libedit,
-  libffi,
-  libpfm,
-  lit,
-  mpfr,
-  zlib,
-  ncurses,
-  doxygen,
-  sphinx,
-  which,
-  sysctl,
-  python3Packages,
-  buildDocs ? true,
-  buildMan ? true,
-  buildTests ? true,
-  llvmTargetsToBuild ? [ "NATIVE" ], # "NATIVE" resolves into x86 or aarch64 depending on stdenv
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkgsBuildBuild
+, pkg-config
+, cmake
+, ninja
+, libxml2
+, libxcrypt
+, libedit
+, libffi
+, libpfm
+, lit
+, mpfr
+, zlib
+, ncurses
+, doxygen
+, sphinx
+, which
+, sysctl
+, python3Packages
+, buildDocs ? true
+, buildMan ? true
+, buildTests ? true
+, llvmTargetsToBuild ? [ "NATIVE" ]
+, # "NATIVE" resolves into x86 or aarch64 depending on stdenv
   llvmProjectsToBuild ? [
     "llvm"
     "mlir"
-  ],
+  ]
+,
 }:
 
 let
@@ -50,13 +51,14 @@ let
   # but a later update will likely fix this (triton-2.1.0)
   python =
     if buildTests then
-      python3Packages.python.withPackages (
-        p: with p; [
-          psutil
-          pygments
-          pyyaml
-        ]
-      )
+      python3Packages.python.withPackages
+        (
+          p: with p; [
+            psutil
+            pygments
+            pyyaml
+          ]
+        )
     else
       python3Packages.python;
 

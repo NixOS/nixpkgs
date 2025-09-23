@@ -1,31 +1,29 @@
-{
-  withDPDK ? false,
-
-  lib,
-  stdenv,
-
-  autoconf,
-  automake,
-  dpdk,
-  fetchFromGitHub,
-  installShellFiles,
-  iproute2,
-  libcap_ng,
-  libpcap,
-  libtool,
-  makeWrapper,
-  nix-update-script,
-  nixosTests,
-  numactl,
-  openssl,
-  perl,
-  pkg-config,
-  procps,
-  python3,
-  sphinxHook,
-  tcpdump,
-  util-linux,
-  which,
+{ withDPDK ? false
+, lib
+, stdenv
+, autoconf
+, automake
+, dpdk
+, fetchFromGitHub
+, installShellFiles
+, iproute2
+, libcap_ng
+, libpcap
+, libtool
+, makeWrapper
+, nix-update-script
+, nixosTests
+, numactl
+, openssl
+, perl
+, pkg-config
+, procps
+, python3
+, sphinxHook
+, tcpdump
+, util-linux
+, which
+,
 }:
 
 stdenv.mkDerivation rec {

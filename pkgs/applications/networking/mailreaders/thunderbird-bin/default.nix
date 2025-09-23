@@ -4,29 +4,30 @@
 #
 #     nix-shell maintainers/scripts/update.nix --argstr package pkgs.thunderbird-bin-unwrapped
 #     nix-shell maintainers/scripts/update.nix --argstr package pkgs.thunderbird-esr-bin-unwrapped
-{
-  lib,
-  stdenv,
-  fetchurl,
-  config,
-  wrapGAppsHook3,
-  autoPatchelfHook,
-  alsa-lib,
-  curl,
-  gtk3,
-  writeScript,
-  writeText,
-  xidel,
-  coreutils,
-  gnused,
-  gnugrep,
-  gnupg,
-  runtimeShell,
-  systemLocale ? config.i18n.defaultLocale or "en_US",
-  patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
-  generated,
-  versionSuffix ? "",
-  applicationName ? "Thunderbird",
+{ lib
+, stdenv
+, fetchurl
+, config
+, wrapGAppsHook3
+, autoPatchelfHook
+, alsa-lib
+, curl
+, gtk3
+, writeScript
+, writeText
+, xidel
+, coreutils
+, gnused
+, gnugrep
+, gnupg
+, runtimeShell
+, systemLocale ? config.i18n.defaultLocale or "en_US"
+, patchelfUnstable
+, # have to use patchelfUnstable to support --no-clobber-old-sections
+  generated
+, versionSuffix ? ""
+, applicationName ? "Thunderbird"
+,
 }:
 
 let

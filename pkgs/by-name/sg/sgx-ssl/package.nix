@@ -1,13 +1,13 @@
-{
-  stdenv,
-  callPackage,
-  fetchFromGitHub,
-  fetchurl,
-  lib,
-  perl,
-  sgx-sdk,
-  which,
-  debug ? false,
+{ stdenv
+, callPackage
+, fetchFromGitHub
+, fetchurl
+, lib
+, perl
+, sgx-sdk
+, which
+, debug ? false
+,
 }:
 let
   sgxVersion = sgx-sdk.versionTag;

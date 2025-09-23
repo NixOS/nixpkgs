@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  protobuf,
-  sqlite,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, protobuf
+, sqlite
+,
 }:
 
 rustPlatform.buildRustPackage {

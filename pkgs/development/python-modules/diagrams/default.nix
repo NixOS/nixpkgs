@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  graphviz,
-  imagemagick,
-  inkscape,
-  jinja2,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  round,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, graphviz
+, imagemagick
+, inkscape
+, jinja2
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, round
+,
 }:
 
 buildPythonPackage rec {

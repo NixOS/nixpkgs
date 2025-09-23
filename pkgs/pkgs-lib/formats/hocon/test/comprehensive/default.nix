@@ -1,9 +1,8 @@
-{
-  lib,
-  formats,
-  stdenvNoCC,
-  writeText,
-  ...
+{ lib
+, formats
+, stdenvNoCC
+, writeText
+, ...
 }:
 let
   hocon = formats.hocon { };

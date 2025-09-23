@@ -1,8 +1,7 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }:
 let
   cfg = config.programs.thunderbird;
@@ -78,10 +77,12 @@ in
 
     programs.thunderbird.policies = {
       DisableAppUpdate = true;
-      Preferences = builtins.mapAttrs (_: value: {
-        Value = value;
-        Status = cfg.preferencesStatus;
-      }) cfg.preferences;
+      Preferences = builtins.mapAttrs
+        (_: value: {
+          Value = value;
+          Status = cfg.preferencesStatus;
+        })
+        cfg.preferences;
     };
   };
 

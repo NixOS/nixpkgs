@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  hatchling,
-  hatch-vcs,
-
-  # dependencies
-  donfig,
-  numpy,
-  numcodecs,
-  packaging,
-  typing-extensions,
-
-  # tests
-  hypothesis,
-  pytest-asyncio,
-  pytest-xdist,
-  pytestCheckHook,
-  tomlkit,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  hatchling
+, hatch-vcs
+, # dependencies
+  donfig
+, numpy
+, numcodecs
+, packaging
+, typing-extensions
+, # tests
+  hypothesis
+, pytest-asyncio
+, pytest-xdist
+, pytestCheckHook
+, tomlkit
+,
 }:
 
 buildPythonPackage rec {

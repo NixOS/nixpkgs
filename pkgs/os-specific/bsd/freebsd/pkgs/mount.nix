@@ -1,8 +1,8 @@
-{
-  lib,
-  mkDerivation,
-  libutil,
-  libxo,
+{ lib
+, mkDerivation
+, libutil
+, libxo
+,
 }:
 mkDerivation {
   path = "sbin/mount";

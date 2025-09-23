@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  async-timeout,
-  buildPythonPackage,
-  fetchPypi,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  siosocks,
-  trustme,
+{ lib
+, stdenv
+, async-timeout
+, buildPythonPackage
+, fetchPypi
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, siosocks
+, trustme
+,
 }:
 
 buildPythonPackage rec {

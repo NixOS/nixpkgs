@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  rustPlatform,
-  pkg-config,
-  libgit2,
-  openssl,
-  sqlite,
-  libiconv,
+{ lib
+, stdenv
+, fetchFromGitLab
+, rustPlatform
+, pkg-config
+, libgit2
+, openssl
+, sqlite
+, libiconv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

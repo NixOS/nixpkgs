@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  python-memcached,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  python-memcached
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

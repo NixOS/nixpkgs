@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  c-blosc,
-  cmake,
-  hdf5,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, stdenv
+, c-blosc
+, cmake
+, hdf5
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

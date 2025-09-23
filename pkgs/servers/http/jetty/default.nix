@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  gitUpdater,
+{ lib
+, stdenvNoCC
+, fetchurl
+, gitUpdater
+,
 }:
 
 let

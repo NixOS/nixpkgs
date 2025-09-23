@@ -1,50 +1,50 @@
-{
-  stdenvNoCC,
-  stdenv,
-  lib,
-  fetchurl,
-  dpkg,
-  nss,
-  nspr,
-  xorg,
-  pango,
-  zlib,
-  atkmm,
-  libdrm,
-  libxkbcommon,
-  xcbutilwm,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  libgbm,
-  alsa-lib,
-  wayland,
-  atk,
-  qt6,
-  at-spi2-atk,
-  at-spi2-core,
-  dbus,
-  cups,
-  gtk3,
-  libxml2,
-  cairo,
-  freetype,
-  fontconfig,
-  vulkan-loader,
-  gdk-pixbuf,
-  libexif,
-  ffmpeg,
-  pulseaudio,
-  systemd,
-  libuuid,
-  expat,
-  bzip2,
-  glib,
-  libva,
-  libGL,
-  libnotify,
-  buildFHSEnv,
-  writeShellScript,
+{ stdenvNoCC
+, stdenv
+, lib
+, fetchurl
+, dpkg
+, nss
+, nspr
+, xorg
+, pango
+, zlib
+, atkmm
+, libdrm
+, libxkbcommon
+, xcbutilwm
+, xcbutilimage
+, xcbutilkeysyms
+, xcbutilrenderutil
+, libgbm
+, alsa-lib
+, wayland
+, atk
+, qt6
+, at-spi2-atk
+, at-spi2-core
+, dbus
+, cups
+, gtk3
+, libxml2
+, cairo
+, freetype
+, fontconfig
+, vulkan-loader
+, gdk-pixbuf
+, libexif
+, ffmpeg
+, pulseaudio
+, systemd
+, libuuid
+, expat
+, bzip2
+, glib
+, libva
+, libGL
+, libnotify
+, buildFHSEnv
+, writeShellScript
+,
 }:
 let
   wechat-uos-env = stdenvNoCC.mkDerivation {
@@ -143,8 +143,7 @@ let
           url = sources.loongarch64_url;
           hash = sources.loongarch64_hash;
         };
-      }
-      .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
+      }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
     nativeBuildInputs = [ dpkg ];
 

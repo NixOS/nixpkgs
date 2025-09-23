@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  cssselect2,
-  lxml,
-  pillow,
-  pytestCheckHook,
-  reportlab,
-  tinycss2,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, cssselect2
+, lxml
+, pillow
+, pytestCheckHook
+, reportlab
+, tinycss2
+,
 }:
 
 buildPythonPackage rec {

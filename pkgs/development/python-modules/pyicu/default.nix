@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pkg-config,
-  setuptools,
-  pytestCheckHook,
-  six,
-  icu,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitLab
+, pkg-config
+, setuptools
+, pytestCheckHook
+, six
+, icu
+,
 }:
 
 buildPythonPackage rec {

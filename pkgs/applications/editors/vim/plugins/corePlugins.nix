@@ -1,5 +1,5 @@
-{
-  symlinkJoin,
+{ symlinkJoin
+,
 }:
 final: prev: {
 

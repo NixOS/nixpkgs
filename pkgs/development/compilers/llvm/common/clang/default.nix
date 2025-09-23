@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  llvm_meta,
-  src ? null,
-  monorepoSrc ? null,
-  runCommand,
-  cmake,
-  ninja,
-  libxml2,
-  libllvm,
-  release_version,
-  version,
-  python3,
-  buildLlvmTools,
-  fixDarwinDylibNames,
-  enableManpages ? false,
-  devExtraCmakeFlags ? [ ],
-  replaceVars,
-  getVersionFile,
-  fetchpatch,
+{ lib
+, stdenv
+, llvm_meta
+, src ? null
+, monorepoSrc ? null
+, runCommand
+, cmake
+, ninja
+, libxml2
+, libllvm
+, release_version
+, version
+, python3
+, buildLlvmTools
+, fixDarwinDylibNames
+, enableManpages ? false
+, devExtraCmakeFlags ? [ ]
+, replaceVars
+, getVersionFile
+, fetchpatch
+,
 }:
 stdenv.mkDerivation (
   finalAttrs:
@@ -28,12 +28,15 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "clang-src-${version}" { inherit (monorepoSrc) passthru; } (''
-          mkdir -p "$out"
-          cp -r ${monorepoSrc}/cmake "$out"
-          cp -r ${monorepoSrc}/clang "$out"
-          cp -r ${monorepoSrc}/clang-tools-extra "$out"
-        '')
+        runCommand "clang-src-${version}" { inherit (monorepoSrc) passthru; }
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/clang "$out"
+              cp -r ${monorepoSrc}/clang-tools-extra "$out"
+            ''
+          )
       else
         src;
 
@@ -198,15 +201,16 @@ stdenv.mkDerivation (
         [ "fortify3" ]
         ++ lib.optional (!targetPlatform.isLinux || !targetPlatform.isx86_64) "shadowstack"
         ++ lib.optional (!targetPlatform.isAarch64 || !targetPlatform.isLinux) "pacret"
-        ++ lib.optional (
-          !(targetPlatform.isLinux || targetPlatform.isFreeBSD)
-          || !(
-            targetPlatform.isx86
-            || targetPlatform.isPower64
-            || targetPlatform.isS390x
-            || targetPlatform.isAarch64
-          )
-        ) "stackclashprotection"
+        ++ lib.optional
+          (
+            !(targetPlatform.isLinux || targetPlatform.isFreeBSD)
+            || !(
+              targetPlatform.isx86
+              || targetPlatform.isPower64
+              || targetPlatform.isS390x
+              || targetPlatform.isAarch64
+            )
+          ) "stackclashprotection"
         ++ lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
         ++ (finalAttrs.passthru.hardeningUnsupportedFlags or [ ]);
     };
@@ -229,7 +233,7 @@ stdenv.mkDerivation (
       mainProgram = "clang";
     };
   }
-  // lib.optionalAttrs enableManpages {
+    // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";
 
     ninjaFlags = [ "docs-clang-man" ];

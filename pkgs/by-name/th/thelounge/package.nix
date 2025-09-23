@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  yarn,
-  fixup-yarn-lock,
-  python3,
-  npmHooks,
-  cctools,
-  sqlite,
-  srcOnly,
-  buildPackages,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, nodejs
+, yarn
+, fixup-yarn-lock
+, python3
+, npmHooks
+, cctools
+, sqlite
+, srcOnly
+, buildPackages
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

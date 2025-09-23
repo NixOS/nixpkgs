@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  alsa-lib,
-  cmake,
-  libjack2,
-  lhasa,
-  makeWrapper,
-  pkg-config,
-  rtmidi,
-  SDL2,
-  zlib,
-  zziplib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, alsa-lib
+, cmake
+, libjack2
+, lhasa
+, makeWrapper
+, pkg-config
+, rtmidi
+, SDL2
+, zlib
+, zziplib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

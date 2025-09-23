@@ -1,21 +1,20 @@
-{
-  lib,
-  stdenv,
-  python,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  flit-core,
-  babel,
-  markupsafe,
-  pytestCheckHook,
-  sphinxHook,
-  pallets-sphinx-themes,
-  sphinxcontrib-log-cabinet,
-  sphinx-issues,
-
-  # Reverse dependency
-  sage,
+{ lib
+, stdenv
+, python
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, flit-core
+, babel
+, markupsafe
+, pytestCheckHook
+, sphinxHook
+, pallets-sphinx-themes
+, sphinxcontrib-log-cabinet
+, sphinx-issues
+, # Reverse dependency
+  sage
+,
 }:
 
 buildPythonPackage rec {

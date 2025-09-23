@@ -1,9 +1,9 @@
-{
-  brotli,
-  compressDrv,
-  lib,
-  zopfli,
-  zstd,
+{ brotli
+, compressDrv
+, lib
+, zopfli
+, zstd
+,
 }:
 /**
   compressDrvWeb compresses a derivation for common web server use.
@@ -17,7 +17,7 @@
 
   : List of file extensions to compress.
 
-    Defaults to common formats that compress well.
+  Defaults to common formats that compress well.
 
   `extraFindOperands` (String)
 
@@ -44,13 +44,13 @@
 
   For example, building `pkgs.gamja` produces the following output:
 
-    /nix/store/2wn1qbk8gp4y2m8xvafxv1b2dcdqj8fz-gamja-1.0.0-beta.9/
-    ├── index.2fd01148.js
-    ├── index.2fd01148.js.map
-    ├── index.37aa9a8a.css
-    ├── index.37aa9a8a.css.map
-    ├── index.html
-    └── manifest.webmanifest
+  /nix/store/2wn1qbk8gp4y2m8xvafxv1b2dcdqj8fz-gamja-1.0.0-beta.9/
+  ├── index.2fd01148.js
+  ├── index.2fd01148.js.map
+  ├── index.37aa9a8a.css
+  ├── index.37aa9a8a.css.map
+  ├── index.html
+  └── manifest.webmanifest
 
   With `pkgs.compressDrvWeb`, one can compress these files:
 
@@ -97,12 +97,12 @@
 
   ```nix
   {
-    virtualHosts."irc.example.org".extraConfig = ''
+  virtualHosts."irc.example.org".extraConfig = ''
       root * ${pkgs.compressDrvWeb pkgs.gamja {}}
       file_server browse {
           precompressed br gzip
       }
-    '';
+  '';
   }
   ```
 
@@ -111,8 +111,7 @@
   :::
 */
 drv:
-{
-  formats ? [
+{ formats ? [
     "css"
     "eot"
     "htm"
@@ -126,17 +125,18 @@ drv:
     "txt"
     "webmanifest"
     "xml"
-  ],
-  extraFormats ? [ ],
-  compressors ? {
+  ]
+, extraFormats ? [ ]
+, compressors ? {
     br = "${lib.getExe brotli} --keep --no-copy-stat {}";
     gz = "${lib.getExe zopfli} --keep {}";
     # --force is required to not fail on symlinks
     # for details on the compression level see
     # https://github.com/NixOS/nixpkgs/pull/332752#issuecomment-2275110390
     zstd = "${lib.getExe zstd} --force --keep --quiet -19 {}";
-  },
-  extraFindOperands ? "",
+  }
+, extraFindOperands ? ""
+,
 }:
 compressDrv drv {
   formats = formats ++ extraFormats;

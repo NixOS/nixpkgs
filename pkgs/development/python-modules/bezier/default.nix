@@ -1,18 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  numpy,
-  matplotlib,
-  scipy,
-  sympy,
-
-  cmake,
-  gfortran,
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, numpy
+, matplotlib
+, scipy
+, sympy
+, cmake
+, gfortran
+, nix-update-script
+,
 }:
 buildPythonPackage rec {
   name = "bezier";

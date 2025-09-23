@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  doubleratchet,
-  omemo,
-  x3dh,
-  xeddsa,
-  protobuf,
-  typing-extensions,
-  xmlschema,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, doubleratchet
+, omemo
+, x3dh
+, xeddsa
+, protobuf
+, typing-extensions
+, xmlschema
+,
 }:
 buildPythonPackage rec {
   pname = "twomemo";

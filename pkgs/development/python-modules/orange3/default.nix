@@ -1,58 +1,53 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  oldest-supported-numpy,
-  setuptools,
-
-  # nativeBuildInputs
-  copyDesktopItems,
-  cython,
-  qt5,
-  recommonmark,
-  sphinx,
-
-  # dependencies
-  baycomp,
-  bottleneck,
-  catboost,
-  chardet,
-  httpx,
-  joblib,
-  keyring,
-  keyrings-alt,
-  matplotlib,
-  numpy,
-  openpyxl,
-  opentsne,
-  orange-canvas-core,
-  orange-widget-base,
-  pandas,
-  pip,
-  pyqt5,
-  pyqtgraph,
-  pyqtwebengine,
-  python-louvain,
-  pyyaml,
-  qtconsole,
-  requests,
-  scikit-learn,
-  scipy,
-  serverfiles,
-  xgboost,
-  xlrd,
-  xlsxwriter,
-
-  makeDesktopItem,
-
-  # passthru
-  gitUpdater,
-  python,
-  pytest-qt,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  oldest-supported-numpy
+, setuptools
+, # nativeBuildInputs
+  copyDesktopItems
+, cython
+, qt5
+, recommonmark
+, sphinx
+, # dependencies
+  baycomp
+, bottleneck
+, catboost
+, chardet
+, httpx
+, joblib
+, keyring
+, keyrings-alt
+, matplotlib
+, numpy
+, openpyxl
+, opentsne
+, orange-canvas-core
+, orange-widget-base
+, pandas
+, pip
+, pyqt5
+, pyqtgraph
+, pyqtwebengine
+, python-louvain
+, pyyaml
+, qtconsole
+, requests
+, scikit-learn
+, scipy
+, serverfiles
+, xgboost
+, xlrd
+, xlsxwriter
+, makeDesktopItem
+, # passthru
+  gitUpdater
+, python
+, pytest-qt
+, pytestCheckHook
+,
 }:
 
 let

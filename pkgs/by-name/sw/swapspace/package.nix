@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  installShellFiles,
-  util-linux,
-  binlore,
-  swapspace,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, installShellFiles
+, util-linux
+, binlore
+, swapspace
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

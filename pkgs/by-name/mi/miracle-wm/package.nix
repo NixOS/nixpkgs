@@ -1,32 +1,32 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  nixosTests,
-  boost,
-  cmake,
-  coreutils,
-  dbus,
-  glib,
-  glm,
-  gtest,
-  json_c,
-  libevdev,
-  libglvnd,
-  libnotify,
-  libuuid,
-  libxkbcommon,
-  libgbm,
-  makeWrapper,
-  mir,
-  nlohmann_json,
-  pcre2,
-  pkg-config,
-  python3,
-  systemd,
-  wayland,
-  yaml-cpp,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, nixosTests
+, boost
+, cmake
+, coreutils
+, dbus
+, glib
+, glm
+, gtest
+, json_c
+, libevdev
+, libglvnd
+, libnotify
+, libuuid
+, libxkbcommon
+, libgbm
+, makeWrapper
+, mir
+, nlohmann_json
+, pcre2
+, pkg-config
+, python3
+, systemd
+, wayland
+, yaml-cpp
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

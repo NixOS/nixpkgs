@@ -1,11 +1,11 @@
-{
-  buildDotnetModule,
-  lib,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
+{ buildDotnetModule
+, lib
+, fetchFromGitHub
+, dotnetCorePackages
+, SDL2
+, SDL2_image
+, SDL2_ttf
+,
 }:
 let
   dotnet = dotnetCorePackages.dotnet_8;

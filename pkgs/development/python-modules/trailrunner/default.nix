@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  pathspec,
-  pythonOlder,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, pathspec
+, pythonOlder
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

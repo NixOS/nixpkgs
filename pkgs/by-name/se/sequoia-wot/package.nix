@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitLab,
-  installShellFiles,
-  pkg-config,
-  nettle,
-  openssl,
-  sqlite,
-  gnupg,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitLab
+, installShellFiles
+, pkg-config
+, nettle
+, openssl
+, sqlite
+, gnupg
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sequoia-wot";

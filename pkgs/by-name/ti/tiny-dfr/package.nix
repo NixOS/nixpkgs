@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  cairo,
-  gdk-pixbuf,
-  glib,
-  libinput,
-  librsvg,
-  libxml2,
-  pango,
-  udev,
-  udevCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, cairo
+, gdk-pixbuf
+, glib
+, libinput
+, librsvg
+, libxml2
+, pango
+, udev
+, udevCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

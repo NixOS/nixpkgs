@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  packaging,
-  poetry-core,
-  pythonOlder,
-  structlog,
+{ lib
+, aiohttp
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, packaging
+, poetry-core
+, pythonOlder
+, structlog
+,
 }:
 
 buildPythonPackage rec {

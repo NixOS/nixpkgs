@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  pass,
-  fetchFromGitHub,
-  python3,
-  gnupg,
+{ lib
+, stdenv
+, pass
+, fetchFromGitHub
+, python3
+, gnupg
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,15 +1,15 @@
-{
-  autoPatchelfHook,
-  cmake,
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
-  libGL,
-  ninja,
-  stdenv,
-  tacent,
-  xorg,
-  zenity,
+{ autoPatchelfHook
+, cmake
+, fetchFromGitHub
+, installShellFiles
+, lib
+, libGL
+, ninja
+, stdenv
+, tacent
+, xorg
+, zenity
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

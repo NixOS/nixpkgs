@@ -1,26 +1,26 @@
-{
-  lib,
-  aiohttp,
-  asdf-standard,
-  asdf-transform-schemas,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fsspec,
-  importlib-metadata,
-  jmespath,
-  lz4,
-  numpy,
-  packaging,
-  psutil,
-  pytest-remotedata,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  requests,
-  semantic-version,
-  setuptools,
-  setuptools-scm,
+{ lib
+, aiohttp
+, asdf-standard
+, asdf-transform-schemas
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, fsspec
+, importlib-metadata
+, jmespath
+, lz4
+, numpy
+, packaging
+, psutil
+, pytest-remotedata
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, semantic-version
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

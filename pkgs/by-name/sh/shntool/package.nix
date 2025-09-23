@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  flac,
+{ lib
+, stdenv
+, fetchFromGitLab
+, flac
+,
 }:
 
 stdenv.mkDerivation rec {

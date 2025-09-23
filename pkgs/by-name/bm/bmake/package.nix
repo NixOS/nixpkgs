@@ -1,12 +1,12 @@
-{
-  lib,
-  bc,
-  fetchurl,
-  getopt,
-  ksh,
-  pkgsMusl ? { },
-  stdenv,
-  tzdata,
+{ lib
+, bc
+, fetchurl
+, getopt
+, ksh
+, pkgsMusl ? { }
+, stdenv
+, tzdata
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

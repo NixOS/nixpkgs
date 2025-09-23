@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  packaging,
-  setuptools,
-  pkgconfig,
-  freetype,
-  pytest,
-  python,
-  pillow,
-  numpy,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, packaging
+, setuptools
+, pkgconfig
+, freetype
+, pytest
+, python
+, pillow
+, numpy
+,
 }:
 
 buildPythonPackage rec {

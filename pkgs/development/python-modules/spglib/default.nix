@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  scikit-build-core,
-  numpy,
-  cmake,
-  ninja,
-  setuptools-scm,
-
-  # dependencies
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  scikit-build-core
+, numpy
+, cmake
+, ninja
+, setuptools-scm
+, # dependencies
+  typing-extensions
+, # tests
+  pytestCheckHook
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

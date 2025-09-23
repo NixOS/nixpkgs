@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jaxtyping,
-  linear-operator,
-  mpmath,
-  scikit-learn,
-  scipy,
-  setuptools,
-  setuptools-scm,
-  torch,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jaxtyping
+, linear-operator
+, mpmath
+, scikit-learn
+, scipy
+, setuptools
+, setuptools-scm
+, torch
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  bleak,
-  bleak-retry-connector,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flux-led,
-  poetry-core,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, bleak
+, bleak-retry-connector
+, buildPythonPackage
+, fetchFromGitHub
+, flux-led
+, poetry-core
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

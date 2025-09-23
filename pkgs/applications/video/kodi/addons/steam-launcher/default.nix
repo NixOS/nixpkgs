@@ -1,12 +1,12 @@
-{
-  lib,
-  buildKodiAddon,
-  fetchFromGitHub,
-  steam,
-  which,
-  xdotool,
-  dos2unix,
-  wmctrl,
+{ lib
+, buildKodiAddon
+, fetchFromGitHub
+, steam
+, which
+, xdotool
+, dos2unix
+, wmctrl
+,
 }:
 buildKodiAddon {
   pname = "steam-launcher";

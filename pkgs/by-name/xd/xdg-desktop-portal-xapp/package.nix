@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsNoGuiHook,
-  cinnamon-desktop,
-  glib,
-  gtk3,
-  gsettings-desktop-schemas,
-  mate,
-  xdg-desktop-portal,
-  xapp,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wrapGAppsNoGuiHook
+, cinnamon-desktop
+, glib
+, gtk3
+, gsettings-desktop-schemas
+, mate
+, xdg-desktop-portal
+, xapp
+,
 }:
 
 stdenv.mkDerivation rec {

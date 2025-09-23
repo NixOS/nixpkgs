@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  staticOnly ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, curl
+, staticOnly ? stdenv.hostPlatform.isStatic
+,
 }:
 
 let

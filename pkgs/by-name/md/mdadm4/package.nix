@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  util-linux,
-  coreutils,
-  fetchurl,
-  groff,
-  system-sendmail,
-  udev,
-  udevCheckHook,
+{ lib
+, stdenv
+, util-linux
+, coreutils
+, fetchurl
+, groff
+, system-sendmail
+, udev
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

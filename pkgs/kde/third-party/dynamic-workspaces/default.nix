@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kpackage,
-  kwin,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kpackage
+, kwin
+,
 }:
 
 stdenv.mkDerivation {

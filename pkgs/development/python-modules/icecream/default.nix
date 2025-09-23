@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  asttokens,
-  colorama,
-  executing,
-  pygments,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  asttokens
+, colorama
+, executing
+, pygments
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

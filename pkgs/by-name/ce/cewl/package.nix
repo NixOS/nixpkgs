@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  bundlerEnv,
-  bundlerUpdateScript,
+{ stdenv
+, lib
+, fetchFromGitHub
+, bundlerEnv
+, bundlerUpdateScript
+,
 }:
 
 let

@@ -1,46 +1,40 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonAtLeast,
-  fetchFromGitHub,
-
-  setuptools,
-  setuptools-scm,
-
-  certifi,
-  filelock,
-  isodate,
-  lxml,
-  numpy,
-  openpyxl,
-  pyparsing,
-  python-dateutil,
-  regex,
-
-  gui ? true,
-  tkinter,
-
-  pycryptodome,
-  pg8000,
-  pymysql,
-  pyodbc,
-  rdflib,
-  holidays,
-  pytz,
-  tinycss2,
-  graphviz,
-  cheroot,
-  cherrypy,
-  tornado,
-
-  sphinxHook,
-  sphinx-autodoc2,
-  myst-parser,
-  sphinx-copybutton,
-  furo,
-
-  pytestCheckHook,
-  boto3,
+{ lib
+, buildPythonPackage
+, pythonAtLeast
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, certifi
+, filelock
+, isodate
+, lxml
+, numpy
+, openpyxl
+, pyparsing
+, python-dateutil
+, regex
+, gui ? true
+, tkinter
+, pycryptodome
+, pg8000
+, pymysql
+, pyodbc
+, rdflib
+, holidays
+, pytz
+, tinycss2
+, graphviz
+, cheroot
+, cherrypy
+, tornado
+, sphinxHook
+, sphinx-autodoc2
+, myst-parser
+, sphinx-copybutton
+, furo
+, pytestCheckHook
+, boto3
+,
 }:
 
 buildPythonPackage rec {

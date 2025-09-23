@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libpulseaudio,
-  openssl,
-  stdenv,
-  alsa-lib,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libpulseaudio
+, openssl
+, stdenv
+, alsa-lib
+, nix-update-script
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "camilladsp";

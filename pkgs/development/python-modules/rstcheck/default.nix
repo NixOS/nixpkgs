@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  pytestCheckHook,
-  pythonOlder,
-  rstcheck-core,
-  sphinx,
-  typer,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, pytestCheckHook
+, pythonOlder
+, rstcheck-core
+, sphinx
+, typer
+,
 }:
 
 buildPythonPackage rec {

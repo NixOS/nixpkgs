@@ -1,9 +1,9 @@
-{
-  lib,
-  mkTclDerivation,
-  fetchzip,
-  pkg-config,
-  dbus,
+{ lib
+, mkTclDerivation
+, fetchzip
+, pkg-config
+, dbus
+,
 }:
 
 mkTclDerivation rec {

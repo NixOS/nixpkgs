@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  caqti,
-  mariadb,
+{ buildDunePackage
+, caqti
+, mariadb
+,
 }:
 
 buildDunePackage {

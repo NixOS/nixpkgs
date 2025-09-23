@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  qt6,
-  pkg-config,
-  vulkan-headers,
-  SDL2,
-  SDL2_ttf,
-  ffmpeg,
-  libopus,
-  libplacebo,
-  openssl,
-  alsa-lib,
-  libpulseaudio,
-  libva,
-  libvdpau,
-  libxkbcommon,
-  wayland,
-  libdrm,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, qt6
+, pkg-config
+, vulkan-headers
+, SDL2
+, SDL2_ttf
+, ffmpeg
+, libopus
+, libplacebo
+, openssl
+, alsa-lib
+, libpulseaudio
+, libva
+, libvdpau
+, libxkbcommon
+, wayland
+, libdrm
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

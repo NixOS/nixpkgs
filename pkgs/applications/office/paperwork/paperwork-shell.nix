@@ -1,22 +1,19 @@
-{
-  buildPythonPackage,
-  lib,
-  callPackage,
-
-  isPy3k,
-  isPyPy,
-
-  openpaperwork-core,
-  openpaperwork-gtk,
-  paperwork-backend,
-  fabulous,
-  rich,
-  getkey,
-  psutil,
-  shared-mime-info,
-  setuptools-scm,
-
-  pkgs,
+{ buildPythonPackage
+, lib
+, callPackage
+, isPy3k
+, isPyPy
+, openpaperwork-core
+, openpaperwork-gtk
+, paperwork-backend
+, fabulous
+, rich
+, getkey
+, psutil
+, shared-mime-info
+, setuptools-scm
+, pkgs
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  autoAddDriverRunpath,
-  config,
-  cudaPackages,
-  fetchFromGitHub,
-  lib,
+{ autoAddDriverRunpath
+, config
+, cudaPackages
+, fetchFromGitHub
+, lib
+,
 }:
 let
   inherit (lib.attrsets) getBin;

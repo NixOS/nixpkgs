@@ -1,12 +1,12 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libimobiledevice,
-  libusb1,
-  avahi,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libimobiledevice
+, libusb1
+, avahi
+,
 }:
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "libgeneral";

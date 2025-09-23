@@ -1,25 +1,25 @@
-{
-  bash,
-  coreutils-prefixed,
-  curl,
-  fetchFromGitHub,
-  gnused,
-  gnugrep,
-  installShellFiles,
-  jq,
-  lib,
-  makeWrapper,
-  mplayer,
-  mpv,
-  procps,
-  scdoc,
-  stdenvNoCC,
-  streamlink,
-  vlc,
-  fzf,
-  withMpv ? true,
-  withVlc ? false,
-  withMplayer ? false,
+{ bash
+, coreutils-prefixed
+, curl
+, fetchFromGitHub
+, gnused
+, gnugrep
+, installShellFiles
+, jq
+, lib
+, makeWrapper
+, mplayer
+, mpv
+, procps
+, scdoc
+, stdenvNoCC
+, streamlink
+, vlc
+, fzf
+, withMpv ? true
+, withVlc ? false
+, withMplayer ? false
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

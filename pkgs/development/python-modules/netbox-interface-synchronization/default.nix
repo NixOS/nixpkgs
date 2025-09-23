@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  netaddr,
-  netbox,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, netaddr
+, netbox
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "netbox-interface-synchronization";

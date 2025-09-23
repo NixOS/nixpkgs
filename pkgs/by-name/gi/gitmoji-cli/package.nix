@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
-  nodejs,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, yarnInstallHook
+, nodejs
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDubPackage,
-  fetchFromGitHub,
-  versionCheckHook,
+{ lib
+, buildDubPackage
+, fetchFromGitHub
+, versionCheckHook
+,
 }:
 
 buildDubPackage rec {

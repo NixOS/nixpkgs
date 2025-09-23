@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp-retry,
-  buildPythonPackage,
-  fetchFromGitHub,
-  dvc-objects,
-  fsspec,
-  funcy,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, aiohttp-retry
+, buildPythonPackage
+, fetchFromGitHub
+, dvc-objects
+, fsspec
+, funcy
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

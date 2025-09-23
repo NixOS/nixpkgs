@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  installShellFiles,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, python3
+, installShellFiles
+, nix-update-script
+,
 }:
 
 let

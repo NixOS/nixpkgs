@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pytestCheckHook,
-  setuptools,
-  typing-extensions,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytestCheckHook
+, setuptools
+, typing-extensions
+,
 }:
 
 let

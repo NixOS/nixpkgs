@@ -1,30 +1,29 @@
-{
-  lib,
-  SDL2,
-  cmake,
-  copyDesktopItems,
-  fetchFromGitHub,
-  ffmpeg_6,
-  glew,
-  libffi,
-  libsForQt5,
-  libzip,
-  libX11,
-  makeDesktopItem,
-  makeWrapper,
-  pkg-config,
-  python3,
-  snappy,
-  stdenv,
-  vulkan-loader,
-  wayland,
-  zlib,
-
-  enableQt ? false,
-  enableVulkan ? true,
-  forceWayland ? false,
-  useSystemFfmpeg ? false,
-  useSystemSnappy ? true,
+{ lib
+, SDL2
+, cmake
+, copyDesktopItems
+, fetchFromGitHub
+, ffmpeg_6
+, glew
+, libffi
+, libsForQt5
+, libzip
+, libX11
+, makeDesktopItem
+, makeWrapper
+, pkg-config
+, python3
+, snappy
+, stdenv
+, vulkan-loader
+, wayland
+, zlib
+, enableQt ? false
+, enableVulkan ? true
+, forceWayland ? false
+, useSystemFfmpeg ? false
+, useSystemSnappy ? true
+,
 }:
 
 let

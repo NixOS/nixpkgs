@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  gdk-pixbuf,
-  glib,
-  gobject-introspection,
-  gtk3,
-  gtksourceview,
-  pango,
-  webkitgtk_4_1,
-  pygobject3,
-  pyyaml,
-  setuptools,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, gdk-pixbuf
+, glib
+, gobject-introspection
+, gtk3
+, gtksourceview
+, pango
+, webkitgtk_4_1
+, pygobject3
+, pyyaml
+, setuptools
+,
 }:
 
 buildPythonApplication rec {

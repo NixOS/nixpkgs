@@ -1,28 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  coreutils,
-  lazarus,
-  fpc,
-  libX11,
-
-  # GTK2/3
-  pango,
-  cairo,
-  glib,
-  atk,
-  gtk2,
-  gtk3,
-  gdk-pixbuf,
-  python3,
-
-  # Qt5
-  libsForQt5,
-
-  widgetset ? "qt5",
-  # See https://github.com/Alexey-T/CudaText-lexers
-  additionalLexers ? [ "Nix" ],
+{ stdenv
+, lib
+, fetchFromGitHub
+, coreutils
+, lazarus
+, fpc
+, libX11
+, # GTK2/3
+  pango
+, cairo
+, glib
+, atk
+, gtk2
+, gtk3
+, gdk-pixbuf
+, python3
+, # Qt5
+  libsForQt5
+, widgetset ? "qt5"
+, # See https://github.com/Alexey-T/CudaText-lexers
+  additionalLexers ? [ "Nix" ]
+,
 }:
 
 assert builtins.elem widgetset [
@@ -32,13 +29,15 @@ assert builtins.elem widgetset [
 ];
 
 let
-  deps = lib.mapAttrs (
-    name: spec:
-    fetchFromGitHub {
-      repo = name;
-      inherit (spec) owner rev hash;
-    }
-  ) (lib.importJSON ./deps.json);
+  deps = lib.mapAttrs
+    (
+      name: spec:
+        fetchFromGitHub {
+          repo = name;
+          inherit (spec) owner rev hash;
+        }
+    )
+    (lib.importJSON ./deps.json);
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
@@ -84,11 +83,14 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase =
-    lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: dep: ''
-        cp -r ${dep} ${name}
-      '') deps
-    )
+    lib.concatStringsSep "\n"
+      (
+        lib.mapAttrsToList
+          (name: dep: ''
+            cp -r ${dep} ${name}
+          '')
+          deps
+      )
     + ''
       # See https://wiki.freepascal.org/CudaText#How_to_compile_CudaText
       substituteInPlace ATSynEdit/atsynedit/atsynedit_package.lpk \
@@ -117,14 +119,16 @@ stdenv.mkDerivation rec {
     install -Dm644 setup/debfiles/cudatext-512.png -t $out/share/pixmaps
     install -Dm644 setup/debfiles/cudatext.desktop -t $out/share/applications
   ''
-  + lib.concatMapStringsSep "\n" (lexer: ''
-    if [ -d "CudaText-lexers/${lexer}" ]; then
-      install -Dm644 CudaText-lexers/${lexer}/*.{cuda-lexmap,lcf} $out/share/cudatext/data/lexlib
-    else
-      echo "${lexer} lexer not found"
-      exit 1
-    fi
-  '') additionalLexers;
+  + lib.concatMapStringsSep "\n"
+    (lexer: ''
+      if [ -d "CudaText-lexers/${lexer}" ]; then
+        install -Dm644 CudaText-lexers/${lexer}/*.{cuda-lexmap,lcf} $out/share/cudatext/data/lexlib
+      else
+        echo "${lexer} lexer not found"
+        exit 1
+      fi
+    '')
+    additionalLexers;
 
   passthru.updateScript = ./update.sh;
 

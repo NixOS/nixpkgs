@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  setuptools,
-  pyyaml,
-  tabulate,
-  pyluwen,
-  tt-tools-common,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, setuptools
+, pyyaml
+, tabulate
+, pyluwen
+, tt-tools-common
+,
 }:
 buildPythonPackage rec {
   pname = "tt-flash";

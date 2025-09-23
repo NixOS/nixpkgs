@@ -8,10 +8,10 @@
 #
 # See also <nixos/modules/profiles/hardened.nix>
 
-{
-  stdenv,
-  lib,
-  version,
+{ stdenv
+, lib
+, version
+,
 }:
 
 with lib.kernel;

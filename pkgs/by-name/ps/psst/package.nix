@@ -1,20 +1,20 @@
-{
-  alsa-lib,
-  atk,
-  cairo,
-  dbus,
-  fetchFromGitHub,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  lib,
-  libclang,
-  makeDesktopItem,
-  nix-update-script,
-  pango,
-  pkg-config,
-  rustPlatform,
-  stdenv,
+{ alsa-lib
+, atk
+, cairo
+, dbus
+, fetchFromGitHub
+, gdk-pixbuf
+, glib
+, gtk3
+, lib
+, libclang
+, makeDesktopItem
+, nix-update-script
+, pango
+, pkg-config
+, rustPlatform
+, stdenv
+,
 }:
 
 let

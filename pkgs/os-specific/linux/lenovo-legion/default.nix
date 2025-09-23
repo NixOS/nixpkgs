@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  kernel,
-  kernelModuleMakeFlags,
-  bash,
-  lenovo-legion,
+{ lib
+, stdenv
+, kernel
+, kernelModuleMakeFlags
+, bash
+, lenovo-legion
+,
 }:
 
 stdenv.mkDerivation {

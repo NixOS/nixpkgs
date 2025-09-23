@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  pkgsBuildBuild,
-  dbip-country-lite,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, pkgsBuildBuild
+, dbip-country-lite
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  m17n_db,
-  autoreconfHook,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, m17n_db
+, autoreconfHook
+, pkg-config
+,
 }:
 stdenv.mkDerivation rec {
   pname = "m17n-lib";

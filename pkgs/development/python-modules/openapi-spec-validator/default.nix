@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # propagates
-  importlib-resources,
-  jsonschema,
-  jsonschema-path,
-  lazy-object-proxy,
-  openapi-schema-validator,
-
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # propagates
+  importlib-resources
+, jsonschema
+, jsonschema-path
+, lazy-object-proxy
+, openapi-schema-validator
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

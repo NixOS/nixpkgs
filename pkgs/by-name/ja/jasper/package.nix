@@ -1,16 +1,16 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  libglut,
-  libGL,
-  libheif,
-  libjpeg,
-  pkg-config,
-  stdenv,
-  enableHEIFCodec ? true,
-  enableJPGCodec ? true,
-  enableOpenGL ? true,
+{ lib
+, cmake
+, fetchFromGitHub
+, libglut
+, libGL
+, libheif
+, libjpeg
+, pkg-config
+, stdenv
+, enableHEIFCodec ? true
+, enableJPGCodec ? true
+, enableOpenGL ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

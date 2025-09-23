@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools-scm,
-  toml,
-  jaraco-functools,
-  jaraco-context,
-  more-itertools,
-  jaraco-collections,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools-scm
+, toml
+, jaraco-functools
+, jaraco-context
+, more-itertools
+, jaraco-collections
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

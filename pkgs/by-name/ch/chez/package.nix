@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  coreutils,
-  cctools,
-  darwin,
-  ncurses,
-  libiconv,
-  libX11,
-  libuuid,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, coreutils
+, cctools
+, darwin
+, ncurses
+, libiconv
+, libX11
+, libuuid
+, testers
+,
 }@args:
 
 stdenv.mkDerivation (finalAttrs: {

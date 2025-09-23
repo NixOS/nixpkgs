@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  termcolor,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, termcolor
+,
 }:
 
 buildPythonPackage rec {

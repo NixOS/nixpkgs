@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

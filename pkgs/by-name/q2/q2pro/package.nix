@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  pkg-config,
-  ninja,
-  zlib,
-  libpng,
-  libjpeg,
-  curl,
-  SDL2,
-  openalSoft,
-  libGL,
-  libogg,
-  libvorbis,
-  libX11,
-  libXi,
-  wayland,
-  wayland-protocols,
-  libdecor,
-  ffmpeg,
-  wayland-scanner,
-  makeBinaryWrapper,
-  versionCheckHook,
-  copyDesktopItems,
-  makeDesktopItem,
-  desktopToDarwinBundle,
-  x11Support ? stdenv.hostPlatform.isLinux,
-  waylandSupport ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, zlib
+, libpng
+, libjpeg
+, curl
+, SDL2
+, openalSoft
+, libGL
+, libogg
+, libvorbis
+, libX11
+, libXi
+, wayland
+, wayland-protocols
+, libdecor
+, ffmpeg
+, wayland-scanner
+, makeBinaryWrapper
+, versionCheckHook
+, copyDesktopItems
+, makeDesktopItem
+, desktopToDarwinBundle
+, x11Support ? stdenv.hostPlatform.isLinux
+, waylandSupport ? stdenv.hostPlatform.isLinux
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  cloudpickle,
-  numpy,
-  gym-notices,
-  importlib-metadata,
-  pythonOlder,
-
-  # tests
-  moviepy,
-  pybox2d,
-  pygame,
-  pytestCheckHook,
-  opencv-python,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  cloudpickle
+, numpy
+, gym-notices
+, importlib-metadata
+, pythonOlder
+, # tests
+  moviepy
+, pybox2d
+, pygame
+, pytestCheckHook
+, opencv-python
+,
 }:
 
 buildPythonPackage rec {

@@ -1,28 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
-  isPyPy,
-
-  # build-system
-  poetry-core,
-  rustPlatform,
-
-  # native dependencies
-  iconv,
-
-  # dependencies
-  importlib-resources,
-  python-dateutil,
-  time-machine,
-  tzdata,
-
-  # tests
-  pytestCheckHook,
-  pytz,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pythonOlder
+, isPyPy
+, # build-system
+  poetry-core
+, rustPlatform
+, # native dependencies
+  iconv
+, # dependencies
+  importlib-resources
+, python-dateutil
+, time-machine
+, tzdata
+, # tests
+  pytestCheckHook
+, pytz
+,
 }:
 
 buildPythonPackage rec {

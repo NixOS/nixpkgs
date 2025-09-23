@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  enableLTO ? true,
-  nrxAlias ? true,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, enableLTO ? true
+, nrxAlias ? true
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nrr";

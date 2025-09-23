@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  meson-python,
-  packaging,
-  cython,
-  numpy,
-  scipy,
-  h5py,
-  nibabel,
-  tqdm,
-  trx-python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, meson-python
+, packaging
+, cython
+, numpy
+, scipy
+, h5py
+, nibabel
+, tqdm
+, trx-python
+,
 }:
 
 buildPythonPackage rec {

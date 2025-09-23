@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildDunePackage,
-  fetchurl,
-  cstruct,
-  duration,
-  ethernet,
-  ipaddr,
-  logs,
-  lwt,
-  macaddr,
-  mirage-sleep,
-  alcotest,
-  bos,
-  mirage-vnetif,
+{ lib
+, stdenv
+, buildDunePackage
+, fetchurl
+, cstruct
+, duration
+, ethernet
+, ipaddr
+, logs
+, lwt
+, macaddr
+, mirage-sleep
+, alcotest
+, bos
+, mirage-vnetif
+,
 }:
 
 buildDunePackage rec {

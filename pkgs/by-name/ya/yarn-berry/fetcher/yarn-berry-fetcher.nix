@@ -1,14 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-
-  libzip,
-  openssl,
-  pkg-config,
-
-  berryVersion,
-  berryCacheVersion,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, libzip
+, openssl
+, pkg-config
+, berryVersion
+, berryCacheVersion
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

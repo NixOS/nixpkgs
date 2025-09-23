@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  doxygen,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, doxygen
+, zlib
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  googleapis-common-protos,
-  grpcio,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, googleapis-common-protos
+, grpcio
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

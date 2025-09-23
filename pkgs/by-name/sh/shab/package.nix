@@ -1,10 +1,10 @@
-{
-  bash,
-  stdenv,
-  lib,
-  runCommand,
-  writeText,
-  fetchFromGitHub,
+{ bash
+, stdenv
+, lib
+, runCommand
+, writeText
+, fetchFromGitHub
+,
 }:
 let
   version = "1.0.0";

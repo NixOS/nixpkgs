@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchzip,
-  flit-core,
-  mistune,
-  nh3,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchzip
+, flit-core
+, mistune
+, nh3
+,
 }:
 
 buildPythonPackage rec {

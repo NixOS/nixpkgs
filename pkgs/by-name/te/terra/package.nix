@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  llvmPackages_18,
-  ncurses,
-  cmake,
-  libxml2,
-  symlinkJoin,
-  cudaPackages,
-  enableCUDA ? false,
-  libffi,
-  libpfm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, llvmPackages_18
+, ncurses
+, cmake
+, libxml2
+, symlinkJoin
+, cudaPackages
+, enableCUDA ? false
+, libffi
+, libpfm
+,
 }:
 
 let

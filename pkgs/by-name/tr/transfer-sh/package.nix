@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  nix-update-script,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, nix-update-script
+, nixosTests
+,
 }:
 
 buildGoModule rec {

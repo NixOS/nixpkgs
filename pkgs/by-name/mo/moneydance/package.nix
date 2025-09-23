@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchzip,
-  makeWrapper,
-  openjdk23,
-  wrapGAppsHook3,
-  jvmFlags ? [ ],
+{ lib
+, stdenv
+, buildPackages
+, fetchzip
+, makeWrapper
+, openjdk23
+, wrapGAppsHook3
+, jvmFlags ? [ ]
+,
 }:
 let
   jdk = openjdk23.override {

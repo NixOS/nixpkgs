@@ -1,81 +1,78 @@
-{
-  lib,
-  bash,
-  bash-completion,
-  bridge-utils,
-  coreutils,
-  curl,
-  darwin,
-  dbus,
-  dnsmasq,
-  docutils,
-  fetchFromGitLab,
-  gettext,
-  glib,
-  gnutls,
-  iproute2,
-  iptables,
-  libgcrypt,
-  libpcap,
-  libtasn1,
-  libxml2,
-  libxslt,
-  makeWrapper,
-  meson,
-  nftables,
-  ninja,
-  openssh,
-  perl,
-  perlPackages,
-  polkit,
-  pkg-config,
-  pmutils,
-  python3,
-  readline,
-  rpcsvc-proto,
-  stdenv,
-  replaceVars,
-  xhtml1,
-  json_c,
-  writeScript,
-  nixosTests,
-
-  # Linux
-  acl ? null,
-  attr ? null,
-  audit ? null,
-  dmidecode ? null,
-  fuse3 ? null,
-  kmod ? null,
-  libapparmor ? null,
-  libcap_ng ? null,
-  libnl ? null,
-  libpciaccess ? null,
-  libtirpc ? null,
-  lvm2 ? null,
-  numactl ? null,
-  numad ? null,
-  parted ? null,
-  systemd ? null,
-  util-linux ? null,
-
-  # Darwin
-  gmp,
-  libiconv,
-  qemu,
-
-  # Options
-  enableCeph ? false,
-  ceph,
-  enableGlusterfs ? false,
-  glusterfs,
-  enableIscsi ? false,
-  openiscsi,
-  libiscsi,
-  enableXen ? stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64,
-  xen,
-  enableZfs ? stdenv.hostPlatform.isLinux,
-  zfs,
+{ lib
+, bash
+, bash-completion
+, bridge-utils
+, coreutils
+, curl
+, darwin
+, dbus
+, dnsmasq
+, docutils
+, fetchFromGitLab
+, gettext
+, glib
+, gnutls
+, iproute2
+, iptables
+, libgcrypt
+, libpcap
+, libtasn1
+, libxml2
+, libxslt
+, makeWrapper
+, meson
+, nftables
+, ninja
+, openssh
+, perl
+, perlPackages
+, polkit
+, pkg-config
+, pmutils
+, python3
+, readline
+, rpcsvc-proto
+, stdenv
+, replaceVars
+, xhtml1
+, json_c
+, writeScript
+, nixosTests
+, # Linux
+  acl ? null
+, attr ? null
+, audit ? null
+, dmidecode ? null
+, fuse3 ? null
+, kmod ? null
+, libapparmor ? null
+, libcap_ng ? null
+, libnl ? null
+, libpciaccess ? null
+, libtirpc ? null
+, lvm2 ? null
+, numactl ? null
+, numad ? null
+, parted ? null
+, systemd ? null
+, util-linux ? null
+, # Darwin
+  gmp
+, libiconv
+, qemu
+, # Options
+  enableCeph ? false
+, ceph
+, enableGlusterfs ? false
+, glusterfs
+, enableIscsi ? false
+, openiscsi
+, libiscsi
+, enableXen ? stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64
+, xen
+, enableZfs ? stdenv.hostPlatform.isLinux
+, zfs
+,
 }:
 
 let

@@ -1,7 +1,7 @@
-{
-  lib,
-  newScope,
-  symlinkJoin,
+{ lib
+, newScope
+, symlinkJoin
+,
 }:
 
 # Note this scope isn't recursed into, at the time of writing.

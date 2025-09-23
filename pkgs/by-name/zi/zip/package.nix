@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  enableNLS ? false,
-  libnatspec ? null,
-  libiconv,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchurl
+, enableNLS ? false
+, libnatspec ? null
+, libiconv
+, fetchpatch
+,
 }:
 
 assert enableNLS -> libnatspec != null;

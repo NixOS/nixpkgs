@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  makeWrapper,
-  udev,
-  systemd,
-  btrfs-progs,
-  cloud-utils,
-  cryptsetup,
-  e2fsprogs,
-  util-linux,
-  xfsprogs,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, makeWrapper
+, udev
+, systemd
+, btrfs-progs
+, cloud-utils
+, cryptsetup
+, e2fsprogs
+, util-linux
+, xfsprogs
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

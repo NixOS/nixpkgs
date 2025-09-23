@@ -1,9 +1,9 @@
-{
-  stdenv,
-  buildPackages,
-  buildBazelPackage,
-  fetchFromGitHub,
-  lib,
+{ stdenv
+, buildPackages
+, buildBazelPackage
+, fetchFromGitHub
+, lib
+,
 }:
 let
   buildPlatform = stdenv.buildPlatform;

@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  aiohttp,
-  mashumaro,
-
-  # tests
-  pytestCheckHook,
-  pytest-aiohttp,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  aiohttp
+, mashumaro
+, # tests
+  pytestCheckHook
+, pytest-aiohttp
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

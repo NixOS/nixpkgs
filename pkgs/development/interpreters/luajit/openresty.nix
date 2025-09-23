@@ -1,8 +1,8 @@
-{
-  self,
-  callPackage,
-  fetchFromGitHub,
-  passthruFun,
+{ self
+, callPackage
+, fetchFromGitHub
+, passthruFun
+,
 }:
 
 callPackage ./default.nix rec {

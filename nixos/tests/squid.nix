@@ -2,10 +2,9 @@
 # - "external" -- i.e. the internet, where the proxy and server communicate
 # - "internal" -- i.e. an office LAN, where the client and proxy communicat
 
-{
-  pkgs,
-  lib,
-  ...
+{ pkgs
+, lib
+, ...
 }:
 # VLANS:
 # 1 -- simulates the internal network

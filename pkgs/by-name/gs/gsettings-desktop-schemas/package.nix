@@ -1,18 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  glib,
-  gobject-introspection,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  meson,
-  ninja,
-  # just for passthru
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, meson
+, ninja
+, # just for passthru
+  gnome
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,14 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-
-  ewmhlib,
-  xlib,
-  typing-extensions,
-  pyobjc-core,
-  pyobjc-framework-Cocoa,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, ewmhlib
+, xlib
+, typing-extensions
+, pyobjc-core
+, pyobjc-framework-Cocoa
+,
 }:
 
 buildPythonPackage rec {

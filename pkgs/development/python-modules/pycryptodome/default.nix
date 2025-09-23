@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  callPackage,
-  fetchFromGitHub,
-  gmp,
-  setuptools,
+{ lib
+, buildPythonPackage
+, callPackage
+, fetchFromGitHub
+, gmp
+, setuptools
+,
 }:
 
 let

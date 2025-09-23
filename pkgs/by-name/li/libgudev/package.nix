@@ -1,21 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  udev,
-  glib,
-  glibcLocales,
-  umockdev,
-  gnome,
-  vala,
-  gobject-introspection,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, udev
+, glib
+, glibcLocales
+, umockdev
+, gnome
+, vala
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

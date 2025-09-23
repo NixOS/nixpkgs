@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  libsForQt5,
-  openrgb,
-  glib,
-  openal,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitLab
+, libsForQt5
+, openrgb
+, glib
+, openal
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

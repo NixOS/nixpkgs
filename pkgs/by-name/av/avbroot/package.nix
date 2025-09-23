@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  protobuf,
-  bzip2,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, protobuf
+, bzip2
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

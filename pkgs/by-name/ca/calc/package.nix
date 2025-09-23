@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  ncurses,
-  readline,
-  unixtools,
-  enableReadline ? true,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, ncurses
+, readline
+, unixtools
+, enableReadline ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

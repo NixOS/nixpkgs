@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  sphinx,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

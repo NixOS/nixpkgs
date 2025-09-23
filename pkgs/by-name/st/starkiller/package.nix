@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  nodejs_24,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, nodejs_24
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

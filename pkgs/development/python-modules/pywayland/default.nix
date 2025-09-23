@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  python,
-  cffi,
-  pkg-config,
-  wayland,
-  wayland-scanner,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+, cffi
+, pkg-config
+, wayland
+, wayland-scanner
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

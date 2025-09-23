@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchurl,
-  sqlite,
-  installShellFiles,
-  nixosTests,
+{ lib
+, buildGoModule
+, fetchurl
+, sqlite
+, installShellFiles
+, nixosTests
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "honk";

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flask,
-  jsonschema,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flask
+, jsonschema
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

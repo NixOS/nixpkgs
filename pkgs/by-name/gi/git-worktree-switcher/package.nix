@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  installShellFiles,
-  git,
-  jq,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, installShellFiles
+, git
+, jq
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  alsa-lib,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, alsa-lib
+,
 }:
 
 let
 
   fetchDebianPatch =
-    {
-      name,
-      debname,
-      sha256,
+    { name
+    , debname
+    , sha256
+    ,
     }:
     fetchpatch {
       inherit sha256 name;

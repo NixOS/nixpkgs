@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchpatch,
-  perl,
-  pkg-config,
-  boost,
-  cppunit,
-  doxygen,
-  gperf,
-  icu,
-  lcms2,
-  librevenge,
-  zlib,
+{ lib
+, stdenv
+, fetchzip
+, fetchpatch
+, perl
+, pkg-config
+, boost
+, cppunit
+, doxygen
+, gperf
+, icu
+, lcms2
+, librevenge
+, zlib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfreehand";

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildKodiAddon,
-  fetchFromGitHub,
-  kodi,
-  inputstreamhelper,
-  requests,
+{ lib
+, buildKodiAddon
+, fetchFromGitHub
+, kodi
+, inputstreamhelper
+, requests
+,
 }:
 
 buildKodiAddon rec {

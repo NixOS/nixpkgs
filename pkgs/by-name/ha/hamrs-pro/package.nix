@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  appimageTools,
-  fetchurl,
-  _7zz,
+{ lib
+, stdenvNoCC
+, appimageTools
+, fetchurl
+, _7zz
+,
 }:
 
 let

@@ -1,11 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-
-  # native check inputs
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, # native check inputs
+  versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  libxml2,
-  minizip,
-  readline,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, libxml2
+, minizip
+, readline
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

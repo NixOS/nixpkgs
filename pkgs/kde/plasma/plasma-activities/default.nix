@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  boost,
+{ mkKdeDerivation
+, qtdeclarative
+, boost
+,
 }:
 mkKdeDerivation {
   pname = "plasma-activities";

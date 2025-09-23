@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  cli-helpers,
-  click,
-  configobj,
-  prompt-toolkit,
-  psycopg,
-  pygments,
-  sqlparse,
-  pgspecial,
-  setproctitle,
-  keyring,
-  pendulum,
-  pytestCheckHook,
-  setuptools,
-  sshtunnel,
-  mock,
-  tzlocal,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, cli-helpers
+, click
+, configobj
+, prompt-toolkit
+, psycopg
+, pygments
+, sqlparse
+, pgspecial
+, setproctitle
+, keyring
+, pendulum
+, pytestCheckHook
+, setuptools
+, sshtunnel
+, mock
+, tzlocal
+,
 }:
 
 # this is a pythonPackage because of the ipython line magics in pgcli.magic

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  iproute2,
-  runtimeShell,
-  systemd,
-  coreutils,
-  util-linux,
+{ lib
+, stdenv
+, fetchFromGitHub
+, iproute2
+, runtimeShell
+, systemd
+, coreutils
+, util-linux
+,
 }:
 
 stdenv.mkDerivation rec {

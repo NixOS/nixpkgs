@@ -1,14 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  makeWrapper,
-  nixosTests,
-
-  # for addons
-  buildNpmPackage,
-  zip,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, makeWrapper
+, nixosTests
+, # for addons
+  buildNpmPackage
+, zip
+,
 }:
 
 buildGoModule (finalAttrs: {

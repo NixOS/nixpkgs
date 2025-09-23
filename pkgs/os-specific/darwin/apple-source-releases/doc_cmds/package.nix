@@ -1,9 +1,9 @@
-{
-  lib,
-  mkAppleDerivation,
-  pkg-config,
-  shell_cmds,
-  zlib,
+{ lib
+, mkAppleDerivation
+, pkg-config
+, shell_cmds
+, zlib
+,
 }:
 
 mkAppleDerivation {

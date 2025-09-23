@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  meson,
-  libGLU,
-  ninja,
-  python3,
-  cmake,
-  pkg-config,
-  xxd,
-  libopus,
-  libogg,
-  zlib,
-  SDL2,
-  SDL2_mixer,
-  libopenmpt,
-  libXrandr,
-  libXext,
-  libXfixes,
-  libXcursor,
-  libXi,
-  libXScrnSaver,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchFromGitea
+, meson
+, libGLU
+, ninja
+, python3
+, cmake
+, pkg-config
+, xxd
+, libopus
+, libogg
+, zlib
+, SDL2
+, SDL2_mixer
+, libopenmpt
+, libXrandr
+, libXext
+, libXfixes
+, libXcursor
+, libXi
+, libXScrnSaver
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  installShellFiles,
-  getconf,
-  dbus,
-  libseccomp,
-  systemd,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
+, getconf
+, dbus
+, libseccomp
+, systemd
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

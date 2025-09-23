@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  llama-index-core,
-  pymilvus,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, llama-index-core
+, pymilvus
+,
 }:
 
 buildPythonPackage rec {

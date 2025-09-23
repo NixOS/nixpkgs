@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  jdk11,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchzip
+, jdk11
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

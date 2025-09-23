@@ -1,19 +1,19 @@
-{
-  buildDotnetModule,
-  cmake,
-  dconf,
-  dotnet-runtime_8,
-  dotnet-sdk_6,
-  fetchFromGitHub,
-  fetchpatch,
-  gcc,
-  glibcLocales,
-  gtk3-x11,
-  gtk3,
-  lib,
-  mono,
-  nix-update-script,
-  python3Packages,
+{ buildDotnetModule
+, cmake
+, dconf
+, dotnet-runtime_8
+, dotnet-sdk_6
+, fetchFromGitHub
+, fetchpatch
+, gcc
+, glibcLocales
+, gtk3-x11
+, gtk3
+, lib
+, mono
+, nix-update-script
+, python3Packages
+,
 }:
 
 let

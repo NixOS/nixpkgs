@@ -1,7 +1,7 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "rblake3sum";

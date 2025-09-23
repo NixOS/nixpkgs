@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cc65,
-  lzsa,
-  python3,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cc65
+, lzsa
+, python3
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

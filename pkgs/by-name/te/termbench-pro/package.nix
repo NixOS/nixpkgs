@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  fmt,
-  glaze,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, fmt
+, glaze
+,
 }:
 
 stdenv.mkDerivation {

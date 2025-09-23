@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

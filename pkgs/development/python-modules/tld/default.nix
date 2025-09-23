@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  factory-boy,
-  faker,
-  fetchPypi,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, factory-boy
+, faker
+, fetchPypi
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

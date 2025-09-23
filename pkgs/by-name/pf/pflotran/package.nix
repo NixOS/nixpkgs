@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromBitbucket,
-  fetchzip,
-  gfortran,
-  mpi,
-  petsc,
-  blas,
-  lapack,
-  parmetis,
-  hdf5-fortran-mpi,
-  mpiCheckPhaseHook,
-  python312Packages,
+{ stdenv
+, lib
+, fetchFromBitbucket
+, fetchzip
+, gfortran
+, mpi
+, petsc
+, blas
+, lapack
+, parmetis
+, hdf5-fortran-mpi
+, mpiCheckPhaseHook
+, python312Packages
+,
 }:
 
 let

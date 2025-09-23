@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  release_version,
-  src ? null,
-  llvm_meta,
-  version,
-  monorepoSrc ? null,
-  runCommand,
-  cmake,
-  ninja,
-  python3,
-  libcxx,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  doFakeLibgcc ? stdenv.hostPlatform.useLLVM,
-  devExtraCmakeFlags ? [ ],
-  getVersionFile,
+{ lib
+, stdenv
+, release_version
+, src ? null
+, llvm_meta
+, version
+, monorepoSrc ? null
+, runCommand
+, cmake
+, ninja
+, python3
+, libcxx
+, enableShared ? !stdenv.hostPlatform.isStatic
+, doFakeLibgcc ? stdenv.hostPlatform.useLLVM
+, devExtraCmakeFlags ? [ ]
+, getVersionFile
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunwind";

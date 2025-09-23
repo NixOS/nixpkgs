@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  gitUpdater,
-  libsForQt5,
-  pkg-config,
-  qt6Packages,
-  rtaudio_6,
-  rtmidi,
-  withQt6 ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, gitUpdater
+, libsForQt5
+, pkg-config
+, qt6Packages
+, rtaudio_6
+, rtmidi
+, withQt6 ? false
+,
 }:
 
 let

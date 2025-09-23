@@ -1,29 +1,28 @@
-{
-  config,
-  lib,
-  stdenv,
-  alsa-lib,
-  autoPatchelfHook,
-  chafa,
-  curl,
-  faad2,
-  fetchFromGitHub,
-  fftwFloat,
-  glib,
-  libogg,
-  libopus,
-  libjack2,
-  libpulseaudio,
-  libvorbis,
-  nix-update-script,
-  opusfile,
-  pkg-config,
-  taglib,
-  versionCheckHook,
-
-  withALSA ? stdenv.hostPlatform.isLinux,
-  withJACK ? false,
-  withPulseaudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+{ config
+, lib
+, stdenv
+, alsa-lib
+, autoPatchelfHook
+, chafa
+, curl
+, faad2
+, fetchFromGitHub
+, fftwFloat
+, glib
+, libogg
+, libopus
+, libjack2
+, libpulseaudio
+, libvorbis
+, nix-update-script
+, opusfile
+, pkg-config
+, taglib
+, versionCheckHook
+, withALSA ? stdenv.hostPlatform.isLinux
+, withJACK ? false
+, withPulseaudio ? config.pulseaudio or stdenv.hostPlatform.isLinux
+,
 }:
 
 let

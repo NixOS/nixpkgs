@@ -1,15 +1,15 @@
-{
-  lib,
-  astroid,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  hypothesis,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  z3-solver,
+{ lib
+, astroid
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, hypothesis
+, pytest-cov-stub
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, z3-solver
+,
 }:
 
 buildPythonPackage rec {

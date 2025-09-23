@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  parver,
-  pulumi,
-  pythonOlder,
-  semver,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, parver
+, pulumi
+, pythonOlder
+, semver
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

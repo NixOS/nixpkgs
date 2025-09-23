@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  httpx,
-  tqdm,
-  urllib3,
-  vcrpy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, httpx
+, tqdm
+, urllib3
+, vcrpy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

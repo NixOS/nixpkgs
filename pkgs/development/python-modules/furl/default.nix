@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  orderedmultidict,
-  pytestCheckHook,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, orderedmultidict
+, pytestCheckHook
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

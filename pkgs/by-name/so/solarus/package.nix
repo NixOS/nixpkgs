@@ -1,22 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  ninja,
-  luajit,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  physfs,
-  glm,
-  openal,
-  libmodplug,
-  libvorbis,
-
-  # tests
-  solarus-quest-editor,
-  solarus-launcher,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, ninja
+, luajit
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, physfs
+, glm
+, openal
+, libmodplug
+, libvorbis
+, # tests
+  solarus-quest-editor
+, solarus-launcher
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cargo,
-  fetchFromGitHub,
-  openssl,
-  pkg-config,
-  pythonOlder,
-  rustc,
-  rustPlatform,
+{ lib
+, stdenv
+, buildPythonPackage
+, cargo
+, fetchFromGitHub
+, openssl
+, pkg-config
+, pythonOlder
+, rustc
+, rustPlatform
+,
 }:
 
 buildPythonPackage rec {

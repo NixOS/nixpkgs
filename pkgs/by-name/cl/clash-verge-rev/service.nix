@@ -1,12 +1,12 @@
-{
-  version,
-  rustPlatform,
-  src-service,
-  pkg-config,
-  openssl,
-  pname,
-  service-cargo-hash,
-  meta,
+{ version
+, rustPlatform
+, src-service
+, pkg-config
+, openssl
+, pname
+, service-cargo-hash
+, meta
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "${pname}-service";

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  mock,
-  setuptools,
-  tox,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, mock
+, setuptools
+, tox
+,
 }:
 
 buildPythonPackage rec {

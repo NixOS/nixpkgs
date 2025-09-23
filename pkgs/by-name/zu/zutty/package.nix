@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  pkg-config,
-  freetype,
-  wafHook,
-  python3,
-  libXmu,
-  glew,
-  ucs-fonts,
-  nixosTests,
+{ lib
+, stdenv
+, fetchgit
+, pkg-config
+, freetype
+, wafHook
+, python3
+, libXmu
+, glew
+, ucs-fonts
+, nixosTests
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zutty";

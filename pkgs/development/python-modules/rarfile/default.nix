@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  libarchive,
-  pythonOlder,
-  setuptools,
-  # unrar is non-free software
-  useUnrar ? false,
-  unrar,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, libarchive
+, pythonOlder
+, setuptools
+, # unrar is non-free software
+  useUnrar ? false
+, unrar
+,
 }:
 
 assert useUnrar -> unrar != null;

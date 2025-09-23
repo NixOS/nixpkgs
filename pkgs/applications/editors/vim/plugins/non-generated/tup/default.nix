@@ -1,7 +1,7 @@
-{
-  lib,
-  vimUtils,
-  tup,
+{ lib
+, vimUtils
+, tup
+,
 }:
 let
   # Based on the comment at the top of https://github.com/gittup/tup/blob/master/contrib/syntax/tup.vim

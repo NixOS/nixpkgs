@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  openssl,
-  libpq,
-  zstd,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openssl
+, libpq
+, zstd
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  readline,
-  xorg,
-  mpi,
-  cmake,
-  bison,
-  flex,
-  git,
-  perl,
-  gsl,
-  xcbuild,
-  python3,
-  useMpi ? false,
-  useIv ? true,
-  useCore ? false,
-  useRx3d ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, readline
+, xorg
+, mpi
+, cmake
+, bison
+, flex
+, git
+, perl
+, gsl
+, xcbuild
+, python3
+, useMpi ? false
+, useIv ? true
+, useCore ? false
+, useRx3d ? false
+,
 }:
 let
   inherit (lib.lists) optionals;

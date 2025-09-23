@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  glibcLocales,
-  isPy3k,
-  pytestCheckHook,
-  curio,
+{ buildPythonPackage
+, lib
+, fetchPypi
+, setuptools
+, setuptools-scm
+, glibcLocales
+, isPy3k
+, pytestCheckHook
+, curio
+,
 }:
 
 buildPythonPackage rec {

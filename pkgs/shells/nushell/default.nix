@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  openssl,
-  zlib,
-  zstd,
-  pkg-config,
-  python3,
-  xorg,
-  nghttp2,
-  libgit2,
-  withDefaultFeatures ? true,
-  additionalFeatures ? (p: p),
-  testers,
-  nushell,
-  nix-update-script,
-  curlMinimal,
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, openssl
+, zlib
+, zstd
+, pkg-config
+, python3
+, xorg
+, nghttp2
+, libgit2
+, withDefaultFeatures ? true
+, additionalFeatures ? (p: p)
+, testers
+, nushell
+, nix-update-script
+, curlMinimal
+,
 }:
 
 let

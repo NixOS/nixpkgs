@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  pkg-config,
-  fribidi,
-  libunibreak,
-  freetype,
-  fontconfig,
-  harfbuzz,
-  zlib,
-  zstd,
-  libpng,
-  libjpeg,
-  utf8proc,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, pkg-config
+, fribidi
+, libunibreak
+, freetype
+, fontconfig
+, harfbuzz
+, zlib
+, zstd
+, libpng
+, libjpeg
+, utf8proc
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "crengine-ng";

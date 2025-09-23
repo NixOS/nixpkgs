@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  k3sVersion ? null,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, k3sVersion ? null
+,
 }:
 
 let

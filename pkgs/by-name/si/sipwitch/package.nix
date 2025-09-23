@@ -1,13 +1,13 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  pkg-config,
-  ucommon,
-  libosip,
-  libexosip,
-  gnutls,
-  zlib,
+{ fetchurl
+, lib
+, stdenv
+, pkg-config
+, ucommon
+, libosip
+, libexosip
+, gnutls
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

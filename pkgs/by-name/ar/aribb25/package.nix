@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  pcsclite,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, pcsclite
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,10 +1,9 @@
 # Tests whether container images are imported and auto deploying manifests work
 import ../make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    k3s,
-    ...
+  { pkgs
+  , lib
+  , k3s
+  , ...
   }:
   let
     pauseImageEnv = pkgs.buildEnv {

@@ -1,11 +1,11 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  wrapQtAppsHook,
-  kwin,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, wrapQtAppsHook
+, kwin
+, lib
+,
 }:
 stdenv.mkDerivation rec {
   pname = "sierra-breeze-enhanced";

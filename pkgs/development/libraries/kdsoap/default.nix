@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cmake,
-  qtbase,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, qtbase
+, wrapQtAppsHook
+,
 }:
 
 let

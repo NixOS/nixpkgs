@@ -1,67 +1,67 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  replaceVars,
-  meson,
-  nasm,
-  ninja,
-  pkg-config,
-  python3,
-  gst-plugins-base,
-  orc,
-  bzip2,
-  gettext,
-  libGL,
-  libv4l,
-  libdv,
-  libavc1394,
-  libiec61883,
-  libvpx,
-  libdrm,
-  speex,
-  opencore-amr,
-  flac,
-  taglib,
-  libshout,
-  cairo,
-  gdk-pixbuf,
-  aalib,
-  libcaca,
-  libsoup_3,
-  libpulseaudio,
-  libintl,
-  libxml2,
-  lame,
-  mpg123,
-  twolame,
-  gtkSupport ? false,
-  gtk3,
-  qt5Support ? false,
-  qt5,
-  qt6Support ? false,
-  qt6,
-  raspiCameraSupport ? false,
-  libraspberrypi,
-  enableJack ? true,
-  libjack2,
-  enableX11 ? stdenv.hostPlatform.isLinux,
-  xorg,
-  ncurses,
-  enableWayland ? stdenv.hostPlatform.isLinux,
-  wayland,
-  wayland-protocols,
-  libgudev,
-  wavpack,
-  glib,
-  openssl,
-  # Checks meson.is_cross_build(), so even canExecute isn't enough.
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
-  hotdoc,
-  gst-plugins-good,
-  directoryListingUpdater,
-  apple-sdk_gstreamer,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, replaceVars
+, meson
+, nasm
+, ninja
+, pkg-config
+, python3
+, gst-plugins-base
+, orc
+, bzip2
+, gettext
+, libGL
+, libv4l
+, libdv
+, libavc1394
+, libiec61883
+, libvpx
+, libdrm
+, speex
+, opencore-amr
+, flac
+, taglib
+, libshout
+, cairo
+, gdk-pixbuf
+, aalib
+, libcaca
+, libsoup_3
+, libpulseaudio
+, libintl
+, libxml2
+, lame
+, mpg123
+, twolame
+, gtkSupport ? false
+, gtk3
+, qt5Support ? false
+, qt5
+, qt6Support ? false
+, qt6
+, raspiCameraSupport ? false
+, libraspberrypi
+, enableJack ? true
+, libjack2
+, enableX11 ? stdenv.hostPlatform.isLinux
+, xorg
+, ncurses
+, enableWayland ? stdenv.hostPlatform.isLinux
+, wayland
+, wayland-protocols
+, libgudev
+, wavpack
+, glib
+, openssl
+, # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, hotdoc
+, gst-plugins-good
+, directoryListingUpdater
+, apple-sdk_gstreamer
+,
 }:
 
 let

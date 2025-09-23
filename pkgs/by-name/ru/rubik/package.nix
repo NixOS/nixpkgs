@@ -1,7 +1,7 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
+{ stdenv
+, lib
+, fetchurl
+,
 }:
 let
   # Latest commit touching the rubik tree

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  libsForQt5,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  openssl,
-  expat,
-  enableGui ? true,
+{ lib
+, stdenv
+, libsForQt5
+, fetchurl
+, fetchpatch
+, pkg-config
+, openssl
+, expat
+, enableGui ? true
+,
 }:
 stdenv.mkDerivation rec {
 

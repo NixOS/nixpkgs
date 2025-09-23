@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  gnugrep,
-  gnused,
-  curl,
-  mpv,
-  aria2,
-  ffmpeg,
-  fzf,
-  openssl,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, gnugrep
+, gnused
+, curl
+, mpv
+, aria2
+, ffmpeg
+, fzf
+, openssl
+,
 }:
 
 stdenvNoCC.mkDerivation {

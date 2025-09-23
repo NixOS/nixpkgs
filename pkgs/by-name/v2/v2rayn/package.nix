@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  autoPatchelfHook,
-  copyDesktopItems,
-  makeDesktopItem,
-  icu,
-  zlib,
-  fontconfig,
-  openssl,
-  lttng-ust_2_12,
-  krb5,
-  bash,
-  xorg,
-  xdg-utils,
-  nix-update-script,
+{ lib
+, stdenv
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, autoPatchelfHook
+, copyDesktopItems
+, makeDesktopItem
+, icu
+, zlib
+, fontconfig
+, openssl
+, lttng-ust_2_12
+, krb5
+, bash
+, xorg
+, xdg-utils
+, nix-update-script
+,
 }:
 
 buildDotnetModule (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  buildFHSEnv,
+{ lib
+, stdenv
+, fetchzip
+, buildFHSEnv
+,
 }:
 
 let

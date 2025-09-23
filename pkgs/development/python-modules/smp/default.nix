@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  cbor2,
-  crcmod,
-  eval-type-backport,
-  pydantic,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, cbor2
+, crcmod
+, eval-type-backport
+, pydantic
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

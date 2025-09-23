@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  bdftopcf,
-  bdf2psf,
-  xorg,
-  targetsDat ? null,
-  variantsDat ? null,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, bdftopcf
+, bdf2psf
+, xorg
+, targetsDat ? null
+, variantsDat ? null
+,
 }:
 
 stdenv.mkDerivation rec {

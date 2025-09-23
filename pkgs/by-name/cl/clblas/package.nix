@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  gfortran,
-  blas,
-  boost,
-  python3,
-  ocl-icd,
-  opencl-headers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, gfortran
+, blas
+, boost
+, python3
+, ocl-icd
+, opencl-headers
+,
 }:
 
 stdenv.mkDerivation rec {

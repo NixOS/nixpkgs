@@ -1,8 +1,8 @@
-{
-  callPackages,
-  callPackage,
-  varnish60,
-  varnish77,
+{ callPackages
+, callPackage
+, varnish60
+, varnish77
+,
 }:
 {
   varnish60Packages = rec {

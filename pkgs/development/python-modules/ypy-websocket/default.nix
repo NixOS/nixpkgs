@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  aiosqlite,
-  anyio,
-  y-py,
-
-  # testing
-  pytest-asyncio,
-  pytestCheckHook,
-  uvicorn,
-  websockets,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  aiosqlite
+, anyio
+, y-py
+, # testing
+  pytest-asyncio
+, pytestCheckHook
+, uvicorn
+, websockets
+,
 }:
 
 buildPythonPackage rec {

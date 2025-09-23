@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  autoreconfHook,
-  pkg-config,
-  gettext,
-  ncurses,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, autoreconfHook
+, pkg-config
+, gettext
+, ncurses
+,
 }:
 
 stdenv.mkDerivation rec {

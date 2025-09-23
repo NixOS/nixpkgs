@@ -1,20 +1,20 @@
-{
-  callPackage,
-  dartSdkVersion,
-  flutterVersion,
-  swiftshaderHash,
-  swiftshaderRev,
-  version,
-  hashes,
-  url,
-  patches,
-  runtimeModes,
-  isOptimized ? null,
-  lib,
-  stdenv,
-  dart,
-  mainRuntimeMode ? null,
-  altRuntimeMode ? null,
+{ callPackage
+, dartSdkVersion
+, flutterVersion
+, swiftshaderHash
+, swiftshaderRev
+, version
+, hashes
+, url
+, patches
+, runtimeModes
+, isOptimized ? null
+, lib
+, stdenv
+, dart
+, mainRuntimeMode ? null
+, altRuntimeMode ? null
+,
 }@args:
 let
   mainRuntimeMode = args.mainRuntimeMode or builtins.elemAt runtimeModes 0;
@@ -61,16 +61,18 @@ stdenv.mkDerivation (
     installPhase = ''
       mkdir -p $out/out
     ''
-    + lib.concatMapStrings (
-      runtimeMode:
-      let
-        runtimeModeBuild = runtimeModesBuilds.${runtimeMode};
-        runtimeModeOut = runtimeModeBuild.outName;
-      in
-      ''
-        ln -sf ${runtimeModeBuild}/out/${runtimeModeOut} $out/out/${runtimeModeOut}
-      ''
-    ) runtimeModes;
+    + lib.concatMapStrings
+      (
+        runtimeMode:
+        let
+          runtimeModeBuild = runtimeModesBuilds.${runtimeMode};
+          runtimeModeOut = runtimeModeBuild.outName;
+        in
+        ''
+          ln -sf ${runtimeModeBuild}/out/${runtimeModeOut} $out/out/${runtimeModeOut}
+        ''
+      )
+      runtimeModes;
   }
-  // runtimeModesBuilds
+    // runtimeModesBuilds
 )

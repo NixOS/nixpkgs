@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  kustomize,
-  testers,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, kustomize
+, testers
+,
 }:
 
 buildGoModule (finalAttrs: {

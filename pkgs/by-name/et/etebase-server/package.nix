@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  withLdap ? false,
-  withPostgres ? true,
-  nix-update-script,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, python3
+, withLdap ? false
+, withPostgres ? true
+, nix-update-script
+, nixosTests
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchPypi,
-  future,
-  pythonOlder,
-  ratelim,
-  requests,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, click
+, fetchPypi
+, future
+, pythonOlder
+, ratelim
+, requests
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

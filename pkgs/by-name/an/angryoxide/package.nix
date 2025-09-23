@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libxkbcommon,
-  sqlite,
-  zlib,
-  wayland,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libxkbcommon
+, sqlite
+, zlib
+, wayland
+,
 }:
 
 let

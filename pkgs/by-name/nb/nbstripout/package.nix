@@ -1,11 +1,11 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  fetchFromGitHub,
-  coreutils,
-  gitMinimal,
-  mercurial,
+{ lib
+, python3
+, fetchPypi
+, fetchFromGitHub
+, coreutils
+, gitMinimal
+, mercurial
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

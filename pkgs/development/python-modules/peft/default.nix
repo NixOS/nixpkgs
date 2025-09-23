@@ -1,32 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  stdenv,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  accelerate,
-  huggingface-hub,
-  numpy,
-  packaging,
-  psutil,
-  pyyaml,
-  safetensors,
-  torch,
-  tqdm,
-  transformers,
-
-  # tests
-  datasets,
-  diffusers,
-  parameterized,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytestCheckHook,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, stdenv
+, # build-system
+  setuptools
+, # dependencies
+  accelerate
+, huggingface-hub
+, numpy
+, packaging
+, psutil
+, pyyaml
+, safetensors
+, torch
+, tqdm
+, transformers
+, # tests
+  datasets
+, diffusers
+, parameterized
+, pytest-cov-stub
+, pytest-xdist
+, pytestCheckHook
+, scipy
+,
 }:
 
 buildPythonPackage rec {

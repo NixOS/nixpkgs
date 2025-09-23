@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtwayland,
-  qtmultimedia,
-  opencv,
+{ mkKdeDerivation
+, qtwayland
+, qtmultimedia
+, opencv
+,
 }:
 mkKdeDerivation {
   pname = "spectacle";

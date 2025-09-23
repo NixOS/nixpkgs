@@ -1,8 +1,8 @@
-{
-  lib,
-  libpcap,
-  rustPlatform,
-  fetchFromGitHub,
+{ lib
+, libpcap
+, rustPlatform
+, fetchFromGitHub
+,
 }:
 
 rustPlatform.buildRustPackage rec {

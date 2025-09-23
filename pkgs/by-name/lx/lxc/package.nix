@@ -1,23 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  bashInteractive,
-  dbus,
-  docbook2x,
-  libapparmor,
-  libcap,
-  libseccomp,
-  libselinux,
-  meson,
-  ninja,
-  nixosTests,
-  openssl,
-  pkg-config,
-  systemd,
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bashInteractive
+, dbus
+, docbook2x
+, libapparmor
+, libcap
+, libseccomp
+, libselinux
+, meson
+, ninja
+, nixosTests
+, openssl
+, pkg-config
+, systemd
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

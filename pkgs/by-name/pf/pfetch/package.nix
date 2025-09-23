@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gitUpdater,
-  versionCheckHook,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gitUpdater
+, versionCheckHook
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fixDarwinDylibNames,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fixDarwinDylibNames
+,
 }:
 
 stdenv.mkDerivation rec {

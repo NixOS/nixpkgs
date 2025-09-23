@@ -1,9 +1,9 @@
-{
-  bundlerApp,
-  bundlerUpdateScript,
-  lib,
-  puppet-lint,
-  testers,
+{ bundlerApp
+, bundlerUpdateScript
+, lib
+, puppet-lint
+, testers
+,
 }:
 
 bundlerApp {

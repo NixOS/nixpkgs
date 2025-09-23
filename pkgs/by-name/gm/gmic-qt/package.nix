@@ -1,26 +1,26 @@
-{
-  lib,
-  cimg,
-  cmake,
-  curl,
-  fetchFromGitHub,
-  fftw,
-  gimp,
-  gimpPlugins,
-  gmic,
-  graphicsmagick,
-  libjpeg,
-  libpng,
-  libsForQt5,
-  libtiff,
-  llvmPackages,
-  ninja,
-  nix-update-script,
-  openexr,
-  pkg-config,
-  stdenv,
-  zlib,
-  variant ? "standalone",
+{ lib
+, cimg
+, cmake
+, curl
+, fetchFromGitHub
+, fftw
+, gimp
+, gimpPlugins
+, gmic
+, graphicsmagick
+, libjpeg
+, libpng
+, libsForQt5
+, libtiff
+, llvmPackages
+, ninja
+, nix-update-script
+, openexr
+, pkg-config
+, stdenv
+, zlib
+, variant ? "standalone"
+,
 }:
 
 let
@@ -44,9 +44,10 @@ in
 assert lib.assertMsg (builtins.hasAttr variant variants)
   "gmic-qt variant \"${variant}\" is not supported. Please use one of ${lib.concatStringsSep ", " (builtins.attrNames variants)}.";
 
-assert lib.assertMsg (builtins.all (d: d != null)
-  variants.${variant}.extraDeps
-) "gmic-qt variant \"${variant}\" is missing one of its dependencies.";
+assert lib.assertMsg
+  (builtins.all (d: d != null)
+    variants.${variant}.extraDeps
+  ) "gmic-qt variant \"${variant}\" is missing one of its dependencies.";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";

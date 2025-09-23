@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  tailscale,
+{ lib
+, stdenv
+, buildGoModule
+, tailscale
+,
 }:
 
 buildGoModule {

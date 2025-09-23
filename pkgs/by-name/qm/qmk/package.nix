@@ -1,16 +1,16 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  pkgsCross,
-  avrdude,
-  bootloadhid,
-  dfu-programmer,
-  dfu-util,
-  wb32-dfu-updater,
-  gcc-arm-embedded,
-  gnumake,
-  teensy-loader-cli,
+{ lib
+, python3
+, fetchPypi
+, pkgsCross
+, avrdude
+, bootloadhid
+, dfu-programmer
+, dfu-util
+, wb32-dfu-updater
+, gcc-arm-embedded
+, gnumake
+, teensy-loader-cli
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

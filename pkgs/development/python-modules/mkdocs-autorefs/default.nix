@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  markdown,
-  mkdocs-material,
-  pytestCheckHook,
-  pdm-backend,
-  markupsafe,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, markdown
+, mkdocs-material
+, pytestCheckHook
+, pdm-backend
+, markupsafe
+,
 }:
 
 buildPythonPackage rec {

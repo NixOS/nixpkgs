@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  robotframework-seleniumlibrary,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, robotframework-seleniumlibrary
+,
 }:
 
 buildPythonPackage rec {

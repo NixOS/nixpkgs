@@ -1,11 +1,9 @@
-{
-  system,
-  pkgs,
-
-  # Projects the test configuration into a the desired value; usually
+{ system
+, pkgs
+, # Projects the test configuration into a the desired value; usually
   # the test runner: `config: config.test`.
-  callTest,
-
+  callTest
+,
 }:
 # The return value of this function will be an attrset with arbitrary depth and
 # the `anything` returned by callTest at its test leaves.
@@ -28,13 +26,14 @@ let
       else
         mapAttrs (n: s: if n == "passthru" then s else discoverTests s) val
     else if isFunction val then
-      # Tests based on make-test-python.nix will return the second lambda
-      # in that file, which are then forwarded to the test definition
-      # following the `import make-test-python.nix` expression
-      # (if it is a function).
-      discoverTests (val {
-        inherit system pkgs;
-      })
+    # Tests based on make-test-python.nix will return the second lambda
+    # in that file, which are then forwarded to the test definition
+    # following the `import make-test-python.nix` expression
+    # (if it is a function).
+      discoverTests
+        (val {
+          inherit system pkgs;
+        })
     else
       val;
 
@@ -1033,10 +1032,12 @@ in
   nixos-generate-config = runTest ./nixos-generate-config.nix;
   nixos-rebuild-install-bootloader = handleTestOn [
     "x86_64-linux"
-  ] ./nixos-rebuild-install-bootloader.nix { withNg = false; };
+  ] ./nixos-rebuild-install-bootloader.nix
+    { withNg = false; };
   nixos-rebuild-install-bootloader-ng = handleTestOn [
     "x86_64-linux"
-  ] ./nixos-rebuild-install-bootloader.nix { withNg = true; };
+  ] ./nixos-rebuild-install-bootloader.nix
+    { withNg = true; };
   nixos-rebuild-specialisations = runTestOn [ "x86_64-linux" ] {
     imports = [ ./nixos-rebuild-specialisations.nix ];
     _module.args.withNg = false;
@@ -1203,7 +1204,8 @@ in
   podman-tls-ghostunnel = handleTestOn [
     "aarch64-linux"
     "x86_64-linux"
-  ] ./podman/tls-ghostunnel.nix { };
+  ] ./podman/tls-ghostunnel.nix
+    { };
   polaris = runTest ./polaris.nix;
   pomerium = handleTestOn [ "x86_64-linux" ] ./pomerium.nix { };
   portunus = runTest ./portunus.nix;
@@ -1438,7 +1440,8 @@ in
   systemd-initrd-networkd-openvpn = handleTestOn [
     "x86_64-linux"
     "i686-linux"
-  ] ./initrd-network-openvpn { systemdStage1 = true; };
+  ] ./initrd-network-openvpn
+    { systemdStage1 = true; };
   systemd-initrd-networkd-ssh = runTest ./systemd-initrd-networkd-ssh.nix;
   systemd-initrd-shutdown = runTest {
     imports = [ ./systemd-shutdown.nix ];

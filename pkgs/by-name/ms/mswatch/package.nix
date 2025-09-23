@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchsvn,
-  pkg-config,
-  autoreconfHook,
-  bison,
-  flex,
-  glib,
+{ lib
+, stdenv
+, fetchsvn
+, pkg-config
+, autoreconfHook
+, bison
+, flex
+, glib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

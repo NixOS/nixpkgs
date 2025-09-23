@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  gtk3,
-  gtklock,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, gtk3
+, gtklock
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

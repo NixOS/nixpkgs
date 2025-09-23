@@ -1,8 +1,8 @@
-{
-  callPackage,
-  lib,
-  stdenv,
-  meta,
+{ callPackage
+, lib
+, stdenv
+, meta
+,
 }:
 let
   examples-shell = callPackage ./examples/shell.nix { licenseAccepted = true; };

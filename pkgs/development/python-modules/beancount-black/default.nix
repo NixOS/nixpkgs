@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  beancount-parser,
-  click,
-  poetry-core,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, beancount-parser
+, click
+, poetry-core
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

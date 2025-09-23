@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pydantic,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
-  cached-property,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pydantic
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typing-extensions
+, cached-property
+,
 }:
 
 buildPythonPackage rec {

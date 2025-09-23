@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchPypi,
-  buildPythonPackage,
-  libmediainfo,
-  pdm-backend,
-  pytest,
-  pythonOlder,
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, libmediainfo
+, pdm-backend
+, pytest
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

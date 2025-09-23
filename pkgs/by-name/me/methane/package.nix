@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  fontconfig,
-  freealut,
-  libglut,
-  gettext,
-  libGL,
-  libGLU,
-  openal,
-  quesoglc,
-  clanlib,
-  libXrender,
-  libmikmod,
-  alsa-lib,
-  nix-update-script,
-  libXinerama,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, fontconfig
+, freealut
+, libglut
+, gettext
+, libGL
+, libGLU
+, openal
+, quesoglc
+, clanlib
+, libXrender
+, libmikmod
+, alsa-lib
+, nix-update-script
+, libXinerama
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

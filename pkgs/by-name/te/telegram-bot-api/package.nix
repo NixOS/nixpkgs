@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gperf,
-  openssl,
-  zlib,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gperf
+, openssl
+, zlib
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation {

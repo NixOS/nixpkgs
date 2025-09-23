@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  iproute2,
-  iptables,
-  python3Packages,
+{ lib
+, fetchFromGitHub
+, iproute2
+, iptables
+, python3Packages
+,
 }:
 
 python3Packages.buildPythonApplication rec {

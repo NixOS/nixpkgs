@@ -1,18 +1,18 @@
-{
-  callPackage,
-  substitute,
-  runtimeShell,
-  coreutils,
-  gnused,
-  gnugrep,
-  jq,
-  util-linux,
-  nix,
-  lib,
-  nixosTests,
-  installShellFiles,
-  binlore,
-  nixos-rebuild,
+{ callPackage
+, substitute
+, runtimeShell
+, coreutils
+, gnused
+, gnugrep
+, jq
+, util-linux
+, nix
+, lib
+, nixosTests
+, installShellFiles
+, binlore
+, nixos-rebuild
+,
 }:
 let
   fallback = import ./../../../../nixos/modules/installer/tools/nix-fallback-paths.nix;

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  ocaml,
-  seq,
-  qcheck,
-  ounit2,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, ocaml
+, seq
+, qcheck
+, ounit2
+,
 }:
 
 buildDunePackage rec {

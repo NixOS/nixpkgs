@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  fuse,
-  zlib,
-  bzip2,
-  openssl,
-  libxml2,
-  icu,
-  lzfse,
-  libiconv,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, fuse
+, zlib
+, bzip2
+, openssl
+, libxml2
+, icu
+, lzfse
+, libiconv
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation {

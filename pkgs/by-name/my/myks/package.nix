@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  installShellFiles,
-  myks,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, installShellFiles
+, myks
+, stdenv
+,
 }:
 
 buildGoModule rec {

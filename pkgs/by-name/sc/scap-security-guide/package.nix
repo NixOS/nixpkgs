@@ -1,18 +1,18 @@
-{
-  ansible-lint,
-  bats,
-  cmake-lint,
-  cmake,
-  fetchFromGitHub,
-  lib,
-  libxml2,
-  libxslt,
-  linkchecker,
-  openscap,
-  python3Packages,
-  stdenv,
-  shellcheck,
-  yamllint,
+{ ansible-lint
+, bats
+, cmake-lint
+, cmake
+, fetchFromGitHub
+, lib
+, libxml2
+, libxslt
+, linkchecker
+, openscap
+, python3Packages
+, stdenv
+, shellcheck
+, yamllint
+,
 }:
 
 stdenv.mkDerivation rec {

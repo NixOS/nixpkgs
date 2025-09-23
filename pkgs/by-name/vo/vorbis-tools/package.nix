@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libogg,
-  libvorbis,
-  libao,
-  pkg-config,
-  curl,
-  libiconv,
-  speex,
-  flac,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchurl
+, libogg
+, libvorbis
+, libao
+, pkg-config
+, curl
+, libiconv
+, speex
+, flac
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

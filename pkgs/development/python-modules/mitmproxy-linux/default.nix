@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  bpf-linker,
-  rustPlatform,
-  mitmproxy-rs,
+{ lib
+, buildPythonPackage
+, bpf-linker
+, rustPlatform
+, mitmproxy-rs
+,
 }:
 
 buildPythonPackage {

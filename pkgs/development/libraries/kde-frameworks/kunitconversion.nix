@@ -1,8 +1,8 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  ki18n,
-  qtbase,
+{ mkDerivation
+, extra-cmake-modules
+, ki18n
+, qtbase
+,
 }:
 
 mkDerivation {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildNpmPackage,
-  python3,
-  nodejs,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildNpmPackage
+, python3
+, nodejs
+, nixosTests
+,
 }:
 
 buildNpmPackage rec {

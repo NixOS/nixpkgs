@@ -1,12 +1,12 @@
-{
-  ctags,
-  fetchurl,
-  lib,
-  libretls,
-  openssl,
-  ncurses,
-  pkg-config,
-  stdenv,
+{ ctags
+, fetchurl
+, lib
+, libretls
+, openssl
+, ncurses
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

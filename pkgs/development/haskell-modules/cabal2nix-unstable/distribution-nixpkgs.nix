@@ -1,20 +1,20 @@
 # This file defines distribution-nixpkgs-unstable, used by maintainers/scripts/haskell/regenerate-hackage-packages.sh.
-{
-  mkDerivation,
-  aeson,
-  base,
-  bytestring,
-  Cabal,
-  containers,
-  deepseq,
-  directory,
-  fetchzip,
-  hspec,
-  language-nix,
-  lens,
-  lib,
-  pretty,
-  process,
+{ mkDerivation
+, aeson
+, base
+, bytestring
+, Cabal
+, containers
+, deepseq
+, directory
+, fetchzip
+, hspec
+, language-nix
+, lens
+, lib
+, pretty
+, process
+,
 }:
 mkDerivation {
   pname = "distribution-nixpkgs";

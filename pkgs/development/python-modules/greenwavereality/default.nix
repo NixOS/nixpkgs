@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  requests,
-  xmltodict,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, requests
+, xmltodict
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

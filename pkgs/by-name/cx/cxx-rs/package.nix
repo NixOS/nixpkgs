@@ -1,9 +1,9 @@
-{
-  cxx-rs,
-  fetchFromGitHub,
-  lib,
-  rustPlatform,
-  testers,
+{ cxx-rs
+, fetchFromGitHub
+, lib
+, rustPlatform
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

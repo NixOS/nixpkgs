@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libpulseaudio,
-  alsa-lib,
-  pkg-config,
-  qt5,
-  ncurses,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchurl
+, libpulseaudio
+, alsa-lib
+, pkg-config
+, qt5
+, ncurses
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

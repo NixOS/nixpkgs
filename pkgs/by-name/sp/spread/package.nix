@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  bash,
-  coreutils,
-  gnutar,
-  gzip,
-  makeWrapper,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, bash
+, coreutils
+, gnutar
+, gzip
+, makeWrapper
+,
 }:
 
 buildGoModule {

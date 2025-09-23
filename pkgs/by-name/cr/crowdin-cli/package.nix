@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gawk,
-  git,
-  gnugrep,
-  installShellFiles,
-  jre,
-  makeWrapper,
-  testers,
-  unzip,
+{ lib
+, stdenv
+, fetchurl
+, gawk
+, git
+, gnugrep
+, installShellFiles
+, jre
+, makeWrapper
+, testers
+, unzip
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

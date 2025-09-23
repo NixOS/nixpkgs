@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flask,
-  elasticsearch,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flask
+, elasticsearch
+,
 }:
 
 buildPythonPackage rec {

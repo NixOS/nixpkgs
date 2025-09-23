@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  libnotify,
-  pcsclite,
-  pkg-config,
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildGoModule
+, libnotify
+, pcsclite
+, pkg-config
+,
 }:
 
 buildGoModule rec {

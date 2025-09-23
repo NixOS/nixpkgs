@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  zlib,
-  openssl,
-  dotnetCorePackages,
-  nix-update-script,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, zlib
+, openssl
+, dotnetCorePackages
+, nix-update-script
+,
 }:
 
 buildDotnetModule rec {

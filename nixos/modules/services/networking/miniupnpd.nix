@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -77,17 +76,21 @@ in
   config = mkIf cfg.enable {
     networking.firewall.extraCommands = lib.mkIf (firewallScripts != [ ]) (
       builtins.concatStringsSep "\n" (
-        map (fw: ''
-          EXTIF=${cfg.externalInterface} ${pkgs.bash}/bin/bash -x ${miniupnpd}/etc/miniupnpd/${fw}_init.sh
-        '') firewallScripts
+        map
+          (fw: ''
+            EXTIF=${cfg.externalInterface} ${pkgs.bash}/bin/bash -x ${miniupnpd}/etc/miniupnpd/${fw}_init.sh
+          '')
+          firewallScripts
       )
     );
 
     networking.firewall.extraStopCommands = lib.mkIf (firewallScripts != [ ]) (
       builtins.concatStringsSep "\n" (
-        map (fw: ''
-          EXTIF=${cfg.externalInterface} ${pkgs.bash}/bin/bash -x ${miniupnpd}/etc/miniupnpd/${fw}_removeall.sh
-        '') firewallScripts
+        map
+          (fw: ''
+            EXTIF=${cfg.externalInterface} ${pkgs.bash}/bin/bash -x ${miniupnpd}/etc/miniupnpd/${fw}_removeall.sh
+          '')
+          firewallScripts
       )
     );
 

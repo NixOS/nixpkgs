@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  marshmallow,
-  mock,
-  openapi-spec-validator,
-  packaging,
-  prance,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, marshmallow
+, mock
+, openapi-spec-validator
+, packaging
+, prance
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

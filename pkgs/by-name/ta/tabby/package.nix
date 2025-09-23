@@ -1,28 +1,24 @@
-{
-  config,
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  stdenv,
-
-  git,
-  openssl,
-  pkg-config,
-  protobuf,
-  cmake,
-
-  llama-cpp,
-
-  apple-sdk_15,
-  autoAddDriverRunpath,
-  versionCheckHook,
-
-  cudaSupport ? config.cudaSupport,
-  rocmSupport ? config.rocmSupport,
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
-  # one of [ null "cpu" "rocm" "cuda" "metal" ];
-  acceleration ? null,
+{ config
+, lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, stdenv
+, git
+, openssl
+, pkg-config
+, protobuf
+, cmake
+, llama-cpp
+, apple-sdk_15
+, autoAddDriverRunpath
+, versionCheckHook
+, cudaSupport ? config.cudaSupport
+, rocmSupport ? config.rocmSupport
+, metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+, # one of [ null "cpu" "rocm" "cuda" "metal" ];
+  acceleration ? null
+,
 }:
 
 let
@@ -50,7 +46,8 @@ let
       lib.warnIf (len > 1) ''
         building tabby with multiple acceleration methods enabled is not
         supported; falling back to `${result}`
-      '' result
+      ''
+        result
     );
 
   # If user did not not override the acceleration attribute, then try to use one of

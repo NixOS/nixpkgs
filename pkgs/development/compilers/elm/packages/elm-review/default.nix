@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  testers,
-  elm-review,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, testers
+, elm-review
+,
 }:
 
 buildNpmPackage rec {

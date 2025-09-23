@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  docopt,
-  pytz,
-  requests,
-  setuptools,
-  vincenty,
-  xmltodict,
-  pytestCheckHook,
-  requests-mock,
-  syrupy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, docopt
+, pytz
+, requests
+, setuptools
+, vincenty
+, xmltodict
+, pytestCheckHook
+, requests-mock
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

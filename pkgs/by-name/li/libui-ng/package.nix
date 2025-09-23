@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  cmocka,
-  fetchFromGitHub,
-  gtk3,
-  meson,
-  ninja,
-  pkg-config,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, cmocka
+, fetchFromGitHub
+, gtk3
+, meson
+, ninja
+, pkg-config
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

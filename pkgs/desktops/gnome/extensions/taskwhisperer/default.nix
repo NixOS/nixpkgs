@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  fetchFromGitHub,
-  taskwarrior2,
-  gettext,
-  runtimeShell,
+{ lib
+, stdenv
+, replaceVars
+, fetchFromGitHub
+, taskwarrior2
+, gettext
+, runtimeShell
+,
 }:
 
 stdenv.mkDerivation rec {

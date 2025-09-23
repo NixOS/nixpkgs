@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  sassc,
-  pkg-config,
-  glib,
-  ninja,
-  python3,
-  gtk3,
-  gnome,
-  gnome-themes-extra,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, sassc
+, pkg-config
+, glib
+, ninja
+, python3
+, gtk3
+, gnome
+, gnome-themes-extra
+,
 }:
 
 stdenv.mkDerivation rec {

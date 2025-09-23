@@ -1,17 +1,17 @@
-{
-  lib,
-  argcomplete,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  httpx,
-  mock,
-  pytestCheckHook,
-  requests,
-  responses,
-  setuptools,
-  typing-extensions,
-  urllib3,
+{ lib
+, argcomplete
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, httpx
+, mock
+, pytestCheckHook
+, requests
+, responses
+, setuptools
+, typing-extensions
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

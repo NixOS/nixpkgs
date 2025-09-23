@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gettext,
-  libiconv,
-  bison,
-  ncurses,
-  perl,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gettext
+, libiconv
+, bison
+, ncurses
+, perl
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation {

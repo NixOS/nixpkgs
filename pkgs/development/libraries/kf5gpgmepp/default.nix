@@ -1,12 +1,12 @@
-{
-  mkDerivation,
-  lib,
-  fetchgit,
-  cmake,
-  extra-cmake-modules,
-  qtbase,
-  boost,
-  gpgme,
+{ mkDerivation
+, lib
+, fetchgit
+, cmake
+, extra-cmake-modules
+, qtbase
+, boost
+, gpgme
+,
 }:
 
 mkDerivation {

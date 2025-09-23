@@ -1,13 +1,13 @@
 /*
-    Test CUDA packages.
+  Test CUDA packages.
 
-    This release file is currently not tested on hydra.nixos.org
-    because it requires unfree software, but it is tested by
-    https://hydra.nix-community.org/jobset/nixpkgs/cuda-nixos-unstable.
+  This release file is currently not tested on hydra.nixos.org
+  because it requires unfree software, but it is tested by
+  https://hydra.nix-community.org/jobset/nixpkgs/cuda-nixos-unstable.
 
-    Cf. https://github.com/nix-community/infra/pull/1335
+  Cf. https://github.com/nix-community/infra/pull/1335
 
-    Test for example like this:
+  Test for example like this:
 
         $ hydra-eval-jobs pkgs/top-level/release-cuda.nix -I .
 */
@@ -22,9 +22,9 @@ in
   supportedSystems ? [
     "x86_64-linux"
     "aarch64-linux"
-  ],
-  variant ? "cuda",
-  # Attributes passed to nixpkgs.
+  ]
+, variant ? "cuda"
+, # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
       allowUnfreePredicate = cudaLib.allowUnfreeCudaPredicate;
@@ -36,8 +36,8 @@ in
     };
 
     __allowFileset = false;
-  },
-  ...
+  }
+, ...
 }@args:
 
 assert builtins.elem variant [

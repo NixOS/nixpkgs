@@ -1,27 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-
-  # build-system
-  cython,
-  meson-python,
-  ninja,
-  setuptools,
-
-  # dependencies
-  numpy,
-  scipy,
-  nibabel,
-  sympy,
-  transforms3d,
-
-  # optional-dependencies
-  matplotlib,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, # build-system
+  cython
+, meson-python
+, ninja
+, setuptools
+, # dependencies
+  numpy
+, scipy
+, nibabel
+, sympy
+, transforms3d
+, # optional-dependencies
+  matplotlib
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

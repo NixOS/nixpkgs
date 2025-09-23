@@ -1,27 +1,26 @@
-{
-  lib,
-  ocaml,
-  version ?
-    if lib.versionAtLeast ocaml.version "5.2" then
-      "1.3"
-    else if lib.versionAtLeast ocaml.version "5.1" then
-      "1.2"
-    else
-      "0.12",
-  buildDunePackage,
-  bigstringaf,
-  cstruct,
-  domain-local-await,
-  fetchurl,
-  fmt,
-  hmap,
-  lwt-dllist,
-  mtime,
-  optint,
-  psq,
-  alcotest,
-  crowbar,
-  mdx,
+{ lib
+, ocaml
+, version ? if lib.versionAtLeast ocaml.version "5.2" then
+    "1.3"
+  else if lib.versionAtLeast ocaml.version "5.1" then
+    "1.2"
+  else
+    "0.12"
+, buildDunePackage
+, bigstringaf
+, cstruct
+, domain-local-await
+, fetchurl
+, fmt
+, hmap
+, lwt-dllist
+, mtime
+, optint
+, psq
+, alcotest
+, crowbar
+, mdx
+,
 }:
 
 let
@@ -39,8 +38,7 @@ let
         minimalOCamlVersion = "5.2";
         hash = "sha256-jtXBPmaJ8xyF3KXxJ2LYS4zABCp7B9PkZN9utLcrPfw=";
       };
-    }
-    ."${version}";
+    }."${version}";
 in
 buildDunePackage rec {
   pname = "eio";

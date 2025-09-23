@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  nixosTests,
-  iptables,
-  iproute2,
-  makeWrapper,
-  openresolv,
-  procps,
-  bash,
-  wireguard-go,
+{ lib
+, stdenv
+, fetchzip
+, nixosTests
+, iptables
+, iproute2
+, makeWrapper
+, openresolv
+, procps
+, bash
+, wireguard-go
+,
 }:
 
 stdenv.mkDerivation rec {

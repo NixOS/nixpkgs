@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pytest-cov-stub,
-  lxml,
-  lxml-html-clean,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pytest-cov-stub
+, lxml
+, lxml-html-clean
+,
 }:
 
 buildPythonPackage rec {

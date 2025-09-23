@@ -1,9 +1,9 @@
-{
-  system ? builtins.currentSystem,
-  pkgs ? import ../.. {
+{ system ? builtins.currentSystem
+, pkgs ? import ../.. {
     inherit system;
     config = { };
-  },
+  }
+,
 }:
 
 let

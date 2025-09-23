@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bdftopcf,
-  mkfontscale,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, bdftopcf
+, mkfontscale
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "font-mutt-misc";

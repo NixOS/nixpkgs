@@ -1,29 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-
-  SDL2,
-  boost,
-  bullet,
-  cmake,
-  collada-dom,
-  ffmpeg,
-  libXt,
-  lua,
-  luajit,
-  lz4,
-  mygui,
-  openal,
-  openscenegraph,
-  pkg-config,
-  qt6Packages,
-  recastnavigation,
-  unshield,
-  yaml-cpp,
-
-  GLPreference ? "GLVND",
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, SDL2
+, boost
+, bullet
+, cmake
+, collada-dom
+, ffmpeg
+, libXt
+, lua
+, luajit
+, lz4
+, mygui
+, openal
+, openscenegraph
+, pkg-config
+, qt6Packages
+, recastnavigation
+, unshield
+, yaml-cpp
+, GLPreference ? "GLVND"
+,
 }:
 let
   inherit (stdenv.hostPlatform) isDarwin isLinux isAarch64;

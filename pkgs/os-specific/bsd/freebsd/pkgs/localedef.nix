@@ -1,13 +1,13 @@
-{
-  mkDerivation,
-  lib,
-  stdenv,
-  compat,
-  bsdSetupHook,
-  byacc,
-  freebsdSetupHook,
-  makeMinimal,
-  install,
+{ mkDerivation
+, lib
+, stdenv
+, compat
+, bsdSetupHook
+, byacc
+, freebsdSetupHook
+, makeMinimal
+, install
+,
 }:
 mkDerivation ({
   path = "usr.bin/localedef";

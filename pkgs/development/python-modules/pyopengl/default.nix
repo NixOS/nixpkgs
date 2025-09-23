@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pkgs,
-  pillow,
-  mesa,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pkgs
+, pillow
+, mesa
+,
 }:
 
 buildPythonPackage rec {

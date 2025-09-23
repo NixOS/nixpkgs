@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  wrapGAppsHook3,
-  pkg-config,
-  gtk3,
-  libxml2,
-  enchant,
-  gucharmap,
-  python3,
-  adwaita-icon-theme,
+{ lib
+, stdenv
+, fetchurl
+, wrapGAppsHook3
+, pkg-config
+, gtk3
+, libxml2
+, enchant
+, gucharmap
+, python3
+, adwaita-icon-theme
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

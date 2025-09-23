@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  runCommand,
-  jq,
-  binlore,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, runCommand
+, jq
+, binlore
+,
 }:
 
 buildNpmPackage (finalAttrs: {

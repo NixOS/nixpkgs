@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libcoldclear,
-  luajit,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libcoldclear
+, luajit
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -13,7 +13,7 @@ in
         services.nginx = {
           enable = true;
 
-          defaultListen = [ { addr = "unix:${defaultNginxSocketPath}"; } ];
+          defaultListen = [{ addr = "unix:${defaultNginxSocketPath}"; }];
           virtualHosts.defaultLocalhost = {
             serverName = "defaultLocalhost";
             locations."/default".return = "200 'bar'";
@@ -21,7 +21,7 @@ in
 
           virtualHosts.localhost = {
             serverName = "localhost";
-            listen = [ { addr = "unix:${nginxSocketPath}"; } ];
+            listen = [{ addr = "unix:${nginxSocketPath}"; }];
             locations."/test".return = "200 'foo'";
           };
         };

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  requests,
-  websockets,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, requests
+, websockets
+,
 }:
 
 buildPythonPackage rec {

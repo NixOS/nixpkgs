@@ -1,12 +1,12 @@
-{
-  lib,
-  atomicwrites,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, atomicwrites
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

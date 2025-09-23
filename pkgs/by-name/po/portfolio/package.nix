@@ -1,17 +1,17 @@
-{
-  autoPatchelfHook,
-  fetchurl,
-  glib,
-  glib-networking,
-  gtk3,
-  lib,
-  libsecret,
-  makeDesktopItem,
-  openjdk21,
-  stdenvNoCC,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  gitUpdater,
+{ autoPatchelfHook
+, fetchurl
+, glib
+, glib-networking
+, gtk3
+, lib
+, libsecret
+, makeDesktopItem
+, openjdk21
+, stdenvNoCC
+, webkitgtk_4_1
+, wrapGAppsHook3
+, gitUpdater
+,
 }:
 let
   desktopItem = makeDesktopItem {

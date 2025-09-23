@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 with utils.systemdUtils.unitOptions;
@@ -2412,7 +2411,7 @@ let
 
     ipv6PREF64Prefixes = mkOption {
       default = [ ];
-      example = [ { Prefix = "64:ff9b::/96"; } ];
+      example = [{ Prefix = "64:ff9b::/96"; }];
       type = types.listOf (
         mkSubsectionType "ipv6PREF64PrefixConfig" check.network.sectionIPv6PREF64Prefix
       );
@@ -2900,7 +2899,7 @@ let
 
     bridgeVLANs = mkOption {
       default = [ ];
-      example = [ { VLAN = "10-20"; } ];
+      example = [{ VLAN = "10-20"; }];
       type = types.listOf (mkSubsectionType "bridgeVLANConfig" check.network.sectionBridgeVLAN);
       description = ''
         A list of BridgeVLAN sections to be added to the unit.  See
@@ -3051,7 +3050,7 @@ let
 
     addresses = mkOption {
       default = [ ];
-      example = [ { Address = "192.168.0.100/24"; } ];
+      example = [{ Address = "192.168.0.100/24"; }];
       type = types.listOf (mkSubsectionType "addressConfig" check.network.sectionAddress);
       description = ''
         A list of address sections to be added to the unit.  See
@@ -3079,7 +3078,7 @@ let
 
     routes = mkOption {
       default = [ ];
-      example = [ { Gateway = "192.168.0.1"; } ];
+      example = [{ Gateway = "192.168.0.1"; }];
       type = types.listOf (mkSubsectionType "routeConfig" check.network.sectionRoute);
       description = ''
         A list of route sections to be added to the unit.  See
@@ -3097,9 +3096,10 @@ let
           Name = config.name;
         };
         networkConfig =
-          optionalAttrs (config.DHCP != null) {
-            DHCP = config.DHCP;
-          }
+          optionalAttrs (config.DHCP != null)
+            {
+              DHCP = config.DHCP;
+            }
           // optionalAttrs (config.domains != null) {
             Domains = concatStringsSep " " config.domains;
           };
@@ -3161,10 +3161,12 @@ let
   mkUnitFiles =
     prefix: cfg:
     listToAttrs (
-      map (name: {
-        name = "${prefix}systemd/network/${name}";
-        value.source = "${cfg.units.${name}.unit}/${name}";
-      }) (attrNames cfg.units)
+      map
+        (name: {
+          name = "${prefix}systemd/network/${name}";
+          value.source = "${cfg.units.${name}.unit}/${name}";
+        })
+        (attrNames cfg.units)
     );
 
   commonOptions = visible: {
@@ -3180,14 +3182,14 @@ let
     links = mkOption {
       default = { };
       inherit visible;
-      type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
+      type = with types; attrsOf (submodule [{ options = linkOptions; }]);
       description = "Definition of systemd network links.";
     };
 
     netdevs = mkOption {
       default = { };
       inherit visible;
-      type = with types; attrsOf (submodule [ { options = netdevOptions; } ]);
+      type = with types; attrsOf (submodule [{ options = netdevOptions; }]);
       description = "Definition of systemd network devices.";
     };
 

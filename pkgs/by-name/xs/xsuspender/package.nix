@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  makeWrapper,
-  pkg-config,
-  glib,
-  libwnck,
-  procps,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, pkg-config
+, glib
+, libwnck
+, procps
+,
 }:
 
 stdenv.mkDerivation rec {

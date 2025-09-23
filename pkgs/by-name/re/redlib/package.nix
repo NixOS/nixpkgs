@@ -1,10 +1,10 @@
-{
-  lib,
-  cacert,
-  nixosTests,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, cacert
+, nixosTests
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage {

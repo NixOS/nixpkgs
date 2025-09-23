@@ -1,35 +1,31 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  gitUpdater,
-  pythonAtLeast,
-  pythonOlder,
-  isPyPy,
-
-  # build-system
-  pathspec,
-  setuptools,
-  types-psutil,
-  types-setuptools,
-
-  # propagates
-  mypy-extensions,
-  tomli,
-  typing-extensions,
-
-  # optionals
-  lxml,
-  psutil,
-
-  # tests
-  attrs,
-  filelock,
-  pytest-xdist,
-  pytestCheckHook,
-  nixosTests,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, gitUpdater
+, pythonAtLeast
+, pythonOlder
+, isPyPy
+, # build-system
+  pathspec
+, setuptools
+, types-psutil
+, types-setuptools
+, # propagates
+  mypy-extensions
+, tomli
+, typing-extensions
+, # optionals
+  lxml
+, psutil
+, # tests
+  attrs
+, filelock
+, pytest-xdist
+, pytestCheckHook
+, nixosTests
+,
 }:
 
 buildPythonPackage rec {

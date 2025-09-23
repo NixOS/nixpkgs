@@ -1,18 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-
-  certifi,
-  cython,
-  gdal,
-  numpy,
-  packaging,
-  setuptools,
-  versioneer,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, certifi
+, cython
+, gdal
+, numpy
+, packaging
+, setuptools
+, versioneer
+, wheel
+,
 }:
 
 buildPythonPackage rec {

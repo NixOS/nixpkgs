@@ -35,7 +35,7 @@ let
     filter
     flatten
     foldl
-    functionArgs # Note: not the builtin; considers `__functor` in attrsets.
+    functionArgs# Note: not the builtin; considers `__functor` in attrsets.
     gvariant
     hasInfix
     head
@@ -45,7 +45,7 @@ let
     isBool
     isDerivation
     isFloat
-    isFunction # Note: not the builtin; considers `__functor` in attrsets.
+    isFunction# Note: not the builtin; considers `__functor` in attrsets.
     isInt
     isList
     isPath
@@ -90,7 +90,7 @@ rec {
     : 2\. Function argument
   */
   mkValueStringDefault =
-    { }:
+    {}:
     v:
     let
       err = t: v: abort ("generators.mkValueStringDefault: " + "${t} not supported: ${toPretty { } v}");
@@ -159,8 +159,8 @@ rec {
     : 4\. Function argument
   */
   mkKeyValueDefault =
-    {
-      mkValueString ? mkValueStringDefault { },
+    { mkValueString ? mkValueStringDefault { }
+    ,
     }:
     sep: k: v:
     "${escape [ sep ] k}${sep}${mkValueString v}";
@@ -184,10 +184,10 @@ rec {
       : Initial indentation level
   */
   toKeyValue =
-    {
-      mkKeyValue ? mkKeyValueDefault { } "=",
-      listsAsDuplicateKeys ? false,
-      indent ? "",
+    { mkKeyValue ? mkKeyValueDefault { } "="
+    , listsAsDuplicateKeys ? false
+    , indent ? ""
+    ,
     }:
     let
       mkLine = k: v: indent + mkKeyValue k v + "\n";
@@ -242,10 +242,10 @@ rec {
     :::
   */
   toINI =
-    {
-      mkSectionName ? (name: escape [ "[" "]" ] name),
-      mkKeyValue ? mkKeyValueDefault { } "=",
-      listsAsDuplicateKeys ? false,
+    { mkSectionName ? (name: escape [ "[" "]" ] name)
+    , mkKeyValue ? mkKeyValueDefault { } "="
+    , listsAsDuplicateKeys ? false
+    ,
     }:
     attrsOfAttrs:
     let
@@ -325,14 +325,14 @@ rec {
     the part in `sections`.
   */
   toINIWithGlobalSection =
-    {
-      mkSectionName ? (name: escape [ "[" "]" ] name),
-      mkKeyValue ? mkKeyValueDefault { } "=",
-      listsAsDuplicateKeys ? false,
+    { mkSectionName ? (name: escape [ "[" "]" ] name)
+    , mkKeyValue ? mkKeyValueDefault { } "="
+    , listsAsDuplicateKeys ? false
+    ,
     }:
-    {
-      globalSection,
-      sections ? { },
+    { globalSection
+    , sections ? { }
+    ,
     }:
     (
       if globalSection == { } then
@@ -460,41 +460,41 @@ rec {
     : The value to be evaluated recursively
   */
   withRecursion =
-    {
-      depthLimit,
-      throwOnDepthLimit ? true,
+    { depthLimit
+    , throwOnDepthLimit ? true
+    ,
     }:
-    assert isInt depthLimit;
-    let
-      specialAttrs = [
-        "__functor"
-        "__functionArgs"
-        "__toString"
-        "__pretty"
-      ];
-      stepIntoAttr = evalNext: name: if elem name specialAttrs then id else evalNext;
-      transform =
-        depth:
-        if depthLimit != null && depth > depthLimit then
-          if throwOnDepthLimit then
-            throw "Exceeded maximum eval-depth limit of ${toString depthLimit} while trying to evaluate with `generators.withRecursion'!"
+      assert isInt depthLimit;
+      let
+        specialAttrs = [
+          "__functor"
+          "__functionArgs"
+          "__toString"
+          "__pretty"
+        ];
+        stepIntoAttr = evalNext: name: if elem name specialAttrs then id else evalNext;
+        transform =
+          depth:
+          if depthLimit != null && depth > depthLimit then
+            if throwOnDepthLimit then
+              throw "Exceeded maximum eval-depth limit of ${toString depthLimit} while trying to evaluate with `generators.withRecursion'!"
+            else
+              const "<unevaluated>"
           else
-            const "<unevaluated>"
-        else
-          id;
-      mapAny =
-        depth: v:
-        let
-          evalNext = x: mapAny (depth + 1) (transform (depth + 1) x);
-        in
-        if isAttrs v then
-          mapAttrs (stepIntoAttr evalNext) v
-        else if isList v then
-          map evalNext v
-        else
-          transform (depth + 1) v;
-    in
-    mapAny 0;
+            id;
+        mapAny =
+          depth: v:
+          let
+            evalNext = x: mapAny (depth + 1) (transform (depth + 1) x);
+          in
+          if isAttrs v then
+            mapAttrs (stepIntoAttr evalNext) v
+          else if isList v then
+            map evalNext v
+          else
+            transform (depth + 1) v;
+      in
+      mapAny 0;
 
   /**
     Pretty print a value, akin to `builtins.trace`.
@@ -521,10 +521,10 @@ rec {
     : The value to be pretty printed
   */
   toPretty =
-    {
-      allowPrettyValues ? false,
-      multiline ? true,
-      indent ? "",
+    { allowPrettyValues ? false
+    , multiline ? true
+    , indent ? ""
+    ,
     }:
     let
       go =
@@ -586,7 +586,7 @@ rec {
           in
           if fna == { } then "<function>" else "<function, args: {${showFnas}}>"
         else if isAttrs v then
-          # apply pretty values if allowed
+        # apply pretty values if allowed
           if allowPrettyValues && v ? __pretty && v ? val then
             v.__pretty v.val
           else if v == { } then
@@ -597,12 +597,14 @@ rec {
             "{"
             + introSpace
             + concatStringsSep introSpace (
-              mapAttrsToList (
-                name: value:
-                "${escapeNixIdentifier name} = ${
+              mapAttrsToList
+                (
+                  name: value:
+                  "${escapeNixIdentifier name} = ${
                   addErrorContext "while evaluating an attribute `${name}`" (go (indent + "  ") value)
                 };"
-              ) v
+                )
+                v
             )
             + outroSpace
             + "}"
@@ -625,8 +627,8 @@ rec {
       : The value to be converted to Plist
   */
   toPlist =
-    {
-      escape ? false,
+    { escape ? false
+    ,
     }:
     v:
     let
@@ -686,17 +688,19 @@ rec {
           attrFilter = name: value: name != "_module" && value != null;
         in
         ind: x:
-        concatStringsSep "\n" (
-          flatten (
-            mapAttrsToList (
-              name: value:
-              optionals (attrFilter name value) [
-                (key "\t${ind}" name)
-                (expr "\t${ind}" value)
-              ]
-            ) x
-          )
-        );
+          concatStringsSep "\n" (
+            flatten (
+              mapAttrsToList
+                (
+                  name: value:
+                    optionals (attrFilter name value) [
+                      (key "\t${ind}" name)
+                      (expr "\t${ind}" value)
+                    ]
+                )
+                x
+            )
+          );
 
     in
     # TODO: As discussed in #356502, deprecated functionality should be removed sometime after 25.11.
@@ -726,7 +730,7 @@ rec {
     : The value to be converted to Dhall
   */
   toDhall =
-    { }@args:
+    {}@args:
     v:
     let
       concatItems = concatStringsSep ", ";
@@ -808,10 +812,10 @@ rec {
     :::
   */
   toLua =
-    {
-      multiline ? true,
-      indent ? "",
-      asBindings ? false,
+    { multiline ? true
+    , indent ? ""
+    , asBindings ? false
+    ,
     }@args:
     v:
     let
@@ -824,9 +828,8 @@ rec {
       };
       concatItems = concatStringsSep ",${introSpace}";
       isLuaInline =
-        {
-          _type ? null,
-          ...
+        { _type ? null
+        , ...
         }:
         _type == "lua-inline";
 
@@ -887,7 +890,7 @@ rec {
     inherit expr;
   };
 }
-// {
+  // {
   /**
     Generates JSON from an arbitrary (non-function) value.
     For more information see the documentation of the builtin.
@@ -902,7 +905,7 @@ rec {
 
     : The value to be converted to JSON
   */
-  toJSON = { }: lib.strings.toJSON;
+  toJSON = {}: lib.strings.toJSON;
 
   /**
     YAML has been a strict superset of JSON since 1.2, so we
@@ -920,5 +923,5 @@ rec {
 
     : The value to be converted to YAML
   */
-  toYAML = { }: lib.strings.toJSON;
+  toYAML = {}: lib.strings.toJSON;
 }

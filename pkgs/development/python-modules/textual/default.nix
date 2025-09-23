@@ -1,30 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  markdown-it-py,
-  platformdirs,
-  rich,
-  typing-extensions,
-
-  # optional-dependencies
-  tree-sitter,
-  tree-sitter-languages,
-
-  # tests
-  jinja2,
-  pytest-aiohttp,
-  pytest-xdist,
-  pytestCheckHook,
-  syrupy,
-  time-machine,
-  tree-sitter-markdown,
-  tree-sitter-python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  markdown-it-py
+, platformdirs
+, rich
+, typing-extensions
+, # optional-dependencies
+  tree-sitter
+, tree-sitter-languages
+, # tests
+  jinja2
+, pytest-aiohttp
+, pytest-xdist
+, pytestCheckHook
+, syrupy
+, time-machine
+, tree-sitter-markdown
+, tree-sitter-python
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  nodejs,
-  buildNpmPackage,
-  fetchFromGitHub,
-  redocly,
-  testers,
+{ lib
+, nodejs
+, buildNpmPackage
+, fetchFromGitHub
+, redocly
+, testers
+,
 }:
 
 buildNpmPackage rec {

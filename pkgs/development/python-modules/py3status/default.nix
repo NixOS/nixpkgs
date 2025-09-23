@@ -1,28 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  acpi,
-  alsa-utils,
-  coreutils,
-  dbus-python,
-  fetchPypi,
-  file,
-  hatchling,
-  i3,
-  i3ipc,
-  libnotify,
-  lm_sensors,
-  procps,
-  pygobject3,
-  pyserial,
-  pytz,
-  requests,
-  setuptools,
-  tzlocal,
-  wrapGAppsHook3,
-  xorg,
-  glib,
-  gobject-introspection,
+{ lib
+, buildPythonPackage
+, acpi
+, alsa-utils
+, coreutils
+, dbus-python
+, fetchPypi
+, file
+, hatchling
+, i3
+, i3ipc
+, libnotify
+, lm_sensors
+, procps
+, pygobject3
+, pyserial
+, pytz
+, requests
+, setuptools
+, tzlocal
+, wrapGAppsHook3
+, xorg
+, glib
+, gobject-introspection
+,
 }:
 
 buildPythonPackage rec {

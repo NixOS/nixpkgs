@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  ipaddr,
-  cstruct,
+{ buildDunePackage
+, ipaddr
+, cstruct
+,
 }:
 
 buildDunePackage {

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  pkg-config,
-  meson,
-  ninja,
-  dbus,
-  scdoc,
+{ stdenv
+, lib
+, fetchFromGitea
+, pkg-config
+, meson
+, ninja
+, dbus
+, scdoc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

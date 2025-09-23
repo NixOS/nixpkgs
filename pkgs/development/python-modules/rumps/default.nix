@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pyobjc-framework-Cocoa,
-  setuptools,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pyobjc-framework-Cocoa
+, setuptools
+,
 }:
 
 buildPythonPackage {

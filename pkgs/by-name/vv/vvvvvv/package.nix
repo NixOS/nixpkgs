@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchurl,
-  cmake,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  faudio,
-  physfs,
-  SDL2,
-  tinyxml-2,
-  makeAndPlay ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchurl
+, cmake
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, faudio
+, physfs
+, SDL2
+, tinyxml-2
+, makeAndPlay ? false
+,
 }:
 
 stdenv.mkDerivation rec {

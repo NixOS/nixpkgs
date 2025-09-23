@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  build2,
-  fetchurl,
-  libbpkg,
-  libbutl,
-  libodb,
-  libodb-sqlite,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableStatic ? !enableShared,
+{ lib
+, stdenv
+, build2
+, fetchurl
+, libbpkg
+, libbutl
+, libodb
+, libodb-sqlite
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? !enableShared
+,
 }:
 
 stdenv.mkDerivation rec {

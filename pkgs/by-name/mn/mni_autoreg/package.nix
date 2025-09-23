@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  makeWrapper,
-  perlPackages,
-  libminc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, perlPackages
+, libminc
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  elmPackages,
-  versionCheckHook,
-  writeShellScript,
-  nix-update,
-  elm2nix,
-  nixfmt,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, elmPackages
+, versionCheckHook
+, writeShellScript
+, nix-update
+, elm2nix
+, nixfmt
+,
 }:
 
 buildNpmPackage rec {

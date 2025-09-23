@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  gettext,
-  autoreconfHook,
-  gmp,
-  mpfr,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, gettext
+, autoreconfHook
+, gmp
+, mpfr
+,
 }:
 
 stdenv.mkDerivation rec {

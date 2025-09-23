@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchzip,
-  meson,
-  ninja,
-  pkg-config,
-  czmq,
-  libusb1,
-  ncurses,
-  SDL2,
-  libelf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, meson
+, ninja
+, pkg-config
+, czmq
+, libusb1
+, ncurses
+, SDL2
+, libelf
+,
 }:
 
 let

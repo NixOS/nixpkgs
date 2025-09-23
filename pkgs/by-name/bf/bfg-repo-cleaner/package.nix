@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jre,
-  makeWrapper,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, jre
+, makeWrapper
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

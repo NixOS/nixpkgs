@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 
 let
@@ -22,10 +21,12 @@ let
     let
       mkSecret =
         section: values:
-        lib.mapAttrsToList (key: value: {
-          env = envEscape "FORGEJO__${section}__${key}__FILE";
-          path = value;
-        }) values;
+        lib.mapAttrsToList
+          (key: value: {
+            env = envEscape "FORGEJO__${section}__${key}__FILE";
+            path = value;
+          })
+          values;
       # https://codeberg.org/forgejo/forgejo/src/tag/v7.0.2/contrib/environment-to-ini/environment-to-ini.go
       envEscape =
         string: lib.replaceStrings [ "." "-" ] [ "_0X2E_" "_0X2D_" ] (lib.strings.toUpper string);
@@ -788,9 +789,10 @@ in
       // lib.listToAttrs (map (e: lib.nameValuePair e.env "%d/${e.env}") secrets);
     };
 
-    services.openssh.settings.AcceptEnv = mkIf (
-      !cfg.settings.server.START_SSH_SERVER or false
-    ) "GIT_PROTOCOL";
+    services.openssh.settings.AcceptEnv = mkIf
+      (
+        !cfg.settings.server.START_SSH_SERVER or false
+      ) "GIT_PROTOCOL";
 
     users.users = mkIf (cfg.user == "forgejo") {
       forgejo = {

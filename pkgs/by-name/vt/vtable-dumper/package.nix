@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libelf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libelf
+,
 }:
 
 stdenv.mkDerivation rec {

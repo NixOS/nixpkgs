@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  aiohttp,
-  bcrypt,
-  freezegun,
-  homeassistant,
-  pytest-asyncio,
-  pytest-socket,
-  requests-mock,
-  respx,
-  syrupy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, aiohttp
+, bcrypt
+, freezegun
+, homeassistant
+, pytest-asyncio
+, pytest-socket
+, requests-mock
+, respx
+, syrupy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

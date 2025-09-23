@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  setuptools,
-  igraph,
-  texttable,
-  cairocffi,
-  matplotlib,
-  plotly,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pkg-config
+, cmake
+, setuptools
+, igraph
+, texttable
+, cairocffi
+, matplotlib
+, plotly
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

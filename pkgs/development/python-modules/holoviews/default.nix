@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  colorcet,
-  numpy,
-  pandas,
-  panel,
-  param,
-  pyviz-comms,
-
-  # tests
-  pytestCheckHook,
-  pytest-asyncio,
-  flaky,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  colorcet
+, numpy
+, pandas
+, panel
+, param
+, pyviz-comms
+, # tests
+  pytestCheckHook
+, pytest-asyncio
+, flaky
+,
 }:
 
 buildPythonPackage rec {

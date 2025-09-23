@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeBinaryWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  desktopToDarwinBundle,
-  unzip,
-  imagemagick,
-  jre,
+{ lib
+, stdenv
+, fetchurl
+, makeBinaryWrapper
+, copyDesktopItems
+, makeDesktopItem
+, desktopToDarwinBundle
+, unzip
+, imagemagick
+, jre
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

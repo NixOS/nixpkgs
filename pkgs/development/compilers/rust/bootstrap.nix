@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchurl,
-  callPackage,
-  version,
-  hashes,
+{ stdenv
+, fetchurl
+, callPackage
+, version
+, hashes
+,
 }:
 
 let

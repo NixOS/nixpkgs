@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  xorg,
-  wrapQtAppsHook,
-  python3,
+{ lib
+, fetchFromGitHub
+, xorg
+, wrapQtAppsHook
+, python3
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

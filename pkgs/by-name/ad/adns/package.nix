@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gnum4,
-  autoreconfHook,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, gnum4
+, autoreconfHook
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

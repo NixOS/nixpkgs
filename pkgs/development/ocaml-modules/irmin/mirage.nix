@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  irmin,
-  fmt,
-  ptime,
-  mirage-clock,
+{ buildDunePackage
+, irmin
+, fmt
+, ptime
+, mirage-clock
+,
 }:
 
 buildDunePackage {

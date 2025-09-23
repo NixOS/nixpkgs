@@ -1,20 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  nix-update-script,
-
-  # build-system
-  cython,
-  setuptools,
-  typing-extensions,
-
-  # dependencies
-  tree-sitter,
-  tree-sitter-c-sharp,
-  tree-sitter-embedded-template,
-  tree-sitter-yaml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, nix-update-script
+, # build-system
+  cython
+, setuptools
+, typing-extensions
+, # dependencies
+  tree-sitter
+, tree-sitter-c-sharp
+, tree-sitter-embedded-template
+, tree-sitter-yaml
+,
 }:
 
 buildPythonPackage rec {

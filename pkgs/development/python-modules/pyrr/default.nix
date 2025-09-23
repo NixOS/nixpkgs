@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  multipledispatch,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, multipledispatch
+, numpy
+,
 }:
 
 buildPythonPackage {

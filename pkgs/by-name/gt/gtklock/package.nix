@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  scdoc,
-  pkg-config,
-  wrapGAppsHook3,
-  gtk3,
-  pam,
-  gtk-session-lock,
-  runCommand,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, scdoc
+, pkg-config
+, wrapGAppsHook3
+, gtk3
+, pam
+, gtk-session-lock
+, runCommand
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  dotmap,
-  matplotlib,
-  pyclipper,
-  pytestCheckHook,
-  pythonImportsCheckHook,
-  setuptools,
-  gitUpdater,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, dotmap
+, matplotlib
+, pyclipper
+, pytestCheckHook
+, pythonImportsCheckHook
+, setuptools
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  stdenv,
-  fetchurl,
-  pkg-config,
-  lib,
-  zlib,
-  ghostscript,
-  imagemagick,
-  plotutils,
-  gd,
-  libjpeg,
-  libwebp,
-  libiconv,
-  makeWrapper,
+{ stdenv
+, fetchurl
+, pkg-config
+, lib
+, zlib
+, ghostscript
+, imagemagick
+, plotutils
+, gd
+, libjpeg
+, libwebp
+, libiconv
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

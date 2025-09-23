@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  six,
-  mock,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, six
+, mock
+,
 }:
 buildPythonPackage rec {
   pname = "hiro";

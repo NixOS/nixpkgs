@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  google-api-core,
-  google-cloud-storage,
-  google-cloud-testutils,
-  libcst,
-  mock,
-  pandas,
-  proto-plus,
-  protobuf,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, google-api-core
+, google-cloud-storage
+, google-cloud-testutils
+, libcst
+, mock
+, pandas
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

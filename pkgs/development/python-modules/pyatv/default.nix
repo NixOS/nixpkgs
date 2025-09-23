@@ -1,30 +1,30 @@
-{
-  lib,
-  buildPythonPackage,
-  aiohttp,
-  async-timeout,
-  chacha20poly1305-reuseable,
-  cryptography,
-  deepdiff,
-  fetchFromGitHub,
-  ifaddr,
-  miniaudio,
-  protobuf,
-  pydantic,
-  pyfakefs,
-  pytest-aiohttp,
-  pytest-asyncio_0,
-  pytest-httpserver,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonAtLeast,
-  requests,
-  setuptools,
-  srptools,
-  stdenv,
-  tabulate,
-  tinytag,
-  zeroconf,
+{ lib
+, buildPythonPackage
+, aiohttp
+, async-timeout
+, chacha20poly1305-reuseable
+, cryptography
+, deepdiff
+, fetchFromGitHub
+, ifaddr
+, miniaudio
+, protobuf
+, pydantic
+, pyfakefs
+, pytest-aiohttp
+, pytest-asyncio_0
+, pytest-httpserver
+, pytest-timeout
+, pytestCheckHook
+, pythonAtLeast
+, requests
+, setuptools
+, srptools
+, stdenv
+, tabulate
+, tinytag
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

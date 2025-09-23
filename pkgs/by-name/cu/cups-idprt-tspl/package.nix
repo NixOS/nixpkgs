@@ -1,13 +1,13 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  cups,
-  e2fsprogs,
-  krb5,
-  libxcrypt-legacy,
-  unzip,
+{ stdenvNoCC
+, lib
+, fetchurl
+, autoPatchelfHook
+, cups
+, e2fsprogs
+, krb5
+, libxcrypt-legacy
+, unzip
+,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -37,8 +37,7 @@ stdenvNoCC.mkDerivation {
         {
           x86_64-linux = "x64";
           x86-linux = "x86";
-        }
-        ."${stdenvNoCC.hostPlatform.system}"
+        }."${stdenvNoCC.hostPlatform.system}"
           or (throw "cups-idprt-tspl: No prebuilt filters for system: ${stdenvNoCC.hostPlatform.system}");
     in
     ''

@@ -1,7 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -28,81 +28,81 @@ let
 
   mkKeyboardTest =
     layout:
-    {
-      extraConfig ? { },
-      tests,
+    { extraConfig ? { }
+    , tests
+    ,
     }:
-    with pkgs.lib;
-    makeTest {
-      name = "keymap-${layout}";
+      with pkgs.lib;
+      makeTest {
+        name = "keymap-${layout}";
 
-      nodes.machine.console.keyMap = mkOverride 900 layout;
-      nodes.machine.services.xserver.desktopManager.xterm.enable = false;
-      nodes.machine.services.xserver.xkb.layout = mkOverride 900 layout;
-      nodes.machine.imports = [
-        ./common/x11.nix
-        extraConfig
-      ];
+        nodes.machine.console.keyMap = mkOverride 900 layout;
+        nodes.machine.services.xserver.desktopManager.xterm.enable = false;
+        nodes.machine.services.xserver.xkb.layout = mkOverride 900 layout;
+        nodes.machine.imports = [
+          ./common/x11.nix
+          extraConfig
+        ];
 
-      testScript = ''
-        import json
-        import shlex
-
-
-        def run_test_case(cmd, inputs, expected):
-            assert len(inputs) == len(expected)
-            machine.execute("rm -f ${readyFile} ${resultFile}")
-
-            # set up process that expects all the keys to be entered
-            machine.succeed(
-                "${pkgs.systemd}/bin/systemd-cat -t input-test-reader -- {} {} {} &".format(
-                    cmd,
-                    "${testReader}",
-                    shlex.quote("".join(expected)),
-                )
-            )
-
-            # wait for reader to be ready
-            machine.wait_for_file("${readyFile}")
-
-            # send all keys
-            for key in inputs:
-                machine.send_key(key)
-
-            # wait for result and check
-            machine.wait_for_file("${resultFile}")
-            machine.succeed("grep -q 'PASS:' ${resultFile}")
+        testScript = ''
+          import json
+          import shlex
 
 
-        with open("${pkgs.writeText "tests.json" (builtins.toJSON tests)}") as json_file:
-            tests = json.load(json_file)
+          def run_test_case(cmd, inputs, expected):
+              assert len(inputs) == len(expected)
+              machine.execute("rm -f ${readyFile} ${resultFile}")
 
-        # These environments used to run in the opposite order, causing the
-        # following error at openvt startup.
-        #
-        # openvt: Couldn't deallocate console 1
-        #
-        # This error did not appear in successful runs.
-        # I don't know the exact cause, but I it seems that openvt and X are
-        # fighting over the virtual terminal. This does not appear to be a problem
-        # when the X test runs first.
-        keymap_environments = {
-            "Xorg Keymap": "env DISPLAY=:0 xterm -title testterm -class testterm -fullscreen -e",
-            "VT Keymap": "openvt -c 2 -sw --",
-        }
+              # set up process that expects all the keys to be entered
+              machine.succeed(
+                  "${pkgs.systemd}/bin/systemd-cat -t input-test-reader -- {} {} {} &".format(
+                      cmd,
+                      "${testReader}",
+                      shlex.quote("".join(expected)),
+                  )
+              )
 
-        machine.wait_for_x()
+              # wait for reader to be ready
+              machine.wait_for_file("${readyFile}")
 
-        for test_case_name, test_data in tests.items():
-            for keymap_env_name, command in keymap_environments.items():
-                with subtest(f"{test_case_name} - {keymap_env_name}"):
-                    run_test_case(
-                        command,
-                        test_data["qwerty"],
-                        test_data["expect"],
-                    )
-      '';
-    };
+              # send all keys
+              for key in inputs:
+                  machine.send_key(key)
+
+              # wait for result and check
+              machine.wait_for_file("${resultFile}")
+              machine.succeed("grep -q 'PASS:' ${resultFile}")
+
+
+          with open("${pkgs.writeText "tests.json" (builtins.toJSON tests)}") as json_file:
+              tests = json.load(json_file)
+
+          # These environments used to run in the opposite order, causing the
+          # following error at openvt startup.
+          #
+          # openvt: Couldn't deallocate console 1
+          #
+          # This error did not appear in successful runs.
+          # I don't know the exact cause, but I it seems that openvt and X are
+          # fighting over the virtual terminal. This does not appear to be a problem
+          # when the X test runs first.
+          keymap_environments = {
+              "Xorg Keymap": "env DISPLAY=:0 xterm -title testterm -class testterm -fullscreen -e",
+              "VT Keymap": "openvt -c 2 -sw --",
+          }
+
+          machine.wait_for_x()
+
+          for test_case_name, test_data in tests.items():
+              for keymap_env_name, command in keymap_environments.items():
+                  with subtest(f"{test_case_name} - {keymap_env_name}"):
+                      run_test_case(
+                          command,
+                          test_data["qwerty"],
+                          test_data["expect"],
+                      )
+        '';
+      };
 
 in
 pkgs.lib.mapAttrs mkKeyboardTest {

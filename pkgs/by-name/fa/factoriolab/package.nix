@@ -1,12 +1,12 @@
-{
-  buildNpmPackage,
-  fetchFromGitHub,
-  vips,
-  lib,
-  pkg-config,
-  jq,
-  makeWrapper,
-  nix-update-script,
+{ buildNpmPackage
+, fetchFromGitHub
+, vips
+, lib
+, pkg-config
+, jq
+, makeWrapper
+, nix-update-script
+,
 }:
 buildNpmPackage rec {
   pname = "factoriolab";

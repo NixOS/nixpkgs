@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  hatch-requirements-txt,
-  deprecation,
-  packaging,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, hatch-requirements-txt
+, deprecation
+, packaging
+,
 }:
 buildPythonPackage rec {
   pname = "deprecation-alias";

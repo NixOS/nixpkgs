@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  setuptools-scm,
-  unittestCheckHook,
-  hledger,
-  perl,
-  rich,
-  pandas,
-  scipy,
-  psutil,
-  matplotlib,
-  drawilleplot,
-  asteval,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, setuptools-scm
+, unittestCheckHook
+, hledger
+, perl
+, rich
+, pandas
+, scipy
+, psutil
+, matplotlib
+, drawilleplot
+, asteval
+,
 }:
 
 buildPythonPackage rec {

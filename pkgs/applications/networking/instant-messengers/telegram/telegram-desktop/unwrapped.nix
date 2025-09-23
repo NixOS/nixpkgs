@@ -1,36 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  callPackage,
-  pkg-config,
-  cmake,
-  ninja,
-  clang,
-  python3,
-  tdlib,
-  tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
-  qtbase,
-  qtsvg,
-  qtwayland,
-  kcoreaddons,
-  lz4,
-  xxHash,
-  ffmpeg_6,
-  protobuf,
-  openalSoft,
-  minizip,
-  range-v3,
-  tl-expected,
-  hunspell,
-  gobject-introspection,
-  rnnoise,
-  microsoft-gsl,
-  boost,
-  ada,
-  libicns,
-  apple-sdk_15,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, pkg-config
+, cmake
+, ninja
+, clang
+, python3
+, tdlib
+, tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; }
+, qtbase
+, qtsvg
+, qtwayland
+, kcoreaddons
+, lz4
+, xxHash
+, ffmpeg_6
+, protobuf
+, openalSoft
+, minizip
+, range-v3
+, tl-expected
+, hunspell
+, gobject-introspection
+, rnnoise
+, microsoft-gsl
+, boost
+, ada
+, libicns
+, apple-sdk_15
+, nix-update-script
+,
 }:
 
 # Main reference:

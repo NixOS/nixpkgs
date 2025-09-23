@@ -1,14 +1,14 @@
-{
-  lib,
-  blas,
-  lapack,
-  buildPythonPackage,
-  cffi,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  numpy,
-  stdenv,
+{ lib
+, blas
+, lapack
+, buildPythonPackage
+, cffi
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, numpy
+, stdenv
+,
 }:
 
 buildPythonPackage {

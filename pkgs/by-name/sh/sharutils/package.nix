@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  gettext,
-  coreutils,
-  updateAutotoolsGnuConfigScriptsHook,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, gettext
+, coreutils
+, updateAutotoolsGnuConfigScriptsHook
+,
 }:
 
 stdenv.mkDerivation rec {

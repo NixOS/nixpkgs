@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  # boost derivation to use for the src and version.
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, # boost derivation to use for the src and version.
   # This is used by the boost derivation to build
   # a b2 matching their version (by overriding this
   # argument). Infinite recursion is not an issue
   # since we only look at src and version of boost.
-  useBoost ? { },
+  useBoost ? { }
+,
 }:
 
 let
@@ -34,9 +34,10 @@ stdenv.mkDerivation {
 
   patches =
     useBoost.boostBuildPatches or [ ]
-    ++ lib.optional (
-      useBoost ? version && lib.versionAtLeast useBoost.version "1.81"
-    ) ./fix-clang-target.patch;
+    ++ lib.optional
+      (
+        useBoost ? version && lib.versionAtLeast useBoost.version "1.81"
+      ) ./fix-clang-target.patch;
 
   postPatch =
     lib.optionalString (useBoost ? version && lib.versionAtLeast useBoost.version "1.80") ''

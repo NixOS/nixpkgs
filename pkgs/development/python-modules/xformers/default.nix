@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  which,
-  setuptools,
-  # runtime dependencies
-  numpy,
-  torch,
-  # check dependencies
-  pytestCheckHook,
-  pytest-cov-stub,
-  # , pytest-mpi
-  pytest-timeout,
-  # , pytorch-image-models
-  hydra-core,
-  fairscale,
-  scipy,
-  cmake,
-  ninja,
-  triton,
-  networkx,
-  #, apex
-  einops,
-  transformers,
-  timm,
-  #, flash-attn
-  openmp,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, which
+, setuptools
+, # runtime dependencies
+  numpy
+, torch
+, # check dependencies
+  pytestCheckHook
+, pytest-cov-stub
+, # , pytest-mpi
+  pytest-timeout
+, # , pytorch-image-models
+  hydra-core
+, fairscale
+, scipy
+, cmake
+, ninja
+, triton
+, networkx
+, #, apex
+  einops
+, transformers
+, timm
+, #, flash-attn
+  openmp
+,
 }:
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;

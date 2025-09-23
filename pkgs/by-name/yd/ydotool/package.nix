@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  scdoc,
-  util-linux,
-  xorg,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, scdoc
+, util-linux
+, xorg
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,11 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-  direnv,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, direnv
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

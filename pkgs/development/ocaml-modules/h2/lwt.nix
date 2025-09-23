@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  h2,
-  lwt,
-  gluten-lwt,
+{ buildDunePackage
+, h2
+, lwt
+, gluten-lwt
+,
 }:
 
 buildDunePackage {

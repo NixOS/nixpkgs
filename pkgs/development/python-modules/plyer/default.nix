@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  keyring,
-  pytestCheckHook,
-  setuptools,
-  writableTmpDirAsHomeHook,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, keyring
+, pytestCheckHook
+, setuptools
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

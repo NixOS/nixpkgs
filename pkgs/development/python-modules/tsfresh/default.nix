@@ -1,32 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  stdenv,
-  pythonOlder,
-  requests,
-  numpy,
-  pandas,
-  scipy,
-  statsmodels,
-  patsy,
-  scikit-learn,
-  tqdm,
-  dask,
-  distributed,
-  stumpy,
-  cloudpickle,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-xdist,
-  mock,
-  matplotlib,
-  seaborn,
-  ipython,
-  notebook,
-  pandas-datareader,
-  setuptools,
-  pywavelets,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, stdenv
+, pythonOlder
+, requests
+, numpy
+, pandas
+, scipy
+, statsmodels
+, patsy
+, scikit-learn
+, tqdm
+, dask
+, distributed
+, stumpy
+, cloudpickle
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-xdist
+, mock
+, matplotlib
+, seaborn
+, ipython
+, notebook
+, pandas-datareader
+, setuptools
+, pywavelets
+,
 }:
 
 buildPythonPackage rec {

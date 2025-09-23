@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  aiohttp,
-  bcrypt,
-  pyopenssl,
-  python-gnupg,
-  requests,
-  pytestCheckHook,
-  pyotp,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, aiohttp
+, bcrypt
+, pyopenssl
+, python-gnupg
+, requests
+, pytestCheckHook
+, pyotp
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

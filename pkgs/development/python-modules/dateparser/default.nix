@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  python-dateutil,
-  pytz,
-  regex,
-  tzlocal,
-  hijridate,
-  convertdate,
-  fasttext,
-  langdetect,
-  parameterized,
-  pytestCheckHook,
-  gitpython,
-  parsel,
-  requests,
-  ruamel-yaml,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, python-dateutil
+, pytz
+, regex
+, tzlocal
+, hijridate
+, convertdate
+, fasttext
+, langdetect
+, parameterized
+, pytestCheckHook
+, gitpython
+, parsel
+, requests
+, ruamel-yaml
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitea,
-  rustPlatform,
+{ lib
+, fetchFromGitea
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

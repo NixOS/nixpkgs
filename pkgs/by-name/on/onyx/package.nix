@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  flutter335,
-  lib,
-  libsecret,
-  makeDesktopItem,
+{ fetchFromGitHub
+, flutter335
+, lib
+, libsecret
+, makeDesktopItem
+,
 }:
 
 flutter335.buildFlutterApplication rec {

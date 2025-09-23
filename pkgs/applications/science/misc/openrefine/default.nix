@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildNpmPackage,
-  curl,
-  jdk,
-  jq,
-  makeWrapper,
-  maven,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildNpmPackage
+, curl
+, jdk
+, jq
+, makeWrapper
+, maven
+,
 }:
 
 let

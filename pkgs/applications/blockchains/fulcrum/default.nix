@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  qmake,
-  python3,
-  qtbase,
-  rocksdb_7_10,
-  zeromq,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, qmake
+, python3
+, qtbase
+, rocksdb_7_10
+, zeromq
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

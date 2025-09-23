@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  flac,
-  libgpiod,
-  libmad,
-  libpulseaudio,
-  libvorbis,
-  mpg123,
-  audioBackend ? if stdenv.hostPlatform.isLinux then "alsa" else "portaudio",
-  alsaSupport ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  dsdSupport ? true,
-  faad2Support ? true,
-  faad2,
-  ffmpegSupport ? true,
-  ffmpeg,
-  opusSupport ? true,
-  opusfile,
-  resampleSupport ? true,
-  soxr,
-  sslSupport ? true,
-  openssl,
-  portaudioSupport ? stdenv.hostPlatform.isDarwin,
-  portaudio,
-  slimserver,
+{ lib
+, stdenv
+, fetchFromGitHub
+, flac
+, libgpiod
+, libmad
+, libpulseaudio
+, libvorbis
+, mpg123
+, audioBackend ? if stdenv.hostPlatform.isLinux then "alsa" else "portaudio"
+, alsaSupport ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, dsdSupport ? true
+, faad2Support ? true
+, faad2
+, ffmpegSupport ? true
+, ffmpeg
+, opusSupport ? true
+, opusfile
+, resampleSupport ? true
+, soxr
+, sslSupport ? true
+, openssl
+, portaudioSupport ? stdenv.hostPlatform.isDarwin
+, portaudio
+, slimserver
+,
 }:
 
 let

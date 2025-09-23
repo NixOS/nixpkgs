@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  apischema,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gql,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiohttp
+, apischema
+, buildPythonPackage
+, fetchFromGitHub
+, gql
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

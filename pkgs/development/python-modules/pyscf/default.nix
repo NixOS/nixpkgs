@@ -1,25 +1,21 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitHub,
-
-  # build-sysetm
-  cmake,
-
-  # build inputs
-  blas,
-  libcint,
-  libxc,
-  xcfun,
-
-  # dependencies
-  cppe,
-  h5py,
-  numpy,
-  scipy,
-
-  # tests
-  pytestCheckHook,
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, # build-sysetm
+  cmake
+, # build inputs
+  blas
+, libcint
+, libxc
+, xcfun
+, # dependencies
+  cppe
+, h5py
+, numpy
+, scipy
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

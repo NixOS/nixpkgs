@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchzip,
-  libblake3,
-  libmd,
-  xxHash,
-  zlib,
-  zstd,
-  buildTopkgPackage,
+{ lib
+, fetchzip
+, libblake3
+, libmd
+, xxHash
+, zlib
+, zstd
+, buildTopkgPackage
+,
 }:
 
 buildTopkgPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ffmpeg-headless,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, ffmpeg-headless
+,
 }:
 
 buildPythonPackage {

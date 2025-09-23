@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  makeWrapper,
-  jre,
-  gradle,
+{ stdenv
+, lib
+, fetchgit
+, makeWrapper
+, jre
+, gradle
+,
 }:
 
 stdenv.mkDerivation rec {

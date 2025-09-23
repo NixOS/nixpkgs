@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  python,
-  qt,
-  gtk,
-  removeReferencesTo,
-  featuresInfo,
-  features,
-  version,
-  sourceSha256,
-  # If overridden. No need to set default values, as they are given defaults in
+{ lib
+, stdenv
+, python
+, qt
+, gtk
+, removeReferencesTo
+, featuresInfo
+, features
+, version
+, sourceSha256
+, # If overridden. No need to set default values, as they are given defaults in
   # the main expressions
-  overrideSrc,
-  fetchFromGitHub,
+  overrideSrc
+, fetchFromGitHub
+,
 }:
 
 let
@@ -41,42 +41,50 @@ in
     removeReferencesTo
   ]
   ++ lib.flatten (
-    lib.mapAttrsToList (
-      feat: info:
-      (lib.optionals (hasFeature feat) (
-        (lib.optionals (builtins.hasAttr "native" info) info.native)
-        ++ (lib.optionals (builtins.hasAttr "pythonNative" info) info.pythonNative)
-      ))
-    ) featuresInfo
+    lib.mapAttrsToList
+      (
+        feat: info:
+          (lib.optionals (hasFeature feat) (
+            (lib.optionals (builtins.hasAttr "native" info) info.native)
+              ++ (lib.optionals (builtins.hasAttr "pythonNative" info) info.pythonNative)
+          ))
+      )
+      featuresInfo
   );
   buildInputs = lib.flatten (
-    lib.mapAttrsToList (
-      feat: info:
-      (lib.optionals (hasFeature feat) (
-        (lib.optionals (builtins.hasAttr "runtime" info) info.runtime)
-        ++ (lib.optionals (
-          builtins.hasAttr "pythonRuntime" info && hasFeature "python-support"
-        ) info.pythonRuntime)
-      ))
-    ) featuresInfo
+    lib.mapAttrsToList
+      (
+        feat: info:
+          (lib.optionals (hasFeature feat) (
+            (lib.optionals (builtins.hasAttr "runtime" info) info.runtime)
+            ++ (lib.optionals
+              (
+                builtins.hasAttr "pythonRuntime" info && hasFeature "python-support"
+              )
+              info.pythonRuntime)
+          ))
+      )
+      featuresInfo
   );
   cmakeFlags = [
     # https://pybind11.readthedocs.io/en/stable/changelog.html#version-2-13-0-june-25-2024
     (lib.cmakeBool "CMAKE_CROSSCOMPILING" cross)
     (lib.cmakeBool "PYBIND11_USE_CROSSCOMPILING" (cross && hasFeature "gnuradio-runtime"))
   ]
-  ++ lib.mapAttrsToList (
-    feat: info:
+  ++ lib.mapAttrsToList
     (
-      if feat == "basic" then
-        # Abuse this unavoidable "iteration" to set this flag which we want as
-        # well - it means: Don't turn on features just because their deps are
-        # satisfied, let only our cmakeFlags decide.
-        (lib.cmakeBool "ENABLE_DEFAULT" false)
-      else
-        (lib.cmakeBool "ENABLE_${info.cmakeEnableFlag}" (hasFeature feat))
+      feat: info:
+        (
+          if feat == "basic" then
+          # Abuse this unavoidable "iteration" to set this flag which we want as
+          # well - it means: Don't turn on features just because their deps are
+          # satisfied, let only our cmakeFlags decide.
+            (lib.cmakeBool "ENABLE_DEFAULT" false)
+          else
+            (lib.cmakeBool "ENABLE_${info.cmakeEnableFlag}" (hasFeature feat))
+        )
     )
-  ) featuresInfo;
+    featuresInfo;
   disallowedReferences = [
     stdenv.cc
     stdenv.cc.cc

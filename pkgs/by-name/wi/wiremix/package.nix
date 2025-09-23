@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchCrate,
-  rustPlatform,
-  pkg-config,
-  pipewire,
+{ lib
+, fetchCrate
+, rustPlatform
+, pkg-config
+, pipewire
+,
 }:
 
 rustPlatform.buildRustPackage rec {

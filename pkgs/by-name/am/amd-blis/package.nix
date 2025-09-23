@@ -1,20 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  python3,
-
-  # Enable BLAS interface with 64-bit integer width.
-  blas64 ? false,
-
-  # Target architecture. "amdzen" compiles kernels for all Zen
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, python3
+, # Enable BLAS interface with 64-bit integer width.
+  blas64 ? false
+, # Target architecture. "amdzen" compiles kernels for all Zen
   # generations. To build kernels for specific Zen generations,
   # use "zen", "zen2", "zen3", or "zen4".
-  withArchitecture ? "amdzen",
-
-  # Enable OpenMP-based threading.
-  withOpenMP ? true,
+  withArchitecture ? "amdzen"
+, # Enable OpenMP-based threading.
+  withOpenMP ? true
+,
 }:
 
 let

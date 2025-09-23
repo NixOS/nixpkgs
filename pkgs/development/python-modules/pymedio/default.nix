@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  cryptography,
-  nibabel,
-  numpy,
-  pydicom,
-  simpleitk,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, cryptography
+, nibabel
+, numpy
+, pydicom
+, simpleitk
+,
 }:
 
 buildPythonPackage rec {

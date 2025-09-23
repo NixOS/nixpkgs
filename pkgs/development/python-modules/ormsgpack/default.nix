@@ -1,20 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cargo,
-  rustPlatform,
-  rustc,
-  pyinstaller,
-
-  # dependencies
-  msgpack,
-
-  # testing
-  pydantic,
-  pytestCheckHook,
-  python-dateutil,
-  pytz,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cargo
+, rustPlatform
+, rustc
+, pyinstaller
+, # dependencies
+  msgpack
+, # testing
+  pydantic
+, pytestCheckHook
+, python-dateutil
+, pytz
+,
 }:
 
 buildPythonPackage rec {

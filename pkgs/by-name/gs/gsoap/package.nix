@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  unzip,
-  m4,
-  bison,
-  flex,
-  openssl,
-  zlib,
-  buildPackages,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, unzip
+, m4
+, bison
+, flex
+, openssl
+, zlib
+, buildPackages
+,
 }:
 
 let

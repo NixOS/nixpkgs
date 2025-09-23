@@ -1,10 +1,10 @@
-{
-  lib,
-  vscode-utils,
-  jq,
-  moreutils,
-  terraform-ls,
-  vscode-extension-update-script,
+{ lib
+, vscode-utils
+, jq
+, moreutils
+, terraform-ls
+, vscode-extension-update-script
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

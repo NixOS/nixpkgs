@@ -1,23 +1,24 @@
-{
-  stdenv,
-  lib,
-  stdenvNoCC,
-  fetchgit,
-  sourceData,
-  versionData,
-  buildFreebsd,
-  patchesRoot,
-  writeText,
-  buildPackages,
+{ stdenv
+, lib
+, stdenvNoCC
+, fetchgit
+, sourceData
+, versionData
+, buildFreebsd
+, patchesRoot
+, writeText
+, buildPackages
+,
 }:
 
 self:
 
-lib.packagesFromDirectoryRecursive {
-  callPackage = self.callPackage;
-  directory = ./pkgs;
-}
-// {
+lib.packagesFromDirectoryRecursive
+  {
+    callPackage = self.callPackage;
+    directory = ./pkgs;
+  }
+  // {
   inherit sourceData patchesRoot versionData;
 
   # Keep the crawled portion of Nixpkgs finite.

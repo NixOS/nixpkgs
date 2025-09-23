@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  openssl,
-  pkg-config,
-  which,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, openssl
+, pkg-config
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

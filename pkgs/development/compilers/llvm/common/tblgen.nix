@@ -1,19 +1,19 @@
-{
-  cmake,
-  devExtraCmakeFlags ? [ ],
-  lib,
-  llvm_meta,
-  monorepoSrc ? null,
-  ninja,
-  patches ? [ ],
-  python3,
-  updateAutotoolsGnuConfigScriptsHook,
-  release_version,
-  runCommand,
-  src ? null,
-  stdenv,
-  version,
-  clangPatches,
+{ cmake
+, devExtraCmakeFlags ? [ ]
+, lib
+, llvm_meta
+, monorepoSrc ? null
+, ninja
+, patches ? [ ]
+, python3
+, updateAutotoolsGnuConfigScriptsHook
+, release_version
+, runCommand
+, src ? null
+, stdenv
+, version
+, clangPatches
+,
 }:
 
 let
@@ -38,15 +38,18 @@ let
 
   src' =
     if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" { } (''
-        mkdir -p "$out"
-        cp -r ${monorepoSrc}/cmake "$out"
-        cp -r ${monorepoSrc}/third-party "$out"
-        cp -r ${monorepoSrc}/llvm "$out"
-        cp -r ${monorepoSrc}/clang "$out"
-        cp -r ${monorepoSrc}/clang-tools-extra "$out"
-        cp -r ${monorepoSrc}/mlir "$out"
-      '')
+      runCommand "${pname}-src-${version}" { }
+        (
+          ''
+            mkdir -p "$out"
+            cp -r ${monorepoSrc}/cmake "$out"
+            cp -r ${monorepoSrc}/third-party "$out"
+            cp -r ${monorepoSrc}/llvm "$out"
+            cp -r ${monorepoSrc}/clang "$out"
+            cp -r ${monorepoSrc}/clang-tools-extra "$out"
+            cp -r ${monorepoSrc}/mlir "$out"
+          ''
+        )
     else
       src;
 

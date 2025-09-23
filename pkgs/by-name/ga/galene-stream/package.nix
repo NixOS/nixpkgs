@@ -1,14 +1,14 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  gitUpdater,
-  nixosTests,
-  galene,
-  gobject-introspection,
-  gst_all_1,
-  libnice,
-  wrapGAppsHook3,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, gitUpdater
+, nixosTests
+, galene
+, gobject-introspection
+, gst_all_1
+, libnice
+, wrapGAppsHook3
+,
 }:
 
 python3Packages.buildPythonApplication rec {

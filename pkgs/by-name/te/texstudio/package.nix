@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  qt6,
-  qt6Packages,
-  hunspell,
-  zlib,
-  pkg-config,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, qt6
+, qt6Packages
+, hunspell
+, zlib
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

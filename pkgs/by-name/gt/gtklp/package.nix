@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  cups,
-  fetchurl,
-  gettext,
-  glib,
-  gtk2,
-  libtool,
-  openssl,
-  pkg-config,
+{ lib
+, stdenv
+, autoreconfHook
+, cups
+, fetchurl
+, gettext
+, glib
+, gtk2
+, libtool
+, openssl
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

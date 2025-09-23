@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchurl,
-  fetchpatch,
-  buildDunePackage,
-  replaceVars,
-  dot-merlin-reader,
-  dune_2,
-  yojson,
-  csexp,
-  result,
-  menhirSdk,
+{ lib
+, fetchurl
+, fetchpatch
+, buildDunePackage
+, replaceVars
+, dot-merlin-reader
+, dune_2
+, yojson
+, csexp
+, result
+, menhirSdk
+,
 }:
 
 buildDunePackage rec {

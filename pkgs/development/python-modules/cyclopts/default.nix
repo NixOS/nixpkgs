@@ -1,19 +1,19 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  docstring-parser,
-  fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pydantic,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  rich-rst,
-  rich,
-  trio,
+{ lib
+, attrs
+, buildPythonPackage
+, docstring-parser
+, fetchFromGitHub
+, poetry-core
+, poetry-dynamic-versioning
+, pydantic
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, rich-rst
+, rich
+, trio
+,
 }:
 
 buildPythonPackage rec {

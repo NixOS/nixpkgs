@@ -1,12 +1,12 @@
-{
-  lib,
-  mkDerivation,
-  fetchurl,
-  fetchpatch,
-  qmake,
-  qttools,
-  qtbase,
-  poppler,
+{ lib
+, mkDerivation
+, fetchurl
+, fetchpatch
+, qmake
+, qttools
+, qtbase
+, poppler
+,
 }:
 
 mkDerivation rec {

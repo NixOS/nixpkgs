@@ -1,8 +1,8 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, lib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "lib45d";

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libGL,
-  libGLU,
-  libpng,
-  mkLibretroCore,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libGL
+, libGLU
+, libpng
+, mkLibretroCore
+,
 }:
 mkLibretroCore {
   core = "parallel-n64";

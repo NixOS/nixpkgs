@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  symlinkJoin,
-  buildGoModule,
-  makeWrapper,
-  nix-update-script,
-  v2ray-geoip,
-  v2ray-domain-list-community,
-  assets ? [
+{ lib
+, fetchFromGitHub
+, symlinkJoin
+, buildGoModule
+, makeWrapper
+, nix-update-script
+, v2ray-geoip
+, v2ray-domain-list-community
+, assets ? [
     v2ray-geoip
     v2ray-domain-list-community
-  ],
+  ]
+,
 }:
 
 buildGoModule rec {

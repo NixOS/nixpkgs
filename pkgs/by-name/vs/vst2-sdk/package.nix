@@ -1,6 +1,6 @@
-{
-  lib,
-  fetchzip,
+{ lib
+, fetchzip
+,
 }:
 fetchzip rec {
   name = "vst2-sdk-${version}"; # cannot be `pname`, as `fetchzip` expects `name`

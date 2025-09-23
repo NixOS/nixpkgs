@@ -1,15 +1,14 @@
-{
-  stdenv,
-  lib,
-  src,
-  pkg-config,
-  tcl,
-  libXft,
-  zip,
-  zlib,
-  patches ? [ ],
-  enableAqua ? stdenv.hostPlatform.isDarwin,
-  ...
+{ stdenv
+, lib
+, src
+, pkg-config
+, tcl
+, libXft
+, zip
+, zlib
+, patches ? [ ]
+, enableAqua ? stdenv.hostPlatform.isDarwin
+, ...
 }:
 
 tcl.mkTclDerivation {
@@ -58,15 +57,15 @@ tcl.mkTclDerivation {
   ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit"
   ++ lib.optional enableAqua "--enable-aqua"
   ++
-    lib.optional (lib.versionAtLeast tcl.version "9.0")
-      # By default, tk libraries get zipped and embedded into libtcl9tk*.so,
-      # which gets `zipfs mount`ed at runtime. This is fragile (for example
-      # stripping the .so removes the zip trailer), so we install them as
-      # traditional files.
-      # This might make tcl slower to start from slower storage on cold cache,
-      # however according to my benchmarks on fast storage and warm cache
-      # tcl built with --disable-zipfs actually starts in half the time.
-      "--disable-zipfs";
+  lib.optional (lib.versionAtLeast tcl.version "9.0")
+    # By default, tk libraries get zipped and embedded into libtcl9tk*.so,
+    # which gets `zipfs mount`ed at runtime. This is fragile (for example
+    # stripping the .so removes the zip trailer), so we install them as
+    # traditional files.
+    # This might make tcl slower to start from slower storage on cold cache,
+    # however according to my benchmarks on fast storage and warm cache
+    # tcl built with --disable-zipfs actually starts in half the time.
+    "--disable-zipfs";
 
   nativeBuildInputs = [
     pkg-config

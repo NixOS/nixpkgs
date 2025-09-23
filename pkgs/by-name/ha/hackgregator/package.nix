@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  pkg-config,
-  wrapGAppsHook4,
-  libadwaita,
-  openssl,
-  webkitgtk_6_0,
-  sqlite,
-  glib-networking,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, pkg-config
+, wrapGAppsHook4
+, libadwaita
+, openssl
+, webkitgtk_6_0
+, sqlite
+, glib-networking
+,
 }:
 
 rustPlatform.buildRustPackage {

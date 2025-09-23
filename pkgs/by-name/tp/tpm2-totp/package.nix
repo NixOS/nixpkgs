@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  tpm2-tss,
-  autoreconfHook,
-  autoconf-archive,
-  pandoc,
-  pkg-config,
-  withPlymouth ? false,
-  plymouth,
-  qrencode,
+{ lib
+, stdenv
+, fetchFromGitHub
+, tpm2-tss
+, autoreconfHook
+, autoconf-archive
+, pandoc
+, pkg-config
+, withPlymouth ? false
+, plymouth
+, qrencode
+,
 }:
 
 stdenv.mkDerivation rec {

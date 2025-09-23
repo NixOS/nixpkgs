@@ -1,22 +1,21 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  makeDesktopItem,
-  fetchurl,
-  openjdk17-bootstrap,
-  jdk11,
-  jdk8,
+{ lib
+, stdenv
+, makeWrapper
+, makeDesktopItem
+, fetchurl
+, openjdk17-bootstrap
+, jdk11
+, jdk8
+,
 }:
 
 let
   generic =
-    {
-      version,
-      hash,
-      platform ? "",
-      jdk,
-      ...
+    { version
+    , hash
+    , platform ? ""
+    , jdk
+    , ...
     }@attrs:
     let
       desktopItem = makeDesktopItem {

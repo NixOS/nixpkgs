@@ -1,20 +1,20 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  coreutils,
-  fetchFromGitHub,
-  google-auth,
-  google-auth-oauthlib,
-  google-cloud-pubsub,
-  mashumaro,
-  pytest-aiohttp,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  requests-oauthlib,
-  setuptools,
+{ lib
+, aiohttp
+, buildPythonPackage
+, coreutils
+, fetchFromGitHub
+, google-auth
+, google-auth-oauthlib
+, google-cloud-pubsub
+, mashumaro
+, pytest-aiohttp
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests-oauthlib
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

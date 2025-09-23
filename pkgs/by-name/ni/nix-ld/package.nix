@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  nixosTests,
-  rustPlatform,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, nixosTests
+, rustPlatform
+, lib
+,
 }:
 
 rustPlatform.buildRustPackage rec {

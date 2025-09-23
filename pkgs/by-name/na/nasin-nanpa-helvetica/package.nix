@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchurl
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

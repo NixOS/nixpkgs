@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  drat-trim,
-  p7zip,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, drat-trim
+, p7zip
+, pkg-config
+,
 }:
 
 let

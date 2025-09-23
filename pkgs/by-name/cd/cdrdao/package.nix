@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  libiconv,
-  libvorbis,
-  libmad,
-  libao,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, libiconv
+, libvorbis
+, libmad
+, libao
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

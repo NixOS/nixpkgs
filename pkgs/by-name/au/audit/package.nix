@@ -1,25 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  bash,
-  bashNonInteractive,
-  buildPackages,
-  linuxHeaders,
-  python3,
-  swig,
-  pkgsCross,
-  libcap_ng,
-  installShellFiles,
-
-  # Enabling python support while cross compiling would be possible, but the
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, bash
+, bashNonInteractive
+, buildPackages
+, linuxHeaders
+, python3
+, swig
+, pkgsCross
+, libcap_ng
+, installShellFiles
+, # Enabling python support while cross compiling would be possible, but the
   # configure script tries executing python to gather info instead of relying on
   # python3-config exclusively
-  enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
-  nix-update-script,
-  testers,
-  nixosTests,
+  enablePython ? stdenv.hostPlatform == stdenv.buildPlatform
+, nix-update-script
+, testers
+, nixosTests
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";

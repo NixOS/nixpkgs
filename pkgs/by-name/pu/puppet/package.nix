@@ -1,10 +1,10 @@
-{
-  bundlerApp,
-  bundlerUpdateScript,
-  lib,
-  puppet,
-  ruby_3_4,
-  testers,
+{ bundlerApp
+, bundlerUpdateScript
+, lib
+, puppet
+, ruby_3_4
+, testers
+,
 }:
 
 (bundlerApp.override { ruby = ruby_3_4; }) {

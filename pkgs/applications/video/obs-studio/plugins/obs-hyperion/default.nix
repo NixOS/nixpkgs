@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  obs-studio,
-  libGL,
-  qtbase,
-  flatbuffers,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, obs-studio
+, libGL
+, qtbase
+, flatbuffers
+,
 }:
 
 stdenv.mkDerivation rec {

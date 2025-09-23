@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  jdk_headless,
-  gradle_8,
-  makeWrapper,
-  bashNonInteractive,
+{ lib
+, stdenv
+, fetchgit
+, jdk_headless
+, gradle_8
+, makeWrapper
+, bashNonInteractive
+,
 }:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."

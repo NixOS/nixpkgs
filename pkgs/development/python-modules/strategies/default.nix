@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  multipledispatch,
-  toolz,
-  pytest,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, multipledispatch
+, toolz
+, pytest
+,
 }:
 
 buildPythonPackage rec {

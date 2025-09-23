@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  autoPatchelfHook,
-  gitUpdater,
-  kwindowsystem,
-  layer-shell-qt,
-  libXdmcp,
-  libpthreadstubs,
-  libqtxdg,
-  lxqt-build-tools,
-  perl,
-  pkg-config,
-  qtbase,
-  qtsvg,
-  qttools,
-  qtwayland,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, autoPatchelfHook
+, gitUpdater
+, kwindowsystem
+, layer-shell-qt
+, libXdmcp
+, libpthreadstubs
+, libqtxdg
+, lxqt-build-tools
+, perl
+, pkg-config
+, qtbase
+, qtsvg
+, qttools
+, qtwayland
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

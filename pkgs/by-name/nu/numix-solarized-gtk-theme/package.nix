@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  sassc,
-  glib,
-  gdk-pixbuf,
-  inkscape,
-  gtk-engine-murrine,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, sassc
+, glib
+, gdk-pixbuf
+, inkscape
+, gtk-engine-murrine
+,
 }:
 
 stdenv.mkDerivation rec {

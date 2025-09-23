@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  pkg-config,
-  gnutls,
-  libgcrypt,
-  libpar2,
-  libcap,
-  libsigcxx,
-  libxml2,
-  ncurses,
-  openssl,
-  zlib,
-  deterministic-uname,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, pkg-config
+, gnutls
+, libgcrypt
+, libpar2
+, libcap
+, libsigcxx
+, libxml2
+, ncurses
+, openssl
+, zlib
+, deterministic-uname
+, nixosTests
+,
 }:
 
 let

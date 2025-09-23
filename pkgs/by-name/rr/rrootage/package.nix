@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  libGL,
-  libGLU,
-  SDL,
-  SDL_mixer,
-  bulletml,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, libGL
+, libGLU
+, SDL
+, SDL_mixer
+, bulletml
+,
 }:
 
 let

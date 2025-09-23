@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  setuptools-scm,
-  dataproperty,
-  typepy,
-  pytestCheckHook,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, setuptools-scm
+, dataproperty
+, typepy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

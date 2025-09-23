@@ -1,13 +1,13 @@
-{
-  cfgPath ? "/etc/nncp.hjson",
-  curl,
-  fetchurl,
-  lib,
-  genericUpdater,
-  go,
-  perl,
-  stdenv,
-  writeShellScript,
+{ cfgPath ? "/etc/nncp.hjson"
+, curl
+, fetchurl
+, lib
+, genericUpdater
+, go
+, perl
+, stdenv
+, writeShellScript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

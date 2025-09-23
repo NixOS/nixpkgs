@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  installShellFiles,
-  pkg-config,
-  glib,
-  pcre,
-  pcre2,
-  util-linux,
-  libsysprof-capture,
-  libmysqlclient,
-  libressl,
-  zlib,
-  zstd,
-  libselinux,
-  libsepol,
-  nix-update-script,
-  testers,
-  versionCheckHook,
-  mydumper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, installShellFiles
+, pkg-config
+, glib
+, pcre
+, pcre2
+, util-linux
+, libsysprof-capture
+, libmysqlclient
+, libressl
+, zlib
+, zstd
+, libselinux
+, libsepol
+, nix-update-script
+, testers
+, versionCheckHook
+, mydumper
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,29 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  markupsafe,
-
-  # optional-dependencies
-  watchdog,
-
-  # tests
-  cffi,
-  cryptography,
-  ephemeral-port-reserve,
-  pytest-timeout,
-  pytestCheckHook,
-
-  # reverse dependencies
-  moto,
-  sentry-sdk,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, # build-system
+  flit-core
+, # dependencies
+  markupsafe
+, # optional-dependencies
+  watchdog
+, # tests
+  cffi
+, cryptography
+, ephemeral-port-reserve
+, pytest-timeout
+, pytestCheckHook
+, # reverse dependencies
+  moto
+, sentry-sdk
+,
 }:
 
 buildPythonPackage rec {

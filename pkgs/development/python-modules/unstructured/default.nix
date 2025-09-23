@@ -1,119 +1,113 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # core networking and async dependencies
-  anyio,
-  backoff,
-  certifi,
-  httpcore,
-  httpx,
-  h11,
-  nest-asyncio,
-  requests,
-  requests-toolbelt,
-  sniffio,
-  urllib3,
-
-  # core parsing and processing
-  beautifulsoup4,
-  chardet,
-  charset-normalizer,
-  emoji,
-  filetype,
-  html5lib,
-  idna,
-  joblib,
-  # jsonpath-python,
-  nltk,
-  olefile,
-  orderly-set,
-  python-dateutil,
-  python-iso639,
-  python-magic,
-  python-oxmsg,
-  rapidfuzz,
-  regex,
-  soupsieve,
-  webencodings,
-
-  # core data handling
-  dataclasses-json,
-  deepdiff,
-  marshmallow,
-  mypy-extensions,
-  packaging,
-  typing-extensions,
-  typing-inspect,
-
-  # core system utilities
-  cffi,
-  cryptography,
-  psutil,
-  pycparser,
-  six,
-  tqdm,
-  wrapt,
-
-  # document format support
-  markdown,
-  pdfminer-six,
-  pdfplumber,
-  # pi-heif,
-  pikepdf,
-  pypandoc,
-  pypdf,
-  python-docx,
-  unstructured-client,
-  # unstructured-pytesseract,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # core networking and async dependencies
+  anyio
+, backoff
+, certifi
+, httpcore
+, httpx
+, h11
+, nest-asyncio
+, requests
+, requests-toolbelt
+, sniffio
+, urllib3
+, # core parsing and processing
+  beautifulsoup4
+, chardet
+, charset-normalizer
+, emoji
+, filetype
+, html5lib
+, idna
+, joblib
+, # jsonpath-python,
+  nltk
+, olefile
+, orderly-set
+, python-dateutil
+, python-iso639
+, python-magic
+, python-oxmsg
+, rapidfuzz
+, regex
+, soupsieve
+, webencodings
+, # core data handling
+  dataclasses-json
+, deepdiff
+, marshmallow
+, mypy-extensions
+, packaging
+, typing-extensions
+, typing-inspect
+, # core system utilities
+  cffi
+, cryptography
+, psutil
+, pycparser
+, six
+, tqdm
+, wrapt
+, # document format support
+  markdown
+, pdfminer-six
+, pdfplumber
+, # pi-heif,
+  pikepdf
+, pypandoc
+, pypdf
+, python-docx
+, unstructured-client
+, # unstructured-pytesseract,
   # optional dependencies
   # csv
-  pytz,
-  tzdata,
-  # markdown
-  importlib-metadata,
-  zipp,
-  # pdf
-  opencv-python,
-  paddlepaddle,
-  pdf2image,
-  # unstructured-paddleocr,
+  pytz
+, tzdata
+, # markdown
+  importlib-metadata
+, zipp
+, # pdf
+  opencv-python
+, paddlepaddle
+, pdf2image
+, # unstructured-paddleocr,
   # pptx
-  lxml,
-  pillow,
-  python-pptx,
-  xlsxwriter,
-  # xslx
-  et-xmlfile,
-  networkx,
-  numpy,
-  openpyxl,
-  pandas,
-  xlrd,
-  # huggingface
-  langdetect,
-  sacremoses,
-  sentencepiece,
-  torch,
-  transformers,
-  # local-inference
-  unstructured-inference,
-  # test dependencies
-  pytestCheckHook,
-  black,
-  coverage,
-  click,
-  freezegun,
-  # , label-studio-sdk
-  mypy,
-  pytest-cov-stub,
-  pytest-mock,
-  vcrpy,
-  grpcio,
+  lxml
+, pillow
+, python-pptx
+, xlsxwriter
+, # xslx
+  et-xmlfile
+, networkx
+, numpy
+, openpyxl
+, pandas
+, xlrd
+, # huggingface
+  langdetect
+, sacremoses
+, sentencepiece
+, torch
+, transformers
+, # local-inference
+  unstructured-inference
+, # test dependencies
+  pytestCheckHook
+, black
+, coverage
+, click
+, freezegun
+, # , label-studio-sdk
+  mypy
+, pytest-cov-stub
+, pytest-mock
+, vcrpy
+, grpcio
+,
 }:
 let
   version = "0.18.14";

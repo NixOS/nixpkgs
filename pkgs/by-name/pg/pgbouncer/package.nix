@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  libevent,
-  c-ares,
-  pkg-config,
-  systemd,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, libevent
+, c-ares
+, pkg-config
+, systemd
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

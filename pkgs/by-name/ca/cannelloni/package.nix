@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  lksctp-tools,
-  sctpSupport ? true,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, lksctp-tools
+, sctpSupport ? true
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -4,9 +4,11 @@
 let
   runWithOpenSSL =
     file: cmd:
-    pkgs.runCommand file {
-      buildInputs = [ pkgs.openssl ];
-    } cmd;
+    pkgs.runCommand file
+      {
+        buildInputs = [ pkgs.openssl ];
+      }
+      cmd;
 
   ca_key = runWithOpenSSL "ca-key.pem" "openssl genrsa -out $out 2048";
   ca_pem = runWithOpenSSL "ca.pem" ''

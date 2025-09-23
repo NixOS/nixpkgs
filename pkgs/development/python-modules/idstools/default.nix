@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
-  sphinx,
-  sphinxcontrib-programoutput,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools
+, sphinx
+, sphinxcontrib-programoutput
+,
 }:
 
 buildPythonPackage rec {

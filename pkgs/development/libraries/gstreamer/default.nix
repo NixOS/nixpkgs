@@ -1,10 +1,10 @@
-{
-  config,
-  lib,
-  callPackage,
-  ipu6ep-camera-hal,
-  ipu6epmtl-camera-hal,
-  apple-sdk_13,
+{ config
+, lib
+, callPackage
+, ipu6ep-camera-hal
+, ipu6epmtl-camera-hal
+, apple-sdk_13
+,
 }:
 
 let
@@ -47,6 +47,6 @@ in
 
   # note: gst-python is in ../../python-modules/gst-python - called under python3Packages
 }
-// lib.optionalAttrs config.allowAliases {
+  // lib.optionalAttrs config.allowAliases {
   gst-plugins-viperfx = throw "'gst_all_1.gst-plugins-viperfx' was removed as it is broken and not maintained upstream"; # Added 2024-12-16
 }

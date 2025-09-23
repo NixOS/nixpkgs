@@ -1,21 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # unpropagated
-  pytest,
-
-  # propagated
-  inflection,
-  factory-boy,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # unpropagated
+  pytest
+, # propagated
+  inflection
+, factory-boy
+, typing-extensions
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

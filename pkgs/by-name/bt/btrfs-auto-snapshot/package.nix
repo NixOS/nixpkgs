@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  coreutils,
-  getopt,
-  gnugrep,
-  gnused,
-  gawk,
-  btrfs-progs,
-  syslogSupport ? true,
-  util-linux ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, getopt
+, gnugrep
+, gnused
+, gawk
+, btrfs-progs
+, syslogSupport ? true
+, util-linux ? null
+,
 }:
 assert syslogSupport -> util-linux != null;
 stdenv.mkDerivation rec {

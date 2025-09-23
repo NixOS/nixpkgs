@@ -807,14 +807,15 @@ in
       in
       # Do not eta reduce v, so that we have the same strictness as `builtins.warn`.
       msg: v:
-      # `builtins.warn` requires a string message, so we enforce that in our implementation, so that callers aren't accidentally incompatible with newer Nix versions.
-      assert isString msg;
-      if mustAbort then
-        builtins.trace "[1;31mevaluation warning:[0m ${msg}" (
-          abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors."
-        )
-      else
-        builtins.trace "[1;35mevaluation warning:[0m ${msg}" v
+        # `builtins.warn` requires a string message, so we enforce that in our implementation, so that callers aren't accidentally incompatible with newer Nix versions.
+        assert isString msg;
+        if mustAbort then
+          builtins.trace "[1;31mevaluation warning:[0m ${msg}"
+            (
+              abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors."
+            )
+        else
+          builtins.trace "[1;35mevaluation warning:[0m ${msg}" v
     );
 
   /**
@@ -1146,10 +1147,11 @@ in
     if match != null then
       (builtins.fromTOML "v=0x${builtins.elemAt match 1}").v
     else
-      # TODO: Turn this into a `throw` in 26.05.
+    # TODO: Turn this into a `throw` in 26.05.
       assert lib.warn "fromHexString: ${
         lib.generators.toPretty { } str
-      } is not a valid input and will be rejected in 26.05" true;
+      } is not a valid input and will be rejected in 26.05"
+        true;
       let
         noPrefix = lib.strings.removePrefix "0x" (lib.strings.toLower str);
       in

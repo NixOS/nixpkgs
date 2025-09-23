@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  dnspython,
-  fetchPypi,
-  filelock,
-  idna,
-  platformdirs,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  uritools,
+{ lib
+, buildPythonPackage
+, dnspython
+, fetchPypi
+, filelock
+, idna
+, platformdirs
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, uritools
+,
 }:
 
 buildPythonPackage rec {

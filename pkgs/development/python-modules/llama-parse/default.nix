@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  llama-cloud-services,
-  hatchling,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, llama-cloud-services
+, hatchling
+,
 }:
 
 buildPythonPackage rec {

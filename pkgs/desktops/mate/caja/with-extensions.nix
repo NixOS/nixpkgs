@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  glib,
-  wrapGAppsHook3,
-  xorg,
-  caja,
-  cajaExtensions,
-  extensions ? [ ],
-  useDefaultExtensions ? true,
+{ stdenv
+, lib
+, glib
+, wrapGAppsHook3
+, xorg
+, caja
+, cajaExtensions
+, extensions ? [ ]
+, useDefaultExtensions ? true
+,
 }:
 
 let

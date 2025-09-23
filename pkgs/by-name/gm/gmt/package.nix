@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  apple-sdk,
-  fftwSinglePrec,
-  netcdf,
-  pcre,
-  gdal,
-  blas,
-  lapack,
-  ghostscript,
-  dcw-gmt,
-  gshhg-gmt,
-  libxml2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, curl
+, apple-sdk
+, fftwSinglePrec
+, netcdf
+, pcre
+, gdal
+, blas
+, lapack
+, ghostscript
+, dcw-gmt
+, gshhg-gmt
+, libxml2
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmt";
@@ -33,9 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS = "-lxml2 -L${lib.getLib libxml2}/lib";
     NIX_CFLAGS_COMPILE =
       lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration "
-      + lib.optionalString (
-        stdenv.hostPlatform.isDarwin && lib.versionOlder apple-sdk.version "13.3"
-      ) "-D__LAPACK_int=int";
+      + lib.optionalString
+        (
+          stdenv.hostPlatform.isDarwin && lib.versionOlder apple-sdk.version "13.3"
+        ) "-D__LAPACK_int=int";
   };
 
   buildInputs = [

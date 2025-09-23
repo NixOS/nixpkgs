@@ -1,11 +1,11 @@
-{
-  buildPecl,
-  fetchFromGitHub,
-  fetchpatch,
-  lib,
-  php,
-  runCommand,
-  systemd,
+{ buildPecl
+, fetchFromGitHub
+, fetchpatch
+, lib
+, php
+, runCommand
+, systemd
+,
 }:
 
 buildPecl {

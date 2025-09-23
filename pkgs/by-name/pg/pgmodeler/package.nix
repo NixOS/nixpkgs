@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  copyDesktopItems,
-  fetchFromGitHub,
-  makeDesktopItem,
-  pkg-config,
-  libpq,
-  cups,
-  libxml2,
-  qt6,
+{ lib
+, stdenv
+, copyDesktopItems
+, fetchFromGitHub
+, makeDesktopItem
+, pkg-config
+, libpq
+, cups
+, libxml2
+, qt6
+,
 }:
 
 stdenv.mkDerivation rec {

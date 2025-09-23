@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gettext,
-  texinfo,
-  xfsprogs,
-  e2fsprogs,
-  libcap,
-  ntfs3g,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gettext
+, texinfo
+, xfsprogs
+, e2fsprogs
+, libcap
+, ntfs3g
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

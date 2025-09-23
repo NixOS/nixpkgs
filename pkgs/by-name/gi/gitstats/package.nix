@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  installShellFiles,
-  perl,
-  python3,
-  gnuplot,
-  coreutils,
-  gnugrep,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, installShellFiles
+, perl
+, python3
+, gnuplot
+, coreutils
+, gnugrep
+,
 }:
 
 stdenv.mkDerivation rec {

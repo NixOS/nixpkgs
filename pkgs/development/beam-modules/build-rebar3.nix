@@ -1,32 +1,31 @@
-{
-  stdenv,
-  writeText,
-  erlang,
-  rebar3WithPlugins,
-  openssl,
-  libyaml,
-  lib,
+{ stdenv
+, writeText
+, erlang
+, rebar3WithPlugins
+, openssl
+, libyaml
+, lib
+,
 }:
 
-{
-  name,
-  version,
-  src,
-  setupHook ? null,
-  buildInputs ? [ ],
-  beamDeps ? [ ],
-  buildPlugins ? [ ],
-  postPatch ? "",
-  installPhase ? null,
-  buildPhase ? null,
-  configurePhase ? null,
-  meta ? { },
-  erlangCompilerOptions ? [ ],
-  # Deterministic Erlang builds remove full system paths from debug information
+{ name
+, version
+, src
+, setupHook ? null
+, buildInputs ? [ ]
+, beamDeps ? [ ]
+, buildPlugins ? [ ]
+, postPatch ? ""
+, installPhase ? null
+, buildPhase ? null
+, configurePhase ? null
+, meta ? { }
+, erlangCompilerOptions ? [ ]
+, # Deterministic Erlang builds remove full system paths from debug information
   # among other things to keep builds more reproducible. See their docs for more:
   # https://www.erlang.org/doc/man/compile
-  erlangDeterministicBuilds ? true,
-  ...
+  erlangDeterministicBuilds ? true
+, ...
 }@attrs:
 
 let

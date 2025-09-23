@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  m4,
-  python3,
-  xcbproto,
-  libxcb,
-  writeScript,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, m4
+, python3
+, xcbproto
+, libxcb
+, writeScript
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxcb-errors";

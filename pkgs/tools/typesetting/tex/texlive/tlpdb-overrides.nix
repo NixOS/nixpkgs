@@ -1,29 +1,29 @@
-{
-  stdenv,
-  fetchpatch,
-  lib,
-  tlpdb,
-  bin,
-  tlpdbxz,
-  tl,
-  installShellFiles,
-  coreutils,
-  findutils,
-  gawk,
-  getopt,
-  ghostscript_headless,
-  gnugrep,
-  gnumake,
-  gnupg,
-  gnused,
-  gzip,
-  html-tidy,
-  ncurses,
-  perl,
-  python3,
-  ruby,
-  zip,
-  luajit,
+{ stdenv
+, fetchpatch
+, lib
+, tlpdb
+, bin
+, tlpdbxz
+, tl
+, installShellFiles
+, coreutils
+, findutils
+, gawk
+, getopt
+, ghostscript_headless
+, gnugrep
+, gnumake
+, gnupg
+, gnused
+, gzip
+, html-tidy
+, ncurses
+, perl
+, python3
+, ruby
+, zip
+, luajit
+,
 }:
 oldTlpdb:
 let
@@ -33,23 +33,23 @@ let
   # so we remove them from binfiles, and add back the ones texlinks purposefully ignore (e.g. mptopdf)
   removeFormatLinks = lib.mapAttrs (
     _: attrs:
-    if
-      (attrs ? formats && attrs ? binfiles)
-    # TLPDB reports erroneously that various metafont binaries like "mf" are format links to engines
-    # like "mf-nowin"; core-big provides both binaries and links so we simply skip them here
-    then
-      let
-        formatLinks = lib.catAttrs "name" (
-          lib.filter (f: f.name != f.engine && !lib.hasSuffix "-nowin" f.engine) attrs.formats
-        );
-        binNotFormats = lib.subtractLists formatLinks attrs.binfiles;
-      in
-      if binNotFormats != [ ] then
-        attrs // { binfiles = binNotFormats; }
+      if
+        (attrs ? formats && attrs ? binfiles)
+      # TLPDB reports erroneously that various metafont binaries like "mf" are format links to engines
+      # like "mf-nowin"; core-big provides both binaries and links so we simply skip them here
+      then
+        let
+          formatLinks = lib.catAttrs "name" (
+            lib.filter (f: f.name != f.engine && !lib.hasSuffix "-nowin" f.engine) attrs.formats
+          );
+          binNotFormats = lib.subtractLists formatLinks attrs.binfiles;
+        in
+        if binNotFormats != [ ] then
+          attrs // { binfiles = binNotFormats; }
+        else
+          removeAttrs attrs [ "binfiles" ]
       else
-        removeAttrs attrs [ "binfiles" ]
-    else
-      attrs
+        attrs
   );
 
   orig = removeFormatLinks (removeAttrs oldTlpdb [ "00texlive.config" ]);

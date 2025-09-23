@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  fetchpatch,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, fetchpatch
+,
 }:
 
 python3Packages.buildPythonApplication {

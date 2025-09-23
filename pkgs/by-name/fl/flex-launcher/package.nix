@@ -1,15 +1,15 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  SDL2,
-  SDL2_ttf,
-  SDL2_image,
-  libX11,
-  cmake,
-  validatePkgConfig,
-  inih,
-  lib,
-  gitUpdater,
+{ stdenv
+, fetchFromGitHub
+, SDL2
+, SDL2_ttf
+, SDL2_image
+, libX11
+, cmake
+, validatePkgConfig
+, inih
+, lib
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

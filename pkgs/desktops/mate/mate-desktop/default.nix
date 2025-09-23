@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  isocodes,
-  libstartup_notification,
-  gtk3,
-  dconf,
-  wrapGAppsHook3,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, isocodes
+, libstartup_notification
+, gtk3
+, dconf
+, wrapGAppsHook3
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  gitUpdater,
-  versionCheckHook,
-  installShellFiles,
-  stdenv,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, gitUpdater
+, versionCheckHook
+, installShellFiles
+, stdenv
+, nix-update-script
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "cortex-tools";

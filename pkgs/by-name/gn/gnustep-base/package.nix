@@ -1,30 +1,30 @@
-{
-  lib,
-  clangStdenv,
-  fetchpatch,
-  fetchzip,
-  aspell,
-  audiofile,
-  binutils-unwrapped,
-  cups,
-  giflib,
-  gmp,
-  gnustep-libobjc,
-  gnustep-make,
-  gnutls,
-  icu,
-  libffi,
-  libgcrypt,
-  libiberty,
-  libiconv,
-  libjpeg,
-  libpng,
-  libtiff,
-  libxml2,
-  libxslt,
-  pkg-config,
-  portaudio,
-  wrapGNUstepAppsHook,
+{ lib
+, clangStdenv
+, fetchpatch
+, fetchzip
+, aspell
+, audiofile
+, binutils-unwrapped
+, cups
+, giflib
+, gmp
+, gnustep-libobjc
+, gnustep-make
+, gnutls
+, icu
+, libffi
+, libgcrypt
+, libiberty
+, libiconv
+, libjpeg
+, libpng
+, libtiff
+, libxml2
+, libxslt
+, pkg-config
+, portaudio
+, wrapGNUstepAppsHook
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

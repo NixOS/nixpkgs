@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qttools,
-  qtdeclarative,
+{ mkKdeDerivation
+, qttools
+, qtdeclarative
+,
 }:
 mkKdeDerivation {
   pname = "kconfig";

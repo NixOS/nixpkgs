@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  makeDesktopItem,
-  copyDesktopItems,
-  cmake,
-  boost,
-  cups,
-  fmt,
-  libvorbis,
-  libsndfile,
-  minizip,
-  gtest,
-  qt6,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, makeDesktopItem
+, copyDesktopItems
+, cmake
+, boost
+, cups
+, fmt
+, libvorbis
+, libsndfile
+, minizip
+, gtest
+, qt6
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

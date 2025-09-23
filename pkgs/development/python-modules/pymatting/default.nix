@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numba,
-  numpy,
-  pillow,
-  pytestCheckHook,
-  scipy,
-  setuptools,
-  config,
-  cudaSupport ? config.cudaSupport,
-  cupy,
-  pyopencl,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, numba
+, numpy
+, pillow
+, pytestCheckHook
+, scipy
+, setuptools
+, config
+, cudaSupport ? config.cudaSupport
+, cupy
+, pyopencl
+,
 }:
 
 buildPythonPackage rec {

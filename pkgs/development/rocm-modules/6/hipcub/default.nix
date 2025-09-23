@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  rocprim,
-  clr,
-  gtest,
-  gbenchmark,
-  buildTests ? false,
-  buildBenchmarks ? false,
-  gpuTargets ? [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, rocprim
+, clr
+, gtest
+, gbenchmark
+, buildTests ? false
+, buildBenchmarks ? false
+, gpuTargets ? [ ]
+,
 }:
 
 # CUB can also be used as a backend instead of rocPRIM.

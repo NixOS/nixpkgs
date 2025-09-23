@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  meson,
-  ninja,
-  pkg-config,
-  glib,
-  gtk3,
-  thunar,
-  libxfce4util,
-  gettext,
-  taglib,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, glib
+, gtk3
+, thunar
+, libxfce4util
+, gettext
+, taglib
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

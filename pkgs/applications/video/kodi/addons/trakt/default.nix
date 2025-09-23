@@ -1,11 +1,11 @@
-{
-  lib,
-  rel,
-  buildKodiAddon,
-  fetchzip,
-  addonUpdateScript,
-  trakt-module,
-  dateutil,
+{ lib
+, rel
+, buildKodiAddon
+, fetchzip
+, addonUpdateScript
+, trakt-module
+, dateutil
+,
 }:
 buildKodiAddon rec {
   pname = "trakt";

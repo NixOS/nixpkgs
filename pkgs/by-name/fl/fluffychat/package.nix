@@ -1,20 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchzip,
-  imagemagick,
-  libgbm,
-  libdrm,
-  flutter332,
-  pulseaudio,
-  copyDesktopItems,
-  makeDesktopItem,
-
-  callPackage,
-  vodozemac-wasm ? callPackage ./vodozemac-wasm.nix { flutter = flutter332; },
-
-  targetFlutterPlatform ? "linux",
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, imagemagick
+, libgbm
+, libdrm
+, flutter332
+, pulseaudio
+, copyDesktopItems
+, makeDesktopItem
+, callPackage
+, vodozemac-wasm ? callPackage ./vodozemac-wasm.nix { flutter = flutter332; }
+, targetFlutterPlatform ? "linux"
+,
 }:
 
 let
@@ -128,7 +126,7 @@ flutter332.buildFlutterApplication (
       patchelf --add-rpath ${libwebrtcRpath} $out/app/fluffychat-linux/lib/libwebrtc.so
     '';
   }
-  // lib.optionalAttrs (targetFlutterPlatform == "web") {
+    // lib.optionalAttrs (targetFlutterPlatform == "web") {
     preBuild = ''
       cp -r ${vodozemac-wasm}/* ./assets/vodozemac/
     '';

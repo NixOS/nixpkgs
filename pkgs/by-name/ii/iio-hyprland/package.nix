@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  meson,
-  cmake,
-  pkg-config,
-  dbus,
-  ninja,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, meson
+, cmake
+, pkg-config
+, dbus
+, ninja
+,
 }:
 
 stdenv.mkDerivation {

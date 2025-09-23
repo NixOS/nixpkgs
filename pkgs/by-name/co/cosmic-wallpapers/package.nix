@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchpatch,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-
-  looseversion,
-  requests,
-  selenium,
-  websockets,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, looseversion
+, requests
+, selenium
+, websockets
+,
 }:
 
 buildPythonPackage {

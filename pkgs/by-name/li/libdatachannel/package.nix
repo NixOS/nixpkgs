@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  pkg-config,
-  libnice,
-  openssl,
-  plog,
-  srtp,
-  usrsctp,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, libnice
+, openssl
+, plog
+, srtp
+, usrsctp
+,
 }:
 
 stdenv.mkDerivation rec {

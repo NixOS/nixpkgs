@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  pgocaml,
-  ppx_optcomp,
+{ buildDunePackage
+, pgocaml
+, ppx_optcomp
+,
 }:
 
 buildDunePackage {

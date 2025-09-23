@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  wrapGAppsHook3,
-  makeDesktopItem,
-  alsa-lib,
-  atk,
-  cairo,
-  dbus-glib,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  libGL,
-  xorg,
-  libgbm,
-  pango,
-  pciutils,
+{ lib
+, stdenv
+, fetchurl
+, wrapGAppsHook3
+, makeDesktopItem
+, alsa-lib
+, atk
+, cairo
+, dbus-glib
+, gdk-pixbuf
+, glib
+, gtk3
+, libGL
+, xorg
+, libgbm
+, pango
+, pciutils
+,
 }:
 
 stdenv.mkDerivation rec {

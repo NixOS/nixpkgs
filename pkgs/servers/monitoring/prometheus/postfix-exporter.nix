@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  nixosTests,
-  systemd,
-  withSystemdSupport ? true,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, nixosTests
+, systemd
+, withSystemdSupport ? true
+,
 }:
 
 buildGoModule rec {

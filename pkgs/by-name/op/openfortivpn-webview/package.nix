@@ -1,8 +1,8 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  electron,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, electron
+,
 }:
 
 let

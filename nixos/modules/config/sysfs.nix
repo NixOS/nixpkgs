@@ -1,9 +1,8 @@
-{
-  lib,
-  config,
-  utils,
-  pkgs,
-  ...
+{ lib
+, config
+, utils
+, pkgs
+, ...
 }:
 
 let
@@ -58,18 +57,21 @@ let
       if length defs == 1 then
         (head defs).value
       else
-        (foldl' (
-          first: def:
-          # merge definitions if they produce the same value string
-          throwIf (mkValueString first.value != mkValueString def.value)
-            "The option \"${showOption loc}\" has conflicting definition values:${
+        (foldl'
+          (
+            first: def:
+            # merge definitions if they produce the same value string
+            throwIf (mkValueString first.value != mkValueString def.value)
+              "The option \"${showOption loc}\" has conflicting definition values:${
               showDefs [
                 first
                 def
               ]
             }"
-            first
-        ) (head defs) (tail defs)).value;
+              first
+          )
+          (head defs)
+          (tail defs)).value;
   };
 
   mapAttrsToListRecursive =
@@ -111,21 +113,23 @@ let
       mkdir "$out"
     ''
     + concatLines (
-      mapAttrsToListRecursive (
-        p: v:
-        let
-          path = mkPath p;
-        in
-        if v == null then
-          [ ]
-        else
-          ''
-            printf 'w %s - - - - %s\n' \
-              ${escapeShellArg (escapeTmpfiles path)} \
-              ${escapeShellArg (escapeTmpfiles (mkValueString v))} \
-              >"$out"/${escapeShellArg (escapeSystemdPath path)}.conf
-          ''
-      ) cfg
+      mapAttrsToListRecursive
+        (
+          p: v:
+            let
+              path = mkPath p;
+            in
+            if v == null then
+              [ ]
+            else
+              ''
+                printf 'w %s - - - - %s\n' \
+                  ${escapeShellArg (escapeTmpfiles path)} \
+                  ${escapeShellArg (escapeTmpfiles (mkValueString v))} \
+                  >"$out"/${escapeShellArg (escapeSystemdPath path)}.conf
+              ''
+        )
+        cfg
     )
   );
 in
@@ -199,17 +203,19 @@ in
         };
       }
       // listToAttrs (
-        mapAttrsToListRecursive (
-          p: v:
-          if v == null then
-            [ ]
-          else
-            nameValuePair "nixos-sysfs@${escapeSystemdPath (mkPath p)}" {
-              overrideStrategy = "asDropin";
-              wantedBy = [ "sysinit.target" ];
-              before = [ "sysinit.target" ];
-            }
-        ) cfg
+        mapAttrsToListRecursive
+          (
+            p: v:
+              if v == null then
+                [ ]
+              else
+                nameValuePair "nixos-sysfs@${escapeSystemdPath (mkPath p)}" {
+                  overrideStrategy = "asDropin";
+                  wantedBy = [ "sysinit.target" ];
+                  before = [ "sysinit.target" ];
+                }
+          )
+          cfg
       );
 
       services."nixos-sysfs@" = {
@@ -247,18 +253,22 @@ in
       };
     };
 
-    warnings = mapAttrsToListRecursive (
-      p: v:
-      if hasGlob p then
-        "Attribute path \"${concatStringsSep "." p}\" contains glob patterns. Please ensure that it does not overlap with other paths."
-      else
-        [ ]
-    ) cfg;
+    warnings = mapAttrsToListRecursive
+      (
+        p: v:
+          if hasGlob p then
+            "Attribute path \"${concatStringsSep "." p}\" contains glob patterns. Please ensure that it does not overlap with other paths."
+          else
+            [ ]
+      )
+      cfg;
 
-    assertions = mapAttrsToListRecursive (p: v: {
-      assertion = all (n: match ''(\.\.?|.*/.*)'' n == null) p;
-      message = "Attribute path \"${concatStringsSep "." p}\" has invalid components.";
-    }) cfg;
+    assertions = mapAttrsToListRecursive
+      (p: v: {
+        assertion = all (n: match ''(\.\.?|.*/.*)'' n == null) p;
+        message = "Attribute path \"${concatStringsSep "." p}\" has invalid components.";
+      })
+      cfg;
   };
 
   meta.maintainers = with lib.maintainers; [ mvs ];

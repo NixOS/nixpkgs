@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  imagemagick,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeBinaryWrapper
+, imagemagick
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

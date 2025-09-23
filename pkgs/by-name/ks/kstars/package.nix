@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cfitsio,
-  cmake,
-  curl,
-  eigen_3_4_0,
-  gsl,
-  indi-full,
-  kdePackages,
-  libnova,
-  libraw,
-  libsecret,
-  libxisf,
-  opencv,
-  stellarsolver,
-  wcslib,
-  xplanet,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, cfitsio
+, cmake
+, curl
+, eigen_3_4_0
+, gsl
+, indi-full
+, kdePackages
+, libnova
+, libraw
+, libsecret
+, libxisf
+, opencv
+, stellarsolver
+, wcslib
+, xplanet
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

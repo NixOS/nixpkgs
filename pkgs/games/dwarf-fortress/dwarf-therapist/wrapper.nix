@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  writeText,
-  dwarf-therapist,
-  dwarf-fortress,
-  dfhack,
-  mkDfWrapper,
-  replaceVars,
-  coreutils,
-  wrapQtAppsHook,
-  expect,
-  xvfb-run,
+{ lib
+, stdenv
+, writeText
+, dwarf-therapist
+, dwarf-fortress
+, dfhack
+, mkDfWrapper
+, replaceVars
+, coreutils
+, wrapQtAppsHook
+, expect
+, xvfb-run
+,
 }:
 
 let

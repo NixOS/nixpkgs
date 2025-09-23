@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  variants ? [ ],
+{ stdenvNoCC
+, lib
+, fetchurl
+, variants ? [ ]
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  libX11,
-  libXext,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, libX11
+, libXext
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

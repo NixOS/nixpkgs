@@ -287,9 +287,11 @@ in
     { nodes, ... }:
     let
       # We need access to the config file in the test script.
-      filteredConfig = pkgs.lib.converge (pkgs.lib.filterAttrsRecursive (
-        _: v: v != null
-      )) nodes.provision.services.kanidm.serverSettings;
+      filteredConfig = pkgs.lib.converge
+        (pkgs.lib.filterAttrsRecursive (
+          _: v: v != null
+        ))
+        nodes.provision.services.kanidm.serverSettings;
       serverConfigFile = (pkgs.formats.toml { }).generate "server.toml" filteredConfig;
 
       specialisations = "${nodes.provision.system.build.toplevel}/specialisation";

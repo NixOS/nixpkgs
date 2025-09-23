@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gitUpdater,
-  autoreconfHook,
-  pkg-config,
-  glib,
-  libuuid,
-  popt,
-  elfutils,
-  enablePython ? false,
-  pythonPackages ? null,
-  swig,
+{ lib
+, stdenv
+, fetchurl
+, gitUpdater
+, autoreconfHook
+, pkg-config
+, glib
+, libuuid
+, popt
+, elfutils
+, enablePython ? false
+, pythonPackages ? null
+, swig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

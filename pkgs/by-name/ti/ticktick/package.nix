@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  wrapGAppsHook3,
-  dpkg,
-  autoPatchelfHook,
-  glibc,
-  gcc-unwrapped,
-  nss,
-  libdrm,
-  libgbm,
-  alsa-lib,
-  xdg-utils,
-  systemd,
+{ lib
+, fetchurl
+, stdenv
+, wrapGAppsHook3
+, dpkg
+, autoPatchelfHook
+, glibc
+, gcc-unwrapped
+, nss
+, libdrm
+, libgbm
+, alsa-lib
+, xdg-utils
+, systemd
+,
 }:
 let
   baseUrl = "https://d2atcrkye2ik4e.cloudfront.net/download";
@@ -23,15 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "${baseUrl}/linux/linux_deb_x64/ticktick-${finalAttrs.version}-amd64.deb";
-        hash = "sha256-0eBsD/qFCaK/Isu4XJVve+8TBssgLAsCCM1GHN23PIk=";
-      }
+      fetchurl
+        {
+          url = "${baseUrl}/linux/linux_deb_x64/ticktick-${finalAttrs.version}-amd64.deb";
+          hash = "sha256-0eBsD/qFCaK/Isu4XJVve+8TBssgLAsCCM1GHN23PIk=";
+        }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
-      fetchurl {
-        url = "${baseUrl}/linux/linux_deb_arm64/ticktick-${finalAttrs.version}-arm64.deb";
-        hash = "sha256-USKmydiyeY8Iibe+ebcGcmwo7XJEw/EEf/OY4PsSrl8=";
-      }
+      fetchurl
+        {
+          url = "${baseUrl}/linux/linux_deb_arm64/ticktick-${finalAttrs.version}-arm64.deb";
+          hash = "sha256-USKmydiyeY8Iibe+ebcGcmwo7XJEw/EEf/OY4PsSrl8=";
+        }
     else
       throw "Unsupported system: ${stdenv.hostPlatform.system}";
 

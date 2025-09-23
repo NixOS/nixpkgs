@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
+{ lib
+, stdenv
+, fetchzip
+,
 }:
 
 let
@@ -13,16 +13,14 @@ let
       x86_64-linux = "linux_amd64";
       aarch64-linux = "linux_arm64";
       armv7l-linux = "linux_armv7";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   hash =
     {
       x86_64-linux = "sha256-Ewez2QUsIAmxyjxR8wvt7UJpXVHjIb8s6gGF1YNgrec=";
       aarch64-linux = "sha256-5hZaOqnTYWeUJXGObzUZMqE62ZgNvJ9Wi8shVng10l8=";
       armv7l-linux = "sha256-MOM0OS2/mhYaxowsBVnZH0poR+wXsbjsJKldU/nAfjU=";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zrok";

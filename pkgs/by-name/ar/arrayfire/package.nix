@@ -1,37 +1,36 @@
-{
-  blas,
-  boost,
-  clblast,
-  cmake,
-  config,
-  cudaPackages,
-  fetchFromGitHub,
-  fftw,
-  fftwFloat,
-  fmt_9,
-  forge,
-  freeimage,
-  gtest,
-  lapack,
-  lib,
-  libGL,
-  mesa,
-  ocl-icd,
-  opencl-clhpp,
-  pkg-config,
-  python3,
-  span-lite,
-  stdenv,
-  # NOTE: We disable tests by default, because they cannot be run easily on
+{ blas
+, boost
+, clblast
+, cmake
+, config
+, cudaPackages
+, fetchFromGitHub
+, fftw
+, fftwFloat
+, fmt_9
+, forge
+, freeimage
+, gtest
+, lapack
+, lib
+, libGL
+, mesa
+, ocl-icd
+, opencl-clhpp
+, pkg-config
+, python3
+, span-lite
+, stdenv
+, # NOTE: We disable tests by default, because they cannot be run easily on
   # non-NixOS systems when either CUDA or OpenCL support is enabled (CUDA and
   # OpenCL need access to drivers that are installed outside of Nix on
   # non-NixOS systems).
-  doCheck ? false,
-  cpuSupport ? true,
-  cudaSupport ? config.cudaSupport,
-  # OpenCL needs mesa which is broken on Darwin
-  openclSupport ? !stdenv.hostPlatform.isDarwin,
-  # This argument lets one run CUDA & OpenCL tests on non-NixOS systems by
+  doCheck ? false
+, cpuSupport ? true
+, cudaSupport ? config.cudaSupport
+, # OpenCL needs mesa which is broken on Darwin
+  openclSupport ? !stdenv.hostPlatform.isDarwin
+, # This argument lets one run CUDA & OpenCL tests on non-NixOS systems by
   # telling Nix where to find the drivers. If you know the version of the
   # Nvidia driver that is installed on your system, you can do:
   #
@@ -49,8 +48,9 @@
   #       })
   #       { libsOnly = true; };
   # }
-  nvidiaComputeDrivers ? null,
-  fetchpatch,
+  nvidiaComputeDrivers ? null
+, fetchpatch
+,
 }:
 
 # ArrayFire compiles with 64-bit BLAS, but some tests segfault or throw
@@ -189,10 +189,10 @@ stdenv.mkDerivation rec {
       export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
     ''
     +
-      # On non-NixOS systems, help the tests find Nvidia drivers
-      lib.optionalString (openclSupport && nvidiaComputeDrivers != null) ''
-        export OCL_ICD_VENDORS=${nvidiaComputeDrivers}/etc/OpenCL/vendors
-      ''
+    # On non-NixOS systems, help the tests find Nvidia drivers
+    lib.optionalString (openclSupport && nvidiaComputeDrivers != null) ''
+      export OCL_ICD_VENDORS=${nvidiaComputeDrivers}/etc/OpenCL/vendors
+    ''
     + ''
       # Note: for debugging, enable AF_TRACE=all
       AF_PRINT_ERRORS=1 ctest ${ctestFlags}

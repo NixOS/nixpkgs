@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  jemalloc,
-  c-blosc,
-  tbb,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, jemalloc
+, c-blosc
+, tbb
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

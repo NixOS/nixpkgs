@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  gfortran,
-  gcc_meta,
-  release_version,
-  version,
-  getVersionFile,
-  monorepoSrc ? null,
-  autoreconfHook269,
-  libiberty,
-  buildPackages,
-  libgcc,
-  libbacktrace,
+{ lib
+, stdenv
+, gfortran
+, gcc_meta
+, release_version
+, version
+, getVersionFile
+, monorepoSrc ? null
+, autoreconfHook269
+, libiberty
+, buildPackages
+, libgcc
+, libbacktrace
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgfortran";
@@ -149,11 +149,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-zlib"
   ]
   ++
-    lib.optional (stdenv.hostPlatform.libc == "glibc")
-      # Cheat and use previous stage's glibc to avoid infinite recursion. As
-      # of GCC 11, libgcc only cares if the version is greater than 2.19,
-      # which is quite ancient, so this little lie should be fine.
-      "--with-glibc-version=${buildPackages.glibc.version}";
+  lib.optional (stdenv.hostPlatform.libc == "glibc")
+    # Cheat and use previous stage's glibc to avoid infinite recursion. As
+    # of GCC 11, libgcc only cares if the version is greater than 2.19,
+    # which is quite ancient, so this little lie should be fine.
+    "--with-glibc-version=${buildPackages.glibc.version}";
 
   configurePlatforms = [
     "build"

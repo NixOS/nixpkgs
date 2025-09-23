@@ -1,32 +1,31 @@
-{
-  nix-update-script,
-  stdenvNoCC,
-  lib,
-  php,
+{ nix-update-script
+, stdenvNoCC
+, lib
+, php
+,
 }@toplevel:
 
 let
   buildComposerProjectOverride =
     finalAttrs:
-    {
-      php ? finalAttrs.php or toplevel.php,
-      composer ? finalAttrs.php.packages.composer or toplevel.php.packages.composer,
-      composerLock ? finalAttrs.composerLock or null,
-      vendorHash ? finalAttrs.vendorHash or "",
-      composerNoDev ? finalAttrs.composerNoDev or true,
-      composerNoPlugins ? finalAttrs.composerNoPlugins or true,
-      composerNoScripts ? finalAttrs.composerNoScripts or true,
-      composerStrictValidation ? finalAttrs.composerStrictValidation or true,
-      buildInputs ? [ ],
-      nativeBuildInputs ? [ ],
-      strictDeps ? true,
-      patches ? [ ],
-      doCheck ? true,
-      doInstallCheck ? true,
-      dontCheckForBrokenSymlinks ? true,
-      passthru ? { },
-      meta ? { },
-      ...
+    { php ? finalAttrs.php or toplevel.php
+    , composer ? finalAttrs.php.packages.composer or toplevel.php.packages.composer
+    , composerLock ? finalAttrs.composerLock or null
+    , vendorHash ? finalAttrs.vendorHash or ""
+    , composerNoDev ? finalAttrs.composerNoDev or true
+    , composerNoPlugins ? finalAttrs.composerNoPlugins or true
+    , composerNoScripts ? finalAttrs.composerNoScripts or true
+    , composerStrictValidation ? finalAttrs.composerStrictValidation or true
+    , buildInputs ? [ ]
+    , nativeBuildInputs ? [ ]
+    , strictDeps ? true
+    , patches ? [ ]
+    , doCheck ? true
+    , doInstallCheck ? true
+    , dontCheckForBrokenSymlinks ? true
+    , passthru ? { }
+    , meta ? { }
+    , ...
     }@args:
     {
       inherit

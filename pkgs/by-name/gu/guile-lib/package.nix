@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  gettext,
-  guile,
-  pkg-config,
-  texinfo,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, gettext
+, guile
+, pkg-config
+, texinfo
+,
 }:
 
 stdenv.mkDerivation rec {

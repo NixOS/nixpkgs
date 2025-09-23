@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  autoPatchelfHook,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
-  alsa-lib,
-  at-spi2-atk,
-  atk,
-  cairo,
-  cups,
-  dbus,
-  gcc-unwrapped,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  libdrm,
-  libnotify,
-  libpulseaudio,
-  libxkbcommon,
-  libgbm,
-  nss,
-  udev,
-  libGL,
-  xorg,
+{ lib
+, stdenvNoCC
+, fetchurl
+, autoPatchelfHook
+, copyDesktopItems
+, makeDesktopItem
+, makeWrapper
+, alsa-lib
+, at-spi2-atk
+, atk
+, cairo
+, cups
+, dbus
+, gcc-unwrapped
+, gdk-pixbuf
+, glib
+, gtk3
+, libdrm
+, libnotify
+, libpulseaudio
+, libxkbcommon
+, libgbm
+, nss
+, udev
+, libGL
+, xorg
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

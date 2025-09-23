@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  makeWrapper,
-  ocamlPackages,
-  remind,
+{ lib
+, stdenv
+, fetchFromGitLab
+, makeWrapper
+, ocamlPackages
+, remind
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

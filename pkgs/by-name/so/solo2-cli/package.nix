@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  pcsclite,
-  udev,
-  udevCheckHook,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, pcsclite
+, udev
+, udevCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

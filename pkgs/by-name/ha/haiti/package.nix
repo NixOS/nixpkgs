@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  ruby,
-  stdenv,
-  versionCheckHook,
+{ fetchFromGitHub
+, lib
+, makeWrapper
+, ruby
+, stdenv
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

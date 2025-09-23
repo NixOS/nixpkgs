@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gfortran,
-  cmake,
-  pkg-config,
-  armadillo,
-  blas,
-  lapack,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gfortran
+, cmake
+, pkg-config
+, armadillo
+, blas
+, lapack
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,16 +1,15 @@
-{
-  toPythonModule,
-  python,
-  lttng-tools,
-  swig,
+{ toPythonModule
+, python
+, lttng-tools
+, swig
+,
 }:
 
 toPythonModule (
   lttng-tools.overrideAttrs (
-    {
-      nativeBuildInputs ? [ ],
-      configureFlags ? [ ],
-      ...
+    { nativeBuildInputs ? [ ]
+    , configureFlags ? [ ]
+    , ...
     }:
     {
       pname = "lttng";

@@ -1,31 +1,31 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchzip,
-  writeText,
-  lib,
-  openssl,
-  cmake,
-  autoconf,
-  automake,
-  libtool,
-  pkg-config,
-  bison,
-  flex,
-  groff,
-  perl,
-  python3,
-  ncurses,
-  time,
-  upx,
-  gtest,
-  libffi,
-  libxml2,
-  zlib,
-  enableTests ? true,
-  buildDevTools ? true,
-  compileYaraPatterns ? true,
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, fetchzip
+, writeText
+, lib
+, openssl
+, cmake
+, autoconf
+, automake
+, libtool
+, pkg-config
+, bison
+, flex
+, groff
+, perl
+, python3
+, ncurses
+, time
+, upx
+, gtest
+, libffi
+, libxml2
+, zlib
+, enableTests ? true
+, buildDevTools ? true
+, compileYaraPatterns ? true
+,
 }:
 
 let

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPy27,
-  setuptools,
-  pytestCheckHook,
-  scipy,
-  numpy,
-  scikit-learn,
-  pandas,
-  matplotlib,
-  joblib,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, setuptools
+, pytestCheckHook
+, scipy
+, numpy
+, scikit-learn
+, pandas
+, matplotlib
+, joblib
+,
 }:
 
 buildPythonPackage rec {

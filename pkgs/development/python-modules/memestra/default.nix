@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  beniget,
-  frilouz,
-  gast,
-  nbconvert,
-  nbformat,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, beniget
+, frilouz
+, gast
+, nbconvert
+, nbformat
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

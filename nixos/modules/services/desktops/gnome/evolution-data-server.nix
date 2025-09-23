@@ -1,10 +1,9 @@
 # Evolution Data Server daemon.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 {

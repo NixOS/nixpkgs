@@ -1,14 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-
-  # dependencies
-  botan3,
-
-  # build dependencies
-  setuptools,
-  setuptools-scm,
+{ lib
+, stdenv
+, buildPythonPackage
+, # dependencies
+  botan3
+, # build dependencies
+  setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

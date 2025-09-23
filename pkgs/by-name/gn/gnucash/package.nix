@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  aqbanking,
-  boost,
-  cmake,
-  gettext,
-  glib,
-  glibcLocales,
-  gobject-introspection,
-  gtest,
-  guile,
-  gwenhywfar,
-  icu,
-  libdbi,
-  libdbiDrivers,
-  libofx,
-  libsecret,
-  libxml2,
-  libxslt,
-  makeWrapper,
-  perlPackages,
-  pkg-config,
-  swig,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, aqbanking
+, boost
+, cmake
+, gettext
+, glib
+, glibcLocales
+, gobject-introspection
+, gtest
+, guile
+, gwenhywfar
+, icu
+, libdbi
+, libdbiDrivers
+, libofx
+, libsecret
+, libxml2
+, libxslt
+, makeWrapper
+, perlPackages
+, pkg-config
+, swig
+, webkitgtk_4_1
+, wrapGAppsHook3
+, python3
+,
 }:
 let
   py = python3.withPackages (

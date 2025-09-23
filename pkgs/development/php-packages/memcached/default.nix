@@ -1,12 +1,12 @@
-{
-  buildPecl,
-  lib,
-  fetchFromGitHub,
-  php,
-  cyrus_sasl,
-  zlib,
-  pkg-config,
-  libmemcached,
+{ buildPecl
+, lib
+, fetchFromGitHub
+, php
+, cyrus_sasl
+, zlib
+, pkg-config
+, libmemcached
+,
 }:
 
 buildPecl rec {

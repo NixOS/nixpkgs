@@ -1,4 +1,4 @@
-{ }:
+{}:
 
 # Minimal set of names assumed to be defined by the rest of ocamlPackages
 {

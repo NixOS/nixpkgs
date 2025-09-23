@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  ghostscript,
-  imagemagick,
-  poppler-utils,
-  python3,
-  tesseract5,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, ghostscript
+, imagemagick
+, poppler-utils
+, python3
+, tesseract5
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

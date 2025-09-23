@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  fetchpatch,
-
-  # build-system
-  setuptools,
-
-  # docs
-  python,
-  sphinx,
-  sphinx-rtd-theme,
-
-  # tests
-  hypothesis,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, fetchpatch
+, # build-system
+  setuptools
+, # docs
+  python
+, sphinx
+, sphinx-rtd-theme
+, # tests
+  hypothesis
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

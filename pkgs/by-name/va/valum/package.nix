@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  meson,
-  ninja,
-  pkg-config,
-  fetchFromGitHub,
-  glib,
-  vala,
-  ctpl,
-  libgee,
-  libsoup_2_4,
-  fcgi,
+{ lib
+, stdenv
+, meson
+, ninja
+, pkg-config
+, fetchFromGitHub
+, glib
+, vala
+, ctpl
+, libgee
+, libsoup_2_4
+, fcgi
+,
 }:
 
 stdenv.mkDerivation rec {

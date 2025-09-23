@@ -1,18 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cargo,
-  pkg-config,
-  rustPlatform,
-  rustc,
-
-  # buildInputs
-  openssl,
-  stdenv,
-  libiconv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cargo
+, pkg-config
+, rustPlatform
+, rustc
+, # buildInputs
+  openssl
+, stdenv
+, libiconv
+,
 }:
 
 buildPythonPackage rec {

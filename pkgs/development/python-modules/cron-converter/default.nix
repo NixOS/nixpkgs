@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  unittestCheckHook,
-  setuptools,
-  python-dateutil,
-  python,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, unittestCheckHook
+, setuptools
+, python-dateutil
+, python
+,
 }:
 buildPythonPackage rec {
   pname = "cron-converter";

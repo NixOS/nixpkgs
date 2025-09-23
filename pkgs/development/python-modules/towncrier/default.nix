@@ -1,18 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchPypi,
-  git, # shells out to git
-  hatchling,
-  importlib-resources,
-  incremental,
-  jinja2,
-  mock,
-  pytestCheckHook,
-  pythonOlder,
-  tomli,
-  twisted,
+{ lib
+, buildPythonPackage
+, click
+, fetchPypi
+, git
+, # shells out to git
+  hatchling
+, importlib-resources
+, incremental
+, jinja2
+, mock
+, pytestCheckHook
+, pythonOlder
+, tomli
+, twisted
+,
 }:
 
 buildPythonPackage rec {

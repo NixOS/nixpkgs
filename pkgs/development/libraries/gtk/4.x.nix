@@ -1,60 +1,60 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  replaceVars,
-  fetchurl,
-  pkg-config,
-  docutils,
-  gettext,
-  graphene,
-  gi-docgen,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  python3,
-  makeWrapper,
-  shared-mime-info,
-  isocodes,
-  glib,
-  cairo,
-  pango,
-  gdk-pixbuf,
-  gobject-introspection,
-  fribidi,
-  harfbuzz,
-  xorg,
-  libepoxy,
-  libxkbcommon,
-  libpng,
-  libtiff,
-  libjpeg,
-  libxml2,
-  gnome,
-  gsettings-desktop-schemas,
-  gst_all_1,
-  sassc,
-  trackerSupport ? stdenv.hostPlatform.isLinux,
-  tinysparql,
-  x11Support ? stdenv.hostPlatform.isLinux,
-  waylandSupport ? stdenv.hostPlatform.isLinux,
-  libGL,
-  vulkanSupport ? stdenv.hostPlatform.isLinux,
-  shaderc,
-  vulkan-loader,
-  vulkan-headers,
-  libdrm,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  xineramaSupport ? stdenv.hostPlatform.isLinux,
-  cupsSupport ? stdenv.hostPlatform.isLinux,
-  compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages,
-  cups,
-  libexecinfo,
-  broadwaySupport ? true,
-  testers,
-  darwinMinVersionHook,
+{ lib
+, stdenv
+, buildPackages
+, replaceVars
+, fetchurl
+, pkg-config
+, docutils
+, gettext
+, graphene
+, gi-docgen
+, meson
+, mesonEmulatorHook
+, ninja
+, python3
+, makeWrapper
+, shared-mime-info
+, isocodes
+, glib
+, cairo
+, pango
+, gdk-pixbuf
+, gobject-introspection
+, fribidi
+, harfbuzz
+, xorg
+, libepoxy
+, libxkbcommon
+, libpng
+, libtiff
+, libjpeg
+, libxml2
+, gnome
+, gsettings-desktop-schemas
+, gst_all_1
+, sassc
+, trackerSupport ? stdenv.hostPlatform.isLinux
+, tinysparql
+, x11Support ? stdenv.hostPlatform.isLinux
+, waylandSupport ? stdenv.hostPlatform.isLinux
+, libGL
+, vulkanSupport ? stdenv.hostPlatform.isLinux
+, shaderc
+, vulkan-loader
+, vulkan-headers
+, libdrm
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xineramaSupport ? stdenv.hostPlatform.isLinux
+, cupsSupport ? stdenv.hostPlatform.isLinux
+, compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, cups
+, libexecinfo
+, broadwaySupport ? true
+, testers
+, darwinMinVersionHook
+,
 }:
 
 let

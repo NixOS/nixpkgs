@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+,
 }:
 stdenv.mkDerivation {
   pname = "gsmlib";

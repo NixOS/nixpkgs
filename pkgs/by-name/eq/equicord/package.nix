@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  git,
-  lib,
-  nodejs,
-  pnpm_10,
-  stdenv,
-  nix-update-script,
-  buildWebExtension ? false,
+{ fetchFromGitHub
+, git
+, lib
+, nodejs
+, pnpm_10
+, stdenv
+, nix-update-script
+, buildWebExtension ? false
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equicord";

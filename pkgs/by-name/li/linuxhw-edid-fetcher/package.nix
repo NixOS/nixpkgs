@@ -1,15 +1,15 @@
-{
-  lib,
-  coreutils,
-  curl,
-  fetchFromGitHub,
-  gawk,
-  gnutar,
-  stdenv,
-  unixtools,
-  writeShellApplication,
-  nix-update-script,
-  displays ? { },
+{ lib
+, coreutils
+, curl
+, fetchFromGitHub
+, gawk
+, gnutar
+, stdenv
+, unixtools
+, writeShellApplication
+, nix-update-script
+, displays ? { }
+,
 }:
 
 # Usage:

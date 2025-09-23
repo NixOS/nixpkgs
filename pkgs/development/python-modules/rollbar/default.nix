@@ -1,17 +1,17 @@
-{
-  lib,
-  aiocontextvars,
-  blinker,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  httpx,
-  mock,
-  pytestCheckHook,
-  requests,
-  six,
-  pythonOlder,
-  webob,
+{ lib
+, aiocontextvars
+, blinker
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, httpx
+, mock
+, pytestCheckHook
+, requests
+, six
+, pythonOlder
+, webob
+,
 }:
 
 buildPythonPackage rec {

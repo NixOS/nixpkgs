@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  typing-extensions,
-
-  # checks
-  pytestCheckHook,
-  pytest-mpl,
-  pytest-subtests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  typing-extensions
+, # checks
+  pytestCheckHook
+, pytest-mpl
+, pytest-subtests
+,
 }:
 
 buildPythonPackage rec {

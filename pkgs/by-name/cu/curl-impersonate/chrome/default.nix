@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  callPackage,
-  buildGoModule,
-  installShellFiles,
-  buildPackages,
-  zlib,
-  zstd,
-  sqlite,
-  cmake,
-  python3,
-  ninja,
-  perl,
-  pkg-config,
-  autoconf,
-  automake,
-  libtool,
-  cctools,
-  cacert,
-  unzip,
-  go,
-  p11-kit,
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, buildGoModule
+, installShellFiles
+, buildPackages
+, zlib
+, zstd
+, sqlite
+, cmake
+, python3
+, ninja
+, perl
+, pkg-config
+, autoconf
+, automake
+, libtool
+, cctools
+, cacert
+, unzip
+, go
+, p11-kit
+,
 }:
 stdenv.mkDerivation rec {
   pname = "curl-impersonate-chrome";
@@ -94,11 +94,12 @@ stdenv.mkDerivation rec {
   dontUseNinjaCheck = true;
 
   postUnpack =
-    lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: dep: "ln -sT ${dep.outPath} ${src.name}/${name}") (
-        lib.filterAttrs (n: v: v ? outPath) passthru.deps
+    lib.concatStringsSep "\n"
+      (
+        lib.mapAttrsToList (name: dep: "ln -sT ${dep.outPath} ${src.name}/${name}") (
+          lib.filterAttrs (n: v: v ? outPath) passthru.deps
+        )
       )
-    )
     + ''
 
       curltar=$(realpath -s ${src.name}/curl-*.tar.gz)

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  makeWrapper,
-  docker,
-  kubectl,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, docker
+, kubectl
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

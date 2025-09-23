@@ -13,9 +13,11 @@
 
       networking.firewall.allowedTCPPorts = [ 80 ];
       networking.extraHosts = lib.strings.concatStringsSep "\n" (
-        lib.attrsets.mapAttrsToList (
-          name: _: "127.0.0.1 ${name}"
-        ) nodes.castopod.services.nginx.virtualHosts
+        lib.attrsets.mapAttrsToList
+          (
+            name: _: "127.0.0.1 ${name}"
+          )
+          nodes.castopod.services.nginx.virtualHosts
       );
 
       services.castopod = {
@@ -27,11 +29,10 @@
     };
 
   nodes.client =
-    {
-      nodes,
-      pkgs,
-      lib,
-      ...
+    { nodes
+    , pkgs
+    , lib
+    , ...
     }:
     let
       domain = nodes.castopod.services.castopod.localDomain;
@@ -68,9 +69,11 @@
     in
     {
       networking.extraHosts = lib.strings.concatStringsSep "\n" (
-        lib.attrsets.mapAttrsToList (
-          name: _: "${getIP nodes.castopod} ${name}"
-        ) nodes.castopod.services.nginx.virtualHosts
+        lib.attrsets.mapAttrsToList
+          (
+            name: _: "${getIP nodes.castopod} ${name}"
+          )
+          nodes.castopod.services.nginx.virtualHosts
       );
 
       environment.systemPackages =

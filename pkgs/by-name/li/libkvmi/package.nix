@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  autoreconfHook,
-  autoconf-archive,
-  pkg-config,
-  glib,
-  libuuid,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, glib
+, libuuid
+,
 }:
 
 stdenv.mkDerivation {

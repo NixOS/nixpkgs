@@ -1,39 +1,34 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  jax,
-  msgpack,
-  numpy,
-  optax,
-  orbax-checkpoint,
-  pyyaml,
-  rich,
-  tensorstore,
-  typing-extensions,
-
-  # optional-dependencies
-  matplotlib,
-
-  # tests
-  cloudpickle,
-  keras,
-  einops,
-  flaxlib,
-  pytestCheckHook,
-  pytest-xdist,
-  sphinx,
-  tensorflow,
-  treescope,
-
-  writeScript,
-  tomlq,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  jax
+, msgpack
+, numpy
+, optax
+, orbax-checkpoint
+, pyyaml
+, rich
+, tensorstore
+, typing-extensions
+, # optional-dependencies
+  matplotlib
+, # tests
+  cloudpickle
+, keras
+, einops
+, flaxlib
+, pytestCheckHook
+, pytest-xdist
+, sphinx
+, tensorflow
+, treescope
+, writeScript
+, tomlq
+,
 }:
 
 buildPythonPackage rec {

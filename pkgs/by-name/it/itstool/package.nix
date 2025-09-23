@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  python3,
-  autoreconfHook,
-  versionCheckHook,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, python3
+, autoreconfHook
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

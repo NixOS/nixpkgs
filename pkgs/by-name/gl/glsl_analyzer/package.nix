@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  zig_0_14,
+{ lib
+, stdenv
+, fetchFromGitHub
+, zig_0_14
+,
 }:
 let
   zig = zig_0_14;

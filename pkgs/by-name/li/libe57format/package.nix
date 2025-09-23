@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  fetchpatch,
-  xercesc,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, fetchpatch
+, xercesc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

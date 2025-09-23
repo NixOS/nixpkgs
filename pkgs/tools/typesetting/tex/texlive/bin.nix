@@ -1,54 +1,54 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  fetchFromGitHub,
-  fetchpatch,
-  buildPackages,
-  texlive,
-  zlib,
-  libiconv,
-  libpng,
-  libX11,
-  freetype,
-  ttfautohint,
-  gd,
-  libXaw,
-  icu,
-  ghostscript,
-  libXpm,
-  libXmu,
-  libXext,
-  perl,
-  perlPackages,
-  python3Packages,
-  pkg-config,
-  cmake,
-  ninja,
-  libpaper,
-  graphite2,
-  zziplib,
-  harfbuzz,
-  potrace,
-  gmp,
-  mpfr,
-  mupdf-headless,
-  brotli,
-  cairo,
-  pixman,
-  xorg,
-  clisp,
-  biber,
-  woff2,
-  xxHash,
-  makeWrapper,
-  shortenPerlShebang,
-  useFixedHashes,
-  asymptote,
-  biber-ms,
-  tlpdb,
-  luajit,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, fetchFromGitHub
+, fetchpatch
+, buildPackages
+, texlive
+, zlib
+, libiconv
+, libpng
+, libX11
+, freetype
+, ttfautohint
+, gd
+, libXaw
+, icu
+, ghostscript
+, libXpm
+, libXmu
+, libXext
+, perl
+, perlPackages
+, python3Packages
+, pkg-config
+, cmake
+, ninja
+, libpaper
+, graphite2
+, zziplib
+, harfbuzz
+, potrace
+, gmp
+, mpfr
+, mupdf-headless
+, brotli
+, cairo
+, pixman
+, xorg
+, clisp
+, biber
+, woff2
+, xxHash
+, makeWrapper
+, shortenPerlShebang
+, useFixedHashes
+, asymptote
+, biber-ms
+, tlpdb
+, luajit
+,
 }@args:
 
 # Useful resource covering build options:
@@ -160,11 +160,11 @@ let
       sed -i '/^#define ST_NLINK_TRICK/d' texk/kpathsea/config.h
     ''
     +
-      # when cross compiling, we must use himktables from PATH
-      # (i.e. from buildPackages.texlive.bin.core.dev)
-      lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-        sed -i 's|\./himktables|himktables|' texk/web2c/Makefile.in
-      '';
+    # when cross compiling, we must use himktables from PATH
+    # (i.e. from buildPackages.texlive.bin.core.dev)
+    lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      sed -i 's|\./himktables|himktables|' texk/web2c/Makefile.in
+    '';
 
     configureFlags = [
       "--with-banner-add=/nixos.org"
@@ -191,19 +191,23 @@ let
       "libpaper"
       "zlib"
     ]
-    ++ lib.optional (
-      stdenv.hostPlatform != stdenv.buildPlatform
-    ) "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc";
+    ++ lib.optional
+      (
+        stdenv.hostPlatform != stdenv.buildPlatform
+      ) "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc";
 
     # move binaries to corresponding split outputs, based on content of texlive.tlpdb
     binToOutput = lib.listToAttrs (
-      lib.concatMap (
-        n:
-        map (v: {
-          name = v;
-          value = builtins.replaceStrings [ "-" ] [ "_" ] n;
-        }) binPackages.${n}.binfiles or [ ]
-      ) (builtins.attrNames binPackages)
+      lib.concatMap
+        (
+          n:
+          map
+            (v: {
+              name = v;
+              value = builtins.replaceStrings [ "-" ] [ "_" ] n;
+            }) binPackages.${n}.binfiles or [ ]
+        )
+        (builtins.attrNames binPackages)
     );
 
     moveBins = ''
@@ -451,27 +455,27 @@ rec {
         "graphite2"
       ]
       ++
-        map (prog: "--disable-${prog}") # don't build things we already have
-          # list from texk/web2c/configure
-          (
-            [
-              "tex"
-              "ptex"
-              "eptex"
-              "uptex"
-              "euptex"
-              "aleph"
-              "hitex"
-              "pdftex"
-              "web-progs"
-              "synctex"
-            ]
-            ++ lib.optionals (!withLuaJIT) [
-              "luajittex"
-              "luajithbtex"
-              "mfluajit"
-            ]
-          )
+      map (prog: "--disable-${prog}") # don't build things we already have
+        # list from texk/web2c/configure
+        (
+          [
+            "tex"
+            "ptex"
+            "eptex"
+            "uptex"
+            "euptex"
+            "aleph"
+            "hitex"
+            "pdftex"
+            "web-progs"
+            "synctex"
+          ]
+          ++ lib.optionals (!withLuaJIT) [
+            "luajittex"
+            "luajithbtex"
+            "mfluajit"
+          ]
+        )
       # disable all packages, re-enable upmendex, web2c packages
       ++ [
         "--disable-all-pkgs"
@@ -782,51 +786,51 @@ rec {
 
 } # un-indented
 
-//
-  lib.optionalAttrs (!clisp.meta.broken) # broken on aarch64 and darwin (#20062)
-    {
+  //
+lib.optionalAttrs (!clisp.meta.broken) # broken on aarch64 and darwin (#20062)
+  {
 
-      xindy = stdenv.mkDerivation {
-        pname = "xindy";
-        inherit (texlive.pkgs.xindy) version;
+    xindy = stdenv.mkDerivation {
+      pname = "xindy";
+      inherit (texlive.pkgs.xindy) version;
 
-        inherit (common) src;
+      inherit (common) src;
 
-        # If unset, xindy will try to mkdir /homeless-shelter
-        HOME = ".";
+      # If unset, xindy will try to mkdir /homeless-shelter
+      HOME = ".";
 
-        prePatch = "cd utils/xindy";
-        # hardcode clisp location
-        postPatch = ''
-          substituteInPlace xindy-*/user-commands/xindy.in \
-            --replace-fail "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
-                           "our \$clisp = '$(type -P clisp)';" \
-            --replace-fail 'die "$cmd: Cannot locate xindy modules directory";' \
-                           '$modules_dir = "${texlive.pkgs.xindy.tex}/xindy/modules"; die "$cmd: Cannot locate xindy modules directory" unless -d $modules_dir;'
-        '';
+      prePatch = "cd utils/xindy";
+      # hardcode clisp location
+      postPatch = ''
+        substituteInPlace xindy-*/user-commands/xindy.in \
+          --replace-fail "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
+                         "our \$clisp = '$(type -P clisp)';" \
+          --replace-fail 'die "$cmd: Cannot locate xindy modules directory";' \
+                         '$modules_dir = "${texlive.pkgs.xindy.tex}/xindy/modules"; die "$cmd: Cannot locate xindy modules directory" unless -d $modules_dir;'
+      '';
 
-        nativeBuildInputs = [
-          pkg-config
-          perl
-        ];
-        buildInputs = [
-          clisp
-          libiconv
-          perl
-        ];
+      nativeBuildInputs = [
+        pkg-config
+        perl
+      ];
+      buildInputs = [
+        clisp
+        libiconv
+        perl
+      ];
 
-        configureFlags = [
-          "--with-clisp-runtime=system"
-          "--disable-xindy-docs"
-          "--disable-xindy-rules"
-        ];
+      configureFlags = [
+        "--with-clisp-runtime=system"
+        "--disable-xindy-docs"
+        "--disable-xindy-rules"
+      ];
 
-        preInstall = ''mkdir -p "$out/bin" '';
-        # fixup various file-location errors of: lib/xindy/{xindy.mem,modules/}
-        postInstall = ''
-          mkdir -p "$out/lib/xindy"
-          mv "$out"/{bin/xindy.mem,lib/xindy/}
-        '';
-      };
+      preInstall = ''mkdir -p "$out/bin" '';
+      # fixup various file-location errors of: lib/xindy/{xindy.mem,modules/}
+      postInstall = ''
+        mkdir -p "$out/lib/xindy"
+        mv "$out"/{bin/xindy.mem,lib/xindy/}
+      '';
+    };
 
-    }
+  }

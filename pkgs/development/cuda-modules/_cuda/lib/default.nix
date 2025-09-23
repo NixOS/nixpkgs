@@ -1,6 +1,6 @@
-{
-  _cuda,
-  lib,
+{ _cuda
+, lib
+,
 }:
 {
   # See ./assertions.nix for documentation.

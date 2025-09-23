@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  dateparser,
-  defusedxml,
-  fetchFromGitHub,
-  importlib-metadata,
-  numpy,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  pytz,
-  remotezip,
-  requests-mock,
-  requests,
-  setuptools-scm,
-  shapely,
-  tenacity,
+{ lib
+, buildPythonPackage
+, dateparser
+, defusedxml
+, fetchFromGitHub
+, importlib-metadata
+, numpy
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pytz
+, remotezip
+, requests-mock
+, requests
+, setuptools-scm
+, shapely
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

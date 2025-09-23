@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  gnunet,
-  qrencode,
-  taler-exchange,
-  taler-wallet-core,
-  libtool,
-  pkg-config,
-  autoreconfHook,
-  makeWrapper,
-  jq,
-  libgcrypt,
-  texinfo,
-  curl,
-  nixosTests,
+{ lib
+, stdenv
+, fetchgit
+, gnunet
+, qrencode
+, taler-exchange
+, taler-wallet-core
+, libtool
+, pkg-config
+, autoreconfHook
+, makeWrapper
+, jq
+, libgcrypt
+, texinfo
+, curl
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

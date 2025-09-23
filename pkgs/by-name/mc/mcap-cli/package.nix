@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  buildPackages,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
+{ stdenv
+, lib
+, buildGoModule
+, buildPackages
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+,
 }:
 let
   version = "0.0.55";

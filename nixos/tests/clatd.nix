@@ -120,8 +120,8 @@
 
       systemd.network.networks."40-eth2" = {
         networkConfig.IPv6SendRA = true;
-        ipv6Prefixes = [ { Prefix = "2001:db8::/64"; } ];
-        ipv6PREF64Prefixes = [ { Prefix = "64:ff9b::/96"; } ];
+        ipv6Prefixes = [{ Prefix = "2001:db8::/64"; }];
+        ipv6PREF64Prefixes = [{ Prefix = "64:ff9b::/96"; }];
         ipv6SendRAConfig = {
           EmitDNS = true;
           DNS = "_link_local";

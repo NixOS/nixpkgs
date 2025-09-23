@@ -1,27 +1,23 @@
-{
-  lib,
-  fetchFromGitLab,
-  stdenv,
-
-  flint3,
-  gmp,
-  libmpc,
-  mpfr,
-  notcurses,
-  windows,
-
-  gsl,
-  man,
-  pkg-config,
-  writableTmpDirAsHomeHook,
-
-  unstableGitUpdater,
-  writeScript,
-
-  static ? false,
-  withGMP ? !static,
-  withArb ? !static,
-  withNrepl ? if stdenv.hostPlatform.isMinGW then false else true,
+{ lib
+, fetchFromGitLab
+, stdenv
+, flint3
+, gmp
+, libmpc
+, mpfr
+, notcurses
+, windows
+, gsl
+, man
+, pkg-config
+, writableTmpDirAsHomeHook
+, unstableGitUpdater
+, writeScript
+, static ? false
+, withGMP ? !static
+, withArb ? !static
+, withNrepl ? if stdenv.hostPlatform.isMinGW then false else true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libffi,
-  libxml2,
-  makeBinaryWrapper,
-  cmake,
-  glibc,
-  rustPlatform,
-  zig_0_13,
-  llvmPackages_18,
-  writableTmpDirAsHomeHook,
-  valgrind,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libffi
+, libxml2
+, makeBinaryWrapper
+, cmake
+, glibc
+, rustPlatform
+, zig_0_13
+, llvmPackages_18
+, writableTmpDirAsHomeHook
+, valgrind
+, autoPatchelfHook
+,
 }:
 
 let

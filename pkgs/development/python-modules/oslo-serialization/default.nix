@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  msgpack,
-  oslo-utils,
-  oslotest,
-  pbr,
-  setuptools,
-  stestr,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, msgpack
+, oslo-utils
+, oslotest
+, pbr
+, setuptools
+, stestr
+,
 }:
 
 buildPythonPackage rec {

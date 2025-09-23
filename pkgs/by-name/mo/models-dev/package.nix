@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  bun,
-  fetchFromGitHub,
-  nix-update-script,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenvNoCC
+, bun
+, fetchFromGitHub
+, nix-update-script
+, writableTmpDirAsHomeHook
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
@@ -64,8 +64,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-linux = "sha256-brjdEEYBJ1R5pIkIHyOOmVieTJ0yUJEgxs7MtbzcKXo=";
         x86_64-darwin = "sha256-aGUWZwySmo0ojOBF/PioZ2wp4NRwYyoaJuytzeGYjck=";
         aarch64-darwin = "sha256-IM88XPfttZouN2DEtnWJmbdRxBs8wN7AZ1T28INJlBY=";
-      }
-      .${stdenvNoCC.hostPlatform.system};
+      }.${stdenvNoCC.hostPlatform.system};
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };

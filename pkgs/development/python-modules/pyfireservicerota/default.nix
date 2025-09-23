@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  pdm-backend,
-  pytz,
-  oauthlib,
-  requests,
-  websocket-client,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, pdm-backend
+, pytz
+, oauthlib
+, requests
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

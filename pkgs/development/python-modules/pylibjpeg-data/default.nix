@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  flit-core,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, flit-core
+,
 }:
 
 buildPythonPackage {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  file,
-  python3Packages,
-  rsync,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, file
+, python3Packages
+, rsync
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

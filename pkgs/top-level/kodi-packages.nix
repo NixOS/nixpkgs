@@ -1,9 +1,9 @@
-{
-  config,
-  lib,
-  newScope,
-  kodi,
-  libretro,
+{ config
+, lib
+, newScope
+, kodi
+, libretro
+,
 }:
 
 let
@@ -263,7 +263,7 @@ let
   };
 in
 self
-// optionalAttrs config.allowAliases {
+  // optionalAttrs config.allowAliases {
   # deprecated or renamed packages
 
   controllers =

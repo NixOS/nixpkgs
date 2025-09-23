@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  cppo,
-  ppx_deriving,
-  ppxlib,
-  dune-configurator,
+{ lib
+, fetchurl
+, buildDunePackage
+, cppo
+, ppx_deriving
+, ppxlib
+, dune-configurator
+,
 }:
 
 buildDunePackage rec {

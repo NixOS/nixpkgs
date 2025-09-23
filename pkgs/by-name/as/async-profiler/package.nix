@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  jdk,
-  makeWrapper,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, jdk
+, makeWrapper
+, nix-update-script
+,
 }:
 stdenv.mkDerivation rec {
   pname = "async-profiler";

@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  buildPythonPackage,
-  pillow,
-  numpy,
-  libdmtx,
-  lib,
+{ fetchFromGitHub
+, buildPythonPackage
+, pillow
+, numpy
+, libdmtx
+, lib
+,
 }:
 
 buildPythonPackage rec {

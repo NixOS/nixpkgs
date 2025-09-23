@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  makeWrapper,
-  boost,
-  portmidi,
-  sqlite,
-  freetype,
-  libpng,
-  pngpp,
-  zlib,
-  wxGTK32,
-  wxsqlite3,
-  fluidsynth,
-  fontconfig,
-  soundfont-fluid,
-  openlilylib-fonts,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, makeWrapper
+, boost
+, portmidi
+, sqlite
+, freetype
+, libpng
+, pngpp
+, zlib
+, wxGTK32
+, wxsqlite3
+, fluidsynth
+, fontconfig
+, soundfont-fluid
+, openlilylib-fonts
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  lib,
-  vscode-utils,
-  ruff,
-  vscode-extension-update-script,
+{ stdenvNoCC
+, lib
+, vscode-utils
+, ruff
+, vscode-extension-update-script
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

@@ -1,32 +1,30 @@
-{
-  stdenv,
-  lib,
-  replaceVars,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  python,
-  pkg-config,
-  setuptools,
-  cython,
-  ninja,
-  meson-python,
-  pyproject-metadata,
-  nix-update-script,
-
-  fontconfig,
-  freetype,
-  libjpeg,
-  libpng,
-  libX11,
-  portmidi,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
-  numpy,
-
-  pygame-gui,
+{ stdenv
+, lib
+, replaceVars
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, python
+, pkg-config
+, setuptools
+, cython
+, ninja
+, meson-python
+, pyproject-metadata
+, nix-update-script
+, fontconfig
+, freetype
+, libjpeg
+, libpng
+, libX11
+, portmidi
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, numpy
+, pygame-gui
+,
 }:
 
 buildPythonPackage rec {
@@ -48,17 +46,21 @@ buildPythonPackage rec {
   patches = [
     (replaceVars ./fix-dependency-finding.patch {
       buildinputs_include = builtins.toJSON (
-        builtins.concatMap (dep: [
-          "${lib.getDev dep}/"
-          "${lib.getDev dep}/include"
-          "${lib.getDev dep}/include/SDL2"
-        ]) buildInputs
+        builtins.concatMap
+          (dep: [
+            "${lib.getDev dep}/"
+            "${lib.getDev dep}/include"
+            "${lib.getDev dep}/include/SDL2"
+          ])
+          buildInputs
       );
       buildinputs_lib = builtins.toJSON (
-        builtins.concatMap (dep: [
-          "${lib.getLib dep}/"
-          "${lib.getLib dep}/lib"
-        ]) buildInputs
+        builtins.concatMap
+          (dep: [
+            "${lib.getLib dep}/"
+            "${lib.getLib dep}/lib"
+          ])
+          buildInputs
       );
     })
     # https://github.com/libsdl-org/sdl2-compat/issues/476

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pythonAtLeast,
-  construct,
-  typing-extensions,
-  arrow,
-  cloudpickle,
-  numpy,
-  pytestCheckHook,
-  ruamel-yaml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pythonAtLeast
+, construct
+, typing-extensions
+, arrow
+, cloudpickle
+, numpy
+, pytestCheckHook
+, ruamel-yaml
+,
 }:
 
 buildPythonPackage rec {

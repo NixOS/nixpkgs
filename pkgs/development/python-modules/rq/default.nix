@@ -1,22 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  click,
-  redis,
-
-  # tests
-  addBinToPathHook,
-  psutil,
-  pytestCheckHook,
-  redisTestHook,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  hatchling
+, # dependencies
+  click
+, redis
+, # tests
+  addBinToPathHook
+, psutil
+, pytestCheckHook
+, redisTestHook
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

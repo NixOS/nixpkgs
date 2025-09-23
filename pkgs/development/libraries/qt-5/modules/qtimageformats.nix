@@ -1,11 +1,11 @@
-{
-  lib,
-  qtModule,
-  qtbase,
-  libwebp,
-  jasper,
-  libmng,
-  libtiff,
+{ lib
+, qtModule
+, qtbase
+, libwebp
+, jasper
+, libmng
+, libtiff
+,
 }:
 
 qtModule {

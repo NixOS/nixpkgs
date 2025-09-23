@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  python3,
-  fetchPypi,
-  ffmpeg,
+{ stdenv
+, lib
+, python3
+, fetchPypi
+, ffmpeg
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

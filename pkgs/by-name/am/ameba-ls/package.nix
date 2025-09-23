@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  crystal_1_15,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, crystal_1_15
+, versionCheckHook
+,
 }:
 
 let

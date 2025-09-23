@@ -1,8 +1,8 @@
-{
-  mkDerivation,
-  rpcgen,
-  include,
-  csu,
+{ mkDerivation
+, rpcgen
+, include
+, csu
+,
 }:
 
 mkDerivation {

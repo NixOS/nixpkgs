@@ -1,15 +1,15 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  autoreconfHook,
-  pkg-config,
-  gettext,
-  python3,
-  texinfo,
-  help2man,
-  libyaml,
-  perl,
+{ fetchFromGitHub
+, lib
+, stdenv
+, autoreconfHook
+, pkg-config
+, gettext
+, python3
+, texinfo
+, help2man
+, libyaml
+, perl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

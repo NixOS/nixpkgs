@@ -1,14 +1,14 @@
-{
-  lib,
-  buildDunePackage,
-  opam,
-  jsonm,
-  ocamlgraph,
-  re,
-  sha,
-  swhid_core,
-  uutf,
-  patch,
+{ lib
+, buildDunePackage
+, opam
+, jsonm
+, ocamlgraph
+, re
+, sha
+, swhid_core
+, uutf
+, patch
+,
 }:
 
 buildDunePackage {

@@ -1,24 +1,24 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  crossplane,
-  fetchFromGitHub,
-  jellyfish,
-  jproperties,
-  jsonschema-specifications,
-  jsonschema,
-  luhn,
-  lxml,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  semgrep,
-  setuptools,
-  six,
-  soupsieve,
-  wrapt,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, crossplane
+, fetchFromGitHub
+, jellyfish
+, jproperties
+, jsonschema-specifications
+, jsonschema
+, luhn
+, lxml
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, semgrep
+, setuptools
+, six
+, soupsieve
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

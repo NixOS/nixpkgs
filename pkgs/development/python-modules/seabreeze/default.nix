@@ -1,27 +1,23 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  cython,
-  git,
-  pkgconfig,
-  setuptools,
-  setuptools-scm,
-  udevCheckHook,
-
-  # dependneices
-  numpy,
-  libusb-compat-0_1,
-
-  # optional-dependencies
-  pyusb,
-
-  # tests
-  mock,
-  pytestCheckHook,
-  zipp,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  cython
+, git
+, pkgconfig
+, setuptools
+, setuptools-scm
+, udevCheckHook
+, # dependneices
+  numpy
+, libusb-compat-0_1
+, # optional-dependencies
+  pyusb
+, # tests
+  mock
+, pytestCheckHook
+, zipp
+,
 }:
 
 ## Usage

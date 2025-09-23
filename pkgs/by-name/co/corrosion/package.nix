@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cargo,
-  cmake,
-  rustc,
-  libiconv,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cargo
+, cmake
+, rustc
+, libiconv
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  qtbase,
-  qtsvg,
-  qtwayland,
-  nixosTests,
-  wrapQtAppsHook,
+{ lib
+, fetchFromGitHub
+, python3
+, qtbase
+, qtsvg
+, qtwayland
+, nixosTests
+, wrapQtAppsHook
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

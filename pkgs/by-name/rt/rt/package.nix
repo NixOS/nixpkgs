@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  buildEnv,
-  fetchFromGitHub,
-  perl,
-  perlPackages,
-  makeWrapper,
-  gnupg,
-  openssl,
+{ lib
+, stdenv
+, autoreconfHook
+, buildEnv
+, fetchFromGitHub
+, perl
+, perlPackages
+, makeWrapper
+, gnupg
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  fetchzip,
-  installShellFiles,
-  lib,
-  stdenv,
+{ buildGoModule
+, fetchFromGitHub
+, fetchzip
+, installShellFiles
+, lib
+, stdenv
+,
 }:
 
 let

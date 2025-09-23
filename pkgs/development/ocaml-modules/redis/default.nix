@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  re,
-  stdlib-shims,
-  uuidm,
+{ lib
+, fetchurl
+, buildDunePackage
+, re
+, stdlib-shims
+, uuidm
+,
 }:
 
 buildDunePackage rec {

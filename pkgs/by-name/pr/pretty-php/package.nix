@@ -1,8 +1,8 @@
-{
-  lib,
-  php,
-  fetchFromGitHub,
-  testers,
+{ lib
+, php
+, fetchFromGitHub
+, testers
+,
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "pretty-php";

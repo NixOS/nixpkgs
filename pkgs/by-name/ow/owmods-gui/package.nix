@@ -1,20 +1,20 @@
-{
-  lib,
-  libsoup_3,
-  dbus,
-  glib,
-  glib-networking,
-  librsvg,
-  webkitgtk_4_1,
-  pkg-config,
-  wrapGAppsHook3,
-  makeDesktopItem,
-  copyDesktopItems,
-  rustPlatform,
-  buildNpmPackage,
-  fetchFromGitHub,
-  mono,
-  wrapWithMono ? true,
+{ lib
+, libsoup_3
+, dbus
+, glib
+, glib-networking
+, librsvg
+, webkitgtk_4_1
+, pkg-config
+, wrapGAppsHook3
+, makeDesktopItem
+, copyDesktopItems
+, rustPlatform
+, buildNpmPackage
+, fetchFromGitHub
+, mono
+, wrapWithMono ? true
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "owmods-gui";

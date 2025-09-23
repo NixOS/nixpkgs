@@ -1,30 +1,31 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  dpkg,
-  patchelf,
-  qt5,
-  libXtst,
-  libXext,
-  libX11,
-  mkDerivation,
-  libXScrnSaver,
-  writeScript,
-  common-updater-scripts,
-  curl,
-  pup,
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, patchelf
+, qt5
+, libXtst
+, libXext
+, libX11
+, mkDerivation
+, libXScrnSaver
+, writeScript
+, common-updater-scripts
+, curl
+, pup
+,
 }:
 
 let
   version = "2.16.5.1";
   src =
     if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        name = "rescuetime-installer.deb";
-        url = "https://www.rescuetime.com/installers/rescuetime_${version}_i386.deb";
-        sha256 = "1xrvyy0higc1fbc8ascpaszvg2bl6x0a35bzmdq6dkay48hnrd8b";
-      }
+      fetchurl
+        {
+          name = "rescuetime-installer.deb";
+          url = "https://www.rescuetime.com/installers/rescuetime_${version}_i386.deb";
+          sha256 = "1xrvyy0higc1fbc8ascpaszvg2bl6x0a35bzmdq6dkay48hnrd8b";
+        }
     else
       fetchurl {
         name = "rescuetime-installer.deb";

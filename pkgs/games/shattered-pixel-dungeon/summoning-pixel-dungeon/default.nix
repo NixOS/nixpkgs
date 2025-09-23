@@ -1,8 +1,8 @@
-{
-  callPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  substitute,
+{ callPackage
+, fetchFromGitHub
+, fetchpatch
+, substitute
+,
 }:
 
 callPackage ../generic.nix rec {

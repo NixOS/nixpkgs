@@ -1,13 +1,13 @@
-{
-  lib,
-  archspec,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  six,
+{ lib
+, archspec
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

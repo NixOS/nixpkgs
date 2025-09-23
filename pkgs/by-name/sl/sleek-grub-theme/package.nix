@@ -1,9 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  withBanner ? "Grub Bootloader", # use override to specify your own banner text
-  withStyle ? "light", # use override to specify one of "dark" / "orange" / "bigSur"
+{ lib
+, stdenv
+, fetchFromGitHub
+, withBanner ? "Grub Bootloader"
+, # use override to specify your own banner text
+  withStyle ? "light"
+, # use override to specify one of "dark" / "orange" / "bigSur"
 }:
 
 assert builtins.any (s: withStyle == s) [

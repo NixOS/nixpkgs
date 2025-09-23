@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  enableAppletSymlinks ? true,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, enableAppletSymlinks ? true
+,
 }:
 
 let

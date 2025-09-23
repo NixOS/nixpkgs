@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  cmake,
-  lua,
+{ fetchFromGitHub
+, lib
+, stdenv
+, cmake
+, lua
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sol2";

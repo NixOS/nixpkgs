@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  gi-docgen,
-  glib,
-  gtk4,
-  gtksourceview5,
-  enchant,
-  icu,
-  libsysprof-capture,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gi-docgen
+, glib
+, gtk4
+, gtksourceview5
+, enchant
+, icu
+, libsysprof-capture
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

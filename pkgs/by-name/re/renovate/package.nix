@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  nodejs,
-  pnpm_10,
-  python3,
-  testers,
-  xcbuild,
-  nixosTests,
-  nix-update-script,
-  yq-go,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, nodejs
+, pnpm_10
+, python3
+, testers
+, xcbuild
+, nixosTests
+, nix-update-script
+, yq-go
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

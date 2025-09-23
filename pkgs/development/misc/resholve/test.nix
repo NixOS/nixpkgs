@@ -1,62 +1,62 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  resholve,
-  shunit2,
-  coreutils,
-  gnused,
-  gnugrep,
-  findutils,
-  jq,
-  bash,
-  bats,
-  libressl,
-  openssl,
-  python27,
-  file,
-  gettext,
-  rSrc,
-  runDemo ? false,
-  binlore,
-  sqlite,
-  unixtools,
-  gawk,
-  rlwrap,
-  gnutar,
-  bc,
-  # override testing
-  esh,
-  getconf,
-  libarchive,
-  locale,
-  mount,
-  ncurses,
-  nixos-install-tools,
-  nixos-rebuild,
-  procps,
-  ps,
-  # known consumers
-  aaxtomp3,
-  arch-install-scripts,
-  bashup-events32,
-  dgoss,
-  git-ftp,
-  lesspipe,
-  locate-dominating-file,
-  mons,
-  msmtp,
-  nix-direnv,
-  pdf2odt,
-  pdfmm,
-  rancid,
-  s0ix-selftest-tool,
-  unix-privesc-check,
-  wgnord,
-  wsl-vpnkit,
-  xdg-utils,
-  yadm,
-  zxfer,
+{ lib
+, stdenv
+, callPackage
+, resholve
+, shunit2
+, coreutils
+, gnused
+, gnugrep
+, findutils
+, jq
+, bash
+, bats
+, libressl
+, openssl
+, python27
+, file
+, gettext
+, rSrc
+, runDemo ? false
+, binlore
+, sqlite
+, unixtools
+, gawk
+, rlwrap
+, gnutar
+, bc
+, # override testing
+  esh
+, getconf
+, libarchive
+, locale
+, mount
+, ncurses
+, nixos-install-tools
+, nixos-rebuild
+, procps
+, ps
+, # known consumers
+  aaxtomp3
+, arch-install-scripts
+, bashup-events32
+, dgoss
+, git-ftp
+, lesspipe
+, locate-dominating-file
+, mons
+, msmtp
+, nix-direnv
+, pdf2odt
+, pdfmm
+, rancid
+, s0ix-selftest-tool
+, unix-privesc-check
+, wgnord
+, wsl-vpnkit
+, xdg-utils
+, yadm
+, zxfer
+,
 }:
 
 let
@@ -344,9 +344,9 @@ rec {
   inherit wsl-vpnkit;
   inherit zxfer;
 }
-//
-  lib.optionalAttrs
-    (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64))
-    {
-      inherit s0ix-selftest-tool;
-    }
+  //
+lib.optionalAttrs
+  (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64))
+  {
+    inherit s0ix-selftest-tool;
+  }

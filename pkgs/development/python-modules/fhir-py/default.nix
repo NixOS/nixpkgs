@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  flit-core,
-  aiohttp,
-  pytz,
-  requests,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pydantic,
-  responses,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, flit-core
+, aiohttp
+, pytz
+, requests
+, pytestCheckHook
+, pytest-asyncio
+, pytest-cov-stub
+, pydantic
+, responses
+,
 }:
 
 buildPythonPackage rec {

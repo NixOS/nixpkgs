@@ -1,14 +1,12 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # tests
-  pytest7CheckHook,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, # build-system
+  setuptools
+, setuptools-scm
+, # tests
+  pytest7CheckHook
+,
 }:
 
 buildPythonPackage rec {

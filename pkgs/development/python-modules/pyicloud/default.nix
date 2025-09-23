@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-  setuptools,
-  certifi,
-  click,
-  keyring,
-  keyrings-alt,
-  requests,
-  tzlocal,
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, setuptools
+, certifi
+, click
+, keyring
+, keyrings-alt
+, requests
+, tzlocal
+, pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

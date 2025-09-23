@@ -1,12 +1,12 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  glib,
-  xorg,
-  cairo,
-  gtk2,
-  makeDesktopItem,
+{ fetchurl
+, lib
+, stdenv
+, glib
+, xorg
+, cairo
+, gtk2
+, makeDesktopItem
+,
 }:
 let
   libPath = lib.makeLibraryPath [
@@ -23,14 +23,15 @@ stdenv.mkDerivation rec {
 
   src =
     if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        name = "sublimetext-${version}.tar.bz2";
-        urls = [
-          "http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%20${version}.tar.bz2"
-          "https://download.sublimetext.com/Sublime%20Text%20${version}.tar.bz2"
-        ];
-        sha256 = "026g5mppk28lzzzn9ibykcqkrd5msfmg0sc0z8w8jd7v3h28wcq7";
-      }
+      fetchurl
+        {
+          name = "sublimetext-${version}.tar.bz2";
+          urls = [
+            "http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%20${version}.tar.bz2"
+            "https://download.sublimetext.com/Sublime%20Text%20${version}.tar.bz2"
+          ];
+          sha256 = "026g5mppk28lzzzn9ibykcqkrd5msfmg0sc0z8w8jd7v3h28wcq7";
+        }
     else
       fetchurl {
         name = "sublimetext-${version}.tar.bz2";

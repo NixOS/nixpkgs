@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  cmake,
-  obs-studio,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, obs-studio
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

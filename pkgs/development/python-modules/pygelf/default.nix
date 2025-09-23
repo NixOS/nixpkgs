@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  mock,
-  pytestCheckHook,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, mock
+, pytestCheckHook
+, requests
+,
 }:
 buildPythonPackage rec {
   pname = "pygelf";

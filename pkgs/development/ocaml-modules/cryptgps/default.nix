@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  ocaml,
-  findlib,
+{ stdenv
+, lib
+, fetchurl
+, ocaml
+, findlib
+,
 }:
 
 if lib.versionAtLeast ocaml.version "4.06" then

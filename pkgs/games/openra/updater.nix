@@ -1,12 +1,12 @@
-{
-  lib,
-  writeShellApplication,
-  curl,
-  jq,
-  gnused,
-  nix,
-  nix-prefetch-github,
-  common-updater-scripts,
+{ lib
+, writeShellApplication
+, curl
+, jq
+, gnused
+, nix
+, nix-prefetch-github
+, common-updater-scripts
+,
 }:
 engine:
 

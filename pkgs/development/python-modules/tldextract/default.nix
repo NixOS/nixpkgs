@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  filelock,
-  idna,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-file,
-  responses,
-  setuptools,
-  setuptools-scm,
-  syrupy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, filelock
+, idna
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-file
+, responses
+, setuptools
+, setuptools-scm
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

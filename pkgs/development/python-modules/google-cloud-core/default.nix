@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  google-api-core,
-  google-auth,
-  grpcio,
-  grpcio-status,
-  mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, google-api-core
+, google-auth
+, grpcio
+, grpcio-status
+, mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

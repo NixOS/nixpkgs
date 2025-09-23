@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  rpmextract,
-  patchelf,
-  testers,
-  scaleft,
+{ lib
+, stdenv
+, fetchurl
+, rpmextract
+, patchelf
+, testers
+, scaleft
+,
 }:
 
 stdenv.mkDerivation rec {

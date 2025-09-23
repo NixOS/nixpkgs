@@ -1,8 +1,8 @@
-{
-  lib,
-  runCommand,
-  runCommandCC,
-  haskellPackages,
+{ lib
+, runCommand
+, runCommandCC
+, haskellPackages
+,
 }:
 
 lib.recurseIntoAttrs {

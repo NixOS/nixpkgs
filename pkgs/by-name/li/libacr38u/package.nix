@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  pcsclite,
-  libusb-compat-0_1,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, pcsclite
+, libusb-compat-0_1
+,
 }:
 
 stdenv.mkDerivation {

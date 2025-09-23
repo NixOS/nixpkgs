@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromRadicle,
-  stdenv,
-  libiconv,
-  zlib,
-  radicle-node,
-  makeBinaryWrapper,
+{ lib
+, rustPlatform
+, fetchFromRadicle
+, stdenv
+, libiconv
+, zlib
+, radicle-node
+, makeBinaryWrapper
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

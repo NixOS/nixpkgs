@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  cmake,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchzip
+, cmake
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

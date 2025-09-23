@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
-  fetchpatch,
-  gmpy2,
-  hypothesis,
-  mpmath,
-  numpy,
-  pexpect,
-  pythonOlder,
-  pytest-cov-stub,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  scipy,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, fetchpatch
+, gmpy2
+, hypothesis
+, mpmath
+, numpy
+, pexpect
+, pythonOlder
+, pytest-cov-stub
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, scipy
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

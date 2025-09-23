@@ -1,9 +1,9 @@
 # Jupyter notebook with the given kernel definitions
 
-{
-  python3,
-  jupyter-kernel,
-  definitions ? jupyter-kernel.default,
+{ python3
+, jupyter-kernel
+, definitions ? jupyter-kernel.default
+,
 }:
 
 let

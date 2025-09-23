@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  buildTopkgPackage,
-  cmdliner,
-  odoc,
-  b0,
+{ lib
+, fetchurl
+, buildTopkgPackage
+, cmdliner
+, odoc
+, b0
+,
 }:
 
 buildTopkgPackage rec {

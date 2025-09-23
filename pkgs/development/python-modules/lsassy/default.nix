@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  impacket,
-  netaddr,
-  poetry-core,
-  pypykatz,
-  pythonOlder,
-  rich,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, impacket
+, netaddr
+, poetry-core
+, pypykatz
+, pythonOlder
+, rich
+,
 }:
 
 buildPythonPackage rec {

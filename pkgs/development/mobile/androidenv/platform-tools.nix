@@ -1,12 +1,12 @@
-{
-  deployAndroidPackage,
-  lib,
-  package,
-  os,
-  arch,
-  autoPatchelfHook,
-  pkgs,
-  meta,
+{ deployAndroidPackage
+, lib
+, package
+, os
+, arch
+, autoPatchelfHook
+, pkgs
+, meta
+,
 }:
 
 deployAndroidPackage {

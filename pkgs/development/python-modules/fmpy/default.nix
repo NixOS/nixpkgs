@@ -1,40 +1,40 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  cmake,
-  sundials,
-  lapack,
-  attrs,
-  lark,
-  lxml,
-  rpclib,
-  msgpack,
-  numpy,
-  scipy,
-  pytz,
-  dask,
-  requests,
-  matplotlib,
-  pyqtgraph,
-  notebook,
-  plotly,
-  hatchling,
-  pyside6,
-  jinja2,
-  flask,
-  dash,
-  dash-bootstrap-components,
-  qt6,
-  fmpy,
-  runCommand,
-  enableRemoting ? true,
-  versionCheckHook,
-  fmi-reference-fmus,
-  replaceVars,
+{ lib
+, stdenv
+, fetchurl
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, cmake
+, sundials
+, lapack
+, attrs
+, lark
+, lxml
+, rpclib
+, msgpack
+, numpy
+, scipy
+, pytz
+, dask
+, requests
+, matplotlib
+, pyqtgraph
+, notebook
+, plotly
+, hatchling
+, pyside6
+, jinja2
+, flask
+, dash
+, dash-bootstrap-components
+, qt6
+, fmpy
+, runCommand
+, enableRemoting ? true
+, versionCheckHook
+, fmi-reference-fmus
+, replaceVars
+,
 }:
 buildPythonPackage rec {
   pname = "fmpy";

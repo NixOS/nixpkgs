@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

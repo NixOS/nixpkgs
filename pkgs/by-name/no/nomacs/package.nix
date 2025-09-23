@@ -1,15 +1,15 @@
-{
-  lib,
-  cmake,
-  exiv2,
-  fetchFromGitHub,
-  libraw,
-  kdePackages,
-  qt6,
-  libtiff,
-  opencv4,
-  pkg-config,
-  stdenv,
+{ lib
+, cmake
+, exiv2
+, fetchFromGitHub
+, libraw
+, kdePackages
+, qt6
+, libtiff
+, opencv4
+, pkg-config
+, stdenv
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";

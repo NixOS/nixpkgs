@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  openal,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, openal
+,
 }:
 
 stdenv.mkDerivation rec {

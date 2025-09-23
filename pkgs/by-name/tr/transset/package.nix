@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libx11,
-  xorgproto,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libx11
+, xorgproto
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "transset";

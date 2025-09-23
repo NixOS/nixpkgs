@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  zlib,
-  openssl,
-  sslSupport ? true,
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, zlib
+, openssl
+, sslSupport ? true
+,
 }:
 
 assert sslSupport -> openssl != null;

@@ -1,23 +1,23 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  doxygen,
-  wrapQtAppsHook,
-  pcre,
-  poco,
-  qtbase,
-  qtsvg,
-  qwt6_1,
-  nlohmann_json,
-  soapysdr-with-plugins,
-  portaudio,
-  alsa-lib,
-  muparserx,
-  python3,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, doxygen
+, wrapQtAppsHook
+, pcre
+, poco
+, qtbase
+, qtsvg
+, qwt6_1
+, nlohmann_json
+, soapysdr-with-plugins
+, portaudio
+, alsa-lib
+, muparserx
+, python3
+,
 }:
 
 mkDerivation rec {

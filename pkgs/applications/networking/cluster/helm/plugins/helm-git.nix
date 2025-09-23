@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  coreutils,
-  findutils,
-  gitMinimal,
-  gnugrep,
-  gnused,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, findutils
+, gitMinimal
+, gnugrep
+, gnused
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

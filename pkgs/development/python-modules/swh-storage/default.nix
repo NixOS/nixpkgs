@@ -1,31 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  setuptools-scm,
-  backports-entry-points-selectable,
-  cassandra-driver,
-  click,
-  deprecated,
-  flask,
-  iso8601,
-  mypy-extensions,
-  psycopg,
-  redis,
-  tenacity,
-  swh-core,
-  swh-model,
-  swh-objstorage,
-  postgresql,
-  postgresqlTestHook,
-  pytest-aiohttp,
-  pytest-mock,
-  pytest-postgresql,
-  pytest-shared-session-scope,
-  pytest-xdist,
-  pytestCheckHook,
-  swh-journal,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, setuptools-scm
+, backports-entry-points-selectable
+, cassandra-driver
+, click
+, deprecated
+, flask
+, iso8601
+, mypy-extensions
+, psycopg
+, redis
+, tenacity
+, swh-core
+, swh-model
+, swh-objstorage
+, postgresql
+, postgresqlTestHook
+, pytest-aiohttp
+, pytest-mock
+, pytest-postgresql
+, pytest-shared-session-scope
+, pytest-xdist
+, pytestCheckHook
+, swh-journal
+,
 }:
 
 buildPythonPackage rec {

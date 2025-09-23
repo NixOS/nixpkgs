@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -36,7 +35,7 @@ in
       };
       vgpus = mkOption {
         default = { };
-        type = with types; attrsOf (submodule [ { options = vgpuOptions; } ]);
+        type = with types; attrsOf (submodule [{ options = vgpuOptions; }]);
         description = ''
           Virtual GPUs to be used in Qemu. You can find devices via {command}`ls /sys/bus/pci/devices/*/mdev_supported_types`
           and find info about device via {command}`cat /sys/bus/pci/devices/*/mdev_supported_types/i915-GVTg_V5_4/description`
@@ -65,37 +64,45 @@ in
       let
         vgpus = listToAttrs (
           flatten (
-            mapAttrsToList (
-              mdev: opt:
-              map (
-                id:
-                nameValuePair "kvmgt-${id}" {
-                  inherit mdev;
-                  uuid = id;
-                }
-              ) opt.uuid
-            ) cfg.vgpus
+            mapAttrsToList
+              (
+                mdev: opt:
+                  map
+                    (
+                      id:
+                      nameValuePair "kvmgt-${id}" {
+                        inherit mdev;
+                        uuid = id;
+                      }
+                    )
+                    opt.uuid
+              )
+              cfg.vgpus
           )
         );
       in
       {
-        paths = mapAttrs (_: opt: {
-          description = "KVMGT VGPU ${opt.uuid} path";
-          wantedBy = [ "multi-user.target" ];
-          pathConfig = {
-            PathExists = "/sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${opt.mdev}/create";
-          };
-        }) vgpus;
+        paths = mapAttrs
+          (_: opt: {
+            description = "KVMGT VGPU ${opt.uuid} path";
+            wantedBy = [ "multi-user.target" ];
+            pathConfig = {
+              PathExists = "/sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${opt.mdev}/create";
+            };
+          })
+          vgpus;
 
-        services = mapAttrs (_: opt: {
-          description = "KVMGT VGPU ${opt.uuid}";
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-            ExecStart = "${pkgs.runtimeShell} -c 'echo ${opt.uuid} > /sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${opt.mdev}/create'";
-            ExecStop = "${pkgs.runtimeShell} -c 'echo 1 > /sys/bus/pci/devices/${cfg.device}/${opt.uuid}/remove'";
-          };
-        }) vgpus;
+        services = mapAttrs
+          (_: opt: {
+            description = "KVMGT VGPU ${opt.uuid}";
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              ExecStart = "${pkgs.runtimeShell} -c 'echo ${opt.uuid} > /sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${opt.mdev}/create'";
+              ExecStop = "${pkgs.runtimeShell} -c 'echo 1 > /sys/bus/pci/devices/${cfg.device}/${opt.uuid}/remove'";
+            };
+          })
+          vgpus;
       };
   };
 

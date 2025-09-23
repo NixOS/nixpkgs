@@ -1,17 +1,17 @@
-{
-  lib,
-  buildDunePackage,
-  cmdliner,
-  functoria-runtime,
-  rresult,
-  astring,
-  fmt,
-  logs,
-  bos,
-  fpath,
-  emile,
-  uri,
-  alcotest,
+{ lib
+, buildDunePackage
+, cmdliner
+, functoria-runtime
+, rresult
+, astring
+, fmt
+, logs
+, bos
+, fpath
+, emile
+, uri
+, alcotest
+,
 }:
 
 buildDunePackage {

@@ -1,12 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  glibcLocales,
-  mpmath,
-
-  # Reverse dependency
-  sage,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, glibcLocales
+, mpmath
+, # Reverse dependency
+  sage
+,
 }:
 
 buildPythonPackage rec {

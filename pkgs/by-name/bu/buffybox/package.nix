@@ -1,17 +1,17 @@
-{
-  fetchFromGitLab,
-  fetchpatch2,
-  inih,
-  lib,
-  libdrm,
-  libinput,
-  libxkbcommon,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  stdenv,
-  gitUpdater,
+{ fetchFromGitLab
+, fetchpatch2
+, inih
+, lib
+, libdrm
+, libinput
+, libxkbcommon
+, meson
+, ninja
+, pkg-config
+, scdoc
+, stdenv
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

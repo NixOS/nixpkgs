@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  buildLua,
-  mpv-unwrapped,
+{ lib
+, fetchFromGitHub
+, unstableGitUpdater
+, buildLua
+, mpv-unwrapped
+,
 }:
 
 buildLua {

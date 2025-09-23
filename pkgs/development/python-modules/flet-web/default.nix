@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  flet-client-flutter,
-
-  # build-system
-  poetry-core,
-
-  flet,
-  fastapi,
-  uvicorn,
-  python,
+{ lib
+, buildPythonPackage
+, flet-client-flutter
+, # build-system
+  poetry-core
+, flet
+, fastapi
+, uvicorn
+, python
+,
 }:
 
 buildPythonPackage rec {

@@ -1,35 +1,35 @@
-{
-  lib,
-  callPackage,
-  runCommand,
-  layer-shell-qt ? null,
-  qtwayland,
-  wrapQtAppsHook,
-  unwrapped ? callPackage ./unwrapped.nix { },
-  withWayland ? false,
-  withLayerShellQt ? false,
-  extraPackages ? [ ],
+{ lib
+, callPackage
+, runCommand
+, layer-shell-qt ? null
+, qtwayland
+, wrapQtAppsHook
+, unwrapped ? callPackage ./unwrapped.nix { }
+, withWayland ? false
+, withLayerShellQt ? false
+, extraPackages ? [ ]
+,
 }:
 runCommand "sddm-wrapped"
-  {
-    inherit (unwrapped) version outputs;
+{
+  inherit (unwrapped) version outputs;
 
-    buildInputs =
-      unwrapped.buildInputs
-      ++ extraPackages
-      ++ lib.optional withWayland qtwayland
-      ++ lib.optional (withWayland && withLayerShellQt) layer-shell-qt;
-    nativeBuildInputs = [ wrapQtAppsHook ];
+  buildInputs =
+    unwrapped.buildInputs
+    ++ extraPackages
+    ++ lib.optional withWayland qtwayland
+    ++ lib.optional (withWayland && withLayerShellQt) layer-shell-qt;
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
-    strictDeps = true;
+  strictDeps = true;
 
-    passthru = {
-      inherit unwrapped;
-      inherit (unwrapped.passthru) tests;
-    };
+  passthru = {
+    inherit unwrapped;
+    inherit (unwrapped.passthru) tests;
+  };
 
-    meta = unwrapped.meta;
-  }
+  meta = unwrapped.meta;
+}
   ''
     mkdir -p $out/bin
 

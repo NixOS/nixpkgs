@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  coreutils,
-  setuptools,
-  xlib,
-  fontconfig,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  pytest-asyncio,
-  pytest-timeout,
-  pytest-xvfb,
-  i3,
-  xorg,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, coreutils
+, setuptools
+, xlib
+, fontconfig
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+, pytest-asyncio
+, pytest-timeout
+, pytest-xvfb
+, i3
+, xorg
+,
 }:
 
 buildPythonPackage rec {

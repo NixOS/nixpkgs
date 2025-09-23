@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  zig_0_14,
-  callPackage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, zig_0_14
+, callPackage
+,
 }:
 
 let

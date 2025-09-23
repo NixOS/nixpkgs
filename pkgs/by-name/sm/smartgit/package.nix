@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeDesktopItem,
-  openjdk21,
-  gtk3,
-  glib,
-  adwaita-icon-theme,
-  wrapGAppsHook3,
-  libXtst,
-  which,
+{ lib
+, stdenv
+, fetchurl
+, makeDesktopItem
+, openjdk21
+, gtk3
+, glib
+, adwaita-icon-theme
+, wrapGAppsHook3
+, libXtst
+, which
+,
 }:
 let
   jre = openjdk21;

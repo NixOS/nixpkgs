@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openjdk,
-  glib,
-  dpkg,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, openjdk
+, glib
+, dpkg
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

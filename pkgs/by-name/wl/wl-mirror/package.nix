@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  wlr-protocols,
-  libGL,
-  libgbm,
-  bash,
-  installExampleScripts ? true,
-  makeWrapper,
-  installShellFiles,
-  pipectl,
-  slurp,
-  rofi,
-  scdoc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wayland
+, wayland-protocols
+, wayland-scanner
+, wlr-protocols
+, libGL
+, libgbm
+, bash
+, installExampleScripts ? true
+, makeWrapper
+, installShellFiles
+, pipectl
+, slurp
+, rofi
+, scdoc
+,
 }:
 
 let

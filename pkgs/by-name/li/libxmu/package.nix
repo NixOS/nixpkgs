@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xorgproto,
-  libx11,
-  libxext,
-  libxt,
-  writeScript,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorgproto
+, libx11
+, libxext
+, libxt
+, writeScript
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxmu";

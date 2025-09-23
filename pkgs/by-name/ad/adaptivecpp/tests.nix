@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  adaptivecpp,
-  # Within the nix sandbox, and on the CI especially, the tests will likely be unable to access a gpu.
+{ lib
+, stdenv
+, adaptivecpp
+, # Within the nix sandbox, and on the CI especially, the tests will likely be unable to access a gpu.
   # While the CI won't be able to test on a GPU, we can do a sanity check with OMP atleast
   #
   # The bulk of work in acpp focuses on the generic target, so we want to test that first and foremost.
   # Not setting an explicit target makes it default to the generic target.
-  targets ? null,
-  enablePstlTests ? false,
-  tbb,
-  cmake,
-  boost,
+  targets ? null
+, enablePstlTests ? false
+, tbb
+, cmake
+, boost
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "${adaptivecpp.pname}-tests";

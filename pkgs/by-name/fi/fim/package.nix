@@ -1,33 +1,33 @@
-{
-  stdenv,
-  fetchurl,
-  autoconf,
-  automake,
-  pkg-config,
-  replaceVars,
-  lib,
-  perl,
-  flex,
-  bison,
-  readline,
-  libexif,
-  bash,
-  buildPackages,
-  # SDL depends on Qt, which doesn't cross-compile
-  x11Support ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
-  SDL,
-  svgSupport ? true,
-  inkscape,
-  asciiArtSupport ? true,
-  aalib,
-  gifSupport ? true,
-  giflib,
-  tiffSupport ? true,
-  libtiff,
-  jpegSupport ? true,
-  libjpeg,
-  pngSupport ? true,
-  libpng,
+{ stdenv
+, fetchurl
+, autoconf
+, automake
+, pkg-config
+, replaceVars
+, lib
+, perl
+, flex
+, bison
+, readline
+, libexif
+, bash
+, buildPackages
+, # SDL depends on Qt, which doesn't cross-compile
+  x11Support ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+, SDL
+, svgSupport ? true
+, inkscape
+, asciiArtSupport ? true
+, aalib
+, gifSupport ? true
+, giflib
+, tiffSupport ? true
+, libtiff
+, jpegSupport ? true
+, libjpeg
+, pngSupport ? true
+, libpng
+,
 }:
 
 stdenv.mkDerivation rec {

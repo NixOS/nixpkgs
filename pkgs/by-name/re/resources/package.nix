@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  appstream-glib,
-  autoAddDriverRunpath,
-  cargo,
-  desktop-file-utils,
-  meson,
-  ninja,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
-  glib,
-  gtk4,
-  libadwaita,
-  dmidecode,
-  util-linux,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream-glib
+, autoAddDriverRunpath
+, cargo
+, desktop-file-utils
+, meson
+, ninja
+, pkg-config
+, rustPlatform
+, rustc
+, wrapGAppsHook4
+, glib
+, gtk4
+, libadwaita
+, dmidecode
+, util-linux
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

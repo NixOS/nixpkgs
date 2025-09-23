@@ -1,17 +1,17 @@
-{
-  fetchFromGitHub,
-  formats,
-  fzf,
-  git,
-  lib,
-  makeWrapper,
-  neovim,
-  nix-update-script,
-  ripgrep,
-  runCommand,
-  stdenv,
-  vim-full,
-  spacevim_config ? import ./init.nix,
+{ fetchFromGitHub
+, formats
+, fzf
+, git
+, lib
+, makeWrapper
+, neovim
+, nix-update-script
+, ripgrep
+, runCommand
+, stdenv
+, vim-full
+, spacevim_config ? import ./init.nix
+,
 }:
 
 let

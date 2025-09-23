@@ -1,42 +1,42 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cargo,
-  cmake,
-  fetchFromGitHub,
-  pkg-config,
-  pkgs, # zstd hidden by python3Packages.zstd
-  pytestCheckHook,
-  pytest-codspeed ? null, # Not in Nixpkgs
-  pytest-cov-stub,
-  pytest-xdist,
-  pytest-benchmark,
-  rustc,
-  rustPlatform,
-  runCommand,
+{ lib
+, stdenv
+, buildPythonPackage
+, cargo
+, cmake
+, fetchFromGitHub
+, pkg-config
+, pkgs
+, # zstd hidden by python3Packages.zstd
+  pytestCheckHook
+, pytest-codspeed ? null
+, # Not in Nixpkgs
+  pytest-cov-stub
+, pytest-xdist
+, pytest-benchmark
+, rustc
+, rustPlatform
+, runCommand
+, mimalloc
+, jemalloc
+, rust-jemalloc-sys
+, # Another alternative is to try `mimalloc`
+  polarsMemoryAllocator ? mimalloc
+, # polarsJemalloc,
+  polarsJemalloc ? let
+    jemalloc' = rust-jemalloc-sys.override {
+      jemalloc = jemalloc.override {
+        # "libjemalloc.so.2: cannot allocate memory in static TLS block"
 
-  mimalloc,
-  jemalloc,
-  rust-jemalloc-sys,
-  # Another alternative is to try `mimalloc`
-  polarsMemoryAllocator ? mimalloc, # polarsJemalloc,
-  polarsJemalloc ?
-    let
-      jemalloc' = rust-jemalloc-sys.override {
-        jemalloc = jemalloc.override {
-          # "libjemalloc.so.2: cannot allocate memory in static TLS block"
-
-          # https://github.com/pola-rs/polars/issues/5401#issuecomment-1300998316
-          disableInitExecTls = true;
-        };
+        # https://github.com/pola-rs/polars/issues/5401#issuecomment-1300998316
+        disableInitExecTls = true;
       };
-    in
-    assert builtins.elem "--disable-initial-exec-tls" jemalloc'.configureFlags;
-    jemalloc',
-
-  polars,
-  python,
+    };
+  in
+  assert builtins.elem "--disable-initial-exec-tls" jemalloc'.configureFlags;
+  jemalloc'
+, polars
+, python
+,
 }:
 
 let

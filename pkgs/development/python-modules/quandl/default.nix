@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  factory-boy,
-  faker,
-  fetchPypi,
-  httpretty,
-  importlib-metadata,
-  inflection,
-  jsondate,
-  mock,
-  more-itertools,
-  numpy,
-  pandas,
-  parameterized,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  six,
+{ lib
+, buildPythonPackage
+, factory-boy
+, faker
+, fetchPypi
+, httpretty
+, importlib-metadata
+, inflection
+, jsondate
+, mock
+, more-itertools
+, numpy
+, pandas
+, parameterized
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
+, six
+,
 }:
 
 buildPythonPackage rec {

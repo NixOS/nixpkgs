@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,9 +49,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_C_FLAGS" "-std=gnu90")
   ]
-  ++ lib.optional (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-  ) "-DPNG_ARM_NEON=off";
+  ++ lib.optional
+    (
+      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+    ) "-DPNG_ARM_NEON=off";
 
   meta = with lib; {
     homepage = "https://github.com/MCredstoner2004/ImageLOL";

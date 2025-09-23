@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  celery,
-  django,
-  pythonOlder,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, celery
+, django
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

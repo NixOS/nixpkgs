@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  cramjam,
-  cython,
-  fetchFromGitHub,
-  fsspec,
-  git,
-  numpy,
-  packaging,
-  pandas,
-  pytestCheckHook,
-  python-lzo,
-  python,
-  pythonOlder,
-  setuptools-scm,
-  setuptools,
-  wheel,
+{ lib
+, buildPythonPackage
+, cramjam
+, cython
+, fetchFromGitHub
+, fsspec
+, git
+, numpy
+, packaging
+, pandas
+, pytestCheckHook
+, python-lzo
+, python
+, pythonOlder
+, setuptools-scm
+, setuptools
+, wheel
+,
 }:
 
 buildPythonPackage rec {

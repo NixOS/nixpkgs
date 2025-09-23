@@ -1,36 +1,37 @@
-{
-  lib,
-  stdenv,
-  runCommand,
-  fetchzip,
-  fetchurl,
-  fetchpatch,
-  fetchFromGitHub,
-  cmake,
-  jbig2dec,
-  libjpeg_turbo,
-  libpng,
-  makeWrapper,
-  pkg-config,
-  zlib,
-  enableGSL ? true,
-  gsl,
-  enableGhostScript ? true,
-  ghostscript,
-  enableMuPDF ? true,
-  mupdf,
-  enableDJVU ? true,
-  djvulibre,
-  enableGOCR ? false, # Disabled by default due to crashes
-  gocr,
-  # Tesseract support is currently broken
+{ lib
+, stdenv
+, runCommand
+, fetchzip
+, fetchurl
+, fetchpatch
+, fetchFromGitHub
+, cmake
+, jbig2dec
+, libjpeg_turbo
+, libpng
+, makeWrapper
+, pkg-config
+, zlib
+, enableGSL ? true
+, gsl
+, enableGhostScript ? true
+, ghostscript
+, enableMuPDF ? true
+, mupdf
+, enableDJVU ? true
+, djvulibre
+, enableGOCR ? false
+, # Disabled by default due to crashes
+  gocr
+, # Tesseract support is currently broken
   # See: https://github.com/NixOS/nixpkgs/issues/368349
-  enableTesseract ? false,
-  tesseract5,
-  enableLeptonica ? true,
-  leptonica,
-  opencl-headers,
-  fetchDebianPatch,
+  enableTesseract ? false
+, tesseract5
+, enableLeptonica ? true
+, leptonica
+, opencl-headers
+, fetchDebianPatch
+,
 }:
 
 # k2pdfopt is a pain to package. It requires modified versions of mupdf,
@@ -60,10 +61,10 @@
 let
   # Create a patch against src based on changes applied in patchCommands
   mkPatch =
-    {
-      name,
-      src,
-      patchCommands,
+    { name
+    , src
+    , patchCommands
+    ,
     }:
     runCommand "${name}-k2pdfopt.patch" { inherit src; } ''
       unpackPhase
@@ -154,9 +155,8 @@ stdenv.mkDerivation rec {
           '';
         };
       mupdf_modded = mupdf.overrideAttrs (
-        {
-          patches ? [ ],
-          ...
+        { patches ? [ ]
+        , ...
         }:
         {
           # The fuzz factor is increased to automatically resolve the merge conflict.
@@ -189,9 +189,8 @@ stdenv.mkDerivation rec {
         patchCommands = "cp -r ${k2pdfopt_src}/leptonica_mod/. ./src/";
       };
       leptonica_modded = leptonica.overrideAttrs (
-        {
-          patches ? [ ],
-          ...
+        { patches ? [ ]
+        , ...
         }:
         {
           patches = patches ++ [ leptonica_patch ];
@@ -222,10 +221,9 @@ stdenv.mkDerivation rec {
       };
       tesseract_modded = tesseract5.override {
         tesseractBase = tesseract5.tesseractBase.overrideAttrs (
-          {
-            patches ? [ ],
-            buildInputs ? [ ],
-            ...
+          { patches ? [ ]
+          , buildInputs ? [ ]
+          , ...
           }:
           {
             pname = "tesseract-k2pdfopt";

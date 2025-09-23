@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  wrapGAppsHook3,
-  pkg-config,
-  openssl,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, wrapGAppsHook3
+, pkg-config
+, openssl
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mpv-subs-popout";

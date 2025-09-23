@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  libgit2,
-  zlib,
-  vimUtils,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, libgit2
+, zlib
+, vimUtils
+, nix-update-script
+,
 }:
 
 let

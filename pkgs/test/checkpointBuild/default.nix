@@ -1,10 +1,10 @@
-{
-  hello,
-  checkpointBuildTools,
-  runCommand,
-  texinfo,
-  stdenv,
-  rsync,
+{ hello
+, checkpointBuildTools
+, runCommand
+, texinfo
+, stdenv
+, rsync
+,
 }:
 let
   baseHelloArtifacts = checkpointBuildTools.prepareCheckpointBuild hello;

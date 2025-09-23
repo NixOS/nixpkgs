@@ -1,15 +1,15 @@
-{
-  config,
-  cmake,
-  cudaPackages,
-  fetchFromGitHub,
-  lib,
-  ninja,
-  python3Packages ? { },
-  pythonSupport ? false,
-  stdenv,
-  symlinkJoin,
-  which,
+{ config
+, cmake
+, cudaPackages
+, fetchFromGitHub
+, lib
+, ninja
+, python3Packages ? { }
+, pythonSupport ? false
+, stdenv
+, symlinkJoin
+, which
+,
 }:
 let
   inherit (lib) lists strings;

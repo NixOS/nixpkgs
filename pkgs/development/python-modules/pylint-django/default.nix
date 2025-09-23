@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  django-tables2,
-  django-tastypie,
-  factory-boy,
-  fetchFromGitHub,
-  poetry-core,
-  pylint-plugin-utils,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, django
+, django-tables2
+, django-tastypie
+, factory-boy
+, fetchFromGitHub
+, poetry-core
+, pylint-plugin-utils
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

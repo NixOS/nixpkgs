@@ -1,16 +1,16 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  llvm,
-  libffi,
-  libz,
-  libxml2,
-  ncurses,
-  stdenv,
-  makeWrapper,
-  callPackage,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, llvm
+, libffi
+, libz
+, libxml2
+, ncurses
+, stdenv
+, makeWrapper
+, callPackage
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

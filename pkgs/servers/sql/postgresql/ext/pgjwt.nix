@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  lib,
-  nixosTests,
-  postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestExtension,
-  unstableGitUpdater,
+{ fetchFromGitHub
+, lib
+, nixosTests
+, postgresql
+, postgresqlBuildExtension
+, postgresqlTestExtension
+, unstableGitUpdater
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

@@ -1,18 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  flax,
-  tomlq,
-  python,
-
-  # build-system
-  nanobind,
-  ninja,
-  scikit-build-core,
-
-  # nativeBuildInputs
-  cmake,
-  pkg-config,
+{ lib
+, buildPythonPackage
+, flax
+, tomlq
+, python
+, # build-system
+  nanobind
+, ninja
+, scikit-build-core
+, # nativeBuildInputs
+  cmake
+, pkg-config
+,
 }:
 
 buildPythonPackage rec {

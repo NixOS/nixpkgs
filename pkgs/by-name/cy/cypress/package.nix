@@ -1,18 +1,18 @@
-{
-  alsa-lib,
-  autoPatchelfHook,
-  fetchzip,
-  gtk2,
-  gtk3,
-  lib,
-  buildPackages,
-  makeShellWrapper,
-  libgbm,
-  nss,
-  stdenv,
-  udev,
-  unzip,
-  xorg,
+{ alsa-lib
+, autoPatchelfHook
+, fetchzip
+, gtk2
+, gtk3
+, lib
+, buildPackages
+, makeShellWrapper
+, libgbm
+, nss
+, stdenv
+, udev
+, unzip
+, xorg
+,
 }:
 
 let

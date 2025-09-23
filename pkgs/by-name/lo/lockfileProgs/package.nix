@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  liblockfile,
+{ lib
+, stdenv
+, fetchurl
+, liblockfile
+,
 }:
 
 stdenv.mkDerivation rec {

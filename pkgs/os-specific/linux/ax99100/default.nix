@@ -1,10 +1,10 @@
-{
-  kernel,
-  stdenv,
-  kmod,
-  lib,
-  fetchzip,
-  dos2unix,
+{ kernel
+, stdenv
+, kmod
+, lib
+, fetchzip
+, dos2unix
+,
 }:
 
 stdenv.mkDerivation {

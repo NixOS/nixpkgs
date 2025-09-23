@@ -1,22 +1,19 @@
-{
-  lib,
-  stdenv,
-  python,
-  buildPythonPackage,
-  fetchurl,
-  pythonOlder,
-  pythonAtLeast,
-
-  # buildInputs
-  cudaPackages,
-
-  # nativeBuildInputs
-  addDriverRunpath,
-  autoPatchelfHook,
-
-  # dependencies
-  pillow,
-  torch-bin,
+{ lib
+, stdenv
+, python
+, buildPythonPackage
+, fetchurl
+, pythonOlder
+, pythonAtLeast
+, # buildInputs
+  cudaPackages
+, # nativeBuildInputs
+  addDriverRunpath
+, autoPatchelfHook
+, # dependencies
+  pillow
+, torch-bin
+,
 }:
 
 let

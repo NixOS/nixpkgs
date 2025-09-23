@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  matplotlib,
-  mizani,
-  pandas,
-  scipy,
-  statsmodels,
-
-  # tests
-  geopandas,
-  pytestCheckHook,
-  pytest-cov-stub,
-  scikit-misc,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  setuptools-scm
+, # dependencies
+  matplotlib
+, mizani
+, pandas
+, scipy
+, statsmodels
+, # tests
+  geopandas
+, pytestCheckHook
+, pytest-cov-stub
+, scikit-misc
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

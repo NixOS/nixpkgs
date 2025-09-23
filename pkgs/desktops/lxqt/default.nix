@@ -1,7 +1,7 @@
-{
-  pkgs,
-  makeScope,
-  kdePackages,
+{ pkgs
+, makeScope
+, kdePackages
+,
 }:
 
 let

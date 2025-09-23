@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  stdenv,
-  libusb1,
-  pkg-config,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, stdenv
+, libusb1
+, pkg-config
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "minidsp";

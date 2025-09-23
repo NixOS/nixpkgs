@@ -1,8 +1,8 @@
-{
-  lib,
-  buildRubyGem,
-  ruby,
-  openssh,
+{ lib
+, buildRubyGem
+, ruby
+, openssh
+,
 }:
 
 # Example ~/.hss.yml

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fuse3,
-  testers,
-  blobfuse,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fuse3
+, testers
+, blobfuse
+, nix-update-script
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  kicad,
-  python3Packages,
-  xvfb-run,
+{ fetchFromGitHub
+, lib
+, kicad
+, python3Packages
+, xvfb-run
+,
 }:
 
 python3Packages.buildPythonApplication rec {

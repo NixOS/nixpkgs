@@ -1,20 +1,16 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-  makeDesktopItem,
-
-  copyDesktopItems,
-  makeWrapper,
-  nodejs,
-  yarn-berry_4,
-  zip,
-
-  electron,
-  commandLineArgs ? "",
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, nodejs
+, yarn-berry_4
+, zip
+, electron
+, commandLineArgs ? ""
+, nix-update-script
+,
 }:
 
 let

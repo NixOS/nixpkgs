@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  click,
-  nurl,
-  nix-prefetch-git,
-  nix,
-  coreutils,
-  nixfmt,
-  makeWrapper,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, click
+, nurl
+, nix-prefetch-git
+, nix
+, coreutils
+, nixfmt
+, makeWrapper
+,
 }:
 # Based on https://github.com/milahu/gclient2nix
 # but with libwebrtc-specific changes.

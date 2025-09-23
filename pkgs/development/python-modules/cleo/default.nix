@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  crashtest,
-  poetry-core,
-  pytest-mock,
-  pytestCheckHook,
-  rapidfuzz,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, crashtest
+, poetry-core
+, pytest-mock
+, pytestCheckHook
+, rapidfuzz
+,
 }:
 
 buildPythonPackage rec {

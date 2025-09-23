@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  mako,
-  sqlalchemy,
-  typing-extensions,
-
-  # tests
-  black,
-  pytestCheckHook,
-  pytest-xdist,
-  python-dateutil,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  mako
+, sqlalchemy
+, typing-extensions
+, # tests
+  black
+, pytestCheckHook
+, pytest-xdist
+, python-dateutil
+,
 }:
 
 buildPythonPackage rec {

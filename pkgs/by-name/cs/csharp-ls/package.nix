@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDotnetGlobalTool,
-  dotnetCorePackages,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildDotnetGlobalTool
+, dotnetCorePackages
+, versionCheckHook
+, nix-update-script
+,
 }:
 let
   dotnet-sdk = dotnetCorePackages.sdk_9_0;

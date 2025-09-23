@@ -1,9 +1,9 @@
-{
-  mkKdeDerivation,
-  qttools,
-  bison,
-  flex,
-  libimobiledevice,
+{ mkKdeDerivation
+, qttools
+, bison
+, flex
+, libimobiledevice
+,
 }:
 mkKdeDerivation {
   pname = "solid";

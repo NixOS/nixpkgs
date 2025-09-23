@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  fetchgit,
-  gnuradio,
-  cmake,
-  pkg-config,
-  logLib,
-  libsndfile,
-  mpir,
-  boost,
-  gmp,
-  thrift,
-  fftwFloat,
-  python,
-  uhd,
-  icu,
-  airspy,
-  hackrf,
-  libbladeRF,
-  rtl-sdr,
-  soapysdr-with-plugins,
-  gnuradioAtLeast,
+{ lib
+, stdenv
+, mkDerivation
+, fetchgit
+, gnuradio
+, cmake
+, pkg-config
+, logLib
+, libsndfile
+, mpir
+, boost
+, gmp
+, thrift
+, fftwFloat
+, python
+, uhd
+, icu
+, airspy
+, hackrf
+, libbladeRF
+, rtl-sdr
+, soapysdr-with-plugins
+, gnuradioAtLeast
+,
 }:
 
 mkDerivation rec {

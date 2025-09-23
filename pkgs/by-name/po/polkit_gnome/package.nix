@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  polkit,
-  gtk3,
-  pkg-config,
-  intltool,
+{ lib
+, stdenv
+, fetchurl
+, polkit
+, gtk3
+, pkg-config
+, intltool
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "polkit-gnome";

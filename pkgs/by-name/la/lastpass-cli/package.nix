@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  asciidoc,
-  cmake,
-  docbook_xsl,
-  pkg-config,
-  bash-completion,
-  openssl,
-  curl,
-  libxml2,
-  libxslt,
+{ stdenv
+, lib
+, fetchFromGitHub
+, asciidoc
+, cmake
+, docbook_xsl
+, pkg-config
+, bash-completion
+, openssl
+, curl
+, libxml2
+, libxslt
+,
 }:
 
 stdenv.mkDerivation rec {

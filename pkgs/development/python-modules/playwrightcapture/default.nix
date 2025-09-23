@@ -1,24 +1,24 @@
-{
-  lib,
-  aiohttp,
-  aiohttp-socks,
-  beautifulsoup4,
-  buildPythonPackage,
-  dateparser,
-  dnspython,
-  fetchFromGitHub,
-  playwright-stealth,
-  playwright,
-  poetry-core,
-  puremagic,
-  pydub,
-  pythonOlder,
-  pytz,
-  requests,
-  setuptools,
-  speechrecognition,
-  tzdata,
-  w3lib,
+{ lib
+, aiohttp
+, aiohttp-socks
+, beautifulsoup4
+, buildPythonPackage
+, dateparser
+, dnspython
+, fetchFromGitHub
+, playwright-stealth
+, playwright
+, poetry-core
+, puremagic
+, pydub
+, pythonOlder
+, pytz
+, requests
+, setuptools
+, speechrecognition
+, tzdata
+, w3lib
+,
 }:
 
 buildPythonPackage rec {

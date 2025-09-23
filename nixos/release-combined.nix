@@ -2,18 +2,18 @@
 # and nixos-14.04). The channel is updated every time the ‘tested’ job
 # succeeds, and all other jobs have finished (they may fail).
 
-{
-  nixpkgs ? {
+{ nixpkgs ? {
     outPath = (import ../lib).cleanSource ./..;
     revCount = 56789;
     shortRev = "gfedcba";
-  },
-  stableBranch ? false,
-  supportedSystems ? [
+  }
+, stableBranch ? false
+, supportedSystems ? [
     "aarch64-linux"
     "x86_64-linux"
-  ],
-  limitedSupportedSystems ? [ ],
+  ]
+, limitedSupportedSystems ? [ ]
+,
 }:
 
 let
@@ -43,12 +43,13 @@ rec {
     }
   );
 
-  nixpkgs = builtins.removeAttrs (removeMaintainers (
-    import ../pkgs/top-level/release.nix {
-      inherit supportedSystems;
-      nixpkgs = nixpkgsSrc;
-    }
-  )) [ "unstable" ];
+  nixpkgs = builtins.removeAttrs
+    (removeMaintainers (
+      import ../pkgs/top-level/release.nix {
+        inherit supportedSystems;
+        nixpkgs = nixpkgsSrc;
+      }
+    )) [ "unstable" ];
 
   tested =
     let

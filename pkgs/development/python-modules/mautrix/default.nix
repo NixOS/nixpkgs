@@ -1,27 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  # deps
-  setuptools,
-  aiohttp,
-  attrs,
-  yarl,
-  # optional deps
-  python-magic,
-  python-olm,
-  unpaddedbase64,
-  pycryptodome,
-  # check deps
-  pytestCheckHook,
-  pytest-asyncio,
-  aiosqlite,
-  asyncpg,
-  ruamel-yaml,
-  fetchpatch,
-
-  withOlm ? false,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # deps
+  setuptools
+, aiohttp
+, attrs
+, yarl
+, # optional deps
+  python-magic
+, python-olm
+, unpaddedbase64
+, pycryptodome
+, # check deps
+  pytestCheckHook
+, pytest-asyncio
+, aiosqlite
+, asyncpg
+, ruamel-yaml
+, fetchpatch
+, withOlm ? false
+,
 }:
 
 buildPythonPackage rec {

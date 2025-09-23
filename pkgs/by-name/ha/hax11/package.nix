@@ -1,11 +1,11 @@
-{
-  lib,
-  multiStdenv,
-  fetchFromGitHub,
-  libX11,
-  libXxf86vm,
-  xorgproto,
-  unstableGitUpdater,
+{ lib
+, multiStdenv
+, fetchFromGitHub
+, libX11
+, libXxf86vm
+, xorgproto
+, unstableGitUpdater
+,
 }:
 
 multiStdenv.mkDerivation (finalAttrs: {

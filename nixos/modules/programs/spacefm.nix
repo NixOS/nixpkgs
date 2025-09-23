@@ -1,10 +1,9 @@
 # Global configuration for spacefm.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let

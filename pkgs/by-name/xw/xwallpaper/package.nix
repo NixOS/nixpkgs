@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
-  installShellFiles,
-  pixman,
-  xcbutil,
-  xcbutilimage,
-  libseccomp,
-  libjpeg,
-  libpng,
-  libXpm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, installShellFiles
+, pixman
+, xcbutil
+, xcbutilimage
+, libseccomp
+, libjpeg
+, libpng
+, libXpm
+,
 }:
 
 stdenv.mkDerivation rec {

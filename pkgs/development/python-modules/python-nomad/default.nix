@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  requests,
-  pythonOlder,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, requests
+, pythonOlder
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

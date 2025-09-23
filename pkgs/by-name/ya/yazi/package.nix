@@ -1,11 +1,9 @@
-{
-  lib,
-  formats,
-  runCommand,
-  makeWrapper,
-
-  extraPackages ? [ ],
-  optionalDeps ? [
+{ lib
+, formats
+, runCommand
+, makeWrapper
+, extraPackages ? [ ]
+, optionalDeps ? [
     jq
     poppler-utils
     _7zz
@@ -17,29 +15,27 @@
     imagemagick
     chafa
     resvg
-  ],
-
-  # deps
-  file,
-  yazi-unwrapped,
-
-  # optional deps
-  jq,
-  poppler-utils,
-  _7zz,
-  ffmpeg,
-  fd,
-  ripgrep,
-  fzf,
-  zoxide,
-  imagemagick,
-  chafa,
-  resvg,
-
-  settings ? { },
-  plugins ? { },
-  flavors ? { },
-  initLua ? null,
+  ]
+, # deps
+  file
+, yazi-unwrapped
+, # optional deps
+  jq
+, poppler-utils
+, _7zz
+, ffmpeg
+, fd
+, ripgrep
+, fzf
+, zoxide
+, imagemagick
+, chafa
+, resvg
+, settings ? { }
+, plugins ? { }
+, flavors ? { }
+, initLua ? null
+,
 }:
 
 let
@@ -91,11 +87,11 @@ let
       '';
 in
 runCommand yazi-unwrapped.name
-  {
-    inherit (yazi-unwrapped) pname version meta;
+{
+  inherit (yazi-unwrapped) pname version meta;
 
-    nativeBuildInputs = [ makeWrapper ];
-  }
+  nativeBuildInputs = [ makeWrapper ];
+}
   ''
     mkdir -p "$out/bin"
     ln -s "${yazi-unwrapped}/share" "$out/share"

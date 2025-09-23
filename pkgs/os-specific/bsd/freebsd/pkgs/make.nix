@@ -1,7 +1,7 @@
-{
-  lib,
-  mkDerivation,
-  stdenv,
+{ lib
+, mkDerivation
+, stdenv
+,
 }:
 
 mkDerivation {

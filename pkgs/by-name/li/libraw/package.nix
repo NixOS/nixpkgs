@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  lcms2,
-  pkg-config,
-
-  # for passthru.tests
-  freeimage,
-  hdrmerge,
-  imagemagick,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, lcms2
+, pkg-config
+, # for passthru.tests
+  freeimage
+, hdrmerge
+, imagemagick
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -16,7 +16,7 @@
           scrapeConfigs = [
             {
               job_name = "prometheus";
-              static_configs = [ { targets = [ "prometheus:${toString config.services.prometheus.port}" ]; } ];
+              static_configs = [{ targets = [ "prometheus:${toString config.services.prometheus.port}" ]; }];
             }
           ];
         };

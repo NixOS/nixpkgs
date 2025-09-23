@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  perl,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, perl
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oniux";

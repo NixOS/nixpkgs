@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib)
@@ -22,9 +21,10 @@ let
   haveVirtual = cfg.virtual != "";
   haveLocalRecipients = cfg.localRecipients != null;
 
-  clientAccess = lib.optional (
-    cfg.dnsBlacklistOverrides != ""
-  ) "check_client_access hash:/etc/postfix/client_access";
+  clientAccess = lib.optional
+    (
+      cfg.dnsBlacklistOverrides != ""
+    ) "check_client_access hash:/etc/postfix/client_access";
 
   dnsBl = lib.optionals (cfg.dnsBlacklists != [ ]) (
     map (s: "reject_rbl_client " + s) cfg.dnsBlacklists
@@ -57,11 +57,10 @@ let
     );
 
   masterCfOptions =
-    {
-      options,
-      config,
-      name,
-      ...
+    { options
+    , config
+    , name
+    , ...
     }:
     {
       options = {
@@ -932,9 +931,10 @@ in
         };
 
         users.groups =
-          lib.optionalAttrs (group == "postfix") {
-            ${group}.gid = config.ids.gids.postfix;
-          }
+          lib.optionalAttrs (group == "postfix")
+            {
+              ${group}.gid = config.ids.gids.postfix;
+            }
           // lib.optionalAttrs (setgidGroup == "postdrop") {
             ${setgidGroup}.gid = config.ids.gids.postdrop;
           };
@@ -1130,8 +1130,7 @@ in
           virtual = {
             privileged = true;
           };
-          lmtp = {
-          };
+          lmtp = { };
           anvil = {
             maxproc = 1;
           };
@@ -1183,14 +1182,14 @@ in
                 ];
                 adjustSmtpTlsSecurityLevel =
                   !(cfg.submissionsOptions ? smtpd_tls_security_level)
-                  || cfg.submissionsOptions.smtpd_tls_security_level == "none"
-                  || cfg.submissionsOptions.smtpd_tls_security_level == "may";
+                    || cfg.submissionsOptions.smtpd_tls_security_level == "none"
+                    || cfg.submissionsOptions.smtpd_tls_security_level == "may";
                 submissionsOptions =
                   cfg.submissionsOptions
-                  // {
+                    // {
                     smtpd_tls_wrappermode = "yes";
                   }
-                  // lib.optionalAttrs adjustSmtpTlsSecurityLevel {
+                    // lib.optionalAttrs adjustSmtpTlsSecurityLevel {
                     smtpd_tls_security_level = "encrypt";
                   };
               in

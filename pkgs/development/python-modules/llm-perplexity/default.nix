@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  llm,
-  openai,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  python-dotenv,
-  pillow,
-  llm-perplexity,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  llm
+, openai
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+, python-dotenv
+, pillow
+, llm-perplexity
+,
 }:
 buildPythonPackage rec {
   pname = "llm-perplexity";

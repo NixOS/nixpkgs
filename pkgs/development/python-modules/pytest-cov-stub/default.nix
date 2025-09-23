@@ -1,7 +1,7 @@
-{
-  lib,
-  buildPythonPackage,
-  hatchling,
+{ lib
+, buildPythonPackage
+, hatchling
+,
 }:
 
 buildPythonPackage {

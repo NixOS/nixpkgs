@@ -1,8 +1,8 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  idrisscript,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, idrisscript
+, lib
+,
 }:
 build-idris-package {
   pname = "webgl";

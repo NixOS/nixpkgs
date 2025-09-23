@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libgit2,
-  nix-update-script,
-  zlib,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libgit2
+, nix-update-script
+, zlib
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

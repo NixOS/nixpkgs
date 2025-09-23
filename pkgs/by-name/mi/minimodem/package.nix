@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoconf,
-  automake,
-  libtool,
-  fftw,
-  fftwSinglePrec,
-  alsa-lib,
-  libsndfile,
-  libpulseaudio,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoconf
+, automake
+, libtool
+, fftw
+, fftwSinglePrec
+, alsa-lib
+, libsndfile
+, libpulseaudio
+,
 }:
 
 stdenv.mkDerivation rec {

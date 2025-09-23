@@ -1,16 +1,16 @@
-{
-  lib,
-  arrow,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pint,
-  pydantic,
-  pythonOlder,
-  pytz,
-  requests,
-  responses,
-  setuptools,
-  setuptools-scm,
+{ lib
+, arrow
+, buildPythonPackage
+, fetchFromGitHub
+, pint
+, pydantic
+, pythonOlder
+, pytz
+, requests
+, responses
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,44 +1,40 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchurl,
-
-  # buildInputs
-  llvmPackages,
-
-  # build-system
-  distutils,
-
-  # dependencies
-  ml-dtypes,
-  absl-py,
-  astunparse,
-  flatbuffers,
-  gast,
-  google-pasta,
-  grpcio,
-  h5py,
-  libclang,
-  numpy,
-  opt-einsum,
-  packaging,
-  protobuf,
-  requests,
-  six,
-  tensorboard,
-  termcolor,
-  typing-extensions,
-  wrapt,
-  isPy3k,
-  mock,
-
-  config,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages,
-  zlib,
-  python,
-  addDriverRunpath,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchurl
+, # buildInputs
+  llvmPackages
+, # build-system
+  distutils
+, # dependencies
+  ml-dtypes
+, absl-py
+, astunparse
+, flatbuffers
+, gast
+, google-pasta
+, grpcio
+, h5py
+, libclang
+, numpy
+, opt-einsum
+, packaging
+, protobuf
+, requests
+, six
+, tensorboard
+, termcolor
+, typing-extensions
+, wrapt
+, isPy3k
+, mock
+, config
+, cudaSupport ? config.cudaSupport
+, cudaPackages
+, zlib
+, python
+, addDriverRunpath
+,
 }:
 
 # We keep this binary build for three reasons:

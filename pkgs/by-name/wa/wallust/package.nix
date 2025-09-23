@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitea,
-  rustPlatform,
-  nix-update-script,
-  imagemagick,
-  makeWrapper,
-  installShellFiles,
+{ lib
+, fetchFromGitea
+, rustPlatform
+, nix-update-script
+, imagemagick
+, makeWrapper
+, installShellFiles
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wallust";

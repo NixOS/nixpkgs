@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  requests,
-  pycryptodome,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, requests
+, pycryptodome
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

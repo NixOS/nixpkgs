@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  types-html5lib,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, types-html5lib
+,
 }:
 
 buildPythonPackage rec {

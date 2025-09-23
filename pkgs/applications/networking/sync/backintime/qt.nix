@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  backintime-common,
-  python3,
-  polkit,
-  which,
-  su,
-  coreutils,
-  util-linux,
-  wrapQtAppsHook,
-  qtbase,
-  qtwayland,
+{ lib
+, stdenv
+, backintime-common
+, python3
+, polkit
+, which
+, su
+, coreutils
+, util-linux
+, wrapQtAppsHook
+, qtbase
+, qtwayland
+,
 }:
 
 let

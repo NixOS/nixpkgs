@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  ocamlPackages,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, ocamlPackages
+,
 }:
 
 ocamlPackages.buildDunePackage rec {

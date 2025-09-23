@@ -1,23 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  packaging,
-
-  # optional-dependencies
-  eventlet,
-  gevent,
-  tornado,
-  setproctitle,
-
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  packaging
+, # optional-dependencies
+  eventlet
+, gevent
+, tornado
+, setproctitle
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

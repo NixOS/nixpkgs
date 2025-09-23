@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  gnugrep,
-  binutils,
-  makeBinaryWrapper,
-  php,
-  testers,
-  phpPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, gnugrep
+, binutils
+, makeBinaryWrapper
+, php
+, testers
+, phpPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

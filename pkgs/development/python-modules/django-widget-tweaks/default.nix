@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  django,
-  python,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, django
+, python
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

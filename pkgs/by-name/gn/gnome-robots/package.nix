@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  cargo,
-  desktop-file-utils,
-  fetchurl,
-  glib,
-  gnome,
-  gtk4,
-  itstool,
-  libadwaita,
-  librsvg,
-  libxml2,
-  gst_all_1,
-  meson,
-  ninja,
-  pkg-config,
-  rustc,
-  rustPlatform,
-  wrapGAppsHook4,
-  _experimental-update-script-combinators,
-  common-updater-scripts,
+{ lib
+, stdenv
+, cargo
+, desktop-file-utils
+, fetchurl
+, glib
+, gnome
+, gtk4
+, itstool
+, libadwaita
+, librsvg
+, libxml2
+, gst_all_1
+, meson
+, ninja
+, pkg-config
+, rustc
+, rustPlatform
+, wrapGAppsHook4
+, _experimental-update-script-combinators
+, common-updater-scripts
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

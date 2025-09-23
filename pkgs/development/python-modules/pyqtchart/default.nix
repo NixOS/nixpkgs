@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pyqt5,
-  pyqt-builder,
-  python,
-  pythonOlder,
-  qtcharts,
-  setuptools,
-  sip,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pyqt5
+, pyqt-builder
+, python
+, pythonOlder
+, qtcharts
+, setuptools
+, sip
+,
 }:
 
 buildPythonPackage rec {

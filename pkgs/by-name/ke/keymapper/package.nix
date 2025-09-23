@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  dbus,
-  libX11,
-  libusb1,
-  pkg-config,
-  udev,
-  wayland,
-  wayland-scanner,
-  libxkbcommon,
-  gtk3,
-  libayatana-appindicator,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, dbus
+, libX11
+, libusb1
+, pkg-config
+, udev
+, wayland
+, wayland-scanner
+, libxkbcommon
+, gtk3
+, libayatana-appindicator
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

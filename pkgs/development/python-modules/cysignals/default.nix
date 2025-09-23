@@ -1,13 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  cython,
-  meson-python,
-  ninja,
-
-  # Reverse dependency
-  sage,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, cython
+, meson-python
+, ninja
+, # Reverse dependency
+  sage
+,
 }:
 
 buildPythonPackage rec {

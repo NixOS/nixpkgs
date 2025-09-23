@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitea,
-  rustPlatform,
-  pkg-config,
-  git,
-  openssl,
+{ lib
+, fetchFromGitea
+, rustPlatform
+, pkg-config
+, git
+, openssl
+,
 }:
 
 rustPlatform.buildRustPackage rec {

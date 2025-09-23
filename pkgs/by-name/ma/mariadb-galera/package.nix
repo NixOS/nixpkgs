@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  asio,
-  boost,
-  check,
-  openssl,
-  cmake,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, asio
+, boost
+, check
+, openssl
+, cmake
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

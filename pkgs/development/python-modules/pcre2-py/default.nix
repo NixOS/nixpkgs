@@ -1,23 +1,23 @@
-{
-  build,
-  bzip2,
-  cmake,
-  cython,
-  editline,
-  gitpython,
-  pytestCheckHook,
-  buildPythonPackage,
-  fetchFromGitHub,
-  haskellPackages,
-  lib,
-  libedit,
-  libz,
-  pcre2,
-  scikit-build,
-  setuptools,
-  twine,
-  readline,
-  requests,
+{ build
+, bzip2
+, cmake
+, cython
+, editline
+, gitpython
+, pytestCheckHook
+, buildPythonPackage
+, fetchFromGitHub
+, haskellPackages
+, lib
+, libedit
+, libz
+, pcre2
+, scikit-build
+, setuptools
+, twine
+, readline
+, requests
+,
 }:
 
 buildPythonPackage rec {

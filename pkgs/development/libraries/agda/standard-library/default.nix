@@ -1,8 +1,8 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  nixosTests,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, nixosTests
+,
 }:
 
 mkDerivation rec {

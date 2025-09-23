@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libevdev,
-  kmod,
-  bash,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libevdev
+, kmod
+, bash
+, installShellFiles
+,
 }:
 let
   pname = "modprobed-db";

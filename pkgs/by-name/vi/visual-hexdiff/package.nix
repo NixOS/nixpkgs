@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  ncurses,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, ncurses
+,
 }:
 stdenv.mkDerivation {
   pname = "visual-hexdiff";

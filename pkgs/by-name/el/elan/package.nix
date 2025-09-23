@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  runCommand,
-  patchelf,
-  makeWrapper,
-  pkg-config,
-  curl,
-  runtimeShell,
-  openssl,
-  zlib,
-  fetchFromGitHub,
-  rustPlatform,
-  libiconv,
+{ stdenv
+, lib
+, runCommand
+, patchelf
+, makeWrapper
+, pkg-config
+, curl
+, runtimeShell
+, openssl
+, zlib
+, fetchFromGitHub
+, rustPlatform
+, libiconv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

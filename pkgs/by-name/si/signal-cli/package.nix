@@ -1,13 +1,13 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  makeWrapper,
-  openjdk21_headless,
-  libmatthew_java,
-  dbus,
-  dbus_java,
-  versionCheckHook,
+{ stdenvNoCC
+, lib
+, fetchurl
+, makeWrapper
+, openjdk21_headless
+, libmatthew_java
+, dbus
+, dbus_java
+, versionCheckHook
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

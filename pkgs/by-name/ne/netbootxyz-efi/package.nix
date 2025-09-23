@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

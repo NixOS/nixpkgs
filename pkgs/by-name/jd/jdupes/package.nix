@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  libjodycode,
+{ lib
+, stdenv
+, fetchFromGitea
+, libjodycode
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

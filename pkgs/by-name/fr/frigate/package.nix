@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  python312Packages,
-  fetchFromGitHub,
-  fetchurl,
-  ffmpeg-headless,
-  sqlite-vec,
-  frigate,
-  nixosTests,
-  fetchpatch,
+{ lib
+, stdenv
+, callPackage
+, python312Packages
+, fetchFromGitHub
+, fetchurl
+, ffmpeg-headless
+, sqlite-vec
+, frigate
+, nixosTests
+, fetchpatch
+,
 }:
 
 let

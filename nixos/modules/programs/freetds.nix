@@ -1,10 +1,9 @@
 # Global configuration for freetds environment.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -52,10 +51,12 @@ in
     environment.etc."freetds.conf" = {
       text = (
         lib.concatStrings (
-          lib.mapAttrsToList (name: value: ''
-            [${name}]
-            ${value}
-          '') cfg
+          lib.mapAttrsToList
+            (name: value: ''
+              [${name}]
+              ${value}
+            '')
+            cfg
         )
       );
     };

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libjpeg,
+{ lib
+, stdenv
+, fetchurl
+, libjpeg
+,
 }:
 
 let

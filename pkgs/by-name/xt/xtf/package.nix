@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchgit,
-  unstableGitUpdater,
-  stdenv,
-  doxygen,
-  graphviz,
-  python3Packages,
+{ lib
+, fetchgit
+, unstableGitUpdater
+, stdenv
+, doxygen
+, graphviz
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation {

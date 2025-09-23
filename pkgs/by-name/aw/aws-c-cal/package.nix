@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  aws-c-common,
-  nix,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, aws-c-common
+, nix
+, openssl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

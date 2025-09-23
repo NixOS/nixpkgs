@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nest-asyncio,
-  pydantic,
-  python-dotenv,
-  requests,
-  setuptools,
-  websockets,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, nest-asyncio
+, pydantic
+, python-dotenv
+, requests
+, setuptools
+, websockets
+,
 }:
 
 buildPythonPackage rec {

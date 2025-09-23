@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mozjpeg,
-  makeWrapper,
-  coreutils,
-  parallel,
-  findutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, mozjpeg
+, makeWrapper
+, coreutils
+, parallel
+, findutils
+,
 }:
 
 stdenv.mkDerivation {

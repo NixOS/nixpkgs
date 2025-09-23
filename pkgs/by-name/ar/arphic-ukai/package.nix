@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  mkfontdir,
-  mkfontscale,
+{ lib
+, stdenvNoCC
+, fetchurl
+, mkfontdir
+, mkfontscale
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

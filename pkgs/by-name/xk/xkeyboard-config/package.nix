@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch2,
-  pkg-config,
-  meson,
-  ninja,
-  python3,
-  perl,
-  libxslt,
-  gettext,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch2
+, pkg-config
+, meson
+, ninja
+, python3
+, perl
+, libxslt
+, gettext
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xkeyboard-config";

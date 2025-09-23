@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  lua,
-  pkg-config,
-  rsync,
-  asciidoc,
-  libxml2,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  libxslt,
-  apple-sdk,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, lua
+, pkg-config
+, rsync
+, asciidoc
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxslt
+, apple-sdk
+,
 }:
 
 let

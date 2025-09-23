@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dovecot,
-  openssl,
+{ lib
+, stdenv
+, fetchurl
+, dovecot
+, openssl
+,
 }:
 let
   dovecotMajorMinor = lib.versions.majorMinor dovecot.version;

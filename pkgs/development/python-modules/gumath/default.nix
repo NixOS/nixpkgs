@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchpatch,
-  python,
-  numba,
-  ndtypes,
-  xnd,
-  libndtypes,
-  libxnd,
-  libgumath,
-  isPy27,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchpatch
+, python
+, numba
+, ndtypes
+, xnd
+, libndtypes
+, libxnd
+, libgumath
+, isPy27
+,
 }:
 
 buildPythonPackage {

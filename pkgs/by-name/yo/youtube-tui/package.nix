@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  xorg,
-  stdenv,
-  python3,
-  makeBinaryWrapper,
-  libsixel,
-  mpv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, xorg
+, stdenv
+, python3
+, makeBinaryWrapper
+, libsixel
+, mpv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

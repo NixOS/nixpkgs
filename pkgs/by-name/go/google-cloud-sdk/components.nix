@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  system,
-  snapshotPath,
-  autoPatchelfHook,
-  python3,
-  libxcrypt-legacy,
+{ lib
+, stdenv
+, fetchurl
+, system
+, snapshotPath
+, autoPatchelfHook
+, python3
+, libxcrypt-legacy
+,
 }:
 
 let
@@ -46,11 +46,11 @@ let
   # installed with google-cloud-sdk to let it know which components are
   # available.
   snapshotFromComponent =
-    {
-      component,
-      revision,
-      schema_version,
-      version,
+    { component
+    , revision
+    , schema_version
+    , version
+    ,
     }:
     builtins.toJSON {
       components = [ component ];
@@ -59,27 +59,28 @@ let
 
   # Generate a set of components from a JSON file describing these components
   componentsFromSnapshot =
-    {
-      components,
-      revision,
-      schema_version,
-      version,
-      ...
+    { components
+    , revision
+    , schema_version
+    , version
+    , ...
     }:
     lib.fix (
       self:
       builtins.listToAttrs (
-        builtins.map (component: {
-          name = component.id;
-          value = componentFromSnapshot self {
-            inherit
-              component
-              revision
-              schema_version
-              version
-              ;
-          };
-        }) components
+        builtins.map
+          (component: {
+            name = component.id;
+            value = componentFromSnapshot self {
+              inherit
+                component
+                revision
+                schema_version
+                version
+                ;
+            };
+          })
+          components
       )
     );
 
@@ -89,11 +90,11 @@ let
     # Component derivations that can be used as dependencies
     components:
     # This component's snapshot
-    {
-      component,
-      revision,
-      schema_version,
-      version,
+    { component
+    , revision
+    , schema_version
+    , version
+    ,
     }@attrs:
     let
       baseUrl = builtins.dirOf schema_version.url;
@@ -103,17 +104,21 @@ let
         lib.attrByPath [ "platform" "architectures" ] allArches component
       );
       # Operating systems supported by this component
-      operating_systems = builtins.filter (
-        os: builtins.elem os (builtins.attrNames oses)
-      ) component.platform.operating_systems;
+      operating_systems = builtins.filter
+        (
+          os: builtins.elem os (builtins.attrNames oses)
+        )
+        component.platform.operating_systems;
     in
     mkComponent {
       pname = component.id;
       version = component.version.version_string;
-      src = lib.optionalString (lib.hasAttrByPath [
-        "data"
-        "source"
-      ] component) "${baseUrl}/${component.data.source}";
+      src = lib.optionalString
+        (lib.hasAttrByPath [
+          "data"
+          "source"
+        ]
+          component) "${baseUrl}/${component.data.source}";
       sha256 = lib.attrByPath [ "data" "checksum" ] "" component;
       dependencies = builtins.map (dep: builtins.getAttr dep components) component.dependencies;
       platforms =
@@ -129,21 +134,21 @@ let
 
   # Make a google-cloud-sdk component
   mkComponent =
-    {
-      pname,
-      version,
-      # Source tarball, if any
-      src ? "",
-      # Checksum for the source tarball, if there is a source
-      sha256 ? "",
-      # Other components this one depends on
-      dependencies ? [ ],
-      # Short text describing the component
-      description ? "",
-      # Platforms supported
-      platforms ? lib.platforms.all,
-      # The snapshot corresponding to this component
-      snapshot,
+    { pname
+    , version
+    , # Source tarball, if any
+      src ? ""
+    , # Checksum for the source tarball, if there is a source
+      sha256 ? ""
+    , # Other components this one depends on
+      dependencies ? [ ]
+    , # Short text describing the component
+      description ? ""
+    , # Platforms supported
+      platforms ? lib.platforms.all
+    , # The snapshot corresponding to this component
+      snapshot
+    ,
     }:
     stdenv.mkDerivation {
       inherit pname version snapshot;

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  writeShellScriptBin,
+{ lib
+, stdenv
+, writeShellScriptBin
+,
 }:
-{
-  versions ? [ ],
-  xcodeBaseDir ? "/Applications/Xcode.app",
+{ versions ? [ ]
+, xcodeBaseDir ? "/Applications/Xcode.app"
+,
 }:
 
 assert stdenv.hostPlatform.isDarwin;

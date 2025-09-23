@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pkgs,
-  python,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pkgs
+, python
+,
 }:
 
 buildPythonPackage rec {

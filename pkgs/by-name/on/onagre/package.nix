@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  rustPlatform,
-  cmake,
-  pkgconf,
-  freetype,
-  expat,
-  wayland,
-  xorg,
-  libxkbcommon,
-  pop-launcher,
-  vulkan-loader,
-  libGL,
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, rustPlatform
+, cmake
+, pkgconf
+, freetype
+, expat
+, wayland
+, xorg
+, libxkbcommon
+, pop-launcher
+, vulkan-loader
+, libGL
+,
 }:
 
 rustPlatform.buildRustPackage {

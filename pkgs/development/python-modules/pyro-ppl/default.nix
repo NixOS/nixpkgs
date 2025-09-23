@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  graphviz,
-  ipywidgets,
-  matplotlib,
-  notebook,
-  numpy,
-  opt-einsum,
-  pandas,
-  pillow,
-  pyro-api,
-  pythonOlder,
-  scikit-learn,
-  scipy,
-  seaborn,
-  setuptools,
-  torch,
-  torchvision,
-  tqdm,
-  wget,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, graphviz
+, ipywidgets
+, matplotlib
+, notebook
+, numpy
+, opt-einsum
+, pandas
+, pillow
+, pyro-api
+, pythonOlder
+, scikit-learn
+, scipy
+, seaborn
+, setuptools
+, torch
+, torchvision
+, tqdm
+, wget
+,
 }:
 
 buildPythonPackage rec {

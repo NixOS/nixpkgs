@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  which,
-  coq,
-  metacoq,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, which
+, coq
+, metacoq
+, version ? null
+,
 }:
 
 with lib;

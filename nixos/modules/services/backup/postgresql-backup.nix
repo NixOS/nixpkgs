@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -192,16 +191,18 @@ in
 
       (lib.mkIf (!cfg.backupAll) {
         systemd.services = lib.listToAttrs (
-          map (
-            db:
-            let
-              cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
-            in
-            {
-              name = "postgresqlBackup-${db}";
-              value = postgresqlBackupService db cmd;
-            }
-          ) cfg.databases
+          map
+            (
+              db:
+              let
+                cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
+              in
+              {
+                name = "postgresqlBackup-${db}";
+                value = postgresqlBackupService db cmd;
+              }
+            )
+            cfg.databases
         );
       })
     ]

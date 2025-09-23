@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  libnfc,
-  openssl,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, libnfc
+, openssl
+,
 }:
 
 stdenv.mkDerivation {

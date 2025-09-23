@@ -1,44 +1,44 @@
-{
-  lib,
-  stdenv,
-  airspy,
-  airspyhf,
-  apple-sdk_12,
-  aptdec,
-  boost,
-  cm256cc,
-  cmake,
-  codec2,
-  dab_lib,
-  dsdcc,
-  faad2,
-  fetchFromGitHub,
-  fftwFloat,
-  flac,
-  glew,
-  hackrf,
-  hidapi,
-  ffmpeg,
-  libiio,
-  libopus,
-  libpulseaudio,
-  libusb1,
-  limesuite,
-  libbladeRF,
-  mbelib,
-  ninja,
-  opencv4,
-  pkg-config,
-  qt6,
-  qt6Packages,
-  rtl-sdr,
-  serialdv,
-  sdrplay,
-  sgp4,
-  soapysdr-with-plugins,
-  uhd,
-  zlib,
-  withSDRplay ? false,
+{ lib
+, stdenv
+, airspy
+, airspyhf
+, apple-sdk_12
+, aptdec
+, boost
+, cm256cc
+, cmake
+, codec2
+, dab_lib
+, dsdcc
+, faad2
+, fetchFromGitHub
+, fftwFloat
+, flac
+, glew
+, hackrf
+, hidapi
+, ffmpeg
+, libiio
+, libopus
+, libpulseaudio
+, libusb1
+, limesuite
+, libbladeRF
+, mbelib
+, ninja
+, opencv4
+, pkg-config
+, qt6
+, qt6Packages
+, rtl-sdr
+, serialdv
+, sdrplay
+, sgp4
+, soapysdr-with-plugins
+, uhd
+, zlib
+, withSDRplay ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

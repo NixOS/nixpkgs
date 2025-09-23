@@ -1,10 +1,10 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  mashumaro,
-  setuptools,
+{ aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, mashumaro
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

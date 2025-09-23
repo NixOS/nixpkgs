@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  buildPackages,
-  python3Packages,
-  pkg-config,
-  cairo,
-  imagemagick,
-  zopfli,
-  nototools,
-  pngquant,
-  which,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, buildPackages
+, python3Packages
+, pkg-config
+, cairo
+, imagemagick
+, zopfli
+, nototools
+, pngquant
+, which
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

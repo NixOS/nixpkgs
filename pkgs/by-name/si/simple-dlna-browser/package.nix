@@ -1,17 +1,18 @@
 {
   # Derivation stuff
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  stdenv,
-  # Dependencies
+  fetchFromGitHub
+, lib
+, makeWrapper
+, stdenv
+, # Dependencies
   # Add these to the wrapper
-  curl,
-  gawk,
-  gnugrep,
-  gnused,
-  socat,
-  wget,
+  curl
+, gawk
+, gnugrep
+, gnused
+, socat
+, wget
+,
 }:
 stdenv.mkDerivation {
   pname = "simple-dlna-browser";

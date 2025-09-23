@@ -1,16 +1,16 @@
-{
-  lib,
-  mkDerivation,
-  stdenv,
-  zlib,
-  defaultMakeFlags,
-  coreutils,
-  cctools,
-  install,
-  bsdSetupHook,
-  netbsdSetupHook,
-  makeMinimal,
-  version,
+{ lib
+, mkDerivation
+, stdenv
+, zlib
+, defaultMakeFlags
+, coreutils
+, cctools
+, install
+, bsdSetupHook
+, netbsdSetupHook
+, makeMinimal
+, version
+,
 }:
 
 mkDerivation (

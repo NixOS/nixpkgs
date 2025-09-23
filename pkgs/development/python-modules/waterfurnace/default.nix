@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  pytestCheckHook,
-  requests,
-  setuptools,
-  websocket-client,
+{ lib
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, pytestCheckHook
+, requests
+, setuptools
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

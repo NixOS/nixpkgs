@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  future,
-  ipython,
-  numpy,
-  pyserial,
-  pyusb,
-  pytestCheckHook,
-  pythonOlder,
-  udevCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, future
+, ipython
+, numpy
+, pyserial
+, pyusb
+, pytestCheckHook
+, pythonOlder
+, udevCheckHook
+,
 }:
 
 buildPythonPackage rec {

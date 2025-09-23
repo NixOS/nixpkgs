@@ -1,16 +1,16 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  ppx_expect,
-  astring,
-  curly,
-  fmt,
-  logs,
-  ppx_yojson_conv,
-  ppx_yojson_conv_lib,
-  yojson,
-  alcotest,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, ppx_expect
+, astring
+, curly
+, fmt
+, logs
+, ppx_yojson_conv
+, ppx_yojson_conv_lib
+, yojson
+, alcotest
+,
 }:
 
 buildDunePackage rec {

@@ -20,8 +20,8 @@
   `example.json`
   ```json
   {
-    ...
-    "fileSystems.<name>.options": {
+  ...
+  "fileSystems.<name>.options": {
       "declarations": ["nixos/modules/tasks/filesystems.nix"],
       "default": {
         "_type": "literalExpression",
@@ -36,8 +36,8 @@
       "readOnly": false,
       "type": "non-empty (list of string (with check: non-empty))"
       "relatedPackages": "- [`pkgs.tmux`](\n    https://search.nixos.org/packages?show=tmux&sort=relevance&query=tmux\n  )\n",
-    },
-    ...
+  },
+  ...
   }
   ```
 
@@ -57,16 +57,16 @@
 
   ```nix
   let
-    # Evaluate a NixOS configuration
-    eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
+  # Evaluate a NixOS configuration
+  eval = import (pkgs.path + "/nixos/lib/eval-config.nix") {
       modules = [
         ./module.nix
       ];
-    };
+  };
   in
-    pkgs.nixosOptionsDoc {
+  pkgs.nixosOptionsDoc {
       inherit (eval) options;
-    }
+  }
   ```
 
   ## Example: non-NixOS modules
@@ -75,39 +75,41 @@
 
   ```nix
   let
-    eval = lib.evalModules {
+  eval = lib.evalModules {
       modules = [
         ./module.nix
       ];
-    };
+  };
   in
-    pkgs.nixosOptionsDoc {
+  pkgs.nixosOptionsDoc {
       inherit (eval) options;
-    }
+  }
   ```
 */
-{
-  pkgs,
-  lib,
-  options,
-  transformOptions ? lib.id, # function for additional transformations of the options
-  documentType ? "appendix",
-  # TODO deprecate "appendix" in favor of "none"
+{ pkgs
+, lib
+, options
+, transformOptions ? lib.id
+, # function for additional transformations of the options
+  documentType ? "appendix"
+, # TODO deprecate "appendix" in favor of "none"
   #      and/or rename function to moduleOptionDoc for clean slate
 
   # If you include more than one option list into a document, you need to
   # provide different ids.
-  variablelistId ? "configuration-variable-list",
-  # String to prefix to the option XML/HTML id attributes.
-  optionIdPrefix ? "opt-",
-  revision ? "", # Specify revision for the options
+  variablelistId ? "configuration-variable-list"
+, # String to prefix to the option XML/HTML id attributes.
+  optionIdPrefix ? "opt-"
+, revision ? ""
+, # Specify revision for the options
   # a set of options the docs we are generating will be merged into, as if by recursiveUpdate.
   # used to split the options doc build into a static part (nixos/modules) and a dynamic part
   # (non-nixos modules imported via configuration.nix, other module sources).
-  baseOptionsJSON ? null,
-  # instead of printing warnings for eg options with missing descriptions (which may be lost
+  baseOptionsJSON ? null
+, # instead of printing warnings for eg options with missing descriptions (which may be lost
   # by nix build unless -L is given), emit errors instead and fail the build
-  warningsAreErrors ? true,
+  warningsAreErrors ? true
+,
 }:
 
 let
@@ -162,14 +164,16 @@ let
     lib.concatMapStrings (p: describe (unpack p)) packages;
 
   optionsNix = builtins.listToAttrs (
-    map (o: {
-      name = o.name;
-      value = removeAttrs o [
-        "name"
-        "visible"
-        "internal"
-      ];
-    }) optionsList
+    map
+      (o: {
+        name = o.name;
+        value = removeAttrs o [
+          "name"
+          "visible"
+          "internal"
+        ];
+      })
+      optionsList
   );
 
 in

@@ -1,25 +1,25 @@
-{
-  fetchFromGitLab,
-  fetchpatch,
-  gitUpdater,
-  lib,
-  stdenv,
-  testers,
-  autoreconfHook,
-  dbus,
-  dbus-test-runner,
-  dpkg,
-  getopt,
-  glib,
-  gobject-introspection,
-  json-glib,
-  libgee,
-  perl,
-  pkg-config,
-  properties-cpp,
-  python3Packages,
-  vala,
-  wrapGAppsHook3,
+{ fetchFromGitLab
+, fetchpatch
+, gitUpdater
+, lib
+, stdenv
+, testers
+, autoreconfHook
+, dbus
+, dbus-test-runner
+, dpkg
+, getopt
+, glib
+, gobject-introspection
+, json-glib
+, libgee
+, perl
+, pkg-config
+, properties-cpp
+, python3Packages
+, vala
+, wrapGAppsHook3
+,
 }:
 
 let
@@ -168,7 +168,7 @@ let
   };
 in
 self
-// {
+  // {
   passthru = self.passthru // {
     tests.pkg-config = testers.hasPkgConfigModules {
       package = self;

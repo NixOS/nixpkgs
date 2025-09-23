@@ -1,18 +1,18 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  git,
-  gnupg,
-  pass,
-  pwgen,
-  qrencode,
-  qtbase,
-  qtsvg,
-  qttools,
-  qmake,
-  wrapQtAppsHook,
-  makeWrapper,
+{ fetchFromGitHub
+, lib
+, stdenv
+, git
+, gnupg
+, pass
+, pwgen
+, qrencode
+, qtbase
+, qtsvg
+, qttools
+, qmake
+, wrapQtAppsHook
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

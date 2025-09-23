@@ -1,8 +1,8 @@
-{
-  buildPecl,
-  lib,
-  rabbitmq-c,
-  fetchFromGitHub,
+{ buildPecl
+, lib
+, rabbitmq-c
+, fetchFromGitHub
+,
 }:
 
 let

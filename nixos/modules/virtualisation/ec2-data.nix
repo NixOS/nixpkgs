@@ -2,11 +2,10 @@
 # authorized client key and host name of virtual machines running on
 # Amazon EC2, Eucalyptus and OpenStack Compute (Nova).
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;

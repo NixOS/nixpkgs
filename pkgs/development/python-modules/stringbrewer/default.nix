@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  rstr,
-  sre-yield,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, rstr
+, sre-yield
+,
 }:
 
 buildPythonPackage rec {

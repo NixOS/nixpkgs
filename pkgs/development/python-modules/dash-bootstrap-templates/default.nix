@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  dash,
-  dash-bootstrap-components,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, dash
+, dash-bootstrap-components
+, numpy
+,
 }:
 
 buildPythonPackage rec {

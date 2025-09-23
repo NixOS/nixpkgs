@@ -1,23 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  replaceVars,
-  xorg,
-
-  # build-system
-  setuptools,
-
-  # tests
-  easyprocess,
-  entrypoint2,
-  pillow,
-  psutil,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  vncdo,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, replaceVars
+, xorg
+, # build-system
+  setuptools
+, # tests
+  easyprocess
+, entrypoint2
+, pillow
+, psutil
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, vncdo
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  help2man,
-  pkg-config,
-  texinfo,
-  boehmgc,
-  readline,
-  nbdSupport ? !stdenv.hostPlatform.isDarwin,
-  libnbd,
-  textStylingSupport ? true,
-  gettext,
-  dejagnu,
-
-  # update script only
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, help2man
+, pkg-config
+, texinfo
+, boehmgc
+, readline
+, nbdSupport ? !stdenv.hostPlatform.isDarwin
+, libnbd
+, textStylingSupport ? true
+, gettext
+, dejagnu
+, # update script only
+  writeScript
+,
 }:
 
 let

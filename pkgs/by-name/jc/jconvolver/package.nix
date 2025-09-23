@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  flac,
-  unzip,
-  fftwFloat,
-  hybridreverb2,
-  libclthreads,
-  libjack2,
-  libsndfile,
-  zita-convolver,
+{ lib
+, stdenv
+, fetchurl
+, flac
+, unzip
+, fftwFloat
+, hybridreverb2
+, libclthreads
+, libjack2
+, libsndfile
+, zita-convolver
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  runTest,
-  lib,
-  pkgs,
-  # Test current default (LTS) and latest kernel
+{ runTest
+, lib
+, pkgs
+, # Test current default (LTS) and latest kernel
   kernelVersionsToTest ? [
     (lib.versions.majorMinor pkgs.linuxPackages.kernel.version)
     "latest"
-  ],
+  ]
+,
 }:
 
 let

@@ -1,25 +1,25 @@
-{
-  cmake,
-  desktopToDarwinBundle,
-  eigen,
-  fetchFromGitHub,
-  glm,
-  gobject-introspection,
-  gtkmm4,
-  lib,
-  libepoxy,
-  libossp_uuid,
-  librsvg,
-  libspnav,
-  libuuid,
-  libxml2,
-  meson,
-  ninja,
-  opencascade-occt_7_6,
-  pkg-config,
-  python3,
-  stdenv,
-  wrapGAppsHook3,
+{ cmake
+, desktopToDarwinBundle
+, eigen
+, fetchFromGitHub
+, glm
+, gobject-introspection
+, gtkmm4
+, lib
+, libepoxy
+, libossp_uuid
+, librsvg
+, libspnav
+, libuuid
+, libxml2
+, meson
+, ninja
+, opencascade-occt_7_6
+, pkg-config
+, python3
+, stdenv
+, wrapGAppsHook3
+,
 }:
 
 let

@@ -1,31 +1,31 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  buildFHSEnv,
-  makeDesktopItem,
-  makeWrapper,
-  alsa-lib,
-  at-spi2-atk,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  libgbm,
-  nss,
-  nspr,
-  libdrm,
-  xorg,
-  libxkbcommon,
-  libxshmfence,
-  pango,
-  systemd,
-  icu,
-  openssl,
-  zlib,
+{ stdenv
+, lib
+, fetchurl
+, buildFHSEnv
+, makeDesktopItem
+, makeWrapper
+, alsa-lib
+, at-spi2-atk
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
+, glib
+, gtk3
+, libgbm
+, nss
+, nspr
+, libdrm
+, xorg
+, libxkbcommon
+, libxshmfence
+, pango
+, systemd
+, icu
+, openssl
+, zlib
+,
 }:
 let
   pname = "sidequest";

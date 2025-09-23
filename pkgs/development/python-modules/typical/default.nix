@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fastjsonschema,
-  fetchFromGitHub,
-  future-typing,
-  inflection,
-  orjson,
-  pandas,
-  pendulum,
-  poetry-core,
-  pydantic,
-  pytestCheckHook,
-  pythonOlder,
-  sqlalchemy,
-  ujson,
+{ lib
+, buildPythonPackage
+, fastjsonschema
+, fetchFromGitHub
+, future-typing
+, inflection
+, orjson
+, pandas
+, pendulum
+, poetry-core
+, pydantic
+, pytestCheckHook
+, pythonOlder
+, sqlalchemy
+, ujson
+,
 }:
 
 buildPythonPackage rec {

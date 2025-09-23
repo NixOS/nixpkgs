@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  cmake,
-  just,
-  libcosmicAppHook,
-  pkg-config,
-  expat,
-  libinput,
-  fontconfig,
-  freetype,
-  pipewire,
-  pulseaudio,
-  udev,
-  util-linux,
-  cosmic-randr,
-  xkeyboard_config,
-  nix-update-script,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, just
+, libcosmicAppHook
+, pkg-config
+, expat
+, libinput
+, fontconfig
+, freetype
+, pipewire
+, pulseaudio
+, udev
+, util-linux
+, cosmic-randr
+, xkeyboard_config
+, nix-update-script
+, nixosTests
+,
 }:
 let
   libcosmicAppHook' = (libcosmicAppHook.__spliced.buildHost or libcosmicAppHook).override {

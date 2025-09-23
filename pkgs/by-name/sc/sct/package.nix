@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  libX11,
-  libXrandr,
-  xorgproto,
+{ lib
+, stdenv
+, fetchzip
+, libX11
+, libXrandr
+, xorgproto
+,
 }:
 
 stdenv.mkDerivation {

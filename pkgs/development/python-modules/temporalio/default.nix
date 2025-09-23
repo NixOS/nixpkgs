@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPackages,
-  buildPythonPackage,
-  cargo,
-  fetchFromGitHub,
-  maturin,
-  nexusrpc,
-  nix-update-script,
-  nixosTests,
-  pythonOlder,
-  poetry-core,
-  protobuf5,
-  python-dateutil,
-  rustc,
-  rustPlatform,
-  setuptools,
-  setuptools-rust,
-  types-protobuf,
-  typing-extensions,
+{ lib
+, buildPackages
+, buildPythonPackage
+, cargo
+, fetchFromGitHub
+, maturin
+, nexusrpc
+, nix-update-script
+, nixosTests
+, pythonOlder
+, poetry-core
+, protobuf5
+, python-dateutil
+, rustc
+, rustPlatform
+, setuptools
+, setuptools-rust
+, types-protobuf
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

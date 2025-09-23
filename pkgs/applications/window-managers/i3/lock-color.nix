@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libxcb,
-  xcbutilkeysyms,
-  xcbutilimage,
-  pam,
-  libX11,
-  libev,
-  cairo,
-  libxkbcommon,
-  libxkbfile,
-  libjpeg_turbo,
-  xcbutilxrm,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libxcb
+, xcbutilkeysyms
+, xcbutilimage
+, pam
+, libX11
+, libev
+, cairo
+, libxkbcommon
+, libxkbfile
+, libjpeg_turbo
+, xcbutilxrm
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

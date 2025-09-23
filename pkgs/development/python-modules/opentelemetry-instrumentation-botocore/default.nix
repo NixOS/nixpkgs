@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-semantic-conventions,
-  botocore,
-  moto,
-  opentelemetry-test-utils,
-  opentelemetry-propagator-aws-xray,
-  pytest-vcr,
-  pytestCheckHook,
-  aws-xray-sdk,
+{ lib
+, buildPythonPackage
+, hatchling
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-semantic-conventions
+, botocore
+, moto
+, opentelemetry-test-utils
+, opentelemetry-propagator-aws-xray
+, pytest-vcr
+, pytestCheckHook
+, aws-xray-sdk
+,
 }:
 
 buildPythonPackage {

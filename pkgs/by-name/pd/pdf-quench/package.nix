@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  pkgs,
-  python3,
-  wrapGAppsHook3,
-  gobject-introspection,
+{ lib
+, fetchFromGitHub
+, pkgs
+, python3
+, wrapGAppsHook3
+, gobject-introspection
+,
 }:
 
 python3.pkgs.buildPythonApplication {

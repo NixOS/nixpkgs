@@ -33,11 +33,10 @@ in
     };
 
   nodes.ente =
-    {
-      config,
-      nodes,
-      lib,
-      ...
+    { config
+    , nodes
+    , lib
+    , ...
     }:
     {
       security.pki.certificateFiles = [ certs.ca.cert ];

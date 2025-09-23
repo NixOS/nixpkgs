@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  colorcet,
-  multipledispatch,
-  numba,
-  numpy,
-  pandas,
-  param,
-  pyct,
-  requests,
-  scipy,
-  toolz,
-  packaging,
-  xarray,
-  pytestCheckHook,
-  pytest-xdist,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, colorcet
+, multipledispatch
+, numba
+, numpy
+, pandas
+, param
+, pyct
+, requests
+, scipy
+, toolz
+, packaging
+, xarray
+, pytestCheckHook
+, pytest-xdist
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

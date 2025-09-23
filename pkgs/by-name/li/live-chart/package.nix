@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  gtk4,
-  libgee,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, vala
+, gtk4
+, libgee
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

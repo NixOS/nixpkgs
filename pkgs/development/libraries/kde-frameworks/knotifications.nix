@@ -1,16 +1,16 @@
-{
-  mkDerivation,
-  lib,
-  stdenv,
-  extra-cmake-modules,
-  kcodecs,
-  kconfig,
-  kcoreaddons,
-  kwindowsystem,
-  phonon,
-  qttools,
-  qtx11extras,
-  qtmacextras,
+{ mkDerivation
+, lib
+, stdenv
+, extra-cmake-modules
+, kcodecs
+, kconfig
+, kcoreaddons
+, kwindowsystem
+, phonon
+, qttools
+, qtx11extras
+, qtmacextras
+,
 }:
 
 mkDerivation {

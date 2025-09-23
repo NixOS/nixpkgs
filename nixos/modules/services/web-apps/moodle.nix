@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -92,37 +91,37 @@ let
   phpExt = pkgs.php83.buildEnv {
     extensions =
       { all, ... }:
-      with all;
-      [
-        iconv
-        mbstring
-        curl
-        openssl
-        tokenizer
-        soap
-        ctype
-        zip
-        gd
-        simplexml
-        dom
-        intl
-        sqlite3
-        pgsql
-        pdo_sqlite
-        pdo_pgsql
-        pdo_odbc
-        pdo_mysql
-        pdo
-        mysqli
-        session
-        zlib
-        xmlreader
-        fileinfo
-        filter
-        opcache
-        exif
-        sodium
-      ];
+        with all;
+        [
+          iconv
+          mbstring
+          curl
+          openssl
+          tokenizer
+          soap
+          ctype
+          zip
+          gd
+          simplexml
+          dom
+          intl
+          sqlite3
+          pgsql
+          pdo_sqlite
+          pdo_pgsql
+          pdo_odbc
+          pdo_mysql
+          pdo
+          mysqli
+          session
+          zlib
+          xmlreader
+          fileinfo
+          filter
+          opcache
+          exif
+          sodium
+        ];
     extraConfig = "max_input_vars = 5000";
   };
 in
@@ -165,8 +164,7 @@ in
           {
             mysql = 3306;
             pgsql = 5432;
-          }
-          .${cfg.database.type};
+          }.${cfg.database.type};
         defaultText = literalExpression "3306";
       };
 

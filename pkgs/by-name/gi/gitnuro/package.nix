@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  jre,
-  libGL,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, jre
+, libGL
+,
 }:
 
 stdenv.mkDerivation rec {

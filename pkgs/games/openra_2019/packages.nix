@@ -56,14 +56,14 @@ rec {
   # The whole attribute set is destructered to ensure those (and only those) attributes are given
   # and to provide defaults for those that are optional.
   buildOpenRAEngine =
-    {
-      name ? null,
-      version,
-      description,
-      homepage,
-      mods,
-      src,
-      installExperimental ? "",
+    { name ? null
+    , version
+    , description
+    , homepage
+    , mods
+    , src
+    , installExperimental ? ""
+    ,
     }@engine:
     # Allow specifying the name at a later point if no name has been given.
     let
@@ -82,20 +82,20 @@ rec {
 
   # See `buildOpenRAEngine`.
   buildOpenRAMod =
-    {
-      name ? null,
-      version,
-      title,
-      description,
-      homepage,
-      src,
-      engine,
+    { name ? null
+    , version
+    , title
+    , description
+    , homepage
+    , src
+    , engine
+    ,
     }@mod:
     (
-      {
-        version,
-        mods ? [ ],
-        src,
+      { version
+      , mods ? [ ]
+      , src
+      ,
       }@engine:
       let
         builder =

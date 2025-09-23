@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  blas,
+{ stdenv
+, lib
+, fetchFromGitHub
+, blas
+,
 }:
 
 assert !blas.isILP64;

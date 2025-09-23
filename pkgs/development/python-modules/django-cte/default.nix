@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  flit-core,
-  django,
-  pytest-unmagic,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, flit-core
+, django
+, pytest-unmagic
+,
 }:
 
 buildPythonPackage rec {

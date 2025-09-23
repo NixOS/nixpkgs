@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  callPackage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, callPackage
+,
 }:
 
 # Note for maintainers:

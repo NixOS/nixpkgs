@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  aiohttp,
-  ciso8601,
-  async-timeout,
-  kasa-crypt,
-  orjson,
-  pythonOlder,
-  requests,
-  websocket-client,
-  websockets,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, aiohttp
+, ciso8601
+, async-timeout
+, kasa-crypt
+, orjson
+, pythonOlder
+, requests
+, websocket-client
+, websockets
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+,
 }:
 let
   version = "1.2.1";

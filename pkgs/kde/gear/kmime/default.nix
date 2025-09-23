@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qttools,
-  ki18n,
+{ mkKdeDerivation
+, qttools
+, ki18n
+,
 }:
 mkKdeDerivation {
   pname = "kmime";

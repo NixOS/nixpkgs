@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  desktopToDarwinBundle,
-  curl,
-  freexl,
-  geos,
-  libpq,
-  librasterlite2,
-  librttopo,
-  libspatialite,
-  libwebp,
-  libxlsxwriter,
-  libxml2,
-  lz4,
-  minizip,
-  openjpeg,
-  proj,
-  sqlite,
-  virtualpg,
-  wxGTK32,
-  xz,
-  zstd,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, desktopToDarwinBundle
+, curl
+, freexl
+, geos
+, libpq
+, librasterlite2
+, librttopo
+, libspatialite
+, libwebp
+, libxlsxwriter
+, libxml2
+, lz4
+, minizip
+, openjpeg
+, proj
+, sqlite
+, virtualpg
+, wxGTK32
+, xz
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  aiohttp,
-  async-timeout,
-  yarl,
-  aresponses,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, aiohttp
+, async-timeout
+, yarl
+, aresponses
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

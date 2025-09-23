@@ -1,10 +1,10 @@
-{
-  fetchFromGitea,
-  lcrq,
-  lib,
-  librecast,
-  libsodium,
-  stdenv,
+{ fetchFromGitea
+, lcrq
+, lib
+, librecast
+, libsodium
+, stdenv
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcsync";

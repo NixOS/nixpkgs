@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  colorlog,
-  smpp-pdu,
-  pyscard,
-  packaging,
-  gsm0338,
-  bidict,
-  jsonpath-ng,
-  termcolor,
-  pyyaml,
-  pycryptodomex,
-  construct,
-  pyserial,
-  pytlv,
-  cmd2,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, colorlog
+, smpp-pdu
+, pyscard
+, packaging
+, gsm0338
+, bidict
+, jsonpath-ng
+, termcolor
+, pyyaml
+, pycryptodomex
+, construct
+, pyserial
+, pytlv
+, cmd2
+,
 }:
 
 buildPythonPackage {

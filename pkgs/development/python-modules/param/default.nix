@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-  hatch-vcs,
-
-  # tests
-  numpy,
-  pandas,
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, hatch-vcs
+, # tests
+  numpy
+, pandas
+, pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  autoreconfHook,
-  gitUpdater,
-  gnome-common,
-  which,
-  fetchgit,
-  libgtop,
-  libwnck,
-  glib,
-  vala,
-  pkg-config,
-  libstartup_notification,
-  gobject-introspection,
-  gtk-doc,
-  docbook_xsl,
-  xorgserver,
-  dbus,
-  python3,
-  wrapGAppsHook3,
-  withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+{ stdenv
+, lib
+, autoreconfHook
+, gitUpdater
+, gnome-common
+, which
+, fetchgit
+, libgtop
+, libwnck
+, glib
+, vala
+, pkg-config
+, libstartup_notification
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, xorgserver
+, dbus
+, python3
+, wrapGAppsHook3
+, withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+,
 }:
 
 stdenv.mkDerivation rec {

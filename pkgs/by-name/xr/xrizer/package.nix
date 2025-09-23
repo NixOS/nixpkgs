@@ -1,16 +1,16 @@
-{
-  fetchFromGitHub,
-  fetchpatch2,
-  lib,
-  libGL,
-  libxkbcommon,
-  nix-update-script,
-  openxr-loader,
-  pkg-config,
-  rustPlatform,
-  shaderc,
-  vulkan-loader,
-  stdenv,
+{ fetchFromGitHub
+, fetchpatch2
+, lib
+, libGL
+, libxkbcommon
+, nix-update-script
+, openxr-loader
+, pkg-config
+, rustPlatform
+, shaderc
+, vulkan-loader
+, stdenv
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "xrizer";
@@ -62,8 +62,7 @@ rustPlatform.buildRustPackage rec {
       "aarch64-linux" = "bin/linuxarm64";
       "i686-linux" = "bin";
       "x86_64-linux" = "bin/linux64";
-    }
-    ."${stdenv.hostPlatform.system}";
+    }."${stdenv.hostPlatform.system}";
 
   passthru.updateScript = nix-update-script { };
 

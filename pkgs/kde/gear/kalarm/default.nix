@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  mpv,
+{ mkKdeDerivation
+, pkg-config
+, mpv
+,
 }:
 mkKdeDerivation {
   pname = "kalarm";

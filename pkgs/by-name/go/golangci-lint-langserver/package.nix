@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  golangci-lint,
-  writableTmpDirAsHomeHook,
-  fetchFromGitHub,
+{ lib
+, buildGoModule
+, golangci-lint
+, writableTmpDirAsHomeHook
+, fetchFromGitHub
+,
 }:
 
 buildGoModule rec {

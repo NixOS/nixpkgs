@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  google-api-core,
-  pythonOlder,
-  protobuf,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, google-api-core
+, pythonOlder
+, protobuf
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

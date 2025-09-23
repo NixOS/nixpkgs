@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchurl,
-  buildDunePackage,
-  gen,
-  ppxlib,
-  uchar,
-  ppx_expect,
+{ lib
+, fetchFromGitHub
+, fetchurl
+, buildDunePackage
+, gen
+, ppxlib
+, uchar
+, ppx_expect
+,
 }:
 
 let

@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  sphinx,
-  pytest-cov-stub,
-  pytestCheckHook,
-  mako,
-  numpy,
-  funcsigs,
-  withCuda ? false,
-  pycuda,
-  withOpenCL ? true,
-  pyopencl,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, sphinx
+, pytest-cov-stub
+, pytestCheckHook
+, mako
+, numpy
+, funcsigs
+, withCuda ? false
+, pycuda
+, withOpenCL ? true
+, pyopencl
+,
 }:
 
 buildPythonPackage rec {

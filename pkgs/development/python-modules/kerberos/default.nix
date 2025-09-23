@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  libkrb5,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, libkrb5
+,
 }:
 
 buildPythonPackage rec {

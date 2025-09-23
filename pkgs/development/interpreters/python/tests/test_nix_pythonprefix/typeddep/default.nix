@@ -1,7 +1,7 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, pythonOlder
+,
 }:
 
 buildPythonPackage {

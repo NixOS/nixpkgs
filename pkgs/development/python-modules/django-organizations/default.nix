@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  django,
-  django-extensions,
-  pytest-django,
-  pytestCheckHook,
-  mock,
-  mock-django,
-  django-autoslug,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, django
+, django-extensions
+, pytest-django
+, pytestCheckHook
+, mock
+, mock-django
+, django-autoslug
+,
 }:
 
 buildPythonPackage rec {

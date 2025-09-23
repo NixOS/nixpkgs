@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitLab,
-  afl-persistent,
-  pprint,
-  version ? "20250314",
+{ lib
+, buildDunePackage
+, fetchFromGitLab
+, afl-persistent
+, pprint
+, version ? "20250314"
+,
 }:
 
 buildDunePackage {

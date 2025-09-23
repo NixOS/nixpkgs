@@ -1,71 +1,72 @@
-{
-  callPackage,
-  lib,
-  stdenv,
-  makeWrapper,
-  fetchurl,
-  fetchpatch,
-  fetchFromGitLab,
-  buildPackages,
-  automake,
-  autoconf,
-  libiconv,
-  libtool,
-  intltool,
-  gettext,
-  gzip,
-  python3,
-  perl,
-  freetype,
-  tradcpp,
-  fontconfig,
-  meson,
-  ninja,
-  ed,
-  fontforge,
-  libGL,
-  spice-protocol,
-  zlib,
-  libGLU,
-  dbus,
-  libunwind,
-  libdrm,
-  netbsd,
-  ncompress,
-  updateAutotoolsGnuConfigScriptsHook,
-  mesa,
-  udev,
-  bootstrap_cmds,
-  bison,
-  flex,
-  clangStdenv,
-  autoreconfHook,
-  mcpp,
-  libepoxy,
-  openssl,
-  pkg-config,
-  llvm,
-  libxslt,
-  libxcrypt,
-  hwdata,
-  xorg,
-  windows,
-  libgbm,
-  mesa-gl-headers,
-  dri-pkgconfig-stub,
+{ callPackage
+, lib
+, stdenv
+, makeWrapper
+, fetchurl
+, fetchpatch
+, fetchFromGitLab
+, buildPackages
+, automake
+, autoconf
+, libiconv
+, libtool
+, intltool
+, gettext
+, gzip
+, python3
+, perl
+, freetype
+, tradcpp
+, fontconfig
+, meson
+, ninja
+, ed
+, fontforge
+, libGL
+, spice-protocol
+, zlib
+, libGLU
+, dbus
+, libunwind
+, libdrm
+, netbsd
+, ncompress
+, updateAutotoolsGnuConfigScriptsHook
+, mesa
+, udev
+, bootstrap_cmds
+, bison
+, flex
+, clangStdenv
+, autoreconfHook
+, mcpp
+, libepoxy
+, openssl
+, pkg-config
+, llvm
+, libxslt
+, libxcrypt
+, hwdata
+, xorg
+, windows
+, libgbm
+, mesa-gl-headers
+, dri-pkgconfig-stub
+,
 }:
 
 let
   inherit (stdenv.hostPlatform) isDarwin;
 
-  malloc0ReturnsNullCrossFlag = lib.optional (
-    stdenv.hostPlatform != stdenv.buildPlatform
-  ) "--enable-malloc0returnsnull";
+  malloc0ReturnsNullCrossFlag = lib.optional
+    (
+      stdenv.hostPlatform != stdenv.buildPlatform
+    ) "--enable-malloc0returnsnull";
 
   addMainProgram =
     pkg:
-    {
-      mainProgram ? pkg.pname,
+    { mainProgram ? pkg.pname
+    ,
     }:
     pkg.overrideAttrs (attrs: {
       meta = attrs.meta // {
@@ -83,34 +84,36 @@ let
 in
 self: super:
 {
-  wrapWithXFileSearchPathHook = callPackage (
-    {
-      makeBinaryWrapper,
-      makeSetupHook,
-      writeScript,
-    }:
-    makeSetupHook
-      {
-        name = "wrapWithXFileSearchPathHook";
-        propagatedBuildInputs = [ makeBinaryWrapper ];
-      }
-      (
-        writeScript "wrapWithXFileSearchPathHook.sh" ''
-          wrapWithXFileSearchPath() {
-            paths=(
-              "$out/share/X11/%T/%N"
-              "$out/include/X11/%T/%N"
-              "${xorg.xbitmaps}/include/X11/%T/%N"
-            )
-            for exe in $out/bin/*; do
-              wrapProgram "$exe" \
-                --suffix XFILESEARCHPATH : $(IFS=:; echo "''${paths[*]}")
-            done
-          }
-          postInstallHooks+=(wrapWithXFileSearchPath)
-        ''
-      )
-  ) { };
+  wrapWithXFileSearchPathHook = callPackage
+    (
+      { makeBinaryWrapper
+      , makeSetupHook
+      , writeScript
+      ,
+      }:
+      makeSetupHook
+        {
+          name = "wrapWithXFileSearchPathHook";
+          propagatedBuildInputs = [ makeBinaryWrapper ];
+        }
+        (
+          writeScript "wrapWithXFileSearchPathHook.sh" ''
+            wrapWithXFileSearchPath() {
+              paths=(
+                "$out/share/X11/%T/%N"
+                "$out/include/X11/%T/%N"
+                "${xorg.xbitmaps}/include/X11/%T/%N"
+              )
+              for exe in $out/bin/*; do
+                wrapProgram "$exe" \
+                  --suffix XFILESEARCHPATH : $(IFS=:; echo "''${paths[*]}")
+              done
+            }
+            postInstallHooks+=(wrapWithXFileSearchPath)
+          ''
+        )
+    )
+    { };
 
   appres = super.appres.overrideAttrs (attrs: {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [
@@ -193,12 +196,12 @@ self: super:
         "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
       ]
       ++
-        lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
-          # checking for /dev/urandom... configure: error: cannot check for file existence when cross compiling
-          [
-            "ac_cv_file__dev_urandom=true"
-            "ac_cv_file__dev_random=true"
-          ];
+      lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+        # checking for /dev/urandom... configure: error: cannot check for file existence when cross compiling
+        [
+          "ac_cv_file__dev_urandom=true"
+          "ac_cv_file__dev_random=true"
+        ];
     meta = attrs.meta // {
       mainProgram = "xdm";
     };
@@ -555,8 +558,8 @@ self: super:
   # xkeyboardconfig variant extensible with custom layouts.
   # See nixos/modules/services/x11/extra-layouts.nix
   xkeyboardconfig_custom =
-    {
-      layouts ? { },
+    { layouts ? { }
+    ,
     }:
     let
       patchIn = name: layout: ''
@@ -1010,8 +1013,8 @@ self: super:
 
 }
 
-# mark some packages as unfree
-// (
+  # mark some packages as unfree
+  // (
   let
     # unfree but redistributable
     redist = [

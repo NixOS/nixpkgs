@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  ruamel-yaml,
-  pytest,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, ruamel-yaml
+, pytest
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

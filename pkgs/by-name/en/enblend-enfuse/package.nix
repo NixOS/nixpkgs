@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchhg,
-  autoreconfHook,
-  boost,
-  libglut,
-  glew,
-  gsl,
-  lcms2,
-  libjpeg,
-  libpng,
-  libtiff,
-  libGLU,
-  libGL,
-  vigra,
-  help2man,
-  pkg-config,
-  perl,
-  texliveSmall,
+{ lib
+, stdenv
+, fetchhg
+, autoreconfHook
+, boost
+, libglut
+, glew
+, gsl
+, lcms2
+, libjpeg
+, libpng
+, libtiff
+, libGLU
+, libGL
+, vigra
+, help2man
+, pkg-config
+, perl
+, texliveSmall
+,
 }:
 
 stdenv.mkDerivation {

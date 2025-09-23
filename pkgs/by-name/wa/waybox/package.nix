@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libGL,
-  libxkbcommon,
-  libxml2,
-  libevdev,
-  libinput,
-  libgbm,
-  meson,
-  ninja,
-  pixman,
-  pkg-config,
-  udev,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  wlroots,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libGL
+, libxkbcommon
+, libxml2
+, libevdev
+, libinput
+, libgbm
+, meson
+, ninja
+, pixman
+, pkg-config
+, udev
+, wayland
+, wayland-protocols
+, wayland-scanner
+, wlroots
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

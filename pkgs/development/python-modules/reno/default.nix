@@ -1,18 +1,18 @@
-{
-  buildPythonApplication,
-  dulwich,
-  docutils,
-  lib,
-  fetchFromGitHub,
-  git,
-  gnupg,
-  pbr,
-  pyyaml,
-  setuptools,
-  sphinx,
-  stestr,
-  testtools,
-  testscenarios,
+{ buildPythonApplication
+, dulwich
+, docutils
+, lib
+, fetchFromGitHub
+, git
+, gnupg
+, pbr
+, pyyaml
+, setuptools
+, sphinx
+, stestr
+, testtools
+, testscenarios
+,
 }:
 
 buildPythonApplication rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  nixosTests,
-  cloud-utils,
-  dmidecode,
-  fetchFromGitHub,
-  iproute2,
-  openssh,
-  python3,
-  shadow,
-  systemd,
-  coreutils,
-  gitUpdater,
-  busybox,
-  procps,
+{ lib
+, nixosTests
+, cloud-utils
+, dmidecode
+, fetchFromGitHub
+, iproute2
+, openssh
+, python3
+, shadow
+, systemd
+, coreutils
+, gitUpdater
+, busybox
+, procps
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

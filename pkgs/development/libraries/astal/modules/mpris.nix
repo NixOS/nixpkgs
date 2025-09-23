@@ -1,7 +1,7 @@
-{
-  buildAstalModule,
-  gvfs,
-  json-glib,
+{ buildAstalModule
+, gvfs
+, json-glib
+,
 }:
 buildAstalModule {
   name = "mpris";

@@ -1,14 +1,14 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  rustPlatform,
-  wget,
-  libiconv,
-  withFzf ? true,
-  fzf,
-  nix-update-script,
+{ stdenv
+, fetchFromGitHub
+, lib
+, makeWrapper
+, rustPlatform
+, wget
+, libiconv
+, withFzf ? true
+, fzf
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

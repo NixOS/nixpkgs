@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -132,8 +131,8 @@ let
   # Throws if the string matches the given regex.
   deny =
     regex: str:
-    assert (match regex str) == null;
-    str;
+      assert (match regex str) == null;
+      str;
 
   # Converts a set of k/v pairs.
   convertKv = concatMapAttrsStringSep "," (
@@ -146,32 +145,33 @@ let
   # Converts the entire config.
   convertConfig = mapAttrs' (
     name: value:
-    let
-      # Convert foo' into 'foo+' for support for '+=' syntax.
-      newName = if hasSuffix "'" name then substring 0 (stringLength name - 1) name + "+" else name;
+      let
+        # Convert foo' into 'foo+' for support for '+=' syntax.
+        newName = if hasSuffix "'" name then substring 0 (stringLength name - 1) name + "+" else name;
 
-      # Get the stringified value.
-      newValue =
-        if headerKvPairs.check value then
-          flatten (
-            mapAttrsToList (header: values: (map (value: convertKvWithHeader header value) values)) value
-          )
-        else if headerKvPair.check value then
-          mapAttrsToList convertKvWithHeader value
-        else if kvPairs.check value then
-          map convertKv value
-        else if kvPair.check value then
-          convertKv value
-        else if listOfAtom.check value then
-          mkAtomOrList value
-        else if lists.check value then
-          map mkAtomOrList value
-        else if atom.check value then
-          mkAtom value
-        else
-          invalid value;
-    in
-    nameValuePair newName newValue
+        # Get the stringified value.
+        newValue =
+          if headerKvPairs.check value then
+            flatten
+              (
+                mapAttrsToList (header: values: (map (value: convertKvWithHeader header value) values)) value
+              )
+          else if headerKvPair.check value then
+            mapAttrsToList convertKvWithHeader value
+          else if kvPairs.check value then
+            map convertKv value
+          else if kvPair.check value then
+            convertKv value
+          else if listOfAtom.check value then
+            mkAtomOrList value
+          else if lists.check value then
+            map mkAtomOrList value
+          else if atom.check value then
+            mkAtom value
+          else
+            invalid value;
+      in
+      nameValuePair newName newValue
   );
 
   mkKismetConf =

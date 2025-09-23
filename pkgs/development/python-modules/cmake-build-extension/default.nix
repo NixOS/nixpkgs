@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  cmake,
-  fetchFromGitHub,
-  gitpython,
-  ninja,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, cmake
+, fetchFromGitHub
+, gitpython
+, ninja
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

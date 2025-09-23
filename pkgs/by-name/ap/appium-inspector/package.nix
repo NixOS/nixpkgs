@@ -1,12 +1,12 @@
-{
-  lib,
-  buildNpmPackage,
-  copyDesktopItems,
-  electron_36,
-  fetchFromGitHub,
-  makeDesktopItem,
-  makeWrapper,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, copyDesktopItems
+, electron_36
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, nix-update-script
+,
 }:
 
 let

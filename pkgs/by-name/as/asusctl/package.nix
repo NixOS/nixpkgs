@@ -1,20 +1,20 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  systemd,
-  coreutils,
-  gnugrep,
-  pkg-config,
-  fontconfig,
-  libGL,
-  libinput,
-  libxkbcommon,
-  libgbm,
-  seatd,
-  wayland,
-  glibc,
-  udevCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, systemd
+, coreutils
+, gnugrep
+, pkg-config
+, fontconfig
+, libGL
+, libinput
+, libxkbcommon
+, libgbm
+, seatd
+, wayland
+, glibc
+, udevCheckHook
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";

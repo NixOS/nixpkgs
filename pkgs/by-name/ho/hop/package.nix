@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bigloo,
+{ lib
+, stdenv
+, fetchurl
+, bigloo
+,
 }:
 
 # Compute the “release” version of bigloo (before the first dash, if any)

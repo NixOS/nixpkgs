@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromSourcehut,
-  pkg-config,
-  sqlite,
-  installShellFiles,
-  makeWrapper,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromSourcehut
+, pkg-config
+, sqlite
+, installShellFiles
+, makeWrapper
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

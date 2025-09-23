@@ -1,11 +1,11 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  fetchzip,
-  appimageTools,
-  makeWrapper,
-  electron,
+{ stdenvNoCC
+, lib
+, fetchurl
+, fetchzip
+, appimageTools
+, makeWrapper
+, electron
+,
 }:
 (stdenvNoCC.mkDerivation rec {
   pname = "revolt-desktop";
@@ -48,8 +48,7 @@
               url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-arm64.AppImage";
               hash = "sha256-VQXyXaL4Ma3peO1duAlyFwkb1CRQ/4DNZhjiAnhms6I=";
             };
-          }
-          .${stdenvNoCC.hostPlatform.system}
+          }.${stdenvNoCC.hostPlatform.system}
             or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
         appimageContents = appimageTools.extractType2 { inherit (final) src pname version; };

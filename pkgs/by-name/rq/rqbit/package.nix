@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  buildNpmPackage,
-  nodejs_20,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, buildNpmPackage
+, nodejs_20
+, nix-update-script
+,
 }:
 let
   pname = "rqbit";

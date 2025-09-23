@@ -1,31 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  setuptools-scm,
-  celery,
-  flask,
-  humanize,
-  importlib-metadata,
-  pika,
-  psycopg,
-  tabulate,
-  swh-storage,
-  plotille,
-  postgresql,
-  postgresqlTestHook,
-  pytestCheckHook,
-  pytest-mock,
-  pytest-postgresql,
-  pytest-shared-session-scope,
-  pytest-xdist,
-  requests-mock,
-  simpy,
-  swh-journal,
-  types-python-dateutil,
-  types-pyyaml,
-  types-requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, setuptools-scm
+, celery
+, flask
+, humanize
+, importlib-metadata
+, pika
+, psycopg
+, tabulate
+, swh-storage
+, plotille
+, postgresql
+, postgresqlTestHook
+, pytestCheckHook
+, pytest-mock
+, pytest-postgresql
+, pytest-shared-session-scope
+, pytest-xdist
+, requests-mock
+, simpy
+, swh-journal
+, types-python-dateutil
+, types-pyyaml
+, types-requests
+,
 }:
 
 buildPythonPackage rec {

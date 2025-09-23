@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wrapGAppsHook4,
-  glib,
-  granite7,
-  gst_all_1,
-  gtk4,
-  libadwaita,
-  libcanberra,
-  libgee,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, vala
+, wrapGAppsHook4
+, glib
+, granite7
+, gst_all_1
+, gtk4
+, libadwaita
+, libcanberra
+, libgee
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

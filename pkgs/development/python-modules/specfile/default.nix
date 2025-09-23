@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flexmock,
-  git,
-  pytestCheckHook,
-  rpm,
-  setuptools-scm,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flexmock
+, git
+, pytestCheckHook
+, rpm
+, setuptools-scm
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

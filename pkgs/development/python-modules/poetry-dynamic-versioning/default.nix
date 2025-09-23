@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  dunamai,
-  fetchFromGitHub,
-  jinja2,
-  poetry-core,
-  poetry,
-  pytestCheckHook,
-  pythonOlder,
-  tomlkit,
+{ lib
+, buildPythonPackage
+, dunamai
+, fetchFromGitHub
+, jinja2
+, poetry-core
+, poetry
+, pytestCheckHook
+, pythonOlder
+, tomlkit
+,
 }:
 
 buildPythonPackage rec {

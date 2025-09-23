@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  util-linux,
-  hexdump,
-  autoSignDarwinBinariesHook,
-  wrapQtAppsHook ? null,
-  boost,
-  libevent,
-  miniupnpc,
-  zeromq,
-  zlib,
-  db48,
-  sqlite,
-  qrencode,
-  qtbase ? null,
-  qttools ? null,
-  python3,
-  withGui,
-  withWallet ? true,
-  gnupg,
-  # Signatures from the following GPG public keys checked during verification of the source code.
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, util-linux
+, hexdump
+, autoSignDarwinBinariesHook
+, wrapQtAppsHook ? null
+, boost
+, libevent
+, miniupnpc
+, zeromq
+, zlib
+, db48
+, sqlite
+, qrencode
+, qtbase ? null
+, qttools ? null
+, python3
+, withGui
+, withWallet ? true
+, gnupg
+, # Signatures from the following GPG public keys checked during verification of the source code.
   # The list can be found at https://github.com/bitcoinknots/guix.sigs/tree/knots/builder-keys
   builderKeys ? [
     "1A3E761F19D2CC7785C5502EA291A2C45D0C504A" # luke-jr.gpg
     "32FE1E61B1C711186CA378DEFD8981F1BC41ABB9" # oomahq.gpg
     "CACC7CBB26B3D2EE8FC2F2BC0E37EBAB8574F005" # leo-haf.gpg
-  ],
+  ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  rustPlatform,
-  arro3-core,
-  pyarrow,
-  openssl,
-  stdenv,
-  libiconv,
-  pkg-config,
-  polars,
-  pytestCheckHook,
-  pytest-benchmark,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-timeout,
-  pandas,
-  deprecated,
-  azure-storage-blob,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, rustPlatform
+, arro3-core
+, pyarrow
+, openssl
+, stdenv
+, libiconv
+, pkg-config
+, polars
+, pytestCheckHook
+, pytest-benchmark
+, pytest-cov-stub
+, pytest-mock
+, pytest-timeout
+, pandas
+, deprecated
+, azure-storage-blob
+,
 }:
 
 buildPythonPackage rec {

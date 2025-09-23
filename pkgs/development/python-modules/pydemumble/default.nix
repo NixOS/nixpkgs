@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  scikit-build-core,
-  cmake,
-  pytestCheckHook,
-  ninja,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, scikit-build-core
+, cmake
+, pytestCheckHook
+, ninja
+,
 }:
 
 buildPythonPackage rec {

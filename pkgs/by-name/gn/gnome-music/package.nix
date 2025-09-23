@@ -1,32 +1,32 @@
-{
-  lib,
-  meson,
-  ninja,
-  gettext,
-  fetchurl,
-  gdk-pixbuf,
-  tinysparql,
-  libxml2,
-  python3,
-  libnotify,
-  wrapGAppsHook4,
-  libmediaart,
-  gobject-introspection,
-  gnome-online-accounts,
-  grilo,
-  grilo-plugins,
-  pkg-config,
-  gtk4,
-  pango,
-  glib,
-  desktop-file-utils,
-  appstream-glib,
-  itstool,
-  gnome,
-  gst_all_1,
-  libsoup_3,
-  libadwaita,
-  gsettings-desktop-schemas,
+{ lib
+, meson
+, ninja
+, gettext
+, fetchurl
+, gdk-pixbuf
+, tinysparql
+, libxml2
+, python3
+, libnotify
+, wrapGAppsHook4
+, libmediaart
+, gobject-introspection
+, gnome-online-accounts
+, grilo
+, grilo-plugins
+, pkg-config
+, gtk4
+, pango
+, glib
+, desktop-file-utils
+, appstream-glib
+, itstool
+, gnome
+, gst_all_1
+, libsoup_3
+, libadwaita
+, gsettings-desktop-schemas
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

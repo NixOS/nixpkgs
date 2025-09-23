@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  coloraide,
-  humanize,
-  multimethod,
-  platformdirs,
-  rich,
-  sqlparse,
-  typing-extensions,
-  rgbxy ? null,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, coloraide
+, humanize
+, multimethod
+, platformdirs
+, rich
+, sqlparse
+, typing-extensions
+, rgbxy ? null
+,
 }:
 let
   version = "0.8.0";

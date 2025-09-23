@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.ddclient;
@@ -116,9 +115,10 @@ in
 
       username = lib.mkOption {
         # For `nsupdate` username contains the path to the nsupdate executable
-        default = lib.optionalString (
-          config.services.ddclient.protocol == "nsupdate"
-        ) "${pkgs.bind.dnsutils}/bin/nsupdate";
+        default = lib.optionalString
+          (
+            config.services.ddclient.protocol == "nsupdate"
+          ) "${pkgs.bind.dnsutils}/bin/nsupdate";
         defaultText = "";
         type = str;
         description = ''
@@ -278,9 +278,11 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       restartTriggers = lib.optional (cfg.configFile != null) cfg.configFile;
-      path = lib.optional (
-        lib.hasPrefix "if," cfg.use || lib.hasPrefix "ifv4," cfg.usev4 || lib.hasPrefix "ifv6," cfg.usev6
-      ) pkgs.iproute2;
+      path = lib.optional
+        (
+          lib.hasPrefix "if," cfg.use || lib.hasPrefix "ifv4," cfg.usev4 || lib.hasPrefix "ifv6," cfg.usev6
+        )
+        pkgs.iproute2;
 
       serviceConfig = {
         DynamicUser = true;

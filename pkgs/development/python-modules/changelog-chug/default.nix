@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromSourcehut,
-  docutils,
-  semver,
-  setuptools,
-  coverage,
-  testscenarios,
-  testtools,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromSourcehut
+, docutils
+, semver
+, setuptools
+, coverage
+, testscenarios
+, testtools
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

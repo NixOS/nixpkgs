@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  gnulib,
-  perl,
-  autoconf,
-  automake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, gnulib
+, perl
+, autoconf
+, automake
+,
 }:
 
 stdenv.mkDerivation rec {

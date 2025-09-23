@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  ipykernel,
-  ipython,
-  ipywidgets,
-  nbconvert,
-  nbformat,
-  pythonOlder,
-  sphinx,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, ipykernel
+, ipython
+, ipywidgets
+, nbconvert
+, nbformat
+, pythonOlder
+, sphinx
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

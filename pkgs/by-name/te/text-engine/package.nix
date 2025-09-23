@@ -1,18 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-
-  gobject-introspection,
-  gtk4,
-  meson,
-  ninja,
-  pkg-config,
-
-  json-glib,
-  libadwaita,
-  libxml2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, gobject-introspection
+, gtk4
+, meson
+, ninja
+, pkg-config
+, json-glib
+, libadwaita
+, libxml2
+,
 }:
 
 stdenv.mkDerivation {

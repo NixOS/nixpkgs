@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  pkg-config,
-  systemd,
-  udevCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, pkg-config
+, systemd
+, udevCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

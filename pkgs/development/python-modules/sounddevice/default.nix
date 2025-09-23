@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  isPy27,
-  setuptools,
-  cffi,
-  numpy,
-  portaudio,
-  replaceVars,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, setuptools
+, cffi
+, numpy
+, portaudio
+, replaceVars
+,
 }:
 
 buildPythonPackage rec {

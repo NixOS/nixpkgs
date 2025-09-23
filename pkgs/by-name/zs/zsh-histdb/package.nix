@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  zsh,
-  sqlite,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, zsh
+, sqlite
+,
 }:
 
 stdenvNoCC.mkDerivation {

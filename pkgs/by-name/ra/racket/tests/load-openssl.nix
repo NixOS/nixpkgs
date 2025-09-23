@@ -1,9 +1,9 @@
 { runCommandLocal, racket }:
 
 runCommandLocal "racket-test-load-openssl"
-  {
-    nativeBuildInputs = [ racket ];
-  }
+{
+  nativeBuildInputs = [ racket ];
+}
   ''
     racket -f - <<EOF
     (require openssl)

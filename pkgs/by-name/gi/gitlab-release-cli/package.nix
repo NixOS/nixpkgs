@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitLab,
-  buildGoModule,
-  stdenv,
+{ lib
+, fetchFromGitLab
+, buildGoModule
+, stdenv
+,
 }:
 
 buildGoModule rec {

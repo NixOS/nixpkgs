@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  pam,
-  coreutils,
-  installShellFiles,
-  scdoc,
-  nixosTests,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, pam
+, coreutils
+, installShellFiles
+, scdoc
+, nixosTests
+,
 }:
 
 buildGoModule rec {

@@ -1,43 +1,43 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  apple-sdk_11,
-  cmake,
-  pkg-config,
-  ninja,
-  makeWrapper,
-  libjack2,
-  alsa-lib,
-  alsa-tools,
-  freetype,
-  jsoncpp,
-  libusb1,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
-  libXScrnSaver,
-  libGL,
-  libxcb,
-  vst2-sdk,
-  xcbutil,
-  libxkbcommon,
-  xcbutilkeysyms,
-  xcb-util-cursor,
-  gtk3,
-  webkitgtk_4_1,
-  python3,
-  curl,
-  pcre,
-  mount,
-  zenity,
-  # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, apple-sdk_11
+, cmake
+, pkg-config
+, ninja
+, makeWrapper
+, libjack2
+, alsa-lib
+, alsa-tools
+, freetype
+, jsoncpp
+, libusb1
+, libX11
+, libXrandr
+, libXinerama
+, libXext
+, libXcursor
+, libXScrnSaver
+, libGL
+, libxcb
+, vst2-sdk
+, xcbutil
+, libxkbcommon
+, xcbutilkeysyms
+, xcb-util-cursor
+, gtk3
+, webkitgtk_4_1
+, python3
+, curl
+, pcre
+, mount
+, zenity
+, # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
   # (the author of Bespoke has such a licence but not Nix). VST3 should work out of the box.
   # Read more in https://github.com/NixOS/nixpkgs/issues/145607
-  enableVST2 ? false,
+  enableVST2 ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

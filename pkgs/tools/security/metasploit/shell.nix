@@ -1,5 +1,5 @@
-{
-  pkgs ? import ../../../.. { },
+{ pkgs ? import ../../../.. { }
+,
 }:
 pkgs.mkShell {
   nativeBuildInputs = [

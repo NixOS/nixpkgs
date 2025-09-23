@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  canmatrix,
-  fetchPypi,
-  pytestCheckHook,
-  python-can,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, canmatrix
+, fetchPypi
+, pytestCheckHook
+, python-can
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

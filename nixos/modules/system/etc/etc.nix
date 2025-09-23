@@ -1,9 +1,8 @@
 # Management of static files in /etc.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -121,11 +120,10 @@ in
         with lib.types;
         attrsOf (
           submodule (
-            {
-              name,
-              config,
-              options,
-              ...
+            { name
+            , config
+            , options
+            , ...
             }:
             {
               options = {
@@ -258,7 +256,7 @@ in
         );
       in
       if config.system.etc.overlay.enable then
-        #bash
+      #bash
         ''
           # This script atomically remounts /etc when switching configuration.
           # On a (re-)boot this should not run because /etc is mounted via a

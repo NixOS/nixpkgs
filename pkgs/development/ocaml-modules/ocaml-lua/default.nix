@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  lua5_1,
-  pkg-config,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, lua5_1
+, pkg-config
+,
 }:
 
 buildDunePackage {

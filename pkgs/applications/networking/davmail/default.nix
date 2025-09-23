@@ -1,19 +1,19 @@
-{
-  stdenv,
-  fetchzip,
-  lib,
-  makeWrapper,
-  unzip,
-  glib,
-  gtk2,
-  gtk3,
-  jre,
-  libXtst,
-  coreutils,
-  gnugrep,
-  zulu,
-  preferGtk3 ? true,
-  preferZulu ? true,
+{ stdenv
+, fetchzip
+, lib
+, makeWrapper
+, unzip
+, glib
+, gtk2
+, gtk3
+, jre
+, libXtst
+, coreutils
+, gnugrep
+, zulu
+, preferGtk3 ? true
+, preferZulu ? true
+,
 }:
 
 let

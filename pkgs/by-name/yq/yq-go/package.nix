@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  pandoc,
-  runCommand,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, pandoc
+, runCommand
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

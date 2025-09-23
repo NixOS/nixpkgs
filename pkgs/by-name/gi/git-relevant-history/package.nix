@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  git,
-  git-filter-repo,
+{ lib
+, fetchFromGitHub
+, python3
+, git
+, git-filter-repo
+,
 }:
 
 python3.pkgs.buildPythonApplication {

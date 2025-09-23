@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  cryptography,
-  buildPythonPackage,
-  fetchPypi,
-  pyjwt,
-  pythonOlder,
-  setuptools,
-  requests,
-  sqlalchemy,
+{ lib
+, aiohttp
+, cryptography
+, buildPythonPackage
+, fetchPypi
+, pyjwt
+, pythonOlder
+, setuptools
+, requests
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

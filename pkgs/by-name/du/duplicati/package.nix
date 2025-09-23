@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  autoPatchelfHook,
-  gcc-unwrapped,
-  zlib,
-  lttng-ust_2_12,
-  icu,
-  openssl,
-  makeBinaryWrapper,
+{ lib
+, stdenv
+, fetchzip
+, autoPatchelfHook
+, gcc-unwrapped
+, zlib
+, lttng-ust_2_12
+, icu
+, openssl
+, makeBinaryWrapper
+,
 }:
 
 let

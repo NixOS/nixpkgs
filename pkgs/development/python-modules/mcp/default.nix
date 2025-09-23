@@ -1,42 +1,38 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-  uv-dynamic-versioning,
-
-  # dependencies
-  anyio,
-  httpx,
-  httpx-sse,
-  jsonschema,
-  pydantic,
-  pydantic-settings,
-  python-multipart,
-  sse-starlette,
-  starlette,
-  uvicorn,
-
-  # optional-dependencies
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, uv-dynamic-versioning
+, # dependencies
+  anyio
+, httpx
+, httpx-sse
+, jsonschema
+, pydantic
+, pydantic-settings
+, python-multipart
+, sse-starlette
+, starlette
+, uvicorn
+, # optional-dependencies
   # cli
-  python-dotenv,
-  typer,
-  # rich
-  rich,
-  # ws
-  websockets,
-
-  # tests
-  dirty-equals,
-  inline-snapshot,
-  pytest-asyncio,
-  pytest-examples,
-  pytest-xdist,
-  pytestCheckHook,
-  requests,
+  python-dotenv
+, typer
+, # rich
+  rich
+, # ws
+  websockets
+, # tests
+  dirty-equals
+, inline-snapshot
+, pytest-asyncio
+, pytest-examples
+, pytest-xdist
+, pytestCheckHook
+, requests
+,
 }:
 
 buildPythonPackage rec {

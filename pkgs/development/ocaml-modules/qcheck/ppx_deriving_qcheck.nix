@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  qcheck,
-  ppxlib,
-  ppx_deriving,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, qcheck
+, ppxlib
+, ppx_deriving
+,
 }:
 
 let

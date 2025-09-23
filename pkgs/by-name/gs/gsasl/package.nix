@@ -1,10 +1,10 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  libidn,
-  libkrb5,
-  testers,
+{ fetchurl
+, lib
+, stdenv
+, libidn
+, libkrb5
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

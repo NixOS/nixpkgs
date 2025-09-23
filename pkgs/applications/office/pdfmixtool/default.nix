@@ -1,16 +1,16 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitLab,
-  fetchpatch,
-  fetchpatch2,
-  cmake,
-  pkg-config,
-  qtbase,
-  qttools,
-  qpdf,
-  podofo,
-  imagemagick,
+{ lib
+, mkDerivation
+, fetchFromGitLab
+, fetchpatch
+, fetchpatch2
+, cmake
+, pkg-config
+, qtbase
+, qttools
+, qpdf
+, podofo
+, imagemagick
+,
 }:
 
 mkDerivation rec {

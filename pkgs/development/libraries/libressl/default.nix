@@ -1,23 +1,23 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  cmake,
-  cacert,
-  fetchpatch,
-  buildShared ? !stdenv.hostPlatform.isStatic,
+{ stdenv
+, fetchurl
+, lib
+, cmake
+, cacert
+, fetchpatch
+, buildShared ? !stdenv.hostPlatform.isStatic
+,
 }:
 
 let
   ldLibPathEnvName = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
 
   generic =
-    {
-      version,
-      hash,
-      patches ? [ ],
-      postPatch ? "",
-      knownVulnerabilities ? [ ],
+    { version
+    , hash
+    , patches ? [ ]
+    , postPatch ? ""
+    , knownVulnerabilities ? [ ]
+    ,
     }:
     stdenv.mkDerivation {
       pname = "libressl";

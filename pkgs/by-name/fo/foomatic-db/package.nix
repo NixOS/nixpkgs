@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cups,
-  cups-filters,
-  ghostscript,
-  gnused,
-  perl,
-  autoconf,
-  automake,
-  patchPpdFilesHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cups
+, cups-filters
+, ghostscript
+, gnused
+, perl
+, autoconf
+, automake
+, patchPpdFilesHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

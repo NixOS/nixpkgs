@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  pkg-config,
-  ninja,
-  cairo,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, pkg-config
+, ninja
+, cairo
+,
 }:
 
 stdenv.mkDerivation rec {

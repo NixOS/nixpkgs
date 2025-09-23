@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchPypi,
-  hatch-vcs,
-  hatchling,
-  pynput,
-  xdg-base-dirs,
+{ lib
+, buildPythonApplication
+, fetchPypi
+, hatch-vcs
+, hatchling
+, pynput
+, xdg-base-dirs
+,
 }:
 
 buildPythonApplication rec {

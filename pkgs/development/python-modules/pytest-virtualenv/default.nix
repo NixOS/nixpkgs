@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cmdline,
-  importlib-metadata,
-  mock,
-  pytestCheckHook,
-  pytest,
-  pytest-fixture-config,
-  pytest-shutil,
-  setuptools,
-  virtualenv,
+{ lib
+, buildPythonPackage
+, cmdline
+, importlib-metadata
+, mock
+, pytestCheckHook
+, pytest
+, pytest-fixture-config
+, pytest-shutil
+, setuptools
+, virtualenv
+,
 }:
 
 buildPythonPackage {

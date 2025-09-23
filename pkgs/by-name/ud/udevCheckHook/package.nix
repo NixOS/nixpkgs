@@ -1,8 +1,8 @@
-{
-  lib,
-  makeSetupHook,
-  systemdMinimal,
-  stdenv,
+{ lib
+, makeSetupHook
+, systemdMinimal
+, stdenv
+,
 }:
 let
   # udev rules can only be checked if systemd (specifically, 'udevadm') can be executed on build platform
@@ -13,7 +13,8 @@ let
   # - if rules are not needed on a target platform where they are broken, they should be deleted from package output
   applyHook = lib.meta.availableOn stdenv.buildPlatform systemdMinimal;
 in
-makeSetupHook {
+makeSetupHook
+{
   name = "udev-check-hook";
   substitutions = {
     udevadm = if applyHook then lib.getExe' systemdMinimal "udevadm" else "";

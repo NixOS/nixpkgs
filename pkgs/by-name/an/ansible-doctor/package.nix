@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  versionCheckHook,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, versionCheckHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

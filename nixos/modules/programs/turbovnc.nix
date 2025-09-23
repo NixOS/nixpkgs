@@ -1,10 +1,9 @@
 # Global configuration for the SSH client.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let

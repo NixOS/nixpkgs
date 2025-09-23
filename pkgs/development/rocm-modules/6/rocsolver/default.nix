@@ -1,21 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  rocblas,
-  rocprim,
-  rocsparse,
-  clr,
-  fmt,
-  gtest,
-  gfortran,
-  lapack-reference,
-  buildTests ? false,
-  buildBenchmarks ? false,
-  gpuTargets ? (
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, rocblas
+, rocprim
+, rocsparse
+, clr
+, fmt
+, gtest
+, gfortran
+, lapack-reference
+, buildTests ? false
+, buildBenchmarks ? false
+, gpuTargets ? (
     clr.localGpuTargets or [
       "gfx900"
       "gfx906"
@@ -31,7 +30,8 @@
       "gfx1200"
       "gfx1201"
     ]
-  ),
+  )
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

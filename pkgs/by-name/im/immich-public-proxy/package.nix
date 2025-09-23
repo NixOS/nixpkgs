@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  nixosTests,
-  nodejs,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+, nodejs
+,
 }:
 buildNpmPackage rec {
   pname = "immich-public-proxy";

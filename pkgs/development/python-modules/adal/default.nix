@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpretty,
-  pyjwt,
-  pytestCheckHook,
-  python-dateutil,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, httpretty
+, pyjwt
+, pytestCheckHook
+, python-dateutil
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

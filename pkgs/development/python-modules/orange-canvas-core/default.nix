@@ -1,33 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  anyqt,
-  cachecontrol,
-  commonmark,
-  dictdiffer,
-  docutils,
-  filelock,
-  lockfile,
-  numpy,
-  pip,
-  trubar,
-  qasync,
-  requests-cache,
-  typing-extensions,
-
-  # tests
-  qt5,
-  pytest-qt,
-  pytestCheckHook,
-
-  stdenv,
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  anyqt
+, cachecontrol
+, commonmark
+, dictdiffer
+, docutils
+, filelock
+, lockfile
+, numpy
+, pip
+, trubar
+, qasync
+, requests-cache
+, typing-extensions
+, # tests
+  qt5
+, pytest-qt
+, pytestCheckHook
+, stdenv
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

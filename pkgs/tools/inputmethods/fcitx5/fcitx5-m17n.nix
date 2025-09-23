@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  fcitx5,
-  m17n_lib,
-  m17n_db,
-  gettext,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, pkg-config
+, fcitx5
+, m17n_lib
+, m17n_db
+, gettext
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

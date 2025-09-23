@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gunicorn,
-  hatchling,
-  httpx,
-  pytestCheckHook,
-  trustme,
-  uvicorn,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gunicorn
+, hatchling
+, httpx
+, pytestCheckHook
+, trustme
+, uvicorn
+,
 }:
 
 buildPythonPackage rec {

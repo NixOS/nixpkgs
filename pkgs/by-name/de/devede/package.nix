@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchFromGitLab,
-  python3Packages,
-  ffmpeg,
-  mplayer,
-  vcdimager,
-  cdrkit,
-  dvdauthor,
-  gtk3,
-  gettext,
-  wrapGAppsHook3,
-  gdk-pixbuf,
-  gobject-introspection,
-  nix-update-script,
+{ lib
+, fetchFromGitLab
+, python3Packages
+, ffmpeg
+, mplayer
+, vcdimager
+, cdrkit
+, dvdauthor
+, gtk3
+, gettext
+, wrapGAppsHook3
+, gdk-pixbuf
+, gobject-introspection
+, nix-update-script
+,
 }:
 
 let

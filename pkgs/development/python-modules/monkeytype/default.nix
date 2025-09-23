@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  libcst,
-  mypy-extensions,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, libcst
+, mypy-extensions
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

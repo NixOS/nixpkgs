@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  nix-update-script,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  installShellFiles,
-  zstd,
-  libsoup_3,
-  makeWrapper,
-  mono,
-  wrapWithMono ? true,
-  openssl,
+{ lib
+, stdenv
+, nix-update-script
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, installShellFiles
+, zstd
+, libsoup_3
+, makeWrapper
+, mono
+, wrapWithMono ? true
+, openssl
+,
 }:
 
 rustPlatform.buildRustPackage rec {

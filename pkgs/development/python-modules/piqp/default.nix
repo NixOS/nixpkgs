@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pytestCheckHook,
-  stdenv,
-  pythonOlder,
-  setuptools,
-  cmake,
-  ninja,
-  wheel,
-  matio,
-  eigen,
-  gtest,
-  cpu_features,
-  pybind11,
-  python,
-  numpy,
-  scipy,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pytestCheckHook
+, stdenv
+, pythonOlder
+, setuptools
+, cmake
+, ninja
+, wheel
+, matio
+, eigen
+, gtest
+, cpu_features
+, pybind11
+, python
+, numpy
+, scipy
+,
 }:
 buildPythonPackage rec {
   pname = "piqp";

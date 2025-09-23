@@ -1,6 +1,6 @@
-{
-  callPackage,
-  fetchFromGitLab,
+{ callPackage
+, fetchFromGitLab
+,
 }:
 let
   common = opts: callPackage (import ./common.nix opts) { };

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pendulum,
-  poetry-core,
-  pprintpp,
-  pytestCheckHook,
-  pythonOlder,
-  wrapt,
+{ lib
+, stdenv
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pendulum
+, poetry-core
+, pprintpp
+, pytestCheckHook
+, pythonOlder
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

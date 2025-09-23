@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  itstool,
-  wrapGAppsHook4,
-  cairo,
-  gdk-pixbuf,
-  colord,
-  glib,
-  libadwaita,
-  gtk4,
-  gusb,
-  packagekit,
-  libwebp,
-  libxml2,
-  sane-backends,
-  vala,
-  gitUpdater,
-  gobject-introspection,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, gettext
+, itstool
+, wrapGAppsHook4
+, cairo
+, gdk-pixbuf
+, colord
+, glib
+, libadwaita
+, gtk4
+, gusb
+, packagekit
+, libwebp
+, libxml2
+, sane-backends
+, vala
+, gitUpdater
+, gobject-introspection
+,
 }:
 
 stdenv.mkDerivation rec {

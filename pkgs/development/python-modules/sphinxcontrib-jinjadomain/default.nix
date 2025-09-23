@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  pytestCheckHook,
-  setuptools,
-  sphinx,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, pytestCheckHook
+, setuptools
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

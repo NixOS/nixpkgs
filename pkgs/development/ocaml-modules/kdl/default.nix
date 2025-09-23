@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  menhir,
-  menhirLib,
-  ppx_expect,
-  sexplib0,
-  zarith,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, menhir
+, menhirLib
+, ppx_expect
+, sexplib0
+, zarith
+,
 }:
 
 buildDunePackage rec {

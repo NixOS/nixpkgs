@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  neon,
-  libdiscid,
-  libxml2,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, neon
+, libdiscid
+, libxml2
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation {

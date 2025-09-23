@@ -20,24 +20,26 @@ let
     path:
     # check if the path is a directory or a file
     if isDir path then
-      # it's a directory, so the set of overlays from the directory, ordered lexicographically
+    # it's a directory, so the set of overlays from the directory, ordered lexicographically
       let
         content = builtins.readDir path;
       in
       map (n: import (path + ("/" + n))) (
-        builtins.filter (
-          n:
+        builtins.filter
           (
-            builtins.match ".*\\.nix" n != null
-            &&
+            n:
+            (
+              builtins.match ".*\\.nix" n != null
+              &&
               # ignore Emacs lock files (.#foo.nix)
               builtins.match "\\.#.*" n == null
+            )
+            || builtins.pathExists (path + ("/" + n + "/default.nix"))
           )
-          || builtins.pathExists (path + ("/" + n + "/default.nix"))
-        ) (builtins.attrNames content)
+          (builtins.attrNames content)
       )
     else
-      # it's a file, so the result is the contents of the file itself
+    # it's a file, so the result is the contents of the file itself
       import path;
 in
 if pathOverlays != "" && builtins.pathExists pathOverlays then

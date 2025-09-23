@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  xmlto,
-  docbook_xml_dtd_412,
-  docbook_xsl,
-  autoconf,
-  automake,
-  libtool,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, xmlto
+, docbook_xml_dtd_412
+, docbook_xsl
+, autoconf
+, automake
+, libtool
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

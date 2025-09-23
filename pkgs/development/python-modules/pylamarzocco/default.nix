@@ -1,17 +1,17 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  bleak,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  mashumaro,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  syrupy,
+{ lib
+, aiohttp
+, aioresponses
+, bleak
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, mashumaro
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

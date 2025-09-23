@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  charset-normalizer,
-  ruamel-yaml,
-  weblate-language-data,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, charset-normalizer
+, ruamel-yaml
+, weblate-language-data
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

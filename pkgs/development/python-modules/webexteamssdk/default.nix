@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  future,
-  pyjwt,
-  pythonOlder,
-  requests,
-  requests-toolbelt,
-  setuptools,
-  versioneer,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, future
+, pyjwt
+, pythonOlder
+, requests
+, requests-toolbelt
+, setuptools
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

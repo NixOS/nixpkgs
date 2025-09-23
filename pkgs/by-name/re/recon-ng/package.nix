@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  replaceVars,
-  fetchpatch,
+{ lib
+, fetchFromGitHub
+, python3
+, replaceVars
+, fetchpatch
+,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "recon-ng";

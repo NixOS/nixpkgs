@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  itstool,
-  libxml2,
-  caja,
-  gtk3,
-  hicolor-icon-theme,
-  json-glib,
-  mate-desktop,
-  wrapGAppsHook3,
-  mateUpdateScript,
-  # can be defaulted to true once switch to meson
-  withMagic ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  file,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, libxml2
+, caja
+, gtk3
+, hicolor-icon-theme
+, json-glib
+, mate-desktop
+, wrapGAppsHook3
+, mateUpdateScript
+, # can be defaulted to true once switch to meson
+  withMagic ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, file
+,
 }:
 
 stdenv.mkDerivation rec {

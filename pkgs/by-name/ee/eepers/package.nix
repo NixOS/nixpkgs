@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gnat,
-  raylib,
-  alsa-lib,
-  wayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gnat
+, raylib
+, alsa-lib
+, wayland
+,
 }:
 
 stdenv.mkDerivation rec {

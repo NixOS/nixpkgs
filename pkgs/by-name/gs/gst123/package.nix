@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  wrapGAppsHook3,
-  gst_all_1,
-  gtk3,
-  ncurses,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, wrapGAppsHook3
+, gst_all_1
+, gtk3
+, ncurses
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

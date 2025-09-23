@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  SDL2,
-  wxGTK32,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, SDL2
+, wxGTK32
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

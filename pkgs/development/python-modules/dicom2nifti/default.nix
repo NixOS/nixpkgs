@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  gdcm,
-  nibabel,
-  numpy,
-  pydicom,
-  scipy,
-
-  # tests
-  pillow,
-  pylibjpeg,
-  pylibjpeg-libjpeg,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  gdcm
+, nibabel
+, numpy
+, pydicom
+, scipy
+, # tests
+  pillow
+, pylibjpeg
+, pylibjpeg-libjpeg
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

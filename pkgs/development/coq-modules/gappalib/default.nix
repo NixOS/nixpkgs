@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  autoconf,
-  coq,
-  flocq,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, autoconf
+, coq
+, flocq
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -24,7 +24,8 @@ mkCoqDerivation {
         case = range "8.8" "8.15";
         out = "1.5.5";
       }
-    ] null;
+    ]
+      null;
 
   release."1.7.0".sha256 = "sha256-NHKfX2on0tw2T0AqOLIFDCHlkl9OXkLiRExEwauwGqE=";
   release."1.6.0".sha256 = "sha256-GQls31TT4y3h18RUxAX+LpHIKon5UvDfW1GuURRKeKA=";

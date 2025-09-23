@@ -1,50 +1,48 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  glib,
-  gdk-pixbuf,
-  installShellFiles,
-  pango,
-  freetype,
-  cairo,
-  libxml2,
-  bzip2,
-  dav1d,
-  rustPlatform,
-  rustc,
-  cargo-c,
-  cargo-auditable-cargo-wrapper,
-  gi-docgen,
-  python3Packages,
-  gnome,
-  vala,
-  shared-mime-info,
-  # Requires building a cdylib.
-  withPixbufLoader ? !stdenv.hostPlatform.isStatic,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
-  gobject-introspection,
-  mesonEmulatorHook,
-  _experimental-update-script-combinators,
-  common-updater-scripts,
-  jq,
-  nix,
-
-  # for passthru.tests
-  enlightenment,
-  ffmpeg,
-  gegl,
-  gimp,
-  imagemagick,
-  imlib2,
-  vips,
-  xfce,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, glib
+, gdk-pixbuf
+, installShellFiles
+, pango
+, freetype
+, cairo
+, libxml2
+, bzip2
+, dav1d
+, rustPlatform
+, rustc
+, cargo-c
+, cargo-auditable-cargo-wrapper
+, gi-docgen
+, python3Packages
+, gnome
+, vala
+, shared-mime-info
+, # Requires building a cdylib.
+  withPixbufLoader ? !stdenv.hostPlatform.isStatic
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
+, mesonEmulatorHook
+, _experimental-update-script-combinators
+, common-updater-scripts
+, jq
+, nix
+, # for passthru.tests
+  enlightenment
+, ffmpeg
+, gegl
+, gimp
+, imagemagick
+, imlib2
+, vips
+, xfce
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

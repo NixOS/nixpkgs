@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  linkFarm,
-  lightdm-tiny-greeter,
-  fetchFromGitHub,
-  pkg-config,
-  lightdm,
-  gtk3,
-  glib,
-  wrapGAppsHook3,
-  config,
-  conf ? config.lightdm-tiny-greeter.conf or "",
+{ lib
+, stdenv
+, linkFarm
+, lightdm-tiny-greeter
+, fetchFromGitHub
+, pkg-config
+, lightdm
+, gtk3
+, glib
+, wrapGAppsHook3
+, config
+, conf ? config.lightdm-tiny-greeter.conf or ""
+,
 }:
 
 stdenv.mkDerivation rec {

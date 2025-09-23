@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  tbb_2022,
-  libgit2,
-  curl,
-  fmt,
-  nlohmann_json,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, tbb_2022
+, libgit2
+, curl
+, fmt
+, nlohmann_json
+, pkg-config
+,
 }:
 
 let

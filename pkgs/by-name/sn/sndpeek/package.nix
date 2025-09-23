@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libsndfile,
-  libglut,
-  alsa-lib,
-  libgbm,
-  libGLU,
-  libX11,
-  libXmu,
-  libXext,
-  libXi,
+{ lib
+, stdenv
+, fetchurl
+, libsndfile
+, libglut
+, alsa-lib
+, libgbm
+, libGLU
+, libX11
+, libXmu
+, libXext
+, libXi
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchCrate,
-  rustPlatform,
-  testers,
-  toml-cli,
+{ lib
+, fetchCrate
+, rustPlatform
+, testers
+, toml-cli
+,
 }:
 
 rustPlatform.buildRustPackage rec {

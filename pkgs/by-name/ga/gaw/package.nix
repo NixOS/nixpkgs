@@ -1,12 +1,12 @@
-{
-  stdenv,
-  runCommandLocal,
-  lib,
-  htmlq,
-  curl,
-  cacert,
-  gtk3,
-  pkg-config,
+{ stdenv
+, runCommandLocal
+, lib
+, htmlq
+, curl
+, cacert
+, gtk3
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  ffmpeg,
-  vulkan-loader,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, ffmpeg
+, vulkan-loader
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

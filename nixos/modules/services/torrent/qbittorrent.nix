@@ -1,9 +1,8 @@
-{
-  config,
-  pkgs,
-  lib,
-  utils,
-  ...
+{ config
+, pkgs
+, lib
+, utils
+, ...
 }:
 let
   cfg = config.services.qbittorrent;
@@ -38,17 +37,20 @@ let
         sep = "=";
       in
       k: v:
-      if isAttrs v then
-        concatStringsSep "\n" (
-          collect isString (
-            mapAttrsRecursive (
-              path: value:
-              "${escape [ sep ] (concatStringsSep "\\" ([ k ] ++ path))}${sep}${mkValueStringDefault { } value}"
-            ) v
-          )
-        )
-      else
-        mkKeyValueDefault { } sep k v;
+        if isAttrs v then
+          concatStringsSep "\n"
+            (
+              collect isString (
+                mapAttrsRecursive
+                  (
+                    path: value:
+                      "${escape [ sep ] (concatStringsSep "\\" ([ k ] ++ path))}${sep}${mkValueStringDefault { } value}"
+                  )
+                  v
+              )
+            )
+        else
+          mkKeyValueDefault { } sep k v;
   };
   configFile = pkgs.writeText "qBittorrent.conf" (gendeepINI cfg.serverConfig);
 in

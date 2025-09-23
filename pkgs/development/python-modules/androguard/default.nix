@@ -1,34 +1,34 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  apkinspector,
-  networkx,
-  pygments,
-  lxml,
-  colorama,
-  cryptography,
-  dataset,
-  frida-python,
-  loguru,
-  matplotlib,
-  asn1crypto,
-  click,
-  mutf8,
-  pyyaml,
-  pydot,
-  ipython,
-  oscrypto,
-  pyqt5,
-  pytestCheckHook,
-  python-magic,
-  qt5,
-  # This is usually used as a library, and it'd be a shame to force the GUI
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, apkinspector
+, networkx
+, pygments
+, lxml
+, colorama
+, cryptography
+, dataset
+, frida-python
+, loguru
+, matplotlib
+, asn1crypto
+, click
+, mutf8
+, pyyaml
+, pydot
+, ipython
+, oscrypto
+, pyqt5
+, pytestCheckHook
+, python-magic
+, qt5
+, # This is usually used as a library, and it'd be a shame to force the GUI
   # libraries to the closure if GUI is not desired.
-  withGui ? false,
-  # Deprecated in 24.11.
-  doCheck ? true,
+  withGui ? false
+, # Deprecated in 24.11.
+  doCheck ? true
+,
 }:
 
 assert lib.warnIf (!doCheck) "python3Packages.androguard: doCheck is deprecated" true;

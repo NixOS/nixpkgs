@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  symlinkJoin,
-  makeWrapper,
-  tcl,
-  fontconfig,
-  tk,
-  ncurses,
-  xorg,
-  file,
+{ lib
+, stdenv
+, fetchurl
+, symlinkJoin
+, makeWrapper
+, tcl
+, fontconfig
+, tk
+, ncurses
+, xorg
+, file
+,
 }:
 
 let

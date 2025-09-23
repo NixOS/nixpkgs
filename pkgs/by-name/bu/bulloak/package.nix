@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  fetchurl,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, fetchurl
+, stdenv
+,
 }:
 
 let

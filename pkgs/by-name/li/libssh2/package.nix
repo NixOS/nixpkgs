@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  zlib,
-  windows,
-
-  # for passthru.tests
-  aria2,
-  curl,
-  libgit2,
-  mc,
-  vlc,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, zlib
+, windows
+, # for passthru.tests
+  aria2
+, curl
+, libgit2
+, mc
+, vlc
+,
 }:
 
 stdenv.mkDerivation rec {

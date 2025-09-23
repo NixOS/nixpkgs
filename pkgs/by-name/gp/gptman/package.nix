@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  libiconv,
-  testers,
-  gptman,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, libiconv
+, testers
+, gptman
+,
 }:
 
 rustPlatform.buildRustPackage rec {

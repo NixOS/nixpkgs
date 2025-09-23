@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenvNoCC,
-  fetchYarnDeps,
-  nodejs,
-  yarnConfigHook,
-  yarnBuildHook,
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, fetchYarnDeps
+, nodejs
+, yarnConfigHook
+, yarnBuildHook
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "clock-weather-card";

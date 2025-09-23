@@ -1,15 +1,15 @@
 # NOTE: Though NCCL tests is called within the cudaPackages package set, we avoid passing in
 # the names of dependencies from that package set directly to avoid evaluation errors
 # in the case redistributable packages are not available.
-{
-  config,
-  cudaPackages,
-  fetchFromGitHub,
-  gitUpdater,
-  lib,
-  mpi,
-  mpiSupport ? false,
-  which,
+{ config
+, cudaPackages
+, fetchFromGitHub
+, gitUpdater
+, lib
+, mpi
+, mpiSupport ? false
+, which
+,
 }:
 let
   inherit (cudaPackages)

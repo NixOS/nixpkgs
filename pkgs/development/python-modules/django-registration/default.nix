@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pdm-backend,
-  confusable-homoglyphs,
-  coverage,
-  django,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pdm-backend
+, confusable-homoglyphs
+, coverage
+, django
+,
 }:
 
 buildPythonPackage rec {

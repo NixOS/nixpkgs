@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  libusb1,
-  mock,
-  ndeflib,
-  pydes,
-  pyserial,
-  pytest-tornasync,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, libusb1
+, mock
+, ndeflib
+, pydes
+, pyserial
+, pytest-tornasync
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

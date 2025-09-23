@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pipewire,
-  pkg-config,
-  bcc,
-  dbus,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pipewire
+, pkg-config
+, bcc
+, dbus
+,
 }:
 
 let

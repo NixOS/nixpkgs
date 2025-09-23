@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  bluez,
+{ lib
+, stdenv
+, fetchzip
+, bluez
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

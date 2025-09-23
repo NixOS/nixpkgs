@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nodejs,
-  pnpm_10,
-  npmHooks,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nodejs
+, pnpm_10
+, npmHooks
+, versionCheckHook
+, nix-update-script
+,
 }:
 let
   pnpm = pnpm_10;

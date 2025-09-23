@@ -1,21 +1,21 @@
-{
-  lib,
-  config,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  addDriverRunpath,
-  cudaSupport ? config.cudaSupport,
-  rocmSupport ? config.rocmSupport,
-  cudaPackages,
-  setuptools,
-  ocl-icd,
-  rocmPackages,
-  pytestCheckHook,
-  gpuctypes,
-  testCudaRuntime ? false,
-  testOpenclRuntime ? false,
-  testRocmRuntime ? false,
+{ lib
+, config
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, addDriverRunpath
+, cudaSupport ? config.cudaSupport
+, rocmSupport ? config.rocmSupport
+, cudaPackages
+, setuptools
+, ocl-icd
+, rocmPackages
+, pytestCheckHook
+, gpuctypes
+, testCudaRuntime ? false
+, testOpenclRuntime ? false
+, testRocmRuntime ? false
+,
 }:
 assert testCudaRuntime -> cudaSupport;
 assert testRocmRuntime -> rocmSupport;

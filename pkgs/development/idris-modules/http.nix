@@ -1,10 +1,10 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  contrib,
-  lightyear,
-  bytes,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, contrib
+, lightyear
+, bytes
+, lib
+,
 }:
 build-idris-package {
   pname = "http";

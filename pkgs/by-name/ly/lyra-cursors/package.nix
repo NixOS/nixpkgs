@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  inkscape,
-  xcursorgen,
-  fetchFromGitHub,
-  fetchpatch2,
+{ lib
+, stdenvNoCC
+, inkscape
+, xcursorgen
+, fetchFromGitHub
+, fetchpatch2
+,
 }:
 let
   styles = [

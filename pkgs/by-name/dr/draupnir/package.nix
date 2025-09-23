@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  nodejs,
-  matrix-sdk-crypto-nodejs,
-  python3,
-  sqlite,
-  srcOnly,
-  removeReferencesTo,
-  mkYarnPackage,
-  fetchYarnDeps,
-  stdenv,
-  cctools,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, nodejs
+, matrix-sdk-crypto-nodejs
+, python3
+, sqlite
+, srcOnly
+, removeReferencesTo
+, mkYarnPackage
+, fetchYarnDeps
+, stdenv
+, cctools
+, nixosTests
+,
 }:
 
 # docs: https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#yarn2nix-javascript-yarn2nix

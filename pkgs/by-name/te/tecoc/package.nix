@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  ncurses,
-  unstableGitUpdater,
+{ stdenv
+, lib
+, fetchFromGitHub
+, ncurses
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

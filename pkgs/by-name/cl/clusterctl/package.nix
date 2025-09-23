@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  clusterctl,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, clusterctl
+,
 }:
 
 buildGoModule rec {

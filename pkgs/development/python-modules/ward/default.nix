@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  click-completion,
-  click-default-group,
-  cucumber-tag-expressions,
-  fetchFromGitHub,
-  pluggy,
-  poetry-core,
-  pprintpp,
-  pythonOlder,
-  rich,
-  tomli,
+{ lib
+, buildPythonPackage
+, click
+, click-completion
+, click-default-group
+, cucumber-tag-expressions
+, fetchFromGitHub
+, pluggy
+, poetry-core
+, pprintpp
+, pythonOlder
+, rich
+, tomli
+,
 }:
 
 buildPythonPackage rec {

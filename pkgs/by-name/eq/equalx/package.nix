@@ -1,19 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-
-  # nativeBuildInputs
-  protobuf,
-  qt5,
-  libsForQt5,
-  pkg-config,
-  installShellFiles,
-
-  # buildInputs
-  ghostscript,
-  poppler-utils,
-  exempi,
+{ lib
+, stdenv
+, fetchFromGitLab
+, # nativeBuildInputs
+  protobuf
+, qt5
+, libsForQt5
+, pkg-config
+, installShellFiles
+, # buildInputs
+  ghostscript
+, poppler-utils
+, exempi
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

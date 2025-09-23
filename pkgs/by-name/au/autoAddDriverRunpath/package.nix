@@ -1,10 +1,11 @@
-{
-  addDriverRunpath,
-  autoFixElfFiles,
-  makeSetupHook,
+{ addDriverRunpath
+, autoFixElfFiles
+, makeSetupHook
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "auto-add-driver-runpath-hook";
   propagatedBuildInputs = [
     addDriverRunpath

@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  buildPythonPackage,
-  setuptools,
-  pyusb,
-  pymodbus,
-  pyserial-asyncio,
-  pytestCheckHook,
-  pytest-asyncio,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, buildPythonPackage
+, setuptools
+, pyusb
+, pymodbus
+, pyserial-asyncio
+, pytestCheckHook
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

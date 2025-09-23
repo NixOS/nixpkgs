@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenvNoCC,
-  gx,
-  gx-go,
-  go,
-  cacert,
+{ lib
+, stdenvNoCC
+, gx
+, gx-go
+, go
+, cacert
+,
 }:
 
 lib.fetchers.withNormalizedHash { } (
-  {
-    name,
-    src,
-    outputHash,
-    outputHashAlgo,
+  { name
+  , src
+  , outputHash
+  , outputHashAlgo
+  ,
   }:
 
   stdenvNoCC.mkDerivation {

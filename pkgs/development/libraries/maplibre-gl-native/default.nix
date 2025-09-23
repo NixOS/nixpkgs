@@ -1,17 +1,17 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchpatch2,
-  cmake,
-  pkg-config,
-  qtbase,
-  curl,
-  libuv,
-  glfw3,
-  rapidjson,
-  stdenv,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, fetchpatch2
+, cmake
+, pkg-config
+, qtbase
+, curl
+, libuv
+, glfw3
+, rapidjson
+, stdenv
+,
 }:
 
 mkDerivation rec {

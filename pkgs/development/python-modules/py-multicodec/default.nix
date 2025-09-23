@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  morphys,
-  pytestCheckHook,
-  pythonOlder,
-  six,
-  varint,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, morphys
+, pytestCheckHook
+, pythonOlder
+, six
+, varint
+,
 }:
 
 buildPythonPackage rec {

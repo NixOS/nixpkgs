@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  taskwarrior2,
-  glibcLocales,
+{ lib
+, python3Packages
+, fetchPypi
+, taskwarrior2
+, glibcLocales
+,
 }:
 
 with python3Packages;

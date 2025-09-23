@@ -1,25 +1,25 @@
-{
-  lib,
-  rustPlatform,
-  cargo-tauri,
-  npmHooks,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  pkg-config,
-  python3,
-  nodejs,
-  webkitgtk_4_1,
-  glib,
-  gtk3,
-  openssl,
-  pango,
-  cairo,
-  pixman,
-  protobuf,
-  perl,
-  makeWrapper,
-  nix-update-script,
-  stdenv,
+{ lib
+, rustPlatform
+, cargo-tauri
+, npmHooks
+, fetchFromGitHub
+, fetchNpmDeps
+, pkg-config
+, python3
+, nodejs
+, webkitgtk_4_1
+, glib
+, gtk3
+, openssl
+, pango
+, cairo
+, pixman
+, protobuf
+, perl
+, makeWrapper
+, nix-update-script
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -84,8 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           "x86_64-darwin" = "x86_64-apple-darwin";
           "aarch64-linux" = "aarch64-unknown-linux-gnu";
           "x86_64-linux" = "x86_64-unknown-linux-gnu";
-        }
-        .${stdenv.hostPlatform.system};
+        }.${stdenv.hostPlatform.system};
     in
     ''
       mkdir -p src-tauri/vendored/node

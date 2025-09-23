@@ -1,9 +1,9 @@
-{
-  lib,
-  gettext,
-  fetchFromGitHub,
-  sqlite,
-  stdenv,
+{ lib
+, gettext
+, fetchFromGitHub
+, sqlite
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

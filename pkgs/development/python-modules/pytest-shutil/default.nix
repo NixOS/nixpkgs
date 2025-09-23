@@ -1,20 +1,17 @@
-{
-  lib,
-  isPyPy,
-  buildPythonPackage,
-  pytest-fixture-config,
-
-  # build-time
-  setuptools,
-
-  # runtime
-  pytest,
-  execnet,
-  termcolor,
-  six,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, isPyPy
+, buildPythonPackage
+, pytest-fixture-config
+, # build-time
+  setuptools
+, # runtime
+  pytest
+, execnet
+, termcolor
+, six
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage {

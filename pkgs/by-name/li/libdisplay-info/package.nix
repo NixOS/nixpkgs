@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  pkg-config,
-  ninja,
-  python3,
-  hwdata,
-  v4l-utils,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, pkg-config
+, ninja
+, python3
+, hwdata
+, v4l-utils
+,
 }:
 
 stdenv.mkDerivation rec {

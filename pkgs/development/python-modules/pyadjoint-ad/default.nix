@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  scipy,
-  checkpoint-schedules,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, scipy
+, checkpoint-schedules
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

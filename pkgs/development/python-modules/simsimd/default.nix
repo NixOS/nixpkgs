@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  numpy,
-  pytest-repeat,
-  pytestCheckHook,
-  setuptools,
-  tabulate,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, numpy
+, pytest-repeat
+, pytestCheckHook
+, setuptools
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

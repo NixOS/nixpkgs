@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  meson,
-  ninja,
-  pkg-config,
-  wayland,
-  libX11,
-  libGL,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, meson
+, ninja
+, pkg-config
+, wayland
+, libX11
+, libGL
+,
 }:
 
 stdenv.mkDerivation {

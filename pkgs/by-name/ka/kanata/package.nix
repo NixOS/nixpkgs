@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  apple-sdk_13,
-  darwinMinVersionHook,
-  rustPlatform,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
-  writeShellScriptBin,
-  withCmd ? false,
+{ stdenv
+, lib
+, apple-sdk_13
+, darwinMinVersionHook
+, rustPlatform
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+, writeShellScriptBin
+, withCmd ? false
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "kanata";

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       selectSystem =
         attrs:
-        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+          attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
       system = selectSystem {
         x86_64-linux = "linux_amd64";
         aarch64-linux = "linux_arm64";

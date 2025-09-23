@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  gfortran,
-  blas,
-  lapack,
-  scalapack,
-  useMpi ? false,
-  mpi,
-  fetchFromGitLab,
-  cmake,
-  pkg-config,
-  readline,
-  ninja,
-  elpa,
+{ lib
+, stdenv
+, gfortran
+, blas
+, lapack
+, scalapack
+, useMpi ? false
+, mpi
+, fetchFromGitLab
+, cmake
+, pkg-config
+, readline
+, ninja
+, elpa
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

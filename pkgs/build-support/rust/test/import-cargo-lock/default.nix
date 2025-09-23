@@ -1,8 +1,8 @@
-{
-  callPackage,
-  maturin,
-  writers,
-  python3Packages,
+{ callPackage
+, maturin
+, writers
+, python3Packages
+,
 }:
 
 # Build like this from nixpkgs root:
@@ -20,15 +20,17 @@
   maturin = maturin.tests.pyo3;
   v1 = callPackage ./v1 { };
   gitDependencyWorkspaceInheritance = callPackage ./git-dependency-workspace-inheritance {
-    replaceWorkspaceValues = writers.writePython3 "replace-workspace-values" {
-      libraries = with python3Packages; [
-        tomli
-        tomli-w
-      ];
-      flakeIgnore = [
-        "E501"
-        "W503"
-      ];
-    } (builtins.readFile ../../replace-workspace-values.py);
+    replaceWorkspaceValues = writers.writePython3 "replace-workspace-values"
+      {
+        libraries = with python3Packages; [
+          tomli
+          tomli-w
+        ];
+        flakeIgnore = [
+          "E501"
+          "W503"
+        ];
+      }
+      (builtins.readFile ../../replace-workspace-values.py);
   };
 }

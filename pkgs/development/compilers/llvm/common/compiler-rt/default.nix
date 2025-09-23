@@ -1,36 +1,34 @@
-{
-  lib,
-  stdenv,
-  llvm_meta,
-  release_version,
-  version,
-  src ? null,
-  monorepoSrc ? null,
-  runCommand,
-  cmake,
-  ninja,
-  python3,
-  libllvm,
-  jq,
-  libcxx,
-  linuxHeaders,
-  freebsd,
-  libxcrypt,
-
-  # Some platforms have switched to using compiler-rt, but still want a
+{ lib
+, stdenv
+, llvm_meta
+, release_version
+, version
+, src ? null
+, monorepoSrc ? null
+, runCommand
+, cmake
+, ninja
+, python3
+, libllvm
+, jq
+, libcxx
+, linuxHeaders
+, freebsd
+, libxcrypt
+, # Some platforms have switched to using compiler-rt, but still want a
   # libgcc.a for ABI compat purposes. The use case would be old code that
   # expects to link `-lgcc` but doesn't care exactly what its contents
   # are, so long as it provides some builtins.
-  doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD,
-
-  # In recent releases, the compiler-rt build seems to produce
+  doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
+, # In recent releases, the compiler-rt build seems to produce
   # many `libclang_rt*` libraries, but not a single unified
   # `libcompiler_rt` library, at least under certain configurations. Some
   # platforms still expect this, however, so we symlink one into place.
-  forceLinkCompilerRt ? stdenv.hostPlatform.isOpenBSD,
-  devExtraCmakeFlags ? [ ],
-  getVersionFile,
-  fetchpatch,
+  forceLinkCompilerRt ? stdenv.hostPlatform.isOpenBSD
+, devExtraCmakeFlags ? [ ]
+, getVersionFile
+, fetchpatch
+,
 }:
 
 let
@@ -52,18 +50,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "compiler-rt-src-${version}" { inherit (monorepoSrc) passthru; } (
-        ''
-          mkdir -p "$out"
-          cp -r ${monorepoSrc}/cmake "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "21") ''
-          cp -r ${monorepoSrc}/third-party "$out"
-        ''
-        + ''
-          cp -r ${monorepoSrc}/compiler-rt "$out"
-        ''
-      )
+      runCommand "compiler-rt-src-${version}" { inherit (monorepoSrc) passthru; }
+        (
+          ''
+            mkdir -p "$out"
+            cp -r ${monorepoSrc}/cmake "$out"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "21") ''
+            cp -r ${monorepoSrc}/third-party "$out"
+          ''
+          + ''
+            cp -r ${monorepoSrc}/compiler-rt "$out"
+          ''
+        )
     else
       src;
 
@@ -220,14 +219,14 @@ stdenv.mkDerivation (finalAttrs: {
       )
     )
     +
-      lib.optionalString (lib.versionAtLeast release_version "19")
-        # codesign in sigtool doesn't support the various options used by the build
-        # and is present in the bootstrap-tools. Removing find_program prevents the
-        # build from trying to use it and failing.
-        ''
-          substituteInPlace cmake/Modules/AddCompilerRT.cmake \
-            --replace-fail 'find_program(CODESIGN codesign)' ""
-        '';
+    lib.optionalString (lib.versionAtLeast release_version "19")
+      # codesign in sigtool doesn't support the various options used by the build
+      # and is present in the bootstrap-tools. Removing find_program prevents the
+      # build from trying to use it and failing.
+      ''
+        substituteInPlace cmake/Modules/AddCompilerRT.cmake \
+          --replace-fail 'find_program(CODESIGN codesign)' ""
+      '';
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cmakeFlagsArray+=(
@@ -281,8 +280,8 @@ stdenv.mkDerivation (finalAttrs: {
       # compiler-rt requires a Clang stdenv on 32-bit RISC-V:
       # https://reviews.llvm.org/D43106#1019077
       (stdenv.hostPlatform.isRiscV32 && !stdenv.cc.isClang)
-      # emutls wants `<pthread.h>` which isn't available (without experimental WASM threads proposal).
-      # `enable_execute_stack.c` Also doesn't sound like something WASM would support.
-      || (stdenv.hostPlatform.isWasm && haveLibc);
+        # emutls wants `<pthread.h>` which isn't available (without experimental WASM threads proposal).
+        # `enable_execute_stack.c` Also doesn't sound like something WASM would support.
+        || (stdenv.hostPlatform.isWasm && haveLibc);
   };
 })

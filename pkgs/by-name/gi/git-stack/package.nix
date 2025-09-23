@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  testers,
-  git-stack,
-  stdenv,
-  zlib,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, testers
+, git-stack
+, stdenv
+, zlib
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "git-stack";

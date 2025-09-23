@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  python3,
-  fetchPypi,
-  src,
-  version,
+{ lib
+, stdenv
+, python3
+, fetchPypi
+, src
+, version
+,
 }:
 
 let

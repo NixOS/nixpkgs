@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  django-extensions,
-  django-js-asset,
-  fetchFromGitHub,
-  pillow,
-  python,
-  pythonOlder,
-  selenium,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, django
+, django-extensions
+, django-js-asset
+, fetchFromGitHub
+, pillow
+, python
+, pythonOlder
+, selenium
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

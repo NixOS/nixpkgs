@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  docbook_xml_dtd_43,
-  docbook-xsl-nons,
-  libxslt,
-  gettext,
-  gnome,
-  withDblatex ? false,
-  dblatex,
+{ lib
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, python3
+, docbook_xml_dtd_43
+, docbook-xsl-nons
+, libxslt
+, gettext
+, gnome
+, withDblatex ? false
+, dblatex
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

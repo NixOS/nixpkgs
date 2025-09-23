@@ -1,28 +1,27 @@
-{
-  lib,
-  ags,
-  astal,
-  dart-sass,
-  fzf,
-  gjs,
-  gnused,
-  gobject-introspection,
-  gtk3,
-  gtk4-layer-shell,
-  stdenvNoCC,
-  wrapGAppsHook3,
-  wrapGAppsHook4,
+{ lib
+, ags
+, astal
+, dart-sass
+, fzf
+, gjs
+, gnused
+, gobject-introspection
+, gtk3
+, gtk4-layer-shell
+, stdenvNoCC
+, wrapGAppsHook3
+, wrapGAppsHook4
+,
 }:
-{
-  entry ? "app.ts",
-  dependencies ? [ ],
-  enableGtk4 ? false,
-  ...
+{ entry ? "app.ts"
+, dependencies ? [ ]
+, enableGtk4 ? false
+, ...
 }@attrs:
 stdenvNoCC.mkDerivation (
   finalAttrs:
   attrs
-  // {
+    // {
     nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
       (ags.override { extraPackages = dependencies; })
       gnused

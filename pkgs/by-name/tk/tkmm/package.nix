@@ -1,19 +1,19 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  makeDesktopItem,
-  copyDesktopItems,
-  libX11,
-  glew,
-  libGL,
-  libICE,
-  libSM,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, makeDesktopItem
+, copyDesktopItems
+, libX11
+, glew
+, libGL
+, libICE
+, libSM
+, libXcursor
+, libXext
+, libXi
+, libXrandr
+,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "Tkmm";

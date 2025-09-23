@@ -1,8 +1,8 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, version ? null
+,
 }:
 
 (mkCoqDerivation {
@@ -53,7 +53,8 @@
         case = "8.5";
         out = "8.5.0";
       }
-    ] null;
+    ]
+      null;
 
   useDuneifVersion = lib.versions.isGe "9.0";
 

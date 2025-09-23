@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  pkg-config,
-  libogg,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, libogg
+,
 }:
 
 stdenv.mkDerivation {
@@ -24,9 +24,10 @@ stdenv.mkDerivation {
     "dev"
   ];
 
-  configureFlags = lib.optional (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "LDFLAGS=-Wl,--undefined-version";
+  configureFlags = lib.optional
+    (
+      stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+    ) "LDFLAGS=-Wl,--undefined-version";
 
   nativeBuildInputs = [
     autoreconfHook

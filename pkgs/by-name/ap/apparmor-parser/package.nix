@@ -1,20 +1,18 @@
-{
-  lib,
-  stdenv,
-  which,
-  flex,
-  bison,
-  linuxHeaders ? stdenv.cc.libc.linuxHeaders,
-  buildPackages,
-
-  # apparmor deps
-  libapparmor,
-  apparmor-bin-utils,
-
-  # testing
-  perl,
-  python3,
-  bashInteractive,
+{ lib
+, stdenv
+, which
+, flex
+, bison
+, linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, buildPackages
+, # apparmor deps
+  libapparmor
+, apparmor-bin-utils
+, # testing
+  perl
+, python3
+, bashInteractive
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "apparmor-parser";

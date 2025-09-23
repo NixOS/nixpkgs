@@ -1,8 +1,8 @@
-{
-  lib,
-  buildLua,
-  fetchFromGitHub,
-  unstableGitUpdater,
+{ lib
+, buildLua
+, fetchFromGitHub
+, unstableGitUpdater
+,
 }:
 buildLua {
   pname = "visualizer";

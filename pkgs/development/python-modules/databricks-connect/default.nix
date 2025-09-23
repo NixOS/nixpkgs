@@ -1,12 +1,12 @@
-{
-  lib,
-  jdk8,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  six,
-  py4j,
-  pythonOlder,
+{ lib
+, jdk8
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, six
+, py4j
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

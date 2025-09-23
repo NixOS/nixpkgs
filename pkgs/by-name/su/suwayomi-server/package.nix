@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  makeWrapper,
-  jdk21_headless,
-  nixosTests,
+{ lib
+, stdenvNoCC
+, fetchurl
+, makeWrapper
+, jdk21_headless
+, nixosTests
+,
 }:
 
 let

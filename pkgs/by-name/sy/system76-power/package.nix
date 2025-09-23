@@ -1,10 +1,10 @@
-{
-  pkg-config,
-  libusb1,
-  dbus,
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
+{ pkg-config
+, libusb1
+, dbus
+, lib
+, rustPlatform
+, fetchFromGitHub
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

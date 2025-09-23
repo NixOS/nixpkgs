@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  nodejs_20,
-  nixosTests,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, makeBinaryWrapper
+, nodejs_20
+, nixosTests
+,
 }:
 buildNpmPackage rec {
   pname = "send";

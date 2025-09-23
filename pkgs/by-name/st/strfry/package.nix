@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  openssl,
-  lmdb,
-  flatbuffers,
-  libuv,
-  libnotify,
-  secp256k1,
-  zlib-ng,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, openssl
+, lmdb
+, flatbuffers
+, libuv
+, libnotify
+, secp256k1
+, zlib-ng
+, zstd
+,
 }:
 stdenv.mkDerivation {
   pname = "strfry";

@@ -1,20 +1,20 @@
 { version, hash }:
 
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  fusePackages,
-  util-linux,
-  gettext,
-  shadow,
-  meson,
-  ninja,
-  pkg-config,
-  autoreconfHook,
-  runtimeShell,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, fusePackages
+, util-linux
+, gettext
+, shadow
+, meson
+, ninja
+, pkg-config
+, autoreconfHook
+, runtimeShell
+, udevCheckHook
+,
 }:
 
 let

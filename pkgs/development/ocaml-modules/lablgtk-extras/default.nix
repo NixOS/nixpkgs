@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  ocaml,
-  findlib,
-  camlp4,
-  config-file,
-  lablgtk,
-  xmlm,
+{ stdenv
+, lib
+, fetchFromGitLab
+, ocaml
+, findlib
+, camlp4
+, config-file
+, lablgtk
+, xmlm
+,
 }:
 
 if lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "4.13" then

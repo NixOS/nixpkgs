@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  runtimeShell,
-  runCommand,
-  makeWrapper,
-  installShellFiles,
-  buildGoModule,
-  coreutils,
-  which,
-  gnugrep,
-  gnused,
-  openresolv,
-  systemd,
-  iproute2,
-  openvpn,
-  electron,
-  wireguard-tools,
-  withWireguard ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, runtimeShell
+, runCommand
+, makeWrapper
+, installShellFiles
+, buildGoModule
+, coreutils
+, which
+, gnugrep
+, gnused
+, openresolv
+, systemd
+, iproute2
+, openvpn
+, electron
+, wireguard-tools
+, withWireguard ? stdenv.hostPlatform.isLinux
+,
 }:
 let
   version = "1.3.4275.94";

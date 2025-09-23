@@ -1,22 +1,22 @@
-{
-  stdenv,
-  cmake,
-  lib,
-  fetchFromGitHub,
-  wrapQtAppsHook,
-  qtbase,
-  qtcharts,
-  fftw,
-  libtorch-bin,
-  portaudio,
-  eigen,
-  xorg,
-  pkg-config,
-  autoPatchelfHook,
-  soxr,
-  libsamplerate,
-  armadillo,
-  tomlplusplus,
+{ stdenv
+, cmake
+, lib
+, fetchFromGitHub
+, wrapQtAppsHook
+, qtbase
+, qtcharts
+, fftw
+, libtorch-bin
+, portaudio
+, eigen
+, xorg
+, pkg-config
+, autoPatchelfHook
+, soxr
+, libsamplerate
+, armadillo
+, tomlplusplus
+,
 }:
 
 stdenv.mkDerivation {

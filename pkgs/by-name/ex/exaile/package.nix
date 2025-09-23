@@ -1,37 +1,37 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gobject-introspection,
-  makeWrapper,
-  wrapGAppsHook3,
-  gtk3,
-  gst_all_1,
-  python3,
-  gettext,
-  adwaita-icon-theme,
-  help2man,
-  keybinder3,
-  libnotify,
-  librsvg,
-  streamripper,
-  udisks,
-  webkitgtk_4_1,
-  iconTheme ? adwaita-icon-theme,
-  deviceDetectionSupport ? true,
-  documentationSupport ? true,
-  notificationSupport ? true,
-  scalableIconSupport ? true,
-  translationSupport ? true,
-  ipythonSupport ? false,
-  cdMetadataSupport ? false,
-  lastfmSupport ? false,
-  lyricsManiaSupport ? false,
-  multimediaKeySupport ? false,
-  musicBrainzSupport ? false,
-  podcastSupport ? false,
-  streamripperSupport ? false,
-  wikipediaSupport ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gobject-introspection
+, makeWrapper
+, wrapGAppsHook3
+, gtk3
+, gst_all_1
+, python3
+, gettext
+, adwaita-icon-theme
+, help2man
+, keybinder3
+, libnotify
+, librsvg
+, streamripper
+, udisks
+, webkitgtk_4_1
+, iconTheme ? adwaita-icon-theme
+, deviceDetectionSupport ? true
+, documentationSupport ? true
+, notificationSupport ? true
+, scalableIconSupport ? true
+, translationSupport ? true
+, ipythonSupport ? false
+, cdMetadataSupport ? false
+, lastfmSupport ? false
+, lyricsManiaSupport ? false
+, multimediaKeySupport ? false
+, musicBrainzSupport ? false
+, podcastSupport ? false
+, streamripperSupport ? false
+, wikipediaSupport ? false
+,
 }:
 
 stdenv.mkDerivation rec {

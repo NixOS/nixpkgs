@@ -1,9 +1,9 @@
-{
-  fetchCrate,
-  go-md2man,
-  installShellFiles,
-  lib,
-  rustPlatform,
+{ fetchCrate
+, go-md2man
+, installShellFiles
+, lib
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage rec {

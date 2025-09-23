@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  llvm_meta,
-  release_version,
-  buildLlvmTools,
-  monorepoSrc,
-  runCommand,
-  cmake,
-  ninja,
-  libxml2,
-  libllvm,
-  version,
-  devExtraCmakeFlags ? [ ],
+{ lib
+, stdenv
+, llvm_meta
+, release_version
+, buildLlvmTools
+, monorepoSrc
+, runCommand
+, cmake
+, ninja
+, libxml2
+, libllvm
+, version
+, devExtraCmakeFlags ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,14 +25,16 @@ stdenv.mkDerivation (finalAttrs: {
     && (!stdenv.hostPlatform.isMusl);
 
   # Blank llvm dir just so relative path works
-  src = runCommand "${finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
-    mkdir -p "$out"
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/mlir "$out"
-    cp -r ${monorepoSrc}/third-party "$out/third-party"
+  src = runCommand "${finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } (
+    ''
+      mkdir -p "$out"
+      cp -r ${monorepoSrc}/cmake "$out"
+      cp -r ${monorepoSrc}/mlir "$out"
+      cp -r ${monorepoSrc}/third-party "$out/third-party"
 
-    mkdir -p "$out/llvm"
-  '');
+      mkdir -p "$out/llvm"
+    ''
+  );
 
   sourceRoot = "${finalAttrs.src.name}/mlir";
 

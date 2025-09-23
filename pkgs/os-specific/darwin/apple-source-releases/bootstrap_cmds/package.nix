@@ -1,15 +1,15 @@
-{
-  lib,
-  apple-sdk,
-  apple-sdk_12,
-  bison,
-  buildPackages,
-  flex,
-  meson,
-  mkAppleDerivation,
-  replaceVars,
-  stdenv,
-  stdenvNoCC,
+{ lib
+, apple-sdk
+, apple-sdk_12
+, bison
+, buildPackages
+, flex
+, meson
+, mkAppleDerivation
+, replaceVars
+, stdenv
+, stdenvNoCC
+,
 }:
 
 let

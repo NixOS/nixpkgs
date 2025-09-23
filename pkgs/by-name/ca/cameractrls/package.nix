@@ -1,19 +1,19 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  glibc,
-  SDL2,
-  libjpeg_turbo,
-  alsa-lib,
-  libspnav,
-  desktop-file-utils,
-  gobject-introspection,
-  wrapGAppsHook3,
-  wrapGAppsHook4,
-  cameractrls-gtk3,
-  cameractrls-gtk4,
-  withGtk ? null,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, glibc
+, SDL2
+, libjpeg_turbo
+, alsa-lib
+, libspnav
+, desktop-file-utils
+, gobject-introspection
+, wrapGAppsHook3
+, wrapGAppsHook4
+, cameractrls-gtk3
+, cameractrls-gtk4
+, withGtk ? null
+,
 }:
 
 assert lib.assertOneOf "'withGtk' in cameractrls" withGtk [

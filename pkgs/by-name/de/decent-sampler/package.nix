@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
-  buildFHSEnv,
-  alsa-lib,
-  freetype,
-  nghttp2,
-  libX11,
-  expat,
+{ lib
+, stdenv
+, fetchzip
+, fetchurl
+, makeDesktopItem
+, copyDesktopItems
+, buildFHSEnv
+, alsa-lib
+, freetype
+, nghttp2
+, libX11
+, expat
+,
 }:
 
 let

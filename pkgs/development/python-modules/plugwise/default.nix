@@ -1,19 +1,19 @@
-{
-  lib,
-  aiofiles,
-  aiohttp,
-  buildPythonPackage,
-  defusedxml,
-  fetchFromGitHub,
-  freezegun,
-  jsonpickle,
-  munch,
-  pytest-aiohttp,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiofiles
+, aiohttp
+, buildPythonPackage
+, defusedxml
+, fetchFromGitHub
+, freezegun
+, jsonpickle
+, munch
+, pytest-aiohttp
+, pytest-asyncio
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

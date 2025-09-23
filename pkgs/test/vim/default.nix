@@ -1,8 +1,8 @@
-{
-  vimUtils,
-  vim-full,
-  vimPlugins,
-  pkgs,
+{ vimUtils
+, vim-full
+, vimPlugins
+, pkgs
+,
 }:
 let
   inherit (vimUtils) buildVimPlugin;

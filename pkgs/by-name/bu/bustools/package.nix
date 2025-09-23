@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  zlib,
-  testers,
-  bustools,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, zlib
+, testers
+, bustools
+,
 }:
 
 stdenv.mkDerivation rec {

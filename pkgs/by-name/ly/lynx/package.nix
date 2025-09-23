@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  pkg-config,
-  ncurses,
-  gzip,
-  sslSupport ? true,
-  openssl,
-  nukeReferences,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, pkg-config
+, ncurses
+, gzip
+, sslSupport ? true
+, openssl
+, nukeReferences
+,
 }:
 
 stdenv.mkDerivation rec {

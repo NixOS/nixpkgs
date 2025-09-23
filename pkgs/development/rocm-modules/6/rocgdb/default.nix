@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  pkg-config,
-  texinfo,
-  bison,
-  flex,
-  glibc,
-  zlib,
-  zstd,
-  gmp,
-  mpfr,
-  ncurses,
-  expat,
-  rocdbgapi,
-  perl,
-  python3,
-  babeltrace,
-  sourceHighlight,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, pkg-config
+, texinfo
+, bison
+, flex
+, glibc
+, zlib
+, zstd
+, gmp
+, mpfr
+, ncurses
+, expat
+, rocdbgapi
+, perl
+, python3
+, babeltrace
+, sourceHighlight
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

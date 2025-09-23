@@ -1,14 +1,14 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  lib,
-  dnsutils,
-  coreutils,
-  openssl,
-  net-tools,
-  util-linux,
-  procps,
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, lib
+, dnsutils
+, coreutils
+, openssl
+, net-tools
+, util-linux
+, procps
+,
 }:
 
 stdenv.mkDerivation rec {

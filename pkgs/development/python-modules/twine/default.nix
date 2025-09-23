@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  id,
-  importlib-metadata,
-  keyring,
-  packaging,
-  pkginfo,
-  readme-renderer,
-  requests,
-  requests-toolbelt,
-  rich,
-  rfc3986,
-  setuptools,
-  setuptools-scm,
-  urllib3,
-  build,
-  pretend,
-  pytest-socket,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, id
+, importlib-metadata
+, keyring
+, packaging
+, pkginfo
+, readme-renderer
+, requests
+, requests-toolbelt
+, rich
+, rfc3986
+, setuptools
+, setuptools-scm
+, urllib3
+, build
+, pretend
+, pytest-socket
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

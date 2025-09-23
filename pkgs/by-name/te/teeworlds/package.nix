@@ -1,22 +1,22 @@
-{
-  fetchFromGitHub,
-  fetchpatch,
-  lib,
-  stdenv,
-  cmake,
-  pkg-config,
-  python3,
-  alsa-lib,
-  libX11,
-  libGLU,
-  SDL2,
-  lua5_3,
-  zlib,
-  freetype,
-  wavpack,
-  icoutils,
-  nixosTests,
-  buildClient ? true,
+{ fetchFromGitHub
+, fetchpatch
+, lib
+, stdenv
+, cmake
+, pkg-config
+, python3
+, alsa-lib
+, libX11
+, libGLU
+, SDL2
+, lua5_3
+, zlib
+, freetype
+, wavpack
+, icoutils
+, nixosTests
+, buildClient ? true
+,
 }:
 
 stdenv.mkDerivation rec {

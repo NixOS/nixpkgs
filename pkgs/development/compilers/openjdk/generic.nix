@@ -1,95 +1,79 @@
-{
-  featureVersion,
-
-  lib,
-  stdenv,
-
-  fetchurl,
-  fetchpatch,
-
-  buildPackages,
-  autoPatchelfHook,
-  pkg-config,
-  autoconf,
-  lndir,
-  unzip,
-  ensureNewerSourcesForZipFilesHook,
-  pandoc,
-
-  cpio,
-  file,
-  which,
-  zip,
-  zlib,
-  cups,
-  freetype,
-  harfbuzz,
-  alsa-lib,
-  libjpeg,
-  giflib,
-  libpng,
-  lcms2,
-  libX11,
-  libICE,
-  libXext,
-  libXrender,
-  libXtst,
-  libXt,
-  libXi,
-  libXinerama,
-  libXcursor,
-  libXrandr,
-  fontconfig,
-
-  setJavaClassPath,
-
-  versionCheckHook,
-
-  liberation_ttf,
-  cacert,
-  jre-generate-cacerts,
-
-  nixpkgs-openjdk-updater,
-
-  # TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
+{ featureVersion
+, lib
+, stdenv
+, fetchurl
+, fetchpatch
+, buildPackages
+, autoPatchelfHook
+, pkg-config
+, autoconf
+, lndir
+, unzip
+, ensureNewerSourcesForZipFilesHook
+, pandoc
+, cpio
+, file
+, which
+, zip
+, zlib
+, cups
+, freetype
+, harfbuzz
+, alsa-lib
+, libjpeg
+, giflib
+, libpng
+, lcms2
+, libX11
+, libICE
+, libXext
+, libXrender
+, libXtst
+, libXt
+, libXi
+, libXinerama
+, libXcursor
+, libXrandr
+, fontconfig
+, setJavaClassPath
+, versionCheckHook
+, liberation_ttf
+, cacert
+, jre-generate-cacerts
+, nixpkgs-openjdk-updater
+, # TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
   # which should be fixable, this is a no-rebuild workaround for GHC.
-  headless ? lib.versionAtLeast featureVersion "21" && stdenv.targetPlatform.isGhcjs,
-
-  enableJavaFX ? false,
-  openjfx17,
-  openjfx21,
-  openjfx23,
-  openjfx24,
-  openjfx_jdk ?
-    {
-      "17" = openjfx17;
-      "21" = openjfx21;
-      "23" = openjfx23;
-      "24" = openjfx24;
-    }
-    .${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
-
-  enableGtk ? true,
-  gtk3,
-  gtk2,
-  glib,
-
-  temurin-bin-8,
-  temurin-bin-11,
-  temurin-bin-17,
-  temurin-bin-21,
-  temurin-bin-23,
-  temurin-bin-24,
-  jdk-bootstrap ?
-    {
-      "8" = temurin-bin-8.__spliced.buildBuild or temurin-bin-8;
-      "11" = temurin-bin-11.__spliced.buildBuild or temurin-bin-11;
-      "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
-      "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
-      "23" = temurin-bin-23.__spliced.buildBuild or temurin-bin-23;
-      "24" = temurin-bin-24.__spliced.buildBuild or temurin-bin-24;
-    }
-    .${featureVersion},
+  headless ? lib.versionAtLeast featureVersion "21" && stdenv.targetPlatform.isGhcjs
+, enableJavaFX ? false
+, openjfx17
+, openjfx21
+, openjfx23
+, openjfx24
+, openjfx_jdk ? {
+    "17" = openjfx17;
+    "21" = openjfx21;
+    "23" = openjfx23;
+    "24" = openjfx24;
+  }.${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}")
+, enableGtk ? true
+, gtk3
+, gtk2
+, glib
+, temurin-bin-8
+, temurin-bin-11
+, temurin-bin-17
+, temurin-bin-21
+, temurin-bin-23
+, temurin-bin-24
+, jdk-bootstrap ? {
+    "8" = temurin-bin-8.__spliced.buildBuild or temurin-bin-8;
+    "11" = temurin-bin-11.__spliced.buildBuild or temurin-bin-11;
+    "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
+    "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
+    "23" = temurin-bin-23.__spliced.buildBuild or temurin-bin-23;
+    "24" = temurin-bin-24.__spliced.buildBuild or temurin-bin-24;
+  }.${featureVersion}
+,
 }:
 
 let
@@ -120,8 +104,7 @@ let
         x86_64-linux = "amd64";
         aarch64-linux = "aarch64";
         powerpc64le-linux = "ppc64le";
-      }
-      .${stdenv.system} or (throw "Unsupported platform ${stdenv.system}");
+      }.${stdenv.system} or (throw "Unsupported platform ${stdenv.system}");
 
   jdk-bootstrap' = jdk-bootstrap.override {
     # when building a headless jdk, also bootstrap it with a headless jdk
@@ -385,9 +368,10 @@ stdenv.mkDerivation (finalAttrs: {
   # This probably shouldn’t apply to OpenJDK 21; see
   # b7e68243306833845cbf92e2ea1e0cf782481a51 which removed it for
   # versions 15 through 20.
-  ++ lib.optional (
-    (featureVersion == "11" || featureVersion == "21") && stdenv.hostPlatform.isx86_64
-  ) "--with-jvm-features=zgc"
+  ++ lib.optional
+    (
+      (featureVersion == "11" || featureVersion == "21") && stdenv.hostPlatform.isx86_64
+    ) "--with-jvm-features=zgc"
   ++ lib.optional headless (if atLeast11 then "--enable-headless-only" else "--disable-headful")
   ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx_jdk}";
 
@@ -413,9 +397,9 @@ stdenv.mkDerivation (finalAttrs: {
       if atLeast17 then
         "-Wno-error"
       else if atLeast11 then
-        # Workaround for
-        # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
-        # when building jtreg
+      # Workaround for
+      # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
+      # when building jtreg
         "-Wformat"
       else
         lib.concatStringsSep " " (

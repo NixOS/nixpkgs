@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  config,
-  callPackage,
-  wineBuild,
+{ lib
+, stdenv
+, config
+, callPackage
+, wineBuild
+,
 }:
 
 rec {

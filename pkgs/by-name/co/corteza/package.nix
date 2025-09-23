@@ -1,12 +1,11 @@
-{
-  withLocales ? true,
-
-  buildGoModule,
-  callPackage,
-  fetchFromGitHub,
-  lib,
-  nixosTests,
-  stdenvNoCC,
+{ withLocales ? true
+, buildGoModule
+, callPackage
+, fetchFromGitHub
+, lib
+, nixosTests
+, stdenvNoCC
+,
 }:
 
 let

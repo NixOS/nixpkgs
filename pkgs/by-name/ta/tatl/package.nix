@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  ocamlPackages,
+{ stdenv
+, lib
+, fetchFromGitHub
+, ocamlPackages
+,
 }:
 
 ocamlPackages.buildDunePackage rec {

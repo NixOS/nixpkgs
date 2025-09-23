@@ -1,21 +1,18 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  django,
-  markdown,
-  pyyaml,
-
-  # tests
-  beautifulsoup4,
-  pytestCheckHook,
-  pytest-django,
-  mkdocs,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, # build-system
+  poetry-core
+, # dependencies
+  django
+, markdown
+, pyyaml
+, # tests
+  beautifulsoup4
+, pytestCheckHook
+, pytest-django
+, mkdocs
+,
 }:
 
 buildPythonPackage rec {

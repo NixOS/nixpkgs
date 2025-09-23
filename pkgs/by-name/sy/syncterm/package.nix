@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  perl,
-  unzip,
-  autoPatchelfHook,
-  ncurses,
-  SDL2,
-  libX11,
-  alsa-lib,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, perl
+, unzip
+, autoPatchelfHook
+, ncurses
+, SDL2
+, libX11
+, alsa-lib
+,
 }:
 
 stdenv.mkDerivation rec {

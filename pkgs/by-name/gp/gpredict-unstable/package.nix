@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  goocanvas3,
-  nix-update-script,
-  gpredict,
+{ lib
+, fetchFromGitHub
+, goocanvas3
+, nix-update-script
+, gpredict
+,
 }:
 
 (gpredict.override {

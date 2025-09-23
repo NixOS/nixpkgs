@@ -1,18 +1,17 @@
-{
-  lib,
-  pkgs,
-  fetchFromGitHub,
-  rustPlatform,
-  pythonImportsCheckHook,
-  buildPythonPackage,
-
-  cargo,
-  rustc,
-  pkg-config,
-  sccache,
-  setuptools,
-  setuptools-rust,
-  setuptools-scm,
+{ lib
+, pkgs
+, fetchFromGitHub
+, rustPlatform
+, pythonImportsCheckHook
+, buildPythonPackage
+, cargo
+, rustc
+, pkg-config
+, sccache
+, setuptools
+, setuptools-rust
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

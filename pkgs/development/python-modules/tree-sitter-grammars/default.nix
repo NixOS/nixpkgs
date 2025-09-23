@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools,
-  pytestCheckHook,
-  tree-sitter,
-  symlinkJoin,
-  writeTextDir,
-  pythonOlder,
-  # `name`: grammar derivation pname in the format of `tree-sitter-<lang>`
-  name,
-  grammarDrv,
+{ lib
+, buildPythonPackage
+, setuptools
+, pytestCheckHook
+, tree-sitter
+, symlinkJoin
+, writeTextDir
+, pythonOlder
+, # `name`: grammar derivation pname in the format of `tree-sitter-<lang>`
+  name
+, grammarDrv
+,
 }:
 let
   inherit (grammarDrv) version;

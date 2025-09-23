@@ -1,31 +1,28 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  jax,
-  jaxlib,
-  multipledispatch,
-  numpy,
-  tqdm,
-
-  # tests
-  dm-haiku,
-  equinox,
-  flax,
-  funsor,
-  graphviz,
-  optax,
-  pyro-api,
-  pytest-xdist,
-  pytestCheckHook,
-  scikit-learn,
-  tensorflow-probability,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  jax
+, jaxlib
+, multipledispatch
+, numpy
+, tqdm
+, # tests
+  dm-haiku
+, equinox
+, flax
+, funsor
+, graphviz
+, optax
+, pyro-api
+, pytest-xdist
+, pytestCheckHook
+, scikit-learn
+, tensorflow-probability
+,
 }:
 
 buildPythonPackage rec {

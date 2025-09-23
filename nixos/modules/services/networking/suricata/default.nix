@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.suricata;
@@ -160,9 +159,11 @@ in
           map (e: e.interface) (
             (optionals (cfg.settings.af-packet != null) cfg.settings.af-packet)
             ++ (optionals (cfg.settings.af-xdp != null) cfg.settings.af-xdp)
-            ++ (optionals (
-              cfg.settings.dpdk != null && cfg.settings.dpdk.interfaces != null
-            ) cfg.settings.dpdk.interfaces)
+            ++ (optionals
+              (
+                cfg.settings.dpdk != null && cfg.settings.dpdk.interfaces != null
+              )
+              cfg.settings.dpdk.interfaces)
             ++ (optionals (cfg.settings.pcap != null) cfg.settings.pcap)
           )
         );
@@ -207,9 +208,11 @@ in
           script =
             let
               python = pkgs.python3.withPackages (ps: with ps; [ pyyaml ]);
-              enabledSourcesCmds = map (
-                src: "${python.interpreter} ${pkg}/bin/suricata-update enable-source ${src}"
-              ) cfg.enabledSources;
+              enabledSourcesCmds = map
+                (
+                  src: "${python.interpreter} ${pkg}/bin/suricata-update enable-source ${src}"
+                )
+                cfg.enabledSources;
             in
             ''
               ${concatStringsSep "\n" enabledSourcesCmds}

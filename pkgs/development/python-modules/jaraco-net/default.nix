@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  autocommand,
-  more-itertools,
-  beautifulsoup4,
-  mechanize,
-  keyring,
-  requests,
-  feedparser,
-  icmplib,
-  jaraco-text,
-  jaraco-logging,
-  jaraco-email,
-  jaraco-functools,
-  jaraco-collections,
-  path,
-  python-dateutil,
-  pathvalidate,
-  jsonpickle,
-  ifconfig-parser,
-  pytestCheckHook,
-  cherrypy,
-  importlib-resources,
-  pyparsing,
-  pytest-responses,
-  net-tools,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, autocommand
+, more-itertools
+, beautifulsoup4
+, mechanize
+, keyring
+, requests
+, feedparser
+, icmplib
+, jaraco-text
+, jaraco-logging
+, jaraco-email
+, jaraco-functools
+, jaraco-collections
+, path
+, python-dateutil
+, pathvalidate
+, jsonpickle
+, ifconfig-parser
+, pytestCheckHook
+, cherrypy
+, importlib-resources
+, pyparsing
+, pytest-responses
+, net-tools
+,
 }:
 
 buildPythonPackage rec {

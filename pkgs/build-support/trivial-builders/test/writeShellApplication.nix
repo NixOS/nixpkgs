@@ -1,13 +1,13 @@
 # Run with:
 # nix-build -A tests.trivial-builders.writeShellApplication
-{
-  writeShellApplication,
-  writeTextFile,
-  runCommand,
-  lib,
-  linkFarm,
-  diffutils,
-  hello,
+{ writeShellApplication
+, writeTextFile
+, runCommand
+, lib
+, linkFarm
+, diffutils
+, hello
+,
 }:
 let
   checkShellApplication =

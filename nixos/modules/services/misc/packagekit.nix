@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -22,24 +21,28 @@ let
 
   confFiles = [
     (iniFmt.generate "PackageKit.conf" (
-      recursiveUpdate {
-        Daemon = {
-          DefaultBackend = "test_nop";
-          KeepCache = false;
-        };
-      } cfg.settings
+      recursiveUpdate
+        {
+          Daemon = {
+            DefaultBackend = "test_nop";
+            KeepCache = false;
+          };
+        }
+        cfg.settings
     ))
 
     (iniFmt.generate "Vendor.conf" (
-      recursiveUpdate {
-        PackagesNotFound = rec {
-          DefaultUrl = "https://github.com/NixOS/nixpkgs";
-          CodecUrl = DefaultUrl;
-          HardwareUrl = DefaultUrl;
-          FontUrl = DefaultUrl;
-          MimeUrl = DefaultUrl;
-        };
-      } cfg.vendorSettings
+      recursiveUpdate
+        {
+          PackagesNotFound = rec {
+            DefaultUrl = "https://github.com/NixOS/nixpkgs";
+            CodecUrl = DefaultUrl;
+            HardwareUrl = DefaultUrl;
+            FontUrl = DefaultUrl;
+            MimeUrl = DefaultUrl;
+          };
+        }
+        cfg.vendorSettings
     ))
   ];
 

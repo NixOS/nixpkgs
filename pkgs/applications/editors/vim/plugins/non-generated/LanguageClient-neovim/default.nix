@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  rustPlatform,
-  vimUtils,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, rustPlatform
+, vimUtils
+,
 }:
 let
   version = "0.1.161";

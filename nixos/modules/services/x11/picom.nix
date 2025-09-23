@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 
 with lib;
@@ -15,8 +14,8 @@ let
 
   pairOf =
     x:
-    with types;
-    addCheck (listOf x) (y: length y == 2) // { description = "pair of ${x.description}"; };
+      with types;
+      addCheck (listOf x) (y: length y == 2) // { description = "pair of ${x.description}"; };
 
   mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
 

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  kdePackages,
-  cmake,
-  ninja,
-  pkg-config,
-  libcprime,
-  libcsys,
-  qdocumentview,
+{ lib
+, stdenv
+, fetchFromGitLab
+, kdePackages
+, cmake
+, ninja
+, pkg-config
+, libcprime
+, libcsys
+, qdocumentview
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

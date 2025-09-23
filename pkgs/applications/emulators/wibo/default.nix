@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchzip,
-  srcOnly,
-  cmake,
-  unzip,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, srcOnly
+, cmake
+, unzip
+,
 }:
 
 stdenv.mkDerivation rec {

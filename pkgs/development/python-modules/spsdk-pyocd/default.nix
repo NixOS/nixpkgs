@@ -1,22 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  pyocd,
-  pyocd-pemicro,
-  spsdk,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-
-  # passthru
-  spsdk-pyocd,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  pyocd
+, pyocd-pemicro
+, spsdk
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+, # passthru
+  spsdk-pyocd
+,
 }:
 
 buildPythonPackage rec {

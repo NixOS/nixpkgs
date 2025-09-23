@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  zope-interface,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, zope-interface
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

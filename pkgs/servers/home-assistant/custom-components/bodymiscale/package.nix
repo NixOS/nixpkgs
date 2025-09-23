@@ -1,9 +1,8 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-
-  cachetools,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, cachetools
+,
 }:
 
 buildHomeAssistantComponent rec {

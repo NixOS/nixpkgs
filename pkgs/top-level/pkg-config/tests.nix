@@ -1,10 +1,9 @@
 # cd nixpkgs
 # nix-build -A tests.pkg-config
-{
-  lib,
-  config,
-  stdenv,
-  ...
+{ lib
+, config
+, stdenv
+, ...
 }:
 
 let

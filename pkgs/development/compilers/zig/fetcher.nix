@@ -1,25 +1,25 @@
-{
-  lib,
-  zig,
-  runCommand,
+{ lib
+, zig
+, runCommand
+,
 }:
-{
-  pname,
-  version,
-  name ? "${pname}-${version}",
-  src,
-  hash ? lib.fakeHash,
+{ pname
+, version
+, name ? "${pname}-${version}"
+, src
+, hash ? lib.fakeHash
+,
 }@args:
 runCommand "${name}-zig-deps"
-  {
-    inherit (args) src;
+{
+  inherit (args) src;
 
-    nativeBuildInputs = [ zig ];
+  nativeBuildInputs = [ zig ];
 
-    outputHashAlgo = null;
-    outputHashMode = "recursive";
-    outputHash = hash;
-  }
+  outputHashAlgo = null;
+  outputHashMode = "recursive";
+  outputHash = hash;
+}
   ''
     export ZIG_GLOBAL_CACHE_DIR=$(mktemp -d)
 

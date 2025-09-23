@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  SDL,
-  pkg-config,
-  buildsystem,
-  uilib,
+{ lib
+, stdenv
+, fetchurl
+, SDL
+, pkg-config
+, buildsystem
+, uilib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

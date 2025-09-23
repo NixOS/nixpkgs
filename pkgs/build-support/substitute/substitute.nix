@@ -6,21 +6,21 @@
   - `name` (optional): The name of the resulting derivation
   - `src`: The path to the file to substitute
   - `substitutions`: The list of substitution arguments to pass
-    See https://nixos.org/manual/nixpkgs/stable/#fun-substitute
+  See https://nixos.org/manual/nixpkgs/stable/#fun-substitute
   - `replacements`: Deprecated version of `substitutions`
-    that doesn't support spaces in arguments.
+  that doesn't support spaces in arguments.
 
   Example:
 
   ```nix
   { substitute }:
   substitute {
-    src = ./greeting.txt;
-    substitutions = [
+  src = ./greeting.txt;
+  substitutions = [
       "--replace"
       "world"
       "paul"
-    ];
+  ];
   }
   ```
 
@@ -52,7 +52,7 @@ optionalDeprecationWarning stdenvNoCC.mkDerivation (
     allowSubstitutes = false;
   }
   // args
-  // lib.optionalAttrs (args ? substitutions) {
+    // lib.optionalAttrs (args ? substitutions) {
     substitutions =
       assert lib.assertMsg (lib.isList args.substitutions)
         ''pkgs.substitute: For "${name}", `substitutions` is passed, which is expected to be a list, but it's a ${builtins.typeOf args.substitutions} instead.'';

@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  embedding-reader,
-  faiss,
-  fire,
-  fsspec,
-  numpy,
-  pyarrow,
-
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  embedding-reader
+, faiss
+, fire
+, fsspec
+, numpy
+, pyarrow
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

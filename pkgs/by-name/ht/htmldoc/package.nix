@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  testers,
-  fetchFromGitHub,
-  zlib,
-  cups,
-  libpng,
-  libjpeg,
-  pkg-config,
-  htmldoc,
+{ lib
+, stdenv
+, testers
+, fetchFromGitHub
+, zlib
+, cups
+, libpng
+, libjpeg
+, pkg-config
+, htmldoc
+,
 }:
 
 stdenv.mkDerivation rec {

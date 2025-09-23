@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  mdformat,
-  mdit-py-plugins,
-  ruamel-yaml,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, mdformat
+, mdit-py-plugins
+, ruamel-yaml
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

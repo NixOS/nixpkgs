@@ -5,7 +5,8 @@ in
 # unsafeGetAttrPos is unspecified best-effort behavior, so we only want to consider this test on an evaluator that satisfies some basic assumptions about this function.
 assert builtins.unsafeGetAttrPos "a" { a = true; } != null;
 assert
-  builtins.unsafeGetAttrPos "a" (discardPositions {
+builtins.unsafeGetAttrPos "a"
+  (discardPositions {
     a = true;
   }) == null;
 {

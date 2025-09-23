@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -272,7 +271,7 @@ in
 
       interfaces = lib.mkOption {
         default = { };
-        type = with lib.types; attrsOf (submodule [ { options = commonOptions; } ]);
+        type = with lib.types; attrsOf (submodule [{ options = commonOptions; }]);
         description = ''
           Interface-specific open ports.
         '';
@@ -285,7 +284,7 @@ in
           default = lib.mapAttrs (name: value: cfg.${name}) commonOptions;
         }
         // cfg.interfaces;
-        type = with lib.types; attrsOf (submodule [ { options = commonOptions; } ]);
+        type = with lib.types; attrsOf (submodule [{ options = commonOptions; }]);
         description = ''
           All open ports.
         '';

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  cmdliner,
-  base,
-  stdio,
+{ lib
+, fetchurl
+, buildDunePackage
+, cmdliner
+, base
+, stdio
+,
 }:
 
 buildDunePackage rec {

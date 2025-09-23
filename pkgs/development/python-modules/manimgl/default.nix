@@ -1,44 +1,41 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  texliveInfraOnly,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  addict,
-  appdirs,
-  colour,
-  diskcache,
-  fonttools,
-  ipython,
-  isosurfaces,
-  manimpango,
-  mapbox-earcut,
-  matplotlib,
-  moderngl,
-  moderngl-window,
-  numpy,
-  pillow,
-  pydub,
-  pygments,
-  pyopengl,
-  pyperclip,
-  pyyaml,
-  rich,
-  scipy,
-  screeninfo,
-  skia-pathops,
-  svgelements,
-  sympy,
-  tqdm,
-  typing-extensions,
-  validators,
-
-  # tests
-  ffmpeg,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, texliveInfraOnly
+, # build-system
+  setuptools
+, # dependencies
+  addict
+, appdirs
+, colour
+, diskcache
+, fonttools
+, ipython
+, isosurfaces
+, manimpango
+, mapbox-earcut
+, matplotlib
+, moderngl
+, moderngl-window
+, numpy
+, pillow
+, pydub
+, pygments
+, pyopengl
+, pyperclip
+, pyyaml
+, rich
+, scipy
+, screeninfo
+, skia-pathops
+, svgelements
+, sympy
+, tqdm
+, typing-extensions
+, validators
+, # tests
+  ffmpeg
+,
 }:
 
 let

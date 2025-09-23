@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  libsForQt5,
+{ lib
+, fetchFromGitHub
+, python3
+, libsForQt5
+,
 }:
 
 let

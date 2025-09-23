@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  yt-dlp,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, yt-dlp
+,
 }:
 
 python3Packages.buildPythonApplication rec {

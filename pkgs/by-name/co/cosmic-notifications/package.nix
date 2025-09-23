@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  just,
-  libcosmicAppHook,
-  which,
-  nixosTests,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, just
+, libcosmicAppHook
+, which
+, nixosTests
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

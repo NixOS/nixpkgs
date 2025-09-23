@@ -1,8 +1,8 @@
-{
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
+{ rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, lib
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "srgn";

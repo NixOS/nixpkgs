@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  dnspython,
-  expiringdict,
-  fetchPypi,
-  hatchling,
-  html2text,
-  imapclient,
-  mail-parser,
-  publicsuffix2,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, dnspython
+, expiringdict
+, fetchPypi
+, hatchling
+, html2text
+, imapclient
+, mail-parser
+, publicsuffix2
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

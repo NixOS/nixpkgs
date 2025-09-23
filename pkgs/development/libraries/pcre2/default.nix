@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  updateAutotoolsGnuConfigScriptsHook,
-  # Causes consistent segfaults on ELFv1 PPC64 when trying to use Perl regex in gnugrep
+{ lib
+, stdenv
+, fetchurl
+, updateAutotoolsGnuConfigScriptsHook
+, # Causes consistent segfaults on ELFv1 PPC64 when trying to use Perl regex in gnugrep
   # https://github.com/PCRE2Project/pcre2/issues/762
-  withJitSealloc ? !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isAbiElfv1),
+  withJitSealloc ? !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isAbiElfv1)
+,
 }:
 
 stdenv.mkDerivation rec {

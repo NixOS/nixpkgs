@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  guile,
-  pkg-config,
-  glib,
-  loudmouth,
-  gmp,
-  libidn,
-  readline,
-  libtool,
-  libunwind,
-  ncurses,
-  curl,
-  jansson,
-  texinfo,
-  argp-standalone,
+{ lib
+, stdenv
+, fetchurl
+, guile
+, pkg-config
+, glib
+, loudmouth
+, gmp
+, libidn
+, readline
+, libtool
+, libunwind
+, ncurses
+, curl
+, jansson
+, texinfo
+, argp-standalone
+,
 }:
 stdenv.mkDerivation rec {
   pname = "freetalk";

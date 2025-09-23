@@ -1,34 +1,33 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchpatch,
-  makeWrapper,
-  binaryen,
-  cargo,
-  libfido2,
-  nodejs,
-  openssl,
-  pkg-config,
-  pnpm_10,
-  rustc,
-  stdenv,
-  xdg-utils,
-  wasm-pack,
-  nixosTests,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, binaryen
+, cargo
+, libfido2
+, nodejs
+, openssl
+, pkg-config
+, pnpm_10
+, rustc
+, stdenv
+, xdg-utils
+, wasm-pack
+, nixosTests
+,
 }:
 
-{
-  version,
-  hash,
-  cargoHash,
-  pnpmHash,
-  vendorHash,
-  wasm-bindgen-cli,
-  buildGoModule,
-
-  withRdpClient ? true,
-  extPatches ? [ ],
+{ version
+, hash
+, cargoHash
+, pnpmHash
+, vendorHash
+, wasm-bindgen-cli
+, buildGoModule
+, withRdpClient ? true
+, extPatches ? [ ]
+,
 }:
 let
 

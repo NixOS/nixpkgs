@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  python3Packages,
-  texinfo,
+{ lib
+, stdenv
+, fetchFromGitLab
+, python3Packages
+, texinfo
+,
 }:
 
 let

@@ -1,17 +1,15 @@
-{
-  lib,
-  php,
-  ...
+{ lib
+, php
+, ...
 }:
 {
   name = "php-${php.version}-httpd-test";
   meta.maintainers = lib.teams.php.members;
 
   nodes.machine =
-    {
-      config,
-      pkgs,
-      ...
+    { config
+    , pkgs
+    , ...
     }:
     {
       services.httpd = {

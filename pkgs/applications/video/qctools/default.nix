@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  qmake,
-  wrapQtAppsHook,
-  ffmpeg_6,
-  qtmultimedia,
-  qwt,
+{ lib
+, stdenv
+, fetchurl
+, qmake
+, wrapQtAppsHook
+, ffmpeg_6
+, qtmultimedia
+, qwt
+,
 }:
 
 stdenv.mkDerivation rec {

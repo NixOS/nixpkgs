@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  nix-update-script,
-  pam,
-  xmlsec,
+{ lib
+, stdenv
+, fetchurl
+, nix-update-script
+, pam
+, xmlsec
+,
 }:
 
 let

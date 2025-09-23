@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   inherit (lib)
@@ -25,9 +24,11 @@ let
   settingsFormat = pkgs.formats.ini { };
 
   checks = mapAttrs' (n: v: nameValuePair "check.${n}" (filterAttrs (_: v: v != null) v)) cfg.checks;
-  wakeups = mapAttrs' (
-    n: v: nameValuePair "wakeup.${n}" (filterAttrs (_: v: v != null) v)
-  ) cfg.wakeups;
+  wakeups = mapAttrs'
+    (
+      n: v: nameValuePair "wakeup.${n}" (filterAttrs (_: v: v != null) v)
+    )
+    cfg.wakeups;
 
   # Whether the given check is enabled
   hasCheck =

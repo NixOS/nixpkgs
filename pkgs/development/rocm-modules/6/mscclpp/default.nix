@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  stdenv,
-  cmake,
-  clr,
-  numactl,
-  nlohmann_json,
+{ fetchFromGitHub
+, stdenv
+, cmake
+, clr
+, numactl
+, nlohmann_json
+,
 }:
 stdenv.mkDerivation {
   pname = "mscclpp";

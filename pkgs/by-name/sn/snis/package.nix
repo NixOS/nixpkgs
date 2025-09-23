@@ -1,8 +1,8 @@
-{
-  buildEnv,
-  snis-unwrapped,
-  snis-assets,
-  makeWrapper,
+{ buildEnv
+, snis-unwrapped
+, snis-assets
+, makeWrapper
+,
 }:
 buildEnv {
   name = "snis-${snis-unwrapped.version}";

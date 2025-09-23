@@ -1,28 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  aiosmtpd,
-  django,
-
-  # tests
-  factory-boy,
-  mock,
-  pip,
-  postgresql,
-  postgresqlTestHook,
-  pygments,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-django,
-  shortuuid,
-  vobject,
-  werkzeug,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  aiosmtpd
+, django
+, # tests
+  factory-boy
+, mock
+, pip
+, postgresql
+, postgresqlTestHook
+, pygments
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-django
+, shortuuid
+, vobject
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  glib,
-  readline,
-  bison,
-  flex,
-  pkg-config,
-  autoreconfHook,
-  txt2man,
-  which,
-  gettext,
-  nix-update-script,
-  versionCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, glib
+, readline
+, bison
+, flex
+, pkg-config
+, autoreconfHook
+, txt2man
+, which
+, gettext
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

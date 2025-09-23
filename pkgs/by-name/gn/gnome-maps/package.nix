@@ -1,31 +1,31 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  gettext,
-  pkg-config,
-  gnome,
-  glib,
-  gtk4,
-  gobject-introspection,
-  gdk-pixbuf,
-  librest_1_0,
-  libgweather,
-  geoclue2,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libportal,
-  libshumate,
-  libsecret,
-  libsoup_3,
-  gsettings-desktop-schemas,
-  gjs,
-  libadwaita,
-  geocode-glib_2,
-  tzdata,
-  writeText,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, gettext
+, pkg-config
+, gnome
+, glib
+, gtk4
+, gobject-introspection
+, gdk-pixbuf
+, librest_1_0
+, libgweather
+, geoclue2
+, wrapGAppsHook4
+, desktop-file-utils
+, libportal
+, libshumate
+, libsecret
+, libsoup_3
+, gsettings-desktop-schemas
+, gjs
+, libadwaita
+, geocode-glib_2
+, tzdata
+, writeText
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

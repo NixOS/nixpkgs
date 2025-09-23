@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  requests,
-  poetry-core,
-  pytestCheckHook,
-  urllib3,
-  waitress,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, requests
+, poetry-core
+, pytestCheckHook
+, urllib3
+, waitress
+,
 }:
 
 buildPythonPackage rec {

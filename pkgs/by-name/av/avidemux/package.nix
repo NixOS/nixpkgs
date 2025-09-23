@@ -1,49 +1,49 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  zlib,
-  gettext,
-  libvdpau,
-  libva,
-  libXv,
-  sqlite,
-  yasm,
-  freetype,
-  fontconfig,
-  fribidi,
-  makeWrapper,
-  libXext,
-  libGLU,
-  alsa-lib,
-  withX265 ? true,
-  x265,
-  withX264 ? true,
-  x264,
-  withXvid ? true,
-  xvidcore,
-  withLAME ? true,
-  lame,
-  withFAAC ? false,
-  faac,
-  withVorbis ? true,
-  libvorbis,
-  withPulse ? true,
-  libpulseaudio,
-  withFAAD ? true,
-  faad2,
-  withOpus ? true,
-  libopus,
-  withVPX ? true,
-  libvpx,
-  withQT ? true,
-  libsForQt5,
-  withCLI ? true,
-  default ? "qt5",
-  withPlugins ? true,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, cmake
+, pkg-config
+, zlib
+, gettext
+, libvdpau
+, libva
+, libXv
+, sqlite
+, yasm
+, freetype
+, fontconfig
+, fribidi
+, makeWrapper
+, libXext
+, libGLU
+, alsa-lib
+, withX265 ? true
+, x265
+, withX264 ? true
+, x264
+, withXvid ? true
+, xvidcore
+, withLAME ? true
+, lame
+, withFAAC ? false
+, faac
+, withVorbis ? true
+, libvorbis
+, withPulse ? true
+, libpulseaudio
+, withFAAD ? true
+, faad2
+, withOpus ? true
+, libopus
+, withVPX ? true
+, libvpx
+, withQT ? true
+, libsForQt5
+, withCLI ? true
+, default ? "qt5"
+, withPlugins ? true
+,
 }:
 
 assert default != "qt5" -> default == "cli";

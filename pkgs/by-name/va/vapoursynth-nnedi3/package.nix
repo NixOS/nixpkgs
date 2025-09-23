@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  vapoursynth,
-  yasm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, vapoursynth
+, yasm
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

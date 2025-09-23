@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonRelaxDepsHook,
-  poetry-core,
-  fonttools,
-  openstep-plist,
-  ufolib2,
-  glyphslib,
-  bump2version,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonRelaxDepsHook
+, poetry-core
+, fonttools
+, openstep-plist
+, ufolib2
+, glyphslib
+, bump2version
+,
 }:
 
 buildPythonPackage rec {

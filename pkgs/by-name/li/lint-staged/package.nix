@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  testers,
-  lint-staged,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, testers
+, lint-staged
+,
 }:
 
 buildNpmPackage rec {

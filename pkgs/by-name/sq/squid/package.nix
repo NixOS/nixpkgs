@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  openldap,
-  pam,
-  db,
-  cyrus_sasl,
-  libcap,
-  expat,
-  libxml2,
-  openssl,
-  pkg-config,
-  systemd,
-  cppunit,
-  ipv6 ? true,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, openldap
+, pam
+, db
+, cyrus_sasl
+, libcap
+, expat
+, libxml2
+, openssl
+, pkg-config
+, systemd
+, cppunit
+, ipv6 ? true
+, nixosTests
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
@@ -58,9 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-htcp"
   ]
   ++ (if ipv6 then [ "--enable-ipv6" ] else [ "--disable-ipv6" ])
-  ++ lib.optional (
-    stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
-  ) "--enable-linux-netfilter";
+  ++ lib.optional
+    (
+      stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
+    ) "--enable-linux-netfilter";
 
   doCheck = true;
   nativeCheckInputs = [ cppunit ];

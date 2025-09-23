@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fluffychat-web,
-  symlinkJoin,
-  buildPackages,
-  rustc,
-  rustPlatform,
-  cargo,
-  flutter,
-  flutter_rust_bridge_codegen,
-  which,
-  wasm-pack,
-  wasm-bindgen-cli_0_2_100,
-  binaryen,
-  writableTmpDirAsHomeHook,
-  runCommand,
+{ lib
+, stdenv
+, fluffychat-web
+, symlinkJoin
+, buildPackages
+, rustc
+, rustPlatform
+, cargo
+, flutter
+, flutter_rust_bridge_codegen
+, which
+, wasm-pack
+, wasm-bindgen-cli_0_2_100
+, binaryen
+, writableTmpDirAsHomeHook
+, runCommand
+,
 }:
 
 let

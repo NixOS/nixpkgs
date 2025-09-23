@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libsForQt5,
-  fftw,
-  itstool,
-  alsaSupport ? true,
-  alsa-lib ? null,
-  jackSupport ? false,
-  libjack2 ? null,
-  portaudioSupport ? false,
-  portaudio ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libsForQt5
+, fftw
+, itstool
+, alsaSupport ? true
+, alsa-lib ? null
+, jackSupport ? false
+, libjack2 ? null
+, portaudioSupport ? false
+, portaudio ? null
+,
 }:
 
 assert alsaSupport -> alsa-lib != null;

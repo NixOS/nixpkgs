@@ -1,19 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  python,
-  buildPythonPackage,
-  setuptools-scm,
-  packaging,
-  aiohttp,
-  requests,
-
-  # native dependencies
-  sdl3,
-  sdl3-ttf,
-  sdl3-image,
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, python
+, buildPythonPackage
+, setuptools-scm
+, packaging
+, aiohttp
+, requests
+, # native dependencies
+  sdl3
+, sdl3-ttf
+, sdl3-image
+,
 }:
 
 let

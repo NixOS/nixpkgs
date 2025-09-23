@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  unzip,
-  zlib,
-  libpng,
-  bzip2,
-  SDL,
-  SDL_mixer,
-  buildEnv,
-  config,
-  runtimeShell,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, unzip
+, zlib
+, libpng
+, bzip2
+, SDL
+, SDL_mixer
+, buildEnv
+, config
+, runtimeShell
+,
 }:
 
 let
@@ -78,11 +78,11 @@ let
   };
 
   mkPak =
-    {
-      sha256,
-      pakName,
-      srcPath ? null,
-      url ? "mirror://sourceforge/simutrans/${pakName}/${srcPath}.zip",
+    { sha256
+    , pakName
+    , srcPath ? null
+    , url ? "mirror://sourceforge/simutrans/${pakName}/${srcPath}.zip"
+    ,
     }:
     stdenv.mkDerivation {
       name = "simutrans-${pakName}";
@@ -170,7 +170,7 @@ let
         '';
       in
       #TODO: MULTI_THREAD = 1 is "highly recommended",
-      # but it's roughly doubling CPU usage for me
+        # but it's roughly doubling CPU usage for me
       ''
         echo "${config}" > config.default
 

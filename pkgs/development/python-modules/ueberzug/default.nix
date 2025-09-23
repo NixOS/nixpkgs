@@ -1,18 +1,18 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  docopt,
-  fetchPypi,
-  libX11,
-  libXext,
-  libXres,
-  meson-python,
-  meson,
-  pillow,
-  pkg-config,
-  psutil,
-  xlib,
+{ lib
+, attrs
+, buildPythonPackage
+, docopt
+, fetchPypi
+, libX11
+, libXext
+, libXres
+, meson-python
+, meson
+, pillow
+, pkg-config
+, psutil
+, xlib
+,
 }:
 
 buildPythonPackage rec {

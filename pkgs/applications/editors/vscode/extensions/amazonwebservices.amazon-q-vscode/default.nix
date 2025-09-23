@@ -1,6 +1,6 @@
-{
-  lib,
-  vscode-utils,
+{ lib
+, vscode-utils
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {

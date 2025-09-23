@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  cairo,
-  elfutils,
-  fetchFromGitHub,
-  fetchpatch,
-  glib,
-  gobject-introspection,
-  gtksourceview3,
-  json-glib,
-  makeWrapper,
-  pango,
-  pkg-config,
-  polkit,
-  python3,
-  scons,
-  sphinx,
-  util-linux,
-  wrapGAppsHook3,
-  withGui ? false,
+{ lib
+, stdenv
+, cairo
+, elfutils
+, fetchFromGitHub
+, fetchpatch
+, glib
+, gobject-introspection
+, gtksourceview3
+, json-glib
+, makeWrapper
+, pango
+, pkg-config
+, polkit
+, python3
+, scons
+, sphinx
+, util-linux
+, wrapGAppsHook3
+, withGui ? false
+,
 }:
 
 assert withGui -> !stdenv.hostPlatform.isDarwin;

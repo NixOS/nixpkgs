@@ -1,11 +1,10 @@
 # This module defines global configuration for the zshell.
 
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 
 let

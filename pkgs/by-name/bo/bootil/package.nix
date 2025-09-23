@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  premake4,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, premake4
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

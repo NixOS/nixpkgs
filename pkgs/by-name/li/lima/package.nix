@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  qemu,
-  darwin,
-  makeWrapper,
-  nix-update-script,
-  apple-sdk_15,
-  withAdditionalGuestAgents ? false,
-  lima-additional-guestagents,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
-  testers,
-  writeText,
-  runCommand,
-  lima,
-  jq,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, qemu
+, darwin
+, makeWrapper
+, nix-update-script
+, apple-sdk_15
+, withAdditionalGuestAgents ? false
+, lima-additional-guestagents
+, writableTmpDirAsHomeHook
+, versionCheckHook
+, testers
+, writeText
+, runCommand
+, lima
+, jq
+,
 }:
 
 buildGoModule (finalAttrs: {

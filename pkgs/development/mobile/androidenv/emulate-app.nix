@@ -1,17 +1,17 @@
-{
-  composeAndroidPackages,
-  stdenv,
-  lib,
-  runtimeShell,
-  meta,
+{ composeAndroidPackages
+, stdenv
+, lib
+, runtimeShell
+, meta
+,
 }:
-{
-  name,
-  app ? null,
-  platformVersion ? "35",
-  abiVersion ? "x86",
-  systemImageType ? "default",
-  enableGPU ? false, # Enable GPU acceleration. It's deprecated, instead use `configOptions` below.
+{ name
+, app ? null
+, platformVersion ? "35"
+, abiVersion ? "x86"
+, systemImageType ? "default"
+, enableGPU ? false
+, # Enable GPU acceleration. It's deprecated, instead use `configOptions` below.
   configOptions ? (
     # List of options to add in config.ini
     lib.optionalAttrs enableGPU (
@@ -19,17 +19,19 @@
         "hw.gpu.enabled" = "yes";
       }
     )
-  ),
-  extraAVDFiles ? [ ],
-  package ? null,
-  activity ? null,
-  androidUserHome ? null,
-  avdHomeDir ? null, # Support old variable with non-standard naming!
-  androidAvdHome ? avdHomeDir,
-  deviceName ? "device",
-  sdkExtraArgs ? { },
-  androidAvdFlags ? null,
-  androidEmulatorFlags ? null,
+  )
+, extraAVDFiles ? [ ]
+, package ? null
+, activity ? null
+, androidUserHome ? null
+, avdHomeDir ? null
+, # Support old variable with non-standard naming!
+  androidAvdHome ? avdHomeDir
+, deviceName ? "device"
+, sdkExtraArgs ? { }
+, androidAvdFlags ? null
+, androidEmulatorFlags ? null
+,
 }:
 
 let

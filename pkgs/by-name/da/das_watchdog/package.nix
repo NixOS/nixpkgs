@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libgtop,
-  xmessage,
-  which,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libgtop
+, xmessage
+, which
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,7 +1,7 @@
-{
-  callPackage,
-  qt6Packages,
-  pkgsi686Linux,
+{ callPackage
+, qt6Packages
+, pkgsi686Linux
+,
 }:
 
 # When adding new plugins:

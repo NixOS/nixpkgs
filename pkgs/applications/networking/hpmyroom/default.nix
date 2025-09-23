@@ -1,26 +1,26 @@
-{
-  mkDerivation,
-  stdenv,
-  lib,
-  fetchurl,
-  rpmextract,
-  autoPatchelfHook,
-  libuuid,
-  libXtst,
-  libXfixes,
-  glib,
-  gst_all_1,
-  alsa-lib,
-  freetype,
-  fontconfig,
-  libXext,
-  libGL,
-  libpng,
-  libXScrnSaver,
-  libxcb,
-  xorg,
-  libpulseaudio,
-  libdrm,
+{ mkDerivation
+, stdenv
+, lib
+, fetchurl
+, rpmextract
+, autoPatchelfHook
+, libuuid
+, libXtst
+, libXfixes
+, glib
+, gst_all_1
+, alsa-lib
+, freetype
+, fontconfig
+, libXext
+, libGL
+, libpng
+, libXScrnSaver
+, libxcb
+, xorg
+, libpulseaudio
+, libdrm
+,
 }:
 mkDerivation rec {
   pname = "hpmyroom";

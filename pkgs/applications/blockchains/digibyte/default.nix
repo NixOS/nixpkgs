@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  boost,
-  libevent,
-  autoreconfHook,
-  db4,
-  pkg-config,
-  protobuf,
-  hexdump,
-  zeromq,
-  withGui,
-  qtbase ? null,
-  qttools ? null,
-  wrapQtAppsHook ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, boost
+, libevent
+, autoreconfHook
+, db4
+, pkg-config
+, protobuf
+, hexdump
+, zeromq
+, withGui
+, qtbase ? null
+, qttools ? null
+, wrapQtAppsHook ? null
+,
 }:
 
 stdenv.mkDerivation rec {

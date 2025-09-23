@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # buildtime
-  setuptools-scm,
-
-  # runtime
-  django,
-  python-ldap,
-
-  # tests
-  openldap,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # buildtime
+  setuptools-scm
+, # runtime
+  django
+, python-ldap
+, # tests
+  openldap
+,
 }:
 
 buildPythonPackage rec {

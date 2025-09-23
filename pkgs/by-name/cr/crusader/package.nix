@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  makeWrapper,
-  pkg-config,
-  autoPatchelfHook,
-
-  # buildInputs
-  fontconfig,
-  libgcc,
-  libxkbcommon,
-  xorg,
-
-  libGL,
-  wayland,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, # nativeBuildInputs
+  makeWrapper
+, pkg-config
+, autoPatchelfHook
+, # buildInputs
+  fontconfig
+, libgcc
+, libxkbcommon
+, xorg
+, libGL
+, wayland
+, versionCheckHook
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "crusader";

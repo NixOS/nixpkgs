@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  llvmPackages,
-  swiftPackages,
-  swift,
-  swiftpm,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, llvmPackages
+, swiftPackages
+, swift
+, swiftpm
+, nix-update-script
+,
 }:
 let
   inherit (llvmPackages) stdenv;

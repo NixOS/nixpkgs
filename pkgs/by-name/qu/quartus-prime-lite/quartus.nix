@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  unstick,
-  fetchurl,
-  withQuesta ? true,
-  supportedDevices ? [
+{ stdenv
+, lib
+, unstick
+, fetchurl
+, withQuesta ? true
+, supportedDevices ? [
     "Arria II"
     "Cyclone V"
     "Cyclone IV"
     "Cyclone 10 LP"
     "MAX II/V"
     "MAX 10 FPGA"
-  ],
+  ]
+,
 }:
 
 let
@@ -25,19 +25,26 @@ let
   };
 
   supportedDeviceIds =
-    assert lib.assertMsg (lib.all (
-      name: lib.hasAttr name deviceIds
-    ) supportedDevices) "Supported devices are: ${lib.concatStringsSep ", " (lib.attrNames deviceIds)}";
+    assert lib.assertMsg
+      (lib.all
+        (
+          name: lib.hasAttr name deviceIds
+        )
+        supportedDevices) "Supported devices are: ${lib.concatStringsSep ", " (lib.attrNames deviceIds)}";
     lib.listToAttrs (
-      map (name: {
-        inherit name;
-        value = deviceIds.${name};
-      }) supportedDevices
+      map
+        (name: {
+          inherit name;
+          value = deviceIds.${name};
+        })
+        supportedDevices
     );
 
-  unsupportedDeviceIds = lib.filterAttrs (
-    name: value: !(lib.hasAttr name supportedDeviceIds)
-  ) deviceIds;
+  unsupportedDeviceIds = lib.filterAttrs
+    (
+      name: value: !(lib.hasAttr name supportedDeviceIds)
+    )
+    deviceIds;
 
   componentHashes = {
     "arria_lite" = "sha256-PNoc15Y5h+2bxhYFIxkg1qVAsXIX3IMfEQSdPLVNUp4=";
@@ -70,13 +77,15 @@ let
       sha256 = "sha256-Dne4MLFSGXUVLMd+JgiS/d5RX9t5gs6PEvexTssLdF4=";
     }
   );
-  components = map (
-    id:
-    download {
-      name = "${id}-${version}.qdz";
-      sha256 = lib.getAttr id componentHashes;
-    }
-  ) (lib.attrValues supportedDeviceIds);
+  components = map
+    (
+      id:
+      download {
+        name = "${id}-${version}.qdz";
+        sha256 = lib.getAttr id componentHashes;
+      }
+    )
+    (lib.attrValues supportedDeviceIds);
 
 in
 stdenv.mkDerivation {

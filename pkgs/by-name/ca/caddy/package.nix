@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGo125Module,
-  callPackage,
-  fetchFromGitHub,
-  nixosTests,
-  caddy,
-  testers,
-  installShellFiles,
-  stdenv,
+{ lib
+, buildGo125Module
+, callPackage
+, fetchFromGitHub
+, nixosTests
+, caddy
+, testers
+, installShellFiles
+, stdenv
+,
 }:
 let
   version = "2.10.2";

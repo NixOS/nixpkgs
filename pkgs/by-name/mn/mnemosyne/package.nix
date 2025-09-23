@@ -1,7 +1,7 @@
-{
-  python3Packages,
-  fetchurl,
-  anki,
+{ python3Packages
+, fetchurl
+, anki
+,
 }:
 
 python3Packages.buildPythonApplication rec {

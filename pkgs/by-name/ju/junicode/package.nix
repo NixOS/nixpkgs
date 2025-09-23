@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  texlive,
-  callPackage,
+{ lib
+, stdenvNoCC
+, fetchzip
+, texlive
+, callPackage
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

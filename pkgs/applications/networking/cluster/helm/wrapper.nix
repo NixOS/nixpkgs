@@ -1,17 +1,17 @@
-{
-  symlinkJoin,
-  lib,
-  makeWrapper,
-  writeText,
+{ symlinkJoin
+, lib
+, makeWrapper
+, writeText
+,
 }:
 
 helm:
 
 let
   wrapper =
-    {
-      plugins ? [ ],
-      extraMakeWrapperArgs ? "",
+    { plugins ? [ ]
+    , extraMakeWrapperArgs ? ""
+    ,
     }:
     let
 

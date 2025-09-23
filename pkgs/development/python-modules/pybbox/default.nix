@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  netaddr,
-  requests,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, netaddr
+, requests
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  newScope,
-  fetchFromGitHub,
-  unzip,
-  stdenvNoCC,
+{ lib
+, newScope
+, fetchFromGitHub
+, unzip
+, stdenvNoCC
+,
 }:
 let
   base = {
@@ -23,10 +23,10 @@ let
     };
   };
   makeNltkDataPackage =
-    {
-      pname,
-      location,
-      hash,
+    { pname
+    , location
+    , hash
+    ,
     }:
     let
       src = fetchFromGitHub {

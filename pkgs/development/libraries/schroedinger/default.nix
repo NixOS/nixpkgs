@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  orc,
-  pkg-config,
-  fetchpatch,
-  autoreconfHook,
-  gtk-doc,
+{ lib
+, stdenv
+, fetchurl
+, orc
+, pkg-config
+, fetchpatch
+, autoreconfHook
+, gtk-doc
+,
 }:
 
 stdenv.mkDerivation rec {

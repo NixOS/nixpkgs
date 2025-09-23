@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  libpcap,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, libpcap
+,
 }:
 
 buildGoModule rec {

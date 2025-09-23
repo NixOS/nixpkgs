@@ -1,32 +1,33 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  cmake,
-  perl,
-  python3,
-  boost,
-  fortranSupport ? false,
-  gfortran,
-  buildDocumentation ? false,
-  fig2dev,
-  ghostscript,
-  doxygen,
-  buildJavaBindings ? false,
-  openjdk,
-  buildPythonBindings ? true,
-  python3Packages,
-  modelCheckingSupport ? false,
-  libunwind,
-  libevent,
-  elfutils, # Inside elfutils: libelf and libdw
-  bmfSupport ? true,
-  eigen,
-  minimalBindings ? false,
-  debug ? false,
-  optimize ? (!debug),
-  moreTests ? false,
-  withoutBin ? false,
+{ stdenv
+, lib
+, fetchFromGitLab
+, cmake
+, perl
+, python3
+, boost
+, fortranSupport ? false
+, gfortran
+, buildDocumentation ? false
+, fig2dev
+, ghostscript
+, doxygen
+, buildJavaBindings ? false
+, openjdk
+, buildPythonBindings ? true
+, python3Packages
+, modelCheckingSupport ? false
+, libunwind
+, libevent
+, elfutils
+, # Inside elfutils: libelf and libdw
+  bmfSupport ? true
+, eigen
+, minimalBindings ? false
+, debug ? false
+, optimize ? (!debug)
+, moreTests ? false
+, withoutBin ? false
+,
 }:
 
 stdenv.mkDerivation rec {

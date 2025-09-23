@@ -1,13 +1,13 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  ffmpeg,
-  xdotool,
-  slop,
-  libnotify,
-  procps,
-  makeWrapper,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, ffmpeg
+, xdotool
+, slop
+, libnotify
+, procps
+, makeWrapper
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

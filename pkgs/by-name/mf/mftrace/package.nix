@@ -1,13 +1,13 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  autoreconfHook,
-  python3,
-  fontforge,
-  potrace,
-  texlive,
+{ stdenv
+, fetchFromGitHub
+, lib
+, makeWrapper
+, autoreconfHook
+, python3
+, fontforge
+, potrace
+, texlive
+,
 }:
 
 /*

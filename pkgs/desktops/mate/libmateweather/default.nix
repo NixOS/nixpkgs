@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchurl,
-  pkg-config,
-  gettext,
-  glib,
-  glib-networking,
-  libxml2,
-  gtk3,
-  gtk-doc,
-  libsoup_3,
-  tzdata,
-  mateUpdateScript,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, glib-networking
+, libxml2
+, gtk3
+, gtk-doc
+, libsoup_3
+, tzdata
+, mateUpdateScript
+,
 }:
 stdenv.mkDerivation rec {
   pname = "libmateweather";

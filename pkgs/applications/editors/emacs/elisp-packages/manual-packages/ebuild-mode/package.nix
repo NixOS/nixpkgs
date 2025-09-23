@@ -1,7 +1,7 @@
-{
-  lib,
-  melpaBuild,
-  fetchzip,
+{ lib
+, melpaBuild
+, fetchzip
+,
 }:
 
 melpaBuild rec {

@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch2,
-  gitUpdater,
-  cmake,
-  nasm,
-  cpuinfo,
-
-  # for passthru.tests
-  ffmpeg,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch2
+, gitUpdater
+, cmake
+, nasm
+, cpuinfo
+, # for passthru.tests
+  ffmpeg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

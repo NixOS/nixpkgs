@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  php82,
-  nix-update-script,
-  dataDir ? "/var/lib/agorakit",
+{ lib
+, fetchFromGitHub
+, php82
+, nix-update-script
+, dataDir ? "/var/lib/agorakit"
+,
 }:
 
 php82.buildComposerProject2 (finalAttrs: {

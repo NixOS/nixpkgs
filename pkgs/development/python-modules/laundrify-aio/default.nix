@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  aiohttp,
-  pyjwt,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, aiohttp
+, pyjwt
+,
 }:
 
 buildPythonPackage rec {

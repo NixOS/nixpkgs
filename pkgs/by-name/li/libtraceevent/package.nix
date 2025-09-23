@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  pkg-config,
-  asciidoc,
-  xmlto,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  meson,
-  ninja,
-  cunit,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchgit
+, pkg-config
+, asciidoc
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, meson
+, ninja
+, cunit
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

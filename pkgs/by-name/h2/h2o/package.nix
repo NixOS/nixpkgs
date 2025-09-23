@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  makeWrapper,
-  ninja,
-  perl,
-  brotli,
-  openssl,
-  libcap,
-  libuv,
-  wslay,
-  zlib,
-  withMruby ? true,
-  bison,
-  ruby,
-  withUring ? stdenv.hostPlatform.isLinux,
-  liburing,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, makeWrapper
+, ninja
+, perl
+, brotli
+, openssl
+, libcap
+, libuv
+, wslay
+, zlib
+, withMruby ? true
+, bison
+, ruby
+, withUring ? stdenv.hostPlatform.isLinux
+, liburing
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

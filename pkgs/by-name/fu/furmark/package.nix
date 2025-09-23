@@ -1,17 +1,17 @@
-{
-  autoPatchelfHook,
-  copyDesktopItems,
-  fetchurl,
-  fetchzip,
-  lib,
-  libGL,
-  libGLU,
-  libxcrypt-legacy,
-  makeDesktopItem,
-  makeWrapper,
-  stdenv,
-  testers,
-  vulkan-loader,
+{ autoPatchelfHook
+, copyDesktopItems
+, fetchurl
+, fetchzip
+, lib
+, libGL
+, libGLU
+, libxcrypt-legacy
+, makeDesktopItem
+, makeWrapper
+, stdenv
+, testers
+, vulkan-loader
+,
 }:
 
 let

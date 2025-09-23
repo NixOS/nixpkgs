@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestExtension,
+{ fetchFromGitHub
+, lib
+, postgresql
+, postgresqlBuildExtension
+, postgresqlTestExtension
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

@@ -1,6 +1,5 @@
-{
-  runTest,
-  ...
+{ runTest
+, ...
 }:
 {
   bios = runTest ./bios.nix;

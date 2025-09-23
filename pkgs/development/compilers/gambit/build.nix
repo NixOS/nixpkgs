@@ -1,20 +1,20 @@
-{
-  gccStdenv,
-  lib,
-  pkgs,
-  git,
-  openssl,
-  autoconf,
-  coreutils,
-  src,
-  version,
-  git-version,
-  stampYmd ? 0,
-  stampHms ? 0,
-  gambit-support,
-  optimizationSetting ? "-O1",
-  gambit-params ? pkgs.gambit-support.stable-params,
-  rev ? git-version,
+{ gccStdenv
+, lib
+, pkgs
+, git
+, openssl
+, autoconf
+, coreutils
+, src
+, version
+, git-version
+, stampYmd ? 0
+, stampHms ? 0
+, gambit-support
+, optimizationSetting ? "-O1"
+, gambit-params ? pkgs.gambit-support.stable-params
+, rev ? git-version
+,
 }:
 
 # Note that according to a benchmark run by Marc Feeley on May 2018,

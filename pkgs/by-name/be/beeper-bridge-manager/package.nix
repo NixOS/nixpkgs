@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  python3,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, python3
+,
 }:
 
 buildGoModule rec {

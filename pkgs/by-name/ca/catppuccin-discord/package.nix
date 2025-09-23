@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  yarnConfigHook,
-  npmHooks,
-  nodejs-slim,
-  fetchYarnDeps,
-  flavour ? [ "mocha" ],
-  accents ? [ "blue" ],
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, yarnConfigHook
+, npmHooks
+, nodejs-slim
+, fetchYarnDeps
+, flavour ? [ "mocha" ]
+, accents ? [ "blue" ]
+,
 }:
 let
   validFlavours = [

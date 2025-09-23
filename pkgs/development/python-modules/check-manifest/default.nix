@@ -1,15 +1,15 @@
-{
-  lib,
-  breezy,
-  build,
-  buildPythonPackage,
-  fetchFromGitHub,
-  git,
-  pep517,
-  pytestCheckHook,
-  setuptools,
-  tomli,
-  pythonOlder,
+{ lib
+, breezy
+, build
+, buildPythonPackage
+, fetchFromGitHub
+, git
+, pep517
+, pytestCheckHook
+, setuptools
+, tomli
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

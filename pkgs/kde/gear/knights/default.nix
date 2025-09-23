@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtsvg,
-  qtspeech,
-  _7zz,
+{ mkKdeDerivation
+, qtsvg
+, qtspeech
+, _7zz
+,
 }:
 mkKdeDerivation {
   pname = "knights";

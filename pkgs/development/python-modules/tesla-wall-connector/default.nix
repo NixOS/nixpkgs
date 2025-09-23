@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  aresponses,
-  backoff,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, aiohttp
+, aresponses
+, backoff
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,10 @@
-{
-  lib,
-  dotnet-sdk,
-  buildPackages, # buildDotnetModule
-  testers,
-  runCommand,
+{ lib
+, dotnet-sdk
+, buildPackages
+, # buildDotnetModule
+  testers
+, runCommand
+,
 }:
 let
   # Note: without structured attributes, we can’t use derivation arguments that

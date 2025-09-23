@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  testers,
-  writeText,
-  runCommand,
-  jj,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, testers
+, writeText
+, runCommand
+, jj
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "jj";

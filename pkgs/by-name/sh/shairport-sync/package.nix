@@ -1,50 +1,50 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  openssl,
-  avahi,
-  alsa-lib,
-  libplist,
-  glib,
-  libdaemon,
-  libsodium,
-  libgcrypt,
-  ffmpeg,
-  libuuid,
-  unixtools,
-  popt,
-  libconfig,
-  libpulseaudio,
-  libjack2,
-  libsndfile,
-  libao,
-  libsoundio,
-  mosquitto,
-  pipewire,
-  soxr,
-  alac,
-  sndio,
-  enableAirplay2 ? false,
-  enableStdout ? true,
-  enableAlsa ? true,
-  enableSndio ? true,
-  enablePulse ? true,
-  enablePipe ? true,
-  enablePipewire ? true,
-  enableAo ? true,
-  enableJack ? true,
-  enableSoundio ? true,
-  enableMetadata ? true,
-  enableMpris ? stdenv.hostPlatform.isLinux,
-  enableMqttClient ? true,
-  enableDbus ? stdenv.hostPlatform.isLinux,
-  enableSoxr ? true,
-  enableAlac ? true,
-  enableConvolution ? true,
-  enableLibdaemon ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, openssl
+, avahi
+, alsa-lib
+, libplist
+, glib
+, libdaemon
+, libsodium
+, libgcrypt
+, ffmpeg
+, libuuid
+, unixtools
+, popt
+, libconfig
+, libpulseaudio
+, libjack2
+, libsndfile
+, libao
+, libsoundio
+, mosquitto
+, pipewire
+, soxr
+, alac
+, sndio
+, enableAirplay2 ? false
+, enableStdout ? true
+, enableAlsa ? true
+, enableSndio ? true
+, enablePulse ? true
+, enablePipe ? true
+, enablePipewire ? true
+, enableAo ? true
+, enableJack ? true
+, enableSoundio ? true
+, enableMetadata ? true
+, enableMpris ? stdenv.hostPlatform.isLinux
+, enableMqttClient ? true
+, enableDbus ? stdenv.hostPlatform.isLinux
+, enableSoxr ? true
+, enableAlac ? true
+, enableConvolution ? true
+, enableLibdaemon ? false
+,
 }:
 
 let

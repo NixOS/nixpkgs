@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  appimageTools,
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+,
 }:
 let
   pname = "navicat-premium";
@@ -18,8 +18,7 @@ let
         url = "https://web.archive.org/web/20250904095643/https://dn.navicat.com/download/navicat17-premium-en-aarch64.AppImage";
         hash = "sha256-r31u/b/3HO9PEQtIr9AZ/5NVrRcgJ+GACHPWCICZYec=";
       };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;

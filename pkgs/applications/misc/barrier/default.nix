@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  xorg,
-  avahi,
-  qtbase,
-  mkDerivation,
-  openssl,
-  wrapGAppsHook3,
-  avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; },
-  fetchpatch,
+{ lib
+, fetchFromGitHub
+, cmake
+, curl
+, xorg
+, avahi
+, qtbase
+, mkDerivation
+, openssl
+, wrapGAppsHook3
+, avahiWithLibdnssdCompat ? avahi.override { withLibdnssdCompat = true; }
+, fetchpatch
+,
 }:
 
 mkDerivation rec {

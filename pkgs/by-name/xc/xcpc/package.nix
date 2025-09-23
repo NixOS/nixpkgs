@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  autoreconfHook,
-  autoconf-archive,
-  pkg-config,
-  wrapGAppsHook3,
-  libepoxy,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, wrapGAppsHook3
+, libepoxy
+,
 }:
 
 stdenv.mkDerivation rec {

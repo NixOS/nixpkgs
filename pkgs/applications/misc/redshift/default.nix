@@ -1,47 +1,45 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  autoconf,
-  automake,
-  gettext,
-  intltool,
-  libtool,
-  pkg-config,
-  wrapGAppsHook3,
-  wrapPython,
-  gobject-introspection,
-  wayland-scanner,
-  gtk3,
-  python,
-  pygobject3,
-  pyxdg,
-
-  withQuartz ? stdenv.hostPlatform.isDarwin,
-  withRandr ? stdenv.hostPlatform.isLinux,
-  libxcb,
-  withDrm ? stdenv.hostPlatform.isLinux,
-  libdrm,
-  withVidmode ? stdenv.hostPlatform.isLinux,
-  libXxf86vm,
-
-  withGeolocation ? true,
-  withCoreLocation ? withGeolocation && stdenv.hostPlatform.isDarwin,
-  withGeoclue ? withGeolocation && stdenv.hostPlatform.isLinux,
-  geoclue,
-  withAppIndicator ? stdenv.hostPlatform.isLinux,
-  libappindicator,
-  libayatana-appindicator,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchFromGitLab
+, autoconf
+, automake
+, gettext
+, intltool
+, libtool
+, pkg-config
+, wrapGAppsHook3
+, wrapPython
+, gobject-introspection
+, wayland-scanner
+, gtk3
+, python
+, pygobject3
+, pyxdg
+, withQuartz ? stdenv.hostPlatform.isDarwin
+, withRandr ? stdenv.hostPlatform.isLinux
+, libxcb
+, withDrm ? stdenv.hostPlatform.isLinux
+, libdrm
+, withVidmode ? stdenv.hostPlatform.isLinux
+, libXxf86vm
+, withGeolocation ? true
+, withCoreLocation ? withGeolocation && stdenv.hostPlatform.isDarwin
+, withGeoclue ? withGeolocation && stdenv.hostPlatform.isLinux
+, geoclue
+, withAppIndicator ? stdenv.hostPlatform.isLinux
+, libappindicator
+, libayatana-appindicator
+,
 }:
 
 let
   mkRedshift =
-    {
-      pname,
-      version,
-      src,
-      meta,
+    { pname
+    , version
+    , src
+    , meta
+    ,
     }:
     stdenv.mkDerivation rec {
       inherit

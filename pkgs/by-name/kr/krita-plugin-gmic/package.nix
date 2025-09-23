@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  fftw,
-  krita,
-  libsForQt5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, fftw
+, krita
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,20 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  symlinkJoin,
-
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
-
-  makeWrapper,
-  v2ray,
-  v2ray-geoip,
-  v2ray-domain-list-community,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, fetchYarnDeps
+, symlinkJoin
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
+, makeWrapper
+, v2ray
+, v2ray-geoip
+, v2ray-domain-list-community
+, nix-update-script
+,
 }:
 let
   pname = "v2raya";

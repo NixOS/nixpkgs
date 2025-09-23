@@ -1,9 +1,9 @@
-{
-  lib,
-  appimageTools,
-  fetchurl,
-  asar,
-  python3,
+{ lib
+, appimageTools
+, fetchurl
+, asar
+, python3
+,
 }:
 let
   pname = "flexoptix-app";

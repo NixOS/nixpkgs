@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  makeWrapper,
-  python3,
-  db,
-  fuse,
-  asciidoc,
-  libxml2,
-  libxslt,
-  docbook_xml_dtd_412,
-  docbook_xsl,
-  boost,
-  pkg-config,
-  judy,
-  pam,
-  spdlog,
-  systemdMinimal,
-  zlib, # optional
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, python3
+, db
+, fuse
+, asciidoc
+, libxml2
+, libxslt
+, docbook_xml_dtd_412
+, docbook_xsl
+, boost
+, pkg-config
+, judy
+, pam
+, spdlog
+, systemdMinimal
+, zlib
+, # optional
 }:
 
 stdenv.mkDerivation rec {

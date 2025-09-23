@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  zlib,
-  pkg-config,
-  glib,
-  libgsf,
-  libxml2,
-  librevenge,
-  boost,
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, pkg-config
+, glib
+, libgsf
+, libxml2
+, librevenge
+, boost
+,
 }:
 
 stdenv.mkDerivation rec {

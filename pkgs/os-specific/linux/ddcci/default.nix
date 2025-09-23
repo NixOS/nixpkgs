@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  kernel,
-  kernelModuleMakeFlags,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitLab
+, kernel
+, kernelModuleMakeFlags
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

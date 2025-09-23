@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  zlib,
-  xorg,
-  freetype,
-  jdk17,
-  curl,
+{ lib
+, stdenv
+, fetchzip
+, zlib
+, xorg
+, freetype
+, jdk17
+, curl
+,
 }:
 
 stdenv.mkDerivation rec {

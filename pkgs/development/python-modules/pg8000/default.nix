@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  importlib-metadata,
-  passlib,
-  python-dateutil,
-  pythonOlder,
-  scramp,
-  hatchling,
-  versioningit,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, importlib-metadata
+, passlib
+, python-dateutil
+, pythonOlder
+, scramp
+, hatchling
+, versioningit
+,
 }:
 
 buildPythonPackage rec {

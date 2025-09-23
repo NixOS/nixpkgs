@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  cargo-tauri,
-  glib-networking,
-  nodejs,
-  libgudev,
-  systemdLibs,
-  pnpm,
-  openssl,
-  nix-update-script,
-  pkg-config,
-  webkitgtk_4_1,
-  wrapGAppsHook4,
-  autoPatchelfHook,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, rustPlatform
+, cargo-tauri
+, glib-networking
+, nodejs
+, libgudev
+, systemdLibs
+, pnpm
+, openssl
+, nix-update-script
+, pkg-config
+, webkitgtk_4_1
+, wrapGAppsHook4
+, autoPatchelfHook
+, fetchFromGitHub
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sftool-gui";

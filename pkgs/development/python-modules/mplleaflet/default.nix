@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  jinja2,
-  six,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jinja2
+, six
+,
 }:
 
 buildPythonPackage rec {

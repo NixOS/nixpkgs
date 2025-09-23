@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  raxml,
-  mafft,
-  trimal,
-  blast,
-  diamond,
-  python3Packages,
+{ lib
+, fetchFromGitHub
+, raxml
+, mafft
+, trimal
+, blast
+, diamond
+, python3Packages
+,
 }:
 let
   finalAttrs = {

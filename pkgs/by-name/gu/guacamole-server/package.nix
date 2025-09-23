@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  pkg-config,
-  autoPatchelfHook,
-  autoreconfHook,
-  cairo,
-  ffmpeg-headless,
-  freerdp,
-  libjpeg_turbo,
-  libpng,
-  libossp_uuid,
-  libpulseaudio,
-  libssh2,
-  libtelnet,
-  libvncserver,
-  libvorbis,
-  libwebp,
-  libwebsockets,
-  makeBinaryWrapper,
-  openssl,
-  pango,
-  perl,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, pkg-config
+, autoPatchelfHook
+, autoreconfHook
+, cairo
+, ffmpeg-headless
+, freerdp
+, libjpeg_turbo
+, libpng
+, libossp_uuid
+, libpulseaudio
+, libssh2
+, libtelnet
+, libvncserver
+, libvorbis
+, libwebp
+, libwebsockets
+, makeBinaryWrapper
+, openssl
+, pango
+, perl
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

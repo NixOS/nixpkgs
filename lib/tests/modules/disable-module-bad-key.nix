@@ -14,5 +14,5 @@ in
   imports = [
     ./declare-enable.nix
   ];
-  disabledModules = [ { } ];
+  disabledModules = [{ }];
 }

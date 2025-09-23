@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  sphinx,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

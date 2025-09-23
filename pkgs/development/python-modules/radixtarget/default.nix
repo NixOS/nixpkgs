@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, poetry-dynamic-versioning
+,
 }:
 
 buildPythonPackage rec {

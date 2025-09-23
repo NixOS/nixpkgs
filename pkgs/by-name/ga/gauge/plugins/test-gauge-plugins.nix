@@ -1,7 +1,7 @@
-{
-  runCommand,
-  gauge,
-  lib,
+{ runCommand
+, gauge
+, lib
+,
 }:
 
 /**

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  ghcWithPackages,
-  xmessage,
-  makeWrapper,
-  packages,
+{ stdenv
+, ghcWithPackages
+, xmessage
+, makeWrapper
+, packages
+,
 }:
 
 let

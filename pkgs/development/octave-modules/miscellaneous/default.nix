@@ -1,10 +1,11 @@
-{
-  buildOctavePackage,
-  lib,
-  fetchurl,
-  # Build-time dependencies
-  ncurses, # >= 5
-  units,
+{ buildOctavePackage
+, lib
+, fetchurl
+, # Build-time dependencies
+  ncurses
+, # >= 5
+  units
+,
 }:
 
 buildOctavePackage rec {

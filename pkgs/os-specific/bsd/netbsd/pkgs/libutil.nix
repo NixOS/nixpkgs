@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenvLibcMinimal,
-  mkDerivation,
-  bsdSetupHook,
-  netbsdSetupHook,
-  makeMinimal,
-  byacc,
-  install,
-  tsort,
-  lorder,
-  mandoc,
-  statHook,
+{ lib
+, stdenvLibcMinimal
+, mkDerivation
+, bsdSetupHook
+, netbsdSetupHook
+, makeMinimal
+, byacc
+, install
+, tsort
+, lorder
+, mandoc
+, statHook
+,
 }:
 
 mkDerivation {

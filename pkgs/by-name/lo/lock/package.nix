@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  appstream,
-  blueprint-compiler,
-  desktop-file-utils,
-  fetchFromGitHub,
-  gdk-pixbuf,
-  glib,
-  gpgme,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, appstream
+, blueprint-compiler
+, desktop-file-utils
+, fetchFromGitHub
+, gdk-pixbuf
+, glib
+, gpgme
+, gtk4
+, libadwaita
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

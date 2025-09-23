@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cachetools,
-  fetchFromGitHub,
-  paho-mqtt,
-  pythonOlder,
-  pytz,
-  requests,
-  requests-oauthlib,
-  schedule,
+{ lib
+, buildPythonPackage
+, cachetools
+, fetchFromGitHub
+, paho-mqtt
+, pythonOlder
+, pytz
+, requests
+, requests-oauthlib
+, schedule
+,
 }:
 
 buildPythonPackage rec {

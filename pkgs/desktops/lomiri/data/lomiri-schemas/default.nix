@@ -1,15 +1,15 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  testers,
-  cmake,
-  cmake-extras,
-  glib,
-  intltool,
-  pkg-config,
-  validatePkgConfig,
+{ stdenvNoCC
+, lib
+, fetchFromGitLab
+, gitUpdater
+, testers
+, cmake
+, cmake-extras
+, glib
+, intltool
+, pkg-config
+, validatePkgConfig
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

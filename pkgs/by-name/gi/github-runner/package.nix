@@ -1,37 +1,39 @@
-{
-  bash,
-  buildDotnetModule,
-  coreutils,
-  darwin,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  fetchpatch,
-  gitMinimal,
-  glibc,
-  glibcLocales,
-  lib,
-  nixosTests,
-  stdenv,
-  which,
-  buildPackages,
-  runtimeShell,
-  # List of Node.js runtimes the package should support
+{ bash
+, buildDotnetModule
+, coreutils
+, darwin
+, dotnetCorePackages
+, fetchFromGitHub
+, fetchpatch
+, gitMinimal
+, glibc
+, glibcLocales
+, lib
+, nixosTests
+, stdenv
+, which
+, buildPackages
+, runtimeShell
+, # List of Node.js runtimes the package should support
   nodeRuntimes ? [
     "node20"
     "node24"
-  ],
-  nodejs_20,
-  nodejs_24,
+  ]
+, nodejs_20
+, nodejs_24
+,
 }:
 
 # Node.js runtimes supported by upstream
-assert builtins.all (
-  x:
-  builtins.elem x [
-    "node20"
-    "node24"
-  ]
-) nodeRuntimes;
+assert builtins.all
+  (
+    x:
+    builtins.elem x [
+      "node20"
+      "node24"
+    ]
+  )
+  nodeRuntimes;
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
@@ -104,9 +106,10 @@ buildDotnetModule (finalAttrs: {
   '';
 
   DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
-  LOCALE_ARCHIVE = lib.optionalString (
-    !finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
-  ) "${glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString
+    (
+      !finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
+    ) "${glibcLocales}/lib/locale/locale-archive";
 
   postConfigure = ''
     # Generate src/Runner.Sdk/BuildConstants.cs

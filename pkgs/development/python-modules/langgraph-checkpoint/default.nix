@@ -1,26 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build system
-  hatchling,
-
-  # dependencies
-  langchain-core,
-  msgpack,
-  ormsgpack,
-
-  # testing
-  dataclasses-json,
-  numpy,
-  pandas,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build system
+  hatchling
+, # dependencies
+  langchain-core
+, msgpack
+, ormsgpack
+, # testing
+  dataclasses-json
+, numpy
+, pandas
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  gobject-introspection,
-  gtk3,
-  docutils,
-  gtksourceview,
-  gtkspell3,
-  librsvg,
-  pygobject3,
-  webkitgtk_4_1,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, wrapGAppsHook3
+, gobject-introspection
+, gtk3
+, docutils
+, gtksourceview
+, gtkspell3
+, librsvg
+, pygobject3
+, webkitgtk_4_1
+,
 }:
 
 buildPythonApplication rec {

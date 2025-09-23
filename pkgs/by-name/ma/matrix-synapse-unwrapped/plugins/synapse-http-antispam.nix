@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  matrix-synapse-unwrapped,
-  nix-update-script,
-  twisted,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, matrix-synapse-unwrapped
+, nix-update-script
+, twisted
+,
 }:
 
 buildPythonPackage rec {

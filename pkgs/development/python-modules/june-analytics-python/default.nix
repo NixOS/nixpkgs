@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  dateutils,
-  requests,
-  monotonic,
-  backoff,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, dateutils
+, requests
+, monotonic
+, backoff
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage {

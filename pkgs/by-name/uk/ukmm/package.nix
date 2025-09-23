@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  wrapGAppsHook3,
-  libglvnd,
-  libxkbcommon,
-  openssl,
-  makeDesktopItem,
-  copyDesktopItems,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wrapGAppsHook3
+, libglvnd
+, libxkbcommon
+, openssl
+, makeDesktopItem
+, copyDesktopItems
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

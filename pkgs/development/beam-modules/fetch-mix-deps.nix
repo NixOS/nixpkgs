@@ -1,28 +1,27 @@
-{
-  stdenvNoCC,
-  lib,
-  elixir,
-  hex,
-  rebar,
-  rebar3,
-  cacert,
-  git,
+{ stdenvNoCC
+, lib
+, elixir
+, hex
+, rebar
+, rebar3
+, cacert
+, git
+,
 }@inputs:
 
-{
-  pname,
-  version,
-  hash ? "",
-  sha256 ? "",
-  src,
-  mixEnv ? "prod",
-  mixTarget ? "host",
-  debug ? false,
-  meta ? { },
-  patches ? [ ],
-  elixir ? inputs.elixir,
-  hex ? inputs.hex.override { inherit elixir; },
-  ...
+{ pname
+, version
+, hash ? ""
+, sha256 ? ""
+, src
+, mixEnv ? "prod"
+, mixTarget ? "host"
+, debug ? false
+, meta ? { }
+, patches ? [ ]
+, elixir ? inputs.elixir
+, hex ? inputs.hex.override { inherit elixir; }
+, ...
 }@attrs:
 
 let
@@ -96,5 +95,5 @@ stdenvNoCC.mkDerivation (
     impureEnvVars = lib.fetchers.proxyImpureEnvVars;
     inherit meta;
   }
-  // hash_
+    // hash_
 )

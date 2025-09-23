@@ -6,11 +6,10 @@ let
 
   externalModule =
     partitionTableType:
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
       virtualisation.directBoot.enable = false;
@@ -61,35 +60,37 @@ in
   testScript =
     { nodes, ... }:
     lib.concatLines (
-      lib.mapAttrsToList (name: node: ''
-        import os
-        import subprocess
-        import tempfile
-        import shutil
+      lib.mapAttrsToList
+        (name: node: ''
+          import os
+          import subprocess
+          import tempfile
+          import shutil
 
-        tmp_disk_image = tempfile.NamedTemporaryFile()
+          tmp_disk_image = tempfile.NamedTemporaryFile()
 
-        shutil.copyfile("${node.system.build.diskImage}/nixos.img", tmp_disk_image.name)
+          shutil.copyfile("${node.system.build.diskImage}/nixos.img", tmp_disk_image.name)
 
-        subprocess.run([
-          "${node.virtualisation.qemu.package}/bin/qemu-img",
-          "resize",
-          "-f",
-          "raw",
-          tmp_disk_image.name,
-          "+32M",
-        ])
+          subprocess.run([
+            "${node.virtualisation.qemu.package}/bin/qemu-img",
+            "resize",
+            "-f",
+            "raw",
+            tmp_disk_image.name,
+            "+32M",
+          ])
 
-        # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
-        os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
+          # Set NIX_DISK_IMAGE so that the qemu script finds the right disk image.
+          os.environ['NIX_DISK_IMAGE'] = tmp_disk_image.name
 
-        ${name}.wait_for_unit("growpart.service")
-        systemd_growpart_logs = ${name}.succeed("journalctl --boot --unit growpart.service")
-        assert "CHANGED" in systemd_growpart_logs
-        ${name}.succeed("systemctl restart growpart.service")
-        systemd_growpart_logs = ${name}.succeed("journalctl --boot --unit growpart.service")
-        assert "NOCHANGE" in systemd_growpart_logs
+          ${name}.wait_for_unit("growpart.service")
+          systemd_growpart_logs = ${name}.succeed("journalctl --boot --unit growpart.service")
+          assert "CHANGED" in systemd_growpart_logs
+          ${name}.succeed("systemctl restart growpart.service")
+          systemd_growpart_logs = ${name}.succeed("journalctl --boot --unit growpart.service")
+          assert "NOCHANGE" in systemd_growpart_logs
 
-      '') nodes
+        '')
+        nodes
     );
 }

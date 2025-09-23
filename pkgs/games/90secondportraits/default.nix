@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  love,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchurl
+, love
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 let

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -212,10 +211,12 @@ in
         # break the module, as such you need `lib.mkForce` to override them.
         foreground = true;
         inetd = false;
-        listen = map (addr: {
-          host = addr;
-          port = toString cfg.port;
-        }) cfg.listenAddresses;
+        listen = map
+          (addr: {
+            host = addr;
+            port = toString cfg.port;
+          })
+          cfg.listenAddresses;
       };
 
     })

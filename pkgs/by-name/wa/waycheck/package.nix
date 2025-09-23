@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  qt6,
-  wayland,
-  glib,
-  wrapGAppsHook3,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, qt6
+, wayland
+, glib
+, wrapGAppsHook3
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

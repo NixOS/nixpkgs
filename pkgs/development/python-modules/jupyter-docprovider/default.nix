@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  hatch-jupyter-builder,
-  jupyter-collaboration,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, hatch-jupyter-builder
+, jupyter-collaboration
+,
 }:
 
 buildPythonPackage rec {

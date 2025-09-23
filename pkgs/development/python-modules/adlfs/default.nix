@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  azure-core,
-  azure-datalake-store,
-  azure-identity,
-  azure-storage-blob,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fsspec,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+{ lib
+, aiohttp
+, azure-core
+, azure-datalake-store
+, azure-identity
+, azure-storage-blob
+, buildPythonPackage
+, fetchFromGitHub
+, fsspec
+, pythonOlder
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

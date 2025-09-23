@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  buildEnv,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  SDL2,
-  libGL,
-  curl,
-  openalSupport ? true,
-  openal,
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildEnv
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, SDL2
+, libGL
+, curl
+, openalSupport ? true
+, openal
+,
 }:
 
 let

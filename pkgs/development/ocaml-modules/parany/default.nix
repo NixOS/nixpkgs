@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  cpu,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, cpu
+,
 }:
 
 buildDunePackage rec {

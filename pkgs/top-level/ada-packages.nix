@@ -1,9 +1,9 @@
-{
-  lib,
-  pkgs,
-  makeScopeWithSplicing',
-  generateSplicesForMkScope,
-  gnat,
+{ lib
+, pkgs
+, makeScopeWithSplicing'
+, generateSplicesForMkScope
+, gnat
+,
 }:
 let
   gnat_version = lib.versions.major gnat.version;

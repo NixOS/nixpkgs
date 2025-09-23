@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libpq,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpq
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

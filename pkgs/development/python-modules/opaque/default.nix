@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  libopaque,
-  setuptools,
-  pysodium,
-  python,
+{ lib
+, stdenv
+, buildPythonPackage
+, libopaque
+, setuptools
+, pysodium
+, python
+,
 }:
 
 buildPythonPackage rec {

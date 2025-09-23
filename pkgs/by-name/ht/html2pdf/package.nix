@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  makeWrapper,
-  chromium,
-  withChromium ? (lib.meta.availableOn stdenv.hostPlatform chromium),
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, makeWrapper
+, chromium
+, withChromium ? (lib.meta.availableOn stdenv.hostPlatform chromium)
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildGoModule,
-  callPackage,
-  fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-  # Deprecated options
+{ lib
+, buildGoModule
+, callPackage
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, # Deprecated options
   # Remove them as soon as possible
-  withXclip ? null,
-  withWlClipboard ? null,
-  withWlclip ? null,
+  withXclip ? null
+, withWlClipboard ? null
+, withWlclip ? null
+,
 }:
 
 let
@@ -95,4 +95,5 @@ lib.warnIf (withXclip != null || withWlClipboard != null || withWlclip != null) 
   - `micro-with-wl-clipboard`
   - `micro-with-xclip`
   - `micro-full`
-'' self
+''
+  self

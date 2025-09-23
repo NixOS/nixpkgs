@@ -1,36 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  pkg-config,
-  cmake,
-  rocm-cmake,
-  clr,
-  openmp,
-  rocblas,
-  hipblas-common,
-  hipblas,
-  hipblaslt,
-  rocmlir,
-  miopen,
-  protobuf,
-  abseil-cpp,
-  half,
-  nlohmann_json,
-  msgpack,
-  sqlite,
-  oneDNN,
-  blaze,
-  texliveSmall,
-  doxygen,
-  sphinx,
-  docutils,
-  ghostscript,
-  python3Packages,
-  buildDocs ? false,
-  buildTests ? false,
-  gpuTargets ? clr.gpuTargets,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, pkg-config
+, cmake
+, rocm-cmake
+, clr
+, openmp
+, rocblas
+, hipblas-common
+, hipblas
+, hipblaslt
+, rocmlir
+, miopen
+, protobuf
+, abseil-cpp
+, half
+, nlohmann_json
+, msgpack
+, sqlite
+, oneDNN
+, blaze
+, texliveSmall
+, doxygen
+, sphinx
+, docutils
+, ghostscript
+, python3Packages
+, buildDocs ? false
+, buildTests ? false
+, gpuTargets ? clr.gpuTargets
+,
 }:
 
 let

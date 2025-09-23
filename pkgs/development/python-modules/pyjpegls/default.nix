@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  charls,
-  cython,
-  numpy,
-  pillow,
-  setuptools,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, charls
+, cython
+, numpy
+, pillow
+, setuptools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

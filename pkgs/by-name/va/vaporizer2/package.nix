@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  juce,
-  pkg-config,
-  alsa-lib,
-  fftwFloat,
-  fontconfig,
-  freetype,
-  libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libjack2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, juce
+, pkg-config
+, alsa-lib
+, fftwFloat
+, fontconfig
+, freetype
+, libGL
+, libX11
+, libXcursor
+, libXext
+, libXinerama
+, libXrandr
+, libjack2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

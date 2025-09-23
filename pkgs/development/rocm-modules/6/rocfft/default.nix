@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  clr,
-  python3,
-  rocm-cmake,
-  sqlite,
-  boost,
-  fftw,
-  fftwFloat,
-  gtest,
-  openmp,
-  rocrand,
-  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, clr
+, python3
+, rocm-cmake
+, sqlite
+, boost
+, fftw
+, fftwFloat
+, gtest
+, openmp
+, rocrand
+, gpuTargets ? clr.localGpuTargets or clr.gpuTargets
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

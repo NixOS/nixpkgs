@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  einops,
-  fetchFromGitHub,
-  flit-core,
-  numba,
-  numpy,
-  pytestCheckHook,
-  pythonOlder,
-  scipy,
-  xarray,
+{ lib
+, buildPythonPackage
+, einops
+, fetchFromGitHub
+, flit-core
+, numba
+, numpy
+, pytestCheckHook
+, pythonOlder
+, scipy
+, xarray
+,
 }:
 
 buildPythonPackage rec {

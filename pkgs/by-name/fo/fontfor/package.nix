@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  expat,
-  fontconfig,
-  freetype,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, pkg-config
+, expat
+, fontconfig
+, freetype
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

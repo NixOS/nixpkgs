@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  ninja,
-  python3,
-  fetchFromGitHub,
-  versionCheckHook,
+{ lib
+, stdenv
+, cmake
+, ninja
+, python3
+, fetchFromGitHub
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

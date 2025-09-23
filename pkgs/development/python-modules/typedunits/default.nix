@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  stdenv,
-  cython,
-  setuptools,
-  attrs,
-  numpy,
-  protobuf,
-  pyparsing,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, stdenv
+, cython
+, setuptools
+, attrs
+, numpy
+, protobuf
+, pyparsing
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

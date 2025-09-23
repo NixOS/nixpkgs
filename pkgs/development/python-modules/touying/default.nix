@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  jinja2,
-  pillow,
-  python-pptx,
-  typst,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  jinja2
+, pillow
+, python-pptx
+, typst
+,
 }:
 
 buildPythonPackage rec {

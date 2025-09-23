@@ -1,13 +1,13 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  electron,
-  copyDesktopItems,
-  makeDesktopItem,
-  nix-update-script,
-  makeWrapper,
-  ivpn-service,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, electron
+, copyDesktopItems
+, makeDesktopItem
+, nix-update-script
+, makeWrapper
+, ivpn-service
+,
 }:
 let
   version = "3.14.34";

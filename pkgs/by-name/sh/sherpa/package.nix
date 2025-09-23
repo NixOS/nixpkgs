@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoconf,
-  gfortran,
-  cmake,
-  libzip,
-  pkg-config,
-  lhapdf,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoconf
+, gfortran
+, cmake
+, libzip
+, pkg-config
+, lhapdf
+, autoPatchelfHook
+,
 }:
 
 stdenv.mkDerivation rec {

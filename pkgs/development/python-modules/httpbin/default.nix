@@ -1,26 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  brotlicffi,
-  decorator,
-  flasgger,
-  flask,
-  greenlet,
-  six,
-  werkzeug,
-
-  # optional-dependencies
-  gunicorn,
-  gevent,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  brotlicffi
+, decorator
+, flasgger
+, flask
+, greenlet
+, six
+, werkzeug
+, # optional-dependencies
+  gunicorn
+, gevent
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

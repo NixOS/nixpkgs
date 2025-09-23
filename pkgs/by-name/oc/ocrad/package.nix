@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  lzip,
-  texinfo,
-  libpng,
+{ lib
+, stdenv
+, fetchurl
+, lzip
+, texinfo
+, libpng
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

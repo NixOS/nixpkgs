@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libglut,
-  gtk2,
-  libGLU,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libglut
+, gtk2
+, libGLU
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

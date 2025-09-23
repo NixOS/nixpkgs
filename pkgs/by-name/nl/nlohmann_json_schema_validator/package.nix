@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nlohmann_json,
-  cmake,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nlohmann_json
+, cmake
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nlohmann_json_schema_validator";

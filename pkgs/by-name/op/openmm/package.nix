@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  gfortran,
-  fftwSinglePrec,
-  doxygen,
-  swig,
-  enablePython ? false,
-  python3Packages,
-  enableOpencl ? true,
-  opencl-headers,
-  ocl-icd,
-  config,
-  enableCuda ? config.cudaSupport,
-  cudaPackages,
-  addDriverRunpath,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, gfortran
+, fftwSinglePrec
+, doxygen
+, swig
+, enablePython ? false
+, python3Packages
+, enableOpencl ? true
+, opencl-headers
+, ocl-icd
+, config
+, enableCuda ? config.cudaSupport
+, cudaPackages
+, addDriverRunpath
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

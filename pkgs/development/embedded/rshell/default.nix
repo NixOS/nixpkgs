@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchPypi,
-  pyserial,
-  pyudev,
+{ lib
+, buildPythonApplication
+, fetchPypi
+, pyserial
+, pyudev
+,
 }:
 
 buildPythonApplication rec {

@@ -1,22 +1,22 @@
-{
-  bleach,
-  buildPythonPackage,
-  certifi,
-  charset-normalizer,
-  fetchPypi,
-  hatchling,
-  idna,
-  lib,
-  python-dateutil,
-  python-slugify,
-  requests,
-  setuptools,
-  six,
-  text-unidecode,
-  tqdm,
-  urllib3,
-  webencodings,
-  protobuf,
+{ bleach
+, buildPythonPackage
+, certifi
+, charset-normalizer
+, fetchPypi
+, hatchling
+, idna
+, lib
+, python-dateutil
+, python-slugify
+, requests
+, setuptools
+, six
+, text-unidecode
+, tqdm
+, urllib3
+, webencodings
+, protobuf
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  dune-configurator,
-  pkg-config,
-  callPackage,
-  ffmpeg-base ? callPackage ./base.nix { },
-  ffmpeg,
+{ lib
+, buildDunePackage
+, dune-configurator
+, pkg-config
+, callPackage
+, ffmpeg-base ? callPackage ./base.nix { }
+, ffmpeg
+,
 }:
 
 buildDunePackage {

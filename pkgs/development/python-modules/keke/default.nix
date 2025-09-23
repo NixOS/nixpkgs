@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  wheel,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, wheel
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

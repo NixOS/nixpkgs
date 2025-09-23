@@ -1,12 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  callPackage,
-
-  jre,
-  gradle,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, jre
+, gradle
+, makeWrapper
+,
 }:
 
 let

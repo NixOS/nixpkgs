@@ -1,9 +1,9 @@
-{
-  buildPythonApplication,
-  fetchFromGitHub,
-  lib,
-  pandoc-xnos,
-  setuptools,
+{ buildPythonApplication
+, fetchFromGitHub
+, lib
+, pandoc-xnos
+, setuptools
+,
 }:
 
 buildPythonApplication rec {

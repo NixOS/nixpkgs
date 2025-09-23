@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  libtool,
-  gettext,
-  pkg-config,
-  wxGTK32,
-  boost,
-  icu,
-  lucenepp,
-  asciidoc,
-  libxslt,
-  xmlto,
-  gtk3,
-  gtkspell3,
-  pugixml,
-  nlohmann_json,
-  hicolor-icon-theme,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, gettext
+, pkg-config
+, wxGTK32
+, boost
+, icu
+, lucenepp
+, asciidoc
+, libxslt
+, xmlto
+, gtk3
+, gtkspell3
+, pugixml
+, nlohmann_json
+, hicolor-icon-theme
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

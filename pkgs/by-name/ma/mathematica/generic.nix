@@ -1,54 +1,54 @@
-{
-  addDriverRunpath,
-  autoPatchelfHook,
-  lib,
-  makeWrapper,
-  requireFile,
-  runCommand,
-  stdenv,
-  symlinkJoin,
-  # arguments from default.nix
-  lang,
-  meta,
-  name,
-  src,
-  version,
-  # dependencies
-  alsa-lib,
-  cudaPackages,
-  cups,
-  dbus,
-  flite,
-  fontconfig,
-  freetype,
-  gcc-unwrapped,
-  glib,
-  gmpxx,
-  keyutils,
-  libGL,
-  libGLU,
-  libpcap,
-  libtins,
-  libuuid,
-  libxkbcommon,
-  libxml2,
-  llvmPackages,
-  matio,
-  mpfr,
-  ncurses,
-  opencv4,
-  openjdk11,
-  openssl,
-  pciutils,
-  tre,
-  unixODBC,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xkeyboard_config,
-  xorg,
-  zlib,
-  # options
-  cudaSupport,
+{ addDriverRunpath
+, autoPatchelfHook
+, lib
+, makeWrapper
+, requireFile
+, runCommand
+, stdenv
+, symlinkJoin
+, # arguments from default.nix
+  lang
+, meta
+, name
+, src
+, version
+, # dependencies
+  alsa-lib
+, cudaPackages
+, cups
+, dbus
+, flite
+, fontconfig
+, freetype
+, gcc-unwrapped
+, glib
+, gmpxx
+, keyutils
+, libGL
+, libGLU
+, libpcap
+, libtins
+, libuuid
+, libxkbcommon
+, libxml2
+, llvmPackages
+, matio
+, mpfr
+, ncurses
+, opencv4
+, openjdk11
+, openssl
+, pciutils
+, tre
+, unixODBC
+, xcbutilimage
+, xcbutilkeysyms
+, xkeyboard_config
+, xorg
+, zlib
+, # options
+  cudaSupport
+,
 }:
 
 let

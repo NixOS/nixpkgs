@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pysigma,
-  pysigma-pipeline-sysmon,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pysigma
+, pysigma-pipeline-sysmon
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

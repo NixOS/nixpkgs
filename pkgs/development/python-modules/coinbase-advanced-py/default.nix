@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  pythonRelaxDepsHook,
-  requests,
-  cryptography,
-  pyjwt,
-  websockets,
-  backoff,
-  pytestCheckHook,
-  requests-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, pythonRelaxDepsHook
+, requests
+, cryptography
+, pyjwt
+, websockets
+, backoff
+, pytestCheckHook
+, requests-mock
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  pkgs,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeScript,
-  makeWrapper,
-  ncurses,
-  libX11,
+{ pkgs
+, lib
+, stdenv
+, fetchFromGitHub
+, writeScript
+, makeWrapper
+, ncurses
+, libX11
+,
 }:
 
 let

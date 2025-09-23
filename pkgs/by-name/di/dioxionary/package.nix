@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  stdenv,
-  installShellFiles,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, stdenv
+, installShellFiles
+, nix-update-script
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dioxionary";

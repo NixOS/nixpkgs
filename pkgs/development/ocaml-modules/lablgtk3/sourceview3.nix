@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  gtksourceview,
-  lablgtk3,
+{ buildDunePackage
+, gtksourceview
+, lablgtk3
+,
 }:
 
 buildDunePackage {

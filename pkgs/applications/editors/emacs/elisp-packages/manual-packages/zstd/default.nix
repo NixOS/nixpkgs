@@ -1,9 +1,9 @@
-{
-  lib,
-  melpaBuild,
-  stdenv,
-  fetchFromGitHub,
-  zstd,
+{ lib
+, melpaBuild
+, stdenv
+, fetchFromGitHub
+, zstd
+,
 }:
 
 let

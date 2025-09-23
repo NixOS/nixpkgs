@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  faker,
-  fetchPypi,
-  flask,
-  flask-sqlalchemy,
-  mongoengine,
-  pytestCheckHook,
-  pythonOlder,
-  mongomock,
-  sqlalchemy,
-  sqlalchemy-utils,
-  setuptools,
+{ lib
+, buildPythonPackage
+, django
+, faker
+, fetchPypi
+, flask
+, flask-sqlalchemy
+, mongoengine
+, pytestCheckHook
+, pythonOlder
+, mongomock
+, sqlalchemy
+, sqlalchemy-utils
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

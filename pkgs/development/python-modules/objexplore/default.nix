@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  blessed,
-  rich,
-  pytestCheckHook,
-  pandas,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, blessed
+, rich
+, pytestCheckHook
+, pandas
+,
 }:
 
 buildPythonPackage {

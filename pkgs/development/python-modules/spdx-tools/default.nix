@@ -1,20 +1,20 @@
-{
-  lib,
-  beartype,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  fetchpatch,
-  license-expression,
-  ply,
-  pytestCheckHook,
-  pyyaml,
-  rdflib,
-  semantic-version,
-  setuptools,
-  setuptools-scm,
-  uritools,
-  xmltodict,
+{ lib
+, beartype
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, fetchpatch
+, license-expression
+, ply
+, pytestCheckHook
+, pyyaml
+, rdflib
+, semantic-version
+, setuptools
+, setuptools-scm
+, uritools
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

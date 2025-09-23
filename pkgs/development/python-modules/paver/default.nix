@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cogapp,
-  fetchPypi,
-  mock,
-  setuptools,
-  pytestCheckHook,
-  pythonOlder,
-  six,
-  virtualenv,
+{ lib
+, buildPythonPackage
+, cogapp
+, fetchPypi
+, mock
+, setuptools
+, pytestCheckHook
+, pythonOlder
+, six
+, virtualenv
+,
 }:
 
 buildPythonPackage rec {

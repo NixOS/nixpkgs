@@ -1,16 +1,16 @@
-{
-  lib,
-  afdko,
-  buildPythonPackage,
-  cmake,
-  distutils,
-  fetchPypi,
-  fonttools,
-  ninja,
-  pytestCheckHook,
-  scikit-build,
-  setuptools,
-  setuptools-scm,
+{ lib
+, afdko
+, buildPythonPackage
+, cmake
+, distutils
+, fetchPypi
+, fonttools
+, ninja
+, pytestCheckHook
+, scikit-build
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

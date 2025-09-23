@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  expiringdict,
-  fetchPypi,
-  google-api-python-client,
-  google-auth,
-  google-auth-httplib2,
-  google-auth-oauthlib,
-  oauth2client,
-  pythonOlder,
-  setuptools,
-  versioneer,
+{ lib
+, buildPythonPackage
+, expiringdict
+, fetchPypi
+, google-api-python-client
+, google-auth
+, google-auth-httplib2
+, google-auth-oauthlib
+, oauth2client
+, pythonOlder
+, setuptools
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

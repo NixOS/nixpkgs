@@ -1,7 +1,7 @@
-{
-  lib,
-  python3,
-  qt5,
+{ lib
+, python3
+, qt5
+,
 }:
 
 let

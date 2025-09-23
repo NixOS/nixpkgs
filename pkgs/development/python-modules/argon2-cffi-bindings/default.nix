@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  libargon2,
-  cffi,
-  setuptools-scm,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, libargon2
+, cffi
+, setuptools-scm
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

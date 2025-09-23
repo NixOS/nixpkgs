@@ -1,30 +1,30 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  glib,
-  flex,
-  bison,
-  meson,
-  ninja,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_45,
-  pkg-config,
-  libffi,
-  python3,
-  cctools,
-  cairo,
-  gnome,
-  replaceVars,
-  replaceVarsWith,
-  buildPackages,
-  gobject-introspection-unwrapped,
-  nixStoreDir ? builtins.storeDir,
-  x11Support ? true,
-  testers,
-  propagateFullGlib ? true,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, glib
+, flex
+, bison
+, meson
+, ninja
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+, pkg-config
+, libffi
+, python3
+, cctools
+, cairo
+, gnome
+, replaceVars
+, replaceVarsWith
+, buildPackages
+, gobject-introspection-unwrapped
+, nixStoreDir ? builtins.storeDir
+, x11Support ? true
+, testers
+, propagateFullGlib ? true
+,
 }:
 
 # now that gobject-introspection creates large .gir files (eg gtk3 case)

@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nixosTests,
-  testers,
-  zenoh,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nixosTests
+, testers
+, zenoh
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "zenoh";

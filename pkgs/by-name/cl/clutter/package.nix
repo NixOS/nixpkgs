@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libGLU,
-  libGL,
-  libX11,
-  libXext,
-  libXfixes,
-  libXdamage,
-  libXcomposite,
-  libXi,
-  libxcb,
-  cogl,
-  pango,
-  atk,
-  json-glib,
-  gobject-introspection,
-  gtk3,
-  gnome,
-  libinput,
-  libgudev,
-  libxkbcommon,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libGLU
+, libGL
+, libX11
+, libXext
+, libXfixes
+, libXdamage
+, libXcomposite
+, libXi
+, libxcb
+, cogl
+, pango
+, atk
+, json-glib
+, gobject-introspection
+, gtk3
+, gnome
+, libinput
+, libgudev
+, libxkbcommon
+,
 }:
 
 let

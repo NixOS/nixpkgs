@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  gradle,
-  jdk21_headless,
-  fetchFromGitHub,
-  stripJavaArchivesHook,
-  wrapGAppsHook4,
-  nix-update-script,
-  makeWrapper,
-  pkg-config,
-  gtk4,
-  libadwaita,
-  glib,
-  pango,
-  gdk-pixbuf,
-  atk,
-  cairo,
+{ stdenv
+, lib
+, gradle
+, jdk21_headless
+, fetchFromGitHub
+, stripJavaArchivesHook
+, wrapGAppsHook4
+, nix-update-script
+, makeWrapper
+, pkg-config
+, gtk4
+, libadwaita
+, glib
+, pango
+, gdk-pixbuf
+, atk
+, cairo
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

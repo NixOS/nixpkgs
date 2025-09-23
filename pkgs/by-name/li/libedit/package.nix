@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,9 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
   # fine with GCC and Musl.
   # There is a DR to fix this issue with Clang which is not merged yet.
   # https://reviews.llvm.org/D137043
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.targetPlatform.isMusl && stdenv.cc.isClang
-  ) "-D__STDC_ISO_10646__=201103L";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.targetPlatform.isMusl && stdenv.cc.isClang
+    ) "-D__STDC_ISO_10646__=201103L";
 
   postFixup = ''
     find $out/lib -type f | \

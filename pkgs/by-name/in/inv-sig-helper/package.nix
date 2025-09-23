@@ -1,17 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  pkg-config,
-
-  # buildInputs
-  openssl,
-
-  # passthru
-  nixosTests,
-  unstableGitUpdater,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, # nativeBuildInputs
+  pkg-config
+, # buildInputs
+  openssl
+, # passthru
+  nixosTests
+, unstableGitUpdater
+,
 }:
 
 rustPlatform.buildRustPackage {

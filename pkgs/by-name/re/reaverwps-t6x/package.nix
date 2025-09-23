@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libpcap,
-  pixiewps,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpcap
+, pixiewps
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

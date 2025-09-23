@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  libsodium,
-  json_c,
-  ncurses,
-  libxml2,
-  jq,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, libsodium
+, json_c
+, ncurses
+, libxml2
+, jq
+,
 }:
 
 stdenv.mkDerivation rec {

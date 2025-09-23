@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -85,21 +84,23 @@ in
   };
 
   config = mkIf (instances != { }) {
-    systemd.services = mapAttrs' (
-      name: cfg:
-      nameValuePair "mailpit-${name}" {
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-online.target" ];
-        wants = [ "network-online.target" ];
-        serviceConfig = {
-          DynamicUser = true;
-          StateDirectory = "mailpit";
-          WorkingDirectory = "%S/mailpit";
-          ExecStart = "${getExe pkgs.mailpit} ${genCliFlags cfg}";
-          Restart = "on-failure";
-        };
-      }
-    ) instances;
+    systemd.services = mapAttrs'
+      (
+        name: cfg:
+          nameValuePair "mailpit-${name}" {
+            wantedBy = [ "multi-user.target" ];
+            after = [ "network-online.target" ];
+            wants = [ "network-online.target" ];
+            serviceConfig = {
+              DynamicUser = true;
+              StateDirectory = "mailpit";
+              WorkingDirectory = "%S/mailpit";
+              ExecStart = "${getExe pkgs.mailpit} ${genCliFlags cfg}";
+              Restart = "on-failure";
+            };
+          }
+      )
+      instances;
   };
 
   meta.maintainers = lib.teams.flyingcircus.members;

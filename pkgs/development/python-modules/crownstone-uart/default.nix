@@ -1,10 +1,10 @@
-{
-  lib,
-  crownstone-core,
-  buildPythonPackage,
-  pyserial,
-  fetchFromGitHub,
-  pythonOlder,
+{ lib
+, crownstone-core
+, buildPythonPackage
+, pyserial
+, fetchFromGitHub
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

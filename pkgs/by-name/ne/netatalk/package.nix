@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  acl,
-  autoreconfHook,
-  avahi,
-  db,
-  libevent,
-  libgcrypt,
-  libiconv,
-  openssl,
-  pam,
-  perl,
-  pkg-config,
-  meson,
-  ninja,
-  file,
-  cracklib,
-  cups,
-  libtirpc,
-  openldap,
-  glib,
-  dbus,
-  iniparser,
-  pandoc,
+{ lib
+, stdenv
+, fetchurl
+, acl
+, autoreconfHook
+, avahi
+, db
+, libevent
+, libgcrypt
+, libiconv
+, openssl
+, pam
+, perl
+, pkg-config
+, meson
+, ninja
+, file
+, cracklib
+, cups
+, libtirpc
+, openldap
+, glib
+, dbus
+, iniparser
+, pandoc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

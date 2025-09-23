@@ -1,15 +1,15 @@
-{
-  cmake,
-  doxygen,
-  fetchurl,
-  graphviz,
-  lib,
-  libogg,
-  nix-update-script,
-  buildPackages,
-  pkg-config,
-  stdenv,
-  versionCheckHook,
+{ cmake
+, doxygen
+, fetchurl
+, graphviz
+, lib
+, libogg
+, nix-update-script
+, buildPackages
+, pkg-config
+, stdenv
+, versionCheckHook
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "flac";

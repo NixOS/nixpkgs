@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gcc-arm-embedded-13,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gcc-arm-embedded-13
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

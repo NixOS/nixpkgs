@@ -1,25 +1,25 @@
-{
-  version,
-  sha256,
-  platforms,
-  patches ? [ ],
+{ version
+, sha256
+, platforms
+, patches ? [ ]
+,
 }:
 
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  pkg-config,
-  ninja,
-  docutils,
-  makeWrapper,
-  fuse3,
-  macfuse-stubs,
-  glib,
-  which,
-  python3Packages,
-  openssh,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, docutils
+, makeWrapper
+, fuse3
+, macfuse-stubs
+, glib
+, which
+, python3Packages
+, openssh
+,
 }:
 
 let
@@ -54,9 +54,10 @@ stdenv.mkDerivation rec {
     python3Packages.pytest
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.system == "i686-linux"
-  ) "-D_FILE_OFFSET_BITS=64";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.hostPlatform.system == "i686-linux"
+    ) "-D_FILE_OFFSET_BITS=64";
 
   postInstall = ''
     mkdir -p $out/sbin

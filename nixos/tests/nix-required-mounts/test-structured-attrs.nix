@@ -1,13 +1,13 @@
-{
-  pkgs ? import <nixpkgs> { },
-  feature,
+{ pkgs ? import <nixpkgs> { }
+, feature
+,
 }:
 
 pkgs.runCommandNoCC "${feature}-present-structured"
-  {
-    __structuredAttrs = true;
-    requiredSystemFeatures = [ feature ];
-  }
+{
+  __structuredAttrs = true;
+  requiredSystemFeatures = [ feature ];
+}
   ''
     if [[ -e /${feature}-files ]]; then
       touch $out

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  alsa-lib,
-  openssl,
-  withTTS ? false,
-  speechd-minimal,
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, alsa-lib
+, openssl
+, withTTS ? false
+, speechd-minimal
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "blightmud";

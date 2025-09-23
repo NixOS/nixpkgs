@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  appdirs,
-  click,
-  click-log,
-  looseversion,
-  paho-mqtt,
-  pyaml,
-  pyserial,
-  schema,
-  simplejson,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, appdirs
+, click
+, click-log
+, looseversion
+, paho-mqtt
+, pyaml
+, pyserial
+, schema
+, simplejson
+,
 }:
 buildPythonPackage rec {
   pname = "bcg";

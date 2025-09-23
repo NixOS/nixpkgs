@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchzip,
-  SDL_compat,
-  SDL_mixer,
-  makeDesktopItem,
-  copyDesktopItems,
-  unzip,
-  buildShareware ? false,
-  withSharewareData ? buildShareware,
+{ stdenv
+, lib
+, fetchurl
+, fetchzip
+, SDL_compat
+, SDL_mixer
+, makeDesktopItem
+, copyDesktopItems
+, unzip
+, buildShareware ? false
+, withSharewareData ? buildShareware
+,
 }:
 assert withSharewareData -> buildShareware;
 

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  colorama,
-  cpe,
-  fetchFromGitHub,
-  jsonschema,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  setuptools,
-  simplejson,
-  stix2-patterns,
+{ lib
+, buildPythonPackage
+, colorama
+, cpe
+, fetchFromGitHub
+, jsonschema
+, python-dateutil
+, pythonOlder
+, requests
+, setuptools
+, simplejson
+, stix2-patterns
+,
 }:
 
 buildPythonPackage rec {

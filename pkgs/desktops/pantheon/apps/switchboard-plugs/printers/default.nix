@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  libadwaita,
-  libgee,
-  gettext,
-  granite7,
-  gtk4,
-  cups,
-  switchboard,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, vala
+, libadwaita
+, libgee
+, gettext
+, granite7
+, gtk4
+, cups
+, switchboard
+,
 }:
 
 stdenv.mkDerivation rec {

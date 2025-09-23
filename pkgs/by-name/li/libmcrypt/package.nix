@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cctools,
-  disablePosixThreads ? false,
+{ lib
+, stdenv
+, fetchurl
+, cctools
+, disablePosixThreads ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  matplotlib,
-  numpy,
-  openpyxl,
-  pandas,
-  poetry-core,
-  pytest7CheckHook,
-  pytest-xdist,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, matplotlib
+, numpy
+, openpyxl
+, pandas
+, poetry-core
+, pytest7CheckHook
+, pytest-xdist
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

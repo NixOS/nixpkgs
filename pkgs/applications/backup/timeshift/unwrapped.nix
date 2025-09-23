@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gettext,
-  help2man,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  gtk3,
-  json-glib,
-  libgee,
-  util-linuxMinimal,
-  vte,
-  xapp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gettext
+, help2man
+, meson
+, ninja
+, pkg-config
+, vala
+, gtk3
+, json-glib
+, libgee
+, util-linuxMinimal
+, vte
+, xapp
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

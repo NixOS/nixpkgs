@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fftwSinglePrec,
-  libxslt,
-  lv2,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fftwSinglePrec
+, libxslt
+, lv2
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

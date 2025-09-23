@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  gobject-introspection,
-  gnutls,
-  cairo,
-  glib,
-  pkg-config,
-  cyrus_sasl,
-  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  gmp,
-  gtk3,
-  vala,
-  gettext,
-  perl,
-  python3,
-  gi-docgen,
-  gnome,
-  gdk-pixbuf,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, gobject-introspection
+, gnutls
+, cairo
+, glib
+, pkg-config
+, cyrus_sasl
+, pulseaudioSupport ? stdenv.hostPlatform.isLinux
+, libpulseaudio
+, gmp
+, gtk3
+, vala
+, gettext
+, perl
+, python3
+, gi-docgen
+, gnome
+, gdk-pixbuf
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

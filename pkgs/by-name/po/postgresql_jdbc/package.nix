@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchMavenArtifact,
-  junixsocket-common,
-  junixsocket-native-common,
+{ lib
+, stdenv
+, fetchMavenArtifact
+, junixsocket-common
+, junixsocket-native-common
+,
 }:
 
 stdenv.mkDerivation rec {

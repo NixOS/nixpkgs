@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libtool,
-  which,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libtool
+, which
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  fontconfig,
-  zlib,
-  icu,
-  libX11,
-  libXext,
-  libXi,
-  libXrandr,
-  libICE,
-  libSM,
-  openssl,
-  unzip,
-  xdg-utils,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, fontconfig
+, zlib
+, icu
+, libX11
+, libXext
+, libXi
+, libXrandr
+, libICE
+, libSM
+, openssl
+, unzip
+, xdg-utils
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

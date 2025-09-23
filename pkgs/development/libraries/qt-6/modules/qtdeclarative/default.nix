@@ -1,15 +1,15 @@
-{
-  qtModule,
-  qtbase,
-  qtlanguageserver,
-  qtshadertools,
-  qtsvg,
-  openssl,
-  darwin,
-  stdenv,
-  lib,
-  pkgsBuildBuild,
-  replaceVars,
+{ qtModule
+, qtbase
+, qtlanguageserver
+, qtshadertools
+, qtsvg
+, openssl
+, darwin
+, stdenv
+, lib
+, pkgsBuildBuild
+, replaceVars
+,
 }:
 
 qtModule {

@@ -1,26 +1,26 @@
-{
-  lib,
-  boto3,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ftfy,
-  mailchecker,
-  openpyxl,
-  orjson,
-  phonenumbers,
-  beautifulsoup4,
-  pytestCheckHook,
-  python-dateutil,
-  python-decouple,
-  python-fsutil,
-  python-slugify,
-  pythonOlder,
-  pyyaml,
-  requests,
-  setuptools,
-  toml,
-  xlrd,
-  xmltodict,
+{ lib
+, boto3
+, buildPythonPackage
+, fetchFromGitHub
+, ftfy
+, mailchecker
+, openpyxl
+, orjson
+, phonenumbers
+, beautifulsoup4
+, pytestCheckHook
+, python-dateutil
+, python-decouple
+, python-fsutil
+, python-slugify
+, pythonOlder
+, pyyaml
+, requests
+, setuptools
+, toml
+, xlrd
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

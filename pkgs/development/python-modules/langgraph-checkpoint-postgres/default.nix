@@ -1,27 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  stdenvNoCC,
-
-  # build system
-  hatchling,
-
-  # dependencies
-  langgraph-checkpoint,
-  ormsgpack,
-  psycopg,
-  psycopg-pool,
-
-  # testing
-  pgvector,
-  postgresql,
-  postgresqlTestHook,
-  pytestCheckHook,
-  pytest-asyncio,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, stdenvNoCC
+, # build system
+  hatchling
+, # dependencies
+  langgraph-checkpoint
+, ormsgpack
+, psycopg
+, psycopg-pool
+, # testing
+  pgvector
+, postgresql
+, postgresqlTestHook
+, pytestCheckHook
+, pytest-asyncio
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

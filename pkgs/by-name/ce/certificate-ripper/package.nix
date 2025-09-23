@@ -1,8 +1,8 @@
-{
-  lib,
-  maven,
-  fetchFromGitHub,
-  buildGraalvmNativeImage,
+{ lib
+, maven
+, fetchFromGitHub
+, buildGraalvmNativeImage
+,
 }:
 
 buildGraalvmNativeImage (finalAttrs: {

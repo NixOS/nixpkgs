@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  efivar,
-  nix-update-script,
-  pkg-config,
-  popt,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, efivar
+, nix-update-script
+, pkg-config
+, popt
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

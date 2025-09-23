@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-  pkg-config,
-  openssl,
-  just,
-  pandoc,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, pkg-config
+, openssl
+, just
+, pandoc
+,
 }:
 
 rustPlatform.buildRustPackage {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  ncurses,
-  bashNonInteractive,
-  python3,
-  rustpython,
-  ps,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeBinaryWrapper
+, ncurses
+, bashNonInteractive
+, python3
+, rustpython
+, ps
+, nix-update-script
+,
 }:
 
 let

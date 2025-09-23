@@ -1,7 +1,7 @@
-{
-  lib,
-  buildGo124Module,
-  fetchFromGitLab,
+{ lib
+, buildGo124Module
+, fetchFromGitLab
+,
 }:
 
 buildGo124Module rec {

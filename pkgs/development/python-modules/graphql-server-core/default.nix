@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  graphql-core,
-  promise,
-  fetchpatch,
-  pythonOlder,
-  pytestCheckHook,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, graphql-core
+, promise
+, fetchpatch
+, pythonOlder
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvLibcMinimal,
-  mkDerivation,
-  libcMinimal,
-  librt,
+{ lib
+, stdenvLibcMinimal
+, mkDerivation
+, libcMinimal
+, librt
+,
 }:
 
 mkDerivation {

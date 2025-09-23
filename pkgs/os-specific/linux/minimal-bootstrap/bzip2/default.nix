@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumake,
-  gnutar,
-  gzip,
+{ lib
+, fetchurl
+, bash
+, tinycc
+, gnumake
+, gnutar
+, gzip
+,
 }:
 let
   pname = "bzip2";
@@ -17,31 +17,31 @@ let
   };
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnutar
-      gzip
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnutar
+    gzip
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/bzip2 --help
-        mkdir $out
-      '';
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/bzip2 --help
+      mkdir $out
+    '';
 
-    meta = with lib; {
-      description = "High-quality data compression program";
-      homepage = "https://www.sourceware.org/bzip2";
-      license = licenses.bsdOriginal;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "High-quality data compression program";
+    homepage = "https://www.sourceware.org/bzip2";
+    license = licenses.bsdOriginal;
+    teams = [ teams.minimal-bootstrap ];
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     tar xzf ${src}

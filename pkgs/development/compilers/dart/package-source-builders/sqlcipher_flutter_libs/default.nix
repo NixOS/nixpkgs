@@ -1,7 +1,7 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
+{ stdenv
+, fetchurl
+, lib
+,
 }:
 
 { version, src, ... }:

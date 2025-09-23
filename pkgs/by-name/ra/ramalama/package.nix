@@ -1,17 +1,15 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  go-md2man,
-
-  # TODO: switch to llama-cpp-vulkan when moltenvk is upgraded to 1.3.0:
+{ lib
+, python3
+, fetchFromGitHub
+, go-md2man
+, # TODO: switch to llama-cpp-vulkan when moltenvk is upgraded to 1.3.0:
   # https://github.com/NixOS/nixpkgs/pull/434130
-  llama-cpp,
-  podman,
-  withPodman ? true,
-
-  # passthru
-  ramalama,
+  llama-cpp
+, podman
+, withPodman ? true
+, # passthru
+  ramalama
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

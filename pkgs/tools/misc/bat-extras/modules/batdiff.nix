@@ -1,11 +1,11 @@
-{
-  lib,
-  buildBatExtrasPkg,
-  less,
-  coreutils,
-  gitMinimal,
-  delta,
-  withDelta ? true,
+{ lib
+, buildBatExtrasPkg
+, less
+, coreutils
+, gitMinimal
+, delta
+, withDelta ? true
+,
 }:
 buildBatExtrasPkg {
   name = "batdiff";

@@ -1,19 +1,19 @@
-{
-  lib,
-  kaem,
-  mes-libc,
+{ lib
+, kaem
+, mes-libc
+,
 }:
 
 rec {
 
   # Recompile libc: crt{1,n,i}, libtcc.a, libc.a, libgetopt.a
   recompileLibc =
-    {
-      tcc,
-      pname,
-      version,
-      src,
-      libtccOptions,
+    { tcc
+    , pname
+    , version
+    , src
+    , libtccOptions
+    ,
     }:
     let
 
@@ -46,14 +46,14 @@ rec {
     '';
 
   buildTinyccMes =
-    {
-      pname,
-      version,
-      src,
-      prev,
-      buildOptions,
-      libtccBuildOptions,
-      meta,
+    { pname
+    , version
+    , src
+    , prev
+    , buildOptions
+    , libtccBuildOptions
+    , meta
+    ,
     }:
     let
       options = lib.strings.concatStringsSep " " buildOptions;

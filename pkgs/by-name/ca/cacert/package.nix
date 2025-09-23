@@ -1,20 +1,18 @@
-{
-  lib,
-  stdenv,
-  writeText,
-  fetchFromGitHub,
-  buildcatrust,
-  blacklist ? [ ],
-  extraCertificateFiles ? [ ],
-  extraCertificateStrings ? [ ],
-
-  # Used by update.sh
-  nssOverride ? null,
-
-  # Used for tests only
-  runCommand,
-  cacert,
-  openssl,
+{ lib
+, stdenv
+, writeText
+, fetchFromGitHub
+, buildcatrust
+, blacklist ? [ ]
+, extraCertificateFiles ? [ ]
+, extraCertificateStrings ? [ ]
+, # Used by update.sh
+  nssOverride ? null
+, # Used for tests only
+  runCommand
+, cacert
+, openssl
+,
 }:
 
 let

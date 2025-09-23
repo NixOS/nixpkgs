@@ -1,32 +1,32 @@
-{
-  lib,
-  runCommand,
-  callPackage,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  replaceVars,
-  setuptools,
-  click-default-group,
-  condense-json,
-  numpy,
-  openai,
-  pip,
-  pluggy,
-  puremagic,
-  pydantic,
-  python,
-  python-ulid,
-  pyyaml,
-  sqlite-migrate,
-  cogapp,
-  pytest-asyncio,
-  pytest-httpx,
-  pytest-recording,
-  sqlite-utils,
-  syrupy,
-  llm-echo,
+{ lib
+, runCommand
+, callPackage
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, replaceVars
+, setuptools
+, click-default-group
+, condense-json
+, numpy
+, openai
+, pip
+, pluggy
+, puremagic
+, pydantic
+, python
+, python-ulid
+, pyyaml
+, sqlite-migrate
+, cogapp
+, pytest-asyncio
+, pytest-httpx
+, pytest-recording
+, sqlite-utils
+, syrupy
+, llm-echo
+,
 }:
 let
   /**
@@ -61,42 +61,41 @@ let
   */
   withPlugins =
     # Keep this list up to date with the plugins in python3Packages!
-    {
-      llm-anthropic ? false,
-      llm-cmd ? false,
-      llm-command-r ? false,
-      llm-deepseek ? false,
-      llm-docs ? false,
-      llm-echo ? false,
-      llm-fragments-github ? false,
-      llm-fragments-pypi ? false,
-      llm-fragments-reader ? false,
-      llm-fragments-symbex ? false,
-      llm-gemini ? false,
-      llm-gguf ? false,
-      llm-git ? false,
-      llm-github-copilot ? false,
-      llm-grok ? false,
-      llm-groq ? false,
-      llm-hacker-news ? false,
-      llm-jq ? false,
-      llm-llama-server ? false,
-      llm-mistral ? false,
-      llm-ollama ? false,
-      llm-openai-plugin ? false,
-      llm-openrouter ? false,
-      llm-pdf-to-images ? false,
-      llm-perplexity ? false,
-      llm-sentence-transformers ? false,
-      llm-templates-fabric ? false,
-      llm-templates-github ? false,
-      llm-tools-datasette ? false,
-      llm-tools-quickjs ? false,
-      llm-tools-simpleeval ? false,
-      llm-tools-sqlite ? false,
-      llm-venice ? false,
-      llm-video-frames ? false,
-      ...
+    { llm-anthropic ? false
+    , llm-cmd ? false
+    , llm-command-r ? false
+    , llm-deepseek ? false
+    , llm-docs ? false
+    , llm-echo ? false
+    , llm-fragments-github ? false
+    , llm-fragments-pypi ? false
+    , llm-fragments-reader ? false
+    , llm-fragments-symbex ? false
+    , llm-gemini ? false
+    , llm-gguf ? false
+    , llm-git ? false
+    , llm-github-copilot ? false
+    , llm-grok ? false
+    , llm-groq ? false
+    , llm-hacker-news ? false
+    , llm-jq ? false
+    , llm-llama-server ? false
+    , llm-mistral ? false
+    , llm-ollama ? false
+    , llm-openai-plugin ? false
+    , llm-openrouter ? false
+    , llm-pdf-to-images ? false
+    , llm-perplexity ? false
+    , llm-sentence-transformers ? false
+    , llm-templates-fabric ? false
+    , llm-templates-github ? false
+    , llm-tools-datasette ? false
+    , llm-tools-quickjs ? false
+    , llm-tools-simpleeval ? false
+    , llm-tools-sqlite ? false
+    , llm-venice ? false
+    , llm-video-frames ? false
+    , ...
     }@args:
     let
       # Filter to just the attributes which are set to a true value.
@@ -113,7 +112,7 @@ let
         else if len > 20 then
           "llm-${llm.version}-with-${toString len}-plugins"
         else
-          # Make a string with those names separated with a dash.
+        # Make a string with those names separated with a dash.
           "llm-${llm.version}-with-${lib.concatStringsSep "-" setArgNames}";
 
       # Make a python environment with just those plugins.
@@ -135,9 +134,9 @@ let
 
     in
     # That Python environment produced above contains too many irrelevant binaries, due to how
-    # Python needs to use propagatedBuildInputs. Let's make one with just what's needed: `llm`.
-    # Since we include the `passthru` and `meta` information, it's as good as the original
-    # derivation.
+      # Python needs to use propagatedBuildInputs. Let's make one with just what's needed: `llm`.
+      # Since we include the `passthru` and `meta` information, it's as good as the original
+      # derivation.
     runCommand "${python.name}-${drvName}" { inherit (llm) passthru meta; } ''
       mkdir -p $out/bin
       ln -s ${python-environment}/bin/llm $out/bin/llm
@@ -156,10 +155,12 @@ let
   # where it's coming from.
   listOfPackagedPlugins = builtins.toFile "plugins.txt" (
     lib.concatStringsSep "\n  " (
-      map (name: ''
-        # ${python.pkgs.${name}.meta.description} <${python.pkgs.${name}.meta.homepage}>
-          ${name} = true;
-      '') withPluginsArgNames
+      map
+        (name: ''
+          # ${python.pkgs.${name}.meta.description} <${python.pkgs.${name}.meta.homepage}>
+            ${name} = true;
+        '')
+        withPluginsArgNames
     )
   );
 

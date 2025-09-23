@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cmake,
-  extra-cmake-modules,
-  qtbase,
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, extra-cmake-modules
+, qtbase
+,
 }:
 stdenv.mkDerivation rec {
   pname = "futuresql";

@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  materia-theme,
+{ lib
+, fetchFromGitHub
+, materia-theme
+,
 }:
 materia-theme.overrideAttrs (oldAttrs: {
   pname = "materia-theme-transparent";

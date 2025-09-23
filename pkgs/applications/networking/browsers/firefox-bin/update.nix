@@ -1,17 +1,17 @@
-{
-  pname,
-  writeScript,
-  xidel,
-  coreutils,
-  gnused,
-  gnugrep,
-  curl,
-  gnupg,
-  runtimeShell,
-  baseName ? "firefox",
-  basePath ? "pkgs/applications/networking/browsers/firefox-bin",
-  baseUrl,
-  versionSuffix ? "",
+{ pname
+, writeScript
+, xidel
+, coreutils
+, gnused
+, gnugrep
+, curl
+, gnupg
+, runtimeShell
+, baseName ? "firefox"
+, basePath ? "pkgs/applications/networking/browsers/firefox-bin"
+, baseUrl
+, versionSuffix ? ""
+,
 }:
 
 writeScript "update-${pname}" ''

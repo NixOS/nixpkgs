@@ -11,7 +11,7 @@ let
     hash = "sha256-LvVOp4vbLwae0CM0CukFoXeNRn0FKXjIhHgbxYwnGnI=";
     passthru = {
       inherit
-        src # Also for `update-source-version` support
+        src# Also for `update-source-version` support
         release
         owner
         repo

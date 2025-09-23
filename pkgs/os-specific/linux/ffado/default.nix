@@ -1,38 +1,38 @@
-{
-  lib,
-  stdenv,
-  argp-standalone,
-  dbus,
-  dbus_cplusplus,
-  fetchurl,
-  glibmm,
-  libavc1394,
-  libconfig,
-  libiec61883,
-  libraw1394,
-  libxmlxx3,
-  pkg-config,
-  python3,
-  scons,
-  which,
-  withMixer ? false,
-  qt5,
-  udevCheckHook,
+{ lib
+, stdenv
+, argp-standalone
+, dbus
+, dbus_cplusplus
+, fetchurl
+, glibmm
+, libavc1394
+, libconfig
+, libiec61883
+, libraw1394
+, libxmlxx3
+, pkg-config
+, python3
+, scons
+, which
+, withMixer ? false
+, qt5
+, udevCheckHook
+,
 }:
 
 let
   python = python3.withPackages (
     pkgs:
-    with pkgs;
-    (
-      [
-        distutils
-      ]
-      ++ lib.optionals withMixer [
-        pyqt5
-        dbus-python
-      ]
-    )
+      with pkgs;
+      (
+        [
+          distutils
+        ]
+        ++ lib.optionals withMixer [
+          pyqt5
+          dbus-python
+        ]
+      )
   );
 in
 stdenv.mkDerivation rec {

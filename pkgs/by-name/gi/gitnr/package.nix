@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libxkbcommon,
-  openssl,
-  stdenv,
-  wayland,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libxkbcommon
+, openssl
+, stdenv
+, wayland
+,
 }:
 
 rustPlatform.buildRustPackage rec {

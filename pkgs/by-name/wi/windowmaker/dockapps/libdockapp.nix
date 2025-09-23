@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  dockapps-sources,
-  fontutil,
-  libX11,
-  libXext,
-  libXpm,
-  mkfontdir,
-  pkg-config,
+{ lib
+, stdenv
+, autoreconfHook
+, dockapps-sources
+, fontutil
+, libX11
+, libXext
+, libXpm
+, mkfontdir
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  perlPackages,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, perlPackages
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

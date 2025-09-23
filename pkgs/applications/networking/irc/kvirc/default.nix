@@ -1,14 +1,14 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  qtbase,
-  qtmultimedia,
-  qtsvg,
-  qtx11extras,
-  pkg-config,
-  cmake,
-  gettext,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, qtbase
+, qtmultimedia
+, qtsvg
+, qtx11extras
+, pkg-config
+, cmake
+, gettext
+,
 }:
 
 mkDerivation {

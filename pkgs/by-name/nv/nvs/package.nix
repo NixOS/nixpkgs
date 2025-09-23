@@ -1,10 +1,10 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  writableTmpDirAsHomeHook,
-  lib,
-  nix-update-script,
+{ buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, writableTmpDirAsHomeHook
+, lib
+, nix-update-script
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "nvs";

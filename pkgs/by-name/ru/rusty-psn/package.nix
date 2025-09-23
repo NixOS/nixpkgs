@@ -1,21 +1,21 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  pkg-config,
-  cmake,
-  fontconfig,
-  glib,
-  gtk3,
-  freetype,
-  openssl,
-  xorg,
-  libGL,
-  libxkbcommon,
-  wayland,
-  withGui ? false, # build GUI version
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, pkg-config
+, cmake
+, fontconfig
+, glib
+, gtk3
+, freetype
+, openssl
+, xorg
+, libGL
+, libxkbcommon
+, wayland
+, withGui ? false
+, # build GUI version
 }:
 
 rustPlatform.buildRustPackage rec {

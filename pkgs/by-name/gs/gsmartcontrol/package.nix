@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  smartmontools,
-  cmake,
-  gtkmm3,
-  pkg-config,
-  wrapGAppsHook3,
-  pcre-cpp,
-  adwaita-icon-theme,
+{ lib
+, stdenv
+, fetchFromGitHub
+, smartmontools
+, cmake
+, gtkmm3
+, pkg-config
+, wrapGAppsHook3
+, pcre-cpp
+, adwaita-icon-theme
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

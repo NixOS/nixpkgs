@@ -1,25 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkgsBuildBuild,
-  cmake,
-  glib,
-  icu,
-  libxml2,
-  ninja,
-  perl,
-  pkg-config,
-  libical,
-  python3,
-  tzdata,
-  fixDarwinDylibNames,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
-  gobject-introspection,
-  vala,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkgsBuildBuild
+, cmake
+, glib
+, icu
+, libxml2
+, ninja
+, perl
+, pkg-config
+, libical
+, python3
+, tzdata
+, fixDarwinDylibNames
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
+, vala
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  python3,
-  bash,
-  coreutils,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, python3
+, bash
+, coreutils
+,
 }:
 
 buildGoModule rec {

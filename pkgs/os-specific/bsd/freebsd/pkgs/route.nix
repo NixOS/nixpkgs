@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  compatIfNeeded,
-  libjail,
+{ mkDerivation
+, compatIfNeeded
+, libjail
+,
 }:
 mkDerivation {
   path = "sbin/route";

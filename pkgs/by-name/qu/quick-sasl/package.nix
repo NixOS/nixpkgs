@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
-  cmake,
-  arpa2cm,
-  arpa2common,
-  quickmem,
-  cyrus_sasl,
-  quickder,
-  libkrb5,
-  libev,
-  e2fsprogs,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, cmake
+, arpa2cm
+, arpa2common
+, quickmem
+, cyrus_sasl
+, quickder
+, libkrb5
+, libev
+, e2fsprogs
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

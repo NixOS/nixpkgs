@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  urllib3,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

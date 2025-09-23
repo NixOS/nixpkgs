@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  acme,
-  boto3,
-  certbot,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ buildPythonPackage
+, acme
+, boto3
+, certbot
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

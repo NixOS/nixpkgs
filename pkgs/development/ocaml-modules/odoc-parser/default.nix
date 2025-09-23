@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  ocaml,
-  astring,
-  result,
-  camlp-streams,
-  version ? "2.4.4",
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, astring
+, result
+, camlp-streams
+, version ? "2.4.4"
+,
 }:
 
 let
@@ -29,40 +29,39 @@ let
         sha256 = "sha256-3w2tG605v03mvmZsS2O5c71y66O3W+n3JjFxIbXwvXk=";
         max_version = "5.0";
       };
-    }
-    ."${version}";
+    }."${version}";
 in
 
 lib.throwIf (param ? max_version && lib.versionAtLeast ocaml.version param.max_version)
   "odoc-parser ${version} is not available for OCaml ${ocaml.version}"
 
   buildDunePackage
-  rec {
-    pname = "odoc-parser";
-    inherit version;
+rec {
+  pname = "odoc-parser";
+  inherit version;
 
-    minimalOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
 
-    src = fetchurl {
-      url =
-        if lib.versionAtLeast version "2.4" then
-          "https://github.com/ocaml/odoc/releases/download/${version}/odoc-${version}.tbz"
-        else
-          "https://github.com/ocaml-doc/odoc-parser/releases/download/${version}/odoc-parser-${version}.tbz";
-      inherit (param) sha256;
-    };
+  src = fetchurl {
+    url =
+      if lib.versionAtLeast version "2.4" then
+        "https://github.com/ocaml/odoc/releases/download/${version}/odoc-${version}.tbz"
+      else
+        "https://github.com/ocaml-doc/odoc-parser/releases/download/${version}/odoc-parser-${version}.tbz";
+    inherit (param) sha256;
+  };
 
-    propagatedBuildInputs = [
-      astring
-      result
-    ]
-    ++ lib.optional (lib.versionAtLeast version "1.0.1") camlp-streams;
+  propagatedBuildInputs = [
+    astring
+    result
+  ]
+  ++ lib.optional (lib.versionAtLeast version "1.0.1") camlp-streams;
 
-    meta = {
-      description = "Parser for Ocaml documentation comments";
-      license = lib.licenses.isc;
-      maintainers = with lib.maintainers; [ momeemt ];
-      homepage = "https://github.com/ocaml-doc/odoc-parser";
-      changelog = "https://github.com/ocaml-doc/odoc-parser/raw/${version}/CHANGES.md";
-    };
-  }
+  meta = {
+    description = "Parser for Ocaml documentation comments";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ momeemt ];
+    homepage = "https://github.com/ocaml-doc/odoc-parser";
+    changelog = "https://github.com/ocaml-doc/odoc-parser/raw/${version}/CHANGES.md";
+  };
+}

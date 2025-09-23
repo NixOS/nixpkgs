@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  clangStdenv,
-  fetchFromGitHub,
-  fetchurl,
-  mill,
-  which,
+{ lib
+, stdenvNoCC
+, clangStdenv
+, fetchFromGitHub
+, fetchurl
+, mill
+, which
+,
 }:
 
 let

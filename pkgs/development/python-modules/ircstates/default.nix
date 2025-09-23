@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  irctokens,
-  pendulum,
-  freezegun,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, irctokens
+, pendulum
+, freezegun
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

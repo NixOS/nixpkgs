@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  requests,
-  stups-cli-support,
-  stups-zign,
-  pytestCheckHook,
-  hypothesis,
-  pythonOlder,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, requests
+, stups-cli-support
+, stups-zign
+, pytestCheckHook
+, hypothesis
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

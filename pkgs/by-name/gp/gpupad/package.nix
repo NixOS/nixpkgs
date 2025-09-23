@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-
-  glslang,
-  imath,
-  ktx-tools,
-  openimageio,
-  qt6Packages,
-  spdlog,
-  spirv-cross,
-  vulkan-memory-allocator,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, glslang
+, imath
+, ktx-tools
+, openimageio
+, qt6Packages
+, spdlog
+, spirv-cross
+, vulkan-memory-allocator
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,28 +1,28 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  gtkmm3,
-  cairomm,
-  yaml-cpp,
-  glfw,
-  libtirpc,
-  liblxi,
-  libsigcxx,
-  glew,
-  zstd,
-  wrapGAppsHook4,
-  shaderc,
-  vulkan-headers,
-  vulkan-loader,
-  vulkan-tools,
-  glslang,
-  spirv-tools,
-  ffts,
-  moltenvk,
-  llvmPackages,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gtkmm3
+, cairomm
+, yaml-cpp
+, glfw
+, libtirpc
+, liblxi
+, libsigcxx
+, glew
+, zstd
+, wrapGAppsHook4
+, shaderc
+, vulkan-headers
+, vulkan-loader
+, vulkan-tools
+, glslang
+, spirv-tools
+, ffts
+, moltenvk
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation {

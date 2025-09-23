@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  jose,
-  uri,
-  junit_alcotest,
+{ lib
+, buildDunePackage
+, fetchurl
+, jose
+, uri
+, junit_alcotest
+,
 }:
 
 buildDunePackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  which,
-  openssl,
-  sqlite,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, which
+, openssl
+, sqlite
+,
 }:
 
 # Instead of writing directly into $HOME, we change the default db location

@@ -1,10 +1,10 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  effects,
-  contrib,
-  lightyear,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, effects
+, contrib
+, lightyear
+, lib
+,
 }:
 build-idris-package {
   pname = "tlhydra";

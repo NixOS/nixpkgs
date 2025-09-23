@@ -1,32 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  blinker,
-  click,
-  importlib-metadata,
-  itsdangerous,
-  jinja2,
-  werkzeug,
-
-  # optional-dependencies
-  asgiref,
-  python-dotenv,
-
-  # tests
-  pytestCheckHook,
-
-  # reverse dependencies
-  flask-limiter,
-  flask-restful,
-  flask-restx,
-  moto,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  flit-core
+, # dependencies
+  blinker
+, click
+, importlib-metadata
+, itsdangerous
+, jinja2
+, werkzeug
+, # optional-dependencies
+  asgiref
+, python-dotenv
+, # tests
+  pytestCheckHook
+, # reverse dependencies
+  flask-limiter
+, flask-restful
+, flask-restx
+, moto
+,
 }:
 
 buildPythonPackage rec {

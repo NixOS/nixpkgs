@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  extractcode-7z,
-  extractcode-libarchive,
-  patch,
-  six,
-  typecode,
-
-  # tests
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  extractcode-7z
+, extractcode-libarchive
+, patch
+, six
+, typecode
+, # tests
+  pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

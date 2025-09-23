@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  makeBinaryWrapper,
-  delta,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, makeBinaryWrapper
+, delta
+,
 }:
 
 buildGoModule rec {

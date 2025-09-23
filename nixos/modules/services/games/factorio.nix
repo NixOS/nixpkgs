@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.factorio;
@@ -44,9 +43,10 @@ let
   serverSettingsFile = pkgs.writeText "server-settings.json" serverSettingsString;
   playerListOption =
     name: list:
-    lib.optionalString (
-      list != [ ]
-    ) "--${name}=${pkgs.writeText "${name}.json" (builtins.toJSON list)}";
+    lib.optionalString
+      (
+        list != [ ]
+      ) "--${name}=${pkgs.writeText "${name}.json" (builtins.toJSON list)}";
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods cfg.mods-dat;
 in
 {

@@ -1,15 +1,15 @@
-{
-  lib,
-  pkgs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  scikit-build-core,
-  gfortran,
-  cmake,
-  ninja,
-  mpi,
-  libspatialindex,
-  rtree,
+{ lib
+, pkgs
+, buildPythonPackage
+, fetchFromGitHub
+, scikit-build-core
+, gfortran
+, cmake
+, ninja
+, mpi
+, libspatialindex
+, rtree
+,
 }:
 
 buildPythonPackage rec {

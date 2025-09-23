@@ -1,29 +1,29 @@
-{
-  lib,
-  appdirs,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  flit-core,
-  id,
-  importlib-resources,
-  pretend,
-  pydantic,
-  pyjwt,
-  pyopenssl,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  rich,
-  nix-update-script,
-  securesystemslib,
-  sigstore-protobuf-specs,
-  sigstore-rekor-types,
-  rfc3161-client,
-  tuf,
-  rfc8785,
-  pyasn1,
-  platformdirs,
+{ lib
+, appdirs
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, flit-core
+, id
+, importlib-resources
+, pretend
+, pydantic
+, pyjwt
+, pyopenssl
+, pytestCheckHook
+, pythonOlder
+, requests
+, rich
+, nix-update-script
+, securesystemslib
+, sigstore-protobuf-specs
+, sigstore-rekor-types
+, rfc3161-client
+, tuf
+, rfc8785
+, pyasn1
+, platformdirs
+,
 }:
 
 buildPythonPackage rec {

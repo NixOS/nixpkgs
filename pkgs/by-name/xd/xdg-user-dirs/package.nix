@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchurl,
-  libxslt,
-  docbook_xsl,
-  docbook_xml_dtd_43,
-  gettext,
-  makeWrapper,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchurl
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_43
+, gettext
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-
-  # tests
-  git,
-  mercurial,
-  patch,
+{ lib
+, fetchFromGitHub
+, python3
+, # tests
+  git
+, mercurial
+, patch
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

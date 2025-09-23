@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  wget,
-  makeWrapper,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, wget
+, makeWrapper
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  numpy,
-  pandas,
-  bokeh,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, numpy
+, pandas
+, bokeh
+,
 }:
 
 buildPythonPackage rec {

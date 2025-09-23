@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xorgproto,
-  zlib,
-  writeScript,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorgproto
+, zlib
+, writeScript
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfontenc";

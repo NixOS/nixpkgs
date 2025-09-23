@@ -1,11 +1,11 @@
-{
-  apacheHttpd,
-  directoryListingUpdater,
-  fetchurl,
-  lib,
-  nixosTests,
-  perl,
-  stdenv,
+{ apacheHttpd
+, directoryListingUpdater
+, fetchurl
+, lib
+, nixosTests
+, perl
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

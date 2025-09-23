@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pexpect,
-  pillow,
-  pycryptodomex,
-  pytestCheckHook,
-  pythonOlder,
-  pyvirtualdisplay,
-  setuptools,
-  twisted,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pexpect
+, pillow
+, pycryptodomex
+, pytestCheckHook
+, pythonOlder
+, pyvirtualdisplay
+, setuptools
+, twisted
+,
 }:
 
 buildPythonPackage rec {

@@ -1,28 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  boltons,
-  orjson,
-  pyrsistent,
-  zope-interface,
-
-  # tests
-  addBinToPathHook,
-  dask,
-  distributed,
-  hypothesis,
-  pandas,
-  pytestCheckHook,
-  testtools,
-  twisted,
-  daemontools,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  boltons
+, orjson
+, pyrsistent
+, zope-interface
+, # tests
+  addBinToPathHook
+, dask
+, distributed
+, hypothesis
+, pandas
+, pytestCheckHook
+, testtools
+, twisted
+, daemontools
+,
 }:
 
 buildPythonPackage rec {

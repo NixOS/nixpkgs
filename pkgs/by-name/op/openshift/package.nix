@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  gpgme,
-  installShellFiles,
-  pkg-config,
-  testers,
-  openshift,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, gpgme
+, installShellFiles
+, pkg-config
+, testers
+, openshift
+,
 }:
 buildGoModule rec {
   pname = "openshift";

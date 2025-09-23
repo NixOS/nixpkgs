@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  givaro,
-  pkg-config,
-  blas,
-  lapack,
-  fflas-ffpack,
-  gmpxx,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, givaro
+, pkg-config
+, blas
+, lapack
+, fflas-ffpack
+, gmpxx
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

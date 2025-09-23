@@ -1,14 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  bison,
-  flex,
-  perl, # for pod2man
-  pkg-config,
-  readline,
-  libxml2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, bison
+, flex
+, perl
+, # for pod2man
+  pkg-config
+, readline
+, libxml2
+,
 }:
 
 stdenv.mkDerivation rec {

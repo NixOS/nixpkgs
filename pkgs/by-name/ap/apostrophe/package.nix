@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitLab,
-  gtksourceview5,
-  libspelling,
-  fetchFromGitHub,
-  python312Packages,
-  nodePackages,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  gobject-introspection,
-  libadwaita,
-  webkitgtk_6_0,
-  texliveMedium,
-  shared-mime-info,
-  nix-update-script,
+{ lib
+, fetchFromGitLab
+, gtksourceview5
+, libspelling
+, fetchFromGitHub
+, python312Packages
+, nodePackages
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, desktop-file-utils
+, gobject-introspection
+, libadwaita
+, webkitgtk_6_0
+, texliveMedium
+, shared-mime-info
+, nix-update-script
+,
 }:
 
 let
@@ -42,7 +42,7 @@ let
 in
 
 # Requires telnetlib, and possibly others
-# Try to remove in subsequent updates
+  # Try to remove in subsequent updates
 python312Packages.buildPythonApplication {
   inherit version src;
   pname = "apostrophe";

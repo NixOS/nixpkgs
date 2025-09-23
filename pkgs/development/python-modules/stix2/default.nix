@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  haversine,
-  medallion,
-  pytz,
-  rapidfuzz,
-  requests,
-  simplejson,
-  stix2-patterns,
-  taxii2-client,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, haversine
+, medallion
+, pytz
+, rapidfuzz
+, requests
+, simplejson
+, stix2-patterns
+, taxii2-client
+,
 }:
 
 buildPythonPackage rec {

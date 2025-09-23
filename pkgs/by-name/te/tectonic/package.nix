@@ -1,11 +1,11 @@
-{
-  lib,
-  symlinkJoin,
-  tectonic,
-  tectonic-unwrapped,
-  biber-for-tectonic,
-  makeBinaryWrapper,
-  callPackage,
+{ lib
+, symlinkJoin
+, tectonic
+, tectonic-unwrapped
+, biber-for-tectonic
+, makeBinaryWrapper
+, callPackage
+,
 }:
 
 symlinkJoin {

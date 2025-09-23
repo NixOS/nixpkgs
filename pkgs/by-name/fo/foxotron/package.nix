@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  nix-update-script,
-  cmake,
-  pkg-config,
-  makeWrapper,
-  zlib,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libXi,
-  libXext,
-  libGLU,
-  alsa-lib,
-  fontconfig,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, cmake
+, pkg-config
+, makeWrapper
+, zlib
+, libX11
+, libXrandr
+, libXinerama
+, libXcursor
+, libXi
+, libXext
+, libGLU
+, alsa-lib
+, fontconfig
+,
 }:
 
 stdenv.mkDerivation rec {

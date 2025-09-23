@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPy3k,
-  progressbar231 ? null,
-  progressbar33,
-  mock,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, progressbar231 ? null
+, progressbar33
+, mock
+,
 }:
 
 buildPythonPackage rec {

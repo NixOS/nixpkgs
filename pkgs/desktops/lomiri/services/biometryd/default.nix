@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  testers,
-  # https://gitlab.com/ubports/development/core/biometryd/-/issues/8
-  boost186,
-  cmake,
-  cmake-extras,
-  dbus,
-  dbus-cpp,
-  gtest,
-  libapparmor,
-  libelf,
-  pkg-config,
-  process-cpp,
-  properties-cpp,
-  qtbase,
-  qtdeclarative,
-  sqlite,
-  validatePkgConfig,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, testers
+, # https://gitlab.com/ubports/development/core/biometryd/-/issues/8
+  boost186
+, cmake
+, cmake-extras
+, dbus
+, dbus-cpp
+, gtest
+, libapparmor
+, libelf
+, pkg-config
+, process-cpp
+, properties-cpp
+, qtbase
+, qtdeclarative
+, sqlite
+, validatePkgConfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

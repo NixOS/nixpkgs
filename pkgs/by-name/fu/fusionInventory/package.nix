@@ -1,14 +1,14 @@
-{
-  lib,
-  perlPackages,
-  nix,
-  dmidecode,
-  pciutils,
-  usbutils,
-  iproute2,
-  net-tools,
-  fetchFromGitHub,
-  makeWrapper,
+{ lib
+, perlPackages
+, nix
+, dmidecode
+, pciutils
+, usbutils
+, iproute2
+, net-tools
+, fetchFromGitHub
+, makeWrapper
+,
 }:
 
 perlPackages.buildPerlPackage rec {

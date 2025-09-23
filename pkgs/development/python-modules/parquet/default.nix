@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pytestCheckHook,
-  python-snappy,
-  pythonOlder,
-  setuptools,
-  thriftpy2,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pytestCheckHook
+, python-snappy
+, pythonOlder
+, setuptools
+, thriftpy2
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  boto3,
-  buildPythonPackage,
-  crc32c,
-  fetchFromGitHub,
-  lib,
-  matplotlib,
-  moto,
-  numpy,
-  protobuf,
-  pytestCheckHook,
-  torch,
-  setuptools-scm,
-  soundfile,
-  stdenv,
-  tensorboard,
-  torchvision,
+{ boto3
+, buildPythonPackage
+, crc32c
+, fetchFromGitHub
+, lib
+, matplotlib
+, moto
+, numpy
+, protobuf
+, pytestCheckHook
+, torch
+, setuptools-scm
+, soundfile
+, stdenv
+, tensorboard
+, torchvision
+,
 }:
 
 buildPythonPackage rec {

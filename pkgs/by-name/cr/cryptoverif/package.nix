@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ocaml,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, ocaml
+, writeScript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

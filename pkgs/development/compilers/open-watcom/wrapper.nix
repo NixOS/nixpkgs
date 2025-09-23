@@ -1,18 +1,18 @@
 # Arguments that this derivation gets when it is created with `callPackage`
-{
-  stdenv,
-  lib,
-  symlinkJoin,
-  makeWrapper,
-  runCommand,
-  file,
+{ stdenv
+, lib
+, symlinkJoin
+, makeWrapper
+, runCommand
+, file
+,
 }:
 
 open-watcom:
 
 let
   wrapper =
-    { }:
+    {}:
     let
       archToBindir =
         with stdenv.hostPlatform;

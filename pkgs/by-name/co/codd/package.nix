@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  haskell,
-  haskellPackages,
+{ lib
+, fetchFromGitHub
+, haskell
+, haskellPackages
+,
 }:
 
 ##############
@@ -19,35 +19,37 @@ let
 
   generated = haskellPackages.callPackage ./generated.nix { haxl = haxlJailbroken; };
 
-  derivationWithVersion = haskell.lib.compose.overrideCabal (rec {
-    version = "0.1.6";
-    src = fetchFromGitHub {
-      owner = "mzabani";
-      repo = "codd";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-KdZCL09TERy/PolQyYYykEbPtG5yhxrLZSSo9n6p2WE=";
-    };
+  derivationWithVersion = haskell.lib.compose.overrideCabal
+    (rec {
+      version = "0.1.6";
+      src = fetchFromGitHub {
+        owner = "mzabani";
+        repo = "codd";
+        rev = "refs/tags/v${version}";
+        hash = "sha256-KdZCL09TERy/PolQyYYykEbPtG5yhxrLZSSo9n6p2WE=";
+      };
 
-    # We only run codd's tests that don't require postgresql nor strace. We need to support unix sockets in codd's test suite
-    # before enabling postgresql's tests, and SystemResourcesSpecs might fail on macOS because of the need for strace and parsing
-    # libc calls. Not that we really gain much from running SystemResourcesSpecs here anyway.
-    testFlags = [
-      "--skip"
-      "/DbDependentSpecs/"
-      "--skip"
-      "/SystemResourcesSpecs/"
-    ];
+      # We only run codd's tests that don't require postgresql nor strace. We need to support unix sockets in codd's test suite
+      # before enabling postgresql's tests, and SystemResourcesSpecs might fail on macOS because of the need for strace and parsing
+      # libc calls. Not that we really gain much from running SystemResourcesSpecs here anyway.
+      testFlags = [
+        "--skip"
+        "/DbDependentSpecs/"
+        "--skip"
+        "/SystemResourcesSpecs/"
+      ];
 
-    isLibrary = false;
-    testToolDepends = [ haskellPackages.hspec-discover ];
+      isLibrary = false;
+      testToolDepends = [ haskellPackages.hspec-discover ];
 
-    description = "CLI tool that applies postgres SQL migrations atomically with schema equality checks";
+      description = "CLI tool that applies postgres SQL migrations atomically with schema equality checks";
 
-    homepage = "https://github.com/mzabani/codd";
+      homepage = "https://github.com/mzabani/codd";
 
-    changelog = "https://github.com/mzabani/codd/releases/tag/v${version}";
+      changelog = "https://github.com/mzabani/codd/releases/tag/v${version}";
 
-    maintainers = with lib.maintainers; [ mzabani ];
-  }) generated;
+      maintainers = with lib.maintainers; [ mzabani ];
+    })
+    generated;
 in
 haskell.lib.compose.justStaticExecutables derivationWithVersion

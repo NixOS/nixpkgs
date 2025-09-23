@@ -1,15 +1,15 @@
-{
-  lib,
-  python3Packages,
-  fetchFromSourcehut,
-  file,
-  installShellFiles,
-  less,
-  offpunk,
-  testers,
-  timg,
-  xdg-utils,
-  xsel,
+{ lib
+, python3Packages
+, fetchFromSourcehut
+, file
+, installShellFiles
+, less
+, offpunk
+, testers
+, timg
+, xdg-utils
+, xsel
+,
 }:
 
 python3Packages.buildPythonApplication rec {

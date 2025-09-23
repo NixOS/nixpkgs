@@ -1,16 +1,16 @@
-{
-  fetchFromGitHub,
-  fetchYarnDeps,
-  lib,
-  makeWrapper,
-  node-gyp,
-  node-pre-gyp,
-  nodejs,
-  python3,
-  stdenv,
-  yarnBuildHook,
-  yarnConfigHook,
-  yarnInstallHook,
+{ fetchFromGitHub
+, fetchYarnDeps
+, lib
+, makeWrapper
+, node-gyp
+, node-pre-gyp
+, nodejs
+, python3
+, stdenv
+, yarnBuildHook
+, yarnConfigHook
+, yarnInstallHook
+,
 }:
 
 stdenv.mkDerivation rec {

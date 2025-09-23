@@ -1,9 +1,9 @@
-{
-  lib,
-  file,
-  hare,
-  runCommandNoCC,
-  writeText,
+{ lib
+, file
+, hare
+, runCommandNoCC
+, writeText
+,
 }:
 let
   archs = lib.concatStringsSep " " (
@@ -16,12 +16,12 @@ let
   '';
 in
 runCommandNoCC "${hare.pname}-cross-compilation-test"
-  {
-    nativeBuildInputs = [
-      hare
-      file
-    ];
-  }
+{
+  nativeBuildInputs = [
+    hare
+    file
+  ];
+}
   ''
     HARECACHE="$(mktemp -d)"
     export HARECACHE

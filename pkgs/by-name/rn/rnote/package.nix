@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  appstream,
-  appstream-glib,
-  cargo,
-  cmake,
-  desktop-file-utils,
-  dos2unix,
-  glib,
-  gst_all_1,
-  gtk4,
-  libadwaita,
-  libxml2,
-  meson,
-  ninja,
-  pkg-config,
-  poppler,
-  python3,
-  rustPlatform,
-  rustc,
-  shared-mime-info,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, appstream
+, appstream-glib
+, cargo
+, cmake
+, desktop-file-utils
+, dos2unix
+, glib
+, gst_all_1
+, gtk4
+, libadwaita
+, libxml2
+, meson
+, ninja
+, pkg-config
+, poppler
+, python3
+, rustPlatform
+, rustc
+, shared-mime-info
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation rec {

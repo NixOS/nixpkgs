@@ -1,24 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  curl,
-  iprange,
-  iproute2,
-  iptables,
-  iputils,
-  kmod,
-  net-tools,
-  procps,
-  tcpdump,
-  traceroute,
-  util-linux,
-  whois,
-
-  # If true, just install FireQOS without FireHOL
-  onlyQOS ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoconf
+, automake
+, curl
+, iprange
+, iproute2
+, iptables
+, iputils
+, kmod
+, net-tools
+, procps
+, tcpdump
+, traceroute
+, util-linux
+, whois
+, # If true, just install FireQOS without FireHOL
+  onlyQOS ? false
+,
 }:
 
 stdenv.mkDerivation rec {

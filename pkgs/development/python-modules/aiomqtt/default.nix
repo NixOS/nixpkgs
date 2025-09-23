@@ -1,12 +1,12 @@
-{
-  lib,
-  anyio,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  paho-mqtt,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, anyio
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, paho-mqtt
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

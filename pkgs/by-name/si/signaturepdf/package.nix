@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  php,
-  makeWrapper,
-  imagemagick,
-  librsvg,
-  potrace,
-  pdftk,
-  ghostscript,
+{ lib
+, stdenv
+, fetchFromGitHub
+, php
+, makeWrapper
+, imagemagick
+, librsvg
+, potrace
+, pdftk
+, ghostscript
+,
 }:
 
 stdenv.mkDerivation rec {

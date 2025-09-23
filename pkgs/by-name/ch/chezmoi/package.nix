@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGo125Module,
-  fetchFromGitHub,
-  installShellFiles,
+{ lib
+, buildGo125Module
+, fetchFromGitHub
+, installShellFiles
+,
 }:
 
 buildGo125Module (finalAttrs: {

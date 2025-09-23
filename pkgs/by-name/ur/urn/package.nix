@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  buildEnv,
-  makeWrapper,
-  lua,
-  luajit,
-  readline,
-  useLuaJit ? false,
-  extraLibraries ? [ ],
+{ lib
+, stdenv
+, fetchFromGitLab
+, buildEnv
+, makeWrapper
+, lua
+, luajit
+, readline
+, useLuaJit ? false
+, extraLibraries ? [ ]
+,
 }:
 
 let

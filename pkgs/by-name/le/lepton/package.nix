@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  git,
-  glibc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, git
+, glibc
+,
 }:
 
 stdenv.mkDerivation {

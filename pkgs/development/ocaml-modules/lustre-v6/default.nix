@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  extlib,
-  lutils,
-  rdbg,
-  yaml,
+{ lib
+, buildDunePackage
+, fetchurl
+, extlib
+, lutils
+, rdbg
+, yaml
+,
 }:
 
 buildDunePackage rec {

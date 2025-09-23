@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  distrobox,
-  podman,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, distrobox
+, podman
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildGoModule rec {

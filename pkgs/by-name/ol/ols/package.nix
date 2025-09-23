@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  makeBinaryWrapper,
-  odin,
-  stdenv,
-  unstableGitUpdater,
+{ fetchFromGitHub
+, lib
+, makeBinaryWrapper
+, odin
+, stdenv
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

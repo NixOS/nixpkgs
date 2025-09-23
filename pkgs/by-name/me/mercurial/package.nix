@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python3Packages,
-  makeWrapper,
-  gettext,
-  installShellFiles,
-  re2Support ? true,
-  rustSupport ? stdenv.hostPlatform.isLinux,
-  cargo,
-  rustPlatform,
-  rustc,
-  fullBuild ? false,
-  gitSupport ? fullBuild,
-  guiSupport ? fullBuild,
-  tk,
-  highlightSupport ? fullBuild,
-  # test dependencies
-  runCommand,
-  unzip,
-  which,
-  sqlite,
-  git,
-  cacert,
-  gnupg,
+{ lib
+, stdenv
+, fetchurl
+, python3Packages
+, makeWrapper
+, gettext
+, installShellFiles
+, re2Support ? true
+, rustSupport ? stdenv.hostPlatform.isLinux
+, cargo
+, rustPlatform
+, rustc
+, fullBuild ? false
+, gitSupport ? fullBuild
+, guiSupport ? fullBuild
+, tk
+, highlightSupport ? fullBuild
+, # test dependencies
+  runCommand
+, unzip
+, which
+, sqlite
+, git
+, cacert
+, gnupg
+,
 }:
 
 let
@@ -51,12 +51,13 @@ let
 
     cargoDeps =
       if rustSupport then
-        rustPlatform.fetchCargoVendor {
-          inherit src;
-          name = "mercurial-${version}";
-          hash = "sha256-k/K1BupCqnlB++2T7hJxu82yID0jG8HwLNmb2eyx29o=";
-          sourceRoot = "mercurial-${version}/rust";
-        }
+        rustPlatform.fetchCargoVendor
+          {
+            inherit src;
+            name = "mercurial-${version}";
+            hash = "sha256-k/K1BupCqnlB++2T7hJxu82yID0jG8HwLNmb2eyx29o=";
+            sourceRoot = "mercurial-${version}/rust";
+          }
       else
         null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -130,10 +131,10 @@ let
   };
 
   makeTests =
-    {
-      mercurial ? self,
-      nameSuffix ? "",
-      flags ? "",
+    { mercurial ? self
+    , nameSuffix ? ""
+    , flags ? ""
+    ,
     }:
     runCommand "${mercurial.pname}${nameSuffix}-tests"
       {

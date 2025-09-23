@@ -1,10 +1,10 @@
-{
-  stdenv,
-  stdenvNoLibc,
-  lib,
-  fetchurl,
-  linuxHeaders ? null,
-  useBSDCompatHeaders ? true,
+{ stdenv
+, stdenvNoLibc
+, lib
+, fetchurl
+, linuxHeaders ? null
+, useBSDCompatHeaders ? true
+,
 }:
 let
   stdenv' = if stdenv.hostPlatform != stdenv.buildPlatform then stdenvNoLibc else stdenv;

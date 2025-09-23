@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  vala,
-  intltool,
-  pkg-config,
-  libkkc,
-  ibus,
-  skkDictionaries,
-  gtk3,
+{ lib
+, stdenv
+, fetchurl
+, vala
+, intltool
+, pkg-config
+, libkkc
+, ibus
+, skkDictionaries
+, gtk3
+,
 }:
 
 stdenv.mkDerivation rec {

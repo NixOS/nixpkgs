@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pyyaml,
-  jinja2,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pyyaml
+, jinja2
+,
 }:
 
 buildPythonPackage rec {

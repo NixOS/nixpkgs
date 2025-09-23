@@ -1,16 +1,16 @@
 # Dependencies (callPackage)
-{
-  lib,
-  stdenvNoCC,
-  shellcheck,
+{ lib
+, stdenvNoCC
+, shellcheck
+,
 }:
 
 # testers.shellcheck function
 # Docs: doc/build-helpers/testers.chapter.md
 # Tests: ./tests.nix
-{
-  name ? null,
-  src,
+{ name ? null
+, src
+,
 }:
 stdenvNoCC.mkDerivation {
   __structuredAttrs = true;

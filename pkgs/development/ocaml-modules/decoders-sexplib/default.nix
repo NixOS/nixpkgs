@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  decoders,
-  sexplib,
-  sexplib0,
-  containers,
-  ounit2,
+{ lib
+, buildDunePackage
+, decoders
+, sexplib
+, sexplib0
+, containers
+, ounit2
+,
 }:
 
 buildDunePackage rec {

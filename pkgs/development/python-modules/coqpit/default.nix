@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-  pytestCheckHook,
-  hatchling,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, pytestCheckHook
+, hatchling
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

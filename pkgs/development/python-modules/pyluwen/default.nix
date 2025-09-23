@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  runCommand,
-  fetchFromGitHub,
-  rustPlatform,
-  maturin,
-  protobuf_30,
+{ lib
+, buildPythonPackage
+, runCommand
+, fetchFromGitHub
+, rustPlatform
+, maturin
+, protobuf_30
+,
 }:
 buildPythonPackage rec {
   pname = "pyluwen";

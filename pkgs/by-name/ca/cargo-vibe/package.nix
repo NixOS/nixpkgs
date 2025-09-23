@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  dbus,
-  udev,
-  openssl,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, dbus
+, udev
+, openssl
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "cargo-vibe";

@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  python3,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  docutils,
-  desktopToDarwinBundle,
-  gtk-vnc,
-  vte,
-  dconf,
-  gobject-introspection,
-  libvirt-glib,
-  gsettings-desktop-schemas,
-  libosinfo,
-  adwaita-icon-theme,
-  gtksourceview4,
-  xorriso,
-  spiceSupport ? true,
-  spice-gtk ? null,
-  gst_all_1 ? null,
+{ stdenv
+, lib
+, fetchFromGitHub
+, python3
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, docutils
+, desktopToDarwinBundle
+, gtk-vnc
+, vte
+, dconf
+, gobject-introspection
+, libvirt-glib
+, gsettings-desktop-schemas
+, libosinfo
+, adwaita-icon-theme
+, gtksourceview4
+, xorriso
+, spiceSupport ? true
+, spice-gtk ? null
+, gst_all_1 ? null
+,
 }:
 
 let

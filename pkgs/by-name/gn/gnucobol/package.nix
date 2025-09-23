@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoconf,
-  automake,
-  libtool,
-  pkg-config,
-  # libs
-  cjson,
-  db,
-  gmp,
-  libxml2,
-  ncurses,
-  # docs
-  help2man,
-  texinfo,
-  texliveBasic,
-  # test
-  perl,
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, libtool
+, pkg-config
+, # libs
+  cjson
+, db
+, gmp
+, libxml2
+, ncurses
+, # docs
+  help2man
+, texinfo
+, texliveBasic
+, # test
+  perl
+,
 }:
 let
   nistTestSuite = fetchurl {

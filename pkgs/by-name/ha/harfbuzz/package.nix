@@ -1,35 +1,38 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  glib,
-  freetype,
-  libintl,
-  meson,
-  ninja,
-  gobject-introspection,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  icu,
-  graphite2,
-  harfbuzz, # The icu variant uses and propagates the non-icu one.
-  withCoreText ? stdenv.hostPlatform.isDarwin, # withCoreText is required for macOS
-  withIcu ? false, # recommended by upstream as default, but most don't needed and it's big
-  withGraphite2 ? true, # it is small and major distros do include it
-  python3,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
-  # for passthru.tests
-  gimp,
-  gtk3,
-  gtk4,
-  mapnik,
-  qt5,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, freetype
+, libintl
+, meson
+, ninja
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, icu
+, graphite2
+, harfbuzz
+, # The icu variant uses and propagates the non-icu one.
+  withCoreText ? stdenv.hostPlatform.isDarwin
+, # withCoreText is required for macOS
+  withIcu ? false
+, # recommended by upstream as default, but most don't needed and it's big
+  withGraphite2 ? true
+, # it is small and major distros do include it
+  python3
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, # for passthru.tests
+  gimp
+, gtk3
+, gtk4
+, mapnik
+, qt5
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

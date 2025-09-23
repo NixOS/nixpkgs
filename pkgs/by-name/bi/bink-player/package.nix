@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  p7zip,
-  libGL,
-  libX11,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, p7zip
+, libGL
+, libX11
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

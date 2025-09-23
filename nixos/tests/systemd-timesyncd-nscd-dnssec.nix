@@ -22,11 +22,10 @@ in
 {
   name = "systemd-timesyncd";
   nodes.machine =
-    {
-      pkgs,
-      lib,
-      config,
-      ...
+    { pkgs
+    , lib
+    , config
+    , ...
     }:
     let
       eth1IP = (lib.head config.networking.interfaces.eth1.ipv4.addresses).address;

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  haskellPackages,
-  packages ? (pkgs: [ ]),
+{ lib
+, stdenv
+, makeWrapper
+, haskellPackages
+, packages ? (pkgs: [ ])
+,
 }:
 
 let

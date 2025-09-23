@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  python,
-  fetchFromGitHub,
-  setuptools,
-  python-dateutil,
-  drf-yasg,
-  netbox,
-  netaddr,
+{ lib
+, buildPythonPackage
+, python
+, fetchFromGitHub
+, setuptools
+, python-dateutil
+, drf-yasg
+, netbox
+, netaddr
+,
 }:
 buildPythonPackage rec {
   pname = "netbox-contract";

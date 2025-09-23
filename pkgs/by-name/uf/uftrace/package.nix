@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  pandoc,
-  capstone,
-  elfutils,
-  libtraceevent,
-  ncurses,
-  withLuaJIT ? false,
-  luajit,
-  withPython ? false,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, pandoc
+, capstone
+, elfutils
+, libtraceevent
+, ncurses
+, withLuaJIT ? false
+, luajit
+, withPython ? false
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

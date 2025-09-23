@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  asn1crypto,
-  pykcs11,
-  pytestCheckHook,
-  softhsm,
+{ buildPythonPackage
+, asn1crypto
+, pykcs11
+, pytestCheckHook
+, softhsm
+,
 }:
 
 buildPythonPackage {

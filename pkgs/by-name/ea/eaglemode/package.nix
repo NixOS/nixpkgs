@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  libX11,
-  libXinerama,
-  libjpeg,
-  libpng,
-  libtiff,
-  libwebp,
-  pkg-config,
-  librsvg,
-  glib,
-  gtk2,
-  libXext,
-  libXxf86vm,
-  poppler,
-  vlc,
-  ghostscript,
-  makeWrapper,
-  tzdata,
-  makeDesktopItem,
-  copyDesktopItems,
-  directoryListingUpdater,
-  htmldoc,
-  binutils,
-  gzip,
-  p7zip,
-  xz,
-  zip,
-  extraRuntimeDeps ? [ ],
+{ lib
+, stdenv
+, fetchurl
+, perl
+, libX11
+, libXinerama
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, pkg-config
+, librsvg
+, glib
+, gtk2
+, libXext
+, libXxf86vm
+, poppler
+, vlc
+, ghostscript
+, makeWrapper
+, tzdata
+, makeDesktopItem
+, copyDesktopItems
+, directoryListingUpdater
+, htmldoc
+, binutils
+, gzip
+, p7zip
+, xz
+, zip
+, extraRuntimeDeps ? [ ]
+,
 }:
 
 stdenv.mkDerivation rec {

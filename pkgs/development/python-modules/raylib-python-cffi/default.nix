@@ -1,18 +1,18 @@
-{
-  gcc,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cffi,
-  pkg-config,
-  glfw3,
-  libffi,
-  raylib,
-  physac,
-  raygui,
-  lib,
-  writers,
-  raylib-python-cffi,
+{ gcc
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cffi
+, pkg-config
+, glfw3
+, libffi
+, raylib
+, physac
+, raygui
+, lib
+, writers
+, raylib-python-cffi
+,
 }:
 
 buildPythonPackage rec {

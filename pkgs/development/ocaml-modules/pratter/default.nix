@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitLab,
-  buildDunePackage,
-  camlp-streams,
-  alcotest,
-  qcheck,
-  qcheck-alcotest,
+{ lib
+, fetchFromGitLab
+, buildDunePackage
+, camlp-streams
+, alcotest
+, qcheck
+, qcheck-alcotest
+,
 }:
 
 buildDunePackage rec {

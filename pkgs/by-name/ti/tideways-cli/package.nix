@@ -1,12 +1,12 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  curl,
-  common-updater-scripts,
-  writeShellApplication,
-  gnugrep,
-  installShellFiles,
+{ stdenvNoCC
+, lib
+, fetchurl
+, curl
+, common-updater-scripts
+, writeShellApplication
+, gnugrep
+, installShellFiles
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

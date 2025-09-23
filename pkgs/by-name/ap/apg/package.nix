@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, autoreconfHook
+,
 }:
 stdenv.mkDerivation {
   pname = "apg";

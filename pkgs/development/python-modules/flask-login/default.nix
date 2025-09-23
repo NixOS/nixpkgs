@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  flask,
-  werkzeug,
-
-  # tests
-  asgiref,
-  blinker,
-  pytestCheckHook,
-  semantic-version,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  flit-core
+, # dependencies
+  flask
+, werkzeug
+, # tests
+  asgiref
+, blinker
+, pytestCheckHook
+, semantic-version
+,
 }:
 
 buildPythonPackage rec {

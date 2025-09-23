@@ -1,39 +1,35 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  cloudpickle,
-  farama-notifications,
-  numpy,
-  typing-extensions,
-  pythonOlder,
-  importlib-metadata,
-
-  # optional-dependencies
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  cloudpickle
+, farama-notifications
+, numpy
+, typing-extensions
+, pythonOlder
+, importlib-metadata
+, # optional-dependencies
   # atari
-  ale-py,
-
-  # tests
-  array-api-compat,
-  dill,
-  flax,
-  jax,
-  jaxlib,
-  matplotlib,
-  mujoco,
-  moviepy,
-  opencv4,
-  pybox2d,
-  pygame,
-  pytestCheckHook,
-  scipy,
-  torch,
+  ale-py
+, # tests
+  array-api-compat
+, dill
+, flax
+, jax
+, jaxlib
+, matplotlib
+, mujoco
+, moviepy
+, opencv4
+, pybox2d
+, pygame
+, pytestCheckHook
+, scipy
+, torch
+,
 }:
 
 buildPythonPackage rec {

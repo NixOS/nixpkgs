@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  zarith,
+{ lib
+, buildDunePackage
+, fetchurl
+, zarith
+,
 }:
 
 let

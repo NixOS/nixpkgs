@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  buildPackages,
-  libGLU,
-  libepoxy,
-  libX11,
-  libdrm,
-  libgbm,
-  libva,
-  vulkan-headers,
-  vulkan-loader,
-  nix-update-script,
-  vulkanSupport ? stdenv.hostPlatform.isLinux,
-  nativeContextSupport ? stdenv.hostPlatform.isLinux,
-  vaapiSupport ? !stdenv.hostPlatform.isDarwin,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, buildPackages
+, libGLU
+, libepoxy
+, libX11
+, libdrm
+, libgbm
+, libva
+, vulkan-headers
+, vulkan-loader
+, nix-update-script
+, vulkanSupport ? stdenv.hostPlatform.isLinux
+, nativeContextSupport ? stdenv.hostPlatform.isLinux
+, vaapiSupport ? !stdenv.hostPlatform.isDarwin
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  glib,
-  gtk3,
-  openssl,
-  pkg-config,
-  python3,
-  rustPlatform,
-  lib,
-  wrapGAppsHook3,
+{ fetchFromGitHub
+, glib
+, gtk3
+, openssl
+, pkg-config
+, python3
+, rustPlatform
+, lib
+, wrapGAppsHook3
+,
 }:
 
 rustPlatform.buildRustPackage rec {

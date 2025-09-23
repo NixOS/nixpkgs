@@ -1,22 +1,23 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
 
   cfg = config.services.salt.minion;
 
-  fullConfig = lib.recursiveUpdate {
-    # Provide defaults for some directories to allow an immutable config dir
-    # NOTE: the config dir being immutable prevents `minion_id` caching
+  fullConfig = lib.recursiveUpdate
+    {
+      # Provide defaults for some directories to allow an immutable config dir
+      # NOTE: the config dir being immutable prevents `minion_id` caching
 
-    # Default is equivalent to /etc/salt/minion.d/*.conf
-    default_include = "/var/lib/salt/minion.d/*.conf";
-    # Default is in /etc/salt/pki/minion
-    pki_dir = "/var/lib/salt/pki/minion";
-  } cfg.configuration;
+      # Default is equivalent to /etc/salt/minion.d/*.conf
+      default_include = "/var/lib/salt/minion.d/*.conf";
+      # Default is in /etc/salt/pki/minion
+      pki_dir = "/var/lib/salt/pki/minion";
+    }
+    cfg.configuration;
 
 in
 

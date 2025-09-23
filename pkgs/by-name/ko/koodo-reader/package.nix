@@ -1,20 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  makeDesktopItem,
-
-  copyDesktopItems,
-  cctools,
-  makeWrapper,
-  nodejs,
-  yarnConfigHook,
-  yarnBuildHook,
-  wrapGAppsHook3,
-  xcbuild,
-
-  electron_37,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, makeDesktopItem
+, copyDesktopItems
+, cctools
+, makeWrapper
+, nodejs
+, yarnConfigHook
+, yarnBuildHook
+, wrapGAppsHook3
+, xcbuild
+, electron_37
+,
 }:
 
 let

@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  pkg-config,
-  file,
-  ncurses,
-  readline,
-  which,
-  musl-fts,
-  pcre,
-  gnused,
-  # options
-  conf ? null,
-  withIcons ? false,
-  withNerdIcons ? false,
-  withEmojis ? false,
-  withPcre ? false,
-  extraMakeFlags ? [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, pkg-config
+, file
+, ncurses
+, readline
+, which
+, musl-fts
+, pcre
+, gnused
+, # options
+  conf ? null
+, withIcons ? false
+, withNerdIcons ? false
+, withEmojis ? false
+, withPcre ? false
+, extraMakeFlags ? [ ]
+,
 }:
 
 # Mutually exclusive options

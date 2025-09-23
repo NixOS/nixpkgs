@@ -1,8 +1,7 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  ...
+{ lib
+, stdenv
+, callPackage
+, ...
 }@args:
 let
   pname = "lmstudio";
@@ -27,7 +26,8 @@ let
   };
 in
 if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix {
+  callPackage ./darwin.nix
+  {
     inherit pname meta;
     passthru.updateScript = ./update.sh;
     version = version_aarch64-darwin;

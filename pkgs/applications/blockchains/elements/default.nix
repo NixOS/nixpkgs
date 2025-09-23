@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  autoreconfHook,
-  pkg-config,
-  util-linux,
-  hexdump,
-  autoSignDarwinBinariesHook,
-  wrapQtAppsHook ? null,
-  boost,
-  libevent,
-  miniupnpc,
-  zeromq,
-  zlib,
-  db48,
-  sqlite,
-  qrencode,
-  qtbase ? null,
-  qttools ? null,
-  python3,
-  withGui,
-  withWallet ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, autoreconfHook
+, pkg-config
+, util-linux
+, hexdump
+, autoSignDarwinBinariesHook
+, wrapQtAppsHook ? null
+, boost
+, libevent
+, miniupnpc
+, zeromq
+, zlib
+, db48
+, sqlite
+, qrencode
+, qtbase ? null
+, qttools ? null
+, python3
+, withGui
+, withWallet ? true
+,
 }:
 
 stdenv.mkDerivation rec {

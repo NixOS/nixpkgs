@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # tests
-  astropy,
-  numpy,
-  pillow,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, setuptools-scm
+, # tests
+  astropy
+, numpy
+, pillow
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

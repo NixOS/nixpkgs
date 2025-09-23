@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  zeromq,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, zeromq
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  meson,
-  ninja,
-  pkg-config,
-  lv2,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, meson
+, ninja
+, pkg-config
+, lv2
+,
 }:
 
 stdenv.mkDerivation rec {

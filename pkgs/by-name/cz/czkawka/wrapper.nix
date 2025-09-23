@@ -1,10 +1,10 @@
-{
-  lib,
-  czkawka,
-  makeWrapper,
-  symlinkJoin,
-  # configurable options
-  extraPackages ? [ ],
+{ lib
+, czkawka
+, makeWrapper
+, symlinkJoin
+, # configurable options
+  extraPackages ? [ ]
+,
 }:
 
 symlinkJoin {

@@ -1,11 +1,11 @@
-{
-  stdenv,
-  boost,
-  libX11,
-  libXext,
-  linuxPackages,
-  openssl,
-  tuxclocker-plugins,
+{ stdenv
+, boost
+, libX11
+, libXext
+, linuxPackages
+, openssl
+, tuxclocker-plugins
+,
 }:
 
 stdenv.mkDerivation {

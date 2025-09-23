@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  makeWrapper,
-  makeDesktopItem,
-  jdk,
-  ant,
-  stripJavaArchivesHook,
-  gtk3,
-  gsettings-desktop-schemas,
-  sweethome3dApp,
-  unzip,
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, makeDesktopItem
+, jdk
+, ant
+, stripJavaArchivesHook
+, gtk3
+, gsettings-desktop-schemas
+, sweethome3dApp
+, unzip
+,
 }:
 
 let
@@ -18,14 +18,14 @@ let
   sweetExec = m: "sweethome3d-" + lib.removeSuffix "libraryeditor" (lib.toLower m) + "-editor";
 
   mkEditorProject =
-    {
-      pname,
-      module,
-      version,
-      src,
-      license,
-      description,
-      desktopName,
+    { pname
+    , module
+    , version
+    , src
+    , license
+    , description
+    , desktopName
+    ,
     }:
 
     stdenv.mkDerivation rec {

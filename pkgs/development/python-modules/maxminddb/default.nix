@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  libmaxminddb,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, libmaxminddb
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

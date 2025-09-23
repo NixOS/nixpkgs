@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  testers,
-  runCommand,
-  writeText,
-  lessc,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, testers
+, runCommand
+, writeText
+, lessc
+,
 }:
 
 buildNpmPackage {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  dune-configurator,
-  pkg-config,
-  taglib_1,
-  zlib,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, dune-configurator
+, pkg-config
+, taglib_1
+, zlib
+,
 }:
 
 buildDunePackage rec {

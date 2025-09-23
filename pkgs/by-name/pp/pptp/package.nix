@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  ppp,
-  iproute2,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, ppp
+, iproute2
+,
 }:
 
 stdenv.mkDerivation rec {

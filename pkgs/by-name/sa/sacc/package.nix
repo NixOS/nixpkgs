@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  libressl,
-  patches ? [ ], # allow users to easily override config.def.h
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, libressl
+, patches ? [ ]
+, # allow users to easily override config.def.h
 }:
 
 stdenv.mkDerivation rec {

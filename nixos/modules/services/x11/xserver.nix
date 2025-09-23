@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  utils,
-  pkgs,
-  ...
+{ config
+, lib
+, utils
+, pkgs
+, ...
 }:
 
 with lib;
@@ -105,21 +104,22 @@ let
     let
       mkMonitor =
         previous: current:
-        singleton {
-          inherit (current) name;
-          value = ''
-            Section "Monitor"
-              Identifier "${current.name}"
-              ${optionalString (current.config.primary) ''
-                Option "Primary" "true"
-              ''}
-              ${optionalString (previous != [ ]) ''
-                Option "RightOf" "${(head previous).name}"
-              ''}
-              ${current.config.monitorConfig}
-            EndSection
-          '';
-        }
+        singleton
+          {
+            inherit (current) name;
+            value = ''
+              Section "Monitor"
+                Identifier "${current.name}"
+                ${optionalString (current.config.primary) ''
+                  Option "Primary" "true"
+                ''}
+                ${optionalString (previous != [ ]) ''
+                  Option "RightOf" "${(head previous).name}"
+                ''}
+                ${current.config.monitorConfig}
+              EndSection
+            '';
+          }
         ++ previous;
       monitors = reverseList (foldl mkMonitor [ ] xrandrHeads);
     in
@@ -401,16 +401,18 @@ in
         ];
         # TODO(@oxij): think how to easily add the rest, like those nvidia things
         relatedPackages = concatLists (
-          mapAttrsToList (
-            n: v:
-            optional (hasPrefix "xf86video" n) {
-              path = [
-                "xorg"
-                n
-              ];
-              title = removePrefix "xf86video" n;
-            }
-          ) pkgs.xorg
+          mapAttrsToList
+            (
+              n: v:
+                optional (hasPrefix "xf86video" n) {
+                  path = [
+                    "xorg"
+                    n
+                  ];
+                  title = removePrefix "xf86video" n;
+                }
+            )
+            pkgs.xorg
         );
         description = ''
           The names of the video drivers the configuration
@@ -778,9 +780,11 @@ in
     services.xserver.drivers = flip concatMap cfg.videoDrivers (
       name:
       let
-        driver = attrByPath [ name ] (
-          if xorg ? ${"xf86video" + name} then { modules = [ xorg.${"xf86video" + name} ]; } else null
-        ) knownVideoDrivers;
+        driver = attrByPath [ name ]
+          (
+            if xorg ? ${"xf86video" + name} then { modules = [ xorg.${"xf86video" + name} ]; } else null
+          )
+          knownVideoDrivers;
       in
       optional (driver != null) (
         {
@@ -844,7 +848,8 @@ in
         xorg.xauth
         pkgs.xterm
         xorg.xf86inputevdev.out # get evdev.4 man page
-      ] config.services.xserver.excludePackages
+      ]
+        config.services.xserver.excludePackages
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
     environment.pathsToLink = [ "/share/X11" ];

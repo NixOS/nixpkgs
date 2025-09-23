@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  extra-cmake-modules,
-  exiv2,
-  ffmpeg,
-  libvlc,
-  kdePackages,
+{ stdenv
+, fetchurl
+, lib
+, extra-cmake-modules
+, exiv2
+, ffmpeg
+, libvlc
+, kdePackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  unzip,
-  fetchurl,
-  electron,
-  makeWrapper,
-  geogebra,
+{ lib
+, stdenv
+, unzip
+, fetchurl
+, electron
+, makeWrapper
+, geogebra
+,
 }:
 let
   pname = "geogebra";

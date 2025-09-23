@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libpng,
-  libjpeg,
-  libtiff,
-  zlib,
-  bzip2,
-  mesa_glu,
-  libXcursor,
-  libXext,
-  libXrandr,
-  libXft,
-  cups,
+{ lib
+, stdenv
+, fetchurl
+, libpng
+, libjpeg
+, libtiff
+, zlib
+, bzip2
+, mesa_glu
+, libXcursor
+, libXext
+, libXrandr
+, libXft
+, cups
+,
 }:
 
 stdenv.mkDerivation rec {

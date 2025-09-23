@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  bison,
-  flex,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, bison
+, flex
+,
 }:
 
 stdenv.mkDerivation rec {

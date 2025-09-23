@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gettext,
-  meson,
-  ninja,
-  pkg-config,
-  wayland-scanner,
-  wrapGAppsHook3,
-  glib,
-  gtk3,
-  libX11,
-  libXtst,
-  libxfce4ui,
-  libxfce4util,
-  qrencode,
-  xfce4-panel,
-  xfconf,
-  wayland,
-  wlr-protocols,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gettext
+, meson
+, ninja
+, pkg-config
+, wayland-scanner
+, wrapGAppsHook3
+, glib
+, gtk3
+, libX11
+, libXtst
+, libxfce4ui
+, libxfce4util
+, qrencode
+, xfce4-panel
+, xfconf
+, wayland
+, wlr-protocols
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

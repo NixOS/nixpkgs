@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bootspec";

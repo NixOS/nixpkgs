@@ -1,21 +1,21 @@
-{
-  lib,
-  runCommandLocal,
-  gfal2-util,
+{ lib
+, runCommandLocal
+, gfal2-util
+,
 }:
 
 # `url` and `urls` should only be overridden via `<pkg>.override`, but not `<pkg>.overrideAttrs`.
-{
-  name ? "",
-  pname ? "",
-  version ? "",
-  urls ? [ ],
-  url ? if urls == [ ] then abort "Expect either non-empty `urls` or `url`" else lib.head urls,
-  hash ? lib.fakeHash,
-  recursive ? false,
-  intermediateDestUrls ? [ ],
-  extraGfalCopyFlags ? [ ],
-  allowSubstitutes ? true,
+{ name ? ""
+, pname ? ""
+, version ? ""
+, urls ? [ ]
+, url ? if urls == [ ] then abort "Expect either non-empty `urls` or `url`" else lib.head urls
+, hash ? lib.fakeHash
+, recursive ? false
+, intermediateDestUrls ? [ ]
+, extraGfalCopyFlags ? [ ]
+, allowSubstitutes ? true
+,
 }:
 
 (runCommandLocal name { } ''
@@ -43,7 +43,7 @@
       gfalCopyFlags = extraGfalCopyFlags ++ lib.optional finalAttrs.recursive "--recursive";
       inherit recursive intermediateDestUrls;
     }
-    // (
+      // (
       if (pname != "" && version != "") then
         {
           inherit pname version;

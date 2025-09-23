@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  libsepol,
-  libselinux,
-  checkpolicy,
-  withGraphics ? false,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, libsepol
+, libselinux
+, checkpolicy
+, withGraphics ? false
+,
 }:
 
 python3Packages.buildPythonApplication rec {

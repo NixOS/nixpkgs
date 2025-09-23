@@ -8,36 +8,38 @@ let
   # NOTE: This is only accessible from an interactive test, for example:
   # $ eval $(nix-build -A nixosTests.taler.basic.driver)/bin/nixos-test-driver
   mkNode =
-    {
-      sshPort ? 0,
-      webuiPort ? 0,
-      nodeSettings ? { },
+    { sshPort ? 0
+    , webuiPort ? 0
+    , nodeSettings ? { }
+    ,
     }:
-    lib.recursiveUpdate {
-      services.openssh = {
-        enable = true;
-        settings = {
-          PermitRootLogin = "yes";
-          PermitEmptyPasswords = "yes";
+    lib.recursiveUpdate
+      {
+        services.openssh = {
+          enable = true;
+          settings = {
+            PermitRootLogin = "yes";
+            PermitEmptyPasswords = "yes";
+          };
         };
-      };
-      security.pam.services.sshd.allowNullPassword = true;
-      virtualisation.forwardPorts =
-        (lib.optionals (sshPort != 0) [
-          {
-            from = "host";
-            host.port = sshPort;
-            guest.port = 22;
-          }
-        ])
-        ++ (lib.optionals (webuiPort != 0) [
-          {
-            from = "host";
-            host.port = webuiPort;
-            guest.port = webuiPort;
-          }
-        ]);
-    } nodeSettings;
+        security.pam.services.sshd.allowNullPassword = true;
+        virtualisation.forwardPorts =
+          (lib.optionals (sshPort != 0) [
+            {
+              from = "host";
+              host.port = sshPort;
+              guest.port = 22;
+            }
+          ])
+          ++ (lib.optionals (webuiPort != 0) [
+            {
+              from = "host";
+              host.port = webuiPort;
+              guest.port = webuiPort;
+            }
+          ]);
+      }
+      nodeSettings;
 in
 rec {
   CURRENCY = "KUDOS";

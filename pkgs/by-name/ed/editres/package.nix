@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libXt,
-  libXaw,
-  libXres,
-  utilmacros,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libXt
+, libXaw
+, libXres
+, utilmacros
+,
 }:
 
 stdenv.mkDerivation rec {

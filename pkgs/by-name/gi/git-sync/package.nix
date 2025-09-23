@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  coreutils,
-  fswatch,
-  gitMinimal,
-  gnugrep,
-  gnused,
-  makeBinaryWrapper,
-  inotify-tools,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, fswatch
+, gitMinimal
+, gnugrep
+, gnused
+, makeBinaryWrapper
+, inotify-tools
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation {

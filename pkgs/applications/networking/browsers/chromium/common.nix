@@ -1,103 +1,103 @@
-{
-  stdenv,
-  lib,
-  fetchpatch,
-  zstd,
-  fetchFromGitiles,
-  fetchNpmDeps,
-  buildPackages,
-  pkgsBuildBuild,
-  # Channel data:
-  upstream-info,
-  # Helper functions:
-  chromiumVersionAtLeast,
-  versionRange,
-
-  # Native build inputs:
-  ninja,
-  bashInteractive,
-  pkg-config,
-  python3,
-  perl,
-  nodejs,
-  npmHooks,
-  which,
-  libuuid,
-  overrideCC,
-  # postPatch:
-  pkgsBuildHost,
-  # configurePhase:
-  gnChromium,
-  symlinkJoin,
-
-  # Build inputs:
-  libpng,
-  bzip2,
-  flac,
-  speex,
-  libopus,
-  libevent,
-  expat,
-  libjpeg,
-  snappy,
-  libcap,
-  minizip,
-  libwebp,
-  libusb1,
-  re2,
-  ffmpeg,
-  libxslt,
-  libxml2,
-  nasm,
-  nspr,
-  nss,
-  util-linux,
-  alsa-lib,
-  bison,
-  gperf,
-  libkrb5,
-  glib,
-  gtk3,
-  dbus-glib,
-  libXScrnSaver,
-  libXcursor,
-  libXtst,
-  libxshmfence,
-  libGLU,
-  libGL,
-  dri-pkgconfig-stub,
-  libgbm,
-  pciutils,
-  protobuf,
-  speechd-minimal,
-  libXdamage,
-  at-spi2-core,
-  pipewire,
-  libva,
-  libdrm,
-  wayland,
-  libxkbcommon, # Ozone
-  curl,
-  libffi,
-  libepoxy,
-  libevdev,
-  # postPatch:
-  glibc, # gconv + locale
+{ stdenv
+, lib
+, fetchpatch
+, zstd
+, fetchFromGitiles
+, fetchNpmDeps
+, buildPackages
+, pkgsBuildBuild
+, # Channel data:
+  upstream-info
+, # Helper functions:
+  chromiumVersionAtLeast
+, versionRange
+, # Native build inputs:
+  ninja
+, bashInteractive
+, pkg-config
+, python3
+, perl
+, nodejs
+, npmHooks
+, which
+, libuuid
+, overrideCC
+, # postPatch:
+  pkgsBuildHost
+, # configurePhase:
+  gnChromium
+, symlinkJoin
+, # Build inputs:
+  libpng
+, bzip2
+, flac
+, speex
+, libopus
+, libevent
+, expat
+, libjpeg
+, snappy
+, libcap
+, minizip
+, libwebp
+, libusb1
+, re2
+, ffmpeg
+, libxslt
+, libxml2
+, nasm
+, nspr
+, nss
+, util-linux
+, alsa-lib
+, bison
+, gperf
+, libkrb5
+, glib
+, gtk3
+, dbus-glib
+, libXScrnSaver
+, libXcursor
+, libXtst
+, libxshmfence
+, libGLU
+, libGL
+, dri-pkgconfig-stub
+, libgbm
+, pciutils
+, protobuf
+, speechd-minimal
+, libXdamage
+, at-spi2-core
+, pipewire
+, libva
+, libdrm
+, wayland
+, libxkbcommon
+, # Ozone
+  curl
+, libffi
+, libepoxy
+, libevdev
+, # postPatch:
+  glibc
+, # gconv + locale
   # postFixup:
-  vulkan-loader,
-
-  # Package customization:
-  cupsSupport ? true,
-  cups ? null,
-  proprietaryCodecs ? true,
-  pulseSupport ? false,
-  libpulseaudio ? null,
-  ungoogled ? false,
-  ungoogled-chromium,
-  # Optional dependencies:
-  libgcrypt ? null, # cupsSupport
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  vulkan-loader
+, # Package customization:
+  cupsSupport ? true
+, cups ? null
+, proprietaryCodecs ? true
+, pulseSupport ? false
+, libpulseaudio ? null
+, ungoogled ? false
+, ungoogled-chromium
+, # Optional dependencies:
+  libgcrypt ? null
+, # cupsSupport
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+,
 }:
 
 buildFun:
@@ -116,11 +116,11 @@ let
   extraAttrs = buildFun base;
 
   githubPatch =
-    {
-      commit,
-      hash,
-      revert ? false,
-      excludes ? [ ],
+    { commit
+    , hash
+    , revert ? false
+    , excludes ? [ ]
+    ,
     }:
     fetchpatch {
       url = "https://github.com/chromium/chromium/commit/${commit}.patch";
@@ -203,8 +203,7 @@ let
           "i686" = "x86";
           "arm" = "arm";
           "aarch64" = "arm64";
-        }
-        .${platform.parsed.cpu.name} or (throw "no chromium Rosetta Stone entry for cpu: ${name}")
+        }.${platform.parsed.cpu.name} or (throw "no chromium Rosetta Stone entry for cpu: ${name}")
       );
     os =
       platform:
@@ -217,52 +216,56 @@ let
   isElectron = packageName == "electron";
   rustcVersion = buildPackages.rustc.version;
 
-  chromiumDeps = lib.mapAttrs (
-    path: args:
-    fetchFromGitiles (
-      removeAttrs args [ "recompress" ]
-      // lib.optionalAttrs args.recompress or false {
-        name = "source.tar.zstd";
-        downloadToTemp = false;
-        passthru.unpack = true;
-        nativeBuildInputs = [ zstd ];
-        postFetch = ''
-          tar \
-            --use-compress-program="zstd -T$NIX_BUILD_CORES" \
-            --sort=name \
-            --mtime="1970-01-01" \
-            --owner=root --group=root \
-            --numeric-owner --mode=go=rX,u+rw,a-s \
-            --remove-files \
-            --directory="$out" \
-            -cf "$TMPDIR/source.zstd" .
-          mv "$TMPDIR/source.zstd" "$out"
-        '';
-      }
+  chromiumDeps = lib.mapAttrs
+    (
+      path: args:
+        fetchFromGitiles (
+          removeAttrs args [ "recompress" ]
+          // lib.optionalAttrs args.recompress or false {
+            name = "source.tar.zstd";
+            downloadToTemp = false;
+            passthru.unpack = true;
+            nativeBuildInputs = [ zstd ];
+            postFetch = ''
+              tar \
+                --use-compress-program="zstd -T$NIX_BUILD_CORES" \
+                --sort=name \
+                --mtime="1970-01-01" \
+                --owner=root --group=root \
+                --numeric-owner --mode=go=rX,u+rw,a-s \
+                --remove-files \
+                --directory="$out" \
+                -cf "$TMPDIR/source.zstd" .
+              mv "$TMPDIR/source.zstd" "$out"
+            '';
+          }
+        )
     )
-  ) upstream-info.DEPS;
+    upstream-info.DEPS;
 
   unpackPhaseSnippet = lib.concatStrings (
-    lib.mapAttrsToList (
-      path: dep:
+    lib.mapAttrsToList
       (
-        if dep.unpack or false then
-          ''
-            mkdir -p ${path}
-            pushd ${path}
-            unpackFile ${dep}
-            popd
-          ''
-        else
-          ''
-            mkdir -p ${builtins.dirOf path}
-            cp -r ${dep}/. ${path}
+        path: dep:
+          (
+            if dep.unpack or false then
+              ''
+                mkdir -p ${path}
+                pushd ${path}
+                unpackFile ${dep}
+                popd
+              ''
+            else
+              ''
+                mkdir -p ${builtins.dirOf path}
+                cp -r ${dep}/. ${path}
+              ''
+          )
+          + ''
+            chmod u+w -R ${path}
           ''
       )
-      + ''
-        chmod u+w -R ${path}
-      ''
-    ) chromiumDeps
+      chromiumDeps
   );
 
   base = rec {
@@ -674,11 +677,11 @@ let
 
       ''
       +
-        lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64)
-          ''
-            substituteInPlace build/toolchain/linux/BUILD.gn \
-              --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
-          ''
+      lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64)
+        ''
+          substituteInPlace build/toolchain/linux/BUILD.gn \
+            --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
+        ''
       + lib.optionalString ungoogled ''
         ${ungoogler}/utils/patches.py . ${ungoogler}/patches
         ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
@@ -909,7 +912,7 @@ stdenv.mkDerivation (
     "gnFlags"
     "buildTargets"
   ]
-  // {
+    // {
     passthru = base.passthru // (extraAttrs.passthru or { });
   }
 )

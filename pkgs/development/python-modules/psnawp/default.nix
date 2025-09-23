@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitea,
-  lib,
-  poetry-core,
-  pycountry,
-  pyrate-limiter,
-  requests,
-  typing-extensions,
+{ buildPythonPackage
+, fetchFromGitea
+, lib
+, poetry-core
+, pycountry
+, pyrate-limiter
+, requests
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

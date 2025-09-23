@@ -1,27 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  ninja,
-  nanobind,
-  scikit-build-core,
-
-  # dependencies
-  mlx-lm,
-  pydantic,
-  sentencepiece,
-  tiktoken,
-  torch,
-  transformers,
-  triton,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cmake
+, ninja
+, nanobind
+, scikit-build-core
+, # dependencies
+  mlx-lm
+, pydantic
+, sentencepiece
+, tiktoken
+, torch
+, transformers
+, triton
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

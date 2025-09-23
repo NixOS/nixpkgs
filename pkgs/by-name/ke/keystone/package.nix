@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  python3,
-  fixDarwinDylibNames,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, python3
+, fixDarwinDylibNames
+,
 }:
 
 stdenv.mkDerivation rec {

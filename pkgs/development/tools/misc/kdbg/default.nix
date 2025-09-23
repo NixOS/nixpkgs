@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  qt6,
-  kdePackages,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, qt6
+, kdePackages
+,
 }:
 
 stdenv.mkDerivation rec {

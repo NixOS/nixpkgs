@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  bubblewrap,
-  makeBinaryWrapper,
-  cmake,
-  pkg-config,
-  ninja,
-  grpc,
-  gbenchmark,
-  gtest,
-  protobuf,
-  glog,
-  nlohmann_json,
-  zlib,
-  openssl,
-  libuuid,
-  tomlplusplus,
-  fuse3,
+{ lib
+, stdenv
+, fetchFromGitLab
+, bubblewrap
+, makeBinaryWrapper
+, cmake
+, pkg-config
+, ninja
+, grpc
+, gbenchmark
+, gtest
+, protobuf
+, glog
+, nlohmann_json
+, zlib
+, openssl
+, libuuid
+, tomlplusplus
+, fuse3
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "buildbox";

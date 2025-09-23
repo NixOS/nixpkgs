@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  click,
-  requests,
-  tabulate,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, click
+, requests
+, tabulate
+,
 }:
 
 let

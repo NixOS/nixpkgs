@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  dbus,
-  pkg-config,
-  openssl,
-  libevdev,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, dbus
+, pkg-config
+, openssl
+, libevdev
+,
 }:
 
 rustPlatform.buildRustPackage rec {

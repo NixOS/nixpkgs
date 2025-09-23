@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libpcap,
-  nix-update-script,
-  testers,
-  ubridge,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpcap
+, nix-update-script
+, testers
+, ubridge
+,
 }:
 
 stdenv.mkDerivation rec {

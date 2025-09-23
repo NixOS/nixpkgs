@@ -1,14 +1,14 @@
-{
-  lib,
-  nixosTests,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  protobuf,
-  openssl,
-  sqlite,
-  adaptor ? "sql",
+{ lib
+, nixosTests
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, protobuf
+, openssl
+, sqlite
+, adaptor ? "sql"
+,
 }:
 
 rustPlatform.buildRustPackage rec {

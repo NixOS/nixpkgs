@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  gi-docgen,
-  python3,
-  libsoup_3,
-  glib,
-  gnome,
-  gssdp-tools,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gi-docgen
+, python3
+, libsoup_3
+, glib
+, gnome
+, gssdp-tools
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

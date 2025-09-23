@@ -1,8 +1,8 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
-  lib ? pkgs.lib,
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../../.. { inherit system config; }
+, lib ? pkgs.lib
+,
 }:
 
 let
@@ -12,10 +12,10 @@ let
 
   # Common user configuration
   makeGaleraTest =
-    {
-      mariadbPackage,
-      name ? mkTestName mariadbPackage,
-      galeraPackage ? pkgs.mariadb-galera,
+    { mariadbPackage
+    , name ? mkTestName mariadbPackage
+    , galeraPackage ? pkgs.mariadb-galera
+    ,
     }:
     makeTest {
       name = "${name}-galera-mariabackup";
@@ -28,9 +28,9 @@ let
       nodes =
         let
           mkGaleraNode =
-            {
-              id,
-              method,
+            { id
+            , method
+            ,
             }:
             let
               address = "192.168.1.${toString id}";

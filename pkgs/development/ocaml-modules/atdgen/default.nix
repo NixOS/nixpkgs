@@ -1,12 +1,12 @@
-{
-  buildDunePackage,
-  alcotest,
-  atd,
-  atdgen-codec-runtime,
-  atdgen-runtime,
-  biniou,
-  re,
-  python3,
+{ buildDunePackage
+, alcotest
+, atd
+, atdgen-codec-runtime
+, atdgen-runtime
+, biniou
+, re
+, python3
+,
 }:
 
 buildDunePackage {

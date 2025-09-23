@@ -1,16 +1,16 @@
-{
-  stdenv,
-  autoconf,
-  automake,
-  fetchFromGitHub,
-  fetchpatch,
-  gettext,
-  lib,
-  libiconv,
-  libtool,
-  libusb1,
-  pkg-config,
-  buildPackages,
+{ stdenv
+, autoconf
+, automake
+, fetchFromGitHub
+, fetchpatch
+, gettext
+, lib
+, libiconv
+, libtool
+, libusb1
+, pkg-config
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

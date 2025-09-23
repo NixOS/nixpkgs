@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  gitUpdater,
-  fetchFromGitea,
-  pkg-config,
-  meson,
-  ninja,
-  scdoc,
-  wayland-scanner,
-  fontconfig,
-  freetype,
-  pixman,
-  libpng,
-  tllist,
-  wayland,
-  wayland-protocols,
-  dbus,
-  fcft,
+{ stdenv
+, lib
+, gitUpdater
+, fetchFromGitea
+, pkg-config
+, meson
+, ninja
+, scdoc
+, wayland-scanner
+, fontconfig
+, freetype
+, pixman
+, libpng
+, tllist
+, wayland
+, wayland-protocols
+, dbus
+, fcft
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  pandoc,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, pandoc
+,
 }:
 
 python3Packages.buildPythonApplication rec {

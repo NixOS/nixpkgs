@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  flask,
-  google-auth,
-  httplib2,
-  mock,
-  pytest-localserver,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, flask
+, google-auth
+, httplib2
+, mock
+, pytest-localserver
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

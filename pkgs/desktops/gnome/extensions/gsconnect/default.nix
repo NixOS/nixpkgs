@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  replaceVars,
-  openssl,
-  gsound,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  wrapGAppsHook3,
-  glib,
-  glib-networking,
-  gtk3,
-  openssh,
-  gnome-shell,
-  evolution-data-server-gtk4,
-  gjs,
-  nixosTests,
-  desktop-file-utils,
+{ stdenv
+, lib
+, fetchFromGitHub
+, replaceVars
+, openssl
+, gsound
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, wrapGAppsHook3
+, glib
+, glib-networking
+, gtk3
+, openssh
+, gnome-shell
+, evolution-data-server-gtk4
+, gjs
+, nixosTests
+, desktop-file-utils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

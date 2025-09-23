@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  jq,
-  glow,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, jq
+, glow
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation {

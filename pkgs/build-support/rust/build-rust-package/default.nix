@@ -1,18 +1,18 @@
-{
-  lib,
-  importCargoLock,
-  fetchCargoVendor,
-  stdenv,
-  cargoBuildHook,
-  cargoCheckHook,
-  cargoInstallHook,
-  cargoNextestHook,
-  cargoSetupHook,
-  cargo,
-  cargo-auditable,
-  buildPackages,
-  rustc,
-  windows,
+{ lib
+, importCargoLock
+, fetchCargoVendor
+, stdenv
+, cargoBuildHook
+, cargoCheckHook
+, cargoInstallHook
+, cargoNextestHook
+, cargoSetupHook
+, cargo
+, cargo-auditable
+, buildPackages
+, rustc
+, windows
+,
 }:
 
 lib.extendMkDerivation {
@@ -27,145 +27,141 @@ lib.extendMkDerivation {
 
   extendDrvArgs =
     finalAttrs:
-    {
-      name ? "${args.pname}-${args.version}",
-
-      # Name for the vendored dependencies tarball
-      cargoDepsName ? name,
-
-      src ? null,
-      srcs ? null,
-      preUnpack ? null,
-      unpackPhase ? null,
-      postUnpack ? null,
-      cargoPatches ? [ ],
-      patches ? [ ],
-      sourceRoot ? null,
-      cargoRoot ? null,
-      logLevel ? "",
-      buildInputs ? [ ],
-      nativeBuildInputs ? [ ],
-      cargoUpdateHook ? "",
-      cargoDepsHook ? "",
-      buildType ? "release",
-      meta ? { },
-      useFetchCargoVendor ? true,
-      cargoDeps ? null,
-      cargoLock ? null,
-      cargoVendorDir ? null,
-      checkType ? buildType,
-      buildNoDefaultFeatures ? false,
-      checkNoDefaultFeatures ? buildNoDefaultFeatures,
-      buildFeatures ? [ ],
-      checkFeatures ? buildFeatures,
-      useNextest ? false,
-      auditable ? !cargo-auditable.meta.broken,
-
-      depsExtraArgs ? { },
-
-      # Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
+    { name ? "${args.pname}-${args.version}"
+    , # Name for the vendored dependencies tarball
+      cargoDepsName ? name
+    , src ? null
+    , srcs ? null
+    , preUnpack ? null
+    , unpackPhase ? null
+    , postUnpack ? null
+    , cargoPatches ? [ ]
+    , patches ? [ ]
+    , sourceRoot ? null
+    , cargoRoot ? null
+    , logLevel ? ""
+    , buildInputs ? [ ]
+    , nativeBuildInputs ? [ ]
+    , cargoUpdateHook ? ""
+    , cargoDepsHook ? ""
+    , buildType ? "release"
+    , meta ? { }
+    , useFetchCargoVendor ? true
+    , cargoDeps ? null
+    , cargoLock ? null
+    , cargoVendorDir ? null
+    , checkType ? buildType
+    , buildNoDefaultFeatures ? false
+    , checkNoDefaultFeatures ? buildNoDefaultFeatures
+    , buildFeatures ? [ ]
+    , checkFeatures ? buildFeatures
+    , useNextest ? false
+    , auditable ? !cargo-auditable.meta.broken
+    , depsExtraArgs ? { }
+    , # Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
       # contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
       # case for `rustfmt`/etc from the `rust-sources).
       # Otherwise, everything from the tarball would've been built/tested.
-      buildAndTestSubdir ? null,
-      ...
+      buildAndTestSubdir ? null
+    , ...
     }@args:
 
-    assert lib.assertMsg useFetchCargoVendor
-      "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it";
+      assert lib.assertMsg useFetchCargoVendor
+        "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it";
 
-    assert lib.warnIf (args ? useFetchCargoVendor)
-      "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it"
-      true;
+      assert lib.warnIf (args ? useFetchCargoVendor)
+        "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it"
+        true;
 
-    lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
-      RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
-    }
-    // {
-      cargoDeps =
-        if cargoVendorDir != null then
-          null
-        else if cargoDeps != null then
-          cargoDeps
-        else if cargoLock != null then
-          importCargoLock cargoLock
-        else if args.cargoHash or null == null then
-          throw "cargoHash, cargoVendorDir, cargoDeps, or cargoLock must be set"
-        else
-          fetchCargoVendor (
-            {
-              inherit
-                src
-                srcs
-                sourceRoot
-                cargoRoot
-                preUnpack
-                unpackPhase
-                postUnpack
-                ;
-              name = cargoDepsName;
-              patches = cargoPatches;
-              hash = args.cargoHash;
-            }
-            // depsExtraArgs
-          );
-      inherit buildAndTestSubdir;
+      lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug")
+        {
+          RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
+        }
+      // {
+        cargoDeps =
+          if cargoVendorDir != null then
+            null
+          else if cargoDeps != null then
+            cargoDeps
+          else if cargoLock != null then
+            importCargoLock cargoLock
+          else if args.cargoHash or null == null then
+            throw "cargoHash, cargoVendorDir, cargoDeps, or cargoLock must be set"
+          else
+            fetchCargoVendor (
+              {
+                inherit
+                  src
+                  srcs
+                  sourceRoot
+                  cargoRoot
+                  preUnpack
+                  unpackPhase
+                  postUnpack
+                  ;
+                name = cargoDepsName;
+                patches = cargoPatches;
+                hash = args.cargoHash;
+              }
+              // depsExtraArgs
+            );
+        inherit buildAndTestSubdir;
 
-      cargoBuildType = buildType;
+        cargoBuildType = buildType;
 
-      cargoCheckType = checkType;
+        cargoCheckType = checkType;
 
-      cargoBuildNoDefaultFeatures = buildNoDefaultFeatures;
+        cargoBuildNoDefaultFeatures = buildNoDefaultFeatures;
 
-      cargoCheckNoDefaultFeatures = checkNoDefaultFeatures;
+        cargoCheckNoDefaultFeatures = checkNoDefaultFeatures;
 
-      cargoBuildFeatures = buildFeatures;
+        cargoBuildFeatures = buildFeatures;
 
-      cargoCheckFeatures = checkFeatures;
+        cargoCheckFeatures = checkFeatures;
 
-      nativeBuildInputs =
-        nativeBuildInputs
-        ++ lib.optionals auditable [
-          (buildPackages.cargo-auditable-cargo-wrapper.override {
-            inherit cargo cargo-auditable;
-          })
-        ]
-        ++ [
-          cargoBuildHook
-          (if useNextest then cargoNextestHook else cargoCheckHook)
-          cargoInstallHook
-          cargoSetupHook
-          rustc
-          cargo
-        ];
+        nativeBuildInputs =
+          nativeBuildInputs
+          ++ lib.optionals auditable [
+            (buildPackages.cargo-auditable-cargo-wrapper.override {
+              inherit cargo cargo-auditable;
+            })
+          ]
+          ++ [
+            cargoBuildHook
+            (if useNextest then cargoNextestHook else cargoCheckHook)
+            cargoInstallHook
+            cargoSetupHook
+            rustc
+            cargo
+          ];
 
-      buildInputs = buildInputs ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
+        buildInputs = buildInputs ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
-      patches = cargoPatches ++ patches;
+        patches = cargoPatches ++ patches;
 
-      PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
+        PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
 
-      postUnpack = ''
-        eval "$cargoDepsHook"
+        postUnpack = ''
+          eval "$cargoDepsHook"
 
-        export RUST_LOG=${logLevel}
-      ''
-      + (args.postUnpack or "");
+          export RUST_LOG=${logLevel}
+        ''
+        + (args.postUnpack or "");
 
-      configurePhase =
-        args.configurePhase or ''
-          runHook preConfigure
-          runHook postConfigure
-        '';
+        configurePhase =
+          args.configurePhase or ''
+            runHook preConfigure
+            runHook postConfigure
+          '';
 
-      doCheck = args.doCheck or true;
+        doCheck = args.doCheck or true;
 
-      strictDeps = true;
+        strictDeps = true;
 
-      meta = meta // {
-        badPlatforms = meta.badPlatforms or [ ] ++ rustc.badTargetPlatforms;
-        # default to Rust's platforms
-        platforms = lib.intersectLists meta.platforms or lib.platforms.all rustc.targetPlatforms;
+        meta = meta // {
+          badPlatforms = meta.badPlatforms or [ ] ++ rustc.badTargetPlatforms;
+          # default to Rust's platforms
+          platforms = lib.intersectLists meta.platforms or lib.platforms.all rustc.targetPlatforms;
+        };
       };
-    };
 }

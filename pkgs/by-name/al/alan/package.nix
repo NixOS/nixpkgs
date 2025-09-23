@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cgreen,
-  openjdk,
-  pkg-config,
-  which,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cgreen
+, openjdk
+, pkg-config
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

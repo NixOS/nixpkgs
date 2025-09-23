@@ -1,8 +1,8 @@
-{
-  lib,
-  nix-update-script,
-  buildGoModule,
-  fetchFromGitHub,
+{ lib
+, nix-update-script
+, buildGoModule
+, fetchFromGitHub
+,
 }:
 
 buildGoModule rec {

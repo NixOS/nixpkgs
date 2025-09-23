@@ -1,8 +1,8 @@
-{
-  runCommand,
-  sanjuuni,
-  nixos-artwork,
-  lua5_2,
+{ runCommand
+, sanjuuni
+, nixos-artwork
+, lua5_2
+,
 }:
 let
   makeCommand = derivation: baseFilename: ''
@@ -15,16 +15,16 @@ let
   '';
 in
 runCommand "sanjuuni-test-run-on-nixos-artwork"
-  {
-    nativeBuildInputs = [
-      sanjuuni
-      lua5_2
-      nixos-artwork.wallpapers.simple-blue
-      nixos-artwork.wallpapers.simple-red
-      nixos-artwork.wallpapers.simple-dark-gray
-      nixos-artwork.wallpapers.stripes
-    ];
-  }
+{
+  nativeBuildInputs = [
+    sanjuuni
+    lua5_2
+    nixos-artwork.wallpapers.simple-blue
+    nixos-artwork.wallpapers.simple-red
+    nixos-artwork.wallpapers.simple-dark-gray
+    nixos-artwork.wallpapers.stripes
+  ];
+}
   ''
     mkdir -p $out
     ${makeCommand nixos-artwork.wallpapers.simple-blue "nix-wallpaper-simple-blue"}

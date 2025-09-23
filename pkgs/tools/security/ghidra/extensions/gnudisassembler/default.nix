@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildGhidraExtension,
-  ghidra,
-  flex,
-  bison,
-  texinfo,
-  perl,
-  zlib,
-  xcbuild,
+{ lib
+, stdenv
+, fetchurl
+, buildGhidraExtension
+, ghidra
+, flex
+, bison
+, texinfo
+, perl
+, zlib
+, xcbuild
+,
 }:
 
 let

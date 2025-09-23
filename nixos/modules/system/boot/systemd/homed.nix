@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  utils,
-  ...
+{ config
+, lib
+, utils
+, ...
 }:
 
 let

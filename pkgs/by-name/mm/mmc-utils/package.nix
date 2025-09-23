@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  gitUpdater,
-  sparse,
+{ lib
+, stdenv
+, fetchgit
+, gitUpdater
+, sparse
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

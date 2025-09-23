@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-  testers,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, testers
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

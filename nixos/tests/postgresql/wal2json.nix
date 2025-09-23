@@ -1,7 +1,7 @@
-{
-  pkgs,
-  makeTest,
-  genTests,
+{ pkgs
+, makeTest
+, genTests
+,
 }:
 
 let

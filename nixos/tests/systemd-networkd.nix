@@ -1,15 +1,14 @@
 let
   generateNodeConf =
-    {
-      lib,
-      pkgs,
-      config,
-      privk,
-      pubk,
-      systemdCreds,
-      peerId,
-      nodeId,
-      ...
+    { lib
+    , pkgs
+    , config
+    , privk
+    , pubk
+    , systemdCreds
+    , peerId
+    , nodeId
+    , ...
     }:
     {
       imports = [ common/user-account.nix ];

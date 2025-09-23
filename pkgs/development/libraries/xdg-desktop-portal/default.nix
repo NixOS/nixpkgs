@@ -1,35 +1,35 @@
-{
-  lib,
-  fetchFromGitHub,
-  flatpak,
-  fuse3,
-  bubblewrap,
-  docutils,
-  systemdMinimal,
-  geoclue2,
-  glib,
-  gsettings-desktop-schemas,
-  json-glib,
-  meson,
-  ninja,
-  nixosTests,
-  pipewire,
-  gdk-pixbuf,
-  librsvg,
-  gobject-introspection,
-  python3,
-  pkg-config,
-  stdenv,
-  runCommand,
-  wrapGAppsNoGuiHook,
-  bash,
-  dbus,
-  gst_all_1,
-  libgudev,
-  umockdev,
-  replaceVars,
-  enableGeoLocation ? true,
-  enableSystemd ? true,
+{ lib
+, fetchFromGitHub
+, flatpak
+, fuse3
+, bubblewrap
+, docutils
+, systemdMinimal
+, geoclue2
+, glib
+, gsettings-desktop-schemas
+, json-glib
+, meson
+, ninja
+, nixosTests
+, pipewire
+, gdk-pixbuf
+, librsvg
+, gobject-introspection
+, python3
+, pkg-config
+, stdenv
+, runCommand
+, wrapGAppsNoGuiHook
+, bash
+, dbus
+, gst_all_1
+, libgudev
+, umockdev
+, replaceVars
+, enableGeoLocation ? true
+, enableSystemd ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

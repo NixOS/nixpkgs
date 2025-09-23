@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -15,32 +14,40 @@ let
     chars: str:
     let
       nonchars = lib.filter (x: !(lib.elem x.value chars)) (
-        lib.imap0 (i: v: {
-          ind = i;
-          value = v;
-        }) (lib.stringToCharacters str)
+        lib.imap0
+          (i: v: {
+            ind = i;
+            value = v;
+          })
+          (lib.stringToCharacters str)
       );
     in
     lib.optionalString (nonchars != [ ]) (
-      lib.substring (lib.head nonchars).ind (lib.add 1 (
-        lib.sub (lib.last nonchars).ind (lib.head nonchars).ind
-      )) str
+      lib.substring (lib.head nonchars).ind
+        (lib.add 1 (
+          lib.sub (lib.last nonchars).ind (lib.head nonchars).ind
+        ))
+        str
     );
   indent =
     str:
     lib.concatStrings (
-      lib.concatMap (s: [
-        "  "
-        (trim [ " " "\t" ] s)
-        "\n"
-      ]) (lib.splitString "\n" str)
+      lib.concatMap
+        (s: [
+          "  "
+          (trim [ " " "\t" ] s)
+          "\n"
+        ])
+        (lib.splitString "\n" str)
     );
   configText = indent (toString cfg.configSetup);
   connectionText = lib.concatStrings (
-    lib.mapAttrsToList (n: v: ''
-      conn ${n}
-      ${indent v}
-    '') cfg.connections
+    lib.mapAttrsToList
+      (n: v: ''
+        conn ${n}
+        ${indent v}
+      '')
+      cfg.connections
   );
 
   configFile = pkgs.writeText "ipsec-nixos.conf" ''
@@ -50,10 +57,12 @@ let
     ${connectionText}
   '';
 
-  policyFiles = lib.mapAttrs' (name: text: {
-    name = "ipsec.d/policies/${name}";
-    value.source = pkgs.writeText "ipsec-policy-${name}" text;
-  }) cfg.policies;
+  policyFiles = lib.mapAttrs'
+    (name: text: {
+      name = "ipsec.d/policies/${name}";
+      value.source = pkgs.writeText "ipsec-policy-${name}" text;
+    })
+    cfg.policies;
 
 in
 

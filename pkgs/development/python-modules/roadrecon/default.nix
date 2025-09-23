@@ -1,19 +1,19 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchPypi,
-  flask,
-  flask-cors,
-  flask-marshmallow,
-  flask-sqlalchemy,
-  marshmallow,
-  marshmallow-sqlalchemy,
-  openpyxl,
-  pythonOlder,
-  roadlib,
-  setuptools,
-  sqlalchemy,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchPypi
+, flask
+, flask-cors
+, flask-marshmallow
+, flask-sqlalchemy
+, marshmallow
+, marshmallow-sqlalchemy
+, openpyxl
+, pythonOlder
+, roadlib
+, setuptools
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

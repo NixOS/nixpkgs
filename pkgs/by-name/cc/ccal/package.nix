@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeWrapper,
-  ghostscript_headless, # for ps2pdf binary
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, ghostscript_headless
+, # for ps2pdf binary
 }:
 
 stdenv.mkDerivation rec {

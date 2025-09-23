@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  sqlcipher,
-  openssl,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, sqlcipher
+, openssl
+,
 }:
 let
   pname = "sqlcipher3";

@@ -1,19 +1,19 @@
-{
-  lib,
-  apple-sdk,
-  apple-sdk_13,
-  bzip2,
-  libmd,
-  libresolv,
-  libutil,
-  libxo,
-  mkAppleDerivation,
-  ncurses,
-  pkg-config,
-  shell_cmds,
-  stdenvNoCC,
-  xz,
-  zlib,
+{ lib
+, apple-sdk
+, apple-sdk_13
+, bzip2
+, libmd
+, libresolv
+, libutil
+, libxo
+, mkAppleDerivation
+, ncurses
+, pkg-config
+, shell_cmds
+, stdenvNoCC
+, xz
+, zlib
+,
 }:
 
 let

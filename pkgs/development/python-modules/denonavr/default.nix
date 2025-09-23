@@ -1,20 +1,20 @@
-{
-  lib,
-  async-timeout,
-  asyncstdlib,
-  attrs,
-  buildPythonPackage,
-  defusedxml,
-  fetchFromGitHub,
-  ftfy,
-  httpx,
-  netifaces,
-  pytest-asyncio,
-  pytest-httpx,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, async-timeout
+, asyncstdlib
+, attrs
+, buildPythonPackage
+, defusedxml
+, fetchFromGitHub
+, ftfy
+, httpx
+, netifaces
+, pytest-asyncio
+, pytest-httpx
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

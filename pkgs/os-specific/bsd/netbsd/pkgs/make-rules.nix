@@ -1,9 +1,9 @@
-{
-  lib,
-  mkDerivation,
-  stdenv,
-  bsdSetupHook,
-  netbsdSetupHook,
+{ lib
+, mkDerivation
+, stdenv
+, bsdSetupHook
+, netbsdSetupHook
+,
 }:
 
 mkDerivation {

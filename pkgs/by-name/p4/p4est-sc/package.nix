@@ -1,18 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  mpi,
-  zlib,
-  jansson,
-  mpiCheckPhaseHook,
-  debug ? false,
-  mpiSupport ? true,
-
-  # passthru.tests
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, mpi
+, zlib
+, jansson
+, mpiCheckPhaseHook
+, debug ? false
+, mpiSupport ? true
+, # passthru.tests
+  testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

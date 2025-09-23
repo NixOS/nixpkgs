@@ -1,9 +1,9 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-  # bool: whether to use networkd in the tests
-  networkd,
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+, # bool: whether to use networkd in the tests
+  networkd
+,
 }:
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
@@ -13,10 +13,12 @@ let
   router = import ./router.nix { inherit networkd; };
   clientConfig =
     extraConfig:
-    lib.recursiveUpdate {
-      networking.useDHCP = false;
-      networking.useNetworkd = networkd;
-    } extraConfig;
+    lib.recursiveUpdate
+      {
+        networking.useDHCP = false;
+        networking.useNetworkd = networkd;
+      }
+      extraConfig;
   testCases = {
     loopback = {
       name = "Loopback";
@@ -499,10 +501,10 @@ let
     sit-6in4 =
       let
         node =
-          {
-            address4,
-            remote,
-            address6,
+          { address4
+          , remote
+          , address6
+          ,
           }:
           {
             virtualisation.interfaces.enp1s0.vlan = 1;
@@ -565,10 +567,10 @@ let
     sit-fou =
       let
         node =
-          {
-            address4,
-            remote,
-            address6,
+          { address4
+          , remote
+          , address6
+          ,
           }:
           { pkgs, ... }:
           {
@@ -605,11 +607,13 @@ let
         nodes.client1 =
           args@{ pkgs, ... }:
           lib.mkMerge [
-            (node {
-              address4 = "192.168.1.1";
-              remote = "192.168.1.2";
-              address6 = "fc00::1";
-            } args)
+            (node
+              {
+                address4 = "192.168.1.1";
+                remote = "192.168.1.2";
+                address6 = "fc00::1";
+              }
+              args)
             {
               networking = {
                 nftables.enable = true;
@@ -624,11 +628,13 @@ let
         nodes.client2 =
           args@{ pkgs, ... }:
           lib.mkMerge [
-            (node {
-              address4 = "192.168.1.2";
-              remote = "192.168.1.1";
-              address6 = "fc00::2";
-            } args)
+            (node
+              {
+                address4 = "192.168.1.2";
+                remote = "192.168.1.1";
+                address6 = "fc00::2";
+              }
+              args)
             {
               networking = {
                 firewall.allowedUDPPorts = [ 9001 ];
@@ -661,10 +667,10 @@ let
     ipip-4in6 =
       let
         node =
-          {
-            address4,
-            remote,
-            address6,
+          { address4
+          , remote
+          , address6
+          ,
           }:
           {
             virtualisation.interfaces.enp1s0.vlan = 1;
@@ -729,10 +735,10 @@ let
     ipip =
       let
         node =
-          {
-            local,
-            remote,
-            address,
+          { local
+          , remote
+          , address
+          ,
           }:
           {
             virtualisation.interfaces.enp1s0.vlan = 1;
@@ -1449,13 +1455,15 @@ let
   };
 
 in
-lib.mapAttrs (lib.const (
-  attrs:
-  makeTest (
-    attrs
-    // {
-      name = "${attrs.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
-      meta.maintainers = with lib.maintainers; [ rnhmjoj ];
-    }
-  )
-)) testCases
+lib.mapAttrs
+  (lib.const (
+    attrs:
+    makeTest (
+      attrs
+        // {
+        name = "${attrs.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
+        meta.maintainers = with lib.maintainers; [ rnhmjoj ];
+      }
+    )
+  ))
+  testCases

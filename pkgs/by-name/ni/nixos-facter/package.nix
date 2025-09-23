@@ -1,14 +1,14 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  hwinfo,
-  libusb1,
-  gcc,
-  pkg-config,
-  makeWrapper,
-  stdenv,
-  systemdMinimal,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, hwinfo
+, libusb1
+, gcc
+, pkg-config
+, makeWrapper
+, stdenv
+, systemdMinimal
+,
 }:
 let
   # We are waiting on some changes to be merged upstream: https://github.com/openSUSE/hwinfo/pulls

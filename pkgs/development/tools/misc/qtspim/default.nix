@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchsvn,
-  wrapQtAppsHook,
-  qtbase,
-  qttools,
-  qmake,
-  bison,
-  flex,
+{ lib
+, stdenv
+, fetchsvn
+, wrapQtAppsHook
+, qtbase
+, qttools
+, qmake
+, bison
+, flex
+,
 }:
 stdenv.mkDerivation {
   pname = "qtspim";

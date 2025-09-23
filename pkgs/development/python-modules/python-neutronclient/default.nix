@@ -1,34 +1,34 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  # Build and Runtime
-  pbr,
-  cliff,
-  debtcollector,
-  netaddr,
-  openstacksdk,
-  osc-lib,
-  oslo-i18n,
-  oslo-log,
-  oslo-serialization,
-  oslo-utils,
-  os-client-config,
-  keystoneauth1,
-  python-keystoneclient,
-  requests,
-  hacking,
-  # Tests
-  fixtures,
-  oslotest,
-  osprofiler,
-  python-openstackclient,
-  requests-mock,
-  stestr,
-  testtools,
-  testscenarios,
-  tempest,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, # Build and Runtime
+  pbr
+, cliff
+, debtcollector
+, netaddr
+, openstacksdk
+, osc-lib
+, oslo-i18n
+, oslo-log
+, oslo-serialization
+, oslo-utils
+, os-client-config
+, keystoneauth1
+, python-keystoneclient
+, requests
+, hacking
+, # Tests
+  fixtures
+, oslotest
+, osprofiler
+, python-openstackclient
+, requests-mock
+, stestr
+, testtools
+, testscenarios
+, tempest
+,
 }:
 
 buildPythonPackage rec {

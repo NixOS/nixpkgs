@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -145,9 +144,10 @@ in
             }"
             "config_reverse_proxy_login_header_name = '${cfg.options.reverseProxyAuth.header}'"
           ]
-          ++ optional (
-            cfg.options.calibreLibrary != null
-          ) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
+          ++ optional
+            (
+              cfg.options.calibreLibrary != null
+            ) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
           ++ optionals cfg.options.enableBookConversion [
             "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
             "config_binariesdir = '${pkgs.calibre}/bin/'"

@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  typing-extensions,
-
-  # nativeCheckInputs
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  typing-extensions
+, # nativeCheckInputs
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

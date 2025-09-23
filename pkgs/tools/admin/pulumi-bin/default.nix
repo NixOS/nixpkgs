@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  makeWrapper,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, makeWrapper
+, installShellFiles
+,
 }:
 
 let

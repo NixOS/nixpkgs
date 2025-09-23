@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  povray,
-  libsForQt5,
-  replaceVars,
-  zlib,
-  testers,
-  nix-update-script,
-  libGL,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, povray
+, libsForQt5
+, replaceVars
+, zlib
+, testers
+, nix-update-script
+, libGL
+,
 }:
 
 /*

@@ -1,14 +1,14 @@
-{
-  jre,
-  lib,
-  stdenv,
-  gradle,
-  makeWrapper,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
-  installShellFiles,
-  stripJavaArchivesHook,
+{ jre
+, lib
+, stdenv
+, gradle
+, makeWrapper
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+, installShellFiles
+, stripJavaArchivesHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

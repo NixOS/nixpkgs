@@ -1,31 +1,31 @@
-{
-  lib,
-  betamax,
-  blinker,
-  buildPythonPackage,
-  coverage,
-  fetchFromGitHub,
-  flask,
-  flask-caching,
-  flask-login,
-  flask-sqlalchemy,
-  flit,
-  freezegun,
-  oauthlib,
-  pallets-sphinx-themes,
-  pillow,
-  pytest,
-  pytest-mock,
-  pytestCheckHook,
-  requests,
-  requests-oauthlib,
-  responses,
-  sphinx,
-  sphinxcontrib-seqdiag,
-  sphinxcontrib-spelling,
-  sqlalchemy,
-  urlobject,
-  werkzeug,
+{ lib
+, betamax
+, blinker
+, buildPythonPackage
+, coverage
+, fetchFromGitHub
+, flask
+, flask-caching
+, flask-login
+, flask-sqlalchemy
+, flit
+, freezegun
+, oauthlib
+, pallets-sphinx-themes
+, pillow
+, pytest
+, pytest-mock
+, pytestCheckHook
+, requests
+, requests-oauthlib
+, responses
+, sphinx
+, sphinxcontrib-seqdiag
+, sphinxcontrib-spelling
+, sqlalchemy
+, urlobject
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

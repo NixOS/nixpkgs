@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -227,58 +226,60 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    systemd.services = mapAttrs' (
-      name: inst:
-      let
-        configFile = genConfigFile name inst;
-      in
-      nameValuePair "easytier-${name}" {
-        description = "EasyTier Daemon - ${name}";
-        wants = [
-          "network-online.target"
-          "nss-lookup.target"
-        ];
-        after = [
-          "network-online.target"
-          "nss-lookup.target"
-        ];
-        wantedBy = [ "multi-user.target" ];
-        path = with pkgs; [
-          cfg.package
-          iproute2
-          bash
-        ];
-        restartTriggers = inst.environmentFiles ++ (optionals (inst.configServer == null) [ configFile ]);
-        serviceConfig = {
-          Type = "simple";
-          Restart = "on-failure";
-          EnvironmentFile = inst.environmentFiles;
-          StateDirectory = "easytier/easytier-${name}";
-          StateDirectoryMode = "0700";
-          WorkingDirectory = "/var/lib/easytier/easytier-${name}";
-          ExecStart = escapeShellArgs (
-            [
-              "${cfg.package}/bin/easytier-core"
-            ]
-            ++ optionals (inst.configServer != null) (
-              [
-                "-w"
-                "${inst.configServer}"
-              ]
-              ++ (optionals (inst.settings.hostname != null) [
-                "--hostname"
-                "${inst.settings.hostname}"
-              ])
-            )
-            ++ optionals (inst.configServer == null) [
-              "-c"
-              "${configFile}"
-            ]
-            ++ inst.extraArgs
-          );
-        };
-      }
-    ) activeInsts;
+    systemd.services = mapAttrs'
+      (
+        name: inst:
+          let
+            configFile = genConfigFile name inst;
+          in
+          nameValuePair "easytier-${name}" {
+            description = "EasyTier Daemon - ${name}";
+            wants = [
+              "network-online.target"
+              "nss-lookup.target"
+            ];
+            after = [
+              "network-online.target"
+              "nss-lookup.target"
+            ];
+            wantedBy = [ "multi-user.target" ];
+            path = with pkgs; [
+              cfg.package
+              iproute2
+              bash
+            ];
+            restartTriggers = inst.environmentFiles ++ (optionals (inst.configServer == null) [ configFile ]);
+            serviceConfig = {
+              Type = "simple";
+              Restart = "on-failure";
+              EnvironmentFile = inst.environmentFiles;
+              StateDirectory = "easytier/easytier-${name}";
+              StateDirectoryMode = "0700";
+              WorkingDirectory = "/var/lib/easytier/easytier-${name}";
+              ExecStart = escapeShellArgs (
+                [
+                  "${cfg.package}/bin/easytier-core"
+                ]
+                ++ optionals (inst.configServer != null) (
+                  [
+                    "-w"
+                    "${inst.configServer}"
+                  ]
+                  ++ (optionals (inst.settings.hostname != null) [
+                    "--hostname"
+                    "${inst.settings.hostname}"
+                  ])
+                )
+                ++ optionals (inst.configServer == null) [
+                  "-c"
+                  "${configFile}"
+                ]
+                ++ inst.extraArgs
+              );
+            };
+          }
+      )
+      activeInsts;
 
     boot.kernel.sysctl = mkIf cfg.allowSystemForward {
       "net.ipv4.conf.all.forwarding" = mkOverride 97 true;

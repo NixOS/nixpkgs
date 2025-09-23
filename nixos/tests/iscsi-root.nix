@@ -11,11 +11,10 @@ in
 
   nodes = {
     target =
-      {
-        config,
-        pkgs,
-        lib,
-        ...
+      { config
+      , pkgs
+      , lib
+      , ...
       }:
       {
         services.target = {
@@ -87,11 +86,10 @@ in
       };
 
     initiatorAuto =
-      {
-        nodes,
-        config,
-        pkgs,
-        ...
+      { nodes
+      , config
+      , pkgs
+      , ...
       }:
       {
         services.openiscsi = {
@@ -115,12 +113,11 @@ in
       };
 
     initiatorRootDisk =
-      {
-        config,
-        pkgs,
-        modulesPath,
-        lib,
-        ...
+      { config
+      , pkgs
+      , modulesPath
+      , lib
+      , ...
       }:
       {
         boot.loader.grub.enable = false;

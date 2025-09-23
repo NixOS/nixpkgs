@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  freexl,
-  geos,
-  expat,
-  librttopo,
-  libspatialite,
-  libxml2,
-  libz,
-  minizip,
-  proj,
-  readosm,
-  sqlite,
-  testers,
-  spatialite-tools,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, freexl
+, geos
+, expat
+, librttopo
+, libspatialite
+, libxml2
+, libz
+, minizip
+, proj
+, readosm
+, sqlite
+, testers
+, spatialite-tools
+,
 }:
 
 stdenv.mkDerivation rec {

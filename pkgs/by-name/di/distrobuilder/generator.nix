@@ -1,13 +1,13 @@
-{
-  stdenvNoCC,
-  lib,
-  src,
-  version,
-  makeWrapper,
-  coreutils,
-  findutils,
-  gnugrep,
-  systemd,
+{ stdenvNoCC
+, lib
+, src
+, version
+, makeWrapper
+, coreutils
+, findutils
+, gnugrep
+, systemd
+,
 }:
 
 stdenvNoCC.mkDerivation {

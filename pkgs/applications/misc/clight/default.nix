@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  dbus,
-  cmake,
-  pkg-config,
-  bash-completion,
-  gsl,
-  popt,
-  clightd,
-  systemd,
-  libconfig,
-  libmodule,
-  withGeoclue ? true,
-  geoclue2,
-  withUpower ? true,
-  upower,
+{ lib
+, stdenv
+, fetchFromGitHub
+, dbus
+, cmake
+, pkg-config
+, bash-completion
+, gsl
+, popt
+, clightd
+, systemd
+, libconfig
+, libmodule
+, withGeoclue ? true
+, geoclue2
+, withUpower ? true
+, upower
+,
 }:
 
 stdenv.mkDerivation rec {

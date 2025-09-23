@@ -1,7 +1,7 @@
-{
-  writeShellApplication,
-  pnpm,
-  pnpmDeps,
+{ writeShellApplication
+, pnpm
+, pnpmDeps
+,
 }:
 
 writeShellApplication {

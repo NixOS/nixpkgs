@@ -1,8 +1,8 @@
-{
-  cacert,
-  fetchFromGitHub,
-  lib,
-  python3,
+{ cacert
+, fetchFromGitHub
+, lib
+, python3
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

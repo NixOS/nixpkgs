@@ -1,7 +1,7 @@
-{
-  stdenv,
-  lib,
-  glibcLocales,
+{ stdenv
+, lib
+, glibcLocales
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

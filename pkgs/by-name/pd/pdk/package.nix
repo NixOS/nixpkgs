@@ -1,11 +1,11 @@
-{
-  bundlerApp,
-  bundlerUpdateScript,
-  gnumake,
-  lib,
-  makeWrapper,
-  pdk,
-  testers,
+{ bundlerApp
+, bundlerUpdateScript
+, gnumake
+, lib
+, makeWrapper
+, pdk
+, testers
+,
 }:
 
 bundlerApp {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  wxGTK32,
-  subversion,
-  apr,
-  aprutil,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, wxGTK32
+, subversion
+, apr
+, aprutil
+, python3
+,
 }:
 
 stdenv.mkDerivation {

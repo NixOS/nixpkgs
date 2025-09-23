@@ -1,12 +1,12 @@
-{
-  lib,
-  bc,
-  buildDotnetModule,
-  fetchFromGitHub,
-  copyDesktopItems,
-  icoutils,
-  makeDesktopItem,
-  dotnetCorePackages,
+{ lib
+, bc
+, buildDotnetModule
+, fetchFromGitHub
+, copyDesktopItems
+, icoutils
+, makeDesktopItem
+, dotnetCorePackages
+,
 }:
 
 buildDotnetModule rec {

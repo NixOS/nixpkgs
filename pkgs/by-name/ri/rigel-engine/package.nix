@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libX11,
-  SDL2,
-  SDL2_mixer,
-  buildOpenGLES ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libX11
+, SDL2
+, SDL2_mixer
+, buildOpenGLES ? false
+,
 }:
 
 stdenv.mkDerivation {

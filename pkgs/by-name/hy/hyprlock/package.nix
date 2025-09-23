@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libGL,
-  libxkbcommon,
-  hyprgraphics,
-  hyprlang,
-  hyprutils,
-  hyprwayland-scanner,
-  pam,
-  sdbus-cpp_2,
-  systemdLibs,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  cairo,
-  file,
-  libjpeg,
-  libwebp,
-  pango,
-  libdrm,
-  libgbm,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libGL
+, libxkbcommon
+, hyprgraphics
+, hyprlang
+, hyprutils
+, hyprwayland-scanner
+, pam
+, sdbus-cpp_2
+, systemdLibs
+, wayland
+, wayland-protocols
+, wayland-scanner
+, cairo
+, file
+, libjpeg
+, libwebp
+, pango
+, libdrm
+, libgbm
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

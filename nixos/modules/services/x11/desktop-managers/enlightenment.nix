@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 with lib;
@@ -53,16 +52,18 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = utils.removePackagesByName (with pkgs; [
-      enlightenment.econnman
-      enlightenment.efl
-      enlightenment.enlightenment
-      enlightenment.ecrire
-      enlightenment.ephoto
-      enlightenment.rage
-      enlightenment.terminology
-      xorg.xcursorthemes
-    ]) config.environment.enlightenment.excludePackages;
+    environment.systemPackages = utils.removePackagesByName
+      (with pkgs; [
+        enlightenment.econnman
+        enlightenment.efl
+        enlightenment.enlightenment
+        enlightenment.ecrire
+        enlightenment.ephoto
+        enlightenment.rage
+        enlightenment.terminology
+        xorg.xcursorthemes
+      ])
+      config.environment.enlightenment.excludePackages;
 
     environment.pathsToLink = [
       "/etc/enlightenment"

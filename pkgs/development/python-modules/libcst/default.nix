@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  callPackage,
-  cargo,
-  hypothesmith,
-  libcst,
-  libiconv,
-  pytestCheckHook,
-  python,
-  pythonOlder,
-  pyyaml,
-  pyyaml-ft,
-  rustPlatform,
-  rustc,
-  setuptools-rust,
-  setuptools-scm,
-  ufmt,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, callPackage
+, cargo
+, hypothesmith
+, libcst
+, libiconv
+, pytestCheckHook
+, python
+, pythonOlder
+, pyyaml
+, pyyaml-ft
+, rustPlatform
+, rustc
+, setuptools-rust
+, setuptools-scm
+, ufmt
+,
 }:
 
 buildPythonPackage rec {

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  meson,
-  ninja,
-  pkg-config,
-  yaml-cpp,
-  systemd,
-  python3Packages,
-  asciidoc,
-  libxslt,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  libxml2,
-  docbook5,
-  mesonEmulatorHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, yaml-cpp
+, systemd
+, python3Packages
+, asciidoc
+, libxslt
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxml2
+, docbook5
+, mesonEmulatorHook
+,
 }:
 
 stdenv.mkDerivation rec {

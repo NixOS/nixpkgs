@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  numpy,
-  python-rapidjson,
-  # optional dependencies
-  aiohttp,
-  geventhttpclient,
-  grpcio,
-  packaging,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, numpy
+, python-rapidjson
+, # optional dependencies
+  aiohttp
+, geventhttpclient
+, grpcio
+, packaging
+,
 }:
 
 let

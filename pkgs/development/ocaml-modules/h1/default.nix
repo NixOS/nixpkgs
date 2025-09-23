@@ -1,14 +1,14 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  angstrom,
-  base64,
-  bstr,
-  faraday,
-  httpun-types,
-  alcotest,
-  version ? "1.1.0",
+{ lib
+, buildDunePackage
+, fetchurl
+, angstrom
+, base64
+, bstr
+, faraday
+, httpun-types
+, alcotest
+, version ? "1.1.0"
+,
 }:
 
 buildDunePackage {

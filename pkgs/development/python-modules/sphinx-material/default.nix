@@ -1,16 +1,16 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  css-html-js-minify,
-  fetchPypi,
-  lxml,
-  python-slugify,
-  pythonOlder,
-  setuptools,
-  sphinx,
-  unidecode,
-  versioneer,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, css-html-js-minify
+, fetchPypi
+, lxml
+, python-slugify
+, pythonOlder
+, setuptools
+, sphinx
+, unidecode
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  colorlog,
-  setuptools,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, colorlog
+, setuptools
+,
 }:
 let
   pname = "zenlog";

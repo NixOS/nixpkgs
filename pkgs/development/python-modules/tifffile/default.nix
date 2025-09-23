@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  dask,
-  fetchPypi,
-  fsspec,
-  lxml,
-  numpy,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  zarr,
+{ lib
+, buildPythonPackage
+, dask
+, fetchPypi
+, fsspec
+, lxml
+, numpy
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, zarr
+,
 }:
 
 buildPythonPackage rec {

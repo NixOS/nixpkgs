@@ -1,22 +1,22 @@
-{
-  aiofiles,
-  buildPythonPackage,
-  cryptography,
-  deepdiff,
-  eval-type-backport,
-  fetchFromGitHub,
-  httpx,
-  lib,
-  nest-asyncio,
-  poetry-core,
-  pydantic,
-  pypdf,
-  pytest-asyncio,
-  pytestCheckHook,
-  python,
-  python-dateutil,
-  requests-toolbelt,
-  typing-inspection,
+{ aiofiles
+, buildPythonPackage
+, cryptography
+, deepdiff
+, eval-type-backport
+, fetchFromGitHub
+, httpx
+, lib
+, nest-asyncio
+, poetry-core
+, pydantic
+, pypdf
+, pytest-asyncio
+, pytestCheckHook
+, python
+, python-dateutil
+, requests-toolbelt
+, typing-inspection
+,
 }:
 
 buildPythonPackage rec {

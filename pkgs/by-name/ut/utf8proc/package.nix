@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  # passthru.tests
-  tmux,
-  fcft,
-  arrow-cpp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, # passthru.tests
+  tmux
+, fcft
+, arrow-cpp
+,
 }:
 
 stdenv.mkDerivation rec {

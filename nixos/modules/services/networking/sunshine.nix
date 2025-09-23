@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 let
   inherit (lib)
@@ -185,10 +184,11 @@ in
           [
             (if cfg.capSysAdmin then "${config.security.wrapperDir}/sunshine" else "${getExe cfg.package}")
           ]
-          ++ optionals (
-            cfg.applications.apps != [ ]
-            || (builtins.length (builtins.attrNames cfg.settings) > 1 || cfg.settings.port != defaultPort)
-          ) [ "${configFile}" ]
+          ++ optionals
+            (
+              cfg.applications.apps != [ ]
+              || (builtins.length (builtins.attrNames cfg.settings) > 1 || cfg.settings.port != defaultPort)
+            ) [ "${configFile}" ]
         );
         Restart = "on-failure";
         RestartSec = "5s";

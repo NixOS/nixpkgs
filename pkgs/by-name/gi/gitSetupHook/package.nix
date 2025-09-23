@@ -1,10 +1,11 @@
-{
-  lib,
-  gitMinimal,
-  makeSetupHook,
+{ lib
+, gitMinimal
+, makeSetupHook
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "gitSetupHook";
 
   substitutions = {

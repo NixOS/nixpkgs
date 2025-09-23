@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  coverage,
-  ipykernel,
-  jupyter-client,
-  nbformat,
-  pytestCheckHook,
-  pytest,
-  glibcLocales,
-  matplotlib,
-  sympy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, coverage
+, ipykernel
+, jupyter-client
+, nbformat
+, pytestCheckHook
+, pytest
+, glibcLocales
+, matplotlib
+, sympy
+,
 }:
 
 buildPythonPackage rec {

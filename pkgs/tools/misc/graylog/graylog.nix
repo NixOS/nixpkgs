@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  openjdk11_headless,
-  openjdk17_headless,
-  systemd,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, openjdk11_headless
+, openjdk17_headless
+, systemd
+, nixosTests
+,
 }:
 
-{
-  version,
-  hash,
-  maintainers,
-  license,
+{ version
+, hash
+, maintainers
+, license
+,
 }:
 stdenv.mkDerivation rec {
   pname = "graylog_${lib.versions.majorMinor version}";

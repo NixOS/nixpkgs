@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  defusedxml,
-  flaky,
-  ipython,
-  keyring,
-  packaging,
-  pillow,
-  pyjwt,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
-  requests,
-  requests-futures,
-  requests-mock,
-  requests-oauthlib,
-  requests-toolbelt,
-  setuptools,
-  setuptools-scm,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, defusedxml
+, flaky
+, ipython
+, keyring
+, packaging
+, pillow
+, pyjwt
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+, requests
+, requests-futures
+, requests-mock
+, requests-oauthlib
+, requests-toolbelt
+, setuptools
+, setuptools-scm
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

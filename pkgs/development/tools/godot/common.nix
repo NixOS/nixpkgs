@@ -1,60 +1,60 @@
-{
-  alsa-lib,
-  autoPatchelfHook,
-  buildPackages,
-  callPackage,
-  dbus,
-  dotnetCorePackages,
-  exportTemplatesHash,
-  fetchFromGitHub,
-  fetchpatch,
-  fontconfig,
-  glib,
-  hash,
-  installShellFiles,
-  lib,
-  libdecor,
-  libGL,
-  libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libxkbcommon,
-  libXrandr,
-  libXrender,
-  makeWrapper,
-  perl,
-  pkg-config,
-  runCommand,
-  scons,
-  speechd-minimal,
-  stdenv,
-  stdenvNoCC,
-  testers,
-  udev,
-  updateScript,
-  version,
-  vulkan-loader,
-  wayland,
-  wayland-scanner,
-  withAlsa ? true,
-  withDbus ? true,
-  withFontconfig ? true,
-  withMono ? false,
-  nugetDeps ? null,
-  withPlatform ? "linuxbsd",
-  withPrecision ? "single",
-  withPulseaudio ? true,
-  withSpeechd ? true,
-  withTouch ? true,
-  withUdev ? true,
-  # Wayland in Godot requires X11 until upstream fix is merged
+{ alsa-lib
+, autoPatchelfHook
+, buildPackages
+, callPackage
+, dbus
+, dotnetCorePackages
+, exportTemplatesHash
+, fetchFromGitHub
+, fetchpatch
+, fontconfig
+, glib
+, hash
+, installShellFiles
+, lib
+, libdecor
+, libGL
+, libpulseaudio
+, libX11
+, libXcursor
+, libXext
+, libXfixes
+, libXi
+, libXinerama
+, libxkbcommon
+, libXrandr
+, libXrender
+, makeWrapper
+, perl
+, pkg-config
+, runCommand
+, scons
+, speechd-minimal
+, stdenv
+, stdenvNoCC
+, testers
+, udev
+, updateScript
+, version
+, vulkan-loader
+, wayland
+, wayland-scanner
+, withAlsa ? true
+, withDbus ? true
+, withFontconfig ? true
+, withMono ? false
+, nugetDeps ? null
+, withPlatform ? "linuxbsd"
+, withPrecision ? "single"
+, withPulseaudio ? true
+, withSpeechd ? true
+, withTouch ? true
+, withUdev ? true
+, # Wayland in Godot requires X11 until upstream fix is merged
   # https://github.com/godotengine/godot/pull/73504
-  withWayland ? true,
-  withX11 ? true,
+  withWayland ? true
+, withX11 ? true
+,
 }:
 assert lib.asserts.assertOneOf "withPrecision" withPrecision [
   "single"
@@ -512,8 +512,7 @@ let
                   [
                     {
                       linuxbsd = "linux";
-                    }
-                    .${withPlatform}
+                    }.${withPlatform}
                   ]
                   target
                 )
@@ -534,7 +533,7 @@ let
           inherit updateScript;
           tests =
             mkTests finalAttrs.finalPackage dotnet-sdk
-            // lib.optionalAttrs (editor && withMono) {
+              // lib.optionalAttrs (editor && withMono) {
               sdk-override = mkTests finalAttrs.finalPackage dotnet-sdk_alt;
             };
         }
@@ -574,72 +573,77 @@ let
 
       unwrapped = stdenv.mkDerivation (
         if (editor && withMono) then
-          dotnetCorePackages.addNuGetDeps {
-            inherit nugetDeps;
-            overrideFetchAttrs = old: rec {
-              runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) old.meta.platforms;
-              buildInputs =
-                old.buildInputs
-                ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk.targetPackages));
-            };
-          } attrs
+          dotnetCorePackages.addNuGetDeps
+            {
+              inherit nugetDeps;
+              overrideFetchAttrs = old: rec {
+                runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) old.meta.platforms;
+                buildInputs =
+                  old.buildInputs
+                  ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk.targetPackages));
+              };
+            }
+            attrs
         else
           attrs
       );
 
       wrapper =
         if (editor && withMono) then
-          stdenv.mkDerivation (finalAttrs: {
-            __structuredAttrs = true;
+          stdenv.mkDerivation
+            (finalAttrs: {
+              __structuredAttrs = true;
 
-            pname = finalAttrs.unwrapped.pname + "-wrapper";
-            inherit (finalAttrs.unwrapped) version outputs meta;
-            inherit unwrapped dotnet-sdk;
+              pname = finalAttrs.unwrapped.pname + "-wrapper";
+              inherit (finalAttrs.unwrapped) version outputs meta;
+              inherit unwrapped dotnet-sdk;
 
-            dontUnpack = true;
-            dontConfigure = true;
-            dontBuild = true;
+              dontUnpack = true;
+              dontConfigure = true;
+              dontBuild = true;
 
-            nativeBuildInputs = [ makeWrapper ];
-            strictDeps = true;
+              nativeBuildInputs = [ makeWrapper ];
+              strictDeps = true;
 
-            installPhase = ''
-              runHook preInstall
+              installPhase = ''
+                runHook preInstall
 
-              mkdir -p "$out"/{bin,libexec,share/applications,nix-support}
+                mkdir -p "$out"/{bin,libexec,share/applications,nix-support}
 
-              cp -d "$unwrapped"/bin/* "$out"/bin/
-              ln -s "$unwrapped"/libexec/* "$out"/libexec/
-              ln -s "$unwrapped"/share/nuget "$out"/share/
-              cp "$unwrapped/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop" \
-                "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop"
+                cp -d "$unwrapped"/bin/* "$out"/bin/
+                ln -s "$unwrapped"/libexec/* "$out"/libexec/
+                ln -s "$unwrapped"/share/nuget "$out"/share/
+                cp "$unwrapped/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop" \
+                  "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop"
 
-              substituteInPlace "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop" \
-                --replace-fail "Exec=$unwrapped/bin/godot${suffix}" "Exec=$out/bin/godot${suffix}"
-              ln -s "$unwrapped"/share/icons $out/share/
+                substituteInPlace "$out/share/applications/org.godotengine.Godot${lib.versions.majorMinor version}${suffix}.desktop" \
+                  --replace-fail "Exec=$unwrapped/bin/godot${suffix}" "Exec=$out/bin/godot${suffix}"
+                ln -s "$unwrapped"/share/icons $out/share/
 
-              # ensure dotnet hooks get run
-              echo "${finalAttrs.dotnet-sdk}" >> "$out"/nix-support/propagated-build-inputs
+                # ensure dotnet hooks get run
+                echo "${finalAttrs.dotnet-sdk}" >> "$out"/nix-support/propagated-build-inputs
 
-              wrapProgram "$out"/libexec/${binary} \
-                --prefix PATH : "${lib.makeBinPath [ finalAttrs.dotnet-sdk ]}"
+                wrapProgram "$out"/libexec/${binary} \
+                  --prefix PATH : "${lib.makeBinPath [ finalAttrs.dotnet-sdk ]}"
 
-              runHook postInstall
-            '';
+                runHook postInstall
+              '';
 
-            postFixup = lib.concatMapStringsSep "\n" (output: ''
-              [[ -e "''$${output}" ]] || ln -s "${unwrapped.${output}}" "''$${output}"
-            '') finalAttrs.unwrapped.outputs;
+              postFixup = lib.concatMapStringsSep "\n"
+                (output: ''
+                  [[ -e "''$${output}" ]] || ln -s "${unwrapped.${output}}" "''$${output}"
+                '')
+                finalAttrs.unwrapped.outputs;
 
-            passthru = unwrapped.passthru // {
-              tests = mkTests finalAttrs.finalPackage null // {
-                unwrapped = lib.recurseIntoAttrs unwrapped.tests;
-                sdk-override = lib.recurseIntoAttrs (
-                  mkTests (finalAttrs.finalPackage.overrideAttrs { dotnet-sdk = dotnet-sdk_alt; }) null
-                );
+              passthru = unwrapped.passthru // {
+                tests = mkTests finalAttrs.finalPackage null // {
+                  unwrapped = lib.recurseIntoAttrs unwrapped.tests;
+                  sdk-override = lib.recurseIntoAttrs (
+                    mkTests (finalAttrs.finalPackage.overrideAttrs { dotnet-sdk = dotnet-sdk_alt; }) null
+                  );
+                };
               };
-            };
-          })
+            })
         else
           unwrapped;
     in

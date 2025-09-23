@@ -1,16 +1,16 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  installShellFiles,
-  python3,
-  strace,
-  systemd,
-  iproute2,
-  stdenv,
-  enableDocumentationFeature ? true,
-  enableDocumentationGeneration ? true,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, installShellFiles
+, python3
+, strace
+, systemd
+, iproute2
+, stdenv
+, enableDocumentationFeature ? true
+, enableDocumentationGeneration ? true
+,
 }:
 let
   isNativeDocgen =

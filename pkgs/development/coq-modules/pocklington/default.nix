@@ -1,8 +1,8 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -20,7 +20,8 @@ mkCoqDerivation {
         case = range "8.7" "8.18";
         out = "8.12.0";
       }
-    ] null;
+    ]
+      null;
 
   meta = with lib; {
     description = "Pocklington's criterion for primality in Coq";

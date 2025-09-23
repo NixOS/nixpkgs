@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libcdio-paranoia,
-  cddiscid,
-  wget,
-  which,
-  vorbis-tools,
-  id3v2,
-  python3Packages,
-  lame,
-  flac,
-  glyr,
-  perlPackages,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, libcdio-paranoia
+, cddiscid
+, wget
+, which
+, vorbis-tools
+, id3v2
+, python3Packages
+, lame
+, flac
+, glyr
+, perlPackages
+, makeWrapper
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "abcde";

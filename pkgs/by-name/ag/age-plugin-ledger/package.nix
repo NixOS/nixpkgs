@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libusb1,
-  openssl,
-  rage,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libusb1
+, openssl
+, rage
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,16 +1,16 @@
-{
-  _experimental-update-script-combinators,
-  callPackage,
-  fetchFromSourcehut,
-  unstableGitUpdater,
-  lib,
-  pkg-config,
-  stdenv,
-  river-classic,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  zig_0_14,
+{ _experimental-update-script-combinators
+, callPackage
+, fetchFromSourcehut
+, unstableGitUpdater
+, lib
+, pkg-config
+, stdenv
+, river-classic
+, wayland
+, wayland-protocols
+, wayland-scanner
+, zig_0_14
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

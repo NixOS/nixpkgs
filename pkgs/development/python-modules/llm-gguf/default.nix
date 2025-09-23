@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  httpx,
-  llama-cpp-python,
-  llm,
-  llm-gguf,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  httpx
+, llama-cpp-python
+, llm
+, llm-gguf
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -69,8 +68,7 @@ in
           {
             "gzip" = "gz";
             "bzip2" = "bz2";
-          }
-          .${cfg.compressionMethod}
+          }.${cfg.compressionMethod}
         )
       ];
       system.nixos.tags = [ "digital-ocean" ];
@@ -91,8 +89,7 @@ in
               {
                 "gzip" = "${pkgs.gzip}/bin/gzip";
                 "bzip2" = "${pkgs.bzip2}/bin/bzip2";
-              }
-              .${cfg.compressionMethod};
+              }.${cfg.compressionMethod};
           in
           ''
             ${compress} $diskImage

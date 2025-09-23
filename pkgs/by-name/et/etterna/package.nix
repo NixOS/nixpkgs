@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  # deps
-  cmake,
-  pkg-config,
-  openssl,
-  libGLU,
-  xorg,
-  alsa-lib,
-  libjack2,
-  libpulseaudio,
-  libogg,
-  sse2neon,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, # deps
+  cmake
+, pkg-config
+, openssl
+, libGLU
+, xorg
+, alsa-lib
+, libjack2
+, libpulseaudio
+, libogg
+, sse2neon
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "etterna";

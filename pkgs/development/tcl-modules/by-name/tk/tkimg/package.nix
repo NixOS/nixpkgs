@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchsvn,
-  tcl,
-  tcllib,
-  tk,
-  xorg,
+{ lib
+, fetchsvn
+, tcl
+, tcllib
+, tk
+, xorg
+,
 }:
 
 tcl.mkTclDerivation rec {

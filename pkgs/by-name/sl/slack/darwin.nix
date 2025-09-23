@@ -1,12 +1,11 @@
-{
-  pname,
-  version,
-  src,
-  passthru,
-  meta,
-
-  stdenvNoCC,
-  undmg,
+{ pname
+, version
+, src
+, passthru
+, meta
+, stdenvNoCC
+, undmg
+,
 }:
 stdenvNoCC.mkDerivation {
   inherit

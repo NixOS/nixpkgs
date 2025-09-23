@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  fftw,
-  hamlib,
-  libpulseaudio,
-  libGL,
-  libX11,
-  liquid-dsp,
-  pkg-config,
-  soapysdr-with-plugins,
-  wxGTK32,
-  enableDigitalLab ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, fftw
+, hamlib
+, libpulseaudio
+, libGL
+, libX11
+, liquid-dsp
+, pkg-config
+, soapysdr-with-plugins
+, wxGTK32
+, enableDigitalLab ? false
+,
 }:
 
 stdenv.mkDerivation rec {

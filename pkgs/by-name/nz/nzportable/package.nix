@@ -1,7 +1,7 @@
-{
-  lib,
-  callPackage,
-  writeShellApplication,
+{ lib
+, callPackage
+, writeShellApplication
+,
 }:
 let
   assets = callPackage ./assets.nix { };

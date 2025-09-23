@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  glib,
-  gtk4,
-  wayland-protocols,
-  libepoxy,
-  wayland,
-  wayland-scanner,
-  wlroots_0_18,
-  libxkbcommon,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, glib
+, gtk4
+, wayland-protocols
+, libepoxy
+, wayland
+, wayland-scanner
+, wlroots_0_18
+, libxkbcommon
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

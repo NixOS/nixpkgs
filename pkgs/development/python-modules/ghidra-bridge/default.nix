@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jfx-bridge,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jfx-bridge
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

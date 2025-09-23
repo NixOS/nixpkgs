@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  ctypes,
-  ctypes-foreign,
-  dune-configurator,
-  result,
-  libargon2,
-  buildDunePackage,
+{ lib
+, fetchurl
+, ctypes
+, ctypes-foreign
+, dune-configurator
+, result
+, libargon2
+, buildDunePackage
+,
 }:
 
 buildDunePackage rec {

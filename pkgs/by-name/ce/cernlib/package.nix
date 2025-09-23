@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  cmake,
-  freetype,
-  gfortran,
-  openssl,
-  libnsl,
-  motif,
-  xorg,
-  libxcrypt,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, cmake
+, freetype
+, gfortran
+, openssl
+, libnsl
+, motif
+, xorg
+, libxcrypt
+,
 }:
 
 stdenv.mkDerivation rec {

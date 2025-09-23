@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  hatchling,
-  oracledb,
-  pytest-mypy-plugins,
-  pytest-xdist,
-  pytestCheckHook,
-  redis,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, hatchling
+, oracledb
+, pytest-mypy-plugins
+, pytest-xdist
+, pytestCheckHook
+, redis
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

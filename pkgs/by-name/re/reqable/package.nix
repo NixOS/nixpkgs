@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  makeBinaryWrapper,
-  fontconfig,
-  atk,
-  cairo,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  harfbuzz,
-  libdbusmenu,
-  libdbusmenu-gtk3,
-  libepoxy,
-  libgcrypt,
-  libgpg-error,
-  lz4,
-  nspr,
-  nss,
-  pango,
-  util-linux,
-  xz,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, makeBinaryWrapper
+, fontconfig
+, atk
+, cairo
+, gdk-pixbuf
+, glib
+, gtk3
+, harfbuzz
+, libdbusmenu
+, libdbusmenu-gtk3
+, libepoxy
+, libgcrypt
+, libgpg-error
+, lz4
+, nspr
+, nss
+, pango
+, util-linux
+, xz
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

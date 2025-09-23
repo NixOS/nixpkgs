@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  curl,
-  libgit2,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, curl
+, libgit2
+, openssl
+,
 }:
 let
   version = "0.16.1";

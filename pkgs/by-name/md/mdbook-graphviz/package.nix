@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  graphviz,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, graphviz
+,
 }:
 
 rustPlatform.buildRustPackage rec {

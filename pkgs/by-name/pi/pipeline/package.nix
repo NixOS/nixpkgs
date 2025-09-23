@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  cargo,
-  rustc,
-  fetchFromGitLab,
-  gtk4,
-  libadwaita,
-  openssl,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  glib,
-  appstream-glib,
-  desktop-file-utils,
-  blueprint-compiler,
-  sqlite,
-  clapper-unwrapped,
-  gettext,
-  gst_all_1,
-  gtuber,
-  glib-networking,
-  gnome,
-  webp-pixbuf-loader,
-  librsvg,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, cargo
+, rustc
+, fetchFromGitLab
+, gtk4
+, libadwaita
+, openssl
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, glib
+, appstream-glib
+, desktop-file-utils
+, blueprint-compiler
+, sqlite
+, clapper-unwrapped
+, gettext
+, gst_all_1
+, gtuber
+, glib-networking
+, gnome
+, webp-pixbuf-loader
+, librsvg
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  mkDerivation,
-  include,
-  libcMinimal,
-  libgcc,
-  libthr,
-  csu,
+{ mkDerivation
+, include
+, libcMinimal
+, libgcc
+, libthr
+, csu
+,
 }:
 
 mkDerivation {

@@ -1,24 +1,24 @@
-{
-  lib,
-  appstream,
-  blueprint-compiler,
-  desktop-file-utils,
-  fetchFromGitHub,
-  gdm,
-  glib,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  python3Packages,
-  wrapGAppsHook4,
-  # gdm-settings needs to know where to look for themes
+{ lib
+, appstream
+, blueprint-compiler
+, desktop-file-utils
+, fetchFromGitHub
+, gdm
+, glib
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, python3Packages
+, wrapGAppsHook4
+, # gdm-settings needs to know where to look for themes
   # This should work for most systems, but can be overridden if not
   dataDirs ? lib.concatStringsSep ":" [
     "/run/current-system/sw/share"
     "/usr/local/share"
     "/usr/share"
-  ],
+  ]
+,
 }:
 
 python3Packages.buildPythonApplication rec {

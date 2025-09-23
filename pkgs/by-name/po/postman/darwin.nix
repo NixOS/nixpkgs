@@ -1,11 +1,11 @@
-{
-  stdenvNoCC,
-  unzip,
-  pname,
-  version,
-  src,
-  passthru,
-  meta,
+{ stdenvNoCC
+, unzip
+, pname
+, version
+, src
+, passthru
+, meta
+,
 }:
 
 stdenvNoCC.mkDerivation {

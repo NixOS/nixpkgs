@@ -1,9 +1,9 @@
-{
-  fetchurl,
-  perlPackages,
-  lib,
-  runCommand,
-  postfix,
+{ fetchurl
+, perlPackages
+, lib
+, runCommand
+, postfix
+,
 }:
 
 let
@@ -29,18 +29,18 @@ let
   name = "postgrey-${version}";
 in
 runCommand name
-  {
-    src = fetchurl {
-      url = "https://postgrey.schweikert.ch/pub/${name}.tar.gz";
-      sha256 = "1xx51xih4711vrvc6d57il9ccallbljj5zhgqdb07jzmz11rakgz";
-    };
-    meta = with lib; {
-      description = "Postfix policy server to provide greylisting";
-      homepage = "https://postgrey.schweikert.ch/";
-      platforms = postfix.meta.platforms;
-      license = licenses.gpl2Plus;
-    };
-  }
+{
+  src = fetchurl {
+    url = "https://postgrey.schweikert.ch/pub/${name}.tar.gz";
+    sha256 = "1xx51xih4711vrvc6d57il9ccallbljj5zhgqdb07jzmz11rakgz";
+  };
+  meta = with lib; {
+    description = "Postfix policy server to provide greylisting";
+    homepage = "https://postgrey.schweikert.ch/";
+    platforms = postfix.meta.platforms;
+    license = licenses.gpl2Plus;
+  };
+}
   ''
     mkdir -p $out/bin
     cd $out

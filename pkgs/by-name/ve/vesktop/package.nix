@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  makeBinaryWrapper,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  vencord,
-  electron,
-  libicns,
-  pipewire,
-  libpulseaudio,
-  autoPatchelfHook,
-  pnpm_10,
-  nodejs,
-  nix-update-script,
-  withTTS ? true,
-  withMiddleClickScroll ? false,
-  # Enables the use of vencord from nixpkgs instead of
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, makeBinaryWrapper
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, vencord
+, electron
+, libicns
+, pipewire
+, libpulseaudio
+, autoPatchelfHook
+, pnpm_10
+, nodejs
+, nix-update-script
+, withTTS ? true
+, withMiddleClickScroll ? false
+, # Enables the use of vencord from nixpkgs instead of
   # letting vesktop manage it's own version
-  withSystemVencord ? false,
+  withSystemVencord ? false
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";

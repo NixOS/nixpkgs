@@ -1,12 +1,12 @@
-{
-  autoreconfHook,
-  fetchFromGitHub,
-  fftwMpi,
-  lib,
-  llvmPackages,
-  mpi,
-  precision ? "double",
-  stdenv,
+{ autoreconfHook
+, fetchFromGitHub
+, fftwMpi
+, lib
+, llvmPackages
+, mpi
+, precision ? "double"
+, stdenv
+,
 }:
 
 assert lib.elem precision [

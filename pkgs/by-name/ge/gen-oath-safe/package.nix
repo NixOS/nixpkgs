@@ -1,15 +1,15 @@
-{
-  coreutils,
-  fetchFromGitHub,
-  file,
-  libcaca,
-  makeWrapper,
-  python3,
-  openssl,
-  qrencode,
-  lib,
-  stdenv,
-  yubikey-manager,
+{ coreutils
+, fetchFromGitHub
+, file
+, libcaca
+, makeWrapper
+, python3
+, openssl
+, qrencode
+, lib
+, stdenv
+, yubikey-manager
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  rustPlatform,
-  lib,
-  testers,
-  fetchFromGitHub,
-  protobuf,
+{ rustPlatform
+, lib
+, testers
+, fetchFromGitHub
+, protobuf
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starpls";

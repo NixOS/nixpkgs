@@ -1,32 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  makefun,
-  multipledispatch,
-  numpy,
-  opt-einsum,
-  typing-extensions,
-
-  # checks
-  pyro-ppl,
-  torch,
-  pandas,
-  pillow,
-  pyro-api,
-  pytestCheckHook,
-  pytest-xdist,
-  requests,
-  scipy,
-  torchvision,
-
-  stdenv,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  makefun
+, multipledispatch
+, numpy
+, opt-einsum
+, typing-extensions
+, # checks
+  pyro-ppl
+, torch
+, pandas
+, pillow
+, pyro-api
+, pytestCheckHook
+, pytest-xdist
+, requests
+, scipy
+, torchvision
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  patchelf,
-  fontconfig,
-  freetype,
-  glib,
-  libICE,
-  libSM,
-  libX11,
-  libXext,
-  libXrender,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, patchelf
+, fontconfig
+, freetype
+, glib
+, libICE
+, libSM
+, libX11
+, libXext
+, libXrender
+, zlib
+,
 }:
 
 let

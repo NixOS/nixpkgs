@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  zlib,
-  openssl,
-  krb5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, zlib
+, openssl
+, krb5
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mscp";

@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  common-updater-scripts,
-  coreutils,
-  gnugrep,
-  gnused,
-  nix,
-  writeScript,
+{ lib
+, stdenv
+, common-updater-scripts
+, coreutils
+, gnugrep
+, gnused
+, nix
+, writeScript
+,
 }:
 
-{
-  name ? null,
-  pname ? null,
-  version ? null,
-  attrPath ? null,
-  versionLister,
-  allowedVersions ? "",
-  ignoredVersions ? "",
-  rev-prefix ? "",
-  rev-suffix ? "",
-  odd-unstable ? false,
-  patchlevel-unstable ? false,
+{ name ? null
+, pname ? null
+, version ? null
+, attrPath ? null
+, versionLister
+, allowedVersions ? ""
+, ignoredVersions ? ""
+, rev-prefix ? ""
+, rev-suffix ? ""
+, odd-unstable ? false
+, patchlevel-unstable ? false
+,
 }:
 
 let

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  kitchen,
-  packaging,
-  poetry-core,
-  poetry-dynamic-versioning,
-  python-dateutil,
-  pythonOlder,
-  pytz,
-  taskwarrior2,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, kitchen
+, packaging
+, poetry-core
+, poetry-dynamic-versioning
+, python-dateutil
+, pythonOlder
+, pytz
+, taskwarrior2
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  glib,
-  gtk3,
-  meson,
-  ninja,
-  nix-update-script,
-  python3Packages,
-  xfce,
+{ lib
+, stdenv
+, fetchFromGitHub
+, glib
+, gtk3
+, meson
+, ninja
+, nix-update-script
+, python3Packages
+, xfce
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

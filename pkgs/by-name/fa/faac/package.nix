@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  mp4v2Support ? true,
-  mp4v2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, mp4v2Support ? true
+, mp4v2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  dramatiq,
-  fetchFromGitLab,
-  flask-migrate,
-  flask,
-  periodiq,
-  poetry-core,
-  postgresql,
-  postgresqlTestHook,
-  psycopg2,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  requests,
+{ lib
+, buildPythonPackage
+, dramatiq
+, fetchFromGitLab
+, flask-migrate
+, flask
+, periodiq
+, poetry-core
+, postgresql
+, postgresqlTestHook
+, psycopg2
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, requests
+,
 }:
 
 buildPythonPackage {

@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # propagates
-  cryptography,
-  six,
-
-  # optional
-  webob,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # propagates
+  cryptography
+, six
+, # optional
+  webob
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

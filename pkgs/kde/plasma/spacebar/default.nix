@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  c-ares,
-  curl,
-  libphonenumber,
-  protobuf,
+{ mkKdeDerivation
+, pkg-config
+, c-ares
+, curl
+, libphonenumber
+, protobuf
+,
 }:
 mkKdeDerivation {
   pname = "spacebar";

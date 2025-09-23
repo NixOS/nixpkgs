@@ -1,32 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  absl-py,
-  etils,
-  jsonpath-rw,
-  networkx,
-  pandas,
-  pandas-stubs,
-  python-dateutil,
-  rdflib,
-  requests,
-  scipy,
-  tqdm,
-
-  # tests
-  apache-beam,
-  gitpython,
-  librosa,
-  pillow,
-  pytestCheckHook,
-  pyyaml,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  absl-py
+, etils
+, jsonpath-rw
+, networkx
+, pandas
+, pandas-stubs
+, python-dateutil
+, rdflib
+, requests
+, scipy
+, tqdm
+, # tests
+  apache-beam
+, gitpython
+, librosa
+, pillow
+, pytestCheckHook
+, pyyaml
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  rustPlatform,
-  fetchFromGitHub,
-  lib,
-  ffmpeg,
-  pkg-config,
-  alsa-lib,
-  wayland,
-  makeWrapper,
-  libxkbcommon,
-  vulkan-loader,
-  xorg,
+{ rustPlatform
+, fetchFromGitHub
+, lib
+, ffmpeg
+, pkg-config
+, alsa-lib
+, wayland
+, makeWrapper
+, libxkbcommon
+, vulkan-loader
+, xorg
+,
 }:
 let
   version = "0.3.1";

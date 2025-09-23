@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  vst2-sdk,
-  wine64,
-  enableJackAssWine64 ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, vst2-sdk
+, wine64
+, enableJackAssWine64 ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

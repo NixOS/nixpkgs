@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  makeWrapper,
-  jre_headless,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, makeWrapper
+, jre_headless
+, writeScript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

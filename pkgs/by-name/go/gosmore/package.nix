@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libxml2,
-  gtk2,
-  curl,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libxml2
+, gtk2
+, curl
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

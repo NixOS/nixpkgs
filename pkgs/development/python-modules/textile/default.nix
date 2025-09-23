@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nh3,
-  pillow,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  regex,
-  setuptools-scm,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nh3
+, pillow
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, regex
+, setuptools-scm
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

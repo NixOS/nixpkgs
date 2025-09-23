@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  setuptools-scm,
-  boto3,
-  click,
-  tqdm,
-  pyorc,
-  plyvel,
-  python,
-  types-requests,
-  swh-core,
-  swh-journal,
-  swh-model,
-  swh-storage,
-  pytestCheckHook,
-  pytest-kafka,
-  pytest-mock,
-  tzdata,
-  pkgs,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, setuptools-scm
+, boto3
+, click
+, tqdm
+, pyorc
+, plyvel
+, python
+, types-requests
+, swh-core
+, swh-journal
+, swh-model
+, swh-storage
+, pytestCheckHook
+, pytest-kafka
+, pytest-mock
+, tzdata
+, pkgs
+,
 }:
 
 buildPythonPackage rec {

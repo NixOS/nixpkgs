@@ -1,11 +1,11 @@
-{
-  lib,
-  kernel,
-  kernelModuleMakeFlags,
-  stdenv,
-  fetchFromGitea,
-  libgcrypt,
-  lvm2,
+{ lib
+, kernel
+, kernelModuleMakeFlags
+, stdenv
+, fetchFromGitea
+, libgcrypt
+, lvm2
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "shufflecake";

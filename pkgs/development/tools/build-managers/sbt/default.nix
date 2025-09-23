@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jre,
-  autoPatchelfHook,
-  zlib,
-  ncurses,
+{ lib
+, stdenv
+, fetchurl
+, jre
+, autoPatchelfHook
+, zlib
+, ncurses
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

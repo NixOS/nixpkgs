@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  gfortran,
-  flex,
-  bison,
-  jre8,
-  blas,
-  lapack,
-  curl,
-  readline,
-  expat,
-  pkg-config,
-  buildPackages,
-  targetPackages,
-  libffi,
-  binutils,
-  mkOpenModelicaDerivation,
+{ stdenv
+, lib
+, gfortran
+, flex
+, bison
+, jre8
+, blas
+, lapack
+, curl
+, readline
+, expat
+, pkg-config
+, buildPackages
+, targetPackages
+, libffi
+, binutils
+, mkOpenModelicaDerivation
+,
 }:
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
@@ -79,7 +79,7 @@ mkOpenModelicaDerivation (
       platforms = platforms.linux;
     };
   }
-  // lib.optionalAttrs isCross {
+    // lib.optionalAttrs isCross {
     configureFlags = [ "--with-omc=${nativeOMCompiler}/bin/omc" ];
   }
 )

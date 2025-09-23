@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  django-stubs-ext,
-  django,
-  fetchFromGitHub,
-  hatchling,
-  redis,
-  mypy,
-  pytest-mypy-plugins,
-  oracledb,
-  pytestCheckHook,
-  pythonOlder,
-  tomli,
-  types-pytz,
-  types-pyyaml,
-  types-redis,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, django-stubs-ext
+, django
+, fetchFromGitHub
+, hatchling
+, redis
+, mypy
+, pytest-mypy-plugins
+, oracledb
+, pytestCheckHook
+, pythonOlder
+, tomli
+, types-pytz
+, types-pyyaml
+, types-redis
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

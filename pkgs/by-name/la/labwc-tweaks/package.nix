@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  perl,
-  pkg-config,
-  qt6,
-  xkeyboard_config,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, perl
+, pkg-config
+, qt6
+, xkeyboard_config
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

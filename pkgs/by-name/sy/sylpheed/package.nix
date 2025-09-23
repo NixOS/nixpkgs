@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gtk2,
-  openssl ? null,
-  gpgme ? null,
-  gpgSupport ? true,
-  sslSupport ? true,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk2
+, openssl ? null
+, gpgme ? null
+, gpgSupport ? true
+, sslSupport ? true
+, fetchpatch
+,
 }:
 
 assert gpgSupport -> gpgme != null;

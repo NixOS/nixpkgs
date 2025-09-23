@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitLab,
-  stdenv,
-  glib,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
+{ lib
+, fetchFromGitLab
+, stdenv
+, glib
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, vala
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "appmenu-glib-translator";

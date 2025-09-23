@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  buildGoModule,
-  glib,
-  pkg-config,
-  cairo,
-  gtk3,
-  xcur2png,
-  libX11,
-  zlib,
+{ lib
+, fetchFromGitHub
+, wrapGAppsHook3
+, buildGoModule
+, glib
+, pkg-config
+, cairo
+, gtk3
+, xcur2png
+, libX11
+, zlib
+,
 }:
 
 buildGoModule rec {

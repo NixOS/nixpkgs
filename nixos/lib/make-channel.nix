@@ -3,11 +3,11 @@
   expressions themselves, files that indicate the version of nixpkgs
   that they represent.
 */
-{
-  pkgs,
-  nixpkgs,
-  version,
-  versionSuffix,
+{ pkgs
+, nixpkgs
+, version
+, versionSuffix
+,
 }:
 
 pkgs.releaseTools.makeSourceTarball {

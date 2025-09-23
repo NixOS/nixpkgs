@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-
-  # src / metadata
-  mujoco-main,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  absl-py,
-  etils,
-  importlib-resources,
-  jax,
-  jaxlib,
-  mujoco,
-  scipy,
-  trimesh,
+{ lib
+, buildPythonPackage
+, # src / metadata
+  mujoco-main
+, # build-system
+  setuptools
+, # dependencies
+  absl-py
+, etils
+, importlib-resources
+, jax
+, jaxlib
+, mujoco
+, scipy
+, trimesh
+,
 }:
 
 buildPythonPackage {

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  pyexcel-io,
-  odfpy,
-  pyexcel,
-  pyexcel-xls,
-  psutil,
-  pytestCheckHook,
-  pytest-cov-stub,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, pyexcel-io
+, odfpy
+, pyexcel
+, pyexcel-xls
+, psutil
+, pytestCheckHook
+, pytest-cov-stub
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

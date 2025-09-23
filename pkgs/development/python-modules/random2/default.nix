@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPyPy,
-  fetchpatch,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, fetchpatch
+,
 }:
 
 buildPythonPackage rec {

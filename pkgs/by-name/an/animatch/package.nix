@@ -1,11 +1,11 @@
-{
-  lib,
-  allegro5,
-  cmake,
-  fetchFromGitLab,
-  libGL,
-  stdenv,
-  xorg,
+{ lib
+, allegro5
+, cmake
+, fetchFromGitLab
+, libGL
+, stdenv
+, xorg
+,
 }:
 stdenv.mkDerivation rec {
   pname = "animatch";

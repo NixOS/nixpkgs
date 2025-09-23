@@ -1,22 +1,22 @@
-{
-  lib,
-  SDL2,
-  SDL2_net,
-  alsa-lib,
-  fetchurl,
-  flac,
-  libglut,
-  libGL,
-  libGLU,
-  libX11,
-  libcdio,
-  libiconv,
-  libjack2,
-  libsamplerate,
-  libsndfile,
-  pkg-config,
-  stdenv,
-  zlib,
+{ lib
+, SDL2
+, SDL2_net
+, alsa-lib
+, fetchurl
+, flac
+, libglut
+, libGL
+, libGLU
+, libX11
+, libcdio
+, libiconv
+, libjack2
+, libsamplerate
+, libsndfile
+, pkg-config
+, stdenv
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

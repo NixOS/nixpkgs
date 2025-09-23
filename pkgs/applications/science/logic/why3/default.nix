@@ -1,16 +1,16 @@
-{
-  callPackage,
-  fetchurl,
-  lib,
-  stdenv,
-  ocamlPackages,
-  coqPackages,
-  rubber,
-  hevea,
-  emacs,
-  version ? "1.8.2",
-  ideSupport ? true,
-  wrapGAppsHook3,
+{ callPackage
+, fetchurl
+, lib
+, stdenv
+, ocamlPackages
+, coqPackages
+, rubber
+, hevea
+, emacs
+, version ? "1.8.2"
+, ideSupport ? true
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
         "1.8.2" = "sha256-t9ES7dW8zmvM4AI9K8g06yrhocQteupE/6Ek1km1C+o=";
         "1.7.2" = "sha256-VaSG/FiO2MDdSSFXGJJrIylQx0LPwtT8AF7TpPVZhCQ=";
         "1.6.0" = "sha256-hFvM6kHScaCtcHCc6Vezl9CR7BFbiKPoTEh7kj0ZJxw=";
-      }
-      ."${version}";
+      }."${version}";
   };
 
   strictDeps = true;
@@ -54,9 +53,9 @@ stdenv.mkDerivation rec {
       hevea
     ]
     ++
-      lib.optional ideSupport
-        # GUI
-        lablgtk3-sourceview3
+    lib.optional ideSupport
+      # GUI
+      lablgtk3-sourceview3
     ++ [
       # WebIDE
       js_of_ocaml
@@ -66,11 +65,11 @@ stdenv.mkDerivation rec {
       ppx_sexp_conv
     ]
     ++
-      # Coq Support
-      (with coqPackages; [
-        coq
-        flocq
-      ]);
+    # Coq Support
+    (with coqPackages; [
+      coq
+      flocq
+    ]);
 
   propagatedBuildInputs = with ocamlPackages; [
     camlzip

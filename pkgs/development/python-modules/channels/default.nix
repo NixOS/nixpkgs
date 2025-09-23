@@ -1,16 +1,16 @@
-{
-  lib,
-  asgiref,
-  buildPythonPackage,
-  daphne,
-  django,
-  fetchFromGitHub,
-  async-timeout,
-  pytest-asyncio,
-  pytest-django,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, asgiref
+, buildPythonPackage
+, daphne
+, django
+, fetchFromGitHub
+, async-timeout
+, pytest-asyncio
+, pytest-django
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

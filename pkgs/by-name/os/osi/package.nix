@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gfortran,
-  pkg-config,
-  blas,
-  zlib,
-  bzip2,
-  coin-utils,
-  withGurobi ? false,
-  gurobi,
-  withCplex ? false,
-  cplex,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gfortran
+, pkg-config
+, blas
+, zlib
+, bzip2
+, coin-utils
+, withGurobi ? false
+, gurobi
+, withCplex ? false
+, cplex
+,
 }:
 
 stdenv.mkDerivation rec {

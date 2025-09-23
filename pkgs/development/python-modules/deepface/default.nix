@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fire,
-  flask,
-  flask-cors,
-  gdown,
-  gunicorn,
-  mtcnn,
-  numpy,
-  opencv4,
-  pandas,
-  pillow,
-  pythonOlder,
-  requests,
-  retinaface,
-  setuptools,
-  tensorflow,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fire
+, flask
+, flask-cors
+, gdown
+, gunicorn
+, mtcnn
+, numpy
+, opencv4
+, pandas
+, pillow
+, pythonOlder
+, requests
+, retinaface
+, setuptools
+, tensorflow
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

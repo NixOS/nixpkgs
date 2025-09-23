@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  libvlc,
-  replaceVars,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, libvlc
+, replaceVars
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

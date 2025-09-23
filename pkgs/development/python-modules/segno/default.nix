@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  importlib-metadata,
-
-  # tests
-  pytestCheckHook,
-  pypng,
-  pyzbar,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  flit-core
+, # dependencies
+  importlib-metadata
+, # tests
+  pytestCheckHook
+, pypng
+, pyzbar
+,
 }:
 
 buildPythonPackage rec {

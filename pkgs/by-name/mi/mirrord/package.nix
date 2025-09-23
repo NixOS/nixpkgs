@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  testers,
-  mirrord,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, fetchurl
+, testers
+, mirrord
+, autoPatchelfHook
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  addBinToPathHook,
-  installShellFiles,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, addBinToPathHook
+, installShellFiles
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

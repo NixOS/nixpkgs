@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  buildPackages,
-  cmake,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableStatic ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, buildPackages
+, cmake
+, installShellFiles
+, versionCheckHook
+, nix-update-script
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.hostPlatform.isStatic
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
@@ -51,9 +51,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # https://github.com/bytecodealliance/wasmtime/blob/v9.0.0/cranelift/codegen/src/isa/x64/mod.rs#L220
     (isx86_64 -> sse3Support && ssse3Support && sse4_1Support)
     &&
-      # The dependency `wasi-preview1-component-adapter` fails to build because of:
-      # error: linker `rust-lld` not found
-      !isAarch64;
+    # The dependency `wasi-preview1-component-adapter` fails to build because of:
+    # error: linker `rust-lld` not found
+    !isAarch64;
 
   # prevent $out from being propagated to $dev:
   # the library and header files are not dependent on the binaries

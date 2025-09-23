@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitea,
-  fetchpatch,
-  wvstreams,
-  pkg-config,
-  lib,
+{ stdenv
+, fetchFromGitea
+, fetchpatch
+, wvstreams
+, pkg-config
+, lib
+,
 }:
 
 stdenv.mkDerivation {

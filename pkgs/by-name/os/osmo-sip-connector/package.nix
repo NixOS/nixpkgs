@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libosmocore,
-  sofia_sip,
-  glib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libosmocore
+, sofia_sip
+, glib
+,
 }:
 
 stdenv.mkDerivation rec {

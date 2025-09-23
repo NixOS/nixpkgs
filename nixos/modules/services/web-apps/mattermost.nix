@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -57,16 +56,16 @@ let
 
   # Creates a database URI.
   mkDatabaseUri =
-    {
-      scheme,
-      user ? null,
-      password ? null,
-      escapeUserAndPassword ? true,
-      host ? null,
-      escapeHost ? true,
-      port ? null,
-      path ? null,
-      query ? { },
+    { scheme
+    , user ? null
+    , password ? null
+    , escapeUserAndPassword ? true
+    , host ? null
+    , escapeHost ? true
+    , port ? null
+    , path ? null
+    , query ? { }
+    ,
     }:
     let
       nullToEmpty = val: if val == null then "" else toString val;
@@ -107,15 +106,16 @@ let
     in
     if cfg.database.driver == "postgres" then
       if cfg.database.peerAuth then
-        mkDatabaseUri {
-          scheme = cfg.database.driver;
-          inherit (cfg.database) user;
-          path = escapeURL cfg.database.name;
-          query = {
-            host = cfg.database.socketPath;
+        mkDatabaseUri
+          {
+            scheme = cfg.database.driver;
+            inherit (cfg.database) user;
+            path = escapeURL cfg.database.name;
+            query = {
+              host = cfg.database.socketPath;
+            }
+            // cfg.database.extraConnectionOptions;
           }
-          // cfg.database.extraConnectionOptions;
-        }
       else
         mkDatabaseUri {
           scheme = cfg.database.driver;
@@ -128,15 +128,16 @@ let
         }
     else if cfg.database.driver == "mysql" then
       if cfg.database.peerAuth then
-        mkDatabaseUri {
-          scheme = null;
-          inherit (cfg.database) user;
-          escapeUserAndPassword = false;
-          host = "unix(${cfg.database.socketPath})";
-          escapeHost = false;
-          path = escapeURL cfg.database.name;
-          query = cfg.database.extraConnectionOptions;
-        }
+        mkDatabaseUri
+          {
+            scheme = null;
+            inherit (cfg.database) user;
+            escapeUserAndPassword = false;
+            host = "unix(${cfg.database.socketPath})";
+            escapeHost = false;
+            path = escapeURL cfg.database.name;
+            query = cfg.database.extraConnectionOptions;
+          }
       else
         mkDatabaseUri {
           scheme = null;
@@ -154,23 +155,25 @@ let
     else
       throw "Invalid database driver: ${cfg.database.driver}";
 
-  mattermostPluginDerivations = map (
-    plugin:
-    pkgs.stdenvNoCC.mkDerivation {
-      name = "${cfg.package.name}-plugin";
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out/share
-        ln -sf ${plugin} $out/share/plugin.tar.gz
-        runHook postInstall
-      '';
-      dontUnpack = true;
-      dontPatch = true;
-      dontConfigure = true;
-      dontBuild = true;
-      preferLocalBuild = true;
-    }
-  ) cfg.plugins;
+  mattermostPluginDerivations = map
+    (
+      plugin:
+      pkgs.stdenvNoCC.mkDerivation {
+        name = "${cfg.package.name}-plugin";
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out/share
+          ln -sf ${plugin} $out/share/plugin.tar.gz
+          runHook postInstall
+        '';
+        dontUnpack = true;
+        dontPatch = true;
+        dontConfigure = true;
+        dontBuild = true;
+        preferLocalBuild = true;
+      }
+    )
+    cfg.plugins;
 
   mattermostPlugins =
     if mattermostPluginDerivations == [ ] then
@@ -204,55 +207,58 @@ let
         preferLocalBuild = true;
       };
 
-  mattermostConfWithoutPlugins = recursiveUpdate {
-    ServiceSettings = {
-      SiteURL = cfg.siteUrl;
-      ListenAddress = "${cfg.host}:${toString cfg.port}";
-      LocalModeSocketLocation = cfg.socket.path;
-      EnableLocalMode = cfg.socket.enable;
-      EnableSecurityFixAlert = cfg.telemetry.enableSecurityAlerts;
-    };
-    TeamSettings.SiteName = cfg.siteName;
-    SqlSettings.DriverName = cfg.database.driver;
-    SqlSettings.DataSource =
-      if cfg.database.fromEnvironment then
-        null
-      else
-        warnIf (!cfg.database.peerAuth && cfg.database.password != null) ''
-          Database password is set in Mattermost config! This password will end up in the Nix store.
+  mattermostConfWithoutPlugins = recursiveUpdate
+    {
+      ServiceSettings = {
+        SiteURL = cfg.siteUrl;
+        ListenAddress = "${cfg.host}:${toString cfg.port}";
+        LocalModeSocketLocation = cfg.socket.path;
+        EnableLocalMode = cfg.socket.enable;
+        EnableSecurityFixAlert = cfg.telemetry.enableSecurityAlerts;
+      };
+      TeamSettings.SiteName = cfg.siteName;
+      SqlSettings.DriverName = cfg.database.driver;
+      SqlSettings.DataSource =
+        if cfg.database.fromEnvironment then
+          null
+        else
+          warnIf (!cfg.database.peerAuth && cfg.database.password != null) ''
+            Database password is set in Mattermost config! This password will end up in the Nix store.
 
-          You may be able to simply set the following, if the database is on the same host
-          and peer authentication is enabled:
+            You may be able to simply set the following, if the database is on the same host
+            and peer authentication is enabled:
 
-          services.mattermost.database.peerAuth = true;
+            services.mattermost.database.peerAuth = true;
 
-          Note that this is the default if you set system.stateVersion to 25.05 or later
-          and the database host is localhost.
+            Note that this is the default if you set system.stateVersion to 25.05 or later
+            and the database host is localhost.
 
-          Alternatively, you can write the following to ${
-            if cfg.environmentFile == null then "your environment file" else cfg.environmentFile
-          }:
+            Alternatively, you can write the following to ${
+              if cfg.environmentFile == null then "your environment file" else cfg.environmentFile
+            }:
 
-          MM_SQLSETTINGS_DATASOURCE=${database}
+            MM_SQLSETTINGS_DATASOURCE=${database}
 
-          Then set the following options:
-          services.mattermost.environmentFile = "<your environment file>";
-          services.mattermost.database.fromEnvironment = true;
-        '' database;
+            Then set the following options:
+            services.mattermost.environmentFile = "<your environment file>";
+            services.mattermost.database.fromEnvironment = true;
+          ''
+            database;
 
-    # Note that the plugin tarball directory is not configurable, and is expected to be in FileSettings.Directory/plugins.
-    FileSettings.Directory = mutableDataDir;
-    PluginSettings.Directory = "${pluginUnpackDir}/server";
-    PluginSettings.ClientDirectory = "${pluginUnpackDir}/client";
+      # Note that the plugin tarball directory is not configurable, and is expected to be in FileSettings.Directory/plugins.
+      FileSettings.Directory = mutableDataDir;
+      PluginSettings.Directory = "${pluginUnpackDir}/server";
+      PluginSettings.ClientDirectory = "${pluginUnpackDir}/client";
 
-    LogSettings = {
-      FileLocation = cfg.logDir;
+      LogSettings = {
+        FileLocation = cfg.logDir;
 
-      # Reaches out to Mattermost's servers for telemetry; disable it by default.
-      # https://docs.mattermost.com/configure/environment-configuration-settings.html#enable-diagnostics-and-error-reporting
-      EnableDiagnostics = cfg.telemetry.enableDiagnostics;
-    };
-  } cfg.settings;
+        # Reaches out to Mattermost's servers for telemetry; disable it by default.
+        # https://docs.mattermost.com/configure/environment-configuration-settings.html#enable-diagnostics-and-error-reporting
+        EnableDiagnostics = cfg.telemetry.enableDiagnostics;
+      };
+    }
+    cfg.settings;
 
   mattermostConf = recursiveUpdate mattermostConfWithoutPlugins (
     if mattermostPlugins == null then
@@ -826,12 +832,12 @@ in
       ]
       ++ (
         if cfg.pluginsBundle == null then
-          # Create the plugin tarball directory to allow plugin uploads.
+        # Create the plugin tarball directory to allow plugin uploads.
           [
             "d= ${pluginTarballDir} 0750 ${cfg.user} ${cfg.group} - -"
           ]
         else
-          # Symlink the plugin tarball directory, removing anything existing, since it's managed by Nix.
+        # Symlink the plugin tarball directory, removing anything existing, since it's managed by Nix.
           [ "L+ ${pluginTarballDir} - - - - ${cfg.pluginsBundle}" ]
       );
 

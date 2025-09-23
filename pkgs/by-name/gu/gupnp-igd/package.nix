@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  gettext,
-  gobject-introspection,
-  gtk-doc,
-  docbook_xsl,
-  docbook_xml_dtd_412,
-  glib,
-  gupnp_1_6,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, gettext
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, glib
+, gupnp_1_6
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

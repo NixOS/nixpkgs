@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  pkg-config,
-  libusb1,
-  iproute2,
-  net-tools,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, libusb1
+, iproute2
+, net-tools
+,
 }:
 
 buildGoModule rec {

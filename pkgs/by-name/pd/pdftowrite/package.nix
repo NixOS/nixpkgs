@@ -1,24 +1,23 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  makeWrapper,
-  versionCheckHook,
-  nix-update-script,
-
-  # shared
-  gzip,
-  # pdftowrite
-  poppler-utils,
-  inkscape,
-  ghostscript,
-  imagemagick,
-  libxml2,
-  libxslt,
-  # writetopdf
-  wkhtmltopdf,
-  pdftk,
-  librsvg,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, makeWrapper
+, versionCheckHook
+, nix-update-script
+, # shared
+  gzip
+, # pdftowrite
+  poppler-utils
+, inkscape
+, ghostscript
+, imagemagick
+, libxml2
+, libxslt
+, # writetopdf
+  wkhtmltopdf
+, pdftk
+, librsvg
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "pdftowrite";

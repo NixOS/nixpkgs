@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  qmake,
-  qtbase,
-  kcoreaddons,
-  kwidgetsaddons,
-  qtsvg,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, qmake
+, qtbase
+, kcoreaddons
+, kwidgetsaddons
+, qtsvg
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

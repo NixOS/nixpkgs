@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  defusedxml,
-  fetchFromGitHub,
-  jsonschema,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  semantic-version,
-  setuptools,
-  xmlschema,
+{ lib
+, buildPythonPackage
+, defusedxml
+, fetchFromGitHub
+, jsonschema
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, semantic-version
+, setuptools
+, xmlschema
+,
 }:
 
 buildPythonPackage rec {

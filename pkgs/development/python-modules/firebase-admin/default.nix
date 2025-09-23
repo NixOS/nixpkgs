@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cachecontrol,
-  cryptography,
-  google-api-python-client,
-  google-cloud-firestore,
-  google-cloud-storage,
-  h2,
-  httpx,
-  pyjwt,
-  requests,
-  respx,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-localserver,
-  pytest-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cachecontrol
+, cryptography
+, google-api-python-client
+, google-cloud-firestore
+, google-cloud-storage
+, h2
+, httpx
+, pyjwt
+, requests
+, respx
+, pytestCheckHook
+, pytest-asyncio
+, pytest-localserver
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

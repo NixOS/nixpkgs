@@ -1,18 +1,18 @@
-{
-  lib,
-  callPackage,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  cython,
-  spacy,
-  numpy,
-  transformers,
-  torch,
-  srsly,
-  spacy-alignments,
-  pytestCheckHook,
+{ lib
+, callPackage
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, cython
+, spacy
+, numpy
+, transformers
+, torch
+, srsly
+, spacy-alignments
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

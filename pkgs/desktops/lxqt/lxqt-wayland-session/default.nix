@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  kwindowsystem,
-  layer-shell-qt,
-  liblxqt,
-  libqtxdg,
-  lxqt-build-tools,
-  lxqt-session,
-  pkg-config,
-  qtsvg,
-  qttools,
-  qtxdg-tools,
-  xdg-user-dirs,
-  xkeyboard_config,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, kwindowsystem
+, layer-shell-qt
+, liblxqt
+, libqtxdg
+, lxqt-build-tools
+, lxqt-session
+, pkg-config
+, qtsvg
+, qttools
+, qtxdg-tools
+, xdg-user-dirs
+, xkeyboard_config
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libjpeg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libjpeg
+,
 }:
 
 stdenv.mkDerivation {

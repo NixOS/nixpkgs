@@ -1,6 +1,6 @@
-{
-  xpra,
-  linuxPackages,
+{ xpra
+, linuxPackages
+,
 }:
 xpra.override {
   withNvenc = true;

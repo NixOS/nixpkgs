@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  glib-networking,
-  gobject-introspection,
-  openconnect,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, webkitgtk_4_1
+, wrapGAppsHook3
+, glib-networking
+, gobject-introspection
+, openconnect
+,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "gp-saml-gui";

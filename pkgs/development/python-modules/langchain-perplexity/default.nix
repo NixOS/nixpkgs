@@ -1,24 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  langchain-core,
-  openai,
-
-  # tests
-  langchain-tests,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pdm-backend
+, # dependencies
+  langchain-core
+, openai
+, # tests
+  langchain-tests
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

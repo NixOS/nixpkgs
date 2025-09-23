@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchPypi,
-  node-gyp,
-  nodejs_20,
-  nixosTests,
-  gettext,
-  python3,
-  giflib,
-  ghostscript_headless,
-  imagemagickBig,
-  jbig2enc,
-  optipng,
-  pngquant,
-  qpdf,
-  tesseract5,
-  unpaper,
-  pnpm,
-  poppler-utils,
-  liberation_ttf,
-  xcbuild,
-  pango,
-  pkg-config,
-  symlinkJoin,
-  nltk-data,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchPypi
+, node-gyp
+, nodejs_20
+, nixosTests
+, gettext
+, python3
+, giflib
+, ghostscript_headless
+, imagemagickBig
+, jbig2enc
+, optipng
+, pngquant
+, qpdf
+, tesseract5
+, unpaper
+, pnpm
+, poppler-utils
+, liberation_ttf
+, xcbuild
+, pango
+, pkg-config
+, symlinkJoin
+, nltk-data
+, xorg
+,
 }:
 let
   version = "2.18.4";

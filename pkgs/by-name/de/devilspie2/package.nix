@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  intltool,
-  pkg-config,
-  glib,
-  gtk3,
-  lua,
-  libwnck,
+{ lib
+, stdenv
+, fetchurl
+, intltool
+, pkg-config
+, glib
+, gtk3
+, lua
+, libwnck
+,
 }:
 
 stdenv.mkDerivation rec {

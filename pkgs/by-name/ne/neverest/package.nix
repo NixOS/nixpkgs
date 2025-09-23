@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  stdenv,
-  pkg-config,
-  installShellFiles,
-  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  notmuch,
-  buildNoDefaultFeatures ? false,
-  buildFeatures ? [ ],
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, pkg-config
+, installShellFiles
+, installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, notmuch
+, buildNoDefaultFeatures ? false
+, buildFeatures ? [ ]
+,
 }:
 
 rustPlatform.buildRustPackage rec {

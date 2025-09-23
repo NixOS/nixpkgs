@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  cmake,
-  python3,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, python3
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

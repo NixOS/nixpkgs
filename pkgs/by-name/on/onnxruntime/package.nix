@@ -1,29 +1,29 @@
-{
-  config,
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  abseil-cpp_202407,
-  cmake,
-  cpuinfo,
-  eigen,
-  flatbuffers_23,
-  glibcLocales,
-  gtest,
-  howard-hinnant-date,
-  libpng,
-  nlohmann_json,
-  pkg-config,
-  python3Packages,
-  re2,
-  zlib,
-  protobuf,
-  microsoft-gsl,
-  darwinMinVersionHook,
-  pythonSupport ? true,
-  cudaSupport ? config.cudaSupport,
-  ncclSupport ? config.cudaSupport,
-  cudaPackages ? { },
+{ config
+, stdenv
+, lib
+, fetchFromGitHub
+, abseil-cpp_202407
+, cmake
+, cpuinfo
+, eigen
+, flatbuffers_23
+, glibcLocales
+, gtest
+, howard-hinnant-date
+, libpng
+, nlohmann_json
+, pkg-config
+, python3Packages
+, re2
+, zlib
+, protobuf
+, microsoft-gsl
+, darwinMinVersionHook
+, pythonSupport ? true
+, cudaSupport ? config.cudaSupport
+, ncclSupport ? config.cudaSupport
+, cudaPackages ? { }
+,
 }@inputs:
 
 let

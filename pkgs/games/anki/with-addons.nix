@@ -1,11 +1,11 @@
-{
-  lib,
-  symlinkJoin,
-  makeWrapper,
-  anki,
-  anki-utils,
-  writeTextDir,
-  ankiAddons ? [ ],
+{ lib
+, symlinkJoin
+, makeWrapper
+, anki
+, anki-utils
+, writeTextDir
+, ankiAddons ? [ ]
+,
 }:
 /*
   `ankiAddons`

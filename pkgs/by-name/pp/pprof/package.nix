@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  libllvm,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, libllvm
+,
 }:
 
 buildGoModule {

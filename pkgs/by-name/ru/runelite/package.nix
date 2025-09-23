@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeDesktopItem,
-  makeWrapper,
-  maven,
-  jdk17,
-  jre,
-  xorg,
-  gitUpdater,
-  libGL,
+{ lib
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, maven
+, jdk17
+, jre
+, xorg
+, gitUpdater
+, libGL
+,
 }:
 
 maven.buildMavenPackage rec {

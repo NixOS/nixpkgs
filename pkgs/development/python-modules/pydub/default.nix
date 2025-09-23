@@ -1,14 +1,14 @@
-{
-  lib,
-  audioop-lts,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  ffmpeg-full,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  replaceVars,
+{ lib
+, audioop-lts
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, ffmpeg-full
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, replaceVars
+,
 }:
 
 buildPythonPackage rec {

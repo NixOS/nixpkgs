@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  acme,
-  certbot,
-  cloudflare,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ buildPythonPackage
+, acme
+, certbot
+, cloudflare
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

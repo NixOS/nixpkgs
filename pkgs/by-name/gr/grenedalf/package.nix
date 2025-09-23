@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  autoconf,
-  pkg-config,
-  libz,
-  bzip2,
-  xz,
-  libdeflate,
-  htslib,
-  fetchurl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, autoconf
+, pkg-config
+, libz
+, bzip2
+, xz
+, libdeflate
+, htslib
+, fetchurl
+,
 }:
 
 let

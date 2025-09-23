@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  bison,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, bison
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

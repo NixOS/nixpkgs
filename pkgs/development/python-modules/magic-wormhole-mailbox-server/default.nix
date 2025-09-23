@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  attrs,
-  twisted,
-  autobahn,
-  treq,
-  nixosTests,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, attrs
+, twisted
+, autobahn
+, treq
+, nixosTests
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

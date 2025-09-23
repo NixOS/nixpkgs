@@ -1,13 +1,12 @@
-{
-  lib,
-  stdenv,
-
-  fetchurl,
-  unzip,
-  qtbase,
-  qtmacextras ? null,
-  qmake,
-  fixDarwinDylibNames,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, qtbase
+, qtmacextras ? null
+, qmake
+, fixDarwinDylibNames
+,
 }:
 
 let

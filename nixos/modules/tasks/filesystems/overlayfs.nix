@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -49,9 +48,8 @@ let
     };
 
   overlayOpts =
-    {
-      config,
-      ...
+    { config
+    , ...
     }:
     {
       options.overlay = {
@@ -162,35 +160,40 @@ in
       boot.initrd.availableKernelModules = lib.mkIf (initrdFileSystems != { }) [ "overlay" ];
 
       assertions =
-        lib.concatLists (
-          lib.mapAttrsToList (_name: fs: [
-            {
-              assertion = (fs.overlay.upperdir == null) == (fs.overlay.workdir == null);
-              message = "You cannot define a `lowerdir` without a `workdir` and vice versa for mount point: ${fs.mountPoint}";
-            }
-            {
-              assertion =
-                (fs.overlay.lowerdir != null && fs.overlay.upperdir == null)
-                -> (lib.length fs.overlay.lowerdir) >= 2;
-              message = "A read-only overlay (without an `upperdir`) requires at least 2 `lowerdir`s: ${fs.mountPoint}";
-            }
-            {
-              assertion = !fs.overlay.useStage1BaseDirectories -> config.boot.initrd.systemd.enable;
-              message = ''
-                Stage 1 overlay file system ${fs.mountPoint} has 'useStage1BaseDirectories' set to false,
-                which is not supported with scripted initrd. Please enable 'boot.initrd.systemd.enable'.
-              '';
-            }
-          ]) overlayFileSystems
-        )
-        ++ lib.mapAttrsToList (_: fs: {
-          assertion = fs.overlay.upperdir == null -> config.boot.initrd.systemd.enable;
-          message = ''
-            Stage 1 overlay file system ${fs.mountPoint} has no upperdir,
-            which is not supported with scripted initrd. Please enable
-            'boot.initrd.systemd.enable'.
-          '';
-        }) initrdFileSystems;
+        lib.concatLists
+          (
+            lib.mapAttrsToList
+              (_name: fs: [
+                {
+                  assertion = (fs.overlay.upperdir == null) == (fs.overlay.workdir == null);
+                  message = "You cannot define a `lowerdir` without a `workdir` and vice versa for mount point: ${fs.mountPoint}";
+                }
+                {
+                  assertion =
+                    (fs.overlay.lowerdir != null && fs.overlay.upperdir == null)
+                    -> (lib.length fs.overlay.lowerdir) >= 2;
+                  message = "A read-only overlay (without an `upperdir`) requires at least 2 `lowerdir`s: ${fs.mountPoint}";
+                }
+                {
+                  assertion = !fs.overlay.useStage1BaseDirectories -> config.boot.initrd.systemd.enable;
+                  message = ''
+                    Stage 1 overlay file system ${fs.mountPoint} has 'useStage1BaseDirectories' set to false,
+                    which is not supported with scripted initrd. Please enable 'boot.initrd.systemd.enable'.
+                  '';
+                }
+              ])
+              overlayFileSystems
+          )
+        ++ lib.mapAttrsToList
+          (_: fs: {
+            assertion = fs.overlay.upperdir == null -> config.boot.initrd.systemd.enable;
+            message = ''
+              Stage 1 overlay file system ${fs.mountPoint} has no upperdir,
+              which is not supported with scripted initrd. Please enable
+              'boot.initrd.systemd.enable'.
+            '';
+          })
+          initrdFileSystems;
 
       boot.initrd.systemd.services = lib.mkMerge (lib.mapAttrsToList preMountService initrdFileSystems);
       systemd.services = lib.mkMerge (lib.mapAttrsToList preMountService userspaceFileSystems);

@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libtool,
-  perl,
-  bsdbuild,
-  gettext,
-  mandoc,
-  libpng,
-  libjpeg,
-  libXinerama,
-  freetype,
-  SDL,
-  libGL,
-  libsndfile,
-  portaudio,
-  libmysqlclient,
-  fontconfig,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libtool
+, perl
+, bsdbuild
+, gettext
+, mandoc
+, libpng
+, libjpeg
+, libXinerama
+, freetype
+, SDL
+, libGL
+, libsndfile
+, portaudio
+, libmysqlclient
+, fontconfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  gettext,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_net,
-  SDL2_ttf,
-  zlib,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, gettext
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_net
+, SDL2_ttf
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

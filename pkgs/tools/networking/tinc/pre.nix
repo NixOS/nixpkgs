@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  texinfo,
-  ncurses,
-  readline,
-  zlib,
-  lzo,
-  openssl,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, texinfo
+, ncurses
+, readline
+, zlib
+, lzo
+, openssl
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

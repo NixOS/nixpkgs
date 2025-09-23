@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  autoreconfHook,
-  libelf,
-  libiberty,
-  unstableGitUpdater,
+{ stdenv
+, lib
+, fetchgit
+, autoreconfHook
+, libelf
+, libiberty
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchurl,
-  pkg-config,
-  libxml2,
-  libxslt,
-  intltool,
-  gnome,
-  python3Packages,
-  fetchpatch,
-  bash,
+{ lib
+, fetchurl
+, pkg-config
+, libxml2
+, libxslt
+, intltool
+, gnome
+, python3Packages
+, fetchpatch
+, bash
+,
 }:
 
 python3Packages.buildPythonApplication rec {

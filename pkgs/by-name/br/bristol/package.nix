@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  alsa-lib,
-  libjack2,
-  pkg-config,
-  libX11,
-  libXext,
-  xorgproto,
-  libpulseaudio,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib
+, libjack2
+, pkg-config
+, libX11
+, libXext
+, xorgproto
+, libpulseaudio
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {

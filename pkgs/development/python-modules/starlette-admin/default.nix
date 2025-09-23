@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  aiosqlite,
-  arrow,
-  babel,
-  cacert,
-  colour,
-  fasteners,
-  httpx,
-  jinja2,
-  mongoengine,
-  motor,
-  passlib,
-  phonenumbers,
-  pillow,
-  psycopg2,
-  pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-multipart,
-  requests,
-  sqlalchemy,
-  sqlalchemy-file,
-  sqlalchemy-utils,
-  sqlmodel,
-  starlette,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, aiosqlite
+, arrow
+, babel
+, cacert
+, colour
+, fasteners
+, httpx
+, jinja2
+, mongoengine
+, motor
+, passlib
+, phonenumbers
+, pillow
+, psycopg2
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, python-multipart
+, requests
+, sqlalchemy
+, sqlalchemy-file
+, sqlalchemy-utils
+, sqlmodel
+, starlette
+,
 }:
 
 buildPythonPackage rec {

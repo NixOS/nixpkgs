@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  gitMinimal,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, gitMinimal
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  ncurses,
-  libtermkey,
-  lua,
-  tre,
-  acl,
-  libselinux,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, ncurses
+, libtermkey
+, lua
+, tre
+, acl
+, libselinux
+,
 }:
 
 let

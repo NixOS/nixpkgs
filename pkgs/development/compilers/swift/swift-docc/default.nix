@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  swift,
-  swiftpm,
-  swiftpm2nix,
-  Foundation,
-  XCTest,
+{ lib
+, stdenv
+, callPackage
+, swift
+, swiftpm
+, swiftpm2nix
+, Foundation
+, XCTest
+,
 }:
 let
   sources = callPackage ../sources.nix { };

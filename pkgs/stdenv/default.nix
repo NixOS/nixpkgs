@@ -6,13 +6,14 @@
 
 {
   # Args just for stdenvs' usage
-  lib,
-  # Args to pass on to the pkgset builder, too
-  localSystem,
-  crossSystem,
-  config,
-  overlays,
-  crossOverlays ? [ ],
+  lib
+, # Args to pass on to the pkgset builder, too
+  localSystem
+, crossSystem
+, config
+, overlays
+, crossOverlays ? [ ]
+,
 }@args:
 
 let
@@ -57,5 +58,4 @@ else
     i686-cygwin = stagesNative;
     x86_64-cygwin = stagesNative;
     x86_64-freebsd = stagesFreeBSD;
-  }
-  .${localSystem.system} or stagesNative
+  }.${localSystem.system} or stagesNative

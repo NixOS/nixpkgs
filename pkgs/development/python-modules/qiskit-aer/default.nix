@@ -1,30 +1,30 @@
-{
-  lib,
-  pythonOlder,
-  buildPythonPackage,
-  fetchFromGitHub,
-  # C Inputs
-  blas,
-  catch2,
-  cmake,
-  cython,
-  fmt,
-  muparserx,
-  ninja,
-  nlohmann_json,
-  spdlog,
-  # Python Inputs
-  cvxpy,
-  numpy,
-  pybind11,
-  scikit-build,
-  # Check Inputs
-  pytestCheckHook,
-  ddt,
-  fixtures,
-  pytest-timeout,
-  qiskit-terra,
-  testtools,
+{ lib
+, pythonOlder
+, buildPythonPackage
+, fetchFromGitHub
+, # C Inputs
+  blas
+, catch2
+, cmake
+, cython
+, fmt
+, muparserx
+, ninja
+, nlohmann_json
+, spdlog
+, # Python Inputs
+  cvxpy
+, numpy
+, pybind11
+, scikit-build
+, # Check Inputs
+  pytestCheckHook
+, ddt
+, fixtures
+, pytest-timeout
+, qiskit-terra
+, testtools
+,
 }:
 
 buildPythonPackage rec {

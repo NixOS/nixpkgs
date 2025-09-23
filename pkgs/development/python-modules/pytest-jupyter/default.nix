@@ -1,24 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build
-  hatchling,
-  pytest,
-
-  # runtime
-  jupyter-core,
-
-  # optionals
-  jupyter-client,
-  ipykernel,
-  jupyter-server,
-  nbformat,
-
-  # tests
-  pytest-timeout,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build
+  hatchling
+, pytest
+, # runtime
+  jupyter-core
+, # optionals
+  jupyter-client
+, ipykernel
+, jupyter-server
+, nbformat
+, # tests
+  pytest-timeout
+, pytestCheckHook
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  xdg-user-dirs,
-  wrapGAppsHook3,
-  gtk3,
-  gnome,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, xdg-user-dirs
+, wrapGAppsHook3
+, gtk3
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

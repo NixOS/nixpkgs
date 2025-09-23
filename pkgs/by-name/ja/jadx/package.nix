@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gradle_8,
-  jdk,
-  quark-engine,
-  makeBinaryWrapper,
-  imagemagick,
-  makeDesktopItem,
-  copyDesktopItems,
-  desktopToDarwinBundle,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gradle_8
+, jdk
+, quark-engine
+, makeBinaryWrapper
+, imagemagick
+, makeDesktopItem
+, copyDesktopItems
+, desktopToDarwinBundle
+,
 }:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."

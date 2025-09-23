@@ -1,20 +1,20 @@
-{
-  lib,
-  flutter332,
-  python3,
-  fetchFromGitHub,
-  pcre2,
-  libnotify,
-  libappindicator,
-  pkg-config,
-  gnome-screenshot,
-  makeWrapper,
-  removeReferencesTo,
-  runCommand,
-  yq,
-  yubioath-flutter,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, flutter332
+, python3
+, fetchFromGitHub
+, pcre2
+, libnotify
+, libappindicator
+, pkg-config
+, gnome-screenshot
+, makeWrapper
+, removeReferencesTo
+, runCommand
+, yq
+, yubioath-flutter
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 flutter332.buildFlutterApplication rec {

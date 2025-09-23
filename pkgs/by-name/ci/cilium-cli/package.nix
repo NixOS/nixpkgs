@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  cilium-cli,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
+{ lib
+, buildGoModule
+, cilium-cli
+, fetchFromGitHub
+, installShellFiles
+, testers
+,
 }:
 
 buildGoModule rec {

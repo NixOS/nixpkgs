@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  cmake,
-  boost179,
-  gmp,
-  htslib,
-  zlib,
-  xz,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, cmake
+, boost179
+, gmp
+, htslib
+, zlib
+, xz
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,16 @@
-{
-  cmake,
-  fpattern,
-  lib,
-  SDL2,
-  stdenv,
-  writeShellScript,
-
-  extraBuildInputs ? [ ],
-  extraMeta,
-  patches,
-  pname,
-  version,
-  src,
+{ cmake
+, fpattern
+, lib
+, SDL2
+, stdenv
+, writeShellScript
+, extraBuildInputs ? [ ]
+, extraMeta
+, patches
+, pname
+, version
+, src
+,
 }:
 
 let

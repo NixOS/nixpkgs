@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  django-taggit,
-  django,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, django-taggit
+, django
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

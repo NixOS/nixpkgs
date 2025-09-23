@@ -1,19 +1,17 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  replaceVars,
-  makeDesktopItem,
-
-  nodejs,
-  yarnConfigHook,
-  yarnBuildHook,
-  makeShellWrapper,
-  copyDesktopItems,
-  electron,
-
-  nixosTests,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchYarnDeps
+, replaceVars
+, makeDesktopItem
+, nodejs
+, yarnConfigHook
+, yarnBuildHook
+, makeShellWrapper
+, copyDesktopItems
+, electron
+, nixosTests
+,
 }:
 let
   description = "Open Source YouTube app for privacy";

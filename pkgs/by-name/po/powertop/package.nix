@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  autoconf-archive,
-  autoreconfHook,
-  fetchFromGitHub,
-  gettext,
-  libnl,
-  ncurses,
-  nix-update-script,
-  pciutils,
-  pkg-config,
-  powertop,
-  testers,
-  xorg,
-  zlib,
+{ lib
+, stdenv
+, autoconf-archive
+, autoreconfHook
+, fetchFromGitHub
+, gettext
+, libnl
+, ncurses
+, nix-update-script
+, pciutils
+, pkg-config
+, powertop
+, testers
+, xorg
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

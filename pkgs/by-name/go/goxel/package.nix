@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  scons,
-  pkg-config,
-  wrapGAppsHook3,
-  glfw3,
-  gtk3,
-  libpng,
+{ lib
+, stdenv
+, fetchFromGitHub
+, scons
+, pkg-config
+, wrapGAppsHook3
+, glfw3
+, gtk3
+, libpng
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

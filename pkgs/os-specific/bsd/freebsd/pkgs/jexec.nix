@@ -1,7 +1,7 @@
-{
-  lib,
-  mkDerivation,
-  libjail,
+{ lib
+, mkDerivation
+, libjail
+,
 }:
 mkDerivation {
   path = "usr.sbin/jexec";

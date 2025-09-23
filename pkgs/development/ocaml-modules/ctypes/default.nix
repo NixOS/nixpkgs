@@ -1,12 +1,12 @@
-{
-  lib,
-  ocaml,
-  fetchFromGitHub,
-  buildDunePackage,
-  dune-configurator,
-  integers,
-  bigarray-compat,
-  ounit2,
+{ lib
+, ocaml
+, fetchFromGitHub
+, buildDunePackage
+, dune-configurator
+, integers
+, bigarray-compat
+, ounit2
+,
 }:
 
 buildDunePackage rec {

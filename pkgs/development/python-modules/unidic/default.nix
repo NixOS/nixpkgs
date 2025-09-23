@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  mecab,
-  setuptools-scm,
-  requests,
-  tqdm,
-  wasabi,
-  plac,
-  cython,
-  platformdirs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, mecab
+, setuptools-scm
+, requests
+, tqdm
+, wasabi
+, plac
+, cython
+, platformdirs
+,
 }:
 
 buildPythonPackage rec {

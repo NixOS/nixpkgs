@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libpng,
-  libx11,
-  libxcursor,
-  xorgproto,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libpng
+, libx11
+, libxcursor
+, xorgproto
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcursorgen";

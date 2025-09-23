@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  rustPlatform,
-  lib,
-  ipset,
+{ fetchFromGitHub
+, rustPlatform
+, lib
+, ipset
+,
 }:
 
 rustPlatform.buildRustPackage {

@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  bx-py-utils,
-  colorlog,
-  fetchFromGitHub,
-  importlib-resources,
-  jaraco-classes,
-  jaraco-collections,
-  jaraco-itertools,
-  jaraco-context,
-  jaraco-functools,
-  jaraco-net,
-  keyring,
-  lomond,
-  more-itertools,
-  platformdirs,
-  pytest-responses,
-  pytestCheckHook,
-  requests,
-  requests-toolbelt,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, bx-py-utils
+, colorlog
+, fetchFromGitHub
+, importlib-resources
+, jaraco-classes
+, jaraco-collections
+, jaraco-itertools
+, jaraco-context
+, jaraco-functools
+, jaraco-net
+, keyring
+, lomond
+, more-itertools
+, platformdirs
+, pytest-responses
+, pytestCheckHook
+, requests
+, requests-toolbelt
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,34 +1,34 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  # native
-  cmake,
-  desktopToDarwinBundle,
-  pkg-config,
-  wrapGAppsHook3,
-  # not native
-  gdal,
-  wxGTK32,
-  proj,
-  libsForQt5,
-  curl,
-  libiodbc,
-  xz,
-  libharu,
-  opencv,
-  vigra,
-  pdal,
-  libpq,
-  unixODBC,
-  poppler,
-  hdf5,
-  netcdf,
-  sqlite,
-  qhull,
-  giflib,
-  libsvm,
-  fftw,
+{ stdenv
+, lib
+, fetchurl
+, # native
+  cmake
+, desktopToDarwinBundle
+, pkg-config
+, wrapGAppsHook3
+, # not native
+  gdal
+, wxGTK32
+, proj
+, libsForQt5
+, curl
+, libiodbc
+, xz
+, libharu
+, opencv
+, vigra
+, pdal
+, libpq
+, unixODBC
+, poppler
+, hdf5
+, netcdf
+, sqlite
+, qhull
+, giflib
+, libsvm
+, fftw
+,
 }:
 
 stdenv.mkDerivation rec {

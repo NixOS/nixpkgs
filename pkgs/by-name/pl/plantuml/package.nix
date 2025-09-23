@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  graphviz,
-  gitUpdater,
-  jre,
-  makeBinaryWrapper,
-  testers,
+{ lib
+, stdenvNoCC
+, fetchurl
+, graphviz
+, gitUpdater
+, jre
+, makeBinaryWrapper
+, testers
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

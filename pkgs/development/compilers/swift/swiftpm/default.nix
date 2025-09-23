@@ -1,24 +1,26 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchpatch,
-  cmake,
-  ninja,
-  git,
-  swift,
-  swiftpm2nix,
-  Foundation,
-  XCTest,
-  pkg-config,
-  sqlite,
-  ncurses,
-  replaceVars,
-  runCommandLocal,
-  makeWrapper,
-  DarwinTools, # sw_vers
-  cctools, # vtool
-  xcbuild,
+{ lib
+, stdenv
+, callPackage
+, fetchpatch
+, cmake
+, ninja
+, git
+, swift
+, swiftpm2nix
+, Foundation
+, XCTest
+, pkg-config
+, sqlite
+, ncurses
+, replaceVars
+, runCommandLocal
+, makeWrapper
+, DarwinTools
+, # sw_vers
+  cctools
+, # vtool
+  xcbuild
+,
 }:
 
 let
@@ -394,7 +396,7 @@ in
 # Build the final swiftpm with the bootstrapping swiftpm.
 stdenv.mkDerivation (
   commonAttrs
-  // {
+    // {
     pname = "swiftpm";
 
     nativeBuildInputs = commonAttrs.nativeBuildInputs ++ [

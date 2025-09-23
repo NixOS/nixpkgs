@@ -1,9 +1,8 @@
-{
-  pkgs,
-  config,
-  lib,
-  utils,
-  ...
+{ pkgs
+, config
+, lib
+, utils
+, ...
 }:
 let
   cfg = config.services.glances;

@@ -1,6 +1,6 @@
-{
-  vimUtils,
-  taskwarrior2,
+{ vimUtils
+, taskwarrior2
+,
 }:
 vimUtils.buildVimPlugin {
   inherit (taskwarrior2) version pname;

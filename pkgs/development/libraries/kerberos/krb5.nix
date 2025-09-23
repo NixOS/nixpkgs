@@ -1,34 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bootstrap_cmds,
-  byacc, # can also use bison, but byacc has fewer dependencies
-  keyutils,
-  openssl,
-  bashNonInteractive,
-  perl,
-  pkg-config,
-
-  # for passthru.tests
-  bind,
-  curl,
-  nixosTests,
-  openssh,
-  postgresql,
-  python3,
-
-  # Extra Arguments
-  withLdap ? false,
-  openldap,
-  withLibedit ? true,
-  libedit,
-  withVerto ? false,
-  libverto,
-
-  # This is called "staticOnly" because krb5 does not support
+{ lib
+, stdenv
+, fetchurl
+, bootstrap_cmds
+, byacc
+, # can also use bison, but byacc has fewer dependencies
+  keyutils
+, openssl
+, bashNonInteractive
+, perl
+, pkg-config
+, # for passthru.tests
+  bind
+, curl
+, nixosTests
+, openssh
+, postgresql
+, python3
+, # Extra Arguments
+  withLdap ? false
+, openldap
+, withLibedit ? true
+, libedit
+, withVerto ? false
+, libverto
+, # This is called "staticOnly" because krb5 does not support
   # builting both static and shared, see below.
-  staticOnly ? false,
+  staticOnly ? false
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -90,11 +88,12 @@ stdenv.mkDerivation rec {
     openssl
     bashNonInteractive # cannot use bashInteractive because of a dependency cycle
   ]
-  ++ lib.optionals (
-    stdenv.hostPlatform.isLinux
-    && stdenv.hostPlatform.libc != "bionic"
-    && !(stdenv.hostPlatform.useLLVM or false)
-  ) [ keyutils ]
+  ++ lib.optionals
+    (
+      stdenv.hostPlatform.isLinux
+        && stdenv.hostPlatform.libc != "bionic"
+        && !(stdenv.hostPlatform.useLLVM or false)
+    ) [ keyutils ]
   ++ lib.optionals withLdap [ openldap ]
   ++ lib.optionals withLibedit [ libedit ]
   ++ lib.optionals withVerto [ libverto ];

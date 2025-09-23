@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  mdformat,
-  mdformat-footnote,
-  mdformat-frontmatter,
-  mdformat-tables,
-  mdit-py-plugins,
-  ruamel-yaml,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, mdformat
+, mdformat-footnote
+, mdformat-frontmatter
+, mdformat-tables
+, mdit-py-plugins
+, ruamel-yaml
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

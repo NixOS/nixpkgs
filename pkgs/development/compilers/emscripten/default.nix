@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  python3,
-  nodejs,
-  closurecompiler,
-  jre,
-  binaryen,
-  llvmPackages,
-  symlinkJoin,
-  makeWrapper,
-  replaceVars,
-  buildNpmPackage,
-  emscripten,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, python3
+, nodejs
+, closurecompiler
+, jre
+, binaryen
+, llvmPackages
+, symlinkJoin
+, makeWrapper
+, replaceVars
+, buildNpmPackage
+, emscripten
+,
 }:
 
 stdenv.mkDerivation rec {

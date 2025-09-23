@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  doxygen,
-  graphviz,
-  boost,
-  cgal,
-  gdal,
-  glew,
-  gmp,
-  libGL,
-  libGLU,
-  libSM,
-  mpfr,
-  proj,
-  python3,
-  qtxmlpatterns,
-  qwt,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, doxygen
+, graphviz
+, boost
+, cgal
+, gdal
+, glew
+, gmp
+, libGL
+, libGLU
+, libSM
+, mpfr
+, proj
+, python3
+, qtxmlpatterns
+, qwt
+, wrapQtAppsHook
+,
 }:
 
 let

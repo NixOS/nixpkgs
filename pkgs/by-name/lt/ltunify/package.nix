@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, udevCheckHook
+,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use

@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchzip,
-  rustPlatform,
-  eyed3,
-  flac,
-  imagemagick,
-  intermodal,
-  lame,
-  makeBinaryWrapper,
-  sox,
-  writableTmpDirAsHomeHook,
+{ lib
+, fetchFromGitHub
+, fetchzip
+, rustPlatform
+, eyed3
+, flac
+, imagemagick
+, intermodal
+, lame
+, makeBinaryWrapper
+, sox
+, writableTmpDirAsHomeHook
+,
 }:
 let
   runtimeDeps = [

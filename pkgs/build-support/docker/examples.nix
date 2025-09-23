@@ -7,16 +7,16 @@
 #  $ nix-build '<nixpkgs>' -A dockerTools.examples.redis
 #  $ docker load < result
 
-{
-  pkgs,
-  buildImage,
-  buildLayeredImage,
-  fakeNss,
-  pullImage,
-  shadowSetup,
-  buildImageWithNixDb,
-  pkgsCross,
-  streamNixShellImage,
+{ pkgs
+, buildImage
+, buildLayeredImage
+, fakeNss
+, pullImage
+, shadowSetup
+, buildImageWithNixDb
+, pkgsCross
+, streamNixShellImage
+,
 }:
 
 let
@@ -591,30 +591,30 @@ rec {
   bashLayeredWithUser =
     let
       nonRootShadowSetup =
-        {
-          user,
-          uid,
-          gid ? uid,
+        { user
+        , uid
+        , gid ? uid
+        ,
         }:
-        with pkgs;
-        [
-          (writeTextDir "etc/shadow" ''
-            root:!x:::::::
-            ${user}:!:::::::
-          '')
-          (writeTextDir "etc/passwd" ''
-            root:x:0:0::/root:${runtimeShell}
-            ${user}:x:${toString uid}:${toString gid}::/home/${user}:
-          '')
-          (writeTextDir "etc/group" ''
-            root:x:0:
-            ${user}:x:${toString gid}:
-          '')
-          (writeTextDir "etc/gshadow" ''
-            root:x::
-            ${user}:x::
-          '')
-        ];
+          with pkgs;
+          [
+            (writeTextDir "etc/shadow" ''
+              root:!x:::::::
+              ${user}:!:::::::
+            '')
+            (writeTextDir "etc/passwd" ''
+              root:x:0:0::/root:${runtimeShell}
+              ${user}:x:${toString uid}:${toString gid}::/home/${user}:
+            '')
+            (writeTextDir "etc/group" ''
+              root:x:0:
+              ${user}:x:${toString gid}:
+            '')
+            (writeTextDir "etc/gshadow" ''
+              root:x::
+              ${user}:x::
+            '')
+          ];
     in
     pkgs.dockerTools.buildLayeredImage {
       name = "bash-layered-with-user";
@@ -655,14 +655,15 @@ rec {
       target = pkgs.writeTextDir "dir/target" "Content doesn't matter.";
       symlink = pkgs.runCommand "symlink" { } "ln -s ${target} $out";
     in
-    pkgs.dockerTools.buildLayeredImage {
-      name = "layeredstoresymlink";
-      tag = "latest";
-      contents = [
-        pkgs.bash
-        symlink
-      ];
-    }
+    pkgs.dockerTools.buildLayeredImage
+      {
+        name = "layeredstoresymlink";
+        tag = "latest";
+        contents = [
+          pkgs.bash
+          symlink
+        ];
+      }
     // {
       passthru = { inherit symlink; };
     };
@@ -880,8 +881,7 @@ rec {
       ];
     };
 
-    config = {
-    };
+    config = { };
   };
 
   nix-shell-basic = streamNixShellImage {

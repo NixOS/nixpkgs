@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  ledger,
-  hledger,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, ledger
+, hledger
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  gettext,
-  glib,
-  gtk3,
-  libnotify,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, gettext
+, glib
+, gtk3
+, libnotify
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

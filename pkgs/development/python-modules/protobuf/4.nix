@@ -1,16 +1,16 @@
-{
-  buildPackages,
-  buildPythonPackage,
-  fetchpatch,
-  isPyPy,
-  lib,
-  stdenv,
-  numpy,
-  protobuf,
-  pytestCheckHook,
-  pythonAtLeast,
-  replaceVars,
-  tzdata,
+{ buildPackages
+, buildPythonPackage
+, fetchpatch
+, isPyPy
+, lib
+, stdenv
+, numpy
+, protobuf
+, pytestCheckHook
+, pythonAtLeast
+, replaceVars
+, tzdata
+,
 }:
 
 assert lib.versionOlder protobuf.version "21" -> throw "Protobuf 21 or newer required";

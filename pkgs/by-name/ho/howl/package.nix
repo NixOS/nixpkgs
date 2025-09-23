@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  pkg-config,
-  gtk3,
-  librsvg,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, gtk3
+, librsvg
+,
 }:
 
 stdenv.mkDerivation rec {

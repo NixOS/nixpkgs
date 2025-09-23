@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  coursier,
-  buildGraalvmNativeImage,
+{ lib
+, stdenvNoCC
+, coursier
+, buildGraalvmNativeImage
+,
 }:
 
 buildGraalvmNativeImage (finalAttrs: {

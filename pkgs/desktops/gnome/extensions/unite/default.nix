@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  gnome-shell,
-  fetchFromGitHub,
-  xprop,
-  glib,
+{ lib
+, stdenv
+, gnome-shell
+, fetchFromGitHub
+, xprop
+, glib
+,
 }:
 
 stdenv.mkDerivation rec {

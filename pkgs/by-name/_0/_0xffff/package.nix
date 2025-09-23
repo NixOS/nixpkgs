@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libusb-compat-0_1,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libusb-compat-0_1
+, versionCheckHook
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "0xFFFF";

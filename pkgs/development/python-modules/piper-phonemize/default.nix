@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  onnxruntime-native,
-  piper-phonemize-native,
-  pybind11,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, onnxruntime-native
+, piper-phonemize-native
+, pybind11
+, setuptools
+,
 }:
 
 buildPythonPackage {

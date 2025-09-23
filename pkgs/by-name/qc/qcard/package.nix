@@ -1,7 +1,7 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromSourcehut,
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+,
 }:
 
 buildGoModule rec {

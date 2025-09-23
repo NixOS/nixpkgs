@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  flit-core,
-  marshmallow,
-  packaging,
-  sqlalchemy,
-  pytest-lazy-fixtures,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, flit-core
+, marshmallow
+, packaging
+, sqlalchemy
+, pytest-lazy-fixtures
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

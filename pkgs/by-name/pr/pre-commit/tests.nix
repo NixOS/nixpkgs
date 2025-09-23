@@ -1,8 +1,8 @@
-{
-  gitMinimal,
-  pre-commit,
-  runCommand,
-  testers,
+{ gitMinimal
+, pre-commit
+, runCommand
+, testers
+,
 }:
 {
   check-meta-hooks =

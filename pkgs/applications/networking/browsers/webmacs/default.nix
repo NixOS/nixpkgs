@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  mkDerivationWith,
-  fetchFromGitHub,
-  python3Packages,
-  herbstluftwm,
+{ lib
+, stdenv
+, mkDerivationWith
+, fetchFromGitHub
+, python3Packages
+, herbstluftwm
+,
 }:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {

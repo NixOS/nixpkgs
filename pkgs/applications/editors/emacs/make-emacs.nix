@@ -1,110 +1,106 @@
-{
-  pname,
-  version,
-  variant,
-  src,
-  patches ? _: [ ],
-  meta,
+{ pname
+, version
+, variant
+, src
+, patches ? _: [ ]
+, meta
+,
 }:
 
-{
-  lib,
-  stdenv,
-  Xaw3d,
-  acl,
-  alsa-lib,
-  apple-sdk,
-  autoreconfHook,
-  cairo,
-  dbus,
-  emacsPackagesFor,
-  fetchpatch,
-  gettext,
-  giflib,
-  glib-networking,
-  gnutls,
-  gpm,
-  gsettings-desktop-schemas,
-  gtk3,
-  gtk3-x11,
-  harfbuzz,
-  imagemagick,
-  jansson,
-  libXaw,
-  libXcursor,
-  libXft,
-  libXi,
-  libXpm,
-  libXrandr,
-  libgccjit,
-  libjpeg,
-  libotf,
-  libpng,
-  librsvg,
-  libselinux,
-  libtiff,
-  libwebp,
-  libxml2,
-  m17n_lib,
-  mailcap,
-  mailutils,
-  makeWrapper,
-  motif,
-  ncurses,
-  nixosTests,
-  pkg-config,
-  recurseIntoAttrs,
-  sigtool,
-  sqlite,
-  replaceVars,
-  systemdLibs,
-  tree-sitter,
-  texinfo,
-  webkitgtk_4_0,
-  wrapGAppsHook3,
-  zlib,
-
-  # Boolean flags
-  withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  noGui ? false,
-  srcRepo ? false,
-  withAcl ? false,
-  withAlsaLib ? false,
-  withAthena ? false,
-  withCairo ? withX,
-  withCsrc ? true,
-  withDbus ? stdenv.hostPlatform.isLinux,
-  withGTK3 ? withPgtk && !noGui,
-  withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets),
-  withGpm ? stdenv.hostPlatform.isLinux,
-  # https://github.com/emacs-mirror/emacs/blob/master/etc/NEWS.27#L140-L142
-  withImageMagick ? false,
-  # Emacs 30+ has native JSON support
-  withJansson ? lib.versionOlder version "30",
-  withMailutils ? true,
-  withMotif ? false,
-  withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui),
-  withPgtk ? false,
-  withSelinux ? stdenv.hostPlatform.isLinux,
-  withSQLite3 ? true,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  withToolkitScrollBars ? true,
-  withTreeSitter ? true,
-  withWebP ? true,
-  withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk),
-  withXinput2 ? withX,
-  withXwidgets ?
-    !noGui
+{ lib
+, stdenv
+, Xaw3d
+, acl
+, alsa-lib
+, apple-sdk
+, autoreconfHook
+, cairo
+, dbus
+, emacsPackagesFor
+, fetchpatch
+, gettext
+, giflib
+, glib-networking
+, gnutls
+, gpm
+, gsettings-desktop-schemas
+, gtk3
+, gtk3-x11
+, harfbuzz
+, imagemagick
+, jansson
+, libXaw
+, libXcursor
+, libXft
+, libXi
+, libXpm
+, libXrandr
+, libgccjit
+, libjpeg
+, libotf
+, libpng
+, librsvg
+, libselinux
+, libtiff
+, libwebp
+, libxml2
+, m17n_lib
+, mailcap
+, mailutils
+, makeWrapper
+, motif
+, ncurses
+, nixosTests
+, pkg-config
+, recurseIntoAttrs
+, sigtool
+, sqlite
+, replaceVars
+, systemdLibs
+, tree-sitter
+, texinfo
+, webkitgtk_4_0
+, wrapGAppsHook3
+, zlib
+, # Boolean flags
+  withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, noGui ? false
+, srcRepo ? false
+, withAcl ? false
+, withAlsaLib ? false
+, withAthena ? false
+, withCairo ? withX
+, withCsrc ? true
+, withDbus ? stdenv.hostPlatform.isLinux
+, withGTK3 ? withPgtk && !noGui
+, withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets)
+, withGpm ? stdenv.hostPlatform.isLinux
+, # https://github.com/emacs-mirror/emacs/blob/master/etc/NEWS.27#L140-L142
+  withImageMagick ? false
+, # Emacs 30+ has native JSON support
+  withJansson ? lib.versionOlder version "30"
+, withMailutils ? true
+, withMotif ? false
+, withNS ? stdenv.hostPlatform.isDarwin && !(variant == "macport" || noGui)
+, withPgtk ? false
+, withSelinux ? stdenv.hostPlatform.isLinux
+, withSQLite3 ? true
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+, withToolkitScrollBars ? true
+, withTreeSitter ? true
+, withWebP ? true
+, withX ? !(stdenv.hostPlatform.isDarwin || noGui || withPgtk)
+, withXinput2 ? withX
+, withXwidgets ? !noGui
     && (withGTK3 || withPgtk || withNS || variant == "macport")
-    && (stdenv.hostPlatform.isDarwin || lib.versionOlder version "30"),
-  # XXX: - upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
+    && (stdenv.hostPlatform.isDarwin || lib.versionOlder version "30")
+, # XXX: - upstream bug 66068 precludes newer versions of webkit2gtk (https://lists.gnu.org/archive/html/bug-gnu-emacs/2024-09/msg00695.html)
   # XXX: - Apple_SDK WebKit is compatible with Emacs.
-  withSmallJaDic ? false,
-  withCompressInstall ? true,
-
-  # Options
-  siteStart ? ./site-start.el,
-  toolkit ? (
+  withSmallJaDic ? false
+, withCompressInstall ? true
+, # Options
+  siteStart ? ./site-start.el
+, toolkit ? (
     if withGTK3 then
       "gtk3"
     else if withMotif then
@@ -113,10 +109,10 @@
       "athena"
     else
       "lucid"
-  ),
-
-  # test
-  callPackage,
+  )
+, # test
+  callPackage
+,
 }:
 
 assert (withGTK3 && !withNS && variant != "macport") -> withX || withPgtk;
@@ -419,10 +415,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env =
-    lib.optionalAttrs withNativeCompilation {
-      NATIVE_FULL_AOT = "1";
-      LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
-    }
+    lib.optionalAttrs withNativeCompilation
+      {
+        NATIVE_FULL_AOT = "1";
+        LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
+      }
     // lib.optionalAttrs (variant == "macport") {
       # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
       # See https://github.com/NixOS/nixpkgs/issues/127902

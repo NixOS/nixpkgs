@@ -6,11 +6,10 @@
   };
 
   nodes.machine =
-    {
-      lib,
-      pkgs,
-      config,
-      ...
+    { lib
+    , pkgs
+    , config
+    , ...
     }:
     {
       users.users.alice = {

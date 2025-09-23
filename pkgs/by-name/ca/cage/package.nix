@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  wayland-scanner,
-  scdoc,
-  makeWrapper,
-  wlroots_0_18,
-  wayland,
-  wayland-protocols,
-  pixman,
-  libxkbcommon,
-  xcbutilwm,
-  libGL,
-  libX11,
-  xwayland ? null,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wayland-scanner
+, scdoc
+, makeWrapper
+, wlroots_0_18
+, wayland
+, wayland-protocols
+, pixman
+, libxkbcommon
+, xcbutilwm
+, libGL
+, libX11
+, xwayland ? null
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

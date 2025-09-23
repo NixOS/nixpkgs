@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gettext,
-  meson,
-  ninja,
-  pkg-config,
-  cairo,
-  glib,
-  gtk3,
-  gtk-layer-shell,
-  libX11,
-  libXi,
-  libxfce4ui,
-  libxfce4util,
-  libxfce4windowing,
-  xfce4-panel,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gettext
+, meson
+, ninja
+, pkg-config
+, cairo
+, glib
+, gtk3
+, gtk-layer-shell
+, libX11
+, libXi
+, libxfce4ui
+, libxfce4util
+, libxfce4windowing
+, xfce4-panel
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

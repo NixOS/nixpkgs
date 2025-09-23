@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  git,
-  ncurses,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  sqlite,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, git
+, ncurses
+, openssl
+, pkg-config
+, rustPlatform
+, sqlite
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

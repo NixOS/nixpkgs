@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gtk3,
-  openssl,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk3
+, openssl
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

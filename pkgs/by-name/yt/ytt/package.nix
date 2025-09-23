@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  ytt,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, ytt
+,
 }:
 buildGoModule rec {
   pname = "ytt";

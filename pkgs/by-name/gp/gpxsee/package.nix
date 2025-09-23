@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  qt6,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, qt6
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

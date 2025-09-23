@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  doxygen,
-  pkg-config,
-  enableUdev ?
-    stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isAndroid,
-  udev,
-  udevCheckHook,
-  withExamples ? false,
-  withStatic ? false,
-  withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, doxygen
+, pkg-config
+, enableUdev ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isAndroid
+, udev
+, udevCheckHook
+, withExamples ? false
+, withStatic ? false
+, withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+,
 }:
 
 stdenv.mkDerivation rec {

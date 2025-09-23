@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  testers,
-  validatePkgConfig,
-  sdl3,
-  cmake,
-  freetype,
-  harfbuzz,
-  glib,
-  ninja,
-  plutosvg,
-  fixDarwinDylibNames,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, testers
+, validatePkgConfig
+, sdl3
+, cmake
+, freetype
+, harfbuzz
+, glib
+, ninja
+, plutosvg
+, fixDarwinDylibNames
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  buildNpmPackage,
-  cctools,
-  fetchFromGitHub,
-  lib,
-  node-gyp,
-  nodejs,
-  python3,
-  stdenv,
+{ buildNpmPackage
+, cctools
+, fetchFromGitHub
+, lib
+, node-gyp
+, nodejs
+, python3
+, stdenv
+,
 }:
 
 buildNpmPackage {

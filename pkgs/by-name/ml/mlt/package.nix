@@ -1,41 +1,41 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  which,
-  ffmpeg,
-  fftw,
-  frei0r,
-  libdv,
-  libjack2,
-  libsamplerate,
-  libvorbis,
-  libxml2,
-  libX11,
-  makeWrapper,
-  movit,
-  opencv4,
-  rtaudio,
-  rubberband,
-  sox,
-  vid-stab,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
-  enableJackrack ? stdenv.hostPlatform.isLinux,
-  glib,
-  ladspa-sdk,
-  ladspaPlugins,
-  enablePython ? false,
-  python3,
-  swig,
-  qt ? null,
-  enableSDL2 ? true,
-  SDL2,
-  gitUpdater,
-  libarchive,
+{ config
+, lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, which
+, ffmpeg
+, fftw
+, frei0r
+, libdv
+, libjack2
+, libsamplerate
+, libvorbis
+, libxml2
+, libX11
+, makeWrapper
+, movit
+, opencv4
+, rtaudio
+, rubberband
+, sox
+, vid-stab
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
+, enableJackrack ? stdenv.hostPlatform.isLinux
+, glib
+, ladspa-sdk
+, ladspaPlugins
+, enablePython ? false
+, python3
+, swig
+, qt ? null
+, enableSDL2 ? true
+, SDL2
+, gitUpdater
+, libarchive
+,
 }:
 
 stdenv.mkDerivation rec {

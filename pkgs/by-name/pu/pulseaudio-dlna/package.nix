@@ -1,20 +1,20 @@
-{
-  fetchFromGitHub,
-  lib,
-  python3Packages,
-  mp3Support ? true,
-  lame,
-  opusSupport ? true,
-  opusTools,
-  faacSupport ? false,
-  faac,
-  flacSupport ? true,
-  flac,
-  soxSupport ? true,
-  sox,
-  vorbisSupport ? true,
-  vorbis-tools,
-  pulseaudio,
+{ fetchFromGitHub
+, lib
+, python3Packages
+, mp3Support ? true
+, lame
+, opusSupport ? true
+, opusTools
+, faacSupport ? false
+, faac
+, flacSupport ? true
+, flac
+, soxSupport ? true
+, sox
+, vorbisSupport ? true
+, vorbis-tools
+, pulseaudio
+,
 }:
 
 python3Packages.buildPythonApplication {

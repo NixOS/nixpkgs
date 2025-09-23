@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromRadicle,
-  fetchRadiclePatch,
-  radicle-node,
-  gitMinimal,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromRadicle
+, fetchRadiclePatch
+, radicle-node
+, gitMinimal
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  doxygen,
-  mandoc,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  sphinx,
-  sphinxygen,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, doxygen
+, mandoc
+, meson
+, ninja
+, pkg-config
+, python3
+, sphinx
+, sphinxygen
+, writeScript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

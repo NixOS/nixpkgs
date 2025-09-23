@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  libX11,
-  krb5,
-  libXcursor,
-  libtasn1,
-  nettle,
-  gnutls,
-  pkg-config,
-  autoreconfHook,
-  libiconv,
-  fetchpatch,
-  enableCredssp ? (!stdenv.hostPlatform.isDarwin),
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, libX11
+, krb5
+, libXcursor
+, libtasn1
+, nettle
+, gnutls
+, pkg-config
+, autoreconfHook
+, libiconv
+, fetchpatch
+, enableCredssp ? (!stdenv.hostPlatform.isDarwin)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

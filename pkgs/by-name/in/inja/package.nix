@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  nlohmann_json,
-  doctest,
-  callPackage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, nlohmann_json
+, doctest
+, callPackage
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

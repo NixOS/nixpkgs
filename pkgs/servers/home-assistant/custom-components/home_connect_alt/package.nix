@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildHomeAssistantComponent,
-  home-connect-async,
+{ lib
+, fetchFromGitHub
+, buildHomeAssistantComponent
+, home-connect-async
+,
 }:
 
 buildHomeAssistantComponent rec {

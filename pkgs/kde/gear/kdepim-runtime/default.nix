@@ -1,15 +1,15 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  shared-mime-info,
-  qtnetworkauth,
-  qtspeech,
-  qtwebengine,
-  cyrus_sasl,
-  lib,
-  libetebase,
-  libkgapi,
-  libxslt,
+{ mkKdeDerivation
+, pkg-config
+, shared-mime-info
+, qtnetworkauth
+, qtspeech
+, qtwebengine
+, cyrus_sasl
+, lib
+, libetebase
+, libkgapi
+, libxslt
+,
 }:
 mkKdeDerivation {
   pname = "kdepim-runtime";

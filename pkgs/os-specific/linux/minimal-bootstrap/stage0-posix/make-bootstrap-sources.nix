@@ -11,11 +11,11 @@
 #   nix-build '<nixpkgs>' -A make-minimal-bootstrap-sources
 #
 
-{
-  lib,
-  hostPlatform,
-  fetchFromGitHub,
-  fetchpatch,
+{ lib
+, hostPlatform
+, fetchFromGitHub
+, fetchpatch
+,
 }:
 
 let

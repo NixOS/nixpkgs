@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  loguru,
-  rpyc,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, loguru
+, rpyc
+,
 }:
 buildPythonPackage rec {
   pname = "streamcontroller-plugin-tools";

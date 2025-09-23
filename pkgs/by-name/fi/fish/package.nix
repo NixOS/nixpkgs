@@ -1,42 +1,39 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  coreutils,
-  darwin,
-  glibcLocales,
-  gnused,
-  gnugrep,
-  groff,
-  gawk,
-  man-db,
-  ninja,
-  getent,
-  libiconv,
-  pcre2,
-  pkg-config,
-  sphinx,
-  gettext,
-  ncurses,
-  python3,
-  cargo,
-  cmake,
-  fishPlugins,
-  procps,
-  rustc,
-  rustPlatform,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
-
-  # used to generate autocompletions from manpages and for configuration editing in the browser
-  usePython ? true,
-
-  runCommand,
-  writeText,
-  nixosTests,
-  nix-update-script,
-  useOperatingSystemEtc ? true,
-  # An optional string containing Fish code that initializes the environment.
+{ stdenv
+, lib
+, fetchFromGitHub
+, coreutils
+, darwin
+, glibcLocales
+, gnused
+, gnugrep
+, groff
+, gawk
+, man-db
+, ninja
+, getent
+, libiconv
+, pcre2
+, pkg-config
+, sphinx
+, gettext
+, ncurses
+, python3
+, cargo
+, cmake
+, fishPlugins
+, procps
+, rustc
+, rustPlatform
+, versionCheckHook
+, writableTmpDirAsHomeHook
+, # used to generate autocompletions from manpages and for configuration editing in the browser
+  usePython ? true
+, runCommand
+, writeText
+, nixosTests
+, nix-update-script
+, useOperatingSystemEtc ? true
+, # An optional string containing Fish code that initializes the environment.
   # This is run at the very beginning of initialization. If it sets $NIX_PROFILES
   # then Fish will use that to configure its function, completion, and conf.d paths.
   # For example:
@@ -44,7 +41,8 @@
   # It can also be a function that takes one argument, which is a function that
   # takes a path to a bash file and converts it to fish. For example:
   #   fishEnvPreInit = source: source "${nix}/etc/profile.d/nix-daemon.sh";
-  fishEnvPreInit ? null,
+  fishEnvPreInit ? null
+,
 }:
 let
   etcConfigAppendix = writeText "config.fish.appendix" ''

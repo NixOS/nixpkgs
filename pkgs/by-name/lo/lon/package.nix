@@ -1,11 +1,11 @@
-{
-  rustPlatform,
-  lib,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  nix-prefetch-git,
-  gitMinimal,
-  nix-update-script,
+{ rustPlatform
+, lib
+, fetchFromGitHub
+, makeBinaryWrapper
+, nix-prefetch-git
+, gitMinimal
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

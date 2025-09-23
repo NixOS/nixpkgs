@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  librsvg,
-  xorg,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, librsvg
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -11,9 +10,11 @@ let
 
   # WM session script
   # Note: this assumes a single WM has been enabled
-  sessionScript = lib.concatMapStringsSep "\n" (
-    i: i.start
-  ) config.services.xserver.windowManager.session;
+  sessionScript = lib.concatMapStringsSep "\n"
+    (
+      i: i.start
+    )
+    config.services.xserver.windowManager.session;
 
 in
 

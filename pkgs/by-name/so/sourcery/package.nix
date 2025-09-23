@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchPypi,
-  autoPatchelfHook,
-  zlib,
+{ lib
+, stdenv
+, python3Packages
+, fetchPypi
+, autoPatchelfHook
+, zlib
+,
 }:
 
 let

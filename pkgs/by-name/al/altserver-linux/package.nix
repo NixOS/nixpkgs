@@ -1,8 +1,8 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  avahi-compat,
+{ stdenv
+, fetchurl
+, lib
+, avahi-compat
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

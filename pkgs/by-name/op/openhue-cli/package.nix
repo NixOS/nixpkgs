@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildGoModule (finalAttrs: {

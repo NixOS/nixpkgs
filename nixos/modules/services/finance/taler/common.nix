@@ -1,15 +1,13 @@
 # TODO: create a common module generator for Taler and Libeufin?
-{
-  talerComponent ? "",
-  servicesDB ? [ ],
-  servicesNoDB ? [ ],
-  ...
+{ talerComponent ? ""
+, servicesDB ? [ ]
+, servicesNoDB ? [ ]
+, ...
 }:
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 let
   cfg = cfgTaler.${talerComponent};

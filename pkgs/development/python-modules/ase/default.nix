@@ -1,28 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  buildPythonPackage,
-  pythonAtLeast,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  flask,
-  matplotlib,
-  numpy,
-  pillow,
-  psycopg2,
-  scipy,
-  tkinter,
-
-  # tests
-  addBinToPathHook,
-  pytestCheckHook,
-  pytest-mock,
-  pytest-xdist,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, buildPythonPackage
+, pythonAtLeast
+, # build-system
+  setuptools
+, # dependencies
+  flask
+, matplotlib
+, numpy
+, pillow
+, psycopg2
+, scipy
+, tkinter
+, # tests
+  addBinToPathHook
+, pytestCheckHook
+, pytest-mock
+, pytest-xdist
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

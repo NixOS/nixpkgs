@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  gettext,
-  libtool,
-  pkg-config,
-  djvulibre,
-  exiv2,
-  fontconfig,
-  graphicsmagick,
-  libjpeg,
-  libuuid,
-  poppler,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, gettext
+, libtool
+, pkg-config
+, djvulibre
+, exiv2
+, fontconfig
+, graphicsmagick
+, libjpeg
+, libuuid
+, poppler
+,
 }:
 
 stdenv.mkDerivation rec {

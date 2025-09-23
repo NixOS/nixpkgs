@@ -1,30 +1,30 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  makeWrapper,
-  wrapGAppsHook3,
-  # build dependencies
-  alsa-lib,
-  atk,
-  at-spi2-atk,
-  at-spi2-core,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  fontconfig,
-  freetype,
-  gdk-pixbuf,
-  glib,
-  glibc,
-  gtk3,
-  libuuid,
-  nspr,
-  nss,
-  pango,
-  xorg,
-  systemd,
+{ stdenv
+, fetchurl
+, lib
+, makeWrapper
+, wrapGAppsHook3
+, # build dependencies
+  alsa-lib
+, atk
+, at-spi2-atk
+, at-spi2-core
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, glibc
+, gtk3
+, libuuid
+, nspr
+, nss
+, pango
+, xorg
+, systemd
+,
 }:
 let
 

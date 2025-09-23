@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  pkg-config,
-  xalanc,
-  xercesc,
-  openssl,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, xalanc
+, xercesc
+, openssl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

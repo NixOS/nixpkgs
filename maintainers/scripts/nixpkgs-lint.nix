@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  makeWrapper,
-  perl,
-  perlPackages,
+{ stdenv
+, lib
+, makeWrapper
+, perl
+, perlPackages
+,
 }:
 
 stdenv.mkDerivation {

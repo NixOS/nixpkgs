@@ -1,9 +1,9 @@
-{
-  lib,
-  gccStdenv,
-  fetchurl,
-  bison,
-  flex,
+{ lib
+, gccStdenv
+, fetchurl
+, bison
+, flex
+,
 }:
 
 let

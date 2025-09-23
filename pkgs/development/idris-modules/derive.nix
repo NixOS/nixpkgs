@@ -1,9 +1,9 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  contrib,
-  pruviloj,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, contrib
+, pruviloj
+, lib
+,
 }:
 build-idris-package {
   pname = "derive";

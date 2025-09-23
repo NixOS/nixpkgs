@@ -1,15 +1,15 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 let
   cfg = config.services.zapret;
 
-  whitelist = lib.optionalString (
-    (builtins.length cfg.whitelist) != 0
-  ) "--hostlist ${pkgs.writeText "zapret-whitelist" (lib.concatStringsSep "\n" cfg.whitelist)}";
+  whitelist = lib.optionalString
+    (
+      (builtins.length cfg.whitelist) != 0
+    ) "--hostlist ${pkgs.writeText "zapret-whitelist" (lib.concatStringsSep "\n" cfg.whitelist)}";
 
   blacklist =
     lib.optionalString ((builtins.length cfg.blacklist) != 0)
@@ -186,9 +186,10 @@ in
       (lib.mkIf cfg.configureFirewall {
         networking.firewall.extraCommands =
           let
-            httpParams = lib.optionalString (
-              cfg.httpMode == "first"
-            ) "-m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:6";
+            httpParams = lib.optionalString
+              (
+                cfg.httpMode == "first"
+              ) "-m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:6";
 
             udpPorts = lib.concatStringsSep "," cfg.udpPorts;
           in

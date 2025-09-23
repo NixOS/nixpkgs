@@ -1,66 +1,66 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  celery,
-  colorama,
-  configobj,
-  dulwich,
-  distro,
-  dpath,
-  dvc-azure,
-  dvc-data,
-  dvc-gdrive,
-  dvc-gs,
-  dvc-hdfs,
-  dvc-http,
-  dvc-oss,
-  dvc-render,
-  dvc-s3,
-  dvc-ssh,
-  dvc-studio-client,
-  dvc-task,
-  dvc-webdav,
-  dvc-webhdfs,
-  fetchFromGitHub,
-  flatten-dict,
-  flufl-lock,
-  fsspec,
-  funcy,
-  grandalf,
-  gto,
-  hydra-core,
-  importlib-metadata,
-  importlib-resources,
-  iterative-telemetry,
-  kombu,
-  networkx,
-  omegaconf,
-  packaging,
-  pathspec,
-  platformdirs,
-  psutil,
-  pydot,
-  pygtrie,
-  pyparsing,
-  pythonOlder,
-  requests,
-  rich,
-  ruamel-yaml,
-  scmrepo,
-  setuptools-scm,
-  shortuuid,
-  shtab,
-  tabulate,
-  tomlkit,
-  tqdm,
-  typing-extensions,
-  voluptuous,
-  zc-lockfile,
-  enableGoogle ? false,
-  enableAWS ? false,
-  enableAzure ? false,
-  enableSSH ? false,
+{ lib
+, attrs
+, buildPythonPackage
+, celery
+, colorama
+, configobj
+, dulwich
+, distro
+, dpath
+, dvc-azure
+, dvc-data
+, dvc-gdrive
+, dvc-gs
+, dvc-hdfs
+, dvc-http
+, dvc-oss
+, dvc-render
+, dvc-s3
+, dvc-ssh
+, dvc-studio-client
+, dvc-task
+, dvc-webdav
+, dvc-webhdfs
+, fetchFromGitHub
+, flatten-dict
+, flufl-lock
+, fsspec
+, funcy
+, grandalf
+, gto
+, hydra-core
+, importlib-metadata
+, importlib-resources
+, iterative-telemetry
+, kombu
+, networkx
+, omegaconf
+, packaging
+, pathspec
+, platformdirs
+, psutil
+, pydot
+, pygtrie
+, pyparsing
+, pythonOlder
+, requests
+, rich
+, ruamel-yaml
+, scmrepo
+, setuptools-scm
+, shortuuid
+, shtab
+, tabulate
+, tomlkit
+, tqdm
+, typing-extensions
+, voluptuous
+, zc-lockfile
+, enableGoogle ? false
+, enableAWS ? false
+, enableAzure ? false
+, enableSSH ? false
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  awscrt,
-  boto3,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, awscrt
+, boto3
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

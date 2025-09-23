@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pyusb,
-  pyserial,
-  prompt-toolkit,
-  libusb1,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pyusb
+, pyserial
+, prompt-toolkit
+, libusb1
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

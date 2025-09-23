@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchCrate,
-  rustPlatform,
-  clang,
-  rustfmt,
+{ lib
+, fetchCrate
+, rustPlatform
+, clang
+, rustfmt
+,
 }:
 let
   # bindgen hardcodes rustfmt outputs that use nightly features

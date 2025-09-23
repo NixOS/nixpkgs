@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libnet,
-  libpcap,
-  libdnet,
+{ lib
+, stdenv
+, fetchurl
+, libnet
+, libpcap
+, libdnet
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

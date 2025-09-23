@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  llvmPackages,
-  z3,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, llvmPackages
+, z3
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

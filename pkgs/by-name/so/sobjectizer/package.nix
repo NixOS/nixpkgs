@@ -1,13 +1,13 @@
-{
-  pkgs,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  withStatic ? stdenv.hostPlatform.isStatic,
-  withShared ? !withStatic,
-  buildExamples ? false,
+{ pkgs
+, lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, withStatic ? stdenv.hostPlatform.isStatic
+, withShared ? !withStatic
+, buildExamples ? false
+,
 }:
 
 # Ensure build examples with static library.

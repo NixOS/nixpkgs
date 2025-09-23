@@ -1,9 +1,9 @@
-{
-  lib,
-  clang,
-  mkAppleDerivation,
-  buildPackages,
-  shell_cmds,
+{ lib
+, clang
+, mkAppleDerivation
+, buildPackages
+, shell_cmds
+,
 }:
 
 mkAppleDerivation {

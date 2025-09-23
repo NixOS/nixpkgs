@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  git,
-  testers,
-  makeWrapper,
-  githooks,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, git
+, testers
+, makeWrapper
+, githooks
+,
 }:
 buildGoModule rec {
   pname = "githooks";

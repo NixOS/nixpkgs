@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  unzrip,
+{ lib
+, stdenvNoCC
+, fetchurl
+, unzrip
+,
 }:
 
 stdenvNoCC.mkDerivation {

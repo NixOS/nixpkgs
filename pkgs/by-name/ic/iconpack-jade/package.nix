@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gtk3,
-  gnome-icon-theme,
-  hicolor-icon-theme,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, gnome-icon-theme
+, hicolor-icon-theme
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

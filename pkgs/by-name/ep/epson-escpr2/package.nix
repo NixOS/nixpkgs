@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  cups,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, cups
+,
 }:
 
 stdenv.mkDerivation {

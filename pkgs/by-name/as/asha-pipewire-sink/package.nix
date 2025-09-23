@@ -1,12 +1,12 @@
-{
-  cmake,
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  pkg-config,
-  pipewire,
-  bluez,
-  glib,
+{ cmake
+, stdenv
+, fetchFromGitHub
+, lib
+, pkg-config
+, pipewire
+, bluez
+, glib
+,
 }:
 
 stdenv.mkDerivation {

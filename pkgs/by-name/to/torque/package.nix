@@ -1,22 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  autoreconfHook,
-  pkg-config,
-  flex,
-  bison,
-
-  openssl,
-  groff,
-  libxml2,
-  util-linux,
-  libtool,
-  which,
-  coreutils,
-  boost,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, flex
+, bison
+, openssl
+, groff
+, libxml2
+, util-linux
+, libtool
+, which
+, coreutils
+, boost
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,9 +1,8 @@
-{
-  callPackage,
-  lib,
-  nixosTests,
-  stdenv,
-  ...
+{ callPackage
+, lib
+, nixosTests
+, stdenv
+, ...
 }@args:
 
 callPackage ./generic.nix args {

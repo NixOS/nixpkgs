@@ -1,17 +1,17 @@
-{
-  lib,
-  aiohttp,
-  aresponses,
-  arrow,
-  buildPythonPackage,
-  certifi,
-  fetchFromGitHub,
-  frozenlist,
-  poetry-core,
-  pytest-aiohttp,
-  pytestCheckHook,
-  pythonOlder,
-  yarl,
+{ lib
+, aiohttp
+, aresponses
+, arrow
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
+, frozenlist
+, poetry-core
+, pytest-aiohttp
+, pytestCheckHook
+, pythonOlder
+, yarl
+,
 }:
 
 buildPythonPackage rec {

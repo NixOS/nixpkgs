@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  menhir,
-  odoc,
-  buildDunePackage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, menhir
+, odoc
+, buildDunePackage
+,
 }:
 buildDunePackage rec {
   pname = "wasm";

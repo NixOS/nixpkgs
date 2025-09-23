@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libevdev,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libevdev
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "evremap";

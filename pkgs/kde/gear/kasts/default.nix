@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  qtsvg,
-  qtmultimedia,
-  pkg-config,
-  taglib_1,
-  libvlc,
+{ mkKdeDerivation
+, qtsvg
+, qtmultimedia
+, pkg-config
+, taglib_1
+, libvlc
+,
 }:
 mkKdeDerivation {
   pname = "kasts";

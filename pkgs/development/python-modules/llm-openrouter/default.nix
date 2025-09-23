@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  llm,
-  llm-openrouter,
-  httpx,
-  openai,
-  pytestCheckHook,
-  inline-snapshot,
-  pytest-recording,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, llm
+, llm-openrouter
+, httpx
+, openai
+, pytestCheckHook
+, inline-snapshot
+, pytest-recording
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

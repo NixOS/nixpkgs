@@ -18,19 +18,21 @@
   };
 
   config = lib.mkIf config.security.lockKernelModules {
-    boot.kernelModules = lib.concatMap (
-      x:
-      lib.optionals (x.device != null) (
-        if x.fsType == "vfat" then
-          [
-            "vfat"
-            "nls-cp437"
-            "nls-iso8859-1"
-          ]
-        else
-          [ x.fsType ]
+    boot.kernelModules = lib.concatMap
+      (
+        x:
+        lib.optionals (x.device != null) (
+          if x.fsType == "vfat" then
+            [
+              "vfat"
+              "nls-cp437"
+              "nls-iso8859-1"
+            ]
+          else
+            [ x.fsType ]
+        )
       )
-    ) config.system.build.fileSystems;
+      config.system.build.fileSystems;
 
     systemd.services.disable-kernel-module-loading = {
       description = "Disable kernel module loading";

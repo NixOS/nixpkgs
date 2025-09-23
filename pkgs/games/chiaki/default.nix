@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  cmake,
-  pkg-config,
-  ffmpeg,
-  libopus,
-  mkDerivation,
-  qtbase,
-  qtmultimedia,
-  qtsvg,
-  SDL2,
-  libevdev,
-  udev,
-  qtmacextras,
-  nanopb,
+{ lib
+, stdenv
+, fetchgit
+, cmake
+, pkg-config
+, ffmpeg
+, libopus
+, mkDerivation
+, qtbase
+, qtmultimedia
+, qtsvg
+, SDL2
+, libevdev
+, udev
+, qtmacextras
+, nanopb
+,
 }:
 
 mkDerivation rec {

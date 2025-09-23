@@ -1,12 +1,12 @@
-{
-  lib,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  cmake,
-  fetchFromGitHub,
-  pkg-config,
-  stdenv,
+{ lib
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, cmake
+, fetchFromGitHub
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

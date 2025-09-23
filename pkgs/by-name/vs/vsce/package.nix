@@ -1,12 +1,12 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  pkg-config,
-  libsecret,
-  python3,
-  testers,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, pkg-config
+, libsecret
+, python3
+, testers
+, nix-update-script
+,
 }:
 
 buildNpmPackage (finalAttrs: {

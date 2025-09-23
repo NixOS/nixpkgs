@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  jdk,
-  ant,
-  gettext,
-  which,
-  dbip-country-lite,
-  java-service-wrapper,
-  makeWrapper,
-  gmp,
+{ lib
+, stdenv
+, fetchzip
+, jdk
+, ant
+, gettext
+, which
+, dbip-country-lite
+, java-service-wrapper
+, makeWrapper
+, gmp
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

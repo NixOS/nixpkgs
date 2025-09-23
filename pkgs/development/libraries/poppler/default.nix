@@ -1,47 +1,46 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitLab,
-  cairo,
-  cmake,
-  boost,
-  curl,
-  fontconfig,
-  freetype,
-  glib,
-  lcms,
-  libiconv,
-  libintl,
-  libjpeg,
-  libtiff,
-  ninja,
-  openjpeg,
-  pkg-config,
-  python3,
-  zlib,
-  withData ? true,
-  poppler_data,
-  qt5Support ? false,
-  qt6Support ? false,
-  qtbase ? null,
-  introspectionSupport ? false,
-  gobject-introspection ? null,
-  gpgmeSupport ? false,
-  gpgme ? null,
-  utils ? false,
-  nss ? null,
-  minimal ? false,
-  suffix ? "glib",
-
-  # for passthru.tests
-  cups-filters,
-  gdal,
-  gegl,
-  inkscape,
-  pdfslicer,
-  scribus,
-  vips,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitLab
+, cairo
+, cmake
+, boost
+, curl
+, fontconfig
+, freetype
+, glib
+, lcms
+, libiconv
+, libintl
+, libjpeg
+, libtiff
+, ninja
+, openjpeg
+, pkg-config
+, python3
+, zlib
+, withData ? true
+, poppler_data
+, qt5Support ? false
+, qt6Support ? false
+, qtbase ? null
+, introspectionSupport ? false
+, gobject-introspection ? null
+, gpgmeSupport ? false
+, gpgme ? null
+, utils ? false
+, nss ? null
+, minimal ? false
+, suffix ? "glib"
+, # for passthru.tests
+  cups-filters
+, gdal
+, gegl
+, inkscape
+, pdfslicer
+, scribus
+, vips
+,
 }:
 
 let

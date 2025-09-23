@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mongoc,
-  openssl,
-  cyrus_sasl,
-  cmake,
-  validatePkgConfig,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, mongoc
+, openssl
+, cyrus_sasl
+, cmake
+, validatePkgConfig
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

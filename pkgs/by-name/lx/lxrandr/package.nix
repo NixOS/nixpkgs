@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  intltool,
-  gtk2,
-  libX11,
-  xrandr,
-  withGtk3 ? false,
-  gtk3,
-  autoreconfHook,
-  libxslt,
-  docbook_xsl,
-  docbook_xml_dtd_412,
-  libxml2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, intltool
+, gtk2
+, libX11
+, xrandr
+, withGtk3 ? false
+, gtk3
+, autoreconfHook
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_412
+, libxml2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

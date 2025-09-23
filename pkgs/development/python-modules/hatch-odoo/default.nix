@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  lib,
-  manifestoo-core,
-  pythonOlder,
-  tomli,
+{ buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, lib
+, manifestoo-core
+, pythonOlder
+, tomli
+,
 }:
 buildPythonPackage rec {
   pname = "hatch-odoo";

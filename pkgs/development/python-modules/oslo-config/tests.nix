@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  oslo-config,
-  docutils,
-  oslo-log,
-  oslotest,
-  requests-mock,
-  sphinx,
-  stestr,
-  testscenarios,
+{ buildPythonPackage
+, oslo-config
+, docutils
+, oslo-log
+, oslotest
+, requests-mock
+, sphinx
+, stestr
+, testscenarios
+,
 }:
 
 buildPythonPackage {

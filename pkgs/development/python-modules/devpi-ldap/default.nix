@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  devpi-server,
-  fetchFromGitHub,
-  ldap3,
-  mock,
-  pytest-cov-stub,
-  pytest-flake8,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  webtest,
+{ lib
+, buildPythonPackage
+, devpi-server
+, fetchFromGitHub
+, ldap3
+, mock
+, pytest-cov-stub
+, pytest-flake8
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools
+, webtest
+,
 }:
 
 buildPythonPackage rec {

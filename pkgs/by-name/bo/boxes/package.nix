@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  flex,
-  pcre2,
-  libunistring,
-  ncurses,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, flex
+, pcre2
+, libunistring
+, ncurses
+,
 }:
 
 stdenv.mkDerivation rec {

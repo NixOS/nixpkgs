@@ -1,20 +1,20 @@
-{
-  lib,
-  blueprint-compiler,
-  cargo,
-  desktop-file-utils,
-  fetchFromGitHub,
-  glib,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  stdenv,
-  wrapGAppsHook4,
+{ lib
+, blueprint-compiler
+, cargo
+, desktop-file-utils
+, fetchFromGitHub
+, glib
+, gtk4
+, libadwaita
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, rustPlatform
+, rustc
+, stdenv
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

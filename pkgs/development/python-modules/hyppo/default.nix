@@ -1,27 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  autograd,
-  future,
-  numba,
-  numpy,
-  pandas,
-  patsy,
-  scikit-learn,
-  scipy,
-  statsmodels,
-
-  # tests
-  matplotlib,
-  pytest-xdist,
-  pytestCheckHook,
-  seaborn,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  autograd
+, future
+, numba
+, numpy
+, pandas
+, patsy
+, scikit-learn
+, scipy
+, statsmodels
+, # tests
+  matplotlib
+, pytest-xdist
+, pytestCheckHook
+, seaborn
+,
 }:
 
 buildPythonPackage rec {

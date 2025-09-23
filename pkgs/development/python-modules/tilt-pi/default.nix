@@ -1,11 +1,11 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
+{ aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

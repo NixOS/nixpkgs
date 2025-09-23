@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  installShellFiles,
-  bzip2,
-  openssl,
-  xz,
-  zstd,
-  stdenv,
-  testers,
-  writableTmpDirAsHomeHook,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
+, bzip2
+, openssl
+, xz
+, zstd
+, stdenv
+, testers
+, writableTmpDirAsHomeHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  go,
-  protobuf,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, go
+, protobuf
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

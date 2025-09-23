@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  llvmPackages, # openmp
-  withMkl ? false,
-  mkl,
-  withCUDA ? false,
-  withCuDNN ? false,
-  cudaPackages,
-  # Enabling both withOneDNN and withOpenblas is broken
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, llvmPackages
+, # openmp
+  withMkl ? false
+, mkl
+, withCUDA ? false
+, withCuDNN ? false
+, cudaPackages
+, # Enabling both withOneDNN and withOpenblas is broken
   # https://github.com/OpenNMT/CTranslate2/issues/1294
-  withOneDNN ? false,
-  oneDNN,
-  withOpenblas ? true,
-  openblas,
-  withRuy ? true,
-
-  # passthru tests
-  libretranslate,
-  wyoming-faster-whisper,
+  withOneDNN ? false
+, oneDNN
+, withOpenblas ? true
+, openblas
+, withRuy ? true
+, # passthru tests
+  libretranslate
+, wyoming-faster-whisper
+,
 }:
 
 let

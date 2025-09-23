@@ -1,33 +1,31 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  replaceVars,
-
-  # build system
-  autoconf,
-  automake,
-  cmake,
-  libtool,
-  makeWrapper,
-  ninja,
-  pkg-config,
-  ronn,
-  which,
-
-  # dependencies
-  alsa-plugins,
-  asyncSupport ? true,
-  klattSupport ? true,
-  mbrola,
-  mbrolaSupport ? true,
-  pcaudiolib,
-  pcaudiolibSupport ? true,
-  sonic,
-  sonicSupport ? true,
-  speechPlayerSupport ? true,
-  ucdSupport ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, replaceVars
+, # build system
+  autoconf
+, automake
+, cmake
+, libtool
+, makeWrapper
+, ninja
+, pkg-config
+, ronn
+, which
+, # dependencies
+  alsa-plugins
+, asyncSupport ? true
+, klattSupport ? true
+, mbrola
+, mbrolaSupport ? true
+, pcaudiolib
+, pcaudiolibSupport ? true
+, sonic
+, sonicSupport ? true
+, speechPlayerSupport ? true
+, ucdSupport ? false
+,
 }:
 
 let

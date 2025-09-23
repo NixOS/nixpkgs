@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  openssl,
-  pkg-config,
-  libnl,
-  nixosTests,
-  wpa_supplicant_gui,
-  dbusSupport ? !stdenv.hostPlatform.isStatic,
-  dbus,
-  withReadline ? true,
-  readline,
-  withPcsclite ? !stdenv.hostPlatform.isStatic,
-  pcsclite,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, openssl
+, pkg-config
+, libnl
+, nixosTests
+, wpa_supplicant_gui
+, dbusSupport ? !stdenv.hostPlatform.isStatic
+, dbus
+, withReadline ? true
+, readline
+, withPcsclite ? !stdenv.hostPlatform.isStatic
+, pcsclite
+,
 }:
 
 stdenv.mkDerivation rec {

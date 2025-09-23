@@ -1,9 +1,9 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  contrib,
-  bi,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, contrib
+, bi
+, lib
+,
 }:
 build-idris-package {
   pname = "trees";

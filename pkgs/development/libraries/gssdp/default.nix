@@ -1,23 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchpatch2,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  gi-docgen,
-  python3,
-  libsoup_2_4,
-  glib,
-  gnome,
-  gssdp-tools,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+{ stdenv
+, lib
+, fetchpatch2
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gi-docgen
+, python3
+, libsoup_2_4
+, glib
+, gnome
+, gssdp-tools
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

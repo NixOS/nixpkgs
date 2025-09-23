@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  httpx,
-  pycryptodome,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  httpx
+, pycryptodome
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  dyn,
-  fetchurl,
-  ppx_expect,
-  stdune,
+{ lib
+, buildDunePackage
+, dyn
+, fetchurl
+, ppx_expect
+, stdune
+,
 }:
 
 buildDunePackage rec {

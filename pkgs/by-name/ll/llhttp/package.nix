@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  nix-update-script,
-  testers,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, nix-update-script
+, testers
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

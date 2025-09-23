@@ -1,13 +1,13 @@
-{
-  beartype,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  poetry-core,
-  pydantic,
-  python,
-  rich,
-  tomli,
+{ beartype
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, poetry-core
+, pydantic
+, python
+, rich
+, tomli
+,
 }:
 buildPythonPackage rec {
   pname = "corallium";

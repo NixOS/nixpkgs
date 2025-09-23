@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  wadler-lindig,
-
-  # tests
-  cloudpickle,
-  equinox,
-  ipython,
-  jax,
-  jaxlib,
-  pytestCheckHook,
-  tensorflow,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  wadler-lindig
+, # tests
+  cloudpickle
+, equinox
+, ipython
+, jax
+, jaxlib
+, pytestCheckHook
+, tensorflow
+, torch
+,
 }:
 
 let

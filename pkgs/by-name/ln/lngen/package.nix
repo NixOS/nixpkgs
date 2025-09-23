@@ -1,7 +1,7 @@
-{
-  lib,
-  haskellPackages,
-  fetchFromGitHub,
+{ lib
+, haskellPackages
+, fetchFromGitHub
+,
 }:
 
 haskellPackages.mkDerivation {

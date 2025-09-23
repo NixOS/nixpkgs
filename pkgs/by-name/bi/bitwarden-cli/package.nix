@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  nodejs_20,
-  fetchFromGitHub,
-  cctools,
-  nix-update-script,
-  nixosTests,
-  perl,
-  xcbuild,
+{ lib
+, stdenv
+, buildNpmPackage
+, nodejs_20
+, fetchFromGitHub
+, cctools
+, nix-update-script
+, nixosTests
+, perl
+, xcbuild
+,
 }:
 
 buildNpmPackage rec {

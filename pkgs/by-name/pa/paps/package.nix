@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  meson,
-  ninja,
-  pkg-config,
-  fmt,
-  glib,
-  pango,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, fmt
+, glib
+, pango
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  clangStdenv,
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  gtk3,
-  libX11,
-  SDL2,
+{ lib
+, clangStdenv
+, buildDotnetModule
+, dotnetCorePackages
+, fetchFromGitHub
+, wrapGAppsHook3
+, gtk3
+, libX11
+, SDL2
+,
 }:
 
 buildDotnetModule rec {

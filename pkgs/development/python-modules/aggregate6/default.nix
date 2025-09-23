@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  py-radix-sr,
-  versionCheckHook,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, py-radix-sr
+, versionCheckHook
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

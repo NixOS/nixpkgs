@@ -1,70 +1,68 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  libGLU,
-  libGL,
-  zlib,
-  wxGTK,
-  gtk3,
-  libX11,
-  gettext,
-  glew,
-  glm,
-  cairo,
-  curl,
-  openssl,
-  boost,
-  pkg-config,
-  doxygen,
-  graphviz,
-  libpthreadstubs,
-  libXdmcp,
-  unixODBC,
-  libgit2,
-  libsecret,
-  libgcrypt,
-  libgpg-error,
-  ninja,
-  writableTmpDirAsHomeHook,
-
-  util-linuxMinimal,
-  libselinux,
-  libsepol,
-  libthai,
-  libdatrie,
-  libxkbcommon,
-  libepoxy,
-  dbus,
-  at-spi2-core,
-  libXtst,
-  pcre2,
-  libdeflate,
-
-  swig,
-  python,
-  wxPython,
-  opencascade-occt_7_6,
-  libngspice,
-  valgrind,
-  protobuf_29,
-  nng,
-
-  stable,
-  testing,
-  kicadSrc,
-  kicadVersion,
-  withNgspice,
-  withScripting,
-  withI18n,
-  debug,
-  sanitizeAddress,
-  sanitizeThreads,
+{ lib
+, stdenv
+, cmake
+, libGLU
+, libGL
+, zlib
+, wxGTK
+, gtk3
+, libX11
+, gettext
+, glew
+, glm
+, cairo
+, curl
+, openssl
+, boost
+, pkg-config
+, doxygen
+, graphviz
+, libpthreadstubs
+, libXdmcp
+, unixODBC
+, libgit2
+, libsecret
+, libgcrypt
+, libgpg-error
+, ninja
+, writableTmpDirAsHomeHook
+, util-linuxMinimal
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, libxkbcommon
+, libepoxy
+, dbus
+, at-spi2-core
+, libXtst
+, pcre2
+, libdeflate
+, swig
+, python
+, wxPython
+, opencascade-occt_7_6
+, libngspice
+, valgrind
+, protobuf_29
+, nng
+, stable
+, testing
+, kicadSrc
+, kicadVersion
+, withNgspice
+, withScripting
+, withI18n
+, debug
+, sanitizeAddress
+, sanitizeThreads
+,
 }:
 
-assert lib.assertMsg (
-  !(sanitizeAddress && sanitizeThreads)
-) "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
+assert lib.assertMsg
+  (
+    !(sanitizeAddress && sanitizeThreads)
+  ) "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
 assert testing -> !stable -> throw "testing implies stable and cannot be used with stable = false";
 
 let

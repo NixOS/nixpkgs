@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  glib,
-  gmime3,
-  gnutls,
-  gpgme,
-  gtk3,
-  gtksourceview4,
-  gtkspell3,
-  libcanberra-gtk3,
-  libesmtp,
-  libical,
-  libnotify,
-  libsecret,
-  openssl,
-  meson,
-  ninja,
-  pkg-config,
-  sqlite,
-  webkitgtk_4_0,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitLab
+, glib
+, gmime3
+, gnutls
+, gpgme
+, gtk3
+, gtksourceview4
+, gtkspell3
+, libcanberra-gtk3
+, libesmtp
+, libical
+, libnotify
+, libsecret
+, openssl
+, meson
+, ninja
+, pkg-config
+, sqlite
+, webkitgtk_4_0
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  libopcodes,
-  libiberty,
-  stdenv,
-  libbfd,
-  zlib,
+{ lib
+, fetchurl
+, libopcodes
+, libiberty
+, stdenv
+, libbfd
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

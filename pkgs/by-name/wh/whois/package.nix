@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  perl,
-  gettext,
-  pkg-config,
-  libidn2,
-  libiconv,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, perl
+, gettext
+, pkg-config
+, libidn2
+, libiconv
+,
 }:
 
 stdenv.mkDerivation rec {

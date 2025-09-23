@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  colorama,
-  distutils,
-  fetchFromGitHub,
-  fickling,
-  intervaltree,
-  json5,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  scipy,
-  setuptools,
-  tqdm,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, colorama
+, distutils
+, fetchFromGitHub
+, fickling
+, intervaltree
+, json5
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, scipy
+, setuptools
+, tqdm
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

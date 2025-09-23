@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  zlib,
-  pcre,
-  gnutls,
+{ stdenv
+, fetchFromGitHub
+, lib
+, zlib
+, pcre
+, gnutls
+,
 }:
 
 stdenv.mkDerivation rec {

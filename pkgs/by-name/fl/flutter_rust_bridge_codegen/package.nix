@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  cargo-expand,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cargo-expand
+, stdenv
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "flutter_rust_bridge_codegen";

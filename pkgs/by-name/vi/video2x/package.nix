@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  pkg-config,
-  versionCheckHook,
-  nix-update-script,
-  boost,
-  ffmpeg,
-  glslang,
-  llvmPackages,
-  ncnn,
-  spdlog,
-  vulkan-headers,
-  vulkan-loader,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, pkg-config
+, versionCheckHook
+, nix-update-script
+, boost
+, ffmpeg
+, glslang
+, llvmPackages
+, ncnn
+, spdlog
+, vulkan-headers
+, vulkan-loader
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "video2x";

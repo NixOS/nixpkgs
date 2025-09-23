@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  glib,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wayland-scanner,
-  accountsservice,
-  elementary-settings-daemon,
-  granite,
-  gtk3,
-  libgee,
-  libhandy,
-  libportal,
-  packagekit,
-  wayland,
-  wingpanel,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nix-update-script
+, glib
+, meson
+, ninja
+, pkg-config
+, vala
+, wayland-scanner
+, accountsservice
+, elementary-settings-daemon
+, granite
+, gtk3
+, libgee
+, libhandy
+, libportal
+, packagekit
+, wayland
+, wingpanel
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

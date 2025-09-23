@@ -1,18 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkDerivation,
-  cmake,
-  sqlite,
-  qtbase,
-  qtsvg,
-  qttools,
-  wrapQtAppsHook,
-  icoutils, # build and runtime deps.
-  wget,
-  fuseiso,
-  wine,
-  which, # runtime deps.
+{ lib
+, fetchFromGitHub
+, mkDerivation
+, cmake
+, sqlite
+, qtbase
+, qtsvg
+, qttools
+, wrapQtAppsHook
+, icoutils
+, # build and runtime deps.
+  wget
+, fuseiso
+, wine
+, which
+, # runtime deps.
 }:
 
 mkDerivation rec {

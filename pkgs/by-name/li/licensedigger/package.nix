@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitLab,
-  stdenv,
-  cmake,
-  extra-cmake-modules,
-  libsForQt5,
+{ lib
+, fetchFromGitLab
+, stdenv
+, cmake
+, extra-cmake-modules
+, libsForQt5
+,
 }:
 stdenv.mkDerivation {
   pname = "licensedigger";

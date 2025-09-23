@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  dill,
-  freezegun,
-  pytestCheckHook,
-  python-utils,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, dill
+, freezegun
+, pytestCheckHook
+, python-utils
+, pythonOlder
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

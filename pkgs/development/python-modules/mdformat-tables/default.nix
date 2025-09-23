@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build dependencies
-  flit-core,
-
-  # dependencies
-  mdformat,
-  wcwidth,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build dependencies
+  flit-core
+, # dependencies
+  mdformat
+, wcwidth
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

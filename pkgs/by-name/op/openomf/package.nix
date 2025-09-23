@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  cmake,
-  argtable,
-  enet,
-  git,
-  libconfuse,
-  libnatpmp,
-  libepoxy,
-  libpng,
-  libxmp,
-  miniupnpc,
-  opusfile,
-  SDL2,
-  SDL2_mixer,
-  unzip,
-  zlib,
-  withRemix ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, cmake
+, argtable
+, enet
+, git
+, libconfuse
+, libnatpmp
+, libepoxy
+, libpng
+, libxmp
+, miniupnpc
+, opusfile
+, SDL2
+, SDL2_mixer
+, unzip
+, zlib
+, withRemix ? true
+,
 }:
 
 let

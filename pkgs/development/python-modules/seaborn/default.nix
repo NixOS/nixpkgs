@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  flit-core,
-  matplotlib,
-  pytest-xdist,
-  pytestCheckHook,
-  numpy,
-  pandas,
-  pythonOlder,
-  scipy,
-  statsmodels,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, flit-core
+, matplotlib
+, pytest-xdist
+, pytestCheckHook
+, numpy
+, pandas
+, pythonOlder
+, scipy
+, statsmodels
+,
 }:
 
 buildPythonPackage rec {

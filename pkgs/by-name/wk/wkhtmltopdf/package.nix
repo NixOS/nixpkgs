@@ -1,19 +1,19 @@
-{
-  lib,
-  autoPatchelfHook,
-  cpio,
-  freetype,
-  zlib,
-  openssl,
-  fetchurl,
-  dpkg,
-  gcc-unwrapped,
-  libjpeg,
-  libpng,
-  fontconfig,
-  stdenv,
-  xar,
-  xorg,
+{ lib
+, autoPatchelfHook
+, cpio
+, freetype
+, zlib
+, openssl
+, fetchurl
+, dpkg
+, gcc-unwrapped
+, libjpeg
+, libpng
+, fontconfig
+, stdenv
+, xar
+, xorg
+,
 }:
 
 let
@@ -126,7 +126,7 @@ stdenv.mkDerivation (
     };
   }
   // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) darwinAttrs
-  //
-    lib.optionalAttrs (stdenv.hostPlatform.isLinux)
-      linuxAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")
+    //
+  lib.optionalAttrs (stdenv.hostPlatform.isLinux)
+    linuxAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")
 )

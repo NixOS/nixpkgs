@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  openssl,
-  ncurses,
-  pkg-config,
-  glib,
-  loudmouth,
-  libotr,
-  gpgme,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, openssl
+, ncurses
+, pkg-config
+, glib
+, loudmouth
+, libotr
+, gpgme
+,
 }:
 
 stdenv.mkDerivation rec {

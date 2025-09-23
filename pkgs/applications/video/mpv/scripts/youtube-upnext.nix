@@ -1,9 +1,9 @@
-{
-  buildLua,
-  fetchFromGitHub,
-  curl,
-  unstableGitUpdater,
-  lib,
+{ buildLua
+, fetchFromGitHub
+, curl
+, unstableGitUpdater
+, lib
+,
 }:
 
 buildLua rec {

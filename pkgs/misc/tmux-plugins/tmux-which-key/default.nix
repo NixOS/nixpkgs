@@ -1,9 +1,9 @@
-{
-  mkTmuxPlugin,
-  fetchFromGitHub,
-  lib,
-  check-jsonschema,
-  python3,
+{ mkTmuxPlugin
+, fetchFromGitHub
+, lib
+, check-jsonschema
+, python3
+,
 }:
 mkTmuxPlugin {
   pluginName = "tmux-which-key";

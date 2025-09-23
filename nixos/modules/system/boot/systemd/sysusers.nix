@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -87,50 +86,60 @@ in
         message = "system.activationScripts.users has to be empty to use systemd-sysusers";
       }
     ]
-    ++ (lib.mapAttrsToList (username: opts: {
-      assertion = opts.enable -> !opts.isNormalUser;
-      message = "${username} is a normal user. systemd-sysusers doesn't create normal users, only system users.";
-    }) userCfg.users)
-    ++ lib.mapAttrsToList (username: opts: {
-      assertion =
-        (opts.password == opts.initialPassword || opts.password == null)
-        && (opts.hashedPassword == opts.initialHashedPassword || opts.hashedPassword == null);
-      message = "user '${username}' uses password or hashedPassword. systemd-sysupdate only supports initial passwords. It'll never update your passwords.";
-    }) systemUsers;
+    ++ (lib.mapAttrsToList
+      (username: opts: {
+        assertion = opts.enable -> !opts.isNormalUser;
+        message = "${username} is a normal user. systemd-sysusers doesn't create normal users, only system users.";
+      })
+      userCfg.users)
+    ++ lib.mapAttrsToList
+      (username: opts: {
+        assertion =
+          (opts.password == opts.initialPassword || opts.password == null)
+            && (opts.hashedPassword == opts.initialHashedPassword || opts.hashedPassword == null);
+        message = "user '${username}' uses password or hashedPassword. systemd-sysupdate only supports initial passwords. It'll never update your passwords.";
+      })
+      systemUsers;
 
     systemd = {
 
       # Create home directories, do not create /var/empty even if that's a user's
       # home.
-      tmpfiles.settings.home-directories = lib.mapAttrs' (
-        username: opts:
-        lib.nameValuePair opts.home {
-          d = {
-            mode = opts.homeMode;
-            user = username;
-            group = opts.group;
-          };
-        }
-      ) (lib.filterAttrs (_username: opts: opts.home != "/var/empty") systemUsers);
+      tmpfiles.settings.home-directories = lib.mapAttrs'
+        (
+          username: opts:
+            lib.nameValuePair opts.home {
+              d = {
+                mode = opts.homeMode;
+                user = username;
+                group = opts.group;
+              };
+            }
+        )
+        (lib.filterAttrs (_username: opts: opts.home != "/var/empty") systemUsers);
 
       # Create uid/gid marker files for those without an explicit id
-      tmpfiles.settings.nixos-uid = lib.mapAttrs' (
-        username: opts:
-        lib.nameValuePair "/var/lib/nixos/uid/${username}" {
-          f = {
-            user = username;
-          };
-        }
-      ) (lib.filterAttrs (_username: opts: opts.uid == null) systemUsers);
+      tmpfiles.settings.nixos-uid = lib.mapAttrs'
+        (
+          username: opts:
+            lib.nameValuePair "/var/lib/nixos/uid/${username}" {
+              f = {
+                user = username;
+              };
+            }
+        )
+        (lib.filterAttrs (_username: opts: opts.uid == null) systemUsers);
 
-      tmpfiles.settings.nixos-gid = lib.mapAttrs' (
-        groupname: opts:
-        lib.nameValuePair "/var/lib/nixos/gid/${groupname}" {
-          f = {
-            group = groupname;
-          };
-        }
-      ) (lib.filterAttrs (_groupname: opts: opts.gid == null) userCfg.groups);
+      tmpfiles.settings.nixos-gid = lib.mapAttrs'
+        (
+          groupname: opts:
+            lib.nameValuePair "/var/lib/nixos/gid/${groupname}" {
+              f = {
+                group = groupname;
+              };
+            }
+        )
+        (lib.filterAttrs (_groupname: opts: opts.gid == null) userCfg.groups);
 
       additionalUpstreamSystemUnits = [
         "systemd-sysusers.service"
@@ -161,22 +170,30 @@ in
           );
           # Make the source files read-only after sysusers has finished.
           ExecStartPost = lib.mkIf (!userCfg.mutableUsers) (
-            lib.map (
-              file:
-              "${pkgs.util-linux}/bin/mount --bind -o ro ${passwordFilesLocation}/${file} ${passwordFilesLocation}/${file}"
-            ) passwordFiles
+            lib.map
+              (
+                file:
+                "${pkgs.util-linux}/bin/mount --bind -o ro ${passwordFilesLocation}/${file} ${passwordFilesLocation}/${file}"
+              )
+              passwordFiles
           );
 
-          LoadCredential = lib.mapAttrsToList (
-            username: opts: "passwd.hashed-password.${username}:${opts.hashedPasswordFile}"
-          ) (lib.filterAttrs (_username: opts: opts.hashedPasswordFile != null) systemUsers);
+          LoadCredential = lib.mapAttrsToList
+            (
+              username: opts: "passwd.hashed-password.${username}:${opts.hashedPasswordFile}"
+            )
+            (lib.filterAttrs (_username: opts: opts.hashedPasswordFile != null) systemUsers);
           SetCredential =
-            (lib.mapAttrsToList (
-              username: opts: "passwd.hashed-password.${username}:${opts.initialHashedPassword}"
-            ) (lib.filterAttrs (_username: opts: opts.initialHashedPassword != null) systemUsers))
-            ++ (lib.mapAttrsToList (
-              username: opts: "passwd.plaintext-password.${username}:${opts.initialPassword}"
-            ) (lib.filterAttrs (_username: opts: opts.initialPassword != null) systemUsers));
+            (lib.mapAttrsToList
+              (
+                username: opts: "passwd.hashed-password.${username}:${opts.initialHashedPassword}"
+              )
+              (lib.filterAttrs (_username: opts: opts.initialHashedPassword != null) systemUsers))
+            ++ (lib.mapAttrsToList
+              (
+                username: opts: "passwd.plaintext-password.${username}:${opts.initialPassword}"
+              )
+              (lib.filterAttrs (_username: opts: opts.initialPassword != null) systemUsers));
         };
       };
 
@@ -192,13 +209,15 @@ in
       # runtime!
       (lib.mkIf immutableEtc (
         lib.listToAttrs (
-          lib.map (
-            file:
-            lib.nameValuePair file {
-              source = "${immutablePasswordFilesLocation}/${file}";
-              mode = "direct-symlink";
-            }
-          ) passwordFiles
+          lib.map
+            (
+              file:
+              lib.nameValuePair file {
+                source = "${immutablePasswordFilesLocation}/${file}";
+                mode = "direct-symlink";
+              }
+            )
+            passwordFiles
         )
       ))
     ];

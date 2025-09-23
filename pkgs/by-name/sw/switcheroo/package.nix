@@ -1,21 +1,21 @@
-{
-  lib,
-  blueprint-compiler,
-  cargo,
-  desktop-file-utils,
-  fetchFromGitLab,
-  glib,
-  gtk4,
-  imagemagick,
-  libadwaita,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  stdenv,
-  wrapGAppsHook4,
+{ lib
+, blueprint-compiler
+, cargo
+, desktop-file-utils
+, fetchFromGitLab
+, glib
+, gtk4
+, imagemagick
+, libadwaita
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, rustPlatform
+, rustc
+, stdenv
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,9 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Workaround for the gettext-sys issue
   # https://github.com/Koka/gettext-rs/issues/114
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
-  ) "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
+    ) "-Wno-error=incompatible-function-pointer-types";
 
   passthru = {
     updateScript = nix-update-script { };

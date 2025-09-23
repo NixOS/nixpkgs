@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  SDL,
-  libGL,
-  libGLU,
-  libpng,
-  libX11,
-  nasm,
-  pkg-config,
-  zlib,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL
+, libGL
+, libGLU
+, libpng
+, libX11
+, nasm
+, pkg-config
+, zlib
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

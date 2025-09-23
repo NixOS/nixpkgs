@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  rustPlatform,
-  testers,
-  komac,
-  dbus,
-  zstd,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
-  bzip2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, openssl
+, rustPlatform
+, testers
+, komac
+, dbus
+, zstd
+, installShellFiles
+, versionCheckHook
+, nix-update-script
+, bzip2
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "komac";

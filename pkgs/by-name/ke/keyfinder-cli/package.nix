@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ffmpeg,
-  libkeyfinder,
-  fftw,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ffmpeg
+, libkeyfinder
+, fftw
+,
 }:
 
 stdenv.mkDerivation rec {

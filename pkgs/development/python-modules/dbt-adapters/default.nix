@@ -1,16 +1,16 @@
-{
-  lib,
-  agate,
-  buildPythonPackage,
-  dbt-common,
-  dbt-protos,
-  fetchPypi,
-  hatchling,
-  mashumaro,
-  protobuf,
-  pytestCheckHook,
-  pytz,
-  typing-extensions,
+{ lib
+, agate
+, buildPythonPackage
+, dbt-common
+, dbt-protos
+, fetchPypi
+, hatchling
+, mashumaro
+, protobuf
+, pytestCheckHook
+, pytz
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

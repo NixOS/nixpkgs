@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonAtLeast,
-  setuptools,
-  wrapt,
-  pytestCheckHook,
-  sphinxHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonAtLeast
+, setuptools
+, wrapt
+, pytestCheckHook
+, sphinxHook
+,
 }:
 
 buildPythonPackage rec {

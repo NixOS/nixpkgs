@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  libressl,
-  libevent,
+{ mkDerivation
+, libressl
+, libevent
+,
 }:
 mkDerivation {
   path = "usr.sbin/syslogd";

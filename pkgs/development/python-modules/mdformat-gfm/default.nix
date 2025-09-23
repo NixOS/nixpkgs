@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  linkify-it-py,
-  markdown-it-py,
-  mdformat,
-  mdformat-tables,
-  mdit-py-plugins,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, linkify-it-py
+, markdown-it-py
+, mdformat
+, mdformat-tables
+, mdit-py-plugins
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

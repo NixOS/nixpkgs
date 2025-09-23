@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  automake,
-  autoconf,
-  libtool,
-  pkg-config,
-  check,
+{ lib
+, stdenv
+, fetchFromGitHub
+, automake
+, autoconf
+, libtool
+, pkg-config
+, check
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

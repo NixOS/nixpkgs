@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDunePackage,
-  atdgen,
-  junit,
-  re,
-  reason,
-  pastel,
-  rely,
-  src,
+{ lib
+, buildDunePackage
+, atdgen
+, junit
+, re
+, reason
+, pastel
+, rely
+, src
+,
 }:
 
 buildDunePackage {

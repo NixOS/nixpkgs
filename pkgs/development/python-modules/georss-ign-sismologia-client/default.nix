@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  dateparser,
-  fetchFromGitHub,
-  georss-client,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, dateparser
+, fetchFromGitHub
+, georss-client
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

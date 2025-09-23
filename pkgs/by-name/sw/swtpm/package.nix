@@ -1,28 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  libtasn1,
-  openssl,
-  fuse,
-  glib,
-  libseccomp,
-  json-glib,
-  libtpms,
-  unixtools,
-  expect,
-  socat,
-  gnutls,
-  perl,
-  makeWrapper,
-
-  # Tests
-  python3,
-  which,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, libtasn1
+, openssl
+, fuse
+, glib
+, libseccomp
+, json-glib
+, libtpms
+, unixtools
+, expect
+, socat
+, gnutls
+, perl
+, makeWrapper
+, # Tests
+  python3
+, which
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

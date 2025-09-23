@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  gitMinimal,
-  python3,
-  makeWrapper,
-  writeScriptBin,
-  versionCheckHook,
-  nix-update-script,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, gitMinimal
+, python3
+, makeWrapper
+, writeScriptBin
+, versionCheckHook
+, nix-update-script
+, writableTmpDirAsHomeHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  lib,
-  unstableGitUpdater,
+{ stdenv
+, fetchFromGitHub
+, cmake
+, lib
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

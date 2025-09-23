@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumake,
-  gnupatch,
-  heirloom-devtools,
-  heirloom,
+{ lib
+, fetchurl
+, bash
+, tinycc
+, gnumake
+, gnupatch
+, heirloom-devtools
+, heirloom
+,
 }:
 let
   pname = "heirloom";
@@ -72,46 +72,46 @@ let
   ];
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnupatch
-      heirloom-devtools
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnupatch
+    heirloom-devtools
+  ];
 
-    passthru.sed = bash.runCommand "${pname}-sed-${version}" { } ''
-      install -D ${heirloom}/bin/sed $out/bin/sed
+  passthru.sed = bash.runCommand "${pname}-sed-${version}" { } ''
+    install -D ${heirloom}/bin/sed $out/bin/sed
+  '';
+
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/banner Hello Heirloom
+      mkdir $out
     '';
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/banner Hello Heirloom
-        mkdir $out
-      '';
-
-    meta = with lib; {
-      description = "Heirloom Toolchest is a collection of standard Unix utilities";
-      homepage = "https://heirloom.sourceforge.net/tools.html";
-      license = with licenses; [
-        # All licenses according to LICENSE/
-        zlib
-        caldera
-        bsdOriginalUC
-        cddl
-        bsd3
-        gpl2Plus
-        lgpl21Plus
-        lpl-102
-        info-zip
-      ];
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "Heirloom Toolchest is a collection of standard Unix utilities";
+    homepage = "https://heirloom.sourceforge.net/tools.html";
+    license = with licenses; [
+      # All licenses according to LICENSE/
+      zlib
+      caldera
+      bsdOriginalUC
+      cddl
+      bsd3
+      gpl2Plus
+      lgpl21Plus
+      lpl-102
+      info-zip
+    ];
+    teams = [ teams.minimal-bootstrap ];
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     unbz2 --file ${src} --output heirloom.tar

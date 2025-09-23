@@ -1,12 +1,12 @@
-{
-  curl,
-  dnsdbq,
-  fetchFromGitHub,
-  jansson,
-  lib,
-  nix-update-script,
-  stdenv,
-  testers,
+{ curl
+, dnsdbq
+, fetchFromGitHub
+, jansson
+, lib
+, nix-update-script
+, stdenv
+, testers
+,
 }:
 stdenv.mkDerivation rec {
   pname = "dnsdbq";

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  zlib,
-  zstd,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, zlib
+, zstd
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

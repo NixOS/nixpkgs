@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  autoconf,
-  automake,
-  libtool,
+{ stdenv
+, lib
+, fetchFromGitea
+, autoconf
+, automake
+, libtool
+,
 }:
 
 stdenv.mkDerivation rec {

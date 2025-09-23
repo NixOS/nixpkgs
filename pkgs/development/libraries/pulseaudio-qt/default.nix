@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cmake,
-  pkg-config,
-  extra-cmake-modules,
-  wrapQtAppsHook,
-  pulseaudio,
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, pkg-config
+, extra-cmake-modules
+, wrapQtAppsHook
+, pulseaudio
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

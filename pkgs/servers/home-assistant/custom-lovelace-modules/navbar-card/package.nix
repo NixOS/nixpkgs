@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bun,
-  nodejs-slim,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bun
+, nodejs-slim
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

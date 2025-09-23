@@ -1,12 +1,12 @@
-{
-  lib,
-  adlfs,
-  azure-identity,
-  buildPythonPackage,
-  dvc-objects,
-  fetchPypi,
-  knack,
-  setuptools-scm,
+{ lib
+, adlfs
+, azure-identity
+, buildPythonPackage
+, dvc-objects
+, fetchPypi
+, knack
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

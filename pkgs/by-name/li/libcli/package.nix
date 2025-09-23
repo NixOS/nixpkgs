@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchDebianPatch,
-  libxcrypt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchDebianPatch
+, libxcrypt
+,
 }:
 
 stdenv.mkDerivation rec {

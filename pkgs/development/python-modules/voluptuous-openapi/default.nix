@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  voluptuous,
-
-  # tests
-  openapi-schema-validator,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  voluptuous
+, # tests
+  openapi-schema-validator
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

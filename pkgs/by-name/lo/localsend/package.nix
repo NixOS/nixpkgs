@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  flutter327,
-  makeDesktopItem,
-  copyDesktopItems,
-  nixosTests,
-  libayatana-appindicator,
-  undmg,
-  makeBinaryWrapper,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, flutter327
+, makeDesktopItem
+, copyDesktopItems
+, nixosTests
+, libayatana-appindicator
+, undmg
+, makeBinaryWrapper
+,
 }:
 
 let

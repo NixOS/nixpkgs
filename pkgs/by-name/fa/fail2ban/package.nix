@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  python3,
-  installShellFiles,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, python3
+, installShellFiles
+, nixosTests
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  cargo,
-  just,
-  rofi,
-  pkg-config,
-  glib,
-  cairo,
-  pango,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cargo
+, just
+, rofi
+, pkg-config
+, glib
+, cairo
+, pango
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

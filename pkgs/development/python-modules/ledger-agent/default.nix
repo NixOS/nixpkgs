@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  ledgerblue,
-  setuptools,
-  libagent,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ledgerblue
+, setuptools
+, libagent
+, wheel
+,
 }:
 
 buildPythonPackage rec {

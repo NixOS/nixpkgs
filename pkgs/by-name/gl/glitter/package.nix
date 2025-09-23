@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  gitMinimal,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, gitMinimal
+,
 }:
 
 rustPlatform.buildRustPackage rec {

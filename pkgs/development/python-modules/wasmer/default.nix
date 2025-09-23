@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  callPackage,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonAtLeast,
-  libiconv,
-  libffi,
-  libxml2,
-  llvm,
-  ncurses,
-  zlib,
+{ stdenv
+, lib
+, rustPlatform
+, callPackage
+, fetchFromGitHub
+, buildPythonPackage
+, pythonAtLeast
+, libiconv
+, libffi
+, libxml2
+, llvm
+, ncurses
+, zlib
+,
 }:
 
 let
   common =
-    {
-      pname,
-      buildAndTestSubdir,
-      cargoHash,
-      extraNativeBuildInputs ? [ ],
-      extraBuildInputs ? [ ],
+    { pname
+    , buildAndTestSubdir
+    , cargoHash
+    , extraNativeBuildInputs ? [ ]
+    , extraBuildInputs ? [ ]
+    ,
     }:
     buildPythonPackage rec {
       inherit pname;

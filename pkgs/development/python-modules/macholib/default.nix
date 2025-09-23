@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  unittestCheckHook,
-  altgraph,
-  setuptools,
-  typing-extensions,
-  pyinstaller,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, unittestCheckHook
+, altgraph
+, setuptools
+, typing-extensions
+, pyinstaller
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gfortran,
-  suitesparse,
-  blas,
-  lapack,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gfortran
+, suitesparse
+, blas
+, lapack
+,
 }:
 stdenv.mkDerivation rec {
   pname = "cholmod-extra";

@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  glib,
-  pcre2,
-  gtk4,
-  pango,
-  fribidi,
-  vala,
-  gi-docgen,
-  libxml2,
-  perl,
-  gettext,
-  gnome,
-  gobject-introspection,
-  dbus,
-  xvfb-run,
-  shared-mime-info,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, glib
+, pcre2
+, gtk4
+, pango
+, fribidi
+, vala
+, gi-docgen
+, libxml2
+, perl
+, gettext
+, gnome
+, gobject-introspection
+, dbus
+, xvfb-run
+, shared-mime-info
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  qt6,
-  lm_sensors,
-  cmake,
-  ninja,
-  libcprime,
-  libcsys,
+{ lib
+, stdenv
+, fetchFromGitLab
+, qt6
+, lm_sensors
+, cmake
+, ninja
+, libcprime
+, libcsys
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

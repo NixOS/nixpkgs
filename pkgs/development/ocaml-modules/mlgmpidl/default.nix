@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  perl,
-  ocaml,
-  findlib,
-  camlidl,
-  gmp,
-  mpfr,
-  bigarray-compat,
+{ stdenv
+, lib
+, fetchFromGitHub
+, perl
+, ocaml
+, findlib
+, camlidl
+, gmp
+, mpfr
+, bigarray-compat
+,
 }:
 
 stdenv.mkDerivation rec {

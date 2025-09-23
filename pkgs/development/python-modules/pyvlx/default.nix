@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  typing-extensions,
-  zeroconf,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools
+, typing-extensions
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

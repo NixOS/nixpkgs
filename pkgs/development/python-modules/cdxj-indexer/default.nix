@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  warcio,
-  surt,
-  py3amf,
-  multipart,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, warcio
+, surt
+, py3amf
+, multipart
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

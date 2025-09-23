@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  pkg-config,
-  gtk3,
-  glib,
-  keybinder3,
-  fetchFromGitea,
+{ lib
+, stdenv
+, pkg-config
+, gtk3
+, glib
+, keybinder3
+, fetchFromGitea
+,
 }:
 
 stdenv.mkDerivation {

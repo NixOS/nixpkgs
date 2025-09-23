@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  fetchFromGitHub,
-  gradle,
-  jdk,
-  lib,
+{ stdenvNoCC
+, fetchFromGitHub
+, gradle
+, jdk
+, lib
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "java-hamcrest";

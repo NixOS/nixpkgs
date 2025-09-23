@@ -1,14 +1,14 @@
-{
-  lib,
-  nix-update-script,
-  rustPlatform,
-  fetchFromGitHub,
-  versionCheckHook,
-  autoPatchelfHook,
-  wayland,
-  libxkbcommon,
-  libGL,
-  stdenv,
+{ lib
+, nix-update-script
+, rustPlatform
+, fetchFromGitHub
+, versionCheckHook
+, autoPatchelfHook
+, wayland
+, libxkbcommon
+, libGL
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  h5py,
-  pytestCheckHook,
-  netcdf4,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, h5py
+, pytestCheckHook
+, netcdf4
+, pythonOlder
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

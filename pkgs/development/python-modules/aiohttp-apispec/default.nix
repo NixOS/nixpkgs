@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  apispec,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jinja2,
-  packaging,
-  pytest-aiohttp,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  webargs,
+{ lib
+, aiohttp
+, apispec
+, buildPythonPackage
+, fetchFromGitHub
+, jinja2
+, packaging
+, pytest-aiohttp
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, webargs
+,
 }:
 
 buildPythonPackage rec {

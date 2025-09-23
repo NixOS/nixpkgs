@@ -1,9 +1,9 @@
-{
-  python3,
-  fetchFromGitHub,
-  nautilus-python,
-  stdenv,
-  lib,
+{ python3
+, fetchFromGitHub
+, nautilus-python
+, stdenv
+, lib
+,
 }:
 stdenv.mkDerivation rec {
   pname = "nautilus-open-in-blackbox";

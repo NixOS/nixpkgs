@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  nixosTests,
-  makeWrapper,
-  openjdk17,
-  which,
-  gawk,
-  bashNonInteractive,
+{ stdenv
+, lib
+, fetchurl
+, nixosTests
+, makeWrapper
+, openjdk17
+, which
+, gawk
+, bashNonInteractive
+,
 }:
 
 stdenv.mkDerivation rec {

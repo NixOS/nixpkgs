@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  black,
-  jinja2,
-  dirty-equals,
-  fastapi,
-  fetchFromGitHub,
-  fetchpatch,
-  pdm-backend,
-  pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  sqlalchemy,
+{ lib
+, buildPythonPackage
+, black
+, jinja2
+, dirty-equals
+, fastapi
+, fetchFromGitHub
+, fetchpatch
+, pdm-backend
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

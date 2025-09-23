@@ -1,10 +1,10 @@
-{
-  src,
-  version,
-  lib,
-  nixosTests,
-  fetchPypi,
-  python3,
+{ src
+, version
+, lib
+, nixosTests
+, fetchPypi
+, python3
+,
 }:
 
 let

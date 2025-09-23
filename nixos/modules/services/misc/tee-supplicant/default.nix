@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   inherit (lib)
@@ -19,19 +18,21 @@ let
   taDir = "optee_armtz";
 
   trustedApplications = pkgs.linkFarm "runtime-trusted-applications" (
-    map (
-      ta:
-      let
-        # This is safe since we are using it as the path value, so the context
-        # will still ensure that this nix store path exists on the running
-        # system.
-        taFile = builtins.baseNameOf (builtins.unsafeDiscardStringContext ta);
-      in
-      {
-        name = "lib/${taDir}/${taFile}";
-        path = ta;
-      }
-    ) cfg.trustedApplications
+    map
+      (
+        ta:
+        let
+          # This is safe since we are using it as the path value, so the context
+          # will still ensure that this nix store path exists on the running
+          # system.
+          taFile = builtins.baseNameOf (builtins.unsafeDiscardStringContext ta);
+        in
+        {
+          name = "lib/${taDir}/${taFile}";
+          path = ta;
+        }
+      )
+      cfg.trustedApplications
   );
 in
 {

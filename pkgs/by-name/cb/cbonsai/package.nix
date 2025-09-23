@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  ncurses,
-  pkg-config,
-  nix-update-script,
-  scdoc,
+{ stdenv
+, lib
+, fetchFromGitLab
+, ncurses
+, pkg-config
+, nix-update-script
+, scdoc
+,
 }:
 
 stdenv.mkDerivation rec {

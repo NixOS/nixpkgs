@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  gtk3,
-  gobject-introspection,
-  libcanberra-gtk3,
-  poppler_gi,
-  withGstreamer ? stdenv.hostPlatform.isLinux,
-  gst_all_1,
-  withVLC ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, wrapGAppsHook3
+, gtk3
+, gobject-introspection
+, libcanberra-gtk3
+, poppler_gi
+, withGstreamer ? stdenv.hostPlatform.isLinux
+, gst_all_1
+, withVLC ? stdenv.hostPlatform.isLinux
+,
 }:
 
 python3Packages.buildPythonApplication rec {

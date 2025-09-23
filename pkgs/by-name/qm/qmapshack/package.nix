@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qt6,
-  qt6Packages,
-  alglib,
-  gdal,
-  proj,
-  routino,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qt6
+, qt6Packages
+, alglib
+, gdal
+, proj
+, routino
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

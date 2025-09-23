@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  glib,
-  libglibutil,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, glib
+, libglibutil
+,
 }:
 
 stdenv.mkDerivation rec {

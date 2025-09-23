@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  jq,
-  element-web-unwrapped,
-  conf ? { },
+{ lib
+, stdenv
+, jq
+, element-web-unwrapped
+, conf ? { }
+,
 }:
 
 if (conf == { }) then

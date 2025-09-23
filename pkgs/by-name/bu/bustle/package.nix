@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  buildPackages,
-  cargo,
-  meson,
-  ninja,
-  pkg-config,
-  desktop-file-utils,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
-  gettext,
-  glib,
-  gtk4,
-  libadwaita,
+{ lib
+, stdenv
+, fetchFromGitLab
+, buildPackages
+, cargo
+, meson
+, ninja
+, pkg-config
+, desktop-file-utils
+, rustPlatform
+, rustc
+, wrapGAppsHook4
+, gettext
+, glib
+, gtk4
+, libadwaita
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

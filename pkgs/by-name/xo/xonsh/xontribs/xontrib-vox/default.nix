@@ -1,15 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-  virtualenv,
-  writableTmpDirAsHomeHook,
-  pytestCheckHook,
-  pytest-subprocess,
-  xonsh,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, virtualenv
+, writableTmpDirAsHomeHook
+, pytestCheckHook
+, pytest-subprocess
+, xonsh
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

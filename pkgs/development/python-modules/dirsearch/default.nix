@@ -1,10 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  python,
-  pytestCheckHook,
-  # deps
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, python
+, pytestCheckHook
+, # deps
   /*
     ntlm-auth is in the requirements.txt, however nixpkgs tells me
     > ntlm-auth has been removed, because it relies on the md4 implementation provided by openssl. Use pyspnego instead.
@@ -13,24 +12,25 @@
   */
   #ntlm-auth,
   #pyspnego,
-  beautifulsoup4,
-  certifi,
-  cffi,
-  chardet,
-  charset-normalizer,
-  colorama,
-  cryptography,
-  defusedxml,
-  idna,
-  jinja2,
-  markupsafe,
-  pyopenssl,
-  pyparsing,
-  pysocks,
-  requests,
-  requests-ntlm,
-  setuptools,
-  urllib3,
+  beautifulsoup4
+, certifi
+, cffi
+, chardet
+, charset-normalizer
+, colorama
+, cryptography
+, defusedxml
+, idna
+, jinja2
+, markupsafe
+, pyopenssl
+, pyparsing
+, pysocks
+, requests
+, requests-ntlm
+, setuptools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

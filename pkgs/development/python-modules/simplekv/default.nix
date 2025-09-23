@@ -1,22 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-
-  # optional dependencies
-  azure-storage-blob,
-  boto3,
-  dulwich,
-  google-cloud-storage,
-  pymongo,
-  redis,
-
-  # testing
-  mock,
-  pytestCheckHook,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, # optional dependencies
+  azure-storage-blob
+, boto3
+, dulwich
+, google-cloud-storage
+, pymongo
+, redis
+, # testing
+  mock
+, pytestCheckHook
+, six
+,
 }:
 
 buildPythonPackage rec {

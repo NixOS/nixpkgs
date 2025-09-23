@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  bundlerEnv,
-  tree,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, bundlerEnv
+, tree
+,
 }:
 let
   version = "1.2.1";

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  autoreconfHook,
-  texinfo,
-  mpfr,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, autoreconfHook
+, texinfo
+, mpfr
+,
 }:
 stdenv.mkDerivation rec {
   pname = "mpfi";

@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  nix-update-script,
-  perlPackages,
-  stdenv,
-  versionCheckHook,
+{ fetchFromGitHub
+, lib
+, makeWrapper
+, nix-update-script
+, perlPackages
+, stdenv
+, versionCheckHook
+,
 }:
 stdenv.mkDerivation rec {
   pname = "manubulon-snmp-plugins";

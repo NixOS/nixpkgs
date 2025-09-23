@@ -1,23 +1,24 @@
 {
   # Basic
-  stdenv,
-  lib,
-  melpaBuild,
-  fetchFromGitHub,
-  symlinkJoin,
-  # Python dependency
-  python3,
-  # Emacs dependencies
-  all-the-icons,
-  # Other dependencies
-  git,
-  nodejs,
-  wmctrl,
-  xdotool,
-  # Updater
-  unstableGitUpdater,
-  # Sub-applications in the framework
-  enabledApps ? [ ],
+  stdenv
+, lib
+, melpaBuild
+, fetchFromGitHub
+, symlinkJoin
+, # Python dependency
+  python3
+, # Emacs dependencies
+  all-the-icons
+, # Other dependencies
+  git
+, nodejs
+, wmctrl
+, xdotool
+, # Updater
+  unstableGitUpdater
+, # Sub-applications in the framework
+  enabledApps ? [ ]
+,
 }:
 
 let

@@ -1,20 +1,21 @@
-{
-  arrayUtilities,
-  lib,
-  stdenvNoCC,
+{ arrayUtilities
+, lib
+, stdenvNoCC
+,
 }:
 lib.makeOverridable (
-  {
-    name,
-    valuesArray ? null,
-    valuesMap ? null,
-    expectedArray ? null,
-    expectedMap ? null,
-    script,
+  { name
+  , valuesArray ? null
+  , valuesMap ? null
+  , expectedArray ? null
+  , expectedMap ? null
+  , script
+  ,
   }:
-  assert lib.assertMsg (
-    expectedArray != null || expectedMap != null
-  ) "testEqualArrayOrMap: at least one of 'expectedArray' or 'expectedMap' must be provided";
+  assert lib.assertMsg
+    (
+      expectedArray != null || expectedMap != null
+    ) "testEqualArrayOrMap: at least one of 'expectedArray' or 'expectedMap' must be provided";
   stdenvNoCC.mkDerivation {
     __structuredAttrs = true;
     strictDeps = true;

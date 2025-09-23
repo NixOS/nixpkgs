@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  bundlewrap,
-  pykeepass,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, bundlewrap
+, pykeepass
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  glib,
-  gobject-introspection,
-  python3,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, gobject-introspection
+, python3
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

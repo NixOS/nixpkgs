@@ -1,8 +1,8 @@
-{
-  qtModule,
-  qtbase,
-  qtdeclarative,
-  openssl,
+{ qtModule
+, qtbase
+, qtdeclarative
+, openssl
+,
 }:
 
 qtModule {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchzip,
-  johnny-reborn-engine,
-  makeWrapper,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchzip
+, johnny-reborn-engine
+, makeWrapper
+,
 }:
 
 let

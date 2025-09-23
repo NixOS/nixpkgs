@@ -1,14 +1,14 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  cattrs,
-  fetchFromGitHub,
-  flit-core,
-  importlib-resources,
-  jsonschema,
-  pyhamcrest,
-  pytestCheckHook,
+{ lib
+, attrs
+, buildPythonPackage
+, cattrs
+, fetchFromGitHub
+, flit-core
+, importlib-resources
+, jsonschema
+, pyhamcrest
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

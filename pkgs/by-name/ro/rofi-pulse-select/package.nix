@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitLab,
-  lib,
-  makeWrapper,
-  ponymix,
-  rofi-unwrapped,
+{ stdenv
+, fetchFromGitLab
+, lib
+, makeWrapper
+, ponymix
+, rofi-unwrapped
+,
 }:
 
 stdenv.mkDerivation rec {

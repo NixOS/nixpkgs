@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pnpm_10,
-  nodejs,
-  electron,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pnpm_10
+, nodejs
+, electron
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (final: {
   pname = "splayer";

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPecl,
-  fetchFromGitHub,
-  pkg-config,
-  libthai,
+{ lib
+, buildPecl
+, fetchFromGitHub
+, pkg-config
+, libthai
+,
 }:
 
 buildPecl rec {

@@ -1,31 +1,31 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  desktop-file-utils,
-  gettext,
-  libxml2,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wayland-scanner,
-  wrapGAppsHook3,
-  at-spi2-core,
-  gnome-settings-daemon,
-  gnome-desktop,
-  granite,
-  granite7,
-  gtk3,
-  gtk4,
-  libcanberra,
-  libgee,
-  libhandy,
-  mutter,
-  sqlite,
-  systemd,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, desktop-file-utils
+, gettext
+, libxml2
+, meson
+, ninja
+, pkg-config
+, vala
+, wayland-scanner
+, wrapGAppsHook3
+, at-spi2-core
+, gnome-settings-daemon
+, gnome-desktop
+, granite
+, granite7
+, gtk3
+, gtk4
+, libcanberra
+, libgee
+, libhandy
+, mutter
+, sqlite
+, systemd
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

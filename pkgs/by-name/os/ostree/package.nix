@@ -1,48 +1,47 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  gtk-doc,
-  nixosTests,
-  pkgsCross,
-  curl,
-  glib,
-  xz,
-  e2fsprogs,
-  libsoup_3,
-  gpgme,
-  which,
-  makeWrapper,
-  autoconf,
-  automake,
-  libtool,
-  fuse3,
-  util-linuxMinimal,
-  libselinux,
-  libsodium,
-  libarchive,
-  libcap,
-  bzip2,
-  bison,
-  libxslt,
-  docbook-xsl-nons,
-  docbook_xml_dtd_42,
-  python3,
-  buildPackages,
-  withComposefs ? false,
-  composefs,
-  withGjs ? lib.meta.availableOn stdenv.hostPlatform gjs,
-  gjs,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  gobject-introspection,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  replaceVars,
-  openssl,
-  ostree-full,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, gtk-doc
+, nixosTests
+, pkgsCross
+, curl
+, glib
+, xz
+, e2fsprogs
+, libsoup_3
+, gpgme
+, which
+, makeWrapper
+, autoconf
+, automake
+, libtool
+, fuse3
+, util-linuxMinimal
+, libselinux
+, libsodium
+, libarchive
+, libcap
+, bzip2
+, bison
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, python3
+, buildPackages
+, withComposefs ? false
+, composefs
+, withGjs ? lib.meta.availableOn stdenv.hostPlatform gjs
+, gjs
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, gobject-introspection
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, replaceVars
+, openssl
+, ostree-full
+,
 }:
 
 let

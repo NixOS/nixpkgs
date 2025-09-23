@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  buildNpmPackage,
-  nixosTests,
-  debianutils,
-  mkdocs,
-  python3,
-  python3Packages,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, buildNpmPackage
+, nixosTests
+, debianutils
+, mkdocs
+, python3
+, python3Packages
+,
 }:
 
 buildGoModule (

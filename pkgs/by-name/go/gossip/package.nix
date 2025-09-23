@@ -1,26 +1,26 @@
-{
-  cmake,
-  fetchFromGitHub,
-  SDL2,
-  ffmpeg_6,
-  fontconfig,
-  git,
-  lib,
-  libGL,
-  libxkbcommon,
-  makeDesktopItem,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  wayland,
-  wayland-scanner,
-  nix-update-script,
-  libX11,
-  libxcb,
-  libXcursor,
-  libXi,
-  libXrandr,
+{ cmake
+, fetchFromGitHub
+, SDL2
+, ffmpeg_6
+, fontconfig
+, git
+, lib
+, libGL
+, libxkbcommon
+, makeDesktopItem
+, openssl
+, pkg-config
+, rustPlatform
+, stdenv
+, wayland
+, wayland-scanner
+, nix-update-script
+, libX11
+, libxcb
+, libXcursor
+, libXi
+, libXrandr
+,
 }:
 
 rustPlatform.buildRustPackage rec {

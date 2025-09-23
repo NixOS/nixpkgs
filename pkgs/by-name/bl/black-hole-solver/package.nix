@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cmake,
-  buildPackages,
-  pkg-config,
-  python3,
-  rinutils,
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, buildPackages
+, pkg-config
+, python3
+, rinutils
+,
 }:
 
 stdenv.mkDerivation rec {

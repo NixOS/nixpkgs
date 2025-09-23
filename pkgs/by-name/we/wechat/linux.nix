@@ -1,9 +1,9 @@
-{
-  pname,
-  version,
-  src,
-  meta,
-  appimageTools,
+{ pname
+, version
+, src
+, meta
+, appimageTools
+,
 }:
 
 let

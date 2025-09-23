@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  perl,
-  pkg-config,
-  python3,
-  xmlto,
-  zip,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, perl
+, pkg-config
+, python3
+, xmlto
+, zip
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

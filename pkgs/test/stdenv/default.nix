@@ -1,11 +1,11 @@
 # To run these tests:
 # nix-build -A tests.stdenv
 
-{
-  stdenv,
-  pkgs,
-  lib,
-  testers,
+{ stdenv
+, pkgs
+, lib
+, testers
+,
 }:
 
 let
@@ -28,10 +28,10 @@ let
   runCommand = earlierPkgs.runCommand;
 
   ccWrapperSubstitutionsTest =
-    {
-      name,
-      stdenv',
-      extraAttrs ? { },
+    { name
+    , stdenv'
+    , extraAttrs ? { }
+    ,
     }:
 
     stdenv'.cc.overrideAttrs (
@@ -59,10 +59,10 @@ let
     );
 
   testEnvAttrset =
-    {
-      name,
-      stdenv',
-      extraAttrs ? { },
+    { name
+    , stdenv'
+    , extraAttrs ? { }
+    ,
     }:
     stdenv'.mkDerivation (
       {
@@ -84,10 +84,10 @@ let
     );
 
   testPrependAndAppendToVar =
-    {
-      name,
-      stdenv',
-      extraAttrs ? { },
+    { name
+    , stdenv'
+    , extraAttrs ? { }
+    ,
     }:
     stdenv'.mkDerivation (
       {
@@ -130,10 +130,10 @@ let
     );
 
   testConcatTo =
-    {
-      name,
-      stdenv',
-      extraAttrs ? { },
+    { name
+    , stdenv'
+    , extraAttrs ? { }
+    ,
     }:
     stdenv'.mkDerivation (
       {
@@ -260,9 +260,10 @@ in
   rejectedHashes = lib.recurseIntoAttrs {
     md5 =
       let
-        drv = runCommand "md5 outputHash rejected" {
-          outputHash = "md5-fPt7dxVVP7ffY3MxkQdwVw==";
-        } "true";
+        drv = runCommand "md5 outputHash rejected"
+          {
+            outputHash = "md5-fPt7dxVVP7ffY3MxkQdwVw==";
+          } "true";
       in
       assert !(builtins.tryEval drv).success;
       { };
@@ -384,45 +385,46 @@ in
   };
 
   ensure-no-execve-in-setup-sh =
-    derivation {
-      name = "ensure-no-execve-in-setup-sh";
-      system = stdenv.system;
-      builder = "${stdenv.bootstrapTools}/bin/bash";
-      PATH = "${pkgs.strace}/bin:${stdenv.bootstrapTools}/bin";
-      initialPath = [
-        stdenv.bootstrapTools
-        pkgs.strace
-      ];
-      args = [
-        "-c"
-        ''
-          countCall() {
-            echo "$stats" | tr -s ' ' | grep "$1" | cut -d ' ' -f5
-          }
+    derivation
+      {
+        name = "ensure-no-execve-in-setup-sh";
+        system = stdenv.system;
+        builder = "${stdenv.bootstrapTools}/bin/bash";
+        PATH = "${pkgs.strace}/bin:${stdenv.bootstrapTools}/bin";
+        initialPath = [
+          stdenv.bootstrapTools
+          pkgs.strace
+        ];
+        args = [
+          "-c"
+          ''
+            countCall() {
+              echo "$stats" | tr -s ' ' | grep "$1" | cut -d ' ' -f5
+            }
 
-          # prevent setup.sh from running `nproc` when cores=0
-          # (this would mess up the syscall stats)
-          export NIX_BUILD_CORES=1
+            # prevent setup.sh from running `nproc` when cores=0
+            # (this would mess up the syscall stats)
+            export NIX_BUILD_CORES=1
 
-          echo "Analyzing setup.sh with strace"
-          stats=$(strace -fc bash -c ". ${../../stdenv/generic/setup.sh}" 2>&1)
-          echo "$stats" | head -n15
+            echo "Analyzing setup.sh with strace"
+            stats=$(strace -fc bash -c ". ${../../stdenv/generic/setup.sh}" 2>&1)
+            echo "$stats" | head -n15
 
-          # fail if execve calls is > 1
-          stats=$(strace -fc bash -c ". ${../../stdenv/generic/setup.sh}" 2>&1)
-          execveCalls=$(countCall execve)
-          if [ "$execveCalls" -gt 1 ]; then
-            echo "execve calls: $execveCalls; expected: 1"
-            echo "ERROR: setup.sh should not launch additional processes when being sourced"
-            exit 1
-          else
-            echo "setup.sh doesn't launch extra processes when sourcing, as expected"
-          fi
+            # fail if execve calls is > 1
+            stats=$(strace -fc bash -c ". ${../../stdenv/generic/setup.sh}" 2>&1)
+            execveCalls=$(countCall execve)
+            if [ "$execveCalls" -gt 1 ]; then
+              echo "execve calls: $execveCalls; expected: 1"
+              echo "ERROR: setup.sh should not launch additional processes when being sourced"
+              exit 1
+            else
+              echo "setup.sh doesn't launch extra processes when sourcing, as expected"
+            fi
 
-          touch $out
-        ''
-      ];
-    }
+            touch $out
+          ''
+        ];
+      }
     // {
       meta = { };
     };

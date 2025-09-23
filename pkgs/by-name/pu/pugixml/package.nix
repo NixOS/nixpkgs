@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  check,
-  validatePkgConfig,
-  shared ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, check
+, validatePkgConfig
+, shared ? false
+,
 }:
 
 stdenv.mkDerivation rec {

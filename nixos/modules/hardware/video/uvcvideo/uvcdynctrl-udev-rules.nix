@@ -1,10 +1,10 @@
-{
-  buildEnv,
-  libwebcam,
-  makeWrapper,
-  runCommand,
-  drivers ? [ ],
-  udevDebug ? false,
+{ buildEnv
+, libwebcam
+, makeWrapper
+, runCommand
+, drivers ? [ ]
+, udevDebug ? false
+,
 }:
 
 let
@@ -22,18 +22,18 @@ let
 in
 
 runCommand "uvcdynctrl-udev-rules-${version}"
-  {
-    inherit dataPath;
-    nativeBuildInputs = [
-      makeWrapper
-    ];
-    buildInputs = [
-      libwebcam
-    ];
-    dontPatchELF = true;
-    dontStrip = true;
-    preferLocalBuild = true;
-  }
+{
+  inherit dataPath;
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+  buildInputs = [
+    libwebcam
+  ];
+  dontPatchELF = true;
+  dontStrip = true;
+  preferLocalBuild = true;
+}
   ''
     mkdir -p "$out/lib/udev"
     makeWrapper "${libwebcam}/lib/udev/uvcdynctrl" "$out/lib/udev/uvcdynctrl" \

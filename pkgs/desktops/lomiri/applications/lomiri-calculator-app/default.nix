@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  nixosTests,
-  cmake,
-  gettext,
-  lomiri-ui-toolkit,
-  pkg-config,
-  qqc2-suru-style,
-  qtbase,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, nixosTests
+, cmake
+, gettext
+, lomiri-ui-toolkit
+, pkg-config
+, qqc2-suru-style
+, qtbase
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

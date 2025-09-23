@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -129,43 +128,43 @@ in
         "d /run/x2go 0755 x2go x2go - -"
       ]
       ++
-        # x2goclient sends SSH commands with preset PATH set to
-        # "/usr/local/bin;/usr/bin;/bin". Since we cannot filter arbitrary ssh
-        # commands, we have to make the following executables available.
-        map (f: "L+ /usr/local/bin/${f} - - - - ${cfg.package}/bin/${f}") [
-          "x2goagent"
-          "x2gobasepath"
-          "x2gocleansessions"
-          "x2gocmdexitmessage"
-          "x2godbadmin"
-          "x2gofeature"
-          "x2gofeaturelist"
-          "x2gofm"
-          "x2gogetapps"
-          "x2gogetservers"
-          "x2golistdesktops"
-          "x2golistmounts"
-          "x2golistsessions"
-          "x2golistsessions_root"
-          "x2golistshadowsessions"
-          "x2gomountdirs"
-          "x2gopath"
-          "x2goprint"
-          "x2goresume-desktopsharing"
-          "x2goresume-session"
-          "x2goruncommand"
-          "x2goserver-run-extensions"
-          "x2gosessionlimit"
-          "x2gosetkeyboard"
-          "x2goshowblocks"
-          "x2gostartagent"
-          "x2gosuspend-desktopsharing"
-          "x2gosuspend-session"
-          "x2goterminate-desktopsharing"
-          "x2goterminate-session"
-          "x2goumount-session"
-          "x2goversion"
-        ]
+      # x2goclient sends SSH commands with preset PATH set to
+      # "/usr/local/bin;/usr/bin;/bin". Since we cannot filter arbitrary ssh
+      # commands, we have to make the following executables available.
+      map (f: "L+ /usr/local/bin/${f} - - - - ${cfg.package}/bin/${f}") [
+        "x2goagent"
+        "x2gobasepath"
+        "x2gocleansessions"
+        "x2gocmdexitmessage"
+        "x2godbadmin"
+        "x2gofeature"
+        "x2gofeaturelist"
+        "x2gofm"
+        "x2gogetapps"
+        "x2gogetservers"
+        "x2golistdesktops"
+        "x2golistmounts"
+        "x2golistsessions"
+        "x2golistsessions_root"
+        "x2golistshadowsessions"
+        "x2gomountdirs"
+        "x2gopath"
+        "x2goprint"
+        "x2goresume-desktopsharing"
+        "x2goresume-session"
+        "x2goruncommand"
+        "x2goserver-run-extensions"
+        "x2gosessionlimit"
+        "x2gosetkeyboard"
+        "x2goshowblocks"
+        "x2gostartagent"
+        "x2gosuspend-desktopsharing"
+        "x2gosuspend-session"
+        "x2goterminate-desktopsharing"
+        "x2goterminate-session"
+        "x2goumount-session"
+        "x2goversion"
+      ]
       ++ [
         "L+ /usr/local/bin/awk - - - - ${gawk}/bin/awk"
         "L+ /usr/local/bin/chmod - - - - ${coreutils}/bin/chmod"

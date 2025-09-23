@@ -1,10 +1,9 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, utils
+, ...
 }:
 let
   gcfg = config.services.tarsnap;
@@ -305,146 +304,158 @@ in
 
   config = lib.mkIf gcfg.enable {
     assertions =
-      (lib.mapAttrsToList (name: cfg: {
-        assertion = cfg.directories != [ ];
-        message = "Must specify paths for tarsnap to back up";
-      }) gcfg.archives)
-      ++ (lib.mapAttrsToList (name: cfg: {
-        assertion = !(cfg.lowmem && cfg.verylowmem);
-        message = "You cannot set both lowmem and verylowmem";
-      }) gcfg.archives);
+      (lib.mapAttrsToList
+        (name: cfg: {
+          assertion = cfg.directories != [ ];
+          message = "Must specify paths for tarsnap to back up";
+        })
+        gcfg.archives)
+      ++ (lib.mapAttrsToList
+        (name: cfg: {
+          assertion = !(cfg.lowmem && cfg.verylowmem);
+          message = "You cannot set both lowmem and verylowmem";
+        })
+        gcfg.archives);
 
     systemd.services =
-      (lib.mapAttrs' (
-        name: cfg:
-        lib.nameValuePair "tarsnap-${name}" {
-          description = "Tarsnap archive '${name}'";
-          requires = [ "network-online.target" ];
-          after = [ "network-online.target" ];
+      (lib.mapAttrs'
+        (
+          name: cfg:
+            lib.nameValuePair "tarsnap-${name}" {
+              description = "Tarsnap archive '${name}'";
+              requires = [ "network-online.target" ];
+              after = [ "network-online.target" ];
 
-          path = with pkgs; [
-            iputils
-            gcfg.package
-            util-linux
-          ];
+              path = with pkgs; [
+                iputils
+                gcfg.package
+                util-linux
+              ];
 
-          # In order for the persistent tarsnap timer to work reliably, we have to
-          # make sure that the tarsnap server is reachable after systemd starts up
-          # the service - therefore we sleep in a loop until we can ping the
-          # endpoint.
-          preStart = ''
-            while ! ping -4 -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done
-          '';
+              # In order for the persistent tarsnap timer to work reliably, we have to
+              # make sure that the tarsnap server is reachable after systemd starts up
+              # the service - therefore we sleep in a loop until we can ping the
+              # endpoint.
+              preStart = ''
+                while ! ping -4 -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done
+              '';
 
-          script =
-            let
-              tarsnap = ''${lib.getExe gcfg.package} --configfile "/etc/tarsnap/${name}.conf"'';
-              run = ''
-                ${tarsnap} -c -f "${name}-$(date +"%Y%m%d%H%M%S")" \
-                                        ${lib.optionalString cfg.verbose "-v"} \
-                                        ${lib.optionalString cfg.explicitSymlinks "-H"} \
-                                        ${lib.optionalString cfg.followSymlinks "-L"} \
-                                        ${lib.concatStringsSep " " cfg.directories}'';
-              cachedir = lib.escapeShellArg cfg.cachedir;
-            in
-            if (cfg.cachedir != null) then
-              ''
-                mkdir -p ${cachedir}
-                chmod 0700 ${cachedir}
+              script =
+                let
+                  tarsnap = ''${lib.getExe gcfg.package} --configfile "/etc/tarsnap/${name}.conf"'';
+                  run = ''
+                    ${tarsnap} -c -f "${name}-$(date +"%Y%m%d%H%M%S")" \
+                                            ${lib.optionalString cfg.verbose "-v"} \
+                                            ${lib.optionalString cfg.explicitSymlinks "-H"} \
+                                            ${lib.optionalString cfg.followSymlinks "-L"} \
+                                            ${lib.concatStringsSep " " cfg.directories}'';
+                  cachedir = lib.escapeShellArg cfg.cachedir;
+                in
+                if (cfg.cachedir != null) then
+                  ''
+                    mkdir -p ${cachedir}
+                    chmod 0700 ${cachedir}
 
-                ( flock 9
-                  if [ ! -e ${cachedir}/firstrun ]; then
-                    ( flock 10
-                      flock -u 9
-                      ${tarsnap} --fsck
-                      flock 9
-                    ) 10>${cachedir}/firstrun
-                  fi
-                ) 9>${cachedir}/lockf
+                    ( flock 9
+                      if [ ! -e ${cachedir}/firstrun ]; then
+                        ( flock 10
+                          flock -u 9
+                          ${tarsnap} --fsck
+                          flock 9
+                        ) 10>${cachedir}/firstrun
+                      fi
+                    ) 9>${cachedir}/lockf
 
-                 exec flock ${cachedir}/firstrun ${run}
-              ''
-            else
-              "exec ${run}";
+                     exec flock ${cachedir}/firstrun ${run}
+                  ''
+                else
+                  "exec ${run}";
 
-          serviceConfig = {
-            Type = "oneshot";
-            IOSchedulingClass = "idle";
-            NoNewPrivileges = "true";
-            CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" ];
-            PermissionsStartOnly = "true";
-          };
-        }
-      ) gcfg.archives)
+              serviceConfig = {
+                Type = "oneshot";
+                IOSchedulingClass = "idle";
+                NoNewPrivileges = "true";
+                CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" ];
+                PermissionsStartOnly = "true";
+              };
+            }
+        )
+        gcfg.archives)
       //
 
-        (lib.mapAttrs' (
+      (lib.mapAttrs'
+        (
           name: cfg:
-          lib.nameValuePair "tarsnap-restore-${name}" {
-            description = "Tarsnap restore '${name}'";
-            requires = [ "network-online.target" ];
+            lib.nameValuePair "tarsnap-restore-${name}" {
+              description = "Tarsnap restore '${name}'";
+              requires = [ "network-online.target" ];
 
-            path = with pkgs; [
-              iputils
-              gcfg.package
-              util-linux
-            ];
+              path = with pkgs; [
+                iputils
+                gcfg.package
+                util-linux
+              ];
 
-            script =
-              let
-                tarsnap = ''${lib.getExe gcfg.package} --configfile "/etc/tarsnap/${name}.conf"'';
-                lastArchive = "$(${tarsnap} --list-archives | sort | tail -1)";
-                run = ''${tarsnap} -x -f "${lastArchive}" ${lib.optionalString cfg.verbose "-v"}'';
-                cachedir = lib.escapeShellArg cfg.cachedir;
+              script =
+                let
+                  tarsnap = ''${lib.getExe gcfg.package} --configfile "/etc/tarsnap/${name}.conf"'';
+                  lastArchive = "$(${tarsnap} --list-archives | sort | tail -1)";
+                  run = ''${tarsnap} -x -f "${lastArchive}" ${lib.optionalString cfg.verbose "-v"}'';
+                  cachedir = lib.escapeShellArg cfg.cachedir;
 
-              in
-              if (cfg.cachedir != null) then
-                ''
-                  mkdir -p ${cachedir}
-                  chmod 0700 ${cachedir}
+                in
+                if (cfg.cachedir != null) then
+                  ''
+                    mkdir -p ${cachedir}
+                    chmod 0700 ${cachedir}
 
-                  ( flock 9
-                    if [ ! -e ${cachedir}/firstrun ]; then
-                      ( flock 10
-                        flock -u 9
-                        ${tarsnap} --fsck
-                        flock 9
-                      ) 10>${cachedir}/firstrun
-                    fi
-                  ) 9>${cachedir}/lockf
+                    ( flock 9
+                      if [ ! -e ${cachedir}/firstrun ]; then
+                        ( flock 10
+                          flock -u 9
+                          ${tarsnap} --fsck
+                          flock 9
+                        ) 10>${cachedir}/firstrun
+                      fi
+                    ) 9>${cachedir}/lockf
 
-                   exec flock ${cachedir}/firstrun ${run}
-                ''
-              else
-                "exec ${run}";
+                     exec flock ${cachedir}/firstrun ${run}
+                  ''
+                else
+                  "exec ${run}";
 
-            serviceConfig = {
-              Type = "oneshot";
-              IOSchedulingClass = "idle";
-              NoNewPrivileges = "true";
-              CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" ];
-              PermissionsStartOnly = "true";
-            };
-          }
-        ) gcfg.archives);
+              serviceConfig = {
+                Type = "oneshot";
+                IOSchedulingClass = "idle";
+                NoNewPrivileges = "true";
+                CapabilityBoundingSet = [ "CAP_DAC_READ_SEARCH" ];
+                PermissionsStartOnly = "true";
+              };
+            }
+        )
+        gcfg.archives);
 
     # Note: the timer must be Persistent=true, so that systemd will start it even
     # if e.g. your laptop was asleep while the latest interval occurred.
-    systemd.timers = lib.mapAttrs' (
-      name: cfg:
-      lib.nameValuePair "tarsnap-${name}" {
-        timerConfig.OnCalendar = cfg.period;
-        timerConfig.Persistent = "true";
-        wantedBy = [ "timers.target" ];
-      }
-    ) gcfg.archives;
+    systemd.timers = lib.mapAttrs'
+      (
+        name: cfg:
+          lib.nameValuePair "tarsnap-${name}" {
+            timerConfig.OnCalendar = cfg.period;
+            timerConfig.Persistent = "true";
+            wantedBy = [ "timers.target" ];
+          }
+      )
+      gcfg.archives;
 
-    environment.etc = lib.mapAttrs' (
-      name: cfg:
-      lib.nameValuePair "tarsnap/${name}.conf" {
-        text = configFile name cfg;
-      }
-    ) gcfg.archives;
+    environment.etc = lib.mapAttrs'
+      (
+        name: cfg:
+          lib.nameValuePair "tarsnap/${name}.conf" {
+            text = configFile name cfg;
+          }
+      )
+      gcfg.archives;
 
     environment.systemPackages = [ gcfg.package ];
   };

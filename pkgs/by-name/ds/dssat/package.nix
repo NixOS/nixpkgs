@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  cmake,
-  glibc,
-  gfortran,
-  makeWrapper,
-  fetchFromGitHub,
-  fetchpatch,
-  dos2unix,
-  dataRepo ? fetchFromGitHub {
+{ stdenv
+, lib
+, cmake
+, glibc
+, gfortran
+, makeWrapper
+, fetchFromGitHub
+, fetchpatch
+, dos2unix
+, dataRepo ? fetchFromGitHub {
     owner = "DSSAT";
     repo = "dssat-csm-data";
     rev = "v4.8.2.8";
     hash = "sha256-hbSBKEvdSd1lfbemfp4Lk4/JcGMXGVjm1x7P7lmmuA0=";
-  },
+  }
+,
 }:
 let
   # Temporary patch to fix 80 chars limit on paths

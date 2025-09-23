@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cffi,
-  libheif,
-  piexif,
-  pillow,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cffi
+, libheif
+, piexif
+, pillow
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

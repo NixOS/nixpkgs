@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  hunspell,
-  ncurses,
-  pkg-config,
-  perl,
+{ lib
+, stdenv
+, fetchurl
+, hunspell
+, ncurses
+, pkg-config
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

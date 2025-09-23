@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  jdk11_headless,
-  makeWrapper,
-  writeText,
-  xorg,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, jdk11_headless
+, makeWrapper
+, writeText
+, xorg
+, nixosTests
+,
 }:
 
 let

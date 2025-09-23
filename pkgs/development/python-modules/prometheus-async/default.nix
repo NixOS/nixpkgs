@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  prometheus-client,
-  pytest-asyncio,
-  pytestCheckHook,
-  twisted,
-  typing-extensions,
-  wrapt,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, prometheus-client
+, pytest-asyncio
+, pytestCheckHook
+, twisted
+, typing-extensions
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

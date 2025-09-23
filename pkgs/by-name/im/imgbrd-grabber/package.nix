@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  makeWrapper,
-  catch2,
-  nodejs,
-  libpulseaudio,
-  openssl,
-  rsync,
-  typescript,
-  qt6,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, makeWrapper
+, catch2
+, nodejs
+, libpulseaudio
+, openssl
+, rsync
+, typescript
+, qt6
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "imgbrd-grabber";

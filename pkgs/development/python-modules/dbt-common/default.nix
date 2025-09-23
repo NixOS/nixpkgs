@@ -1,30 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  dbt-protos,
-  agate,
-  colorama,
-  deepdiff,
-  isodate,
-  jinja2,
-  jsonschema,
-  mashumaro,
-  pathspec,
-  protobuf,
-  python-dateutil,
-  requests,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  pytest-mock,
-  pytest-xdist,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  dbt-protos
+, agate
+, colorama
+, deepdiff
+, isodate
+, jinja2
+, jsonschema
+, mashumaro
+, pathspec
+, protobuf
+, python-dateutil
+, requests
+, typing-extensions
+, # tests
+  pytestCheckHook
+, pytest-mock
+, pytest-xdist
+,
 }:
 
 buildPythonPackage rec {

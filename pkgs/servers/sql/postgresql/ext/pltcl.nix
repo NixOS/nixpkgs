@@ -1,9 +1,9 @@
-{
-  buildEnv,
-  lib,
-  postgresql,
-  postgresqlTestExtension,
-  tclPackages,
+{ buildEnv
+, lib
+, postgresql
+, postgresqlTestExtension
+, tclPackages
+,
 }:
 
 let

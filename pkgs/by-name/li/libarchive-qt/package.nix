@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  libarchive,
-  xz,
-  zlib,
-  bzip2,
-  meson,
-  pkg-config,
-  ninja,
-  qt6,
+{ lib
+, stdenv
+, fetchFromGitLab
+, libarchive
+, xz
+, zlib
+, bzip2
+, meson
+, pkg-config
+, ninja
+, qt6
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

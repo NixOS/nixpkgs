@@ -1,17 +1,17 @@
-{
-  fetchFromGitHub,
-  buildGoModule,
-  stdenvNoCC,
-  nix-update-script,
-  nodejs,
-  lib,
-  pnpm,
-  buf,
-  cacert,
-  grpc-gateway,
-  protoc-gen-go,
-  protoc-gen-go-grpc,
-  protoc-gen-validate,
+{ fetchFromGitHub
+, buildGoModule
+, stdenvNoCC
+, nix-update-script
+, nodejs
+, lib
+, pnpm
+, buf
+, cacert
+, grpc-gateway
+, protoc-gen-go
+, protoc-gen-go-grpc
+, protoc-gen-validate
+,
 }:
 let
   version = "0.25.0";

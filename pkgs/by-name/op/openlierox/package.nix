@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  curl,
-  gd,
-  libX11,
-  libxml2,
-  libzip,
-  SDL,
-  SDL_image,
-  SDL_mixer,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, curl
+, gd
+, libX11
+, libxml2
+, libzip
+, SDL
+, SDL_image
+, SDL_mixer
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

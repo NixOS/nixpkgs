@@ -1,9 +1,9 @@
-{
-  buildPecl,
-  fetchFromGitHub,
-  lib,
-  pkg-config,
-  dlib,
+{ buildPecl
+, fetchFromGitHub
+, lib
+, pkg-config
+, dlib
+,
 }:
 let
   pname = "pdlib";

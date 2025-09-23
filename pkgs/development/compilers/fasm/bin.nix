@@ -1,7 +1,7 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
+{ stdenvNoCC
+, lib
+, fetchurl
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

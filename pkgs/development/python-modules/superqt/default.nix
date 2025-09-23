@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  pint,
-  pygments,
-  pyqt5,
-  pyqt6,
-  pyside2,
-  pyside6,
-  pytestCheckHook,
-  pythonOlder,
-  qtpy,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, pint
+, pygments
+, pyqt5
+, pyqt6
+, pyside2
+, pyside6
+, pytestCheckHook
+, pythonOlder
+, qtpy
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

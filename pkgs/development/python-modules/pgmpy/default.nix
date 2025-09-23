@@ -1,29 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # dependencies
-  networkx,
-  numpy,
-  scipy,
-  scikit-learn,
-  pandas,
-  pyparsing,
-  torch,
-  statsmodels,
-  tqdm,
-  joblib,
-  opt-einsum,
-  xgboost,
-  google-generativeai,
-
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
-  coverage,
-  mock,
-  black,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # dependencies
+  networkx
+, numpy
+, scipy
+, scikit-learn
+, pandas
+, pyparsing
+, torch
+, statsmodels
+, tqdm
+, joblib
+, opt-einsum
+, xgboost
+, google-generativeai
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+, coverage
+, mock
+, black
+,
 }:
 buildPythonPackage rec {
   pname = "pgmpy";

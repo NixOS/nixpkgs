@@ -1,27 +1,26 @@
-{
-  stdenv,
-  erlang,
-  rebar3WithPlugins,
-  openssl,
-  lib,
+{ stdenv
+, erlang
+, rebar3WithPlugins
+, openssl
+, lib
+,
 }:
 
-{
-  pname,
-  version,
-  src,
-  beamDeps ? [ ],
-  buildPlugins ? [ ],
-  checkouts ? null,
-  releaseType,
-  buildInputs ? [ ],
-  setupHook ? null,
-  profile ? "default",
-  installPhase ? null,
-  buildPhase ? null,
-  configurePhase ? null,
-  meta ? { },
-  ...
+{ pname
+, version
+, src
+, beamDeps ? [ ]
+, buildPlugins ? [ ]
+, checkouts ? null
+, releaseType
+, buildInputs ? [ ]
+, setupHook ? null
+, profile ? "default"
+, installPhase ? null
+, buildPhase ? null
+, configurePhase ? null
+, meta ? { }
+, ...
 }@attrs:
 
 let

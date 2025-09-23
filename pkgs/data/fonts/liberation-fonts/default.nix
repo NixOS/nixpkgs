@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fontforge,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fontforge
+, python3
+,
 }:
 let
   inherit (python3.pkgs) fonttools;
@@ -13,13 +13,13 @@ let
     python3
   ];
   common =
-    {
-      version,
-      repo,
-      sha256,
-      docsToInstall,
-      nativeBuildInputs,
-      postPatch ? null,
+    { version
+    , repo
+    , sha256
+    , docsToInstall
+    , nativeBuildInputs
+    , postPatch ? null
+    ,
     }:
     stdenv.mkDerivation rec {
       pname = "liberation-fonts";

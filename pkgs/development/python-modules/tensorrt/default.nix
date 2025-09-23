@@ -1,11 +1,11 @@
-{
-  lib,
-  python,
-  autoAddDriverRunpath,
-  buildPythonPackage,
-  autoPatchelfHook,
-  unzip,
-  cudaPackages,
+{ lib
+, python
+, autoAddDriverRunpath
+, buildPythonPackage
+, autoPatchelfHook
+, unzip
+, cudaPackages
+,
 }:
 
 let

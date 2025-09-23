@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  chromium,
-  python3,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, chromium
+, python3
+,
 }:
 buildNpmPackage {
   pname = "single-file-cli";

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  zlib,
-  enableUnfree ? false,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, zlib
+, enableUnfree ? false
+,
 }:
 
 stdenv.mkDerivation rec {

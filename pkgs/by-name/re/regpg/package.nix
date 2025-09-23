@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  gnupg,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, gnupg
+, perl
+,
 }:
 
 let

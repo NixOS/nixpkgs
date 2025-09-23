@@ -1,9 +1,9 @@
-{
-  buildTeleport,
-  buildGo124Module,
-  wasm-bindgen-cli_0_2_99,
-  withRdpClient ? true,
-  extPatches ? [ ],
+{ buildTeleport
+, buildGo124Module
+, wasm-bindgen-cli_0_2_99
+, withRdpClient ? true
+, extPatches ? [ ]
+,
 }:
 
 buildTeleport rec {

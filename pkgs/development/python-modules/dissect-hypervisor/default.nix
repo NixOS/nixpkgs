@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  defusedxml,
-  dissect-cstruct,
-  dissect-util,
-  fetchFromGitHub,
-  pycryptodome,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, defusedxml
+, dissect-cstruct
+, dissect-util
+, fetchFromGitHub
+, pycryptodome
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  glib,
-  gjs,
-  ninja,
-  gtk4,
-  gsettings-desktop-schemas,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  gobject-introspection,
-  glib-networking,
-  pkg-config,
-  libadwaita,
-  appstream,
-  blueprint-compiler,
-  gettext,
-  libportal-gtk4,
-  languagetool,
-  libsoup_3,
-  openjdk,
-  xdg-desktop-portal,
-  dbus,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, glib
+, gjs
+, ninja
+, gtk4
+, gsettings-desktop-schemas
+, wrapGAppsHook4
+, desktop-file-utils
+, gobject-introspection
+, glib-networking
+, pkg-config
+, libadwaita
+, appstream
+, blueprint-compiler
+, gettext
+, libportal-gtk4
+, languagetool
+, libsoup_3
+, openjdk
+, xdg-desktop-portal
+, dbus
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

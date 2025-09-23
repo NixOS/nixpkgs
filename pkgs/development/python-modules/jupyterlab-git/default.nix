@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  git,
-  gitMinimal,
-  nodejs,
-  writableTmpDirAsHomeHook,
-  yarn-berry_3,
-  jupyter-server,
-  hatch-jupyter-builder,
-  hatch-nodejs-version,
-  hatchling,
-  jupyterlab,
-  nbdime,
-  nbformat,
-  packaging,
-  pexpect,
-  pytest-asyncio,
-  pytest-jupyter,
-  pytest-tornasync,
-  pytestCheckHook,
-  traitlets,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, git
+, gitMinimal
+, nodejs
+, writableTmpDirAsHomeHook
+, yarn-berry_3
+, jupyter-server
+, hatch-jupyter-builder
+, hatch-nodejs-version
+, hatchling
+, jupyterlab
+, nbdime
+, nbformat
+, packaging
+, pexpect
+, pytest-asyncio
+, pytest-jupyter
+, pytest-tornasync
+, pytestCheckHook
+, traitlets
+,
 }:
 
 buildPythonPackage rec {

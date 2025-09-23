@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  httplib,
-  libarchive,
-  libXdmcp,
-  libpthreadstubs,
-  xcbutilkeysyms,
-  qt6,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, pkg-config
+, httplib
+, libarchive
+, libXdmcp
+, libpthreadstubs
+, xcbutilkeysyms
+, qt6
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";

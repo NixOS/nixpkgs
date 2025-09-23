@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, installShellFiles
+,
 }:
 
 let

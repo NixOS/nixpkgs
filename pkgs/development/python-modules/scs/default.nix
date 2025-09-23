@@ -1,23 +1,19 @@
-{
-  lib,
-  stdenv,
-  pkgs,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  meson-python,
-  numpy,
-  pkg-config,
-
-  blas,
-  lapack,
-
-  # dependencies
-  scipy,
-
-  # check inputs
-  pytestCheckHook,
+{ lib
+, stdenv
+, pkgs
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  meson-python
+, numpy
+, pkg-config
+, blas
+, lapack
+, # dependencies
+  scipy
+, # check inputs
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

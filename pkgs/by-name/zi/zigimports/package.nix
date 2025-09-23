@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  zig_0_13,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, zig_0_13
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

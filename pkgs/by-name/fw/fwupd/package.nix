@@ -1,88 +1,77 @@
 # Updating? Keep $out/etc synchronized with passthru keys
 
-{
-  lib,
-  stdenv,
-
-  # runPythonCommand
-  runCommand,
-  python3,
-
-  # test-firmware
-  fetchFromGitHub,
-  unstableGitUpdater,
-
-  # fwupd
-  pkg-config,
-  pkgsBuildBuild,
-
-  # propagatedBuildInputs
-  json-glib,
-
-  # nativeBuildInputs
-  ensureNewerSourcesForZipFilesHook,
-  gettext,
-  gi-docgen,
-  gobject-introspection,
-  meson,
-  ninja,
-  protobuf,
-  protobufc,
-  shared-mime-info,
-  vala,
-  wrapGAppsNoGuiHook,
-  writableTmpDirAsHomeHook,
-  mesonEmulatorHook,
-
-  # buildInputs
-  bash-completion,
-  curl,
-  elfutils,
-  fwupd-efi,
-  gnutls,
-  gusb,
-  libarchive,
-  libcbor,
-  libdrm,
-  libgudev,
-  libjcat,
-  libmbim,
-  libmnl,
-  libqmi,
-  libuuid,
-  libxmlb,
-  libxml2,
-  modemmanager,
-  pango,
-  polkit,
-  readline,
-  sqlite,
-  tpm2-tss,
-  valgrind,
-  xz, # for liblzma
-  flashrom,
-
-  # mesonFlags
-  hwdata,
-
-  # env
-  makeFontsConf,
-  freefont_ttf,
-
-  # preCheck
-  libredirect,
-
-  # preFixup
-  bubblewrap,
-  efibootmgr,
-  tpm2-tools,
-
-  # passthru
-  nixosTests,
-  nix-update-script,
-
-  enableFlashrom ? false,
-  enablePassim ? false,
+{ lib
+, stdenv
+, # runPythonCommand
+  runCommand
+, python3
+, # test-firmware
+  fetchFromGitHub
+, unstableGitUpdater
+, # fwupd
+  pkg-config
+, pkgsBuildBuild
+, # propagatedBuildInputs
+  json-glib
+, # nativeBuildInputs
+  ensureNewerSourcesForZipFilesHook
+, gettext
+, gi-docgen
+, gobject-introspection
+, meson
+, ninja
+, protobuf
+, protobufc
+, shared-mime-info
+, vala
+, wrapGAppsNoGuiHook
+, writableTmpDirAsHomeHook
+, mesonEmulatorHook
+, # buildInputs
+  bash-completion
+, curl
+, elfutils
+, fwupd-efi
+, gnutls
+, gusb
+, libarchive
+, libcbor
+, libdrm
+, libgudev
+, libjcat
+, libmbim
+, libmnl
+, libqmi
+, libuuid
+, libxmlb
+, libxml2
+, modemmanager
+, pango
+, polkit
+, readline
+, sqlite
+, tpm2-tss
+, valgrind
+, xz
+, # for liblzma
+  flashrom
+, # mesonFlags
+  hwdata
+, # env
+  makeFontsConf
+, freefont_ttf
+, # preCheck
+  libredirect
+, # preFixup
+  bubblewrap
+, efibootmgr
+, tpm2-tools
+, # passthru
+  nixosTests
+, nix-update-script
+, enableFlashrom ? false
+, enablePassim ? false
+,
 }:
 
 let

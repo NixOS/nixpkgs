@@ -1,17 +1,18 @@
 {
   # general
-  lib,
-  resholve,
-  bash,
-  doCheck ? true,
-  doInstallCheck ? true,
-  # variant-specific
-  variant,
-  version,
-  branch,
-  src,
-  fake ? false,
-  keep,
+  lib
+, resholve
+, bash
+, doCheck ? true
+, doInstallCheck ? true
+, # variant-specific
+  variant
+, version
+, branch
+, src
+, fake ? false
+, keep
+,
 }:
 let
   # extracting this so that it's trivial to test in other shells

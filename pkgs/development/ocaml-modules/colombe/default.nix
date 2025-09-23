@@ -1,13 +1,13 @@
-{
-  alcotest,
-  angstrom,
-  buildDunePackage,
-  crowbar,
-  emile,
-  fetchurl,
-  fmt,
-  ipaddr,
-  lib,
+{ alcotest
+, angstrom
+, buildDunePackage
+, crowbar
+, emile
+, fetchurl
+, fmt
+, ipaddr
+, lib
+,
 }:
 
 let

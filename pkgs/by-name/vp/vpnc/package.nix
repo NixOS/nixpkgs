@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  bash,
-  buildPackages,
-  fetchFromGitHub,
-  makeWrapper,
-  pkg-config,
-  perl,
-  gnutls,
-  libgcrypt,
-  vpnc-scripts,
-  opensslSupport ? false,
-  openssl, # Distributing this is a GPL violation.
+{ lib
+, stdenv
+, bash
+, buildPackages
+, fetchFromGitHub
+, makeWrapper
+, pkg-config
+, perl
+, gnutls
+, libgcrypt
+, vpnc-scripts
+, opensslSupport ? false
+, openssl
+, # Distributing this is a GPL violation.
 }:
 
 stdenv.mkDerivation {

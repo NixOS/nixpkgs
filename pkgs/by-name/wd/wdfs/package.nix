@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  glib,
-  neon,
-  fuse,
-  autoreconfHook,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, glib
+, neon
+, fuse
+, autoreconfHook
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

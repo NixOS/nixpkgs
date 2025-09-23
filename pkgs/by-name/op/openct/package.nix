@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  doxygen,
-  libxslt,
-  pkg-config,
-  pcsclite,
-  libtool,
-  libusb-compat-0_1,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, doxygen
+, libxslt
+, pkg-config
+, pcsclite
+, libtool
+, libusb-compat-0_1
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

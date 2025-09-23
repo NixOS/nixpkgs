@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pytest-asyncio_0,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, poetry-dynamic-versioning
+, pytest-asyncio_0
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

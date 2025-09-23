@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  opusfile,
-  libogg,
-  SDL2,
-  openal,
-  freetype,
-  libjpeg,
-  curl,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, opusfile
+, libogg
+, SDL2
+, openal
+, freetype
+, libjpeg
+, curl
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

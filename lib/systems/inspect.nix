@@ -99,12 +99,14 @@ rec {
         bits = 32;
       };
     };
-    isArmv7 = map (
-      { arch, ... }:
-      {
-        cpu = { inherit arch; };
-      }
-    ) (filter (cpu: hasPrefix "armv7" cpu.arch or "") (attrValues cpuTypes));
+    isArmv7 = map
+      (
+        { arch, ... }:
+        {
+          cpu = { inherit arch; };
+        }
+      )
+      (filter (cpu: hasPrefix "armv7" cpu.arch or "") (attrValues cpuTypes));
     isAarch64 = {
       cpu = {
         family = "arm";
@@ -269,17 +271,17 @@ rec {
       }
     ]
     ++
-      map
-        (a: {
-          abi = {
-            abi = a;
-          };
-        })
-        [
-          "n32"
-          "ilp32"
-          "x32"
-        ];
+    map
+      (a: {
+        abi = {
+          abi = a;
+        };
+      })
+      [
+        "n32"
+        "ilp32"
+        "x32"
+      ];
     isBigEndian = {
       cpu = {
         significantByte = significantBytes.bigEndian;
@@ -450,23 +452,30 @@ rec {
       pat1 = toList pat1_;
       pat2 = toList pat2_;
     in
-    concatMap (
-      attr1:
-      map (
-        attr2:
-        recursiveUpdateUntil (
-          path: subattr1: subattr2:
-          if (builtins.intersectAttrs subattr1 subattr2) == { } || subattr1 == subattr2 then
-            true
-          else
-            throw ''
-              pattern conflict at path ${toString path}:
-                ${toJSON subattr1}
-                ${toJSON subattr2}
-            ''
-        ) attr1 attr2
-      ) pat2
-    ) pat1;
+    concatMap
+      (
+        attr1:
+        map
+          (
+            attr2:
+            recursiveUpdateUntil
+              (
+                path: subattr1: subattr2:
+                if (builtins.intersectAttrs subattr1 subattr2) == { } || subattr1 == subattr2 then
+                  true
+                else
+                  throw ''
+                    pattern conflict at path ${toString path}:
+                      ${toJSON subattr1}
+                      ${toJSON subattr2}
+                  ''
+              )
+              attr1
+              attr2
+          )
+          pat2
+      )
+      pat1;
 
   matchAnyAttrs =
     patterns:

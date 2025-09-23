@@ -1,12 +1,12 @@
-{
-  buildDunePackage,
-  mirage-crypto-rng,
-  miou,
-  logs,
-  duration,
-  mtime,
-  digestif,
-  ohex,
+{ buildDunePackage
+, mirage-crypto-rng
+, miou
+, logs
+, duration
+, mtime
+, digestif
+, ohex
+,
 }:
 
 buildDunePackage {

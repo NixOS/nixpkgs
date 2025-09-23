@@ -1,6 +1,6 @@
-{
-  vimUtils,
-  hurl,
+{ vimUtils
+, hurl
+,
 }:
 vimUtils.buildVimPlugin {
   pname = "hurl";

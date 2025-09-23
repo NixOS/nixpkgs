@@ -1,31 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  affine,
-  cachetools,
-  numpy,
-  pyproj,
-  shapely,
-
-  # optional-dependencies
-  azure-storage-blob,
-  boto3,
-  dask,
-  distributed,
-  rasterio,
-  tifffile,
-  xarray,
-
-  # tests
-  geopandas,
-  matplotlib,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  affine
+, cachetools
+, numpy
+, pyproj
+, shapely
+, # optional-dependencies
+  azure-storage-blob
+, boto3
+, dask
+, distributed
+, rasterio
+, tifffile
+, xarray
+, # tests
+  geopandas
+, matplotlib
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

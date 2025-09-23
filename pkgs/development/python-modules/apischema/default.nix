@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  graphql-core,
-  pytest-asyncio,
-  pytest8_3CheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, graphql-core
+, pytest-asyncio
+, pytest8_3CheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

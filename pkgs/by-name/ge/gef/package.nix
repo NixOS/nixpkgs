@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  gdb,
-  python3,
-  bintools-unwrapped,
-  file,
-  ps,
-  git,
-  coreutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, gdb
+, python3
+, bintools-unwrapped
+, file
+, ps
+, git
+, coreutils
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  go-mockery,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, go-mockery
+, versionCheckHook
+,
 }:
 buildGoModule rec {
   pname = "sesh";

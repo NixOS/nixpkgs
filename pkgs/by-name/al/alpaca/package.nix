@@ -1,21 +1,21 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  appstream,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libadwaita,
-  gtksourceview5,
-  xdg-utils,
-  ollama,
-  vte-gtk4,
-  libspelling,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, appstream
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, wrapGAppsHook4
+, desktop-file-utils
+, libadwaita
+, gtksourceview5
+, xdg-utils
+, ollama
+, vte-gtk4
+, libspelling
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

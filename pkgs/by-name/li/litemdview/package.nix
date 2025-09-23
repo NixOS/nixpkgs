@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  gtkmm3,
-  autoreconfHook,
-  pkg-config,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitea
+, gtkmm3
+, autoreconfHook
+, pkg-config
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

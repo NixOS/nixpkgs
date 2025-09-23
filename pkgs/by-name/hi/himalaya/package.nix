@@ -1,20 +1,20 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  stdenv,
-  buildPackages,
-  pkg-config,
-  apple-sdk,
-  installShellFiles,
-  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  notmuch,
-  gpgme,
-  buildNoDefaultFeatures ? false,
-  buildFeatures ? [ ],
-  withNoDefaultFeatures ? buildNoDefaultFeatures,
-  withFeatures ? buildFeatures,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, buildPackages
+, pkg-config
+, apple-sdk
+, installShellFiles
+, installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, notmuch
+, gpgme
+, buildNoDefaultFeatures ? false
+, buildFeatures ? [ ]
+, withNoDefaultFeatures ? buildNoDefaultFeatures
+, withFeatures ? buildFeatures
+,
 }@args:
 
 let

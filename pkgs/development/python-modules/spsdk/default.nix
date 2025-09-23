@@ -1,51 +1,48 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  asn1crypto,
-  bincopy,
-  bitstring,
-  click,
-  click-command-tree,
-  click-option-group,
-  colorama,
-  crcmod,
-  cryptography,
-  deepmerge,
-  fastjsonschema,
-  filelock,
-  hexdump,
-  libusbsio,
-  libuuu,
-  oscrypto,
-  packaging,
-  platformdirs,
-  prettytable,
-  pyasn1,
-  pyocd,
-  pyserial,
-  requests,
-  ruamel-yaml,
-  sly,
-  spsdk-mcu-link,
-  spsdk-pyocd,
-  typing-extensions,
-  x690,
-
-  # tests
-  cookiecutter,
-  ipykernel,
-  pytest-notebook,
-  pytestCheckHook,
-  voluptuous,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  asn1crypto
+, bincopy
+, bitstring
+, click
+, click-command-tree
+, click-option-group
+, colorama
+, crcmod
+, cryptography
+, deepmerge
+, fastjsonschema
+, filelock
+, hexdump
+, libusbsio
+, libuuu
+, oscrypto
+, packaging
+, platformdirs
+, prettytable
+, pyasn1
+, pyocd
+, pyserial
+, requests
+, ruamel-yaml
+, sly
+, spsdk-mcu-link
+, spsdk-pyocd
+, typing-extensions
+, x690
+, # tests
+  cookiecutter
+, ipykernel
+, pytest-notebook
+, pytestCheckHook
+, voluptuous
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

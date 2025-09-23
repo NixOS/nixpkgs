@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  librosa,
-  pytestCheckHook,
-  pythonOlder,
-  resampy,
-  scipy,
-  setuptools,
-  torch,
-  torchaudio,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, librosa
+, pytestCheckHook
+, pythonOlder
+, resampy
+, scipy
+, setuptools
+, torch
+, torchaudio
+, tqdm
+,
 }:
 
 buildPythonPackage {

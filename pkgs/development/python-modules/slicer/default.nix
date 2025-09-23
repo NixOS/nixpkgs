@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  dos2unix,
-  fetchPypi,
-  pytestCheckHook,
-  pythonOlder,
-  pandas,
-  torch,
-  scipy,
+{ lib
+, buildPythonPackage
+, dos2unix
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, pandas
+, torch
+, scipy
+,
 }:
 
 buildPythonPackage rec {

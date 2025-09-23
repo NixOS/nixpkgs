@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pyqtgraph,
-  numpy,
-  pyqt5,
-  pyqt6,
-  pyside6,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pyqtgraph
+, numpy
+, pyqt5
+, pyqt6
+, pyside6
+,
 }:
 
 buildPythonPackage rec {

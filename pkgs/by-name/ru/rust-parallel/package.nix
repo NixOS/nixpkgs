@@ -1,10 +1,10 @@
-{
-  bash,
-  fetchFromGitHub,
-  lib,
-  rustPlatform,
-  versionCheckHook,
-  nix-update-script,
+{ bash
+, fetchFromGitHub
+, lib
+, rustPlatform
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

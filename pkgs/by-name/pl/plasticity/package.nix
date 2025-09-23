@@ -1,35 +1,35 @@
-{
-  alsa-lib,
-  at-spi2-atk,
-  autoPatchelfHook,
-  cairo,
-  cups,
-  dbus,
-  desktop-file-utils,
-  expat,
-  fetchurl,
-  gdk-pixbuf,
-  gtk3,
-  gvfs,
-  hicolor-icon-theme,
-  lib,
-  libdrm,
-  libglvnd,
-  libnotify,
-  libxkbcommon,
-  libgbm,
-  nspr,
-  nss,
-  openssl,
-  pango,
-  rpmextract,
-  stdenv,
-  systemd,
-  trash-cli,
-  vulkan-loader,
-  wrapGAppsHook3,
-  xdg-utils,
-  xorg,
+{ alsa-lib
+, at-spi2-atk
+, autoPatchelfHook
+, cairo
+, cups
+, dbus
+, desktop-file-utils
+, expat
+, fetchurl
+, gdk-pixbuf
+, gtk3
+, gvfs
+, hicolor-icon-theme
+, lib
+, libdrm
+, libglvnd
+, libnotify
+, libxkbcommon
+, libgbm
+, nspr
+, nss
+, openssl
+, pango
+, rpmextract
+, stdenv
+, systemd
+, trash-cli
+, vulkan-loader
+, wrapGAppsHook3
+, xdg-utils
+, xorg
+,
 }:
 stdenv.mkDerivation rec {
   pname = "plasticity";

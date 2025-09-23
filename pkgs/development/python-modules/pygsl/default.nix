@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pkg-config,
-  gsl,
-  swig,
-  meson-python,
-  numpy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pkg-config
+, gsl
+, swig
+, meson-python
+, numpy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

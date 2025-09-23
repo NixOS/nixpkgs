@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  flex,
-  bison,
-  linuxHeaders,
-  libtirpc,
-  mount,
-  umount,
-  nfs-utils,
-  e2fsprogs,
-  libxml2,
-  libkrb5,
-  kmod,
-  openldap,
-  sssd,
-  cyrus_sasl,
-  openssl,
-  rpcsvc-proto,
-  pkgconf,
-  fetchpatch,
-  libnsl,
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, linuxHeaders
+, libtirpc
+, mount
+, umount
+, nfs-utils
+, e2fsprogs
+, libxml2
+, libkrb5
+, kmod
+, openldap
+, sssd
+, cyrus_sasl
+, openssl
+, rpcsvc-proto
+, pkgconf
+, fetchpatch
+, libnsl
+,
 }:
 
 stdenv.mkDerivation rec {

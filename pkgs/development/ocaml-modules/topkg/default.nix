@@ -6,15 +6,15 @@
   in many cases. When more fine-grained control on how to run the “topkg”
   build system is required, the attribute `run` can be used.
 */
-{
-  stdenv,
-  lib,
-  fetchurl,
-  ocaml,
-  findlib,
-  ocamlbuild,
-  result,
-  opaline,
+{ stdenv
+, lib
+, fetchurl
+, ocaml
+, findlib
+, ocamlbuild
+, result
+, opaline
+,
 }:
 
 let

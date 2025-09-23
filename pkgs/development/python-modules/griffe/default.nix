@@ -1,13 +1,13 @@
-{
-  lib,
-  aiofiles,
-  buildPythonPackage,
-  colorama,
-  fetchFromGitHub,
-  git,
-  jsonschema,
-  pdm-backend,
-  pytestCheckHook,
+{ lib
+, aiofiles
+, buildPythonPackage
+, colorama
+, fetchFromGitHub
+, git
+, jsonschema
+, pdm-backend
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

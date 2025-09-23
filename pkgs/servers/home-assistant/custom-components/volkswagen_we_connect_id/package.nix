@@ -1,9 +1,9 @@
-{
-  ascii-magic,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  lib,
-  weconnect,
+{ ascii-magic
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, lib
+, weconnect
+,
 }:
 
 buildHomeAssistantComponent rec {

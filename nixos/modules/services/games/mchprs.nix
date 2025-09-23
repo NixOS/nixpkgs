@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.mchprs;
@@ -10,10 +9,12 @@ let
 
   whitelistFile = pkgs.writeText "whitelist.json" (
     builtins.toJSON (
-      lib.mapAttrsToList (n: v: {
-        name = n;
-        uuid = v;
-      }) cfg.whitelist.list
+      lib.mapAttrsToList
+        (n: v: {
+          name = n;
+          uuid = v;
+        })
+        cfg.whitelist.list
     )
   );
 

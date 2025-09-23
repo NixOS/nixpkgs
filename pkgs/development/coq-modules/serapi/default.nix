@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchzip,
-  mkCoqDerivation,
-  coq,
-  coq-lsp,
-  version ? null,
+{ lib
+, fetchzip
+, mkCoqDerivation
+, coq
+, coq-lsp
+, version ? null
+,
 }:
 
 let
@@ -74,7 +74,8 @@ in
       case = lib.versions.isEq "8.10";
       out = "8.10.0+0.7.2";
     }
-  ] null;
+  ]
+    null;
 
   useDune = true;
 

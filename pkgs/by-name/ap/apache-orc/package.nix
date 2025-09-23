@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  fetchpatch,
-  cmake,
-  gtest,
-  lz4,
-  protobuf_30,
-  snappy,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, fetchpatch
+, cmake
+, gtest
+, lz4
+, protobuf_30
+, snappy
+, zlib
+, zstd
+,
 }:
 
 let

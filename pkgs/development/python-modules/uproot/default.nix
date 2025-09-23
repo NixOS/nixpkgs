@@ -1,28 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  awkward,
-  cramjam,
-  fsspec,
-  numpy,
-  packaging,
-
-  # tests
-  awkward-pandas,
-  pandas,
-  pytest-timeout,
-  pytestCheckHook,
-  rangehttpserver,
-  scikit-hep-testdata,
-  writableTmpDirAsHomeHook,
-  xxhash,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  awkward
+, cramjam
+, fsspec
+, numpy
+, packaging
+, # tests
+  awkward-pandas
+, pandas
+, pytest-timeout
+, pytestCheckHook
+, rangehttpserver
+, scikit-hep-testdata
+, writableTmpDirAsHomeHook
+, xxhash
+,
 }:
 
 buildPythonPackage rec {

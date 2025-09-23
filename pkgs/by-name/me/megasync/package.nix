@@ -1,36 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # nativeBuildInputs
-  cmake,
-  libsForQt5,
-  libtool,
-  pkg-config,
-  unzip,
-
-  # buildInputs
-  c-ares,
-  cryptopp,
-  curl,
-  ffmpeg,
-  hicolor-icon-theme,
-  icu,
-  libmediainfo,
-  libsodium,
-  libuv,
-  libxcb,
-  libzen,
-  openssl,
-  readline,
-  sqlite,
-  wget,
-  xorg,
-  zlib,
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, # nativeBuildInputs
+  cmake
+, libsForQt5
+, libtool
+, pkg-config
+, unzip
+, # buildInputs
+  c-ares
+, cryptopp
+, curl
+, ffmpeg
+, hicolor-icon-theme
+, icu
+, libmediainfo
+, libsodium
+, libuv
+, libxcb
+, libzen
+, openssl
+, readline
+, sqlite
+, wget
+, xorg
+, zlib
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "megasync";

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  lwt,
-  ppxlib,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, lwt
+, ppxlib
+,
 }:
 
 buildDunePackage {

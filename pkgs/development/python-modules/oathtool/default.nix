@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  autocommand,
-  importlib-resources,
-  path,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, autocommand
+, importlib-resources
+, path
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

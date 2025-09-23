@@ -1,9 +1,9 @@
-{
-  lib,
-  vscode-utils,
-  jq,
-  moreutils,
-  pandoc,
+{ lib
+, vscode-utils
+, jq
+, moreutils
+, pandoc
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

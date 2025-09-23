@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  fontconfig,
-  graphviz,
-  mock,
-  pycodestyle,
-  pygraphviz,
-  pytestCheckHook,
-  setuptools,
-  six,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, fontconfig
+, graphviz
+, mock
+, pycodestyle
+, pygraphviz
+, pytestCheckHook
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

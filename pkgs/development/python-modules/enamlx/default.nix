@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  enaml,
-  pyqtgraph,
-  pyqt5,
-  pythonocc-core,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, enaml
+, pyqtgraph
+, pyqt5
+, pythonocc-core
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

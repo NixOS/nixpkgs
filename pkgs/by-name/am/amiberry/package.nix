@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  copyDesktopItems,
-  makeWrapper,
-  flac,
-  libmpeg2,
-  libmpg123,
-  libpng,
-  libserialport,
-  portmidi,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, copyDesktopItems
+, makeWrapper
+, flac
+, libmpeg2
+, libmpg123
+, libpng
+, libserialport
+, portmidi
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,8 @@
 # generate the script used to activate the configuration.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -12,26 +11,28 @@ let
 
   addAttributeName = mapAttrs (
     a: v:
-    v
-    // {
-      text = ''
-        #### Activation script snippet ${a}:
-        _localstatus=0
-        ${v.text}
+      v
+      // {
+        text = ''
+          #### Activation script snippet ${a}:
+          _localstatus=0
+          ${v.text}
 
-        if (( _localstatus > 0 )); then
-          printf "Activation script snippet '%s' failed (%s)\n" "${a}" "$_localstatus"
-        fi
-      '';
-    }
+          if (( _localstatus > 0 )); then
+            printf "Activation script snippet '%s' failed (%s)\n" "${a}" "$_localstatus"
+          fi
+        '';
+      }
   );
 
   systemActivationScript =
     set: onlyDry:
     let
-      set' = mapAttrs (
-        _: v: if isString v then (noDepEntry v) // { supportsDryActivation = false; } else v
-      ) set;
+      set' = mapAttrs
+        (
+          _: v: if isString v then (noDepEntry v) // { supportsDryActivation = false; } else v
+        )
+        set;
       withHeadlines = addAttributeName set';
       # When building a dry activation script, this replaces all activation scripts
       # that do not support dry mode with a comment that does nothing. Filtering these
@@ -39,16 +40,18 @@ let
       # does not work because when an activation script that supports dry mode depends on
       # an activation script that does not, the dependency cannot be resolved and the eval
       # fails.
-      withDrySnippets = mapAttrs (
-        a: v:
-        if onlyDry && !v.supportsDryActivation then
-          v
-          // {
-            text = "#### Activation script snippet ${a} does not support dry activation.";
-          }
-        else
-          v
-      ) withHeadlines;
+      withDrySnippets = mapAttrs
+        (
+          a: v:
+            if onlyDry && !v.supportsDryActivation then
+              v
+              // {
+                text = "#### Activation script snippet ${a} does not support dry activation.";
+              }
+            else
+              v
+        )
+        withHeadlines;
     in
     ''
       #!${pkgs.runtimeShell}
@@ -95,37 +98,37 @@ let
 
   scriptType =
     withDry:
-    with types;
-    let
-      scriptOptions = {
-        deps = mkOption {
-          type = types.listOf types.str;
-          default = [ ];
-          description = "List of dependencies. The script will run after these.";
+      with types;
+      let
+        scriptOptions = {
+          deps = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            description = "List of dependencies. The script will run after these.";
+          };
+          text = mkOption {
+            type = types.lines;
+            description = "The content of the script.";
+          };
+        }
+        // optionalAttrs withDry {
+          supportsDryActivation = mkOption {
+            type = types.bool;
+            default = false;
+            description = ''
+              Whether this activation script supports being dry-activated.
+              These activation scripts will also be executed on dry-activate
+              activations with the environment variable
+              `NIXOS_ACTION` being set to `dry-activate`.
+              it's important that these activation scripts  don't
+              modify anything about the system when the variable is set.
+            '';
+          };
         };
-        text = mkOption {
-          type = types.lines;
-          description = "The content of the script.";
-        };
-      }
-      // optionalAttrs withDry {
-        supportsDryActivation = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Whether this activation script supports being dry-activated.
-            These activation scripts will also be executed on dry-activate
-            activations with the environment variable
-            `NIXOS_ACTION` being set to `dry-activate`.
-            it's important that these activation scripts  don't
-            modify anything about the system when the variable is set.
-          '';
-        };
-      };
-    in
-    either str (submodule {
-      options = scriptOptions;
-    });
+      in
+      either str (submodule {
+        options = scriptOptions;
+      });
 
 in
 
@@ -256,13 +259,15 @@ in
 
         See `pkgs/by-name/sw/switch-to-configuration-ng/src/src/main.rs`.
       '';
-      type = types.unique {
-        message = ''
-          Only one bootloader can be enabled at a time. This requirement has not
-          been checked until NixOS 22.05. Earlier versions defaulted to the last
-          definition. Change your configuration to enable only one bootloader.
-        '';
-      } (types.either types.str types.package);
+      type = types.unique
+        {
+          message = ''
+            Only one bootloader can be enabled at a time. This requirement has not
+            been checked until NixOS 22.05. Earlier versions defaulted to the last
+            definition. Change your configuration to enable only one bootloader.
+          '';
+        }
+        (types.either types.str types.package);
     };
 
   };

@@ -1,20 +1,20 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  callPackage,
-  gradle_8,
-  makeBinaryWrapper,
-  openjdk21,
-  unzip,
-  makeDesktopItem,
-  copyDesktopItems,
-  desktopToDarwinBundle,
-  xcbuild,
-  protobuf,
-  ghidra-extensions,
-  python3,
-  python3Packages,
+{ stdenv
+, fetchFromGitHub
+, lib
+, callPackage
+, gradle_8
+, makeBinaryWrapper
+, openjdk21
+, unzip
+, makeDesktopItem
+, copyDesktopItems
+, desktopToDarwinBundle
+, xcbuild
+, protobuf
+, ghidra-extensions
+, python3
+, python3Packages
+,
 }:
 
 let

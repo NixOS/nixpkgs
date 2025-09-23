@@ -1,8 +1,8 @@
-{
-  lib,
-  mkKdeDerivation,
-  fetchurl,
-  doxygen,
+{ lib
+, mkKdeDerivation
+, fetchurl
+, doxygen
+,
 }:
 mkKdeDerivation rec {
   pname = "kdsoap-ws-discovery-client";

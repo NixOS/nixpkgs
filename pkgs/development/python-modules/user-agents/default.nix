@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ua-parser,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, ua-parser
+,
 }:
 
 buildPythonPackage rec {

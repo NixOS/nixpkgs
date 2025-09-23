@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  replaceVars,
-  bash,
-  jre,
+{ stdenv
+, lib
+, fetchzip
+, replaceVars
+, bash
+, jre
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  cython,
-  setuptools,
-
-  # dependencies
-  fontconfig,
-  freefont_ttf,
-  makeFontsConf,
-
-  # testing
-  dejavu_fonts,
-  python,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  cython
+, setuptools
+, # dependencies
+  fontconfig
+, freefont_ttf
+, makeFontsConf
+, # testing
+  dejavu_fonts
+, python
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  arpa2cm,
-  quickder,
-  quickmem,
-  quick-sasl,
-  lillydap,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, arpa2cm
+, quickder
+, quickmem
+, quick-sasl
+, lillydap
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

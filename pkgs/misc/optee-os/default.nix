@@ -1,9 +1,9 @@
-{
-  dtc,
-  fetchFromGitHub,
-  lib,
-  pkgsBuildBuild,
-  stdenv,
+{ dtc
+, fetchFromGitHub
+, lib
+, pkgsBuildBuild
+, stdenv
+,
 }:
 
 let
@@ -17,13 +17,12 @@ let
   };
 
   buildOptee = lib.makeOverridable (
-    {
-      version ? null,
-      src ? null,
-      platform,
-      extraMakeFlags ? [ ],
-      extraMeta ? { },
-      ...
+    { version ? null
+    , src ? null
+    , platform
+    , extraMakeFlags ? [ ]
+    , extraMeta ? { }
+    , ...
     }@args:
 
     let
@@ -33,8 +32,7 @@ let
         {
           "arm" = "ta_arm32";
           "arm64" = "ta_arm64";
-        }
-        .${stdenv.hostPlatform.linuxArch};
+        }.${stdenv.hostPlatform.linuxArch};
     in
     stdenv.mkDerivation (
       {

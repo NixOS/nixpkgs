@@ -1,7 +1,7 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+,
 }:
 
 # To use upower-notify, the maintainer suggests adding something like this to your configuration.nix:

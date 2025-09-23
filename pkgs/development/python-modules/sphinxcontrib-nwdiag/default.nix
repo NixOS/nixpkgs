@@ -1,11 +1,11 @@
-{
-  lib,
-  blockdiag,
-  buildPythonPackage,
-  fetchPypi,
-  nwdiag,
-  pythonOlder,
-  sphinx,
+{ lib
+, blockdiag
+, buildPythonPackage
+, fetchPypi
+, nwdiag
+, pythonOlder
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

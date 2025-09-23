@@ -1,21 +1,20 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  libcosmicAppHook,
-  pkg-config,
-  libdisplay-info,
-  libgbm,
-  libinput,
-  pixman,
-  seatd,
-  udev,
-  systemd,
-  nix-update-script,
-  nixosTests,
-
-  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, libcosmicAppHook
+, pkg-config
+, libdisplay-info
+, libgbm
+, libinput
+, pixman
+, seatd
+, udev
+, systemd
+, nix-update-script
+, nixosTests
+, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

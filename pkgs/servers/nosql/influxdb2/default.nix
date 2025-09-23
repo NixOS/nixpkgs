@@ -1,16 +1,16 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  fetchurl,
-  fetchpatch,
-  go-bindata,
-  lib,
-  perl,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  libiconv,
-  nixosTests,
+{ buildGoModule
+, fetchFromGitHub
+, fetchurl
+, fetchpatch
+, go-bindata
+, lib
+, perl
+, pkg-config
+, rustPlatform
+, stdenv
+, libiconv
+, nixosTests
+,
 }:
 
 let

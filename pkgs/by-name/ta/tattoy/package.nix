@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  libxcb,
-  dbus,
-  bash,
-  procps,
-  nano,
-  watch,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, libxcb
+, dbus
+, bash
+, procps
+, nano
+, watch
+,
 }:
 
 rustPlatform.buildRustPackage (attrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  libxkbcommon,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, libxkbcommon
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

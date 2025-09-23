@@ -1,11 +1,11 @@
-{
-  cmake,
-  fetchFromGitHub,
-  lib,
-  maplibre-native-qt,
-  qtbase,
-  qtpositioning,
-  stdenv,
+{ cmake
+, fetchFromGitHub
+, lib
+, maplibre-native-qt
+, qtbase
+, qtpositioning
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

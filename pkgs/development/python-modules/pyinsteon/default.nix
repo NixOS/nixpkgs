@@ -1,19 +1,19 @@
-{
-  lib,
-  aiofiles,
-  aiohttp,
-  async-timeout,
-  async-generator,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pypubsub,
-  pyserial,
-  pyserial-asyncio,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  setuptools,
-  voluptuous,
+{ lib
+, aiofiles
+, aiohttp
+, async-timeout
+, async-generator
+, buildPythonPackage
+, fetchFromGitHub
+, pypubsub
+, pyserial
+, pyserial-asyncio
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, setuptools
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

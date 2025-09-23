@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  buildPythonApplication,
-  fetchPypi,
-  replaceVars,
-  clang,
-  libclang,
-  pytestCheckHook,
-  pkg-config,
-  cmake,
-  flex,
-  glib,
-  json-glib,
-  libxml2,
-  appdirs,
-  backports-entry-points-selectable,
-  dbus-deviation,
-  faust-cchardet,
-  feedgen,
-  lxml,
-  networkx,
-  pkgconfig,
-  pyyaml,
-  schema,
-  setuptools,
-  toposort,
-  wheezy-template,
-  llvmPackages,
-  gst_all_1,
+{ lib
+, stdenv
+, buildPythonApplication
+, fetchPypi
+, replaceVars
+, clang
+, libclang
+, pytestCheckHook
+, pkg-config
+, cmake
+, flex
+, glib
+, json-glib
+, libxml2
+, appdirs
+, backports-entry-points-selectable
+, dbus-deviation
+, faust-cchardet
+, feedgen
+, lxml
+, networkx
+, pkgconfig
+, pyyaml
+, schema
+, setuptools
+, toposort
+, wheezy-template
+, llvmPackages
+, gst_all_1
+,
 }:
 
 buildPythonApplication rec {

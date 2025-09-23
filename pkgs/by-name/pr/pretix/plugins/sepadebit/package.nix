@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pretix-plugin-build,
-  setuptools,
-
-  # dependencies
-  django-localflavor,
-  sepaxml,
-
-  # tests
-  django-scopes,
-  pretix,
-  pytest-django,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pretix-plugin-build
+, setuptools
+, # dependencies
+  django-localflavor
+, sepaxml
+, # tests
+  django-scopes
+, pretix
+, pytest-django
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

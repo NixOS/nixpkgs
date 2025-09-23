@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  ncurses,
-  customConfig ? null,
-  pname,
-  version,
-  src,
-  patches ? [ ],
+{ lib
+, stdenv
+, ncurses
+, customConfig ? null
+, pname
+, version
+, src
+, patches ? [ ]
+,
 }:
 stdenv.mkDerivation {
 

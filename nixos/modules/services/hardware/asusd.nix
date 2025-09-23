@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -136,9 +135,11 @@ in
         "asusd/fan_curves.ron" = maybeConfig "fan_curves.ron" cfg.fanCurvesConfig;
         "asusd/asusd_user_ledmodes.ron" = maybeConfig "asusd_user_ledmodes.ron" cfg.userLedModesConfig;
       }
-      // lib.attrsets.concatMapAttrs (prod_id: value: {
-        "asusd/aura_${prod_id}.ron" = maybeConfig "aura_${prod_id}.ron" value;
-      }) cfg.auraConfigs;
+      // lib.attrsets.concatMapAttrs
+        (prod_id: value: {
+          "asusd/aura_${prod_id}.ron" = maybeConfig "aura_${prod_id}.ron" value;
+        })
+        cfg.auraConfigs;
 
     services.dbus.enable = true;
     systemd.packages = [ cfg.package ];

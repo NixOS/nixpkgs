@@ -5,35 +5,34 @@
   Check for any minor version changes.
 */
 
-{
-  makeScopeWithSplicing',
-  generateSplicesForMkScope,
-  lib,
-  stdenv,
-  fetchurl,
-  fetchgit,
-  fetchpatch,
-  fetchFromGitHub,
-  makeSetupHook,
-  makeWrapper,
-  bison,
-  cups ? null,
-  harfbuzz,
-  libGL,
-  perl,
-  python3,
-  gstreamer,
-  gst-plugins-base,
-  gtk3,
-  dconf,
-  llvmPackages_19,
-  darwin,
-
-  # options
-  developerBuild ? false,
-  decryptSslTraffic ? false,
-  debug ? false,
-  config,
+{ makeScopeWithSplicing'
+, generateSplicesForMkScope
+, lib
+, stdenv
+, fetchurl
+, fetchgit
+, fetchpatch
+, fetchFromGitHub
+, makeSetupHook
+, makeWrapper
+, bison
+, cups ? null
+, harfbuzz
+, libGL
+, perl
+, python3
+, gstreamer
+, gst-plugins-base
+, gtk3
+, dconf
+, llvmPackages_19
+, darwin
+, # options
+  developerBuild ? false
+, decryptSslTraffic ? false
+, debug ? false
+, config
+,
 }:
 
 let
@@ -379,39 +378,45 @@ let
             ++ lib.optional (stdenv.hostPlatform.isDarwin) qtmacextras
           );
 
-      qmake = callPackage (
-        { qtbase }:
-        makeSetupHook {
-          name = "qmake-hook";
-          ${
-            if stdenv.buildPlatform == stdenv.hostPlatform then
-              "propagatedBuildInputs"
-            else
-              "depsTargetTargetPropagated"
-          } =
-            [ qtbase.dev ];
-          substitutions = {
-            inherit debug;
-            fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
-          };
-        } ../hooks/qmake-hook.sh
-      ) { };
+      qmake = callPackage
+        (
+          { qtbase }:
+          makeSetupHook
+            {
+              name = "qmake-hook";
+              ${
+              if stdenv.buildPlatform == stdenv.hostPlatform then
+                "propagatedBuildInputs"
+              else
+                "depsTargetTargetPropagated"
+              } =
+                [ qtbase.dev ];
+              substitutions = {
+                inherit debug;
+                fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
+              };
+            } ../hooks/qmake-hook.sh
+        )
+        { };
 
-      wrapQtAppsHook = callPackage (
-        {
-          makeBinaryWrapper,
-          qtbase,
-          qtwayland,
-        }:
-        makeSetupHook {
-          name = "wrap-qt5-apps-hook";
-          propagatedBuildInputs = [
-            qtbase.dev
-            makeBinaryWrapper
-          ]
-          ++ lib.optional stdenv.hostPlatform.isLinux qtwayland.dev;
-        } ../hooks/wrap-qt-apps-hook.sh
-      ) { };
+      wrapQtAppsHook = callPackage
+        (
+          { makeBinaryWrapper
+          , qtbase
+          , qtwayland
+          ,
+          }:
+          makeSetupHook
+            {
+              name = "wrap-qt5-apps-hook";
+              propagatedBuildInputs = [
+                qtbase.dev
+                makeBinaryWrapper
+              ]
+              ++ lib.optional stdenv.hostPlatform.isLinux qtwayland.dev;
+            } ../hooks/wrap-qt-apps-hook.sh
+        )
+        { };
     };
 
   baseScope = makeScopeWithSplicing' {

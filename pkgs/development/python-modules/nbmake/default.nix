@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  ipykernel,
-  nbclient,
-  nbformat,
-  pygments,
-
-  # tests
-  pytestCheckHook,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  ipykernel
+, nbclient
+, nbformat
+, pygments
+, # tests
+  pytestCheckHook
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

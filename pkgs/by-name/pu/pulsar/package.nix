@@ -1,37 +1,37 @@
-{
-  lib,
-  stdenv,
-  git,
-  git-lfs,
-  fetchurl,
-  wrapGAppsHook3,
-  alsa-lib,
-  at-spi2-atk,
-  cairo,
-  coreutils,
-  cups,
-  dbus,
-  expat,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  libgbm,
-  nss,
-  nspr,
-  xorg,
-  libdrm,
-  libsecret,
-  libxkbcommon,
-  pango,
-  systemd,
-  hunspellDicts,
-  useHunspell ? true,
-  languages ? [ "en_US" ],
-  withNemoAction ? true,
-  makeDesktopItem,
-  copyDesktopItems,
-  asar,
-  python3,
+{ lib
+, stdenv
+, git
+, git-lfs
+, fetchurl
+, wrapGAppsHook3
+, alsa-lib
+, at-spi2-atk
+, cairo
+, coreutils
+, cups
+, dbus
+, expat
+, gdk-pixbuf
+, glib
+, gtk3
+, libgbm
+, nss
+, nspr
+, xorg
+, libdrm
+, libsecret
+, libxkbcommon
+, pango
+, systemd
+, hunspellDicts
+, useHunspell ? true
+, languages ? [ "en_US" ]
+, withNemoAction ? true
+, makeDesktopItem
+, copyDesktopItems
+, asar
+, python3
+,
 }:
 
 let
@@ -44,8 +44,7 @@ let
       x86_64-linux.hash = "sha256-Iq+mYI8vldBroU/1ztVhWfbDUh9GiFjrSIzW0Qtgnvc=";
       aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
       aarch64-linux.hash = "sha256-hQBMxonnUSEoa0ATISuCoWh0scv/GPf6Tq55l+I1/n0=";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   newLibpath = lib.makeLibraryPath [
     alsa-lib
@@ -80,9 +79,11 @@ let
   # Hunspell
   hunspellDirs = builtins.map (lang: "${hunspellDicts.${lang}}/share/hunspell") languages;
   hunspellTargetDirs = "$out/opt/Pulsar/resources/app.asar.unpacked/node_modules/spellchecker/vendor/hunspell_dictionaries";
-  hunspellCopyCommands = lib.concatMapStringsSep "\n" (
-    lang: "cp -r ${lang}/* ${hunspellTargetDirs};"
-  ) hunspellDirs;
+  hunspellCopyCommands = lib.concatMapStringsSep "\n"
+    (
+      lang: "cp -r ${lang}/* ${hunspellTargetDirs};"
+    )
+    hunspellDirs;
 in
 stdenv.mkDerivation {
   inherit pname version;

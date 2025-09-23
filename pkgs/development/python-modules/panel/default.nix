@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  bleach,
-  bokeh,
-  param,
-  pyviz-comms,
-  markdown,
-  pyct,
-  requests,
-  setuptools,
-  tqdm,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, bleach
+, bokeh
+, param
+, pyviz-comms
+, markdown
+, pyct
+, requests
+, setuptools
+, tqdm
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

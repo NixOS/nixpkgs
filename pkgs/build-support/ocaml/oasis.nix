@@ -1,23 +1,22 @@
-{
-  lib,
-  stdenv,
-  ocaml_oasis,
-  ocaml,
-  findlib,
-  ocamlbuild,
+{ lib
+, stdenv
+, ocaml_oasis
+, ocaml
+, findlib
+, ocamlbuild
+,
 }:
 
-{
-  pname,
-  version,
-  nativeBuildInputs ? [ ],
-  meta ? {
+{ pname
+, version
+, nativeBuildInputs ? [ ]
+, meta ? {
     platforms = ocaml.meta.platforms or [ ];
-  },
-  minimumOCamlVersion ? null,
-  createFindlibDestdir ? true,
-  dontStrip ? true,
-  ...
+  }
+, minimumOCamlVersion ? null
+, createFindlibDestdir ? true
+, dontStrip ? true
+, ...
 }@args:
 
 if args ? minimumOCamlVersion && lib.versionOlder ocaml.version args.minimumOCamlVersion then
@@ -26,7 +25,7 @@ else
 
   stdenv.mkDerivation (
     args
-    // {
+      // {
       name = "ocaml${ocaml.version}-${pname}-${version}";
 
       nativeBuildInputs = [

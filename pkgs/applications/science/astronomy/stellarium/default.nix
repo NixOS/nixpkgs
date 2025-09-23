@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  perl,
-  wrapGAppsHook3,
-  wrapQtAppsHook,
-  qtbase,
-  qtcharts,
-  qtpositioning,
-  qtmultimedia,
-  qtserialport,
-  qtwayland,
-  qtwebengine,
-  calcmysky,
-  qxlsx,
-  indilib,
-  libnova,
-  qttools,
-  exiv2,
-  nlopt,
-  testers,
-  xvfb-run,
-  gitUpdater,
-  md4c,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, perl
+, wrapGAppsHook3
+, wrapQtAppsHook
+, qtbase
+, qtcharts
+, qtpositioning
+, qtmultimedia
+, qtserialport
+, qtwayland
+, qtwebengine
+, calcmysky
+, qxlsx
+, indilib
+, libnova
+, qttools
+, exiv2
+, nlopt
+, testers
+, xvfb-run
+, gitUpdater
+, md4c
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

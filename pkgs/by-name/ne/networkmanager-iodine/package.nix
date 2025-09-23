@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  replaceVars,
-  autoreconfHook,
-  iodine,
-  intltool,
-  pkg-config,
-  networkmanager,
-  libsecret,
-  gtk3,
-  withGnome ? true,
-  unstableGitUpdater,
-  libnma,
-  glib,
+{ lib
+, stdenv
+, fetchFromGitLab
+, replaceVars
+, autoreconfHook
+, iodine
+, intltool
+, pkg-config
+, networkmanager
+, libsecret
+, gtk3
+, withGnome ? true
+, unstableGitUpdater
+, libnma
+, glib
+,
 }:
 
 stdenv.mkDerivation {

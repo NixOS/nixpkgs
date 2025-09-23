@@ -1,22 +1,20 @@
-{
-  lib,
-
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchPypi,
-  pythonOlder,
-
-  nix-update-script,
-  pcpp,
-  platformdirs,
-  poetry-core,
-  pydantic,
-  pydantic-settings,
-  pyparsing,
-  pyyaml,
-  tree-sitter,
-  tree-sitter-grammars,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchPypi
+, pythonOlder
+, nix-update-script
+, pcpp
+, platformdirs
+, poetry-core
+, pydantic
+, pydantic-settings
+, pyparsing
+, pyyaml
+, tree-sitter
+, tree-sitter-grammars
+, versionCheckHook
+,
 }:
 let
   version = "0.22.1";

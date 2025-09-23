@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  kdePackages,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, kdePackages
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation rec {

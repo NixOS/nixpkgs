@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -15,10 +14,12 @@ let
   # https://github.com/systemd/systemd/pull/38187 is resolved. Also ensure
   # utils.systemdUtils.lib.definitions is capable of setting a custom file
   # suffix.
-  sysupdateTransfers = lib.mapAttrs' (name: value: {
-    name = "sysupdate.d/${name}.transfer";
-    value.source = format.generate "${name}.transfer" value;
-  }) cfg.transfers;
+  sysupdateTransfers = lib.mapAttrs'
+    (name: value: {
+      name = "sysupdate.d/${name}.transfer";
+      value.source = format.generate "${name}.transfer" value;
+    })
+    cfg.transfers;
 in
 {
   options.systemd.sysupdate = {

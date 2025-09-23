@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  writableTmpDirAsHomeHook,
-  setuptools,
-  lxml,
-  pymupdf,
-  pysrt,
-  translatehtml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, writableTmpDirAsHomeHook
+, setuptools
+, lxml
+, pymupdf
+, pysrt
+, translatehtml
+,
 }:
 
 buildPythonPackage rec {

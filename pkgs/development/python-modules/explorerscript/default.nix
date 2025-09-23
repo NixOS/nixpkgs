@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  igraph,
-  pygments,
-  scikit-build-core,
-  pybind11,
-  ninja,
-  cmake,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, igraph
+, pygments
+, scikit-build-core
+, pybind11
+, ninja
+, cmake
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

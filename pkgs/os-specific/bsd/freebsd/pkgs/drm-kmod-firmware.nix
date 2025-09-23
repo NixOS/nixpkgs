@@ -1,11 +1,11 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  buildFreebsd,
-  sys,
-  withAmd ? true,
-  withIntel ? true,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, buildFreebsd
+, sys
+, withAmd ? true
+, withIntel ? true
+,
 }:
 mkDerivation rec {
   pname =

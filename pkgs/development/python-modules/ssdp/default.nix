@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  flit-core,
-  flit-scm,
-  pygments,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, flit-core
+, flit-scm
+, pygments
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

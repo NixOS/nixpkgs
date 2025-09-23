@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  qttools,
-  cpp-utilities,
-  qtbase,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, qttools
+, cpp-utilities
+, qtbase
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

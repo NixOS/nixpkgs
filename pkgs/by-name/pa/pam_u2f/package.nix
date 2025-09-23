@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libfido2,
-  pam,
-  openssl,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libfido2
+, pam
+, openssl
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

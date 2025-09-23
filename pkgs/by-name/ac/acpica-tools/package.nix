@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  flex,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, flex
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

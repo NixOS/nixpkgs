@@ -1,40 +1,40 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  rustPlatform,
-  meson,
-  ninja,
-  python3,
-  pkg-config,
-  rustc,
-  cargo,
-  cargo-c,
-  lld,
-  nasm,
-  cmake,
-  gstreamer,
-  gst-plugins-base,
-  gst-plugins-bad,
-  gtk4,
-  cairo,
-  csound,
-  dav1d,
-  libsodium,
-  libwebp,
-  openssl,
-  pango,
-  gst-plugins-good,
-  nix-update-script,
-  # specifies a limited subset of plugins to build (the default `null` means all plugins supported on the stdenv platform)
-  plugins ? null,
-  withGtkPlugins ? true,
-  # Checks meson.is_cross_build(), so even canExecute isn't enough.
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null,
-  hotdoc,
-  mopidy,
-  apple-sdk_gstreamer,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, rustPlatform
+, meson
+, ninja
+, python3
+, pkg-config
+, rustc
+, cargo
+, cargo-c
+, lld
+, nasm
+, cmake
+, gstreamer
+, gst-plugins-base
+, gst-plugins-bad
+, gtk4
+, cairo
+, csound
+, dav1d
+, libsodium
+, libwebp
+, openssl
+, pango
+, gst-plugins-good
+, nix-update-script
+, # specifies a limited subset of plugins to build (the default `null` means all plugins supported on the stdenv platform)
+  plugins ? null
+, withGtkPlugins ? true
+, # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null
+, hotdoc
+, mopidy
+, apple-sdk_gstreamer
+,
 }:
 
 let
@@ -105,27 +105,29 @@ let
     if plugins != null then
       lib.unique (lib.sort lib.lessThan plugins)
     else
-      lib.subtractLists (
-        [
-          "csound" # tests have weird failure on x86, does not currently work on arm or darwin
-          "livesync" # tests have suspicious intermittent failure, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/357
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-          "raptorq" # pointer alignment failure in tests on aarch64
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          "reqwest" # tests hang on darwin
-          "threadshare" # tests cannot bind to localhost on darwin
-          "webp" # not supported on darwin (upstream crate issue)
-        ]
-        ++ lib.optionals (!gst-plugins-base.glEnabled || !withGtkPlugins) [
-          # these require gstreamer-gl
-          "gtk4"
-          "livesync"
-          "fallbackswitch"
-          "togglerecord"
-        ]
-      ) (lib.attrNames validPlugins);
+      lib.subtractLists
+        (
+          [
+            "csound" # tests have weird failure on x86, does not currently work on arm or darwin
+            "livesync" # tests have suspicious intermittent failure, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/357
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+            "raptorq" # pointer alignment failure in tests on aarch64
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            "reqwest" # tests hang on darwin
+            "threadshare" # tests cannot bind to localhost on darwin
+            "webp" # not supported on darwin (upstream crate issue)
+          ]
+          ++ lib.optionals (!gst-plugins-base.glEnabled || !withGtkPlugins) [
+            # these require gstreamer-gl
+            "gtk4"
+            "livesync"
+            "fallbackswitch"
+            "togglerecord"
+          ]
+        )
+        (lib.attrNames validPlugins);
 
   invalidPlugins = lib.subtractLists (lib.attrNames validPlugins) selectedPlugins;
 in

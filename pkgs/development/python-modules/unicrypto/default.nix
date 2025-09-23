@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pycryptodome,
-  pycryptodomex,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pycryptodome
+, pycryptodomex
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

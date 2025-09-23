@@ -1,7 +1,7 @@
-{
-  stdenv,
-  lib,
-  python3,
+{ stdenv
+, lib
+, python3
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pulseaudio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pulseaudio
+,
 }:
 
 buildPythonPackage rec {

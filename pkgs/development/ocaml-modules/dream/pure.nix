@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  lwt_ppx,
-  base64,
-  hmap,
-  lwt,
-  ptime,
-  uri,
+{ lib
+, buildDunePackage
+, fetchurl
+, lwt_ppx
+, base64
+, hmap
+, lwt
+, ptime
+, uri
+,
 }:
 
 buildDunePackage rec {

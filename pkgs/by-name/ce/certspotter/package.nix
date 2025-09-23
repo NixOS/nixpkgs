@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  lowdown-unsandboxed,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, lowdown-unsandboxed
+,
 }:
 
 buildGoModule rec {

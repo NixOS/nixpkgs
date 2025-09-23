@@ -1,18 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  deprecation,
-  prompt-toolkit,
-  pyusb,
-  pyvcd,
-  pyxdg,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  deprecation
+, prompt-toolkit
+, pyusb
+, pyvcd
+, pyxdg
+,
 }:
 
 buildPythonPackage rec {

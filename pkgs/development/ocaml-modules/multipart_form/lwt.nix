@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  multipart_form,
-  lwt,
+{ buildDunePackage
+, multipart_form
+, lwt
+,
 }:
 
 buildDunePackage {

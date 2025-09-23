@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  isPyPy,
-  # dependencies
-  eth-hash,
-  eth-typing,
-  cytoolz,
-  toolz,
-  pydantic,
-  # nativeCheckInputs
-  hypothesis,
-  mypy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, isPyPy
+, # dependencies
+  eth-hash
+, eth-typing
+, cytoolz
+, toolz
+, pydantic
+, # nativeCheckInputs
+  hypothesis
+, mypy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

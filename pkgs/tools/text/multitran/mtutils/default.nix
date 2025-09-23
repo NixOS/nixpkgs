@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libmtsupport,
-  libfacet,
-  libbtree,
-  libmtquery,
-  help2man,
+{ lib
+, stdenv
+, fetchurl
+, libmtsupport
+, libfacet
+, libbtree
+, libmtquery
+, help2man
+,
 }:
 
 stdenv.mkDerivation rec {

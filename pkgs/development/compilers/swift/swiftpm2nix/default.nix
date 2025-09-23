@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  makeWrapper,
-  jq,
-  nurl,
+{ lib
+, stdenv
+, callPackage
+, makeWrapper
+, jq
+, nurl
+,
 }:
 
 stdenv.mkDerivation {

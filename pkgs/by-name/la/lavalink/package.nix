@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  jdk21,
-  jdk ? jdk21,
-  fetchurl,
-  nixosTests,
+{ lib
+, stdenv
+, makeWrapper
+, jdk21
+, jdk ? jdk21
+, fetchurl
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

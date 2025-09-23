@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  attrs,
-  beautifulsoup4,
-  mkdocs,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, attrs
+, beautifulsoup4
+, mkdocs
+, requests
+,
 }:
 
 buildPythonPackage rec {

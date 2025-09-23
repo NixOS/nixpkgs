@@ -1,10 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  gerbil-support,
-  gerbilPackages,
-  gerbil,
-  ...
+{ lib
+, fetchFromGitHub
+, gerbil-support
+, gerbilPackages
+, gerbil
+, ...
 }:
 
 rec {

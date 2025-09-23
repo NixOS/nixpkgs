@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  cffi,
-  fetchFromGitHub,
-  pytestCheckHook,
-  six,
-  ssdeep,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, cffi
+, fetchFromGitHub
+, pytestCheckHook
+, six
+, ssdeep
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

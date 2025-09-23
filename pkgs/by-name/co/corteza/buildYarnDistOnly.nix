@@ -1,19 +1,18 @@
-{
-  pname,
-  version,
-  src,
-  sourceDir,
-  yarnLock ? null,
-  hash,
-  extraFiles ? "",
-  meta,
-
-  fetchYarnDeps,
-  lib,
-  nodejs_22,
-  stdenvNoCC,
-  yarnBuildHook,
-  yarnConfigHook,
+{ pname
+, version
+, src
+, sourceDir
+, yarnLock ? null
+, hash
+, extraFiles ? ""
+, meta
+, fetchYarnDeps
+, lib
+, nodejs_22
+, stdenvNoCC
+, yarnBuildHook
+, yarnConfigHook
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  version ? "0.0.6",
-  ptime,
-  re,
-  uutf,
-  alcotest,
-  crowbar,
-  fmt,
-  rresult,
+{ lib
+, fetchurl
+, buildDunePackage
+, version ? "0.0.6"
+, ptime
+, re
+, uutf
+, alcotest
+, crowbar
+, fmt
+, rresult
+,
 }:
 
 buildDunePackage {

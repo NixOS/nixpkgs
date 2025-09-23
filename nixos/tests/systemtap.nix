@@ -1,7 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+,
 }@args:
 
 with pkgs.lib;
@@ -17,30 +17,32 @@ let
   ## TODO shared infra with ../kernel-generic.nix
   testsForLinuxPackages =
     linuxPackages:
-    (import ./make-test-python.nix (
-      { pkgs, ... }:
-      {
-        name = "kernel-${linuxPackages.kernel.version}";
-        meta = with pkgs.lib.maintainers; {
-          maintainers = [ bendlas ];
-        };
-
-        nodes.machine =
-          { ... }:
-          {
-            boot.kernelPackages = linuxPackages;
-            programs.systemtap.enable = true;
+    (import ./make-test-python.nix
+      (
+        { pkgs, ... }:
+        {
+          name = "kernel-${linuxPackages.kernel.version}";
+          meta = with pkgs.lib.maintainers; {
+            maintainers = [ bendlas ];
           };
 
-        testScript = ''
-          with subtest("Capture stap ouput"):
-              output = machine.succeed("stap ${stapScript} 2>&1")
+          nodes.machine =
+            { ... }:
+            {
+              boot.kernelPackages = linuxPackages;
+              programs.systemtap.enable = true;
+            };
 
-          with subtest("Ensure that expected output from stap script is there"):
-              assert "kernel function probe & println work\n" == output, "kernel function probe & println work\n != " + output
-        '';
-      }
-    ) args);
+          testScript = ''
+            with subtest("Capture stap ouput"):
+                output = machine.succeed("stap ${stapScript} 2>&1")
+
+            with subtest("Ensure that expected output from stap script is there"):
+                assert "kernel function probe & println work\n" == output, "kernel function probe & println work\n != " + output
+          '';
+        }
+      )
+      args);
 
   ## TODO shared infra with ../kernel-generic.nix
   kernels = {
@@ -49,7 +51,7 @@ let
 
 in
 mapAttrs (_: lP: testsForLinuxPackages lP) kernels
-// {
+  // {
   passthru = {
     inherit testsForLinuxPackages;
 

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  pytestCheckHook,
-  beautifulsoup4,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, pytestCheckHook
+, beautifulsoup4
+,
 }:
 
 buildPythonPackage rec {

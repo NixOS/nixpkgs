@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mock,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  ujson,
-  versioneer,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mock
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, ujson
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

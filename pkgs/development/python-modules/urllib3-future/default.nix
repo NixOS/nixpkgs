@@ -1,25 +1,25 @@
-{
-  aiofile,
-  brotli,
-  brotlicffi,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  h11,
-  isPyPy,
-  jh2,
-  lib,
-  pytest-asyncio,
-  pytest-timeout,
-  pytestCheckHook,
-  python-socks,
-  pythonOlder,
-  qh3,
-  stdenv,
-  tornado,
-  trustme,
-  wsproto,
-  zstandard,
+{ aiofile
+, brotli
+, brotlicffi
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, h11
+, isPyPy
+, jh2
+, lib
+, pytest-asyncio
+, pytest-timeout
+, pytestCheckHook
+, python-socks
+, pythonOlder
+, qh3
+, stdenv
+, tornado
+, trustme
+, wsproto
+, zstandard
+,
 }:
 
 buildPythonPackage rec {

@@ -1,25 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  elasticsearch,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, elasticsearch
+,
 }:
 
 let
   esVersion = elasticsearch.version;
 
   esPlugin =
-    a@{
-      pluginName,
-      installPhase ? ''
+    a@{ pluginName
+    , installPhase ? ''
         mkdir -p $out/config
         mkdir -p $out/plugins
         ln -s ${elasticsearch}/lib ${elasticsearch}/modules $out
         ES_HOME=$out ${elasticsearch}/bin/elasticsearch-plugin install --batch -v file://$src
         rm $out/lib $out/modules
-      '',
-      ...
+      ''
+    , ...
     }:
     stdenv.mkDerivation (
       a
@@ -218,10 +217,11 @@ in
           throw "unsupported version ${esVersion} for plugin ${pluginName}";
       src =
         if esVersion == "7.17.27" then
-          fetchurl {
-            url = "https://maven.search-guard.com/search-guard-suite-release/com/floragunn/search-guard-suite-plugin/${version}/search-guard-suite-plugin-${version}.zip";
-            hash = "sha256-M1yJ8OD+mDq2uEiK6pvsMxUQMrg6o5A4xEPX8nDt1Rs=";
-          }
+          fetchurl
+            {
+              url = "https://maven.search-guard.com/search-guard-suite-release/com/floragunn/search-guard-suite-plugin/${version}/search-guard-suite-plugin-${version}.zip";
+              hash = "sha256-M1yJ8OD+mDq2uEiK6pvsMxUQMrg6o5A4xEPX8nDt1Rs=";
+            }
         else
           throw "unsupported version ${version} for plugin ${pluginName}";
       meta = {

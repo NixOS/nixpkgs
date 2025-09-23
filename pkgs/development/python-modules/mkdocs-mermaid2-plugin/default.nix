@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  beautifulsoup4,
-  jsbeautifier,
-  mkdocs,
-  mkdocs-material,
-  pymdown-extensions,
-  pyyaml,
-  requests,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, beautifulsoup4
+, jsbeautifier
+, mkdocs
+, mkdocs-material
+, pymdown-extensions
+, pyyaml
+, requests
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

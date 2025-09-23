@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  callPackage,
-  swift,
-  swiftpm,
-  swiftpm2nix,
-  Foundation,
+{ lib
+, stdenv
+, fetchpatch
+, callPackage
+, swift
+, swiftpm
+, swiftpm2nix
+, Foundation
+,
 }:
 let
   sources = callPackage ../sources.nix { };

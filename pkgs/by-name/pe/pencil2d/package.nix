@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qt5,
-  git,
-  ffmpeg_6,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qt5
+, git
+, ffmpeg_6
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

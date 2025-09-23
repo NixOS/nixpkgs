@@ -1,7 +1,6 @@
-{
-  testers,
-  fetchNextcloudApp,
-  ...
+{ testers
+, fetchNextcloudApp
+, ...
 }:
 
 {

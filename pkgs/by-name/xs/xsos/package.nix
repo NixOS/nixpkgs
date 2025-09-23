@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  installShellFiles,
-  dmidecode,
-  ethtool,
-  pciutils,
-  multipath-tools,
-  iproute2,
-  sysvinit,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, installShellFiles
+, dmidecode
+, ethtool
+, pciutils
+, multipath-tools
+, iproute2
+, sysvinit
+,
 }:
 let
   binPath = [

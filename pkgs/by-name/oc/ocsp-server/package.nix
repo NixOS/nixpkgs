@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  perl,
-  libmysqlclient,
-  sqlite,
-  mariadb,
-  postgresql,
-  mbedtls,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, perl
+, libmysqlclient
+, sqlite
+, mariadb
+, postgresql
+, mbedtls
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

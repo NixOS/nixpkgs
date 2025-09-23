@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cairo,
-  pango,
-  libpng,
-  expat,
-  fontconfig,
-  gtk2,
-  xorg,
-  autoPatchelfHook,
+{ stdenv
+, lib
+, fetchurl
+, cairo
+, pango
+, libpng
+, expat
+, fontconfig
+, gtk2
+, xorg
+, autoPatchelfHook
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hterm";
@@ -20,10 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
       versionWithoutDots = builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version;
     in
     if stdenv.targetPlatform.is64bit then
-      fetchurl {
-        url = "https://www.der-hammer.info/terminal/hterm${versionWithoutDots}-linux-64.tgz";
-        hash = "sha256-DY+X7FaU1UBbNf/Kgy4TzBZiocQ4/TpJW3KLW1iu0M0=";
-      }
+      fetchurl
+        {
+          url = "https://www.der-hammer.info/terminal/hterm${versionWithoutDots}-linux-64.tgz";
+          hash = "sha256-DY+X7FaU1UBbNf/Kgy4TzBZiocQ4/TpJW3KLW1iu0M0=";
+        }
     else
       fetchurl {
         url = "https://www.der-hammer.info/terminal/hterm${versionWithoutDots}-linux-32.tgz";

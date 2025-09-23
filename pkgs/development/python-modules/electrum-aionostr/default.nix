@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  aiohttp,
-  aiohttp-socks,
-  aiorpcx,
-  cryptography,
-  electrum-ecc,
-  click,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, aiohttp
+, aiohttp-socks
+, aiorpcx
+, cryptography
+, electrum-ecc
+, click
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

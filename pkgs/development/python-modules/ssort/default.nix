@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  pathspec,
-  pytestCheckHook,
-  pyyaml,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, pathspec
+, pytestCheckHook
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

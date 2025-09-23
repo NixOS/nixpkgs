@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  fetchFromGitHub,
-  dpkg,
-  glib,
-  gnutar,
-  gtk3-x11,
-  luajit,
-  sdcv,
-  SDL2,
-  openssl,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, fetchFromGitHub
+, dpkg
+, glib
+, gnutar
+, gtk3-x11
+, luajit
+, sdcv
+, SDL2
+, openssl
+, writeScript
+,
 }:
 let
   luajit_lua52 = luajit.override { enable52Compat = true; };
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     let
       selectSystem =
         attrs:
-        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+          attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
       arch = selectSystem {
         aarch64-linux = "arm64";
         armv7l-linux = "armhf";

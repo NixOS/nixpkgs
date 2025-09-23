@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  replaceVars,
-  opentype-sanitizer,
-  setuptools-scm,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, replaceVars
+, opentype-sanitizer
+, setuptools-scm
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

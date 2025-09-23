@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  imagemagick,
-  libicns,
-  kdePackages,
-  grim,
-  makeBinaryWrapper,
-  kdsingleapplication,
-  nix-update-script,
-  enableWlrSupport ? !stdenv.hostPlatform.isDarwin,
-  enableMonochromeIcon ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, imagemagick
+, libicns
+, kdePackages
+, grim
+, makeBinaryWrapper
+, kdsingleapplication
+, nix-update-script
+, enableWlrSupport ? !stdenv.hostPlatform.isDarwin
+, enableMonochromeIcon ? false
+,
 }:
 
 assert stdenv.hostPlatform.isDarwin -> (!enableWlrSupport);

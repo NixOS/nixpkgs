@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  bzip2,
-  gd,
-  libjpeg,
-  libpng,
+{ stdenv
+, lib
+, fetchFromGitHub
+, bzip2
+, gd
+, libjpeg
+, libpng
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ocaml,
-  findlib,
-  ocamlbuild,
-  topkg,
-  uutf,
-  cmdliner,
-  cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1",
-  version ? if lib.versionAtLeast ocaml.version "4.14" then "17.0.0" else "15.0.0",
+{ lib
+, stdenv
+, fetchurl
+, ocaml
+, findlib
+, ocamlbuild
+, topkg
+, uutf
+, cmdliner
+, cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1"
+, version ? if lib.versionAtLeast ocaml.version "4.14" then "17.0.0" else "15.0.0"
+,
 }:
 
 let
@@ -19,8 +19,7 @@ let
     {
       "15.0.0" = "sha256-B/prPAwfqS8ZPS3fyDDIzXWRbKofwOCyCfwvh9veuug=";
       "17.0.0" = "sha256-5XYZU8Ros2aiCy04xzLiwhN+v5kM9Y3twdVPQ8IY1GA=";
-    }
-    ."${version}";
+    }."${version}";
 in
 
 if lib.versionOlder ocaml.version "4.03" then

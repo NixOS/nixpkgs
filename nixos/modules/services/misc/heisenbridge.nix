@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.heisenbridge;
@@ -198,9 +197,10 @@ in
         CapabilityBoundingSet = [
           "CAP_CHOWN"
         ]
-        ++ lib.optional (
-          cfg.port < 1024 || (cfg.identd.enable && cfg.identd.port < 1024)
-        ) "CAP_NET_BIND_SERVICE";
+        ++ lib.optional
+          (
+            cfg.port < 1024 || (cfg.identd.enable && cfg.identd.port < 1024)
+          ) "CAP_NET_BIND_SERVICE";
         AmbientCapabilities = CapabilityBoundingSet;
         NoNewPrivileges = true;
         LockPersonality = true;

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ppp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ppp
+,
 }:
 let
 in

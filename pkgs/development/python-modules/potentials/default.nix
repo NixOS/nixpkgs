@@ -1,27 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  bibtexparser,
-  cdcs,
-  datamodeldict,
-  habanero,
-  ipywidgets,
-  lxml,
-  matplotlib,
-  numpy,
-  pandas,
-  requests,
-  scipy,
-  unidecode,
-  xmltodict,
-  yabadaba,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  bibtexparser
+, cdcs
+, datamodeldict
+, habanero
+, ipywidgets
+, lxml
+, matplotlib
+, numpy
+, pandas
+, requests
+, scipy
+, unidecode
+, xmltodict
+, yabadaba
+,
 }:
 
 buildPythonPackage rec {

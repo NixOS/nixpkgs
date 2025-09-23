@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  click,
-  httpretty,
-  pytestCheckHook,
-  requests,
-  requests-kerberos,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, click
+, httpretty
+, pytestCheckHook
+, requests
+, requests-kerberos
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

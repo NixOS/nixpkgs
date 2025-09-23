@@ -1,15 +1,15 @@
-{
-  lib,
-  perlPackages,
-  fetchFromGitHub,
-  makeWrapper,
-  stdenv,
-  shortenPerlShebang,
-  perl,
-  atomicparsley,
-  ffmpeg,
-  testers,
-  get_iplayer,
+{ lib
+, perlPackages
+, fetchFromGitHub
+, makeWrapper
+, stdenv
+, shortenPerlShebang
+, perl
+, atomicparsley
+, ffmpeg
+, testers
+, get_iplayer
+,
 }:
 
 perlPackages.buildPerlPackage rec {

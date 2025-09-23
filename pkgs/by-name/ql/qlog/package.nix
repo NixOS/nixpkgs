@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  stdenv,
-  lib,
-  cups,
-  hamlib,
-  pkg-config,
-  qt6,
-  qt6Packages,
+{ fetchFromGitHub
+, stdenv
+, lib
+, cups
+, hamlib
+, pkg-config
+, qt6
+, qt6Packages
+,
 }:
 
 stdenv.mkDerivation rec {

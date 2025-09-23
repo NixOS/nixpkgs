@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  check,
-  dbus,
-  xvfb-run,
-  glib,
-  gtk3,
-  gettext,
-  libiconv,
-  json-glib,
-  libintl,
-  zathura,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, check
+, dbus
+, xvfb-run
+, glib
+, gtk3
+, gettext
+, libiconv
+, json-glib
+, libintl
+, zathura
+,
 }:
 
 stdenv.mkDerivation rec {

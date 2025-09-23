@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  mock,
-  pbr,
-  pyyaml,
-  setuptools,
-  six,
-  multi-key-dict,
-  testscenarios,
-  requests,
-  requests-mock,
-  stestr,
-  multiprocess,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, mock
+, pbr
+, pyyaml
+, setuptools
+, six
+, multi-key-dict
+, testscenarios
+, requests
+, requests-mock
+, stestr
+, multiprocess
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  autoreconfHook,
-  docbook_xml_dtd_44,
-  docbook-xsl-ns,
-  fetchFromGitHub,
-  lib,
-  libX11,
-  libXpm,
-  libxslt,
-  stdenv,
+{ autoreconfHook
+, docbook_xml_dtd_44
+, docbook-xsl-ns
+, fetchFromGitHub
+, lib
+, libX11
+, libXpm
+, libxslt
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

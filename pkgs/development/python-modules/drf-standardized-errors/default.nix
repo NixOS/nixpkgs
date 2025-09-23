@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  flit-core,
-  django,
-  djangorestframework,
-  drf-spectacular,
-  inflection,
-  pytestCheckHook,
-  pytest-django,
-  django-filter,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, flit-core
+, django
+, djangorestframework
+, drf-spectacular
+, inflection
+, pytestCheckHook
+, pytest-django
+, django-filter
+,
 }:
 
 buildPythonPackage rec {

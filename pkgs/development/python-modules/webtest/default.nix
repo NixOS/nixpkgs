@@ -1,17 +1,17 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pastedeploy,
-  pyquery,
-  pytestCheckHook,
-  pythonOlder,
-  six,
-  waitress,
-  webob,
-  wsgiproxy2,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pastedeploy
+, pyquery
+, pytestCheckHook
+, pythonOlder
+, six
+, waitress
+, webob
+, wsgiproxy2
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  runCommand,
-  nixosTests,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, runCommand
+, nixosTests
+,
 }:
 
 let

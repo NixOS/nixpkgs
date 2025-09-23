@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cherrypy,
-  fetchFromGitHub,
-  flit-core,
-  filelock,
-  mock,
-  msgpack,
-  pytestCheckHook,
-  redis,
-  requests,
+{ lib
+, buildPythonPackage
+, cherrypy
+, fetchFromGitHub
+, flit-core
+, filelock
+, mock
+, msgpack
+, pytestCheckHook
+, redis
+, requests
+,
 }:
 
 buildPythonPackage rec {

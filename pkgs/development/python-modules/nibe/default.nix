@@ -1,20 +1,20 @@
-{
-  lib,
-  aresponses,
-  async-modbus,
-  async-timeout,
-  asyncclick,
-  buildPythonPackage,
-  construct,
-  exceptiongroup,
-  fetchFromGitHub,
-  pandas,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-slugify,
-  pythonOlder,
-  setuptools,
-  tenacity,
+{ lib
+, aresponses
+, async-modbus
+, async-timeout
+, asyncclick
+, buildPythonPackage
+, construct
+, exceptiongroup
+, fetchFromGitHub
+, pandas
+, pytest-asyncio
+, pytestCheckHook
+, python-slugify
+, pythonOlder
+, setuptools
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

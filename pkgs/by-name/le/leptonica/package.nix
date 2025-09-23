@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  autoreconfHook,
-  pkg-config,
-  which,
-  gnuplot,
-  giflib,
-  libjpeg,
-  libpng,
-  libtiff,
-  libwebp,
-  openjpeg,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, autoreconfHook
+, pkg-config
+, which
+, gnuplot
+, giflib
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, openjpeg
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

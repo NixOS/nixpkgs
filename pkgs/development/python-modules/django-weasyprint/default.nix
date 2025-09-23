@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  django,
-  weasyprint,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, django
+, weasyprint
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

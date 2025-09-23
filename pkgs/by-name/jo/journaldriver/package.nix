@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchgit,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  systemd,
+{ lib
+, fetchgit
+, rustPlatform
+, pkg-config
+, openssl
+, systemd
+,
 }:
 
 rustPlatform.buildRustPackage {

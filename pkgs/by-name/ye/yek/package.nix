@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, nix-update-script
+, versionCheckHook
+,
 }:
 let
   version = "0.21.0";

@@ -1,17 +1,17 @@
-{
-  pkgsi686Linux,
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  makeWrapper,
-  ghostscript,
-  file,
-  gnused,
-  gnugrep,
-  coreutils,
-  which,
-  perl,
+{ pkgsi686Linux
+, lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, ghostscript
+, file
+, gnused
+, gnugrep
+, coreutils
+, which
+, perl
+,
 }:
 let
   version = "1.0.2-0";

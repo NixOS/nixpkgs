@@ -1,36 +1,36 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchFromGitHub,
-  nix-update-script,
-  replaceVars,
-  plymouth,
-  pam,
-  pkg-config,
-  autoreconfHook,
-  gettext,
-  libtool,
-  libxcb,
-  glib,
-  libXdmcp,
-  itstool,
-  intltool,
-  libxklavier,
-  libgcrypt,
-  audit,
-  busybox,
-  polkit,
-  accountsservice,
-  gtk-doc,
-  gobject-introspection,
-  vala,
-  fetchpatch,
-  withQt5 ? false,
-  qtbase,
-  yelp-tools,
-  yelp-xsl,
-  nixosTests,
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, nix-update-script
+, replaceVars
+, plymouth
+, pam
+, pkg-config
+, autoreconfHook
+, gettext
+, libtool
+, libxcb
+, glib
+, libXdmcp
+, itstool
+, intltool
+, libxklavier
+, libgcrypt
+, audit
+, busybox
+, polkit
+, accountsservice
+, gtk-doc
+, gobject-introspection
+, vala
+, fetchpatch
+, withQt5 ? false
+, qtbase
+, yelp-tools
+, yelp-xsl
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

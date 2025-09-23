@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  grub2_xen,
-  grub2_xen_pvh,
-  grubPlatform ? "xen_pvh",
+{ lib
+, stdenv
+, grub2_xen
+, grub2_xen_pvh
+, grubPlatform ? "xen_pvh"
+,
 }:
 
 assert lib.assertOneOf "grubPlatform" grubPlatform [

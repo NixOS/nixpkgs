@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib) types;
@@ -256,87 +255,90 @@ in
       anubis = { };
     };
 
-    systemd.services = lib.mapAttrs' (
-      name: instance:
-      lib.nameValuePair "${instanceName name}" {
-        description = "Anubis (${if name == "" then "default" else name} instance)";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-online.target" ];
-        wants = [ "network-online.target" ];
+    systemd.services = lib.mapAttrs'
+      (
+        name: instance:
+          lib.nameValuePair "${instanceName name}" {
+            description = "Anubis (${if name == "" then "default" else name} instance)";
+            wantedBy = [ "multi-user.target" ];
+            after = [ "network-online.target" ];
+            wants = [ "network-online.target" ];
 
-        environment = lib.mapAttrs (lib.const (lib.generators.mkValueStringDefault { })) (
-          lib.filterAttrs (_: v: v != null) (
-            instance.settings
-            // {
-              POLICY_FNAME =
-                if instance.settings.POLICY_FNAME != null then
-                  instance.settings.POLICY_FNAME
-                else if instance.botPolicy != null then
-                  jsonFormat.generate "${instanceName name}-botPolicy.json" instance.botPolicy
+            environment = lib.mapAttrs (lib.const (lib.generators.mkValueStringDefault { })) (
+              lib.filterAttrs (_: v: v != null) (
+                instance.settings
+                // {
+                  POLICY_FNAME =
+                    if instance.settings.POLICY_FNAME != null then
+                      instance.settings.POLICY_FNAME
+                    else if instance.botPolicy != null then
+                      jsonFormat.generate "${instanceName name}-botPolicy.json" instance.botPolicy
+                    else
+                      null;
+                }
+              )
+            );
+
+            serviceConfig = {
+              User = instance.user;
+              Group = instance.group;
+              DynamicUser = true;
+
+              ExecStart = lib.concatStringsSep " " (
+                (lib.singleton (lib.getExe cfg.package)) ++ instance.extraFlags
+              );
+              RuntimeDirectory =
+                if
+                  lib.any (lib.hasPrefix "/run/anubis")
+                    (
+                      with instance.settings;
+                      [
+                        BIND
+                        METRICS_BIND
+                      ]
+                    )
+                then
+                  "anubis"
                 else
                   null;
-            }
-          )
-        );
 
-        serviceConfig = {
-          User = instance.user;
-          Group = instance.group;
-          DynamicUser = true;
-
-          ExecStart = lib.concatStringsSep " " (
-            (lib.singleton (lib.getExe cfg.package)) ++ instance.extraFlags
-          );
-          RuntimeDirectory =
-            if
-              lib.any (lib.hasPrefix "/run/anubis") (
-                with instance.settings;
-                [
-                  BIND
-                  METRICS_BIND
-                ]
-              )
-            then
-              "anubis"
-            else
-              null;
-
-          # hardening
-          NoNewPrivileges = true;
-          CapabilityBoundingSet = null;
-          SystemCallFilter = [
-            "@system-service"
-            "~@privileged"
-          ];
-          SystemCallArchitectures = "native";
-          MemoryDenyWriteExecute = true;
-          AmbientCapabilities = "";
-          PrivateMounts = true;
-          PrivateUsers = true;
-          PrivateTmp = true;
-          PrivateDevices = true;
-          ProtectHome = true;
-          ProtectClock = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          ProtectSystem = "strict";
-          ProtectControlGroups = "strict";
-          LockPersonality = true;
-          RemoveIPC = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          RestrictNamespaces = true;
-          RestrictAddressFamilies = [
-            "AF_UNIX"
-            "AF_INET"
-            "AF_INET6"
-          ];
-        };
-      }
-    ) enabledInstances;
+              # hardening
+              NoNewPrivileges = true;
+              CapabilityBoundingSet = null;
+              SystemCallFilter = [
+                "@system-service"
+                "~@privileged"
+              ];
+              SystemCallArchitectures = "native";
+              MemoryDenyWriteExecute = true;
+              AmbientCapabilities = "";
+              PrivateMounts = true;
+              PrivateUsers = true;
+              PrivateTmp = true;
+              PrivateDevices = true;
+              ProtectHome = true;
+              ProtectClock = true;
+              ProtectHostname = true;
+              ProtectKernelLogs = true;
+              ProtectKernelModules = true;
+              ProtectKernelTunables = true;
+              ProtectProc = "invisible";
+              ProtectSystem = "strict";
+              ProtectControlGroups = "strict";
+              LockPersonality = true;
+              RemoveIPC = true;
+              RestrictRealtime = true;
+              RestrictSUIDSGID = true;
+              RestrictNamespaces = true;
+              RestrictAddressFamilies = [
+                "AF_UNIX"
+                "AF_INET"
+                "AF_INET6"
+              ];
+            };
+          }
+      )
+      enabledInstances;
   };
 
   meta.maintainers = with lib.maintainers; [

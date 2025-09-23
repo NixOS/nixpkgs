@@ -1,8 +1,8 @@
-{
-  stdenv,
-  makeWrapper,
-  runCommand,
-  why3,
+{ stdenv
+, makeWrapper
+, runCommand
+, why3
+,
 }:
 provers:
 let

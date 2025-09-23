@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  python3,
-  makeWrapper,
+{ lib
+, fetchFromGitHub
+, stdenv
+, python3
+, makeWrapper
+,
 }:
 let
   pythonEnv = python3.buildEnv.override {

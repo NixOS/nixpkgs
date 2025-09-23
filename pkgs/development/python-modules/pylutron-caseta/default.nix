@@ -1,18 +1,18 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  click,
-  cryptography,
-  fetchFromGitHub,
-  hatchling,
-  orjson,
-  pytest-asyncio,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
-  xdg,
-  zeroconf,
+{ lib
+, async-timeout
+, buildPythonPackage
+, click
+, cryptography
+, fetchFromGitHub
+, hatchling
+, orjson
+, pytest-asyncio
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, xdg
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

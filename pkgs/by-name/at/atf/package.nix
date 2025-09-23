@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  kyua,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, kyua
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

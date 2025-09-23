@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  nodejs,
-  pnpm_9,
-  fetchFromGitHub,
-  callPackage,
-  nix-update-script,
+{ lib
+, stdenv
+, nodejs
+, pnpm_9
+, fetchFromGitHub
+, callPackage
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "autoprefixer";

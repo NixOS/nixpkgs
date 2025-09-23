@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  imagemagick,
-  libXpm,
-  libXmu,
-  libXi,
-  libXp,
-  Xaw3d,
-  libXaw,
-  libXft,
-  fig2dev,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, imagemagick
+, libXpm
+, libXmu
+, libXi
+, libXp
+, Xaw3d
+, libXaw
+, libXft
+, fig2dev
+,
 }:
 
 stdenv.mkDerivation rec {

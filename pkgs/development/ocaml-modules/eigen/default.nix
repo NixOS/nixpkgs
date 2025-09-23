@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildDunePackage,
-  fetchFromGitHub,
-  ctypes,
-  dune-configurator,
+{ lib
+, stdenv
+, buildDunePackage
+, fetchFromGitHub
+, ctypes
+, dune-configurator
+,
 }:
 
 buildDunePackage rec {

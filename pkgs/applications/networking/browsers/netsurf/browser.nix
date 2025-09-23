@@ -1,48 +1,46 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  SDL,
-  check,
-  curl,
-  expat,
-  gperf,
-  gtk2,
-  gtk3,
-  libXcursor,
-  libXrandr,
-  libidn,
-  libjpeg,
-  libjxl,
-  libpng,
-  libwebp,
-  libxml2,
-  makeWrapper,
-  openssl,
-  perlPackages,
-  pkg-config,
-  wrapGAppsHook3,
-  xxd,
-
-  # Netsurf-specific dependencies
-  buildsystem,
-  libcss,
-  libdom,
-  libhubbub,
-  libnsbmp,
-  libnsfb,
-  libnsgif,
-  libnslog,
-  libnspsl,
-  libnsutils,
-  libparserutils,
-  libsvgtiny,
-  libutf8proc,
-  libwapcaplet,
-  nsgenbind,
-
-  # Configuration
-  uilib,
+{ lib
+, stdenv
+, fetchurl
+, SDL
+, check
+, curl
+, expat
+, gperf
+, gtk2
+, gtk3
+, libXcursor
+, libXrandr
+, libidn
+, libjpeg
+, libjxl
+, libpng
+, libwebp
+, libxml2
+, makeWrapper
+, openssl
+, perlPackages
+, pkg-config
+, wrapGAppsHook3
+, xxd
+, # Netsurf-specific dependencies
+  buildsystem
+, libcss
+, libdom
+, libhubbub
+, libnsbmp
+, libnsfb
+, libnsgif
+, libnslog
+, libnspsl
+, libnsutils
+, libparserutils
+, libsvgtiny
+, libutf8proc
+, libwapcaplet
+, nsgenbind
+, # Configuration
+  uilib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

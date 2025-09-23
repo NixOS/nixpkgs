@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  boost,
-  cairo,
-  libGL,
-  lv2,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, boost
+, cairo
+, libGL
+, lv2
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation {

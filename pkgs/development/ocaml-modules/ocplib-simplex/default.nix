@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  buildDunePackage,
-  logs,
-  zarith,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, buildDunePackage
+, logs
+, zarith
+,
 }:
 
 buildDunePackage rec {

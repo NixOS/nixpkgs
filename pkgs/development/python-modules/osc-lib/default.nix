@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  cliff,
-  fetchFromGitHub,
-  keystoneauth1,
-  openstacksdk,
-  oslo-i18n,
-  oslo-utils,
-  pbr,
-  requests,
-  requests-mock,
-  setuptools,
-  stdenv,
-  stestr,
-  stevedore,
+{ lib
+, buildPythonPackage
+, cliff
+, fetchFromGitHub
+, keystoneauth1
+, openstacksdk
+, oslo-i18n
+, oslo-utils
+, pbr
+, requests
+, requests-mock
+, setuptools
+, stdenv
+, stestr
+, stevedore
+,
 }:
 
 buildPythonPackage rec {

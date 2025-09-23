@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fusepy,
-  indexed-gzip,
-  indexed-zstd,
-  libarchive-c,
-  python-xz,
-  pythonOlder,
-  rapidgzip,
-  rarfile,
-  ratarmountcore,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fusepy
+, indexed-gzip
+, indexed-zstd
+, libarchive-c
+, python-xz
+, pythonOlder
+, rapidgzip
+, rarfile
+, ratarmountcore
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cython,
-  boost,
-  bluez,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cython
+, boost
+, bluez
+,
 }:
 
 buildPythonPackage rec {

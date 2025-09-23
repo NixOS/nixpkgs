@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  cmake,
-  imagemagick,
-  kdePackages,
-  pkg-config,
+{ stdenv
+, lib
+, fetchgit
+, cmake
+, imagemagick
+, kdePackages
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,9 +1,9 @@
-{
-  mkKdeDerivation,
-  qtsvg,
-  qtwayland,
-  wayland,
-  pkg-config,
+{ mkKdeDerivation
+, qtsvg
+, qtwayland
+, wayland
+, pkg-config
+,
 }:
 mkKdeDerivation {
   pname = "libplasma";

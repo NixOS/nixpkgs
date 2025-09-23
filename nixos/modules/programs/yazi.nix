@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -28,20 +27,22 @@ in
         submodule {
           options = (
             lib.listToAttrs (
-              map (
-                name:
-                lib.nameValuePair name (
-                  lib.mkOption {
-                    inherit (settingsFormat) type;
-                    default = { };
-                    description = ''
-                      Configuration included in `${name}.toml`.
+              map
+                (
+                  name:
+                  lib.nameValuePair name (
+                    lib.mkOption {
+                      inherit (settingsFormat) type;
+                      default = { };
+                      description = ''
+                        Configuration included in `${name}.toml`.
 
-                      See <https://yazi-rs.github.io/docs/configuration/${name}/> for documentation.
-                    '';
-                  }
+                        See <https://yazi-rs.github.io/docs/configuration/${name}/> for documentation.
+                      '';
+                    }
+                  )
                 )
-              ) files
+                files
             )
           );
         };

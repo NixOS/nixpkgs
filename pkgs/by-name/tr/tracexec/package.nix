@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  cargo-about,
-  nix-update-script,
-  pkg-config,
-  libbpf,
-  elfutils,
-  libseccomp,
-  zlib,
-  clang,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cargo-about
+, nix-update-script
+, pkg-config
+, libbpf
+, elfutils
+, libseccomp
+, zlib
+, clang
+,
 }:
 
 rustPlatform.buildRustPackage rec {

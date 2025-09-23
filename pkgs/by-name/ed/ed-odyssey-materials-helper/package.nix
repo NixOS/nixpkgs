@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gradle,
-  jdk24,
-  wrapGAppsHook3,
-  libXxf86vm,
-  libXtst,
-  libglvnd,
-  glib,
-  alsa-lib,
-  ffmpeg,
-  lsb-release,
-  copyDesktopItems,
-  makeDesktopItem,
-  writeScript,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gradle
+, jdk24
+, wrapGAppsHook3
+, libXxf86vm
+, libXtst
+, libglvnd
+, glib
+, alsa-lib
+, ffmpeg
+, lsb-release
+, copyDesktopItems
+, makeDesktopItem
+, writeScript
+,
 }:
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";

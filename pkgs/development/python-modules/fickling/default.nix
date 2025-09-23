@@ -1,14 +1,14 @@
-{
-  lib,
-  astunparse,
-  buildPythonPackage,
-  distutils,
-  fetchFromGitHub,
-  flit-core,
-  pytestCheckHook,
-  pythonOlder,
-  torch,
-  torchvision,
+{ lib
+, astunparse
+, buildPythonPackage
+, distutils
+, fetchFromGitHub
+, flit-core
+, pytestCheckHook
+, pythonOlder
+, torch
+, torchvision
+,
 }:
 
 buildPythonPackage rec {

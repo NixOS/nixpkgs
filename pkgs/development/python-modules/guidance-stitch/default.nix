@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  hatch-jupyter-builder,
-  hatch-nodejs-version,
-  hatchling,
-  jupyterlab,
-
-  # dependencies
-  ipywidgets,
-
-  # tests
-  nbval,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  hatch-jupyter-builder
+, hatch-nodejs-version
+, hatchling
+, jupyterlab
+, # dependencies
+  ipywidgets
+, # tests
+  nbval
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

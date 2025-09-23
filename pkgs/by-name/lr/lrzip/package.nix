@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  zlib,
-  lzo,
-  bzip2,
-  lz4,
-  nasm,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, zlib
+, lzo
+, bzip2
+, lz4
+, nasm
+, perl
+,
 }:
 
 let

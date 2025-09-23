@@ -1,11 +1,11 @@
-{
-  lib,
-  mdbook,
-  nodePackages,
-  python3,
-  util-linux,
-  rustPlatform,
-  fetchFromGitHub,
+{ lib
+, mdbook
+, nodePackages
+, python3
+, util-linux
+, rustPlatform
+, fetchFromGitHub
+,
 }:
 
 rustPlatform.buildRustPackage {

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  pythonOlder,
-  setuptools,
-  docopt,
-  dj-database-url,
-  python,
-  django-filer,
-  six,
-  django-app-helper,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, pythonOlder
+, setuptools
+, docopt
+, dj-database-url
+, python
+, django-filer
+, six
+, django-app-helper
+,
 }:
 
 buildPythonPackage rec {

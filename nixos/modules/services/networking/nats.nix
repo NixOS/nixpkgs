@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -15,17 +14,19 @@ let
 
   validateConfig =
     file:
-    pkgs.callPackage (
-      { runCommand, nats-server }:
-      runCommand "validate-nats-conf"
-        {
-          nativeBuildInputs = [ nats-server ];
-        }
-        ''
-          nats-server --config "${file}" -t
-          ln -s "${file}" "$out"
-        ''
-    ) { };
+    pkgs.callPackage
+      (
+        { runCommand, nats-server }:
+        runCommand "validate-nats-conf"
+          {
+            nativeBuildInputs = [ nats-server ];
+          }
+          ''
+            nats-server --config "${file}" -t
+            ln -s "${file}" "$out"
+          ''
+      )
+      { };
 
   unvalidatedConfigFile = format.generate "nats.conf" cfg.settings;
 

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  bison,
-  cyrus_sasl,
-  db,
-  fetchurl,
-  flex,
-  gdbm,
-  liblockfile,
-  ncurses,
-  openssl,
-  readline,
-  runtimeShell,
-  versionCheckHook,
+{ lib
+, stdenv
+, autoreconfHook
+, bison
+, cyrus_sasl
+, db
+, fetchurl
+, flex
+, gdbm
+, liblockfile
+, ncurses
+, openssl
+, readline
+, runtimeShell
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

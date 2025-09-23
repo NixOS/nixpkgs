@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qt6,
-  cfitsio,
-  gsl,
-  wcslib,
-  withTester ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qt6
+, cfitsio
+, gsl
+, wcslib
+, withTester ? false
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellarsolver";

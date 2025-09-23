@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  binutils,
-  asciidoctor,
-  cmake,
-  perl,
-  fmt,
-  hiredis,
-  xxHash,
-  zstd,
-  bashInteractive,
-  doctest,
-  xcodebuild,
-  makeWrapper,
-  ctestCheckHook,
-  writableTmpDirAsHomeHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, binutils
+, asciidoctor
+, cmake
+, perl
+, fmt
+, hiredis
+, xxHash
+, zstd
+, bashInteractive
+, doctest
+, xcodebuild
+, makeWrapper
+, ctestCheckHook
+, writableTmpDirAsHomeHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -126,9 +126,10 @@ stdenv.mkDerivation (finalAttrs: {
               if unwrappedCC.isClang or false then
                 ""
               else
-                (lib.optionalString (
-                  unwrappedCC ? targetConfig && unwrappedCC.targetConfig != null && unwrappedCC.targetConfig != ""
-                ) "${unwrappedCC.targetConfig}-");
+                (lib.optionalString
+                  (
+                    unwrappedCC ? targetConfig && unwrappedCC.targetConfig != null && unwrappedCC.targetConfig != ""
+                  ) "${unwrappedCC.targetConfig}-");
           in
           ''
             mkdir -p $out/bin

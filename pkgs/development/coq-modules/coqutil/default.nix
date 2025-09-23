@@ -1,9 +1,9 @@
-{
-  coq,
-  findutils,
-  lib,
-  mkCoqDerivation,
-  version ? null,
+{ coq
+, findutils
+, lib
+, mkCoqDerivation
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -22,7 +22,8 @@ mkCoqDerivation {
         case = range "8.17" "8.20";
         out = "0.0.5";
       }
-    ] null;
+    ]
+      null;
 
   releaseRev = v: "v${v}";
   release."0.0.6".sha256 = "sha256-c/ddrj0ahuaj9Zu7YBqK7Q0ur+LK7Fgaa//nxQpQcm4=";

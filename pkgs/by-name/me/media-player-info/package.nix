@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  pkg-config,
-  python3,
-  udev,
-  udevCheckHook,
-  systemd,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, python3
+, udev
+, udevCheckHook
+, systemd
+,
 }:
 
 stdenv.mkDerivation rec {

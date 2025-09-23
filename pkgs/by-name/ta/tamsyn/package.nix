@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fontforge,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, fontforge
+, xorg
+,
 }:
 
 let

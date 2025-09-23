@@ -1,21 +1,20 @@
-{
-  stdenv,
-  akku,
-  chez,
-  guile,
-  chibi,
-  makeWrapper,
-  lib,
-  writeShellScriptBin,
+{ stdenv
+, akku
+, chez
+, guile
+, chibi
+, makeWrapper
+, lib
+, writeShellScriptBin
+,
 }:
-{
-  pname,
-  version,
-  src,
-  buildInputs ? [ ],
-  r7rs ? false,
-  nativeBuildInputs ? [ ],
-  ...
+{ pname
+, version
+, src
+, buildInputs ? [ ]
+, r7rs ? false
+, nativeBuildInputs ? [ ]
+, ...
 }@args:
 let
   parse-akku_ = writeShellScriptBin "parse-akku" "${guile}/bin/guile --no-auto-compile ${./parse-akku.scm} \"$@\"";
@@ -119,7 +118,7 @@ stdenv.mkDerivation (
     // args.meta or { };
     setupHook = ./setup-hook.sh;
   }
-  // builtins.removeAttrs args [
+    // builtins.removeAttrs args [
     "name"
     "buildInputs"
     "meta"

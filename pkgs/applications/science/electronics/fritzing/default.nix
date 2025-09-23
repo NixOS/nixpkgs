@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  wrapQtAppsHook,
-  qmake,
-  pkg-config,
-  qtbase,
-  qtsvg,
-  qttools,
-  qtserialport,
-  qtwayland,
-  qt5compat,
-  boost,
-  libngspice,
-  libgit2,
-  quazip,
-  clipper,
+{ stdenv
+, lib
+, fetchFromGitHub
+, wrapQtAppsHook
+, qmake
+, pkg-config
+, qtbase
+, qtsvg
+, qttools
+, qtserialport
+, qtwayland
+, qt5compat
+, boost
+, libngspice
+, libgit2
+, quazip
+, clipper
+,
 }:
 
 let

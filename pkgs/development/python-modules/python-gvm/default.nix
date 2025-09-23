@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  defusedxml,
-  fetchFromGitHub,
-  lxml,
-  paramiko,
-  poetry-core,
-  pontos,
-  pytestCheckHook,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, stdenv
+, buildPythonPackage
+, defusedxml
+, fetchFromGitHub
+, lxml
+, paramiko
+, poetry-core
+, pontos
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

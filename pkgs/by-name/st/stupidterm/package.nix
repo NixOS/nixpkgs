@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  vte,
-  gtk3,
-  pcre2,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, vte
+, gtk3
+, pcre2
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation {

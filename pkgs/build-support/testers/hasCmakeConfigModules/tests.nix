@@ -1,12 +1,12 @@
 # cd nixpkgs
 # nix-build -A tests.testers.hasCmakeConfigModules
-{
-  lib,
-  testers,
-  boost,
-  mpi,
-  eigen,
-  runCommand,
+{ lib
+, testers
+, boost
+, mpi
+, eigen
+, runCommand
+,
 }:
 
 lib.recurseIntoAttrs {

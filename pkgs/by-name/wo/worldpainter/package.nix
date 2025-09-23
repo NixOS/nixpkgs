@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jre,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  gnused,
+{ lib
+, stdenv
+, fetchurl
+, jre
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, gnused
+,
 }:
 stdenv.mkDerivation rec {
   pname = "worldpainter";

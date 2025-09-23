@@ -25,28 +25,30 @@ in
     };
   }
   // lib.listToAttrs (
-    builtins.map (
-      client:
-      lib.nameValuePair client {
-        imports = [
-          ./common/user-account.nix
-        ];
+    builtins.map
+      (
+        client:
+        lib.nameValuePair client {
+          imports = [
+            ./common/user-account.nix
+          ];
 
-        systemd.services.ii = {
-          requires = [ "network.target" ];
-          wantedBy = [ "default.target" ];
+          systemd.services.ii = {
+            requires = [ "network.target" ];
+            wantedBy = [ "default.target" ];
 
-          serviceConfig = {
-            Type = "simple";
-            ExecPreStartPre = "mkdir -p ${iiDir}";
-            ExecStart = ''
-              ${lib.getBin pkgs.ii}/bin/ii -n ${client} -s ${server} -i ${iiDir}
-            '';
-            User = "alice";
+            serviceConfig = {
+              Type = "simple";
+              ExecPreStartPre = "mkdir -p ${iiDir}";
+              ExecStart = ''
+                ${lib.getBin pkgs.ii}/bin/ii -n ${client} -s ${server} -i ${iiDir}
+              '';
+              User = "alice";
+            };
           };
-        };
-      }
-    ) clients
+        }
+      )
+      clients
   );
 
   testScript =
@@ -83,11 +85,13 @@ in
           ''
           # check that all greetings arrived on all clients
         ]
-        ++ builtins.map (other: ''
-          ${client}.succeed(
-              "grep '${msg other}$' ${iiDir}/${server}/#${channel}/out"
-          )
-        '') clients;
+        ++ builtins.map
+          (other: ''
+            ${client}.succeed(
+                "grep '${msg other}$' ${iiDir}/${server}/#${channel}/out"
+            )
+          '')
+          clients;
 
       # foldl', but requires a non-empty list instead of a start value
       reduce = f: list: builtins.foldl' f (builtins.head list) (builtins.tail list);

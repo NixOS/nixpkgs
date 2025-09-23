@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  httpx,
-  httpx-sse,
-  llm,
-  llm-fragments-reader,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-httpx,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, httpx
+, httpx-sse
+, llm
+, llm-fragments-reader
+, pytestCheckHook
+, pytest-asyncio
+, pytest-httpx
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

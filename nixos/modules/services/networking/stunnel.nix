@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -32,10 +31,12 @@ let
       lib.generators.mkValueStringDefault { } v;
   generateConfig =
     c:
-    lib.generators.toINI {
-      mkSectionName = lib.id;
-      mkKeyValue = k: v: "${k} = ${mkValueString v}";
-    } (removeNulls c);
+    lib.generators.toINI
+      {
+        mkSectionName = lib.id;
+        mkKeyValue = k: v: "${k} = ${mkValueString v}";
+      }
+      (removeNulls c);
 
 in
 

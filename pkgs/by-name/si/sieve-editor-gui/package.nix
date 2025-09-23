@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  electron,
-  makeDesktopItem,
-  copyDesktopItems,
-  runCommand,
-  zip,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, electron
+, makeDesktopItem
+, copyDesktopItems
+, runCommand
+, zip
+,
 }:
 
 let

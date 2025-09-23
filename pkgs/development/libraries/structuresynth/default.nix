@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  qtbase,
-  wrapQtAppsHook,
-  libGL,
-  libGLU,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, qtbase
+, wrapQtAppsHook
+, libGL
+, libGLU
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

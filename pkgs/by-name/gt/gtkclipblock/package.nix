@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  cmake,
-  ninja,
-  pkg-config,
-  gtk2,
-  gtk3,
-  gtk4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, cmake
+, ninja
+, pkg-config
+, gtk2
+, gtk3
+, gtk4
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchFromGitHub,
-  json_c,
-  libpcap,
-  libtool,
-  pkg-config,
-  which,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, json_c
+, libpcap
+, libtool
+, pkg-config
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

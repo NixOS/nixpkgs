@@ -1,44 +1,43 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  cmake,
-  ninja,
-  pkg-config,
-  m4,
-  perl,
-  bash,
-  xdg-utils,
-  zip,
-  unzip,
-  gzip,
-  bzip2,
-  gnutar,
-  p7zip,
-  xz,
-  withTTYX ? true,
-  libX11,
-  withGUI ? true,
-  wxGTK32,
-  withUCD ? true,
-  libuchardet,
-
-  # Plugins
-  withColorer ? true,
-  spdlog,
-  libxml2,
-  withMultiArc ? true,
-  libarchive,
-  pcre,
-  withNetRocks ? true,
-  openssl,
-  libssh,
-  samba,
-  libnfs,
-  neon,
-  withPython ? false,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, cmake
+, ninja
+, pkg-config
+, m4
+, perl
+, bash
+, xdg-utils
+, zip
+, unzip
+, gzip
+, bzip2
+, gnutar
+, p7zip
+, xz
+, withTTYX ? true
+, libX11
+, withGUI ? true
+, wxGTK32
+, withUCD ? true
+, libuchardet
+, # Plugins
+  withColorer ? true
+, spdlog
+, libxml2
+, withMultiArc ? true
+, libarchive
+, pcre
+, withNetRocks ? true
+, openssl
+, libssh
+, samba
+, libnfs
+, neon
+, withPython ? false
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation rec {

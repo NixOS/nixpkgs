@@ -1,19 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-
-  cmake,
-  installShellFiles,
-  pkg-config,
-
-  bzip2,
-  libusb1,
-  openssl,
-  tinyxml-2,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, installShellFiles
+, pkg-config
+, bzip2
+, libusb1
+, openssl
+, tinyxml-2
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

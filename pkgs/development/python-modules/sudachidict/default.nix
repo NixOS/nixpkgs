@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  sudachidict,
-  setuptools,
-  sudachipy,
+{ buildPythonPackage
+, fetchFromGitHub
+, sudachidict
+, setuptools
+, sudachipy
+,
 }:
 
 buildPythonPackage rec {

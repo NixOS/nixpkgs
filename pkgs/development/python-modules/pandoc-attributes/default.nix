@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  pandocfilters,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, pandocfilters
+,
 }:
 
 buildPythonPackage rec {

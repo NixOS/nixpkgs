@@ -1,10 +1,10 @@
-{
-  buildPgrxExtension,
-  cargo-pgrx_0_12_6,
-  postgresql,
-  fetchFromGitHub,
-  lib,
-  postgresqlTestExtension,
+{ buildPgrxExtension
+, cargo-pgrx_0_12_6
+, postgresql
+, fetchFromGitHub
+, lib
+, postgresqlTestExtension
+,
 }:
 
 buildPgrxExtension (finalAttrs: {

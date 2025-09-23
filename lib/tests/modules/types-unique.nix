@@ -5,9 +5,11 @@ in
 {
   options.examples = mkOption {
     type = types.lazyAttrsOf (
-      types.unique {
-        message = "We require a single definition, because seeing the whole value at once helps us maintain critical invariants of our system.";
-      } (types.attrsOf types.str)
+      types.unique
+        {
+          message = "We require a single definition, because seeing the whole value at once helps us maintain critical invariants of our system.";
+        }
+        (types.attrsOf types.str)
     );
   };
   imports = [

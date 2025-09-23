@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  callPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytest,
-  setuptools-scm,
-  backports-asyncio-runner,
+{ lib
+, buildPythonPackage
+, callPackage
+, fetchFromGitHub
+, pythonOlder
+, pytest
+, setuptools-scm
+, backports-asyncio-runner
+,
 }:
 
 buildPythonPackage rec {

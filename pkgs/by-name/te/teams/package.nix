@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  xar,
-  cpio,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, xar
+, cpio
+, makeWrapper
+,
 }:
 
 let

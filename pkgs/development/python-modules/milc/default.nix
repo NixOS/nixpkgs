@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  argcomplete,
-  colorama,
-  halo,
-  platformdirs,
-  spinners,
-  types-colorama,
-  typing-extensions,
-  setuptools,
-  pytestCheckHook,
-  semver,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, argcomplete
+, colorama
+, halo
+, platformdirs
+, spinners
+, types-colorama
+, typing-extensions
+, setuptools
+, pytestCheckHook
+, semver
+,
 }:
 
 buildPythonPackage rec {

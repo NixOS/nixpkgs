@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  kdePackages,
-  xorg,
-  cmake,
-  ninja,
-  libcprime,
-  libcsys,
+{ lib
+, stdenv
+, fetchFromGitLab
+, kdePackages
+, xorg
+, cmake
+, ninja
+, libcprime
+, libcsys
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

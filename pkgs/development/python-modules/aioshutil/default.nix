@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

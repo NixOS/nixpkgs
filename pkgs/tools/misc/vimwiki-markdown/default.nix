@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchPypi,
-  markdown,
-  pygments,
+{ lib
+, buildPythonApplication
+, fetchPypi
+, markdown
+, pygments
+,
 }:
 
 buildPythonApplication rec {

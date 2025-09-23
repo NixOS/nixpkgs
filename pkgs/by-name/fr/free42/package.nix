@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  alsa-lib,
-  copyDesktopItems,
-  wrapGAppsHook3,
-  makeDesktopItem,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitea
+, alsa-lib
+, copyDesktopItems
+, wrapGAppsHook3
+, makeDesktopItem
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

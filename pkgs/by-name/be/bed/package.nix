@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  which,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, which
+, versionCheckHook
+, nix-update-script
+,
 }:
 buildGoModule rec {
   pname = "bed";

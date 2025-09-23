@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libsForQt5,
-  libjack2,
-  lilv,
-  lv2,
-  meson,
-  ninja,
-  pkg-config,
-  portaudio,
-  serd,
-  sord,
-  sratom,
-  suil,
-  wrapGAppsHook3,
-  useJack ? true,
-  useQt ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libsForQt5
+, libjack2
+, lilv
+, lv2
+, meson
+, ninja
+, pkg-config
+, portaudio
+, serd
+, sord
+, sratom
+, suil
+, wrapGAppsHook3
+, useJack ? true
+, useQt ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

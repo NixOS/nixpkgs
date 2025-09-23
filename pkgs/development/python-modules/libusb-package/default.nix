@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  tomli,
-  importlib-resources,
-  libusb1,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, tomli
+, importlib-resources
+, libusb1
+,
 }:
 
 buildPythonPackage rec {

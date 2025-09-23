@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  brotli,
-  inflate64,
-  multivolumefile,
-  psutil,
-  pybcj,
-  pycryptodomex,
-  pyppmd,
-  pyzstd,
-  texttable,
-  py-cpuinfo,
-  pytest-benchmark,
-  pytest-httpserver,
-  pytest-remotedata,
-  pytest-timeout,
-  pytestCheckHook,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, brotli
+, inflate64
+, multivolumefile
+, psutil
+, pybcj
+, pycryptodomex
+, pyppmd
+, pyzstd
+, texttable
+, py-cpuinfo
+, pytest-benchmark
+, pytest-httpserver
+, pytest-remotedata
+, pytest-timeout
+, pytestCheckHook
+, requests
+,
 }:
 
 buildPythonPackage rec {

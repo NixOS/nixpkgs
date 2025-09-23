@@ -1,13 +1,12 @@
-{
-  lib,
-  julia,
-  python3,
-  runCommand,
-
-  augmentedRegistry,
-  packageNames,
-  packageOverrides,
-  packageImplications,
+{ lib
+, julia
+, python3
+, runCommand
+, augmentedRegistry
+, packageNames
+, packageOverrides
+, packageImplications
+,
 }:
 
 let
@@ -64,12 +63,12 @@ let
 in
 
 runCommand "julia-package-closure.yml"
-  {
-    buildInputs = [
-      julia
-      (python3.withPackages (ps: with ps; [ pyyaml ]))
-    ];
-  }
+{
+  buildInputs = [
+    julia
+    (python3.withPackages (ps: with ps; [ pyyaml ]))
+  ];
+}
   ''
     mkdir home
     export HOME=$(pwd)/home

@@ -1,24 +1,24 @@
-{
-  autoPatchelfHook,
-  cairo,
-  dbus,
-  requireFile,
-  fontconfig,
-  freetype,
-  glib,
-  gtk3,
-  lib,
-  libdrm,
-  libGL,
-  libkrb5,
-  libsecret,
-  libunwind,
-  libxkbcommon,
-  makeWrapper,
-  openssl,
-  stdenv,
-  xorg,
-  zlib,
+{ autoPatchelfHook
+, cairo
+, dbus
+, requireFile
+, fontconfig
+, freetype
+, glib
+, gtk3
+, lib
+, libdrm
+, libGL
+, libkrb5
+, libsecret
+, libunwind
+, libxkbcommon
+, makeWrapper
+, openssl
+, stdenv
+, xorg
+, zlib
+,
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "ida-free";

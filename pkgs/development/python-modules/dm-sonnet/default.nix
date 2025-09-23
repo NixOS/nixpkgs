@@ -1,26 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  dm-tree,
-  etils,
-  numpy,
-  tabulate,
-  wrapt,
-
-  # tests
-  click,
-  docutils,
-  keras,
-  pytestCheckHook,
-  tensorflow,
-  tensorflow-datasets,
-  tf-keras,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  dm-tree
+, etils
+, numpy
+, tabulate
+, wrapt
+, # tests
+  click
+, docutils
+, keras
+, pytestCheckHook
+, tensorflow
+, tensorflow-datasets
+, tf-keras
+,
 }:
 
 buildPythonPackage rec {

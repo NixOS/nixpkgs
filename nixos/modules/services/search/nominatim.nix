@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 
 let
@@ -243,9 +242,10 @@ in
               --workers 4 \
               --worker-class uvicorn.workers.UvicornWorker "nominatim_api.server.falcon.server:run_wsgi()"
           '';
-          Environment = lib.optional (
-            cfg.database.passwordFile != null
-          ) "PGPASSFILE=${cfg.database.passwordFile}";
+          Environment = lib.optional
+            (
+              cfg.database.passwordFile != null
+            ) "PGPASSFILE=${cfg.database.passwordFile}";
           ExecReload = "${pkgs.procps}/bin/kill -s HUP $MAINPID";
           KillMode = "mixed";
           TimeoutStopSec = 5;

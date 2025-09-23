@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  brainflow,
-  nptyping,
-  numpy,
-  python,
-  setuptools,
+{ buildPythonPackage
+, brainflow
+, nptyping
+, numpy
+, python
+, setuptools
+,
 }:
 
 buildPythonPackage {

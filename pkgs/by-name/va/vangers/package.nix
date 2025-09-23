@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  callPackage,
-  stdenv,
-  cmake,
-  SDL2,
-  SDL2_net,
-  libogg,
-  libvorbis,
-  ffmpeg,
-  zlib,
+{ lib
+, fetchFromGitHub
+, callPackage
+, stdenv
+, cmake
+, SDL2
+, SDL2_net
+, libogg
+, libvorbis
+, ffmpeg
+, zlib
+,
 }:
 
 let

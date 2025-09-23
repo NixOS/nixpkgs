@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # tests
-  pytestCheckHook,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # tests
+  pytestCheckHook
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

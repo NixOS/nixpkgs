@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  babel,
-  ipykernel,
-  ipython-genutils,
-  jupyter-packaging,
-  jupyter-server,
-  nest-asyncio,
-  notebook-shim,
-  pytest-jupyter,
-  pytest-tornasync,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, babel
+, ipykernel
+, ipython-genutils
+, jupyter-packaging
+, jupyter-server
+, nest-asyncio
+, notebook-shim
+, pytest-jupyter
+, pytest-tornasync
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

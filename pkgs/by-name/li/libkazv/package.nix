@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  boost,
-  catch2_3,
-  cmake,
-  cryptopp,
-  immer,
-  lager,
-  libcpr,
-  libhttpserver,
-  libmicrohttpd,
-  nlohmann_json,
-  olm,
-  pkg-config,
-  zug,
+{ lib
+, stdenv
+, fetchFromGitLab
+, boost
+, catch2_3
+, cmake
+, cryptopp
+, immer
+, lager
+, libcpr
+, libhttpserver
+, libmicrohttpd
+, nlohmann_json
+, olm
+, pkg-config
+, zug
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  python,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchurl,
-  setuptools,
-  cython,
-  bash,
-  perl,
-  gnum4,
-  texliveBasic,
+{ lib
+, python
+, buildPythonPackage
+, fetchFromGitHub
+, fetchurl
+, setuptools
+, cython
+, bash
+, perl
+, gnum4
+, texliveBasic
+,
 }:
 
 let

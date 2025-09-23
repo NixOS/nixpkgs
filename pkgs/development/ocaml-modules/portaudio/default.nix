@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  dune-configurator,
-  portaudio,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, dune-configurator
+, portaudio
+,
 }:
 
 buildDunePackage rec {

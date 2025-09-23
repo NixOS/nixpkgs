@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  makeWrapper,
-  installShellFiles,
-  nodejsInstallManuals,
-  nodejsInstallExecutables,
-  coreutils,
-  nix-prefetch-git,
-  fetchurl,
-  jq,
-  nodejs,
-  nodejs-slim,
-  prefetch-yarn-deps,
-  fixup-yarn-lock,
-  diffutils,
-  yarn,
-  makeSetupHook,
-  cacert,
-  callPackage,
+{ stdenv
+, lib
+, makeWrapper
+, installShellFiles
+, nodejsInstallManuals
+, nodejsInstallExecutables
+, coreutils
+, nix-prefetch-git
+, fetchurl
+, jq
+, nodejs
+, nodejs-slim
+, prefetch-yarn-deps
+, fixup-yarn-lock
+, diffutils
+, yarn
+, makeSetupHook
+, cacert
+, callPackage
+,
 }:
 
 let
@@ -98,12 +98,11 @@ in
   fetchYarnDeps =
     let
       f =
-        {
-          name ? "offline",
-          src ? null,
-          hash ? "",
-          sha256 ? "",
-          ...
+        { name ? "offline"
+        , src ? null
+        , hash ? ""
+        , sha256 ? ""
+        , ...
         }@args:
         let
           hash_ =
@@ -162,38 +161,41 @@ in
     in
     lib.setFunctionArgs f (lib.functionArgs f) // { inherit tests; };
 
-  yarnConfigHook = makeSetupHook {
-    name = "yarn-config-hook";
-    propagatedBuildInputs = [
-      yarn
-      fixup-yarn-lock
-    ];
-    substitutions = {
-      # Specify `diff` by abspath to ensure that the user's build
-      # inputs do not cause us to find the wrong binaries.
-      diff = "${diffutils}/bin/diff";
-    };
-    meta = {
-      description = "Install nodejs dependencies from an offline yarn cache produced by fetchYarnDeps";
-    };
-  } ./yarn-config-hook.sh;
+  yarnConfigHook = makeSetupHook
+    {
+      name = "yarn-config-hook";
+      propagatedBuildInputs = [
+        yarn
+        fixup-yarn-lock
+      ];
+      substitutions = {
+        # Specify `diff` by abspath to ensure that the user's build
+        # inputs do not cause us to find the wrong binaries.
+        diff = "${diffutils}/bin/diff";
+      };
+      meta = {
+        description = "Install nodejs dependencies from an offline yarn cache produced by fetchYarnDeps";
+      };
+    } ./yarn-config-hook.sh;
 
-  yarnBuildHook = makeSetupHook {
-    name = "yarn-build-hook";
-    meta = {
-      description = "Run yarn build in buildPhase";
-    };
-  } ./yarn-build-hook.sh;
+  yarnBuildHook = makeSetupHook
+    {
+      name = "yarn-build-hook";
+      meta = {
+        description = "Run yarn build in buildPhase";
+      };
+    } ./yarn-build-hook.sh;
 
-  yarnInstallHook = makeSetupHook {
-    name = "yarn-install-hook";
-    propagatedBuildInputs = [
-      yarn
-      nodejsInstallManuals
-      nodejsInstallExecutables
-    ];
-    substitutions = {
-      jq = lib.getExe jq;
-    };
-  } ./yarn-install-hook.sh;
+  yarnInstallHook = makeSetupHook
+    {
+      name = "yarn-install-hook";
+      propagatedBuildInputs = [
+        yarn
+        nodejsInstallManuals
+        nodejsInstallExecutables
+      ];
+      substitutions = {
+        jq = lib.getExe jq;
+      };
+    } ./yarn-install-hook.sh;
 }

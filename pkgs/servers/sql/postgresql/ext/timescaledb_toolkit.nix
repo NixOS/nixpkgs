@@ -1,10 +1,10 @@
-{
-  buildPgrxExtension,
-  cargo-pgrx_0_12_6,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  postgresql,
+{ buildPgrxExtension
+, cargo-pgrx_0_12_6
+, fetchFromGitHub
+, lib
+, nix-update-script
+, postgresql
+,
 }:
 
 buildPgrxExtension (finalAttrs: {
@@ -45,9 +45,9 @@ buildPgrxExtension (finalAttrs: {
     broken =
       lib.versionOlder postgresql.version "15"
       ||
-        # Check after next package update.
-        lib.warnIf (finalAttrs.version != "1.21.0")
-          "Is postgresql18Packages.timescaledb_toolkit still broken?"
-          (lib.versionAtLeast postgresql.version "18");
+      # Check after next package update.
+      lib.warnIf (finalAttrs.version != "1.21.0")
+        "Is postgresql18Packages.timescaledb_toolkit still broken?"
+        (lib.versionAtLeast postgresql.version "18");
   };
 })

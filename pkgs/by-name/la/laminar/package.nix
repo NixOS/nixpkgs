@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  cmake,
-  capnproto,
-  sqlite,
-  boost,
-  zlib,
-  rapidjson,
-  pandoc,
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, cmake
+, capnproto
+, sqlite
+, boost
+, zlib
+, rapidjson
+, pandoc
+,
 }:
 let
   js.vue = fetchurl {

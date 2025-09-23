@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  gtk4,
-  vte-gtk4,
-  json-glib,
-  sassc,
-  libadwaita,
-  pcre2,
-  libsixel,
-  libxml2,
-  librsvg,
-  libgee,
-  callPackage,
-  python3,
-  desktop-file-utils,
-  wrapGAppsHook4,
-  sixelSupport ? false,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, vala
+, gtk4
+, vte-gtk4
+, json-glib
+, sassc
+, libadwaita
+, pcre2
+, libsixel
+, libxml2
+, librsvg
+, libgee
+, callPackage
+, python3
+, desktop-file-utils
+, wrapGAppsHook4
+, sixelSupport ? false
+,
 }:
 
 let

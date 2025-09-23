@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  libGL,
-  SDL2,
-  libGLU,
-  catch2_3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libGL
+, SDL2
+, libGLU
+, catch2_3
+,
 }:
 
 stdenv.mkDerivation {

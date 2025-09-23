@@ -1,63 +1,63 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
-  cmake,
-  pkg-config,
-  doxygen,
-  libX11,
-  libXinerama,
-  libXrandr,
-  libGLU,
-  libGL,
-  glib,
-  libxml2,
-  pcre,
-  zlib,
-  boost,
-  jpegSupport ? true,
-  libjpeg,
-  exrSupport ? false,
-  openexr,
-  gifSupport ? true,
-  giflib,
-  pngSupport ? true,
-  libpng,
-  tiffSupport ? true,
-  libtiff,
-  gdalSupport ? false,
-  gdal,
-  curlSupport ? true,
-  curl,
-  colladaSupport ? false,
-  collada-dom,
-  opencascadeSupport ? false,
-  opencascade-occt,
-  ffmpegSupport ? false,
-  ffmpeg,
-  nvttSupport ? false,
-  nvidia-texture-tools,
-  freetypeSupport ? true,
-  freetype,
-  svgSupport ? false,
-  librsvg,
-  pdfSupport ? false,
-  poppler,
-  vncSupport ? false,
-  libvncserver,
-  lasSupport ? false,
-  libLAS,
-  luaSupport ? false,
-  lua,
-  sdlSupport ? false,
-  SDL2,
-  restSupport ? false,
-  asio,
-  withApps ? false,
-  withExamples ? false,
-  fltk,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, cmake
+, pkg-config
+, doxygen
+, libX11
+, libXinerama
+, libXrandr
+, libGLU
+, libGL
+, glib
+, libxml2
+, pcre
+, zlib
+, boost
+, jpegSupport ? true
+, libjpeg
+, exrSupport ? false
+, openexr
+, gifSupport ? true
+, giflib
+, pngSupport ? true
+, libpng
+, tiffSupport ? true
+, libtiff
+, gdalSupport ? false
+, gdal
+, curlSupport ? true
+, curl
+, colladaSupport ? false
+, collada-dom
+, opencascadeSupport ? false
+, opencascade-occt
+, ffmpegSupport ? false
+, ffmpeg
+, nvttSupport ? false
+, nvidia-texture-tools
+, freetypeSupport ? true
+, freetype
+, svgSupport ? false
+, librsvg
+, pdfSupport ? false
+, poppler
+, vncSupport ? false
+, libvncserver
+, lasSupport ? false
+, libLAS
+, luaSupport ? false
+, lua
+, sdlSupport ? false
+, SDL2
+, restSupport ? false
+, asio
+, withApps ? false
+, withExamples ? false
+, fltk
+,
 }:
 
 stdenv.mkDerivation rec {

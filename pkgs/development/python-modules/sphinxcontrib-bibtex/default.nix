@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  docutils,
-  importlib-metadata,
-  oset,
-  pybtex,
-  pybtex-docutils,
-  sphinx,
-  sphinx-autoapi,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, docutils
+, importlib-metadata
+, oset
+, pybtex
+, pybtex-docutils
+, sphinx
+, sphinx-autoapi
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

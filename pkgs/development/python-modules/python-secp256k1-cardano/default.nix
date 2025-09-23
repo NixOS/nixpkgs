@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pkg-config,
-  cffi,
-  secp256k1,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pkg-config
+, cffi
+, secp256k1
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

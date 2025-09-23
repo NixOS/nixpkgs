@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonAtLeast,
-  fetchFromGitHub,
-  rustPlatform,
-  numpy,
-  pytestCheckHook,
-  syrupy,
+{ lib
+, buildPythonPackage
+, pythonAtLeast
+, fetchFromGitHub
+, rustPlatform
+, numpy
+, pytestCheckHook
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

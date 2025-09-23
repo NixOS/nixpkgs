@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  replaceVars,
-  graphviz,
-  setuptools,
-  markdown,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, replaceVars
+, graphviz
+, setuptools
+, markdown
+,
 }:
 
 buildPythonPackage rec {

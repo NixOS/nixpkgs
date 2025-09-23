@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  coreutils,
-  python3,
-  duplicity,
-  gawk,
-  gnupg,
-  bash,
-  gnugrep,
-  txt2man,
-  makeWrapper,
-  which,
+{ lib
+, stdenv
+, fetchurl
+, coreutils
+, python3
+, duplicity
+, gawk
+, gnupg
+, bash
+, gnugrep
+, txt2man
+, makeWrapper
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

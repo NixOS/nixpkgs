@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  mariadb,
-  mailutils,
-  pbzip2,
-  pigz,
-  bzip2,
-  gzip,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, mariadb
+, mailutils
+, pbzip2
+, pigz
+, bzip2
+, gzip
+,
 }:
 
 stdenv.mkDerivation rec {

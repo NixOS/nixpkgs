@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  chardet,
-  regex,
-  packaging,
-
-  # optionals
-  faust-cchardet,
-  pandas,
-  tabview,
-  # TODO: , wilderness
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  chardet
+, regex
+, packaging
+, # optionals
+  faust-cchardet
+, pandas
+, tabview
+, # TODO: , wilderness
 
   # tests
-  python,
-  pytestCheckHook,
+  python
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

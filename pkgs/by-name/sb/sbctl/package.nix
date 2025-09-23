@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  asciidoc,
-  databasePath ? "/etc/secureboot",
-  nix-update-script,
+{ lib
+, buildGoModule
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, asciidoc
+, databasePath ? "/etc/secureboot"
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

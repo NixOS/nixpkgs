@@ -1,14 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  gdk-pixbuf,
-  gd,
-  pkg-config,
-
-  # Enable linking against image loading libraries as part of the
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, gdk-pixbuf
+, gd
+, pkg-config
+, # Enable linking against image loading libraries as part of the
   # implementation of the sixel_helper_{load,write}_image_file() functions.
   # These helper functions are not needed for the main functionality of the
   # library to encode image buffers to sixels.
@@ -19,7 +17,8 @@
   # This pulls in a large amount of deps bloating the resulting library.
   #
   # Default off, but configurable in case you really need it.
-  withGd ? false,
+  withGd ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

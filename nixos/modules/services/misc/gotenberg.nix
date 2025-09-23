@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.gotenberg;
@@ -29,9 +28,10 @@ let
   ++ optional cfg.libreoffice.autoStart "--libreoffice-auto-start"
   ++ optional cfg.libreoffice.disableRoutes "--libreoffice-disable-routes"
   ++ optional cfg.pdfEngines.disableRoutes "--pdfengines-disable-routes"
-  ++ optional (
-    cfg.downloadFrom.denyList != null
-  ) "--api-download-from-deny-list=${cfg.downloadFrom.denyList}"
+  ++ optional
+    (
+      cfg.downloadFrom.denyList != null
+    ) "--api-download-from-deny-list=${cfg.downloadFrom.denyList}"
   ++ optional cfg.downloadFrom.disable "--api-disable-download-from"
   ++ optional (cfg.bodyLimit != null) "--api-body-limit=${cfg.bodyLimit}"
   ++ lib.optionals (cfg.extraArgs != [ ]) cfg.extraArgs;

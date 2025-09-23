@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  wheel,
-  typeguard,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, wheel
+, typeguard
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  fetchpatch,
-  libraw,
-  pytest,
-  mock,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, fetchpatch
+, libraw
+, pytest
+, mock
+,
 }:
 
 buildPythonPackage rec {

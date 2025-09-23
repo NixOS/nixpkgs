@@ -1,12 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-
-  fontconfig,
-  freetype,
-
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, fontconfig
+, freetype
+,
 }:
 
 stdenv.mkDerivation rec {

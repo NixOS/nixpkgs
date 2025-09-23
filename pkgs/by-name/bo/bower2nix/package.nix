@@ -1,10 +1,10 @@
-{
-  buildNpmPackage,
-  fetchFromGitHub,
-  git,
-  lib,
-  nix,
-  unstableGitUpdater,
+{ buildNpmPackage
+, fetchFromGitHub
+, git
+, lib
+, nix
+, unstableGitUpdater
+,
 }:
 
 buildNpmPackage rec {

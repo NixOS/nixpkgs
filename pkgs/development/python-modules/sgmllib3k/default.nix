@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPy27,
-  pytestCheckHook,
-  pythonAtLeast,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, pytestCheckHook
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

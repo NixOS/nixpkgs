@@ -1,32 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  albucore,
-  numpy,
-  opencv-python,
-  pydantic,
-  pyyaml,
-  scipy,
-
-  # optional dependencies
-  huggingface-hub,
-  pillow,
-  torch,
-
-  # tests
-  deepdiff,
-  pytestCheckHook,
-  pytest-mock,
-  scikit-image,
-  scikit-learn,
-  torchvision,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  albucore
+, numpy
+, opencv-python
+, pydantic
+, pyyaml
+, scipy
+, # optional dependencies
+  huggingface-hub
+, pillow
+, torch
+, # tests
+  deepdiff
+, pytestCheckHook
+, pytest-mock
+, scikit-image
+, scikit-learn
+, torchvision
+,
 }:
 
 buildPythonPackage rec {

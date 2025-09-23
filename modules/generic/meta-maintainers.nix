@@ -23,18 +23,22 @@ let
       loc: defs:
       lib.zipAttrs (
         lib.flatten (
-          lib.imap1 (
-            n: def:
-            lib.imap1 (
-              m: def':
-              maintainer.merge (loc ++ [ "[${toString n}-${toString m}]" ]) [
-                {
-                  inherit (def) file;
-                  value = def';
-                }
-              ]
-            ) def.value
-          ) defs
+          lib.imap1
+            (
+              n: def:
+              lib.imap1
+                (
+                  m: def':
+                  maintainer.merge (loc ++ [ "[${toString n}-${toString m}]" ]) [
+                    {
+                      inherit (def) file;
+                      value = def';
+                    }
+                  ]
+                )
+                def.value
+            )
+            defs
         )
       );
   };

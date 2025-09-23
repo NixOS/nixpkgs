@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  freetype,
-  libX11,
-  libXi,
-  libXt,
-  libXft,
+{ lib
+, stdenv
+, fetchFromGitHub
+, freetype
+, libX11
+, libXi
+, libXt
+, libXft
+,
 }:
 
 stdenv.mkDerivation {

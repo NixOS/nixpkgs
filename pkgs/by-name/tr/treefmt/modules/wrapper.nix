@@ -1,9 +1,8 @@
-{
-  lib,
-  pkgs,
-  config,
-  options,
-  ...
+{ lib
+, pkgs
+, config
+, options
+, ...
 }:
 {
   options.result = lib.mkOption {

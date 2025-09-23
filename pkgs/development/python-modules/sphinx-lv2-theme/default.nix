@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitLab,
-  setuptools,
-  sphinx,
+{ buildPythonPackage
+, lib
+, fetchFromGitLab
+, setuptools
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

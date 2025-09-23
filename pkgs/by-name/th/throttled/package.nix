@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gobject-introspection,
-  python3Packages,
-  pciutils,
-  wrapGAppsNoGuiHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gobject-introspection
+, python3Packages
+, pciutils
+, wrapGAppsNoGuiHook
+,
 }:
 
 stdenv.mkDerivation rec {

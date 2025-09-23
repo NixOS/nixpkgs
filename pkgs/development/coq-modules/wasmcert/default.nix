@@ -1,14 +1,14 @@
-{
-  lib,
-  mkCoqDerivation,
-  callPackage,
-  coq,
-  flocq,
-  parseque,
-  mathcomp-boot,
-  compcert,
-  ExtLib,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, callPackage
+, coq
+, flocq
+, parseque
+, mathcomp-boot
+, compcert
+, ExtLib
+, version ? null
+,
 }:
 
 with lib;

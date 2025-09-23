@@ -1,34 +1,30 @@
-{
-  apple-sdk,
-  cmake,
-  fetchFromGitHub,
-  git,
-  lib,
-  libffi,
-  llvmPackages_18,
-  makeWrapper,
-  ncurses,
-  python3,
-  zlib,
-
-  # *NOT* from LLVM 18!
+{ apple-sdk
+, cmake
+, fetchFromGitHub
+, git
+, lib
+, libffi
+, llvmPackages_18
+, makeWrapper
+, ncurses
+, python3
+, zlib
+, # *NOT* from LLVM 18!
   # The compiler used to compile Cling may affect the runtime include and lib
   # directories it expects to be run with. Cling builds against (a fork of) Clang,
   # so we prefer to use Clang as the compiler as well for consistency.
   # It would be cleanest to use LLVM 9's clang, but it errors. So, we use a later
   # version of Clang to compile, but we check out the Cling fork of Clang 9 to
   # build Cling against.
-  clangStdenv,
-
-  # For runtime C++ standard library
-  gcc-unwrapped,
-
-  # Build with debug symbols
-  debug ? false,
-
-  # Build with libc++ (LLVM) rather than stdlibc++ (GCC).
+  clangStdenv
+, # For runtime C++ standard library
+  gcc-unwrapped
+, # Build with debug symbols
+  debug ? false
+, # Build with libc++ (LLVM) rather than stdlibc++ (GCC).
   # This is experimental and not all features work.
-  useLLVMLibcxx ? clangStdenv.hostPlatform.isDarwin,
+  useLLVMLibcxx ? clangStdenv.hostPlatform.isDarwin
+,
 }:
 
 let

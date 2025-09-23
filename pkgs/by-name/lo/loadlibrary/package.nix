@@ -1,9 +1,9 @@
-{
-  lib,
-  cabextract,
-  fetchFromGitHub,
-  readline,
-  stdenv_32bit,
+{ lib
+, cabextract
+, fetchFromGitHub
+, readline
+, stdenv_32bit
+,
 }:
 
 # stdenv_32bit is needed because the program depends upon 32-bit libraries and does not have

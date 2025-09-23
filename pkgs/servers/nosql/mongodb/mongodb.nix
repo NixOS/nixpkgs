@@ -1,36 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPackages,
-  boost,
-  gperftools,
-  pcre2,
-  pcre-cpp,
-  snappy,
-  zlib,
-  yaml-cpp,
-  sasl,
-  net-snmp,
-  openldap,
-  openssl,
-  libpcap,
-  curl,
-  cctools,
-  xz,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
+, boost
+, gperftools
+, pcre2
+, pcre-cpp
+, snappy
+, zlib
+, yaml-cpp
+, sasl
+, net-snmp
+, openldap
+, openssl
+, libpcap
+, curl
+, cctools
+, xz
+,
 }:
 
 # Note:
 #   The command line administrative tools are part of other packages:
 #   see pkgs.mongodb-tools and pkgs.mongosh.
 
-{
-  version,
-  sha256,
-  patches ? [ ],
-  license ? lib.licenses.sspl,
-  avxSupport ? stdenv.hostPlatform.avxSupport,
-  passthru ? { },
+{ version
+, sha256
+, patches ? [ ]
+, license ? lib.licenses.sspl
+, avxSupport ? stdenv.hostPlatform.avxSupport
+, passthru ? { }
+,
 }:
 
 let

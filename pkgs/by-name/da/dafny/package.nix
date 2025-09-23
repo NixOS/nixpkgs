@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  runCommand,
-  dafny,
-  writeScript,
-  jdk11,
-  z3,
-  dotnetCorePackages,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, runCommand
+, dafny
+, writeScript
+, jdk11
+, z3
+, dotnetCorePackages
+,
 }:
 
 let

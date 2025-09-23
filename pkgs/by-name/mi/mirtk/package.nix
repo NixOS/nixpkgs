@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  boost186,
-  eigen,
-  libGLU,
-  fltk,
-  vtk,
-  zlib,
-  tbb,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, boost186
+, eigen
+, libGLU
+, fltk
+, vtk
+, zlib
+, tbb
+,
 }:
 
 stdenv.mkDerivation {

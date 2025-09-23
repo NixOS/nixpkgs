@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  coreutils,
-  libblocksruntime,
-  llvmPackages,
-  ninja,
-  pkg-config,
-  python3,
-  replaceVars,
-  writeShellScriptBin,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, coreutils
+, libblocksruntime
+, llvmPackages
+, ninja
+, pkg-config
+, python3
+, replaceVars
+, writeShellScriptBin
+, zlib
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

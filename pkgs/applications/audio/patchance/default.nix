@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  buildPythonApplication,
-  libjack2,
-  pyqt5,
-  qt5,
-  which,
-  bash,
+{ lib
+, fetchurl
+, buildPythonApplication
+, libjack2
+, pyqt5
+, qt5
+, which
+, bash
+,
 }:
 
 buildPythonApplication rec {

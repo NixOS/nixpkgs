@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  asciidoc,
-  pkg-config,
-  boost,
-  cmark,
-  coeurl,
-  curl,
-  kdsingleapplication,
-  libevent,
-  libsecret,
-  lmdb,
-  lmdbxx,
-  mtxclient,
-  nlohmann_json,
-  olm,
-  re2,
-  spdlog,
-  gst_all_1,
-  libnice,
-  qt6Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, asciidoc
+, pkg-config
+, boost
+, cmark
+, coeurl
+, curl
+, kdsingleapplication
+, libevent
+, libsecret
+, lmdb
+, lmdbxx
+, mtxclient
+, nlohmann_json
+, olm
+, re2
+, spdlog
+, gst_all_1
+, libnice
+, qt6Packages
+,
 }:
 
 stdenv.mkDerivation rec {

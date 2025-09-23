@@ -1,21 +1,20 @@
-{
-  lib,
-  stdenv,
-  alsa-lib,
-  fetchFromGitHub,
-  fftwFloat,
-  freetype,
-  libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrender,
-  meson,
-  ninja,
-  pkg-config,
-
-  # empty means build all available plugins
-  plugins ? [ ],
+{ lib
+, stdenv
+, alsa-lib
+, fetchFromGitHub
+, fftwFloat
+, freetype
+, libGL
+, libX11
+, libXcursor
+, libXext
+, libXrender
+, meson
+, ninja
+, pkg-config
+, # empty means build all available plugins
+  plugins ? [ ]
+,
 }:
 
 let

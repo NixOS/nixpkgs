@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkLibretroCore,
-  type ? "x64",
+{ lib
+, fetchFromGitHub
+, mkLibretroCore
+, type ? "x64"
+,
 }:
 mkLibretroCore {
   core = "vice-${type}";

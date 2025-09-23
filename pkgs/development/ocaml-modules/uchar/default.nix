@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchurl,
-  ocaml,
-  findlib,
-  ocamlbuild,
-  opaline,
-  withShared ? true,
-  lib,
+{ stdenv
+, fetchurl
+, ocaml
+, findlib
+, ocamlbuild
+, opaline
+, withShared ? true
+, lib
+,
 }:
 
 stdenv.mkDerivation rec {

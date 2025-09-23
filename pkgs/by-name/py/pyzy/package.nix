@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  python3,
-  glib,
-  libuuid,
-  sqlite,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, python3
+, glib
+, libuuid
+, sqlite
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation {

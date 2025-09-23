@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  ocaml_pcre,
-  mparser,
+{ buildDunePackage
+, ocaml_pcre
+, mparser
+,
 }:
 
 buildDunePackage {

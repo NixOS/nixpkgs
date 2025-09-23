@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  anki,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, anki
+,
 }:
 
 python3Packages.buildPythonApplication {

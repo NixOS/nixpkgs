@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lxml,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, lxml
+, six
+,
 }:
 
 buildPythonPackage rec {

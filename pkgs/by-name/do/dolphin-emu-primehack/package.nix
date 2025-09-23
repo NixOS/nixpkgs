@@ -1,53 +1,50 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  pkg-config,
-  cmake,
-  qt6,
-
-  # buildInputs
-  curl,
-  enet,
-  ffmpeg,
-  fmt,
-  gettext,
-  libGL,
-  libGLU,
-  libSM,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXxf86vm,
-  libao,
-  libpthreadstubs,
-  libpulseaudio,
-  libusb1,
-  mbedtls_2,
-  miniupnpc,
-  openal,
-  pcre,
-  portaudio,
-  readline,
-  sfml,
-  soundtouch,
-  xz,
-  # linux-only
-  alsa-lib,
-  bluez,
-  libevdev,
-  udev,
-  vulkan-loader,
-  # darwin-only
-  hidapi,
-  libpng,
-
-  # passthru
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  pkg-config
+, cmake
+, qt6
+, # buildInputs
+  curl
+, enet
+, ffmpeg
+, fmt
+, gettext
+, libGL
+, libGLU
+, libSM
+, libXdmcp
+, libXext
+, libXinerama
+, libXrandr
+, libXxf86vm
+, libao
+, libpthreadstubs
+, libpulseaudio
+, libusb1
+, mbedtls_2
+, miniupnpc
+, openal
+, pcre
+, portaudio
+, readline
+, sfml
+, soundtouch
+, xz
+, # linux-only
+  alsa-lib
+, bluez
+, libevdev
+, udev
+, vulkan-loader
+, # darwin-only
+  hidapi
+, libpng
+, # passthru
+  testers
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

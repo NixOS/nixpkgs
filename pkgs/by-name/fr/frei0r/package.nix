@@ -1,14 +1,14 @@
-{
-  lib,
-  config,
-  stdenv,
-  fetchFromGitHub,
-  cairo,
-  cmake,
-  opencv,
-  pkg-config,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages,
+{ lib
+, config
+, stdenv
+, fetchFromGitHub
+, cairo
+, cmake
+, opencv
+, pkg-config
+, cudaSupport ? config.cudaSupport
+, cudaPackages
+,
 }:
 
 stdenv.mkDerivation rec {

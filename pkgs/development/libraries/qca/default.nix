@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  openssl,
-  pkg-config,
-  qtbase,
-  qt5compat ? null,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, openssl
+, pkg-config
+, qtbase
+, qt5compat ? null
+,
 }:
 
 let

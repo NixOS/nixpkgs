@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  makeDesktopItem,
-  copyDesktopItems,
-  electron,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildNpmPackage
+, makeDesktopItem
+, copyDesktopItems
+, electron
+, nix-update-script
+,
 }:
 
 buildNpmPackage rec {

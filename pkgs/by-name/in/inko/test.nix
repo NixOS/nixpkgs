@@ -1,8 +1,7 @@
-{
-  inko,
-  writeText,
-  runCommand,
-  ...
+{ inko
+, writeText
+, runCommand
+, ...
 }:
 
 let

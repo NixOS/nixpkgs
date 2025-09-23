@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  gflags,
-  gtest,
-  perl,
-  pkgsBuildHost,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, gflags
+, gtest
+, perl
+, pkgsBuildHost
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -76,9 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
         ++ [
           "logging" # works around segfaults for now
         ];
-      excludedTestsRegex = lib.optionalString (
-        excludedTests != [ ]
-      ) "(${lib.concatStringsSep "|" excludedTests})";
+      excludedTestsRegex = lib.optionalString
+        (
+          excludedTests != [ ]
+        ) "(${lib.concatStringsSep "|" excludedTests})";
     in
     ''
       runHook preCheck

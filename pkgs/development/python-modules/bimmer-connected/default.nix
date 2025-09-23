@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  pbr,
-  httpx,
-  pillow,
-  pycryptodome,
-  pyjwt,
-  pytest-asyncio,
-  pytestCheckHook,
-  python,
-  respx,
-  setuptools,
-  time-machine,
-  tzdata,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, pbr
+, httpx
+, pillow
+, pycryptodome
+, pyjwt
+, pytest-asyncio
+, pytestCheckHook
+, python
+, respx
+, setuptools
+, time-machine
+, tzdata
+,
 }:
 
 buildPythonPackage rec {

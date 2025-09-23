@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  alsaSupport ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  autoreconfHook,
-  pulseSupport ? stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  libsidplayfp,
-  out123Support ? stdenv.hostPlatform.isDarwin,
-  mpg123,
-  perl,
-  pkg-config,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, alsaSupport ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, autoreconfHook
+, pulseSupport ? stdenv.hostPlatform.isLinux
+, libpulseaudio
+, libsidplayfp
+, out123Support ? stdenv.hostPlatform.isDarwin
+, mpg123
+, perl
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

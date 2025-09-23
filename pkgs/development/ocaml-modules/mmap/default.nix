@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  bigarray-compat,
+{ lib
+, buildDunePackage
+, fetchurl
+, bigarray-compat
+,
 }:
 
 buildDunePackage rec {

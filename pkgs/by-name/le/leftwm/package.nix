@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  libX11,
-  libXinerama,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, libX11
+, libXinerama
+,
 }:
 
 let

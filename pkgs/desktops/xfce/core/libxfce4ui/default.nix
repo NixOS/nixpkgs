@@ -1,23 +1,22 @@
-{
-  stdenv,
-  mkXfceDerivation,
-  lib,
-  perl,
-  libICE,
-  libSM,
-  libepoxy,
-  libgtop,
-  libgudev,
-  libstartup_notification,
-  xfconf,
-  gtk3,
-  libxfce4util,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
-  gobject-introspection,
-  vala,
+{ stdenv
+, mkXfceDerivation
+, lib
+, perl
+, libICE
+, libSM
+, libepoxy
+, libgtop
+, libgudev
+, libstartup_notification
+, xfconf
+, gtk3
+, libxfce4util
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
+, vala
+,
 }:
 
 mkXfceDerivation {

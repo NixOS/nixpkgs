@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  grpcio,
-  grpcio-reflection,
-  protobuf,
-  pytestCheckHook,
-  pytest-grpc,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, setuptools-scm
+, grpcio
+, grpcio-reflection
+, protobuf
+, pytestCheckHook
+, pytest-grpc
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  qtserialport,
-  cmake,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitLab
+, qtserialport
+, cmake
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation {

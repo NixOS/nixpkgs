@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  wheel,
-  click,
-  colorclass,
-  sphinx,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, wheel
+, click
+, colorclass
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

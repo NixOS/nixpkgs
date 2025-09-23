@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  griffe,
-  mcp,
-  openai,
-  pydantic,
-  requests,
-  types-requests,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, griffe
+, mcp
+, openai
+, pydantic
+, requests
+, types-requests
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

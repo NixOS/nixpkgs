@@ -1,13 +1,13 @@
-{
-  lib,
-  pythonOlder,
-  fetchPypi,
-  buildPythonPackage,
-  rustPlatform,
-  pytestCheckHook,
-  psutil,
-  cbor2,
-  hypothesis,
+{ lib
+, pythonOlder
+, fetchPypi
+, buildPythonPackage
+, rustPlatform
+, pytestCheckHook
+, psutil
+, cbor2
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

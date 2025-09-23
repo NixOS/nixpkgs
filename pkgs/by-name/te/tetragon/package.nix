@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  go,
-  llvm,
-  clang,
-  bash,
-  writableTmpDirAsHomeHook,
-  gitMinimal,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, go
+, llvm
+, clang
+, bash
+, writableTmpDirAsHomeHook
+, gitMinimal
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

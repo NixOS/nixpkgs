@@ -1,12 +1,11 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitHub,
-  nim,
-  openssl,
-  makeWrapper,
-
-  nix-update-script,
+{ lib
+, buildNimPackage
+, fetchFromGitHub
+, nim
+, openssl
+, makeWrapper
+, nix-update-script
+,
 }:
 
 buildNimPackage (

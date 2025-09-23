@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  python,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  pybind11,
-  tiledb,
-  numpy,
-  wheel,
-  isPy3k,
-  setuptools-scm,
-  psutil,
-  pandas,
-  cmake,
-  ninja,
-  scikit-build-core,
-  packaging,
-  pytest,
-  hypothesis,
-  pyarrow,
+{ lib
+, stdenv
+, python
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, pybind11
+, tiledb
+, numpy
+, wheel
+, isPy3k
+, setuptools-scm
+, psutil
+, pandas
+, cmake
+, ninja
+, scikit-build-core
+, packaging
+, pytest
+, hypothesis
+, pyarrow
+,
 }:
 
 buildPythonPackage rec {

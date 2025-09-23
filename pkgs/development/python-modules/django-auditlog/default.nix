@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  django,
-  python-dateutil,
-  freezegun,
-  psycopg2,
-  postgresql,
-  postgresqlTestHook,
-  python,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, django
+, python-dateutil
+, freezegun
+, psycopg2
+, postgresql
+, postgresqlTestHook
+, python
+,
 }:
 
 buildPythonPackage rec {

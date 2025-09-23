@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  SDL2,
-  SDL2_net,
-  openal,
-  libsndfile,
-  fluidsynth,
-  alsa-lib,
-  libxmp,
-  libebur128,
-  python3,
-  yyjson,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, SDL2
+, SDL2_net
+, openal
+, libsndfile
+, fluidsynth
+, alsa-lib
+, libxmp
+, libebur128
+, python3
+, yyjson
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

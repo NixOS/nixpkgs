@@ -1,12 +1,12 @@
-{
-  lib,
-  acpica-tools,
-  fetchgit,
-  python3,
-  stdenv,
-  writeText,
-  # Configurable options
-  ___build-type ? "csm",
+{ lib
+, acpica-tools
+, fetchgit
+, python3
+, stdenv
+, writeText
+, # Configurable options
+  ___build-type ? "csm"
+,
 }:
 
 assert lib.elem ___build-type [
@@ -22,15 +22,13 @@ let
       "coreboot" = "bios.bin.elf";
       "csm" = "Csm16.bin";
       "qemu" = "bios.bin";
-    }
-    .${___build-type};
+    }.${___build-type};
   configuration-string =
     {
       "coreboot" = "CONFIG_COREBOOT";
       "csm" = "CONFIG_CSM";
       "qemu" = "CONFIG_QEMU";
-    }
-    .${___build-type};
+    }.${___build-type};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "seabios";

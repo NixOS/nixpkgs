@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  php,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, php
+, versionCheckHook
+,
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "phpactor";

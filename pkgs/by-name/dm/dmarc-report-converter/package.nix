@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  dmarc-report-converter,
-  fetchFromGitHub,
-  testers,
+{ lib
+, buildGoModule
+, dmarc-report-converter
+, fetchFromGitHub
+, testers
+,
 }:
 
 buildGoModule rec {

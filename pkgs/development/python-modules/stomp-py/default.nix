@@ -1,18 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  docopt,
-  websocket-client,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  docopt
+, websocket-client
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

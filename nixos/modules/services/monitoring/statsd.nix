@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -125,10 +124,12 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    assertions = map (backend: {
-      assertion = !isBuiltinBackend backend -> lib.hasAttrByPath [ backend ] pkgs.nodePackages;
-      message = "Only builtin backends (graphite, console, repeater) or backends enumerated in `pkgs.nodePackages` are allowed!";
-    }) cfg.backends;
+    assertions = map
+      (backend: {
+        assertion = !isBuiltinBackend backend -> lib.hasAttrByPath [ backend ] pkgs.nodePackages;
+        message = "Only builtin backends (graphite, console, repeater) or backends enumerated in `pkgs.nodePackages` are allowed!";
+      })
+      cfg.backends;
 
     users.users.statsd = {
       uid = config.ids.uids.statsd;

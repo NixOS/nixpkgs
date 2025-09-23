@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  ant,
-  unzip,
-  makeWrapper,
-  jdk,
-  jogl,
-  rsync,
-  ffmpeg,
-  batik,
-  stripJavaArchivesHook,
-  wrapGAppsHook3,
-  libGL,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, ant
+, unzip
+, makeWrapper
+, jdk
+, jogl
+, rsync
+, ffmpeg
+, batik
+, stripJavaArchivesHook
+, wrapGAppsHook3
+, libGL
+,
 }:
 let
   buildNumber = "1295";
@@ -56,8 +56,7 @@ let
   arch =
     {
       x86_64 = "amd64";
-    }
-    .${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
+    }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
 in
 stdenv.mkDerivation rec {
   pname = "processing";

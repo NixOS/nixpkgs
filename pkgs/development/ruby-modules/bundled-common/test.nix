@@ -1,9 +1,9 @@
-{
-  lib,
-  ruby,
-  defaultGemConfig,
-  test,
-  should,
+{ lib
+, ruby
+, defaultGemConfig
+, test
+, should
+,
 }:
 let
   testConfigs = {
@@ -51,10 +51,12 @@ builtins.concatLists [
 
   (test.run "Filter empty gemset" { } (
     set:
-    functions.filterGemset {
-      inherit ruby;
-      groups = [ "default" ];
-    } set == { }
+    functions.filterGemset
+      {
+        inherit ruby;
+        groups = [ "default" ];
+      }
+      set == { }
   ))
   (
     let
@@ -69,13 +71,15 @@ builtins.concatLists [
     in
     test.run "Filter matches a group" gemSet (
       set:
-      functions.filterGemset {
-        inherit ruby;
-        groups = [
-          "y"
-          "z"
-        ];
-      } set == gemSet
+      functions.filterGemset
+        {
+          inherit ruby;
+          groups = [
+            "y"
+            "z"
+          ];
+        }
+        set == gemSet
     )
   )
   (
@@ -88,10 +92,12 @@ builtins.concatLists [
     in
     test.run "Filter matches empty platforms list" gemSet (
       set:
-      functions.filterGemset {
-        inherit ruby;
-        groups = [ ];
-      } set == gemSet
+      functions.filterGemset
+        {
+          inherit ruby;
+          groups = [ ];
+        }
+        set == gemSet
     )
   )
   (
@@ -109,10 +115,12 @@ builtins.concatLists [
     in
     test.run "Filter matches on platform" gemSet (
       set:
-      functions.filterGemset {
-        inherit ruby;
-        groups = [ ];
-      } set == gemSet
+      functions.filterGemset
+        {
+          inherit ruby;
+          groups = [ ];
+        }
+        set == gemSet
     )
   )
   (
@@ -128,13 +136,15 @@ builtins.concatLists [
     in
     test.run "Filter excludes based on groups" gemSet (
       set:
-      functions.filterGemset {
-        inherit ruby;
-        groups = [
-          "a"
-          "b"
-        ];
-      } set == { }
+      functions.filterGemset
+        {
+          inherit ruby;
+          groups = [
+            "a"
+            "b"
+          ];
+        }
+        set == { }
     )
   )
 ]

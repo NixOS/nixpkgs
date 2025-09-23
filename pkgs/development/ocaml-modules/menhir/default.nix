@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  replaceVars,
-  ocaml,
-  menhirLib,
-  menhirSdk,
+{ buildDunePackage
+, replaceVars
+, ocaml
+, menhirLib
+, menhirSdk
+,
 }:
 
 buildDunePackage {

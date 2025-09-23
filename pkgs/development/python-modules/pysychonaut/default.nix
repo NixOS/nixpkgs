@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  requests,
-  requests-cache,
-  beautifulsoup4,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, requests
+, requests-cache
+, beautifulsoup4
+,
 }:
 
 buildPythonPackage rec {

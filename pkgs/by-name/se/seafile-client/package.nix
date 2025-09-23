@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  qt6,
-  libuuid,
-  seafile-shared,
-  jansson,
-  libsearpc,
-  withShibboleth ? true,
+{ lib
+, stdenv
+, fetchpatch
+, fetchFromGitHub
+, pkg-config
+, cmake
+, qt6
+, libuuid
+, seafile-shared
+, jansson
+, libsearpc
+, withShibboleth ? true
+,
 }:
 
 stdenv.mkDerivation rec {

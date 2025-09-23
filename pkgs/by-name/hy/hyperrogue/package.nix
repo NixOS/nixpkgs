@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  pkg-config,
-  SDL,
-  SDL_ttf,
-  SDL_gfx,
-  SDL_mixer,
-  libpng,
-  glew,
-  fontconfig,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, pkg-config
+, SDL
+, SDL_ttf
+, SDL_gfx
+, SDL_mixer
+, libpng
+, glew
+, fontconfig
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

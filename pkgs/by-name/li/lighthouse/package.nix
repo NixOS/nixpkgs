@@ -1,18 +1,18 @@
-{
-  cmake,
-  fetchFromGitHub,
-  fetchurl,
-  lib,
-  lighthouse,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  protobuf,
-  rustPlatform,
-  rust-jemalloc-sys,
-  sqlite,
-  stdenv,
-  testers,
+{ cmake
+, fetchFromGitHub
+, fetchurl
+, lib
+, lighthouse
+, nix-update-script
+, openssl
+, pkg-config
+, protobuf
+, rustPlatform
+, rust-jemalloc-sys
+, sqlite
+, stdenv
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage rec {

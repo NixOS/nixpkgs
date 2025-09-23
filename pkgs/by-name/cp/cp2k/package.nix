@@ -1,63 +1,63 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mpiCheckPhaseHook,
-  cmake,
-  python3,
-  gfortran,
-  blas,
-  lapack,
-  dbcsr,
-  fftw,
-  libint,
-  libvori,
-  libxc,
-  dftd4,
-  simple-dftd3,
-  tblite,
-  mpi,
-  gsl,
-  scalapack,
-  makeWrapper,
-  libxsmm,
-  spglib,
-  which,
-  pkg-config,
-  plumed,
-  zlib,
-  hdf5-fortran,
-  sirius,
-  libvdwxc,
-  spla,
-  spfft,
-  trexio,
-  toml-f,
-  greenx,
-  gmp,
-  enableElpa ? false,
-  elpa,
-  cudaPackages,
-  rocmPackages,
-  newScope,
-  mctc-lib,
-  jonquil,
-  multicharge,
-  mstore,
-  test-drive,
-  config,
-  gpuBackend ? (
+{ lib
+, stdenv
+, fetchFromGitHub
+, mpiCheckPhaseHook
+, cmake
+, python3
+, gfortran
+, blas
+, lapack
+, dbcsr
+, fftw
+, libint
+, libvori
+, libxc
+, dftd4
+, simple-dftd3
+, tblite
+, mpi
+, gsl
+, scalapack
+, makeWrapper
+, libxsmm
+, spglib
+, which
+, pkg-config
+, plumed
+, zlib
+, hdf5-fortran
+, sirius
+, libvdwxc
+, spla
+, spfft
+, trexio
+, toml-f
+, greenx
+, gmp
+, enableElpa ? false
+, elpa
+, cudaPackages
+, rocmPackages
+, newScope
+, mctc-lib
+, jonquil
+, multicharge
+, mstore
+, test-drive
+, config
+, gpuBackend ? (
     if config.cudaSupport then
       "cuda"
     else if config.rocmSupport then
       "rocm"
     else
       "none"
-  ),
-  # Change to a value suitable for your target GPU.
+  )
+, # Change to a value suitable for your target GPU.
   # see https://github.com/cp2k/cp2k/blob/master/CMakeLists.txt#L433
-  hipTarget ? "gfx908",
-  cudaTarget ? "80",
+  hipTarget ? "gfx908"
+, cudaTarget ? "80"
+,
 }:
 
 assert builtins.elem gpuBackend [

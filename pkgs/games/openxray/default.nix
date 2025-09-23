@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  cmake,
-  glew,
-  liblockfile,
-  openal,
-  libtheora,
-  SDL2,
-  lzo,
-  libjpeg,
-  libogg,
-  pcre,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, cmake
+, glew
+, liblockfile
+, openal
+, libtheora
+, SDL2
+, lzo
+, libjpeg
+, libogg
+, pcre
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

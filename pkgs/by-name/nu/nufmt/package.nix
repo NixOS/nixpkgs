@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  rustPlatform,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, rustPlatform
+, stdenv
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "nufmt";

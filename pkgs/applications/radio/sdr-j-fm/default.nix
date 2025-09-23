@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  wrapQtAppsHook,
-  pkg-config,
-  qtbase,
-  qwt6_1,
-  fftwFloat,
-  libsamplerate,
-  portaudio,
-  libusb1,
-  libsndfile,
-  featuresOverride ? { },
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, wrapQtAppsHook
+, pkg-config
+, qtbase
+, qwt6_1
+, fftwFloat
+, libsamplerate
+, portaudio
+, libusb1
+, libsndfile
+, featuresOverride ? { }
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

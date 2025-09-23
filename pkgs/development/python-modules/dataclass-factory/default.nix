@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nose2,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nose2
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

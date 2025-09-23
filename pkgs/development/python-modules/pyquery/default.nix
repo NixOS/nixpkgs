@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cssselect,
-  fetchPypi,
-  lxml,
-  pytestCheckHook,
-  requests,
-  setuptools,
-  webob,
-  webtest,
+{ lib
+, buildPythonPackage
+, cssselect
+, fetchPypi
+, lxml
+, pytestCheckHook
+, requests
+, setuptools
+, webob
+, webtest
+,
 }:
 
 buildPythonPackage rec {

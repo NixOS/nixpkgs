@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  dataclasses-json,
-  fetchFromGitHub,
-  marshmallow,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  websockets,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, dataclasses-json
+, fetchFromGitHub
+, marshmallow
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, websockets
+,
 }:
 
 buildPythonPackage rec {

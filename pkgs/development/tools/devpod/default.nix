@@ -1,28 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchYarnDeps,
-
-  cargo-tauri,
-  desktop-file-utils,
-  installShellFiles,
-  jq,
-  makeBinaryWrapper,
-  moreutils,
-  nodejs,
-  pkg-config,
-  yarnConfigHook,
-  wrapGAppsHook3,
-
-  glib-networking,
-  libayatana-appindicator,
-  openssl,
-  webkitgtk_4_1,
-
-  testers,
+{ lib
+, stdenv
+, buildGoModule
+, rustPlatform
+, fetchFromGitHub
+, fetchYarnDeps
+, cargo-tauri
+, desktop-file-utils
+, installShellFiles
+, jq
+, makeBinaryWrapper
+, moreutils
+, nodejs
+, pkg-config
+, yarnConfigHook
+, wrapGAppsHook3
+, glib-networking
+, libayatana-appindicator
+, openssl
+, webkitgtk_4_1
+, testers
+,
 }:
 
 let

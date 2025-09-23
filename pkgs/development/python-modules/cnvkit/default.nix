@@ -1,26 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  python,
-  makeWrapper,
-  # dependencies
-  biopython,
-  matplotlib,
-  numpy,
-  pandas,
-  pomegranate,
-  pyfaidx,
-  pysam,
-  reportlab,
-  rPackages,
-  scikit-learn,
-  scipy,
-  R,
-  # tests
-  pytestCheckHook,
-
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, python
+, makeWrapper
+, # dependencies
+  biopython
+, matplotlib
+, numpy
+, pandas
+, pomegranate
+, pyfaidx
+, pysam
+, reportlab
+, rPackages
+, scikit-learn
+, scipy
+, R
+, # tests
+  pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "cnvkit";

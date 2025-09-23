@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  glib,
-  libgcrypt,
-  libintl,
-  libotr,
-  meson,
-  ncurses,
-  ninja,
-  openssl,
-  perl,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, glib
+, libgcrypt
+, libintl
+, libotr
+, meson
+, ncurses
+, ninja
+, openssl
+, perl
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

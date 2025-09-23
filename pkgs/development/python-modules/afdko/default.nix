@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  # Enables some expensive tests, useful for verifying an update
-  afdko,
-  antlr4_13,
-  booleanoperations,
-  buildPythonPackage,
-  cmake,
-  defcon,
-  fetchFromGitHub,
-  fetchpatch,
-  fontmath,
-  fontpens,
-  fonttools,
-  libxml2,
-  mutatormath,
-  ninja,
-  pytestCheckHook,
-  pythonOlder,
-  runAllTests ? false,
-  scikit-build,
-  setuptools-scm,
-  tqdm,
-  ufonormalizer,
-  ufoprocessor,
+{ lib
+, stdenv
+, # Enables some expensive tests, useful for verifying an update
+  afdko
+, antlr4_13
+, booleanoperations
+, buildPythonPackage
+, cmake
+, defcon
+, fetchFromGitHub
+, fetchpatch
+, fontmath
+, fontpens
+, fonttools
+, libxml2
+, mutatormath
+, ninja
+, pytestCheckHook
+, pythonOlder
+, runAllTests ? false
+, scikit-build
+, setuptools-scm
+, tqdm
+, ufonormalizer
+, ufoprocessor
+,
 }:
 
 buildPythonPackage rec {

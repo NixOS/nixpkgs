@@ -7,82 +7,82 @@
 # be nice to add the native GUI (and/or the GTK GUI) as an option too, but that
 # requires invoking the Xcode build system, which is non-trivial for now.
 
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  # For tests
-  testers,
-  runCommand,
-  fetchurl,
-  fetchpatch2,
-  # Main build tools
-  pkg-config,
-  autoconf,
-  automake,
-  libtool,
-  m4,
-  xz,
-  python3,
-  numactl,
-  writeText,
-  # Processing, video codecs, containers
-  ffmpeg_7-full,
-  nv-codec-headers,
-  libogg,
-  x264,
-  x265,
-  libvpx,
-  libtheora,
-  dav1d,
-  zimg,
-  svt-av1,
-  # Codecs, audio
-  libopus,
-  lame,
-  libvorbis,
-  a52dec,
-  speex,
-  libsamplerate,
-  # Text processing
-  libiconv,
-  fribidi,
-  fontconfig,
-  freetype,
-  libass,
-  jansson,
-  libxml2,
-  harfbuzz,
-  libjpeg_turbo,
-  # Optical media
-  libdvdread,
-  libdvdnav,
-  libdvdcss,
-  libbluray,
-  # GTK
+{ stdenv
+, lib
+, fetchFromGitHub
+, # For tests
+  testers
+, runCommand
+, fetchurl
+, fetchpatch2
+, # Main build tools
+  pkg-config
+, autoconf
+, automake
+, libtool
+, m4
+, xz
+, python3
+, numactl
+, writeText
+, # Processing, video codecs, containers
+  ffmpeg_7-full
+, nv-codec-headers
+, libogg
+, x264
+, x265
+, libvpx
+, libtheora
+, dav1d
+, zimg
+, svt-av1
+, # Codecs, audio
+  libopus
+, lame
+, libvorbis
+, a52dec
+, speex
+, libsamplerate
+, # Text processing
+  libiconv
+, fribidi
+, fontconfig
+, freetype
+, libass
+, jansson
+, libxml2
+, harfbuzz
+, libjpeg_turbo
+, # Optical media
+  libdvdread
+, libdvdnav
+, libdvdcss
+, libbluray
+, # GTK
   # NOTE: 2019-07-19: The gtk3 package has a transitive dependency on dbus,
   # which in turn depends on systemd. systemd is not supported on Darwin, so
   # for now we disable GTK GUI support on Darwin. (It may be possible to remove
   # this restriction later.)
-  useGtk ? !stdenv.hostPlatform.isDarwin,
-  appstream,
-  desktop-file-utils,
-  meson,
-  ninja,
-  wrapGAppsHook4,
-  intltool,
-  glib,
-  gtk4,
-  libappindicator-gtk3,
-  libnotify,
-  gst_all_1,
-  dbus-glib,
-  udev,
-  libgudev,
-  hicolor-icon-theme,
-  # FDK
-  useFdk ? false,
-  fdk_aac,
+  useGtk ? !stdenv.hostPlatform.isDarwin
+, appstream
+, desktop-file-utils
+, meson
+, ninja
+, wrapGAppsHook4
+, intltool
+, glib
+, gtk4
+, libappindicator-gtk3
+, libnotify
+, gst_all_1
+, dbus-glib
+, udev
+, libgudev
+, hicolor-icon-theme
+, # FDK
+  useFdk ? false
+, fdk_aac
+,
 }:
 
 let

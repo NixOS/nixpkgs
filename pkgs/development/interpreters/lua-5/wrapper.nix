@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  lua,
-  buildEnv,
-  makeWrapper,
-  extraLibs ? [ ],
-  extraOutputsToInstall ? [ ],
-  postBuild ? "",
-  ignoreCollisions ? false,
-  requiredLuaModules,
-  makeWrapperArgs ? [ ],
+{ lib
+, stdenv
+, lua
+, buildEnv
+, makeWrapper
+, extraLibs ? [ ]
+, extraOutputsToInstall ? [ ]
+, postBuild ? ""
+, ignoreCollisions ? false
+, requiredLuaModules
+, makeWrapperArgs ? [ ]
+,
 }:
 
 # Create a lua executable that knows about additional packages.

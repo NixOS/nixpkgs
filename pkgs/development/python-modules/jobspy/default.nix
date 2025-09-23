@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  numpy,
-  pandas,
-  pydantic,
-  regex,
-  requests,
-  markdownify,
-  tls-client,
-  beautifulsoup4,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, numpy
+, pandas
+, pydantic
+, regex
+, requests
+, markdownify
+, tls-client
+, beautifulsoup4
+,
 }:
 
 buildPythonPackage rec {

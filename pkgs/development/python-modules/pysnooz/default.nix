@@ -1,20 +1,20 @@
-{
-  lib,
-  bleak,
-  bleak-retry-connector,
-  bluetooth-sensor-state-data,
-  buildPythonPackage,
-  events,
-  fetchFromGitHub,
-  freezegun,
-  home-assistant-bluetooth,
-  poetry-core,
-  pytest-asyncio_0,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  transitions,
+{ lib
+, bleak
+, bleak-retry-connector
+, bluetooth-sensor-state-data
+, buildPythonPackage
+, events
+, fetchFromGitHub
+, freezegun
+, home-assistant-bluetooth
+, poetry-core
+, pytest-asyncio_0
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, transitions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libosmocore,
-  libosmoabis,
-  libosmo-netif,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libosmocore
+, libosmoabis
+, libosmo-netif
+,
 }:
 
 stdenv.mkDerivation rec {

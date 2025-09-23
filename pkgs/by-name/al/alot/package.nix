@@ -1,13 +1,13 @@
-{
-  lib,
-  python311,
-  fetchFromGitHub,
-  file,
-  gnupg,
-  gawk,
-  procps,
-  notmuch,
-  withManpage ? false,
+{ lib
+, python311
+, fetchFromGitHub
+, file
+, gnupg
+, gawk
+, procps
+, notmuch
+, withManpage ? false
+,
 }:
 
 with python311.pkgs;

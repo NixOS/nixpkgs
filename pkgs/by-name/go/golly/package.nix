@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  wrapGAppsHook3,
-  wxGTK32,
-  python3,
-  zlib,
-  libGLU,
-  libGL,
-  libX11,
-  SDL2,
+{ lib
+, stdenv
+, fetchurl
+, wrapGAppsHook3
+, wxGTK32
+, python3
+, zlib
+, libGLU
+, libGL
+, libX11
+, SDL2
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "golly";

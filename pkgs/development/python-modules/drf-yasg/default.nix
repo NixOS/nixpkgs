@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  django,
-  djangorestframework,
-  inflection,
-  packaging,
-  pytz,
-  pyyaml,
-  uritemplate,
-  datadiff,
-  dj-database-url,
-  pytest-django,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, django
+, djangorestframework
+, inflection
+, packaging
+, pytz
+, pyyaml
+, uritemplate
+, datadiff
+, dj-database-url
+, pytest-django
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

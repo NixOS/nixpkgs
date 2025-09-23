@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  lib,
-  nix-update-script,
-  poetry-core,
-  pytestCheckHook,
-  requests,
+{ buildPythonPackage
+, fetchFromGitHub
+, httpx
+, lib
+, nix-update-script
+, poetry-core
+, pytestCheckHook
+, requests
+,
 }:
 
 buildPythonPackage rec {

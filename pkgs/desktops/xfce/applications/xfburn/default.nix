@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  docbook_xsl,
-  glib,
-  libxslt,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  exo,
-  gst_all_1,
-  gtk3,
-  libburn,
-  libgudev,
-  libisofs,
-  libxfce4ui,
-  libxfce4util,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, docbook_xsl
+, glib
+, libxslt
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, exo
+, gst_all_1
+, gtk3
+, libburn
+, libgudev
+, libisofs
+, libxfce4ui
+, libxfce4util
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

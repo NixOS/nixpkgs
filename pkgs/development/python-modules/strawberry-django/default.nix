@@ -1,36 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-  setuptools,
-
-  # dependencies
-  asgiref,
-  django,
-  strawberry-graphql,
-
-  # optional-dependencies
-  django-debug-toolbar,
-  django-choices-field,
-
-  # check inputs
-  pytestCheckHook,
-  django-guardian,
-  django-model-utils,
-  django-mptt,
-  django-polymorphic,
-  django-tree-queries,
-  factory-boy,
-  pillow,
-  psycopg2,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-django,
-  pytest-mock,
-  pytest-snapshot,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, setuptools
+, # dependencies
+  asgiref
+, django
+, strawberry-graphql
+, # optional-dependencies
+  django-debug-toolbar
+, django-choices-field
+, # check inputs
+  pytestCheckHook
+, django-guardian
+, django-model-utils
+, django-mptt
+, django-polymorphic
+, django-tree-queries
+, factory-boy
+, pillow
+, psycopg2
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-django
+, pytest-mock
+, pytest-snapshot
+,
 }:
 
 buildPythonPackage rec {

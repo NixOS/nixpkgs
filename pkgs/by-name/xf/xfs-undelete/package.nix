@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  coreutils,
-  tcl-8_6,
-  tclPackages,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, tcl-8_6
+, tclPackages
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation {

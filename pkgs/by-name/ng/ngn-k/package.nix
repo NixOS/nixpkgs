@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  runtimeShell,
+{ lib
+, stdenv
+, fetchFromGitea
+, runtimeShell
+,
 }:
 
 stdenv.mkDerivation {

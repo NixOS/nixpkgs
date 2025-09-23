@@ -1,9 +1,9 @@
-{
-  gccStdenv,
-  lib,
-  fetchurl,
-  fetchzip,
-  autoreconfHook,
+{ gccStdenv
+, lib
+, fetchurl
+, fetchzip
+, autoreconfHook
+,
 }:
 
 gccStdenv.mkDerivation (finalAttrs: {

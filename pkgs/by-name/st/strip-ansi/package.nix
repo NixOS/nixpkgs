@@ -1,11 +1,11 @@
-{
-  stdenv,
-  buildPackages,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  nix-update-script,
-  installShellFiles,
+{ stdenv
+, buildPackages
+, lib
+, fetchFromGitHub
+, rustPlatform
+, nix-update-script
+, installShellFiles
+,
 }:
 let
   canRunStripAnsi = stdenv.hostPlatform.emulatorAvailable buildPackages;

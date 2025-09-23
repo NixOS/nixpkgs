@@ -1,12 +1,12 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  git,
-  testers,
-  aws-sam-cli,
-  nix-update-script,
-  enableTelemetry ? false,
+{ lib
+, python3
+, fetchFromGitHub
+, git
+, testers
+, aws-sam-cli
+, nix-update-script
+, enableTelemetry ? false
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

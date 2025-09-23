@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  rename,
-  unstableGitUpdater,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, rename
+, unstableGitUpdater
+,
 }:
 stdenvNoCC.mkDerivation {
   pname = "material-symbols";

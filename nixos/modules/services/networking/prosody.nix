@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -276,14 +275,18 @@ let
 
   settingsToLua =
     prefix: settings:
-    generators.toKeyValue {
-      listsAsDuplicateKeys = false;
-      mkKeyValue =
-        k:
-        generators.mkKeyValueDefault {
-          mkValueString = toLua;
-        } " = " (prefix + k);
-    } (filterAttrs (k: v: v != null) settings);
+    generators.toKeyValue
+      {
+        listsAsDuplicateKeys = false;
+        mkKeyValue =
+          k:
+          generators.mkKeyValueDefault
+            {
+              mkValueString = toLua;
+            } " = "
+            (prefix + k);
+      }
+      (filterAttrs (k: v: v != null) settings);
 
   createSSLOptsStr = o: ''
     ssl = {
@@ -510,16 +513,18 @@ let
         url = cfg.httpFileShare.domain;
         description = "HTTP file share endpoint";
       };
-      mucDiscoItems = builtins.foldl' (
-        acc: muc:
-        [
-          {
-            url = muc.domain;
-            description = "${muc.domain} MUC endpoint";
-          }
-        ]
-        ++ acc
-      ) [ ] cfg.muc;
+      mucDiscoItems = builtins.foldl'
+        (
+          acc: muc:
+            [
+              {
+                url = muc.domain;
+                description = "${muc.domain} MUC endpoint";
+              }
+            ]
+            ++ acc
+        ) [ ]
+        cfg.muc;
       discoItems = cfg.disco_items ++ httpDiscoItems ++ mucDiscoItems;
     in
     pkgs.writeText "prosody.cfg.lua" ''

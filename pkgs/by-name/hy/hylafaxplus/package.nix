@@ -1,33 +1,35 @@
-{
-  stdenv,
-  lib,
-  fakeroot,
-  fetchurl,
-  libfaketime,
-  replaceVars,
-  ## runtime dependencies
-  coreutils,
-  file,
-  findutils,
-  gawk,
-  ghostscript,
-  gnugrep,
-  gnused,
-  libtiff,
-  libxcrypt,
-  openssl,
-  psmisc,
-  sharutils,
-  util-linux,
-  zlib,
-  ## optional packages (using `null` disables some functionality)
-  jbigkit ? null,
-  lcms2 ? null, # for colored faxes
-  openldap ? null,
-  pam ? null,
-  ## system-dependent settings that have to be hardcoded
-  maxgid ? 65534, # null -> try to auto-detect (bad on linux)
-  maxuid ? 65534, # null -> hardcoded value 60002
+{ stdenv
+, lib
+, fakeroot
+, fetchurl
+, libfaketime
+, replaceVars
+, ## runtime dependencies
+  coreutils
+, file
+, findutils
+, gawk
+, ghostscript
+, gnugrep
+, gnused
+, libtiff
+, libxcrypt
+, openssl
+, psmisc
+, sharutils
+, util-linux
+, zlib
+, ## optional packages (using `null` disables some functionality)
+  jbigkit ? null
+, lcms2 ? null
+, # for colored faxes
+  openldap ? null
+, pam ? null
+, ## system-dependent settings that have to be hardcoded
+  maxgid ? 65534
+, # null -> try to auto-detect (bad on linux)
+  maxuid ? 65534
+, # null -> hardcoded value 60002
 }:
 
 let

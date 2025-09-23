@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kernel,
-  # See the official readme for a list of optional flags:
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, # See the official readme for a list of optional flags:
   # https://github.com/cyring/CoreFreq/blob/master/README.md
-  extraFlags ? [ ],
+  extraFlags ? [ ]
+,
 }:
 
 stdenv.mkDerivation rec {

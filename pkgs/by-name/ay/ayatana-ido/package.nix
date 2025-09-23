@@ -1,11 +1,11 @@
-{
-  cmake,
-  fetchFromGitHub,
-  glib,
-  gtk3,
-  lib,
-  pkg-config,
-  stdenv,
+{ cmake
+, fetchFromGitHub
+, glib
+, gtk3
+, lib
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

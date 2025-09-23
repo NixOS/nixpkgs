@@ -1,18 +1,16 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  nodejs,
-  node-pre-gyp,
-  node-gyp,
-  python3,
-  util-linux,
-  ffmpeg-headless,
-
-  # Current derivation only supports linux-x86_64 (contributions welcome, without libTensorflow builtin webassembly can be used)
-  useLibTensorflow ? stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux,
-
-  ncVersion,
+{ stdenv
+, fetchurl
+, lib
+, nodejs
+, node-pre-gyp
+, node-gyp
+, python3
+, util-linux
+, ffmpeg-headless
+, # Current derivation only supports linux-x86_64 (contributions welcome, without libTensorflow builtin webassembly can be used)
+  useLibTensorflow ? stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux
+, ncVersion
+,
 }:
 let
   latestVersionForNc = {

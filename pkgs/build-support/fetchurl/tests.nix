@@ -1,9 +1,8 @@
-{
-  testers,
-  fetchurl,
-  jq,
-  moreutils,
-  ...
+{ testers
+, fetchurl
+, jq
+, moreutils
+, ...
 }:
 {
   # Tests that we can send custom headers with spaces in them

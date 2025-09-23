@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  ncurses5,
-  enableSdl2 ? false,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, ncurses5
+, enableSdl2 ? false
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

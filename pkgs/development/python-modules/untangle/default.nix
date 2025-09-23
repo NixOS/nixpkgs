@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  unittestCheckHook,
-  defusedxml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, unittestCheckHook
+, defusedxml
+,
 }:
 
 buildPythonPackage rec {

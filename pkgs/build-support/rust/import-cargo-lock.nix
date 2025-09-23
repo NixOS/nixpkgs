@@ -1,25 +1,22 @@
-{
-  fetchgit,
-  fetchurl,
-  lib,
-  writers,
-  python3Packages,
-  runCommand,
-  cargo,
-  jq,
+{ fetchgit
+, fetchurl
+, lib
+, writers
+, python3Packages
+, runCommand
+, cargo
+, jq
+,
 }:
 
 {
   # Cargo lock file
-  lockFile ? null,
-
-  # Cargo lock file contents as string
-  lockFileContents ? null,
-
-  # Allow `builtins.fetchGit` to be used to not require hashes for git dependencies
-  allowBuiltinFetchGit ? false,
-
-  # Additional registries to pull sources from
+  lockFile ? null
+, # Cargo lock file contents as string
+  lockFileContents ? null
+, # Allow `builtins.fetchGit` to be used to not require hashes for git dependencies
+  allowBuiltinFetchGit ? false
+, # Additional registries to pull sources from
   #   { "https://<registry index URL>" = "https://<registry download URL>"; }
   #   or if the registry is using the new sparse protocol
   #   { "sparse+https://<registry download URL>" = "https://<registry download URL>"; }
@@ -28,10 +25,10 @@
   #   https://doc.rust-lang.org/cargo/reference/registries.html#using-an-alternate-registry
   # - "download URL" is the "dl" value of its associated index configuration
   #   https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
-  extraRegistries ? { },
-
-  # Hashes for git dependencies.
-  outputHashes ? { },
+  extraRegistries ? { }
+, # Hashes for git dependencies.
+  outputHashes ? { }
+,
 }@args:
 
 assert (lockFile == null) != (lockFileContents == null);
@@ -100,17 +97,19 @@ let
   # workspace). By using the git commit SHA as a universal identifier,
   # the user does not have to specify the output hash for every package
   # individually.
-  gitShaOutputHash = lib.mapAttrs' (
-    nameVer: hash:
-    let
-      unusedHash = throw "A hash was specified for ${nameVer}, but there is no corresponding git dependency.";
-      rev = namesGitShas.${nameVer} or unusedHash;
-    in
-    {
-      name = rev;
-      value = hash;
-    }
-  ) outputHashes;
+  gitShaOutputHash = lib.mapAttrs'
+    (
+      nameVer: hash:
+        let
+          unusedHash = throw "A hash was specified for ${nameVer}, but there is no corresponding git dependency.";
+          rev = namesGitShas.${nameVer} or unusedHash;
+        in
+        {
+          name = rev;
+          value = hash;
+        }
+    )
+    outputHashes;
 
   # We can't use the existing fetchCrate function, since it uses a
   # recursive hash of the unpacked crate.
@@ -135,16 +134,18 @@ let
   // extraRegistries;
 
   # Replaces values inherited by workspace members.
-  replaceWorkspaceValues = writers.writePython3 "replace-workspace-values" {
-    libraries = with python3Packages; [
-      tomli
-      tomli-w
-    ];
-    flakeIgnore = [
-      "E501"
-      "W503"
-    ];
-  } (builtins.readFile ./replace-workspace-values.py);
+  replaceWorkspaceValues = writers.writePython3 "replace-workspace-values"
+    {
+      libraries = with python3Packages; [
+        tomli
+        tomli-w
+      ];
+      flakeIgnore = [
+        "E501"
+        "W503"
+      ];
+    }
+    (builtins.readFile ./replace-workspace-values.py);
 
   # Fetch and unpack a crate.
   mkCrate =
@@ -182,18 +183,20 @@ let
         '';
         tree =
           if gitShaOutputHash ? ${gitParts.sha} then
-            fetchgit {
-              inherit (gitParts) url;
-              rev = gitParts.sha; # The commit SHA is always available.
-              sha256 = gitShaOutputHash.${gitParts.sha};
-            }
+            fetchgit
+              {
+                inherit (gitParts) url;
+                rev = gitParts.sha; # The commit SHA is always available.
+                sha256 = gitShaOutputHash.${gitParts.sha};
+              }
           else if allowBuiltinFetchGit then
-            builtins.fetchGit {
-              inherit (gitParts) url;
-              rev = gitParts.sha;
-              allRefs = true;
-              submodules = true;
-            }
+            builtins.fetchGit
+              {
+                inherit (gitParts) url;
+                rev = gitParts.sha;
+                allRefs = true;
+                submodules = true;
+              }
           else
             missingHash;
       in

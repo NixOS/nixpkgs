@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  libtool,
-  bison,
-  pcre2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, bison
+, pcre2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

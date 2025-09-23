@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchCrate,
-  rustPlatform,
-  pkg-config,
-  rustfmt,
-  cacert,
-  openssl,
-  nix-update-script,
-  testers,
-  dioxus-cli,
+{ lib
+, stdenv
+, fetchCrate
+, rustPlatform
+, pkg-config
+, rustfmt
+, cacert
+, openssl
+, nix-update-script
+, testers
+, dioxus-cli
+,
 }:
 
 rustPlatform.buildRustPackage rec {

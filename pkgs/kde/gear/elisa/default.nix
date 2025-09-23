@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qtmultimedia,
-  libvlc,
+{ mkKdeDerivation
+, qtmultimedia
+, libvlc
+,
 }:
 mkKdeDerivation {
   pname = "elisa";

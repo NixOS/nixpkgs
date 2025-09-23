@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build dependencies
-  poetry-core,
-
-  # dependencies
-  appdirs,
-  babelfish,
-  chardet,
-  click,
-  jsonschema,
-  pysrt,
-  pyyaml,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build dependencies
+  poetry-core
+, # dependencies
+  appdirs
+, babelfish
+, chardet
+, click
+, jsonschema
+, pysrt
+, pyyaml
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

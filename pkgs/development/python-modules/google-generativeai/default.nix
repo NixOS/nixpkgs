@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  google-ai-generativelanguage,
-  google-api-core,
-  google-api-python-client,
-  google-auth,
-  protobuf,
-  pydantic,
-  pythonOlder,
-  setuptools,
-  tqdm,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, google-ai-generativelanguage
+, google-api-core
+, google-api-python-client
+, google-auth
+, protobuf
+, pydantic
+, pythonOlder
+, setuptools
+, tqdm
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

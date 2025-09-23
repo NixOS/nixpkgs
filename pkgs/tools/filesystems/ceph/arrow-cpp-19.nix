@@ -4,16 +4,15 @@
 # This should be entirely removed when upstream bug
 #     https://tracker.ceph.com/issues/71269
 # is fixed.
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch2,
-  fetchFromGitHub,
-  fixDarwinDylibNames,
-  autoconf,
-  aws-sdk-cpp,
-  aws-sdk-cpp-arrow ? aws-sdk-cpp.override {
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch2
+, fetchFromGitHub
+, fixDarwinDylibNames
+, autoconf
+, aws-sdk-cpp
+, aws-sdk-cpp-arrow ? aws-sdk-cpp.override {
     apis = [
       "cognito-identity"
       "config"
@@ -22,49 +21,49 @@
       "sts"
       "transfer"
     ];
-  },
-  boost,
-  brotli,
-  bzip2,
-  cmake,
-  crc32c,
-  curl,
-  flatbuffers,
-  gflags,
-  glog,
-  google-cloud-cpp,
-  grpc,
-  gtest,
-  libbacktrace,
-  lz4,
-  minio,
-  ninja,
-  nlohmann_json,
-  openssl,
-  perl,
-  pkg-config,
-  protobuf,
-  python3,
-  rapidjson,
-  re2,
-  snappy,
-  sqlite,
-  thrift,
-  tzdata,
-  utf8proc,
-  which,
-  zlib,
-  zstd,
-  testers,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
-  # Disable also on RiscV
+  }
+, boost
+, brotli
+, bzip2
+, cmake
+, crc32c
+, curl
+, flatbuffers
+, gflags
+, glog
+, google-cloud-cpp
+, grpc
+, gtest
+, libbacktrace
+, lz4
+, minio
+, ninja
+, nlohmann_json
+, openssl
+, perl
+, pkg-config
+, protobuf
+, python3
+, rapidjson
+, re2
+, snappy
+, sqlite
+, thrift
+, tzdata
+, utf8proc
+, which
+, zlib
+, zstd
+, testers
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform
+, # Disable also on RiscV
   # configure: error: cannot determine number of significant virtual address bits
-  enableJemalloc ?
-    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isRiscV64,
-  enableS3 ? true,
-  # google-cloud-cpp fails to build on RiscV
-  enableGcs ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isRiscV64,
+  enableJemalloc ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isRiscV64
+, enableS3 ? true
+, # google-cloud-cpp fails to build on RiscV
+  enableGcs ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isRiscV64
+,
 }:
 
 let

@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  udevCheckHook,
+{ lib
+, python3Packages
+, fetchPypi
+, udevCheckHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

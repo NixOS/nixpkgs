@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pytestCheckHook,
-  python-dateutil,
-  python-socketio,
-  requests,
-  requests-mock,
-  requests-toolbelt,
-  sseclient-py,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pytestCheckHook
+, python-dateutil
+, python-socketio
+, requests
+, requests-mock
+, requests-toolbelt
+, sseclient-py
+,
 }:
 
 buildPythonPackage rec {

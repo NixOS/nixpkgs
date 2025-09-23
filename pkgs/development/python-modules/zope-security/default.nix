@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  zope-component,
-  zope-i18nmessageid,
-  zope-interface,
-  zope-location,
-  zope-proxy,
-  zope-schema,
-  pytz,
-  zope-configuration,
-  btrees,
-  unittestCheckHook,
-  zope-exceptions,
-  zope-testing,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, zope-component
+, zope-i18nmessageid
+, zope-interface
+, zope-location
+, zope-proxy
+, zope-schema
+, pytz
+, zope-configuration
+, btrees
+, unittestCheckHook
+, zope-exceptions
+, zope-testing
+,
 }:
 
 buildPythonPackage rec {

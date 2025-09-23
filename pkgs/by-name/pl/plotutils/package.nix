@@ -1,9 +1,9 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  libpng,
-  autoreconfHook,
+{ fetchurl
+, lib
+, stdenv
+, libpng
+, autoreconfHook
+,
 }:
 
 # debian splits this package into plotutils and libplot2c2

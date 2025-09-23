@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  python3,
-  stdenv,
-  sudo,
-  zfs,
+{ fetchFromGitHub
+, lib
+, python3
+, stdenv
+, sudo
+, zfs
+,
 }:
 
 stdenv.mkDerivation rec {

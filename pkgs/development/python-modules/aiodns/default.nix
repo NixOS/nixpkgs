@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pycares,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pycares
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

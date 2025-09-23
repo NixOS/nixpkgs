@@ -1,30 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-
-  autoreconfHook,
-  pkg-config,
-
-  waylandSupport ? true,
-  x11Support ? true,
-
-  cairo,
-  glib,
-  libnotify,
-  rofi-unwrapped,
-  wl-clipboard,
-  xclip,
-  xdotool,
-  wtype,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, autoreconfHook
+, pkg-config
+, waylandSupport ? true
+, x11Support ? true
+, cairo
+, glib
+, libnotify
+, rofi-unwrapped
+, wl-clipboard
+, xclip
+, xdotool
+, wtype
+,
 }:
 
 import ./versions.nix (
-  {
-    version,
-    hash,
-    patches,
+  { version
+  , hash
+  , patches
+  ,
   }:
   stdenv.mkDerivation rec {
     pname = "rofi-emoji";

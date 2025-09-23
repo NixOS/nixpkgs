@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  modbus-tk,
-  poetry-core,
-  pyserial,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, modbus-tk
+, poetry-core
+, pyserial
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

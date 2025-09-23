@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libuuid,
-  libsodium,
-  keyutils,
-  liburcu,
-  zlib,
-  libaio,
-  zstd,
-  lz4,
-  attr,
-  udev,
-  fuse3,
-  cargo,
-  rustc,
-  rustPlatform,
-  makeWrapper,
-  nix-update-script,
-  python3,
-  testers,
-  nixosTests,
-  installShellFiles,
-  fuseSupport ? false,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libuuid
+, libsodium
+, keyutils
+, liburcu
+, zlib
+, libaio
+, zstd
+, lz4
+, attr
+, udev
+, fuse3
+, cargo
+, rustc
+, rustPlatform
+, makeWrapper
+, nix-update-script
+, python3
+, testers
+, nixosTests
+, installShellFiles
+, fuseSupport ? false
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

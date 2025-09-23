@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  clr,
-  gtest,
-  gbenchmark,
-  buildTests ? false,
-  buildBenchmarks ? false,
-  gpuTargets ? [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, clr
+, gtest
+, gbenchmark
+, buildTests ? false
+, buildBenchmarks ? false
+, gpuTargets ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

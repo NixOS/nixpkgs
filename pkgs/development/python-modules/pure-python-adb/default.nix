@@ -1,10 +1,10 @@
-{
-  aiofiles,
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  pythonOlder,
-  pytestCheckHook,
+{ aiofiles
+, buildPythonPackage
+, fetchPypi
+, lib
+, pythonOlder
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

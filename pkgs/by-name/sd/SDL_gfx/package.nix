@@ -1,10 +1,10 @@
-{
-  lib,
-  SDL,
-  fetchurl,
-  stdenv,
-  # Boolean flags
-  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+{ lib
+, SDL
+, fetchurl
+, stdenv
+, # Boolean flags
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

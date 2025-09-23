@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  pythonPackages,
-  opencv4,
+{ lib
+, fetchFromGitHub
+, pythonPackages
+, opencv4
+,
 }:
 
 let

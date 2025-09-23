@@ -1,50 +1,41 @@
-{
-  featureVersion ? "17",
-
-  lib,
-  stdenv,
-  pkgs,
-
-  gradle_8,
-  gradle_7,
-  perl,
-  pkg-config,
-  cmake,
-  gperf,
-  python3,
-  ruby,
-
-  gtk2,
-  gtk3,
-  libXtst,
-  libXxf86vm,
-  glib,
-  alsa-lib,
-  ffmpeg,
-  ffmpeg-headless,
-
-  writeText,
-
-  _experimental-update-script-combinators,
-  nixpkgs-openjdk-updater,
-  writeShellScript,
-  path,
-
-  withMedia ? true,
-  withWebKit ? false,
-
-  jdk17_headless,
-  jdk21_headless,
-  jdk23_headless,
-  jdk24_headless,
-  jdk-bootstrap ?
-    {
-      "17" = jdk17_headless;
-      "21" = jdk21_headless;
-      "23" = jdk23_headless;
-      "24" = jdk24_headless;
-    }
-    .${featureVersion},
+{ featureVersion ? "17"
+, lib
+, stdenv
+, pkgs
+, gradle_8
+, gradle_7
+, perl
+, pkg-config
+, cmake
+, gperf
+, python3
+, ruby
+, gtk2
+, gtk3
+, libXtst
+, libXxf86vm
+, glib
+, alsa-lib
+, ffmpeg
+, ffmpeg-headless
+, writeText
+, _experimental-update-script-combinators
+, nixpkgs-openjdk-updater
+, writeShellScript
+, path
+, withMedia ? true
+, withWebKit ? false
+, jdk17_headless
+, jdk21_headless
+, jdk23_headless
+, jdk24_headless
+, jdk-bootstrap ? {
+    "17" = jdk17_headless;
+    "21" = jdk21_headless;
+    "23" = jdk23_headless;
+    "24" = jdk24_headless;
+  }.${featureVersion}
+,
 }:
 
 let

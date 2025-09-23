@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  asio,
-  nettle,
-  gnutls,
-  msgpack-cxx,
-  readline,
-  libargon2,
-  jsoncpp,
-  restinio,
-  llhttp,
-  openssl,
-  fmt,
-  nix-update-script,
-  enableProxyServerAndClient ? false,
-  enablePushNotifications ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, asio
+, nettle
+, gnutls
+, msgpack-cxx
+, readline
+, libargon2
+, jsoncpp
+, restinio
+, llhttp
+, openssl
+, fmt
+, nix-update-script
+, enableProxyServerAndClient ? false
+, enablePushNotifications ? false
+,
 }:
 
 stdenv.mkDerivation rec {

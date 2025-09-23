@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost183,
-  cmake,
-  ninja,
-  zeromq,
-  catch2,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost183
+, cmake
+, ninja
+, zeromq
+, catch2
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

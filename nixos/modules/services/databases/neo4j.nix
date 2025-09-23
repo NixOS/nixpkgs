@@ -1,9 +1,8 @@
-{
-  config,
-  options,
-  lib,
-  pkgs,
-  ...
+{ config
+, options
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.neo4j;
@@ -12,30 +11,32 @@ let
   isDefaultPathOption =
     opt: lib.isOption opt && opt.type == lib.types.path && opt.highestPrio >= 1500;
 
-  sslPolicies = lib.mapAttrsToList (name: conf: ''
-    dbms.ssl.policy.${name}.allow_key_generation=${lib.boolToString conf.allowKeyGeneration}
-    dbms.ssl.policy.${name}.base_directory=${conf.baseDirectory}
-    ${lib.optionalString (conf.ciphers != null) ''
-      dbms.ssl.policy.${name}.ciphers=${lib.concatStringsSep "," conf.ciphers}
-    ''}
-    dbms.ssl.policy.${name}.client_auth=${conf.clientAuth}
-    ${
-      if lib.length (lib.splitString "/" conf.privateKey) > 1 then
-        "dbms.ssl.policy.${name}.private_key=${conf.privateKey}"
-      else
-        "dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}"
-    }
-    ${
-      if lib.length (lib.splitString "/" conf.privateKey) > 1 then
-        "dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}"
-      else
-        "dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}"
-    }
-    dbms.ssl.policy.${name}.revoked_dir=${conf.revokedDir}
-    dbms.ssl.policy.${name}.tls_versions=${lib.concatStringsSep "," conf.tlsVersions}
-    dbms.ssl.policy.${name}.trust_all=${lib.boolToString conf.trustAll}
-    dbms.ssl.policy.${name}.trusted_dir=${conf.trustedDir}
-  '') cfg.ssl.policies;
+  sslPolicies = lib.mapAttrsToList
+    (name: conf: ''
+      dbms.ssl.policy.${name}.allow_key_generation=${lib.boolToString conf.allowKeyGeneration}
+      dbms.ssl.policy.${name}.base_directory=${conf.baseDirectory}
+      ${lib.optionalString (conf.ciphers != null) ''
+        dbms.ssl.policy.${name}.ciphers=${lib.concatStringsSep "," conf.ciphers}
+      ''}
+      dbms.ssl.policy.${name}.client_auth=${conf.clientAuth}
+      ${
+        if lib.length (lib.splitString "/" conf.privateKey) > 1 then
+          "dbms.ssl.policy.${name}.private_key=${conf.privateKey}"
+        else
+          "dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}"
+      }
+      ${
+        if lib.length (lib.splitString "/" conf.privateKey) > 1 then
+          "dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}"
+        else
+          "dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}"
+      }
+      dbms.ssl.policy.${name}.revoked_dir=${conf.revokedDir}
+      dbms.ssl.policy.${name}.tls_versions=${lib.concatStringsSep "," conf.tlsVersions}
+      dbms.ssl.policy.${name}.trust_all=${lib.boolToString conf.trustAll}
+      dbms.ssl.policy.${name}.trusted_dir=${conf.trustedDir}
+    '')
+    cfg.ssl.policies;
 
   serverConfig = pkgs.writeText "neo4j.conf" ''
     # General
@@ -459,11 +460,10 @@ in
         with lib.types;
         attrsOf (
           submodule (
-            {
-              name,
-              config,
-              options,
-              ...
+            { name
+            , config
+            , options
+            , ...
             }:
             {
               options = {
@@ -618,9 +618,11 @@ in
                 };
               };
 
-              config.directoriesToCreate = lib.optionals (
-                certDirOpt.highestPrio >= 1500 && options.baseDirectory.highestPrio >= 1500
-              ) (map (opt: opt.value) (lib.filter isDefaultPathOption (lib.attrValues options)));
+              config.directoriesToCreate = lib.optionals
+                (
+                  certDirOpt.highestPrio >= 1500 && options.baseDirectory.highestPrio >= 1500
+                )
+                (map (opt: opt.value) (lib.filter isDefaultPathOption (lib.attrValues options)));
             }
           )
         );

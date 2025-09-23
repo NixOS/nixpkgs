@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  emoji,
-  python-yakh,
-  questo,
-  rich,
-
-  # nativeCheckInputs
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  emoji
+, python-yakh
+, questo
+, rich
+, # nativeCheckInputs
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

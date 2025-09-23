@@ -1,73 +1,72 @@
-{
-  lib,
-  stdenv,
-  bash,
-  fetchFromGitHub,
-  SDL2,
-  alsa-lib,
-  catch2_3,
-  fftw,
-  glib,
-  gobject-introspection,
-  gpsd,
-  gtk-layer-shell,
-  gtkmm3,
-  iniparser,
-  jsoncpp,
-  libcava,
-  libdbusmenu-gtk3,
-  libevdev,
-  libinotify-kqueue,
-  libinput,
-  libjack2,
-  libmpdclient,
-  libnl,
-  libpulseaudio,
-  libsigcxx,
-  libxkbcommon,
-  meson,
-  ncurses,
-  ninja,
-  pipewire,
-  pkg-config,
-  playerctl,
-  portaudio,
-  python3,
-  scdoc,
-  sndio,
-  spdlog,
-  systemdMinimal,
-  udev,
-  upower,
-  versionCheckHook,
-  wayland,
-  wayland-scanner,
-  wireplumber,
-  wrapGAppsHook3,
-
-  cavaSupport ? true,
-  enableManpages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  evdevSupport ? true,
-  experimentalPatches ? true,
-  gpsSupport ? true,
-  inputSupport ? true,
-  jackSupport ? true,
-  mpdSupport ? true,
-  mprisSupport ? stdenv.hostPlatform.isLinux,
-  niriSupport ? true,
-  nlSupport ? true,
-  pipewireSupport ? true,
-  pulseSupport ? true,
-  rfkillSupport ? true,
-  runTests ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  sndioSupport ? true,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-  traySupport ? true,
-  udevSupport ? true,
-  upowerSupport ? true,
-  wireplumberSupport ? true,
-  withMediaPlayer ? mprisSupport && false,
-  nix-update-script,
+{ lib
+, stdenv
+, bash
+, fetchFromGitHub
+, SDL2
+, alsa-lib
+, catch2_3
+, fftw
+, glib
+, gobject-introspection
+, gpsd
+, gtk-layer-shell
+, gtkmm3
+, iniparser
+, jsoncpp
+, libcava
+, libdbusmenu-gtk3
+, libevdev
+, libinotify-kqueue
+, libinput
+, libjack2
+, libmpdclient
+, libnl
+, libpulseaudio
+, libsigcxx
+, libxkbcommon
+, meson
+, ncurses
+, ninja
+, pipewire
+, pkg-config
+, playerctl
+, portaudio
+, python3
+, scdoc
+, sndio
+, spdlog
+, systemdMinimal
+, udev
+, upower
+, versionCheckHook
+, wayland
+, wayland-scanner
+, wireplumber
+, wrapGAppsHook3
+, cavaSupport ? true
+, enableManpages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, evdevSupport ? true
+, experimentalPatches ? true
+, gpsSupport ? true
+, inputSupport ? true
+, jackSupport ? true
+, mpdSupport ? true
+, mprisSupport ? stdenv.hostPlatform.isLinux
+, niriSupport ? true
+, nlSupport ? true
+, pipewireSupport ? true
+, pulseSupport ? true
+, rfkillSupport ? true
+, runTests ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, sndioSupport ? true
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
+, traySupport ? true
+, udevSupport ? true
+, upowerSupport ? true
+, wireplumberSupport ? true
+, withMediaPlayer ? mprisSupport && false
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

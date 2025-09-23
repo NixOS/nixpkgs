@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nixosTests,
-  pnpm_9,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nixosTests
+, pnpm_9
+, nix-update-script
+,
 }:
 
 buildNpmPackage rec {

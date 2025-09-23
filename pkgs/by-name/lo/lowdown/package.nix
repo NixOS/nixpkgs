@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fixDarwinDylibNames,
-  which,
-  dieHook,
-  bmake,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  enableDarwinSandbox ? true,
-  # for passthru.tests
-  nix,
+{ lib
+, stdenv
+, fetchurl
+, fixDarwinDylibNames
+, which
+, dieHook
+, bmake
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableDarwinSandbox ? true
+, # for passthru.tests
+  nix
+,
 }:
 
 stdenv.mkDerivation rec {

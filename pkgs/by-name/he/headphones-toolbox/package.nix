@@ -1,15 +1,15 @@
-{
-  cargo-tauri,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  lib,
-  nix-update-script,
-  nodejs,
-  pkg-config,
-  rustPlatform,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  yarnConfigHook,
+{ cargo-tauri
+, fetchFromGitHub
+, fetchYarnDeps
+, lib
+, nix-update-script
+, nodejs
+, pkg-config
+, rustPlatform
+, webkitgtk_4_1
+, wrapGAppsHook3
+, yarnConfigHook
+,
 }:
 
 rustPlatform.buildRustPackage (rec {

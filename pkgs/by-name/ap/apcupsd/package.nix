@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  systemd,
-  unixtools,
-  libusb-compat-0_1,
-  coreutils,
-  wall,
-  hostname,
-  man,
-  enableCgiScripts ? true,
-  gd,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, systemd
+, unixtools
+, libusb-compat-0_1
+, coreutils
+, wall
+, hostname
+, man
+, enableCgiScripts ? true
+, gd
+, nixosTests
+,
 }:
 
 assert enableCgiScripts -> gd != null;

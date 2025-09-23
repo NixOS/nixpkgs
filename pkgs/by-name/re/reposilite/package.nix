@@ -1,19 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jre_headless,
-  linkFarm,
-  makeWrapper,
-  nixosTests,
-  plugins ? [ ],
+{ lib
+, stdenv
+, fetchurl
+, jre_headless
+, linkFarm
+, makeWrapper
+, nixosTests
+, plugins ? [ ]
+,
 }:
 let
   pluginsDir = linkFarm "reposilite-plugins" (
-    builtins.map (p: {
-      name = (builtins.parseDrvName p.name).name + ".jar";
-      path = p.outPath or p;
-    }) plugins
+    builtins.map
+      (p: {
+        name = (builtins.parseDrvName p.name).name + ".jar";
+        path = p.outPath or p;
+      })
+      plugins
   );
 in
 stdenv.mkDerivation (finalAttrs: {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  cmrt,
-  libdrm,
-  libva,
-  libX11,
-  libGL,
-  wayland,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, cmrt
+, libdrm
+, libva
+, libX11
+, libGL
+, wayland
+,
 }:
 
 stdenv.mkDerivation rec {

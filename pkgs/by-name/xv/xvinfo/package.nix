@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xorgproto,
-  libx11,
-  libxv,
-  libxext,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorgproto
+, libx11
+, libxv
+, libxext
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xvinfo";

@@ -1,37 +1,38 @@
-{
-  fetchpatch,
-  fetchurl,
-  lib,
-  stdenv,
-  makeWrapper,
-  buildEnv,
-  pkg-config,
-  gnupg,
-  xapian,
-  gmime3,
-  sfsexp,
-  talloc,
-  zlib,
-  doxygen,
-  perl,
-  texinfo,
-  pythonPackages,
-  emacs,
-  ruby,
-  testers,
-  gitUpdater,
-  which,
-  dtach,
-  openssl,
-  bash,
-  gdb,
-  man,
-  git,
-  withEmacs ? true,
-  withRuby ? true,
-  withSfsexp ? true, # also installs notmuch-git, which requires sexp-support
+{ fetchpatch
+, fetchurl
+, lib
+, stdenv
+, makeWrapper
+, buildEnv
+, pkg-config
+, gnupg
+, xapian
+, gmime3
+, sfsexp
+, talloc
+, zlib
+, doxygen
+, perl
+, texinfo
+, pythonPackages
+, emacs
+, ruby
+, testers
+, gitUpdater
+, which
+, dtach
+, openssl
+, bash
+, gdb
+, man
+, git
+, withEmacs ? true
+, withRuby ? true
+, withSfsexp ? true
+, # also installs notmuch-git, which requires sexp-support
   # TODO upstream: it takes too long ! 800 ms here
-  withVim ? true,
+  withVim ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

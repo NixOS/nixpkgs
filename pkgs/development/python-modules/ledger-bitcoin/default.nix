@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  ledgercomm,
-  packaging,
-  bip32,
-  coincurve,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, ledgercomm
+, packaging
+, bip32
+, coincurve
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

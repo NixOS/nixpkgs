@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchurl,
-  pkg-config,
-  gtk2,
-  libX11,
-  libXtst,
-  libXi,
-  libxkbfile,
-  xorgproto,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchurl
+, pkg-config
+, gtk2
+, libX11
+, libXtst
+, libXi
+, libxkbfile
+, xorgproto
+,
 }:
 
 let

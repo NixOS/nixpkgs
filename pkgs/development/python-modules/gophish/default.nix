@@ -1,19 +1,19 @@
-{
-  lib,
-  appdirs,
-  buildPythonPackage,
-  certifi,
-  chardet,
-  fetchFromGitHub,
-  idna,
-  packaging,
-  pyparsing,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  setuptools,
-  six,
-  urllib3,
+{ lib
+, appdirs
+, buildPythonPackage
+, certifi
+, chardet
+, fetchFromGitHub
+, idna
+, packaging
+, pyparsing
+, python-dateutil
+, pythonOlder
+, requests
+, setuptools
+, six
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  imageio,
-  napari-plugin-engine,
-  numpy,
-  vispy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, imageio
+, napari-plugin-engine
+, numpy
+, vispy
+,
 }:
 
 buildPythonPackage rec {

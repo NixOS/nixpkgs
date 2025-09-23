@@ -1,7 +1,6 @@
-{
-  callPackage,
-  nginxMainline,
-  ...
+{ callPackage
+, nginxMainline
+, ...
 }@args:
 
 callPackage ./generic.nix args {

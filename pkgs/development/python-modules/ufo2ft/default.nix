@@ -1,20 +1,20 @@
-{
-  lib,
-  booleanoperations,
-  buildPythonPackage,
-  cffsubr,
-  compreffor,
-  cu2qu,
-  defcon,
-  fetchPypi,
-  fontmath,
-  fonttools,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
-  skia-pathops,
-  syrupy,
-  ufolib2,
+{ lib
+, booleanoperations
+, buildPythonPackage
+, cffsubr
+, compreffor
+, cu2qu
+, defcon
+, fetchPypi
+, fontmath
+, fonttools
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, skia-pathops
+, syrupy
+, ufolib2
+,
 }:
 
 buildPythonPackage rec {

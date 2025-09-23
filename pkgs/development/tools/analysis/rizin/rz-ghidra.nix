@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  # buildInputs
-  rizin,
-  openssl,
-  pugixml,
-  # optional buildInputs
-  enableCutterPlugin ? true,
-  cutter,
-  qt5compat,
-  qtbase,
-  qtsvg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, # buildInputs
+  rizin
+, openssl
+, pugixml
+, # optional buildInputs
+  enableCutterPlugin ? true
+, cutter
+, qt5compat
+, qtbase
+, qtsvg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

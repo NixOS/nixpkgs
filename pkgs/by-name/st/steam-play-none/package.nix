@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  stdenvNoCC,
-  lib,
-  bash,
+{ fetchFromGitHub
+, stdenvNoCC
+, lib
+, bash
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "steam-play-none";

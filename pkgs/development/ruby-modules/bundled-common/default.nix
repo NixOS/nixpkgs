@@ -1,38 +1,38 @@
-{
-  stdenv,
-  lib,
-  buildPackages,
-  runCommand,
-  ruby,
-  defaultGemConfig,
-  buildRubyGem,
-  buildEnv,
-  makeBinaryWrapper,
-  bundler,
+{ stdenv
+, lib
+, buildPackages
+, runCommand
+, ruby
+, defaultGemConfig
+, buildRubyGem
+, buildEnv
+, makeBinaryWrapper
+, bundler
+,
 }@defs:
 
-{
-  name ? null,
-  pname ? null,
-  version ? null,
-  mainGemName ? null,
-  gemdir ? null,
-  gemfile ? null,
-  lockfile ? null,
-  gemset ? null,
-  ruby ? defs.ruby,
-  copyGemFiles ? false, # Copy gem files instead of symlinking
-  gemConfig ? defaultGemConfig,
-  postBuild ? null,
-  document ? [ ],
-  meta ? { },
-  groups ? null,
-  ignoreCollisions ? false,
-  nativeBuildInputs ? [ ],
-  buildInputs ? [ ],
-  extraConfigPaths ? [ ],
-  passthru ? { },
-  ...
+{ name ? null
+, pname ? null
+, version ? null
+, mainGemName ? null
+, gemdir ? null
+, gemfile ? null
+, lockfile ? null
+, gemset ? null
+, ruby ? defs.ruby
+, copyGemFiles ? false
+, # Copy gem files instead of symlinking
+  gemConfig ? defaultGemConfig
+, postBuild ? null
+, document ? [ ]
+, meta ? { }
+, groups ? null
+, ignoreCollisions ? false
+, nativeBuildInputs ? [ ]
+, buildInputs ? [ ]
+, extraConfigPaths ? [ ]
+, passthru ? { }
+, ...
 }@args:
 
 assert name == null -> pname != null;
@@ -58,13 +58,13 @@ let
 
   configuredGemset = lib.flip lib.mapAttrs filteredGemset (
     name: attrs:
-    applyGemConfigs (
-      attrs
-      // {
-        inherit ruby document;
-        gemName = name;
-      }
-    )
+      applyGemConfigs (
+        attrs
+        // {
+          inherit ruby document;
+          gemName = name;
+        }
+      )
   );
 
   hasBundler = builtins.hasAttr "bundler" filteredGemset;
@@ -92,9 +92,8 @@ let
   pname' = if pname != null then pname else name;
 
   copyIfBundledByPath =
-    {
-      bundledByPath ? false,
-      ...
+    { bundledByPath ? false
+    , ...
     }:
     (lib.optionalString bundledByPath (
       assert gemFiles.gemdir != null;
@@ -152,14 +151,15 @@ let
     pathsToLink = [ "/lib" ];
 
     postBuild =
-      genStubsScript (
-        defs
-        // args
-        // {
-          inherit confFiles bundler groups;
-          binPaths = envPaths;
-        }
-      )
+      genStubsScript
+        (
+          defs
+          // args
+          // {
+            inherit confFiles bundler groups;
+            binPaths = envPaths;
+          }
+        )
       + lib.optionalString (postBuild != null) postBuild;
 
     meta = {
@@ -168,9 +168,10 @@ let
     // meta;
 
     passthru = (
-      lib.optionalAttrs (pname != null) {
-        inherit (gems.${pname}) gemType;
-      }
+      lib.optionalAttrs (pname != null)
+        {
+          inherit (gems.${pname}) gemType;
+        }
       // rec {
         inherit
           ruby

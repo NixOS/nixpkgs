@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  python3Packages,
-  wayland-scanner,
-  libxkbcommon,
-  libgbm,
-  pixman,
-  xorg,
-  wayland,
-  gtest,
+{ lib
+, stdenv
+, fetchzip
+, meson
+, ninja
+, pkg-config
+, python3
+, python3Packages
+, wayland-scanner
+, libxkbcommon
+, libgbm
+, pixman
+, xorg
+, wayland
+, gtest
+,
 }:
 
 stdenv.mkDerivation {

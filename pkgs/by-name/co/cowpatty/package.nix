@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  clang,
-  fetchFromGitHub,
-  fetchpatch,
-  installShellFiles,
-  openssl,
-  libpcap,
+{ lib
+, stdenv
+, clang
+, fetchFromGitHub
+, fetchpatch
+, installShellFiles
+, openssl
+, libpcap
+,
 }:
 
 stdenv.mkDerivation rec {

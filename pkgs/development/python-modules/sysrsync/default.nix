@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  setuptools,
-  rsync,
-  toml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, setuptools
+, rsync
+, toml
+,
 }:
 
 buildPythonPackage rec {

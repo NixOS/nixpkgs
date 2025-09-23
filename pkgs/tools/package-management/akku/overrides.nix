@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  akku,
-  curl,
-  git,
+{ stdenv
+, lib
+, akku
+, curl
+, git
+,
 }:
 let
   joinOverrides =

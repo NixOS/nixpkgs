@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  python,
-  netbox,
-  django,
-  netaddr,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, python
+, netbox
+, django
+, netaddr
+,
 }:
 buildPythonPackage rec {
   pname = "netbox-attachments";

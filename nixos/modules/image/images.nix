@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  extendModules,
-  ...
+{ config
+, lib
+, pkgs
+, extendModules
+, ...
 }:
 let
   inherit (lib) types;
@@ -55,12 +54,14 @@ let
     };
     kexec = ../installer/netboot/netboot-minimal.nix;
   };
-  imageConfigs = lib.mapAttrs (
-    name: module:
-    extendModules {
-      modules = [ module ];
-    }
-  ) config.image.modules;
+  imageConfigs = lib.mapAttrs
+    (
+      name: module:
+        extendModules {
+          modules = [ module ];
+        }
+    )
+    config.image.modules;
 in
 {
   options = {
@@ -83,20 +84,22 @@ in
 
   config.image.modules = lib.mkIf (!config.system.build ? image) imageModules;
   config.system.build.images = lib.mkIf (!config.system.build ? image) (
-    lib.mapAttrs (
-      name: nixos:
-      let
-        inherit (nixos) config;
-        inherit (config.image) filePath;
-        builder =
-          config.system.build.image
-            or (throw "Module for `system.build.images.${name}` misses required `system.build.image` option.");
-      in
-      lib.recursiveUpdate builder {
-        passthru = {
-          inherit config filePath;
-        };
-      }
-    ) imageConfigs
+    lib.mapAttrs
+      (
+        name: nixos:
+          let
+            inherit (nixos) config;
+            inherit (config.image) filePath;
+            builder =
+              config.system.build.image
+                or (throw "Module for `system.build.images.${name}` misses required `system.build.image` option.");
+          in
+          lib.recursiveUpdate builder {
+            passthru = {
+              inherit config filePath;
+            };
+          }
+      )
+      imageConfigs
   );
 }

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  # Need macOS 15+ for nested virtualization.
-  apple-sdk_15,
-  buildGoModule,
-  fetchFromGitLab,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, stdenv
+, # Need macOS 15+ for nested virtualization.
+  apple-sdk_15
+, buildGoModule
+, fetchFromGitLab
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 buildGoModule (finalAttrs: {

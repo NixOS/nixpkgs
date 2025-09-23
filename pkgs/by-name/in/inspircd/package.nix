@@ -63,28 +63,28 @@ let
 
 in
 
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nixosTests,
-  perl,
-  pkg-config,
-  http-parser,
-  utf8cpp,
-  libargon2,
-  openldap,
-  libpq,
-  libmysqlclient,
-  pcre2,
-  re2,
-  sqlite,
-  gnutls,
-  libmaxminddb,
-  openssl,
-  yyjson,
-  # For a full list of module names, see https://docs.inspircd.org/packaging/
-  extraModules ? compatibleModules lib stdenv,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, perl
+, pkg-config
+, http-parser
+, utf8cpp
+, libargon2
+, openldap
+, libpq
+, libmysqlclient
+, pcre2
+, re2
+, sqlite
+, gnutls
+, libmaxminddb
+, openssl
+, yyjson
+, # For a full list of module names, see https://docs.inspircd.org/packaging/
+  extraModules ? compatibleModules lib stdenv
+,
 }:
 
 let
@@ -123,9 +123,11 @@ let
   };
 
   # buildInputs necessary for the enabled extraModules
-  extraInputs = lib.concatMap (
-    m: extras."${m}" or (builtins.throw "Unknown extra module ${m}")
-  ) extraModules;
+  extraInputs = lib.concatMap
+    (
+      m: extras."${m}" or (builtins.throw "Unknown extra module ${m}")
+    )
+    extraModules;
 
   # if true, we can't provide a binary version of this
   # package without violating the GPL 2
@@ -133,7 +135,7 @@ let
     let
       allowed = compatibleModules lib stdenv;
     in
-    !lib.all (lib.flip lib.elem allowed) extraModules;
+      !lib.all (lib.flip lib.elem allowed) extraModules;
 
   # return list of the license(s) of the given derivation
   getLicenses =

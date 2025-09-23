@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cython,
-  boost,
-  bluez,
-  nlohmann_json,
-  pyserial,
-  requests,
-  warble,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cython
+, boost
+, bluez
+, nlohmann_json
+, pyserial
+, requests
+, warble
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  python,
-  cronsim,
-  python-dateutil,
-  tzlocal,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-xdist,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, python
+, cronsim
+, python-dateutil
+, tzlocal
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-xdist
+,
 }:
 
 buildPythonPackage rec {

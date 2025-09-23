@@ -1,25 +1,28 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  autoconf,
-  makeDesktopItem,
-  nixosTests,
-  vte,
-  harfbuzz, # can be replaced with libotf
-  fribidi,
-  m17n_lib,
-  libssh2, # build-in ssh
-  fcitx5,
-  fcitx5-gtk,
-  ibus,
-  uim, # IME
-  wrapGAppsHook3, # color picker in mlconfig
-  gdk-pixbuf,
-  gtk3,
-  gtk ? gtk3,
-  # List of gui libraries to use. According to `./configure --help` ran on
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, autoconf
+, makeDesktopItem
+, nixosTests
+, vte
+, harfbuzz
+, # can be replaced with libotf
+  fribidi
+, m17n_lib
+, libssh2
+, # build-in ssh
+  fcitx5
+, fcitx5-gtk
+, ibus
+, uim
+, # IME
+  wrapGAppsHook3
+, # color picker in mlconfig
+  gdk-pixbuf
+, gtk3
+, gtk ? gtk3
+, # List of gui libraries to use. According to `./configure --help` ran on
   # release 3.9.3, options are: (xlib|win32|fb|quartz|console|wayland|sdl2|beos)
   enableGuis ? {
     xlib = enableX11;
@@ -31,21 +34,23 @@
     quartz = stdenv.hostPlatform.isDarwin;
     wayland = stdenv.hostPlatform.isLinux;
     sdl2 = true;
-  },
-  libxkbcommon,
-  wayland, # for the "wayland" --with-gui option
-  SDL2, # for the "sdl" --with-gui option
+  }
+, libxkbcommon
+, wayland
+, # for the "wayland" --with-gui option
+  SDL2
+, # for the "sdl" --with-gui option
   # List of typing engines, the default list enables compiling all of the
   # available ones, as recorded on release 3.9.3
   enableTypeEngines ? {
     xcore = false; # Considered legacy
     xft = enableX11;
     cairo = true;
-  },
-  libX11,
-  libXft,
-  cairo,
-  # List of external tools to create, this default list includes all default
+  }
+, libX11
+, libXft
+, cairo
+, # List of external tools to create, this default list includes all default
   # tools, as recorded on release 3.9.3.
   enableTools ? {
     mlclient = true;
@@ -58,10 +63,10 @@
     mlimgloader = true;
     registobmp = true;
     mlfc = true;
-  },
-  # Whether to enable the X window system
-  enableX11 ? stdenv.hostPlatform.isLinux,
-  # Most of the input methods and other build features are enabled by default,
+  }
+, # Whether to enable the X window system
+  enableX11 ? stdenv.hostPlatform.isLinux
+, # Most of the input methods and other build features are enabled by default,
   # the following attribute set can be used to disable some of them. It's parsed
   # when we set `configureFlags`. If you find other configure Flags that require
   # dependencies, it'd be nice to make that contribution here.
@@ -74,8 +79,8 @@
     bidi = true;
     # Open Type layout support, (substituting glyphs with opentype fonts)
     otl = true;
-  },
-  # Configure the Exec directive in the generated .desktop file
+  }
+, # Configure the Exec directive in the generated .desktop file
   desktopBinary ? (
     if enableGuis.xlib then
       "mlterm"
@@ -85,7 +90,8 @@
       "mlterm-sdl2"
     else
       throw "mlterm: couldn't figure out what desktopBinary to use."
-  ),
+  )
+,
 }:
 
 let

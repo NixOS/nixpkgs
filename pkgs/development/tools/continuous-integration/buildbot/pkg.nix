@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  isPy3k,
-  buildbot,
+{ lib
+, buildPythonPackage
+, isPy3k
+, buildbot
+,
 }:
 
 buildPythonPackage {

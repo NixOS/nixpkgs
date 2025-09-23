@@ -1,24 +1,24 @@
-{
-  lib,
-  rustPlatform,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook4,
-  bashNonInteractive,
-  gdk-pixbuf,
-  gtk4,
-  libdrm,
-  ocl-icd,
-  vulkan-loader,
-  vulkan-tools,
-  coreutils,
-  systemdMinimal,
-  nix-update-script,
-  nixosTests,
-  hwdata,
-  fuse3,
-  autoAddDriverRunpath,
+{ lib
+, rustPlatform
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook4
+, bashNonInteractive
+, gdk-pixbuf
+, gtk4
+, libdrm
+, ocl-icd
+, vulkan-loader
+, vulkan-tools
+, coreutils
+, systemdMinimal
+, nix-update-script
+, nixosTests
+, hwdata
+, fuse3
+, autoAddDriverRunpath
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

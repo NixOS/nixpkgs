@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  rustPlatform,
-  marked-man,
-  coreutils,
-  vulkan-loader,
-  wayland,
-  pkg-config,
-  udev,
-  v4l-utils,
-  dbus,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, rustPlatform
+, marked-man
+, coreutils
+, vulkan-loader
+, wayland
+, pkg-config
+, udev
+, v4l-utils
+, dbus
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

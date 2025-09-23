@@ -1,27 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-
-  packaging,
-  pandas,
-  pyogrio,
-  pyproj,
-  rtree,
-  shapely,
-
-  # optional-dependencies
-  folium,
-  geoalchemy2,
-  geopy,
-  mapclassify,
-  matplotlib,
-  psycopg,
-  pyarrow,
-  sqlalchemy,
-  xyzservices,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, packaging
+, pandas
+, pyogrio
+, pyproj
+, rtree
+, shapely
+, # optional-dependencies
+  folium
+, geoalchemy2
+, geopy
+, mapclassify
+, matplotlib
+, psycopg
+, pyarrow
+, sqlalchemy
+, xyzservices
+,
 }:
 
 buildPythonPackage rec {

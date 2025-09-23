@@ -1,29 +1,28 @@
-{
-  fetchurl,
-  stdenvNoCC,
-  lib,
-  makeWrapper,
-  p7zip,
-  asar,
-  jq,
-  python3,
-  electron,
-  fetchFromGitHub,
-  electronArguments ? "",
-
-  # Whether to enable tray menu by default
-  trayEnabled ? true,
-  # Style of tray: 1 - default style, 2 - mono black, 3 - mono white
-  trayStyle ? 1,
-  # Whether to leave application in tray disregarding of its play state
-  trayAlways ? false,
-  # Whether to enable developers tools
-  devTools ? false,
-  # Vibe animation FPS can be  from 0 (black screen) to any reasonable number.
+{ fetchurl
+, stdenvNoCC
+, lib
+, makeWrapper
+, p7zip
+, asar
+, jq
+, python3
+, electron
+, fetchFromGitHub
+, electronArguments ? ""
+, # Whether to enable tray menu by default
+  trayEnabled ? true
+, # Style of tray: 1 - default style, 2 - mono black, 3 - mono white
+  trayStyle ? 1
+, # Whether to leave application in tray disregarding of its play state
+  trayAlways ? false
+, # Whether to enable developers tools
+  devTools ? false
+, # Vibe animation FPS can be  from 0 (black screen) to any reasonable number.
   # Recommended 25 - 144. Default 25.
-  vibeAnimationMaxFps ? 25,
-  # Yandex Music's custom Windows-styled titlebar. Also makes the window frameless.
-  customTitleBar ? false,
+  vibeAnimationMaxFps ? 25
+, # Yandex Music's custom Windows-styled titlebar. Also makes the window frameless.
+  customTitleBar ? false
+,
 }:
 assert lib.assertMsg (trayStyle >= 1 && trayStyle <= 3) "Tray style must be withing 1 and 3";
 assert lib.assertMsg (vibeAnimationMaxFps >= 0) "Vibe animation max FPS must be greater then 0";

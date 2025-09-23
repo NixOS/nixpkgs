@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumakeBoot,
-  gnupatch,
-  gnused,
-  gnugrep,
-  gawk,
-  gnutar,
-  gzip,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, tinycc
+, gnumakeBoot
+, gnupatch
+, gnused
+, gnugrep
+, gawk
+, gnutar
+, gzip
+,
 }:
 let
   pname = "gnumake-musl";
@@ -32,36 +32,36 @@ let
   ];
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumakeBoot
-      gnupatch
-      gnused
-      gnugrep
-      gawk
-      gnutar
-      gzip
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumakeBoot
+    gnupatch
+    gnused
+    gnugrep
+    gawk
+    gnutar
+    gzip
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/make --version
-        mkdir $out
-      '';
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/make --version
+      mkdir $out
+    '';
 
-    meta = with lib; {
-      description = "Tool to control the generation of non-source files from sources";
-      homepage = "https://www.gnu.org/software/make";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      mainProgram = "make";
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "Tool to control the generation of non-source files from sources";
+    homepage = "https://www.gnu.org/software/make";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    mainProgram = "make";
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     tar xzf ${src}

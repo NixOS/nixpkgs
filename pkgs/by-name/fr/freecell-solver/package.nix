@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  cmocka,
-  gmp,
-  gperf,
-  ninja,
-  perl,
-  pkg-config,
-  python3,
-  rinutils,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, cmocka
+, gmp
+, gperf
+, ninja
+, perl
+, pkg-config
+, python3
+, rinutils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ (
     with perl.pkgs;
     TaskFreecellSolverTesting.buildInputs
-    ++ [
+      ++ [
       GamesSolitaireVerify
       HTMLTemplate
       Moo

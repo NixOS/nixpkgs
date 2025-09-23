@@ -1,16 +1,16 @@
-{
-  pkgsBuildBuild,
-  lib,
-  fetchFromGitHub,
-  vscode-utils,
-  jq,
-  rust-analyzer,
-  buildNpmPackage,
-  moreutils,
-  esbuild,
-  pkg-config,
-  libsecret,
-  setDefaultServerPath ? true,
+{ pkgsBuildBuild
+, lib
+, fetchFromGitHub
+, vscode-utils
+, jq
+, rust-analyzer
+, buildNpmPackage
+, moreutils
+, esbuild
+, pkg-config
+, libsecret
+, setDefaultServerPath ? true
+,
 }:
 
 let

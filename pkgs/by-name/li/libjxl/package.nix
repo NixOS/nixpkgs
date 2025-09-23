@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  brotli,
-  cmake,
-  giflib,
-  gperftools,
-  gtest,
-  libhwy,
-  libjpeg,
-  libpng,
-  libwebp,
-  gdk-pixbuf,
-  openexr,
-  pkg-config,
-  makeWrapper,
-  zlib,
-  asciidoc,
-  graphviz,
-  doxygen,
-  python3,
-  lcms2,
-  enablePlugins ? true,
+{ stdenv
+, lib
+, fetchFromGitHub
+, brotli
+, cmake
+, giflib
+, gperftools
+, gtest
+, libhwy
+, libjpeg
+, libpng
+, libwebp
+, gdk-pixbuf
+, openexr
+, pkg-config
+, makeWrapper
+, zlib
+, asciidoc
+, graphviz
+, doxygen
+, python3
+, lcms2
+, enablePlugins ? true
+,
 }:
 
 let

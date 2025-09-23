@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  cups,
-  ninja,
-  python,
-  pythonImportsCheckHook,
-  moveBuildTree,
-  shiboken6,
-  llvmPackages,
-  symlinkJoin,
+{ lib
+, stdenv
+, cmake
+, cups
+, ninja
+, python
+, pythonImportsCheckHook
+, moveBuildTree
+, shiboken6
+, llvmPackages
+, symlinkJoin
+,
 }:
 let
   packages = with python.pkgs.qt6; [
@@ -96,8 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = (
     if stdenv.hostPlatform.isLinux then
-      # qtwebengine fails under darwin
-      # see https://github.com/NixOS/nixpkgs/pull/312987
+    # qtwebengine fails under darwin
+    # see https://github.com/NixOS/nixpkgs/pull/312987
       packages ++ [ python.pkgs.qt6.qtwebengine ]
     else
       python.pkgs.qt6.darwinVersionInputs

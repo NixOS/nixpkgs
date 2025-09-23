@@ -1,14 +1,13 @@
-{
-  lib,
-  fetchzip,
-  npm-lockfile-fix,
-  buildNpmPackage,
-
-  name,
-  url,
-  hash,
-  npmDepsHash,
-  patches ? [ ],
+{ lib
+, fetchzip
+, npm-lockfile-fix
+, buildNpmPackage
+, name
+, url
+, hash
+, npmDepsHash
+, patches ? [ ]
+,
 }:
 
 buildNpmPackage {

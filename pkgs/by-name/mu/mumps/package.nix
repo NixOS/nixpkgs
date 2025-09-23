@@ -1,21 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  mpi,
-  gfortran,
-  fixDarwinDylibNames,
-  blas,
-  lapack,
-  scalapack,
-  scotch,
-  metis,
-  parmetis,
-  mpiCheckPhaseHook,
-  static ? stdenv.hostPlatform.isStatic,
-  mpiSupport ? false,
-  withParmetis ? false, # default to false due to unfree license
-  withPtScotch ? mpiSupport,
+{ lib
+, stdenv
+, fetchzip
+, mpi
+, gfortran
+, fixDarwinDylibNames
+, blas
+, lapack
+, scalapack
+, scotch
+, metis
+, parmetis
+, mpiCheckPhaseHook
+, static ? stdenv.hostPlatform.isStatic
+, mpiSupport ? false
+, withParmetis ? false
+, # default to false due to unfree license
+  withPtScotch ? mpiSupport
+,
 }:
 assert withParmetis -> mpiSupport;
 assert withPtScotch -> mpiSupport;

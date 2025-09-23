@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  characteristic,
-  six,
-  twisted,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, characteristic
+, six
+, twisted
+,
 }:
 
 buildPythonPackage {

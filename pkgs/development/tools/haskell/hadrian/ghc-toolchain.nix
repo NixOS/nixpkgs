@@ -1,16 +1,16 @@
-{
-  mkDerivation,
-  base,
-  directory,
-  filepath,
-  ghc-platform,
-  lib,
-  process,
-  text,
-  transformers,
-  # GHC source tree to build ghc-toolchain from
-  ghcVersion,
-  ghcSrc,
+{ mkDerivation
+, base
+, directory
+, filepath
+, ghc-platform
+, lib
+, process
+, text
+, transformers
+, # GHC source tree to build ghc-toolchain from
+  ghcVersion
+, ghcSrc
+,
 }:
 mkDerivation {
   pname = "ghc-toolchain";

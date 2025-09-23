@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, autoPatchelfHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

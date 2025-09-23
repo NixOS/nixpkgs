@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -141,9 +140,10 @@ in
           ];
         };
         db_url_envs =
-          lib.optionalAttrs useUrlPath {
-            DATABASE_URL_FILE = "%d/DATABASE_URL_FILE";
-          }
+          lib.optionalAttrs useUrlPath
+            {
+              DATABASE_URL_FILE = "%d/DATABASE_URL_FILE";
+            }
           // lib.optionalAttrs (!useUrlPath) {
             DATABASE_URL = cfg.database.url;
           };

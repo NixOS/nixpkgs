@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jinja2,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jinja2
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

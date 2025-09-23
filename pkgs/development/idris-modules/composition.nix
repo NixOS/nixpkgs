@@ -1,8 +1,8 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  hezarfen,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, hezarfen
+, lib
+,
 }:
 build-idris-package {
   pname = "composition";

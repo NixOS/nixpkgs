@@ -1,21 +1,21 @@
 # FIXME: make gdk-pixbuf dependency optional
-{
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  lib,
-  replaceVars,
-  pikepdf,
-  pytestCheckHook,
-  cairo,
-  cffi,
-  flit-core,
-  numpy,
-  withXcffib ? false,
-  xcffib,
-  glib,
-  gdk-pixbuf,
+{ stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, lib
+, replaceVars
+, pikepdf
+, pytestCheckHook
+, cairo
+, cffi
+, flit-core
+, numpy
+, withXcffib ? false
+, xcffib
+, glib
+, gdk-pixbuf
+,
 }:
 
 buildPythonPackage rec {

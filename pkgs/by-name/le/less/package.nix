@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchurl,
-  fetchpatch,
-  ncurses,
-  pcre2,
-  stdenv,
-  versionCheckHook,
-  # Boolean options
-  withSecure ? false,
+{ lib
+, fetchurl
+, fetchpatch
+, ncurses
+, pcre2
+, stdenv
+, versionCheckHook
+, # Boolean options
+  withSecure ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

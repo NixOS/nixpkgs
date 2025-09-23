@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  which,
-  attr,
-  e2fsprogs,
-  curl,
-  libargon2,
-  librsync,
-  libthreadar,
-  gpgme,
-  libgcrypt,
-  openssl,
-  bzip2,
-  lz4,
-  lzo,
-  xz,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, fetchzip
+, which
+, attr
+, e2fsprogs
+, curl
+, libargon2
+, librsync
+, libthreadar
+, gpgme
+, libgcrypt
+, openssl
+, bzip2
+, lz4
+, lzo
+, xz
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  python3,
-  jdk17_headless,
-  gradle_8,
-  makeWrapper,
-  postgresql,
-  postgresqlTestHook,
+{ lib
+, stdenv
+, fetchgit
+, python3
+, jdk17_headless
+, gradle_8
+, makeWrapper
+, postgresql
+, postgresqlTestHook
+,
 }:
 let
   customPython = python3.withPackages (p: [ p.setuptools ]);

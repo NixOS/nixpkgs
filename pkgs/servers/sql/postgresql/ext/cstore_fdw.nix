@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  postgresql,
-  postgresqlBuildExtension,
-  protobufc,
+{ fetchFromGitHub
+, lib
+, postgresql
+, postgresqlBuildExtension
+, protobufc
+,
 }:
 
 postgresqlBuildExtension {

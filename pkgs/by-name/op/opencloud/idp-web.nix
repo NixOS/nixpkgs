@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  lib,
-  opencloud,
-  pnpm_10,
-  nodejs,
+{ stdenvNoCC
+, lib
+, opencloud
+, pnpm_10
+, nodejs
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

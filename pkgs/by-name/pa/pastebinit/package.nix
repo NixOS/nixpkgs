@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  libxslt,
-  docbook_xsl,
-  installShellFiles,
-  callPackage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, libxslt
+, docbook_xsl
+, installShellFiles
+, callPackage
+,
 }:
 stdenv.mkDerivation rec {
   version = "1.6.2";

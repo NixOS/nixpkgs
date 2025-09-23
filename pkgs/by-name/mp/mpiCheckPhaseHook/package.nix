@@ -1,10 +1,11 @@
-{
-  callPackage,
-  makeSetupHook,
-  stdenv,
+{ callPackage
+, makeSetupHook
+, stdenv
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "mpi-checkPhase-hook";
 
   substitutions = {

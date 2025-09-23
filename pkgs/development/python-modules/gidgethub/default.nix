@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  flit-core,
-  uritemplate,
-  pyjwt,
-  pytestCheckHook,
-  aiohttp,
-  httpx,
-  importlib-resources,
-  pytest-asyncio,
-  pytest-tornasync,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, flit-core
+, uritemplate
+, pyjwt
+, pytestCheckHook
+, aiohttp
+, httpx
+, importlib-resources
+, pytest-asyncio
+, pytest-tornasync
+,
 }:
 
 buildPythonPackage rec {

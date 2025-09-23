@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  python3,
-  python3Packages,
+{ fetchFromGitHub
+, lib
+, makeWrapper
+, python3
+, python3Packages
+,
 }:
 
 python3Packages.buildPythonPackage rec {

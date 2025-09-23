@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  django,
-  djangorestframework,
-  pytestCheckHook,
-  pytest-django,
-  pytz,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, django
+, djangorestframework
+, pytestCheckHook
+, pytest-django
+, pytz
+,
 }:
 
 buildPythonPackage rec {

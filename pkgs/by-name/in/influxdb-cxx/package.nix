@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  catch2_3,
-  libcpr_1_10_5,
-  trompeloeil,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, catch2_3
+, libcpr_1_10_5
+, trompeloeil
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

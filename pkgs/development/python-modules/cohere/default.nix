@@ -1,21 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  fastavro,
-  httpx,
-  httpx-sse,
-  pydantic,
-  pydantic-core,
-  requests,
-  tokenizers,
-  types-requests,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  fastavro
+, httpx
+, httpx-sse
+, pydantic
+, pydantic-core
+, requests
+, tokenizers
+, types-requests
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

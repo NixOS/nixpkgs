@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  fioctl,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, fioctl
+,
 }:
 
 buildGoModule rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libsForQt5,
-  pkg-config,
-  cmake,
-  ninja,
-  python3,
-  runtimeShell,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libsForQt5
+, pkg-config
+, cmake
+, ninja
+, python3
+, runtimeShell
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

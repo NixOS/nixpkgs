@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  ptime,
-  alcotest,
-  ohex,
+{ lib
+, buildDunePackage
+, fetchurl
+, ptime
+, alcotest
+, ohex
+,
 }:
 
 buildDunePackage rec {

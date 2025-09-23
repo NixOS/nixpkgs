@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  perl,
-  perlPackages,
-  tayga,
-  iproute2,
-  nftables,
-  systemd,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, perl
+, perlPackages
+, tayga
+, iproute2
+, nftables
+, systemd
+, nixosTests
+,
 }:
 
 assert (lib.assertMsg systemd.withNetworkd "systemd for clatd must be built with networkd support");

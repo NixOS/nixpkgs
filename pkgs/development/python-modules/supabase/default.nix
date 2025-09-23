@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  gotrue,
-  postgrest,
-  realtime,
-  storage3,
-  supafunc,
-  httpx,
-  pytestCheckHook,
-  python-dotenv,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, gotrue
+, postgrest
+, realtime
+, storage3
+, supafunc
+, httpx
+, pytestCheckHook
+, python-dotenv
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

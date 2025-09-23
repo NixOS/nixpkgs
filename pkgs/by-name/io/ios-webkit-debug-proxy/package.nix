@@ -1,20 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  autoconf,
-  automake,
-  libtool,
-  pkg-config,
-
-  libimobiledevice,
-  libplist,
-  libusb1,
-  openssl,
-
-  nix-update-script,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkg-config
+, libimobiledevice
+, libplist
+, libusb1
+, openssl
+, nix-update-script
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

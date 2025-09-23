@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  appthreat-vulnerability-db,
-  custom-json-diff,
-  cvss,
-  rich,
-  toml,
-  writableTmpDirAsHomeHook,
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, appthreat-vulnerability-db
+, custom-json-diff
+, cvss
+, rich
+, toml
+, writableTmpDirAsHomeHook
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

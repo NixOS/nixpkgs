@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gettext,
-  setuptools,
-  django,
-  pyjwt,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gettext
+, setuptools
+, django
+, pyjwt
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  lib,
-  tailscale,
-  buildGo124Module,
+{ lib
+, tailscale
+, buildGo124Module
+,
 }:
 
 buildGo124Module {

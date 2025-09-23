@@ -1,42 +1,39 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-  hatch-vcs,
-
-  # dependencies
-  aiohttp,
-  awkward,
-  cachetools,
-  cloudpickle,
-  correctionlib,
-  dask,
-  dask-awkward,
-  dask-histogram,
-  hist,
-  lz4,
-  matplotlib,
-  mplhep,
-  numba,
-  numpy,
-  packaging,
-  pandas,
-  pyarrow,
-  requests,
-  scipy,
-  toml,
-  tqdm,
-  uproot,
-  vector,
-
-  # tests
-  distributed,
-  pyinstrument,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, hatch-vcs
+, # dependencies
+  aiohttp
+, awkward
+, cachetools
+, cloudpickle
+, correctionlib
+, dask
+, dask-awkward
+, dask-histogram
+, hist
+, lz4
+, matplotlib
+, mplhep
+, numba
+, numpy
+, packaging
+, pandas
+, pyarrow
+, requests
+, scipy
+, toml
+, tqdm
+, uproot
+, vector
+, # tests
+  distributed
+, pyinstrument
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

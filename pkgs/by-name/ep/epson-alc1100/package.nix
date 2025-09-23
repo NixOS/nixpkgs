@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cups,
-  pkgsi686Linux,
-  dpkg,
-  psutils,
-  makeWrapper,
-  ghostscript,
-  bash,
+{ lib
+, stdenv
+, fetchurl
+, cups
+, pkgsi686Linux
+, dpkg
+, psutils
+, makeWrapper
+, ghostscript
+, bash
+,
 }:
 
 let

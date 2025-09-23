@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  findutils,
-  krb5-c,
-  pythonOlder,
-  setuptools,
-  replaceVars,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, findutils
+, krb5-c
+, pythonOlder
+, setuptools
+, replaceVars
+,
 }:
 
 buildPythonPackage rec {

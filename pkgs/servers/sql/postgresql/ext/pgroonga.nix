@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  groonga,
-  lib,
-  msgpack-c,
-  pkg-config,
-  postgresql,
-  postgresqlBuildExtension,
-  xxHash,
+{ fetchFromGitHub
+, groonga
+, lib
+, msgpack-c
+, pkg-config
+, postgresql
+, postgresqlBuildExtension
+, xxHash
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

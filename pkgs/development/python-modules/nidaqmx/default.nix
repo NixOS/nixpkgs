@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pythonOlder,
-  numpy,
-  deprecation,
-  hightime,
-  tzlocal,
-  python-decouple,
-  click,
-  distro,
-  requests,
-  sphinx,
-  sphinx-rtd-theme,
-  grpcio,
-  protobuf,
-  toml,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pythonOlder
+, numpy
+, deprecation
+, hightime
+, tzlocal
+, python-decouple
+, click
+, distro
+, requests
+, sphinx
+, sphinx-rtd-theme
+, grpcio
+, protobuf
+, toml
+,
 }:
 
 buildPythonPackage rec {

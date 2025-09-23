@@ -1,7 +1,7 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
+{ stdenv
+, lib
+, fetchurl
+,
 }:
 let
   pname = "roapi-http";
@@ -9,25 +9,25 @@ let
   target = lib.optionalString stdenv.hostPlatform.isDarwin "apple-darwin";
 in
 # TODO build from source, currently compilation fails on darwin on snmalloc with
-#  ./mem/../ds/../pal/pal_apple.h:277:64: error: use of undeclared identifier 'kCCSuccess'
-#            reinterpret_cast<void*>(&result), sizeof(result)) != kCCSuccess)
-#
-# rustPlatform.buildRustPackage {
-#   pname = "roapi-http";
-#   inherit version;
+  #  ./mem/../ds/../pal/pal_apple.h:277:64: error: use of undeclared identifier 'kCCSuccess'
+  #            reinterpret_cast<void*>(&result), sizeof(result)) != kCCSuccess)
+  #
+  # rustPlatform.buildRustPackage {
+  #   pname = "roapi-http";
+  #   inherit version;
 
-#   src = fetchFromGitHub {
-#     owner = "roapi";
-#     repo = "roapi";
-#     rev = "roapi-http-v${version}";
-#     sha256 = "sha256-qHAO3h+TTCQQ7vdd4CoXVGfKZ1fIxTWKqbUNnRsJaok=";
-#   };
+  #   src = fetchFromGitHub {
+  #     owner = "roapi";
+  #     repo = "roapi";
+  #     rev = "roapi-http-v${version}";
+  #     sha256 = "sha256-qHAO3h+TTCQQ7vdd4CoXVGfKZ1fIxTWKqbUNnRsJaok=";
+  #   };
 
-#   cargoHash = "sha256-qDJKC6MXeKerPFwJsNND3WkziFtGkTvCgVEsdPbBGAo=";
+  #   cargoHash = "sha256-qDJKC6MXeKerPFwJsNND3WkziFtGkTvCgVEsdPbBGAo=";
 
-#   buildAndTestSubdir = "roapi-http";
+  #   buildAndTestSubdir = "roapi-http";
 
-#   nativeBuildInputs = [ cmake ];
+  #   nativeBuildInputs = [ cmake ];
 
 stdenv.mkDerivation rec {
   inherit pname version;

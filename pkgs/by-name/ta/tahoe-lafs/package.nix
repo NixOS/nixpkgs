@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  texinfo,
-  versionCheckHook,
+{ lib
+, python3
+, fetchFromGitHub
+, texinfo
+, versionCheckHook
+,
 }:
 
 let
@@ -22,9 +22,11 @@ let
           hash = "sha256-FQ7m6hkJcFZaE+ptDALq/gijn/RcAM1Zvzi2+xpoXBU=";
         };
 
-        nativeCheckInputs = lib.filter (
-          input: (input.pname or null) != "pytest-twisted"
-        ) oldAttrs.nativeCheckInputs;
+        nativeCheckInputs = lib.filter
+          (
+            input: (input.pname or null) != "pytest-twisted"
+          )
+          oldAttrs.nativeCheckInputs;
 
         doCheck = false;
       });

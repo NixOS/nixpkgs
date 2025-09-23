@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flask,
-  karton-core,
-  mistune,
-  networkx,
-  prometheus-client,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flask
+, karton-core
+, mistune
+, networkx
+, prometheus-client
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  requests,
-  beautifulsoup4,
-  feather-format,
-  joblib,
-  openpyxl,
-  pandas,
-  pyarrow,
-  xlrd,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, requests
+, beautifulsoup4
+, feather-format
+, joblib
+, openpyxl
+, pandas
+, pyarrow
+, xlrd
+,
 }:
 
 buildPythonPackage rec {

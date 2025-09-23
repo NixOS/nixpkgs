@@ -1,6 +1,6 @@
-{
-  pkgs ? import <nixpkgs> { },
-  feature,
+{ pkgs ? import <nixpkgs> { }
+, feature
+,
 }:
 
 pkgs.runCommandNoCC "${feature}-present" { requiredSystemFeatures = [ feature ]; } ''

@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  redis,
-
-  # tests
-  pygments,
-  pytest-cov-stub,
-  pytest-rerunfailures,
-  pytest-timeout,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  redis
+, # tests
+  pygments
+, pytest-cov-stub
+, pytest-rerunfailures
+, pytest-timeout
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  cffi,
-  fetchPypi,
-  lib,
-  libpulseaudio,
-  numpy,
-  setuptools,
-  testers,
+{ buildPythonPackage
+, cffi
+, fetchPypi
+, lib
+, libpulseaudio
+, numpy
+, setuptools
+, testers
+,
 }:
 let
   pname = "soundcard";

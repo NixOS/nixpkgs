@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  coapthon3,
-  fetchFromGitHub,
-  pycryptodomex,
-  setuptools,
+{ lib
+, buildPythonPackage
+, coapthon3
+, fetchFromGitHub
+, pycryptodomex
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

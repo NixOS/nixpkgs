@@ -1,24 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  zlib,
-  pcre,
-  libxcrypt,
-  libxml2,
-  libxslt,
-  replaceVars,
-  gd,
-  geoip,
-  gperftools,
-  jemalloc,
-  nixosTests,
-  withDebug ? false,
-  withMail ? false,
-  withStream ? false,
-  modules ? [ ],
-  ...
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, zlib
+, pcre
+, libxcrypt
+, libxml2
+, libxslt
+, replaceVars
+, gd
+, geoip
+, gperftools
+, jemalloc
+, nixosTests
+, withDebug ? false
+, withMail ? false
+, withStream ? false
+, modules ? [ ]
+, ...
 }:
 
 let

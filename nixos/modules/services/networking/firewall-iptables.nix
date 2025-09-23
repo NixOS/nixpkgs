@@ -29,11 +29,10 @@
   script will be called which in return will effectively disable the
   complete firewall (in the default configuration).
 */
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 

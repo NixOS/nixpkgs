@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 
 with lib;
@@ -430,16 +429,20 @@ in
 
       # Register the addresses as existing
       virtual = concatStringsSep "\n" (
-        mapAttrsToList (
-          _: inbox: concatMapStringsSep "\n" (address: "${address} ${address}") inbox.address
-        ) cfg.inboxes
+        mapAttrsToList
+          (
+            _: inbox: concatMapStringsSep "\n" (address: "${address} ${address}") inbox.address
+          )
+          cfg.inboxes
       );
 
       # Deliver the addresses with the public-inbox transport
       transport = concatStringsSep "\n" (
-        mapAttrsToList (
-          _: inbox: concatMapStringsSep "\n" (address: "${address} public-inbox:${address}") inbox.address
-        ) cfg.inboxes
+        mapAttrsToList
+          (
+            _: inbox: concatMapStringsSep "\n" (address: "${address} public-inbox:${address}") inbox.address
+          )
+          cfg.inboxes
       );
 
       # The public-inbox transport
@@ -521,35 +524,35 @@ in
                 [ "${cfg.package}/bin/public-inbox-httpd" ]
                 ++ cfg.http.args
                 ++
-                  # See https://public-inbox.org/public-inbox.git/tree/examples/public-inbox.psgi
-                  # for upstream's example.
-                  [
-                    (pkgs.writeText "public-inbox.psgi" ''
-                      #!${cfg.package.fullperl} -w
-                      use strict;
-                      use warnings;
-                      use Plack::Builder;
-                      use PublicInbox::WWW;
+                # See https://public-inbox.org/public-inbox.git/tree/examples/public-inbox.psgi
+                # for upstream's example.
+                [
+                  (pkgs.writeText "public-inbox.psgi" ''
+                    #!${cfg.package.fullperl} -w
+                    use strict;
+                    use warnings;
+                    use Plack::Builder;
+                    use PublicInbox::WWW;
 
-                      my $www = PublicInbox::WWW->new;
-                      $www->preload;
+                    my $www = PublicInbox::WWW->new;
+                    $www->preload;
 
-                      builder {
-                        # If reached through a reverse proxy,
-                        # make it transparent by resetting some HTTP headers
-                        # used by public-inbox to generate URIs.
-                        enable 'ReverseProxy';
+                    builder {
+                      # If reached through a reverse proxy,
+                      # make it transparent by resetting some HTTP headers
+                      # used by public-inbox to generate URIs.
+                      enable 'ReverseProxy';
 
-                        # No need to send a response body if it's an HTTP HEAD requests.
-                        enable 'Head';
+                      # No need to send a response body if it's an HTTP HEAD requests.
+                      enable 'Head';
 
-                        # Route according to configured domains and root paths.
-                        ${concatMapStrings (path: ''
-                          mount q(${path}) => sub { $www->call(@_); };
-                        '') cfg.http.mounts}
-                      }
-                    '')
-                  ]
+                      # Route according to configured domains and root paths.
+                      ${concatMapStrings (path: ''
+                        mount q(${path}) => sub { $www->call(@_); };
+                      '') cfg.http.mounts}
+                    }
+                  '')
+                ]
               );
             };
           }
@@ -629,39 +632,41 @@ in
                 ''}
               ''
               + concatStrings (
-                mapAttrsToList (name: inbox: ''
-                  if [ ! -e ${escapeShellArg inbox.inboxdir} ]; then
-                    # public-inbox-init creates an inbox and adds it to a config file.
-                    # It tries to atomically write the config file by creating
-                    # another file in the same directory, and renaming it.
-                    # This has the sad consequence that we can't use
-                    # /dev/null, or it would try to create a file in /dev.
-                    conf_dir="$(mktemp -d)"
+                mapAttrsToList
+                  (name: inbox: ''
+                    if [ ! -e ${escapeShellArg inbox.inboxdir} ]; then
+                      # public-inbox-init creates an inbox and adds it to a config file.
+                      # It tries to atomically write the config file by creating
+                      # another file in the same directory, and renaming it.
+                      # This has the sad consequence that we can't use
+                      # /dev/null, or it would try to create a file in /dev.
+                      conf_dir="$(mktemp -d)"
 
-                    PI_CONFIG=$conf_dir/conf \
-                    ${cfg.package}/bin/public-inbox-init -V2 \
-                      ${escapeShellArgs (
-                        [
-                          name
-                          inbox.inboxdir
-                          inbox.url
-                        ]
-                        ++ inbox.address
-                      )}
+                      PI_CONFIG=$conf_dir/conf \
+                      ${cfg.package}/bin/public-inbox-init -V2 \
+                        ${escapeShellArgs (
+                          [
+                            name
+                            inbox.inboxdir
+                            inbox.url
+                          ]
+                          ++ inbox.address
+                        )}
 
-                    rm -rf $conf_dir
-                  fi
+                      rm -rf $conf_dir
+                    fi
 
-                  ln -sf ${inbox.description} \
-                    ${escapeShellArg inbox.inboxdir}/description
+                    ln -sf ${inbox.description} \
+                      ${escapeShellArg inbox.inboxdir}/description
 
-                  export GIT_DIR=${escapeShellArg inbox.inboxdir}/all.git
-                  if test -d "$GIT_DIR"; then
-                    # Config is inherited by each epoch repository,
-                    # so just needs to be set for all.git.
-                    ${pkgs.git}/bin/git config core.sharedRepository 0640
-                  fi
-                '') cfg.inboxes
+                    export GIT_DIR=${escapeShellArg inbox.inboxdir}/all.git
+                    if test -d "$GIT_DIR"; then
+                      # Config is inherited by each epoch repository,
+                      # so just needs to be set for all.git.
+                      ${pkgs.git}/bin/git config core.sharedRepository 0640
+                    fi
+                  '')
+                  cfg.inboxes
               );
               serviceConfig = {
                 Type = "oneshot";

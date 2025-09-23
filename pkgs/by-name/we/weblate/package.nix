@@ -1,16 +1,16 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  gettext,
-  pango,
-  harfbuzz,
-  librsvg,
-  gdk-pixbuf,
-  glib,
-  borgbackup,
-  writeText,
-  nixosTests,
+{ lib
+, python3
+, fetchFromGitHub
+, gettext
+, pango
+, harfbuzz
+, librsvg
+, gdk-pixbuf
+, glib
+, borgbackup
+, writeText
+, nixosTests
+,
 }:
 
 let

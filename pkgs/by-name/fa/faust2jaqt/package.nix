@@ -1,13 +1,13 @@
-{
-  bash,
-  faust,
-  jack2,
-  qt5,
-  libsndfile,
-  alsa-lib,
-  writeText,
-  buildPackages,
-  which,
+{ bash
+, faust
+, jack2
+, qt5
+, libsndfile
+, alsa-lib
+, writeText
+, buildPackages
+, which
+,
 }:
 let
   # Wrap the binary coming out of the the compilation script, so it knows QT_PLUGIN_PATH

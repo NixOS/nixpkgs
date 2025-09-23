@@ -1,23 +1,22 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchPypi,
-  pythonOlder,
-
-  certifi,
-  charset-normalizer,
-  enochecker-core,
-  exceptiongroup,
-  idna,
-  iniconfig,
-  jsons,
-  packaging,
-  pluggy,
-  pytest,
-  requests,
-  tomli,
-  typish,
-  urllib3,
+{ lib
+, buildPythonApplication
+, fetchPypi
+, pythonOlder
+, certifi
+, charset-normalizer
+, enochecker-core
+, exceptiongroup
+, idna
+, iniconfig
+, jsons
+, packaging
+, pluggy
+, pytest
+, requests
+, tomli
+, typish
+, urllib3
+,
 }:
 
 buildPythonApplication rec {

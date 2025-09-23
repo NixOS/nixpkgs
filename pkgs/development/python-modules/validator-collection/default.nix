@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  simplejson,
-  jsonschema,
-  pyfakefs,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, simplejson
+, jsonschema
+, pyfakefs
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

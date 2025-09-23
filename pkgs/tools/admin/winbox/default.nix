@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeBinaryWrapper,
-  wine,
+{ lib
+, stdenvNoCC
+, fetchurl
+, copyDesktopItems
+, makeDesktopItem
+, makeBinaryWrapper
+, wine
+,
 }:
 
 let

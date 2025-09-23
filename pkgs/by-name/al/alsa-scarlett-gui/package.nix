@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  makeWrapper,
-  alsa-utils,
-  alsa-lib,
-  gtk4,
-  openssl,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, makeWrapper
+, alsa-utils
+, alsa-lib
+, gtk4
+, openssl
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation rec {

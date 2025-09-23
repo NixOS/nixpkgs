@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  makeDesktopItem,
-  fetchurl,
-  jdk21,
-  wrapGAppsHook3,
-  glib,
-  nix-update-script,
+{ lib
+, stdenv
+, makeDesktopItem
+, fetchurl
+, jdk21
+, wrapGAppsHook3
+, glib
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

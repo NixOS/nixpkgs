@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  requests,
-  flit-core,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, requests
+, flit-core
+,
 }:
 
 buildPythonPackage rec {

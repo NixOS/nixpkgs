@@ -1,16 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  aiohttp,
-  music-assistant-models,
-  orjson,
-
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  aiohttp
+, music-assistant-models
+, orjson
+,
 }:
 
 buildPythonPackage rec {

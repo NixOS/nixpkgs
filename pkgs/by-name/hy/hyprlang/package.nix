@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  hyprutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, hyprutils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

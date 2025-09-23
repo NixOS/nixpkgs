@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  libpng,
+{ lib
+, stdenv
+, fetchzip
+, libpng
+,
 }:
 
 stdenv.mkDerivation rec {

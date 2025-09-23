@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  makeWrapper,
-  markdownlint-cli2,
-  nodejs,
-  runCommand,
-  zstd,
+{ lib
+, stdenvNoCC
+, fetchurl
+, makeWrapper
+, markdownlint-cli2
+, nodejs
+, runCommand
+, zstd
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

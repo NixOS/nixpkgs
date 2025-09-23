@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  makeWrapper,
-  writeScript,
+{ lib
+, fetchurl
+, appimageTools
+, makeWrapper
+, writeScript
+,
 }:
 let
   pname = "redact";

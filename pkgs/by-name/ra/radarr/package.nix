@@ -1,24 +1,25 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  sqlite,
-  withFFmpeg ? true, # replace bundled ffprobe binary with symlink to ffmpeg package.
-  servarr-ffmpeg,
-  fetchYarnDeps,
-  yarn,
-  fixup-yarn-lock,
-  nodejs,
-  nixosTests,
-  # update script
-  writers,
-  python3Packages,
-  nix,
-  prefetch-yarn-deps,
-  fetchpatch,
-  applyPatches,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, sqlite
+, withFFmpeg ? true
+, # replace bundled ffprobe binary with symlink to ffmpeg package.
+  servarr-ffmpeg
+, fetchYarnDeps
+, yarn
+, fixup-yarn-lock
+, nodejs
+, nixosTests
+, # update script
+  writers
+, python3Packages
+, nix
+, prefetch-yarn-deps
+, fetchpatch
+, applyPatches
+,
 }:
 let
   version = "5.26.2.10099";
@@ -173,19 +174,20 @@ buildDotnetModule {
       inherit (nixosTests) radarr;
     };
 
-    updateScript = writers.writePython3 "radarr-updater" {
-      libraries = with python3Packages; [ requests ];
-      flakeIgnore = [ "E501" ];
-      makeWrapperArgs = [
-        "--prefix"
-        "PATH"
-        ":"
-        (lib.makeBinPath [
-          nix
-          prefetch-yarn-deps
-        ])
-      ];
-    } ./update.py;
+    updateScript = writers.writePython3 "radarr-updater"
+      {
+        libraries = with python3Packages; [ requests ];
+        flakeIgnore = [ "E501" ];
+        makeWrapperArgs = [
+          "--prefix"
+          "PATH"
+          ":"
+          (lib.makeBinPath [
+            nix
+            prefetch-yarn-deps
+          ])
+        ];
+      } ./update.py;
   };
 
   meta = {

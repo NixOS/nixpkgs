@@ -1,15 +1,15 @@
-{
-  lib,
-  catch2_3,
-  cmake,
-  fetchFromGitHub,
-  gtkmm4,
-  libadwaita,
-  pcre2,
-  pkg-config,
-  stdenv,
-  tinyxml-2,
-  wrapGAppsHook4,
+{ lib
+, catch2_3
+, cmake
+, fetchFromGitHub
+, gtkmm4
+, libadwaita
+, pcre2
+, pkg-config
+, stdenv
+, tinyxml-2
+, wrapGAppsHook4
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "progress-tracker";

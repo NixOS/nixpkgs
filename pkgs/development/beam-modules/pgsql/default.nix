@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildRebar3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildRebar3
+,
 }:
 
 let

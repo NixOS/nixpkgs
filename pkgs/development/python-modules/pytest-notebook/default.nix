@@ -1,30 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  attrs,
-  jsonschema,
-  nbclient,
-  nbdime,
-  nbformat,
-
-  # buildInputs
-  pytest,
-
-  # tests
-  black,
-  coverage,
-  ipykernel,
-  pytest-cov-stub,
-  pytest-regressions,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  pythonAtLeast,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit-core
+, # dependencies
+  attrs
+, jsonschema
+, nbclient
+, nbdime
+, nbformat
+, # buildInputs
+  pytest
+, # tests
+  black
+, coverage
+, ipykernel
+, pytest-cov-stub
+, pytest-regressions
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

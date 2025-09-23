@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libxkbcommon,
-  pipewire,
-  vulkan-loader,
-  wayland,
-  libGL,
-  xorg,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libxkbcommon
+, pipewire
+, vulkan-loader
+, wayland
+, libGL
+, xorg
+,
 }:
 
 rustPlatform.buildRustPackage rec {

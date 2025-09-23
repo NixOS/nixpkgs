@@ -1,15 +1,15 @@
-{
-  fetchurl,
-  stdenv,
-  lib,
-  buildFHSEnv,
-  appimageTools,
-  writeShellScript,
-  anki,
-  undmg,
-  zstd,
-  cacert,
-  commandLineArgs ? [ ],
+{ fetchurl
+, stdenv
+, lib
+, buildFHSEnv
+, appimageTools
+, writeShellScript
+, anki
+, undmg
+, zstd
+, cacert
+, commandLineArgs ? [ ]
+,
 }:
 
 let

@@ -1,18 +1,18 @@
-{
-  _7zz,
-  curl,
-  fetchurl,
-  git,
-  lib,
-  makeBinaryWrapper,
-  php,
-  stdenvNoCC,
-  unzip,
-  xz,
-  version,
-  pharHash,
-  installShellFiles,
-  stdenv,
+{ _7zz
+, curl
+, fetchurl
+, git
+, lib
+, makeBinaryWrapper
+, php
+, stdenvNoCC
+, unzip
+, xz
+, version
+, pharHash
+, installShellFiles
+, stdenv
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

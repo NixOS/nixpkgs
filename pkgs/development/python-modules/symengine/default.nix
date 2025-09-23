@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  cmake,
-  symengine,
-  pytest,
-  sympy,
-  python,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, cmake
+, symengine
+, pytest
+, sympy
+, python
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

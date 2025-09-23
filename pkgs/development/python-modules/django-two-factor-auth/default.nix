@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  django-formtools,
-  django-otp,
-  django-phonenumber-field,
-  fetchFromGitHub,
-  phonenumbers,
-  pydantic,
-  pythonOlder,
-  qrcode,
-  setuptools-scm,
-  twilio,
-  webauthn,
+{ lib
+, buildPythonPackage
+, django
+, django-formtools
+, django-otp
+, django-phonenumber-field
+, fetchFromGitHub
+, phonenumbers
+, pydantic
+, pythonOlder
+, qrcode
+, setuptools-scm
+, twilio
+, webauthn
+,
 }:
 
 buildPythonPackage rec {

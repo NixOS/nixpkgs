@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  setuptools-scm,
-  pyelftools,
-  packaging,
-  pretend,
-  pytestCheckHook,
-  # non-python dependencies
-  bzip2,
-  gnutar,
-  patchelf,
-  unzip,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, setuptools-scm
+, pyelftools
+, packaging
+, pretend
+, pytestCheckHook
+, # non-python dependencies
+  bzip2
+, gnutar
+, patchelf
+, unzip
+,
 }:
 
 buildPythonPackage rec {

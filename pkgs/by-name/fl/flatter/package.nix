@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  cmake,
-  blas,
-  gmp,
-  mpfr,
-  fplll,
-  eigen,
-  llvmPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, cmake
+, blas
+, gmp
+, mpfr
+, fplll
+, eigen
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation {

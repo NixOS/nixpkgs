@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  python3Packages,
-  gnupg,
-  perl,
+{ fetchFromGitHub
+, lib
+, python3Packages
+, gnupg
+, perl
+,
 }:
 
 let

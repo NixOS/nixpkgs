@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  paramiko,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-toolbelt,
-  responses,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, paramiko
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-toolbelt
+, responses
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

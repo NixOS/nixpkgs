@@ -1,24 +1,24 @@
-{
-  lib,
-  beautifulsoup4,
-  boto3,
-  buildPythonPackage,
-  cryptography,
-  dnspython,
-  fetchFromGitHub,
-  importlib-metadata,
-  localzone,
-  oci,
-  poetry-core,
-  pyotp,
-  pytest-vcr,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  requests,
-  softlayer,
-  tldextract,
-  zeep,
+{ lib
+, beautifulsoup4
+, boto3
+, buildPythonPackage
+, cryptography
+, dnspython
+, fetchFromGitHub
+, importlib-metadata
+, localzone
+, oci
+, poetry-core
+, pyotp
+, pytest-vcr
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, softlayer
+, tldextract
+, zeep
+,
 }:
 
 buildPythonPackage rec {

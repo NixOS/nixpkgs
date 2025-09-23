@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  nodejs,
-  gitUpdater,
+{ lib
+, stdenvNoCC
+, fetchurl
+, nodejs
+, gitUpdater
+,
 }:
 let
   owner = "google-gemini";

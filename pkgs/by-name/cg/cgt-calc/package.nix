@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  withTeXLive ? true,
-  texliveSmall,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, withTeXLive ? true
+, texliveSmall
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "cgt-calc";

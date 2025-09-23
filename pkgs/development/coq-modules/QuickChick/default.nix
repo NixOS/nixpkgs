@@ -1,11 +1,11 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  mathcomp-boot,
-  ExtLib,
-  simple-io,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, mathcomp-boot
+, ExtLib
+, simple-io
+, version ? null
+,
 }:
 
 let

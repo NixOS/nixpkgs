@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  replaceVars,
-  fetchurl,
-  cmake,
-  libogg,
-  libvorbis,
-  libtheora,
-  curl,
-  freetype,
-  libjpeg,
-  libpng,
-  SDL2,
-  libGL,
-  libX11,
-  openal,
-  zlib,
+{ stdenv
+, lib
+, replaceVars
+, fetchurl
+, cmake
+, libogg
+, libvorbis
+, libtheora
+, curl
+, freetype
+, libjpeg
+, libpng
+, SDL2
+, libGL
+, libX11
+, openal
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

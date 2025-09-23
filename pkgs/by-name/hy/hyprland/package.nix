@@ -1,53 +1,53 @@
-{
-  lib,
-  stdenv,
-  stdenvAdapters,
-  fetchFromGitHub,
-  pkg-config,
-  makeWrapper,
-  cmake,
-  meson,
-  ninja,
-  aquamarine,
-  binutils,
-  cairo,
-  epoll-shim,
-  git,
-  glaze,
-  hyprcursor,
-  hyprgraphics,
-  hyprland-qtutils,
-  hyprlang,
-  hyprutils,
-  hyprwayland-scanner,
-  libGL,
-  libdrm,
-  libexecinfo,
-  libinput,
-  libuuid,
-  libxkbcommon,
-  libgbm,
-  pango,
-  pciutils,
-  pkgconf,
-  python3,
-  re2,
-  systemd,
-  tomlplusplus,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  xorg,
-  xwayland,
-  debug ? false,
-  enableXWayland ? true,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  wrapRuntimeDeps ? true,
-  # deprecated flags
-  nvidiaPatches ? false,
-  hidpiXWayland ? false,
-  enableNvidiaPatches ? false,
-  legacyRenderer ? false,
+{ lib
+, stdenv
+, stdenvAdapters
+, fetchFromGitHub
+, pkg-config
+, makeWrapper
+, cmake
+, meson
+, ninja
+, aquamarine
+, binutils
+, cairo
+, epoll-shim
+, git
+, glaze
+, hyprcursor
+, hyprgraphics
+, hyprland-qtutils
+, hyprlang
+, hyprutils
+, hyprwayland-scanner
+, libGL
+, libdrm
+, libexecinfo
+, libinput
+, libuuid
+, libxkbcommon
+, libgbm
+, pango
+, pciutils
+, pkgconf
+, python3
+, re2
+, systemd
+, tomlplusplus
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xorg
+, xwayland
+, debug ? false
+, enableXWayland ? true
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, wrapRuntimeDeps ? true
+, # deprecated flags
+  nvidiaPatches ? false
+, hidpiXWayland ? false
+, enableNvidiaPatches ? false
+, legacyRenderer ? false
+,
 }:
 let
   inherit (builtins)
@@ -85,9 +85,10 @@ assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed."
 assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
 assert assertMsg (!hidpiXWayland)
   "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
-assert assertMsg (
-  !legacyRenderer
-) "The option `legacyRenderer` has been removed. Legacy renderer is no longer supported.";
+assert assertMsg
+  (
+    !legacyRenderer
+  ) "The option `legacyRenderer` has been removed. Legacy renderer is no longer supported.";
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";

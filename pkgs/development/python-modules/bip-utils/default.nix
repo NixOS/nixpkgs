@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  cbor2,
-  coincurve,
-  crcmod,
-  ecdsa,
-  ed25519-blake2b,
-  fetchFromGitHub,
-  py-sr25519-bindings,
-  pycryptodome,
-  pynacl,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cbor2
+, coincurve
+, crcmod
+, ecdsa
+, ed25519-blake2b
+, fetchFromGitHub
+, py-sr25519-bindings
+, pycryptodome
+, pynacl
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

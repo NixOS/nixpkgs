@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  installShellFiles,
-  makeWrapper,
-  perl,
-  unzip,
-  gzip,
-  file,
-  # extractors which are added to unp’s PATH
-  extraBackends ? [ ],
+{ stdenv
+, lib
+, fetchFromGitLab
+, installShellFiles
+, makeWrapper
+, perl
+, unzip
+, gzip
+, file
+, # extractors which are added to unp’s PATH
+  extraBackends ? [ ]
+,
 }:
 
 let

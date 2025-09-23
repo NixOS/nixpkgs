@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

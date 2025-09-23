@@ -1,21 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  pdm-backend,
-  jschon,
-  pyvcd,
-  jinja2,
-  importlib-resources,
-  importlib-metadata,
-  git,
-
-  # for tests
-  pytestCheckHook,
-  sby,
-  yices,
-  yosys,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, pdm-backend
+, jschon
+, pyvcd
+, jinja2
+, importlib-resources
+, importlib-metadata
+, git
+, # for tests
+  pytestCheckHook
+, sby
+, yices
+, yosys
+,
 }:
 
 buildPythonPackage rec {

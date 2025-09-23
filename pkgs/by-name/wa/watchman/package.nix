@@ -1,36 +1,30 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-
-  cmake,
-  ninja,
-  pkg-config,
-  rustc,
-  cargo,
-  rustPlatform,
-  ensureNewerSourcesForZipFilesHook,
-  removeReferencesTo,
-
-  pcre2,
-  openssl,
-  gflags,
-  glog,
-  libevent,
-  edencommon,
-  folly,
-  fizz,
-  wangle,
-  fbthrift,
-  fb303,
-  cpptoml,
-
-  gtest,
-
-  nix-update-script,
-
-  stateDir ? "",
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, rustc
+, cargo
+, rustPlatform
+, ensureNewerSourcesForZipFilesHook
+, removeReferencesTo
+, pcre2
+, openssl
+, gflags
+, glog
+, libevent
+, edencommon
+, folly
+, fizz
+, wangle
+, fbthrift
+, fb303
+, cpptoml
+, gtest
+, nix-update-script
+, stateDir ? ""
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

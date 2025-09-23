@@ -1,16 +1,16 @@
-{
-  lib,
-  desktop-file-utils,
-  fetchFromGitHub,
-  gobject-introspection,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  stdenv,
-  wrapGAppsHook4,
+{ lib
+, desktop-file-utils
+, fetchFromGitHub
+, gobject-introspection
+, gtk4
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, python3
+, stdenv
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,36 +1,30 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-
-  # build-system
-  hatchling,
-
-  # docs
-  sphinxHook,
-
-  # dependencies
-  soupsieve,
-  typing-extensions,
-
-  # optional-dependencies
-  chardet,
-  charset-normalizer,
-  faust-cchardet,
-  html5lib,
-  lxml,
-
-  # tests
-  pytestCheckHook,
-
-  # for passthru.tests
-  html-sanitizer,
-  markdownify,
-  mechanicalsoup,
-  nbconvert,
-  subliminal,
-  wagtail,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, # build-system
+  hatchling
+, # docs
+  sphinxHook
+, # dependencies
+  soupsieve
+, typing-extensions
+, # optional-dependencies
+  chardet
+, charset-normalizer
+, faust-cchardet
+, html5lib
+, lxml
+, # tests
+  pytestCheckHook
+, # for passthru.tests
+  html-sanitizer
+, markdownify
+, mechanicalsoup
+, nbconvert
+, subliminal
+, wagtail
+,
 }:
 
 buildPythonPackage rec {

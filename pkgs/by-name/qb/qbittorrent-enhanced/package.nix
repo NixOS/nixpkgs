@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  qbittorrent,
-  guiSupport ? true,
+{ lib
+, fetchFromGitHub
+, qbittorrent
+, guiSupport ? true
+,
 }:
 
 (qbittorrent.override { inherit guiSupport; }).overrideAttrs (old: rec {

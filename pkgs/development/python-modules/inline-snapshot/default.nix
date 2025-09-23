@@ -1,25 +1,25 @@
-{
-  lib,
-  asttokens,
-  black,
-  buildPythonPackage,
-  dirty-equals,
-  executing,
-  fetchFromGitHub,
-  freezegun,
-  hatchling,
-  hypothesis,
-  pydantic,
-  pyright,
-  pytest-freezer,
-  pytest-mock,
-  pytest-subtests,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  rich,
-  time-machine,
-  toml,
+{ lib
+, asttokens
+, black
+, buildPythonPackage
+, dirty-equals
+, executing
+, fetchFromGitHub
+, freezegun
+, hatchling
+, hypothesis
+, pydantic
+, pyright
+, pytest-freezer
+, pytest-mock
+, pytest-subtests
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, rich
+, time-machine
+, toml
+,
 }:
 
 buildPythonPackage rec {

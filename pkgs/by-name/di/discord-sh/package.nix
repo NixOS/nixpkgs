@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  curl,
-  jq,
-  coreutils,
-  file,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, curl
+, jq
+, coreutils
+, file
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

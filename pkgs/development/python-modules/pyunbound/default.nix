@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  unbound,
-  openssl,
-  expat,
-  libevent,
-  bison,
-  flex,
-  swig,
-  python,
-  stdenv,
+{ lib
+, buildPythonPackage
+, unbound
+, openssl
+, expat
+, libevent
+, bison
+, flex
+, swig
+, python
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

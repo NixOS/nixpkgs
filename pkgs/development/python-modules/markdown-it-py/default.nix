@@ -1,27 +1,27 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  commonmark,
-  fetchFromGitHub,
-  flit-core,
-  linkify-it-py,
-  markdown,
-  mdit-py-plugins,
-  mdurl,
-  mistletoe,
-  mistune,
-  myst-parser,
-  panflute,
-  pyyaml,
-  sphinx,
-  sphinx-book-theme,
-  sphinx-copybutton,
-  sphinx-design,
-  stdenv,
-  pytest-regressions,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, attrs
+, buildPythonPackage
+, commonmark
+, fetchFromGitHub
+, flit-core
+, linkify-it-py
+, markdown
+, mdit-py-plugins
+, mdurl
+, mistletoe
+, mistune
+, myst-parser
+, panflute
+, pyyaml
+, sphinx
+, sphinx-book-theme
+, sphinx-copybutton
+, sphinx-design
+, stdenv
+, pytest-regressions
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

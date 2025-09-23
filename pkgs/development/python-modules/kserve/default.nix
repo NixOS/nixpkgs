@@ -1,55 +1,50 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  deprecation,
-  poetry-core,
-
-  # dependencies
-  cloudevents,
-  fastapi,
-  grpc-interceptor,
-  grpcio,
-  httpx,
-  kubernetes,
-  numpy,
-  orjson,
-  pandas,
-  uvicorn,
-
-  # optional-dependencies
-  azure-identity,
-  azure-storage-blob,
-  azure-storage-file-share,
-  boto3,
-  google-cloud-storage,
-  huggingface-hub,
-  asgi-logger,
-  ray,
-  vllm,
-
-  prometheus-client,
-  protobuf,
-  requests,
-  psutil,
-  pydantic,
-  python-dateutil,
-  pyyaml,
-  six,
-  tabulate,
-  timing-asgi,
-
-  # tests
-  avro,
-  grpcio-testing,
-  pytest-asyncio,
-  pytest-httpx,
-  pytest-xdist,
-  pytestCheckHook,
-  tomlkit,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  deprecation
+, poetry-core
+, # dependencies
+  cloudevents
+, fastapi
+, grpc-interceptor
+, grpcio
+, httpx
+, kubernetes
+, numpy
+, orjson
+, pandas
+, uvicorn
+, # optional-dependencies
+  azure-identity
+, azure-storage-blob
+, azure-storage-file-share
+, boto3
+, google-cloud-storage
+, huggingface-hub
+, asgi-logger
+, ray
+, vllm
+, prometheus-client
+, protobuf
+, requests
+, psutil
+, pydantic
+, python-dateutil
+, pyyaml
+, six
+, tabulate
+, timing-asgi
+, # tests
+  avro
+, grpcio-testing
+, pytest-asyncio
+, pytest-httpx
+, pytest-xdist
+, pytestCheckHook
+, tomlkit
+,
 }:
 
 buildPythonPackage rec {

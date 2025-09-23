@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  buildPackages,
-  libiconv,
-  perl,
-  texinfo,
-  xz,
-  binlore,
-  coreutils,
-  gmpSupport ? true,
-  gmp,
-  aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl,
-  acl,
-  attrSupport ? lib.meta.availableOn stdenv.hostPlatform attr,
-  attr,
-  selinuxSupport ? false,
-  libselinux,
-  libsepol,
-  # No openssl in default version, so openssl-induced rebuilds aren't too big.
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, buildPackages
+, libiconv
+, perl
+, texinfo
+, xz
+, binlore
+, coreutils
+, gmpSupport ? true
+, gmp
+, aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl
+, acl
+, attrSupport ? lib.meta.availableOn stdenv.hostPlatform attr
+, attr
+, selinuxSupport ? false
+, libselinux
+, libsepol
+, # No openssl in default version, so openssl-induced rebuilds aren't too big.
   # It makes *sum functions significantly faster.
-  minimal ? true,
-  withOpenssl ? !minimal,
-  openssl,
-  withPrefix ? false,
-  singleBinary ? "symlinks", # you can also pass "shebangs" or false
+  minimal ? true
+, withOpenssl ? !minimal
+, openssl
+, withPrefix ? false
+, singleBinary ? "symlinks"
+, # you can also pass "shebangs" or false
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -177,9 +177,10 @@ stdenv.mkDerivation rec {
   ++ optional stdenv.hostPlatform.isDarwin "--disable-nls"
   # The VMULL-based CRC implementation produces incorrect results on musl.
   # https://lists.gnu.org/archive/html/bug-coreutils/2025-02/msg00046.html
-  ++ optional (
-    stdenv.hostPlatform.config == "aarch64-unknown-linux-musl"
-  ) "utils_cv_vmull_intrinsic_exists=no"
+  ++ optional
+    (
+      stdenv.hostPlatform.config == "aarch64-unknown-linux-musl"
+    ) "utils_cv_vmull_intrinsic_exists=no"
   ++ optionals (isCross && stdenv.hostPlatform.libc == "glibc") [
     # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
     # don't know why it is not properly detected cross building with glibc.

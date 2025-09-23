@@ -1,8 +1,8 @@
-{
-  pkgs,
-  lib,
-  stdenvNoCC,
-  themeConfig ? null,
+{ pkgs
+, lib
+, stdenvNoCC
+, themeConfig ? null
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

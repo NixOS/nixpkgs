@@ -1,13 +1,14 @@
-{
-  lib,
-  stdenv,
-  symlinkJoin,
-  buildGoModule,
-  fetchFromGitHub,
-  kubo-migrator-unwrapped,
-  writeShellApplication,
-  minRepoVersion ? 0, # The minimum supported Kubo repo version from which the migrations can start. Increasing this reduces the closure size
-  stubBrokenMigrations ? true, # This prevents the fs-repo-migrations program from downloading binaries off the internet without even checking any signatures
+{ lib
+, stdenv
+, symlinkJoin
+, buildGoModule
+, fetchFromGitHub
+, kubo-migrator-unwrapped
+, writeShellApplication
+, minRepoVersion ? 0
+, # The minimum supported Kubo repo version from which the migrations can start. Increasing this reduces the closure size
+  stubBrokenMigrations ? true
+, # This prevents the fs-repo-migrations program from downloading binaries off the internet without even checking any signatures
 }:
 
 let
@@ -230,9 +231,11 @@ let
     else
       throw "The minimum supported repo version is 0. Set `minRepoVersion` to a non-zero value.";
 
-  latestMigration = builtins.foldl' (x: y: if y.to == maxRepoVersion then y else x) {
-    release = throw "Could not get the latest Kubo migration";
-  } releases;
+  latestMigration = builtins.foldl' (x: y: if y.to == maxRepoVersion then y else x)
+    {
+      release = throw "Could not get the latest Kubo migration";
+    }
+    releases;
   version = "${toString maxRepoVersion}.${latestMigration.release}";
 
   mkMigrationOrStub =
@@ -245,9 +248,11 @@ let
 
   packageNotBroken = package: !package.meta.broken;
   migrationsBrokenRemoved = builtins.filter packageNotBroken migrations;
-  migrationsBrokenStubbed = builtins.map (
-    x: if packageNotBroken x then x else (stubBecauseBroken x.pname)
-  ) migrations;
+  migrationsBrokenStubbed = builtins.map
+    (
+      x: if packageNotBroken x then x else (stubBecauseBroken x.pname)
+    )
+    migrations;
 in
 
 symlinkJoin {

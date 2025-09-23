@@ -1,33 +1,33 @@
-{
-  lib,
-  buildDotnetModule,
-  cctools,
-  darwin,
-  dotnetCorePackages,
-  fetchFromGitLab,
-  libX11,
-  libgdiplus,
-  moltenvk,
-  ffmpeg,
-  openal,
-  libsoundio,
-  sndio,
-  stdenv,
-  pulseaudio,
-  vulkan-loader,
-  glew,
-  libGL,
-  libICE,
-  libSM,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
-  udev,
-  SDL2,
-  SDL2_mixer,
-  gtk3,
-  wrapGAppsHook3,
+{ lib
+, buildDotnetModule
+, cctools
+, darwin
+, dotnetCorePackages
+, fetchFromGitLab
+, libX11
+, libgdiplus
+, moltenvk
+, ffmpeg
+, openal
+, libsoundio
+, sndio
+, stdenv
+, pulseaudio
+, vulkan-loader
+, glew
+, libGL
+, libICE
+, libSM
+, libXcursor
+, libXext
+, libXi
+, libXrandr
+, udev
+, SDL2
+, SDL2_mixer
+, gtk3
+, wrapGAppsHook3
+,
 }:
 
 buildDotnetModule rec {

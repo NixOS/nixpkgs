@@ -1,20 +1,20 @@
-{
-  lib,
-  ocaml,
-  buildDunePackage,
-  lsp,
-  xdg,
-  re,
-  fiber,
-  makeWrapper,
-  dot-merlin-reader,
-  spawn,
-  ocamlc-loc,
-  merlin,
-  merlin-lib,
-  astring,
-  camlp-streams,
-  base,
+{ lib
+, ocaml
+, buildDunePackage
+, lsp
+, xdg
+, re
+, fiber
+, makeWrapper
+, dot-merlin-reader
+, spawn
+, ocamlc-loc
+, merlin
+, merlin-lib
+, astring
+, camlp-streams
+, base
+,
 }:
 
 # Freeze ocaml-lsp-version at 1.17.0 for OCaml 5.0
@@ -35,17 +35,19 @@ in
 let
   merlin-lib_v =
     if lib.versions.majorMinor ocaml.version == "4.14" then
-      merlin-lib.override {
-        merlin = merlin.override {
-          version = "4.16-414";
-        };
-      }
+      merlin-lib.override
+        {
+          merlin = merlin.override {
+            version = "4.16-414";
+          };
+        }
     else if lib.versions.majorMinor ocaml.version == "5.1" then
-      merlin-lib.override {
-        merlin = merlin.override {
-          version = "4.16-501";
-        };
-      }
+      merlin-lib.override
+        {
+          merlin = merlin.override {
+            version = "4.16-501";
+          };
+        }
     else
       merlin-lib;
 in

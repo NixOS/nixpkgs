@@ -1,10 +1,11 @@
-{
-  buildGoModule,
-  doCheck ? !stdenv.hostPlatform.isDarwin, # Can't start localhost test server in MacOS sandbox.
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
-  stdenv,
+{ buildGoModule
+, doCheck ? !stdenv.hostPlatform.isDarwin
+, # Can't start localhost test server in MacOS sandbox.
+  fetchFromGitHub
+, installShellFiles
+, lib
+, stdenv
+,
 }:
 let
   version = "25.2.4";

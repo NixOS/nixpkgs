@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  vtk,
-  gdcm,
-  testers,
-  vtk-dicom,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, vtk
+, gdcm
+, testers
+, vtk-dicom
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

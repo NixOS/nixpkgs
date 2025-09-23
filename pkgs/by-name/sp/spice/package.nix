@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  pixman,
-  alsa-lib,
-  openssl,
-  libXrandr,
-  libXfixes,
-  libXext,
-  libXrender,
-  libXinerama,
-  libjpeg,
-  zlib,
-  spice-protocol,
-  python3,
-  glib,
-  cyrus_sasl,
-  libcacard,
-  lz4,
-  libopus,
-  gst_all_1,
-  orc,
-  gdk-pixbuf,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, pixman
+, alsa-lib
+, openssl
+, libXrandr
+, libXfixes
+, libXext
+, libXrender
+, libXinerama
+, libjpeg
+, zlib
+, spice-protocol
+, python3
+, glib
+, cyrus_sasl
+, libcacard
+, lz4
+, libopus
+, gst_all_1
+, orc
+, gdk-pixbuf
+,
 }:
 
 stdenv.mkDerivation rec {

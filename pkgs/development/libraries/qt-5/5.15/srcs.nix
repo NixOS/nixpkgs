@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchgit,
-  fetchFromGitHub,
+{ lib
+, fetchgit
+, fetchFromGitHub
+,
 }:
 
 let
@@ -19,7 +19,7 @@ let
   };
 in
 lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
-// {
+  // {
   # qtpim has no official releases
   qtpim = {
     version = "unstable-2020-11-02";

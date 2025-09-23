@@ -1,13 +1,13 @@
-{
-  lib,
-  astropy,
-  buildPythonPackage,
-  dask,
-  fetchPypi,
-  numpy,
-  oldest-supported-numpy,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, astropy
+, buildPythonPackage
+, dask
+, fetchPypi
+, numpy
+, oldest-supported-numpy
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

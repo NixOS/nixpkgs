@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  pydantic,
-  hatchling,
-  djangorestframework,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, pydantic
+, hatchling
+, djangorestframework
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

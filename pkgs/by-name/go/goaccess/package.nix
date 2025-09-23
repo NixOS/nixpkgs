@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchFromGitHub,
-  gettext,
-  libmaxminddb,
-  ncurses,
-  openssl,
-  withGeolocation ? true,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, gettext
+, libmaxminddb
+, ncurses
+, openssl
+, withGeolocation ? true
+,
 }:
 
 stdenv.mkDerivation rec {

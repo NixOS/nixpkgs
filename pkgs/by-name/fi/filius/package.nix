@@ -1,11 +1,11 @@
-{
-  lib,
-  maven,
-  fetchFromGitLab,
-  makeWrapper,
-  jre,
-  wrapGAppsHook3,
-  nix-update-script,
+{ lib
+, maven
+, fetchFromGitLab
+, makeWrapper
+, jre
+, wrapGAppsHook3
+, nix-update-script
+,
 }:
 
 maven.buildMavenPackage rec {

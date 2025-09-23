@@ -1,20 +1,20 @@
-{
-  lib,
-  gitUpdater,
-  stdenv,
-  buildPythonPackage,
-  setuptools,
-  fetchFromGitHub,
-  pyqt5,
-  pyqtwebengine,
-  matplotlib,
-  orange-canvas-core,
-  pyqtgraph,
-  typing-extensions,
-  qt5,
-  pytestCheckHook,
-  pytest-qt,
-  appnope,
+{ lib
+, gitUpdater
+, stdenv
+, buildPythonPackage
+, setuptools
+, fetchFromGitHub
+, pyqt5
+, pyqtwebengine
+, matplotlib
+, orange-canvas-core
+, pyqtgraph
+, typing-extensions
+, qt5
+, pytestCheckHook
+, pytest-qt
+, appnope
+,
 }:
 
 buildPythonPackage rec {

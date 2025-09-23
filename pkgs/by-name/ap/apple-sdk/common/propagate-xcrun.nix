@@ -1,8 +1,8 @@
-{
-  lib,
-  pkgsBuildHost,
-  stdenv,
-  stdenvNoCC,
+{ lib
+, pkgsBuildHost
+, stdenv
+, stdenvNoCC
+,
 }:
 
 let

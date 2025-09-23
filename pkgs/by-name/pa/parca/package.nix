@@ -1,11 +1,11 @@
-{
-  buildGoModule,
-  faketty,
-  fetchFromGitHub,
-  lib,
-  nodejs,
-  pnpm_9,
-  stdenv,
+{ buildGoModule
+, faketty
+, fetchFromGitHub
+, lib
+, nodejs
+, pnpm_9
+, stdenv
+,
 }:
 let
   version = "0.24.0";

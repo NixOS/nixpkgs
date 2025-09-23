@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  geant4,
+{ lib
+, stdenv
+, fetchurl
+, geant4
+,
 }:
 
 let
   mkDataset =
-    {
-      pname,
-      version,
-      sha256,
-      envvar,
+    { pname
+    , version
+    , sha256
+    , envvar
+    ,
     }:
     stdenv.mkDerivation {
       inherit pname version;

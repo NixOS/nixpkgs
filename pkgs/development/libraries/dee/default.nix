@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  fetchpatch,
-  pkg-config,
-  glib,
-  icu,
-  gobject-introspection,
-  dbus-glib,
-  vala,
-  python3,
-  autoreconfHook,
-  gtk-doc,
+{ lib
+, stdenv
+, fetchgit
+, fetchpatch
+, pkg-config
+, glib
+, icu
+, gobject-introspection
+, dbus-glib
+, vala
+, python3
+, autoreconfHook
+, gtk-doc
+,
 }:
 
 stdenv.mkDerivation rec {

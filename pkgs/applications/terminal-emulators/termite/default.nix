@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  vte,
-  gtk3,
-  ncurses,
-  pcre2,
-  wrapGAppsHook3,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, vte
+, gtk3
+, ncurses
+, pcre2
+, wrapGAppsHook3
+, nixosTests
+,
 }:
 
 let

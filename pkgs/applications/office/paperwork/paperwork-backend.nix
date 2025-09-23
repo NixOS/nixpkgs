@@ -1,29 +1,29 @@
-{
-  buildPythonPackage,
-  lib,
-  callPackage,
-  pyenchant,
-  scikit-learn,
-  pypillowfight,
-  pycountry,
-  whoosh,
-  termcolor,
-  pygobject3,
-  pyocr,
-  natsort,
-  libinsane,
-  distro,
-  openpaperwork-core,
-  openpaperwork-gtk,
-  psutil,
-  gtk3,
-  poppler_gi,
-  gettext,
-  which,
-  shared-mime-info,
-  libreoffice,
-  unittestCheckHook,
-  setuptools-scm,
+{ buildPythonPackage
+, lib
+, callPackage
+, pyenchant
+, scikit-learn
+, pypillowfight
+, pycountry
+, whoosh
+, termcolor
+, pygobject3
+, pyocr
+, natsort
+, libinsane
+, distro
+, openpaperwork-core
+, openpaperwork-gtk
+, psutil
+, gtk3
+, poppler_gi
+, gettext
+, which
+, shared-mime-info
+, libreoffice
+, unittestCheckHook
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

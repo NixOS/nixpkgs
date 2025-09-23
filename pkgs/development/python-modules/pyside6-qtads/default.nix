@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cmake-build-extension,
-  fetchFromGitHub,
-  pythonRelaxDepsHook,
-  pyside6,
-  qt6,
-  setuptools,
-  setuptools-scm,
-  shiboken6,
+{ lib
+, buildPythonPackage
+, cmake-build-extension
+, fetchFromGitHub
+, pythonRelaxDepsHook
+, pyside6
+, qt6
+, setuptools
+, setuptools-scm
+, shiboken6
+,
 }:
 
 buildPythonPackage rec {

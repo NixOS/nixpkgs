@@ -1,7 +1,6 @@
-{
-  config,
-  lib,
-  ...
+{ config
+, lib
+, ...
 }:
 
 let
@@ -196,42 +195,44 @@ in
 
     acme = mkOption {
       type = types.nullOr (
-        types.addCheck (types.submodule {
-          options = {
-            enable = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Whether to ask Let’s Encrypt to sign a certificate for this
-                virtual host. Alternatively, an existing host can be used thru
-                {option}`acme.useHost`.
-              '';
+        types.addCheck
+          (types.submodule {
+            options = {
+              enable = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Whether to ask Let’s Encrypt to sign a certificate for this
+                  virtual host. Alternatively, an existing host can be used thru
+                  {option}`acme.useHost`.
+                '';
+              };
+              useHost = mkOption {
+                type = types.nullOr types.nonEmptyStr;
+                default = null;
+                description = ''
+                  An existing Let’s Encrypt certificate to use for this virtual
+                  host. This is useful if you have many subdomains and want to
+                  avoid hitting the [rate
+                  limit](https://letsencrypt.org/docs/rate-limits). Alternately,
+                  you can generate a certificate through {option}`acme.enable`.
+                  Note that this option neither creates any certificates nor does
+                  it add subdomains to existing ones — you will need to create
+                  them manually using [](#opt-security.acme.certs).
+                '';
+              };
+              root = mkOption {
+                type = types.nullOr types.path;
+                default = "/var/lib/acme/acme-challenge";
+                description = ''
+                  Directory for the ACME challenge, which is **public**. Don’t put
+                  certs or keys in here. Set to `null` to inherit from
+                  config.security.acme.
+                '';
+              };
             };
-            useHost = mkOption {
-              type = types.nullOr types.nonEmptyStr;
-              default = null;
-              description = ''
-                An existing Let’s Encrypt certificate to use for this virtual
-                host. This is useful if you have many subdomains and want to
-                avoid hitting the [rate
-                limit](https://letsencrypt.org/docs/rate-limits). Alternately,
-                you can generate a certificate through {option}`acme.enable`.
-                Note that this option neither creates any certificates nor does
-                it add subdomains to existing ones — you will need to create
-                them manually using [](#opt-security.acme.certs).
-              '';
-            };
-            root = mkOption {
-              type = types.nullOr types.path;
-              default = "/var/lib/acme/acme-challenge";
-              description = ''
-                Directory for the ACME challenge, which is **public**. Don’t put
-                certs or keys in here. Set to `null` to inherit from
-                config.security.acme.
-              '';
-            };
-          };
-        }) (a: (a.enable || a.useHost != null) && !(a.enable && a.useHost != null))
+          })
+          (a: (a.enable || a.useHost != null) && !(a.enable && a.useHost != null))
       );
       default = null;
       description = "ACME options for virtual host.";

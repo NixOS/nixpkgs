@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  libpcap,
+{ lib
+, stdenv
+, fetchFromGitLab
+, libpcap
+,
 }:
 
 stdenv.mkDerivation rec {

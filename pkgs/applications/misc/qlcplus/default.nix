@@ -1,20 +1,20 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  qmake,
-  pkg-config,
-  udev,
-  qtmultimedia,
-  qtscript,
-  qtserialport,
-  alsa-lib,
-  ola,
-  libftdi1,
-  libusb-compat-0_1,
-  libsndfile,
-  libmad,
-  udevCheckHook,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, qmake
+, pkg-config
+, udev
+, qtmultimedia
+, qtscript
+, qtserialport
+, alsa-lib
+, ola
+, libftdi1
+, libusb-compat-0_1
+, libsndfile
+, libmad
+, udevCheckHook
+,
 }:
 
 mkDerivation rec {

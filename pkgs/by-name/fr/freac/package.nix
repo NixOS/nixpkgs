@@ -1,12 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  boca,
-  smooth,
-  systemd,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boca
+, smooth
+, systemd
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

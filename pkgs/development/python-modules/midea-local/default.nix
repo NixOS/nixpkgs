@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  aiofiles,
-  aiohttp,
-  colorlog,
-  commonregex,
-  defusedxml,
-  deprecated,
-  ifaddr,
-  pycryptodome,
-  platformdirs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, aiofiles
+, aiohttp
+, colorlog
+, commonregex
+, defusedxml
+, deprecated
+, ifaddr
+, pycryptodome
+, platformdirs
+,
 }:
 
 buildPythonPackage rec {

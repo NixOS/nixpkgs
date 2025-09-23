@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, numpy
+,
 }:
 
 buildPythonPackage rec {

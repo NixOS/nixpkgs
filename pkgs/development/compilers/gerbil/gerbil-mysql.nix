@@ -1,9 +1,8 @@
-{
-  pkgs,
-  lib,
-  fetchFromGitHub,
-  mariadb-connector-c,
-  ...
+{ pkgs
+, lib
+, fetchFromGitHub
+, mariadb-connector-c
+, ...
 }:
 
 {

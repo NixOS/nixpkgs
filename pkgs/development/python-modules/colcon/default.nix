@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  # build-system
-  setuptools,
-  # dependencies
-  distlib,
-  empy,
-  packaging,
-  python-dateutil,
-  pyyaml,
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-repeat,
-  pytest-rerunfailures,
-  scspell,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  distlib
+, empy
+, packaging
+, python-dateutil
+, pyyaml
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+, pytest-repeat
+, pytest-rerunfailures
+, scspell
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromSourcehut,
-  wrapGAppsHook3,
-  pkg-config,
-  cmake,
-  meson,
-  ninja,
-  gtk3,
-  gtk-layer-shell,
-  json_c,
-  librsvg,
-  scdoc,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromSourcehut
+, wrapGAppsHook3
+, pkg-config
+, cmake
+, meson
+, ninja
+, gtk3
+, gtk-layer-shell
+, json_c
+, librsvg
+, scdoc
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

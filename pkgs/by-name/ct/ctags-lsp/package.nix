@@ -1,13 +1,13 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  git,
-  jujutsu,
-  lib,
-  makeWrapper,
-  nix-update-script,
-  universal-ctags,
-  versionCheckHook,
+{ buildGoModule
+, fetchFromGitHub
+, git
+, jujutsu
+, lib
+, makeWrapper
+, nix-update-script
+, universal-ctags
+, versionCheckHook
+,
 }:
 buildGoModule rec {
   pname = "ctags-lsp";

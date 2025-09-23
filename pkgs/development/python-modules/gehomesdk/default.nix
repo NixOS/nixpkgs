@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  bidict,
-  buildPythonPackage,
-  fetchPypi,
-  humanize,
-  lxml,
-  pythonOlder,
-  requests,
-  setuptools,
-  slixmpp,
-  websockets,
+{ lib
+, aiohttp
+, bidict
+, buildPythonPackage
+, fetchPypi
+, humanize
+, lxml
+, pythonOlder
+, requests
+, setuptools
+, slixmpp
+, websockets
+,
 }:
 
 buildPythonPackage rec {

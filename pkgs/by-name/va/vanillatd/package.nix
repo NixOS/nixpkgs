@@ -1,31 +1,26 @@
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  fetchFromGitHub,
-
-  # buildInputs
-  SDL2,
-  libcxx,
-  openal,
-
-  # nativeBuildInputs
-  cmake,
-  git,
-  pkg-config,
-  imagemagick,
-  libicns,
-  copyDesktopItems,
-
-  makeDesktopItem,
-
-  # passthru
-  callPackage,
-  symlinkJoin,
-  rsync,
-
-  appName,
-  CMAKE_BUILD_TYPE ? "RelWithDebInfo", # "Choose the type of build, recommended options are: Debug Release RelWithDebInfo"
+{ lib
+, stdenv
+, stdenvNoCC
+, fetchFromGitHub
+, # buildInputs
+  SDL2
+, libcxx
+, openal
+, # nativeBuildInputs
+  cmake
+, git
+, pkg-config
+, imagemagick
+, libicns
+, copyDesktopItems
+, makeDesktopItem
+, # passthru
+  callPackage
+, symlinkJoin
+, rsync
+, appName
+, CMAKE_BUILD_TYPE ? "RelWithDebInfo"
+, # "Choose the type of build, recommended options are: Debug Release RelWithDebInfo"
 }:
 assert lib.assertOneOf "appName" appName [
   "vanillatd"
@@ -109,8 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
         {
           "vanillatd" = "Command & Conquer: Tiberian Dawn";
           "vanillara" = "Command & Conquer: Red Alert";
-        }
-        ."${appName}";
+        }."${appName}";
       exec = appName;
       terminal = false;
       icon = appName;
@@ -170,8 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
           "Vanilla Conquer is a modern, multi-platform source port of Command & Conquer: Tiberian Dawn";
         "vanillara" =
           "Vanilla Conquer is a modern, multi-platform source port of Command & Conquer: Red Alert";
-      }
-      ."${appName}";
+      }."${appName}";
     homepage = "https://github.com/TheAssemblyArmada/Vanilla-Conquer";
     license = with lib.licenses; [ gpl3Only ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];

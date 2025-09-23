@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchurl,
-  isPyPy,
-  R,
-  rWrapper,
-  xz,
-  bzip2,
-  zlib,
-  zstd,
-  icu,
-  pytestCheckHook,
-  setuptools,
-  cffi,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchurl
+, isPyPy
+, R
+, rWrapper
+, xz
+, bzip2
+, zlib
+, zstd
+, icu
+, pytestCheckHook
+, setuptools
+, cffi
+,
 }:
 
 buildPythonPackage rec {

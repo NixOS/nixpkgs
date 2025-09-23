@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  socat,
-  psutil,
-  python-hglib,
-  pygit2,
-  pyuv,
-  i3ipc,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, socat
+, psutil
+, python-hglib
+, pygit2
+, pyuv
+, i3ipc
+, stdenv
+,
 }:
 
 # TODO: bzr support is missing because nixpkgs switched to `breezy`

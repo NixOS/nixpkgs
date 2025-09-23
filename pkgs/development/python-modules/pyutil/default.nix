@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPyPy,
-  mock,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  setuptools,
-  simplejson,
-  twisted,
-  versioneer,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, mock
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, setuptools
+, simplejson
+, twisted
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

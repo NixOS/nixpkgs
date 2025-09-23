@@ -1,10 +1,10 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  bash,
-  perl,
-  nixosTests,
+{ fetchurl
+, lib
+, stdenv
+, bash
+, perl
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

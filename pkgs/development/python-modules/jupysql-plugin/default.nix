@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  hatchling,
-  hatch-jupyter-builder,
-  hatch-nodejs-version,
-  jupyterlab,
-  ploomber-core,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, hatchling
+, hatch-jupyter-builder
+, hatch-nodejs-version
+, jupyterlab
+, ploomber-core
+,
 }:
 
 buildPythonPackage rec {

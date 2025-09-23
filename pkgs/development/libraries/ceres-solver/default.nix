@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  blas,
-  cmake,
-  eigen,
-  gflags,
-  glog,
-  suitesparse,
-  metis,
-  runTests ? false,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  withBlas ? true,
+{ lib
+, stdenv
+, fetchurl
+, blas
+, cmake
+, eigen
+, gflags
+, glog
+, suitesparse
+, metis
+, runTests ? false
+, enableStatic ? stdenv.hostPlatform.isStatic
+, withBlas ? true
+,
 }:
 
 # gflags is required to run tests

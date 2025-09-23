@@ -1,17 +1,18 @@
-{
-  lib,
-  backendStdenv,
-  setupCudaHook,
+{ lib
+, backendStdenv
+, setupCudaHook
+,
 }:
 prevAttrs: {
   # Merge "bin" and "dev" into "out" to avoid circular references
-  outputs = builtins.filter (
-    x:
-    !(builtins.elem x [
-      "dev"
-      "bin"
-    ])
-  ) prevAttrs.outputs or [ ];
+  outputs = builtins.filter
+    (
+      x:
+        !(builtins.elem x [
+          "dev"
+          "bin"
+        ])
+    ) prevAttrs.outputs or [ ];
 
   # Patch the nvcc.profile.
   # Syntax:

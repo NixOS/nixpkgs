@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  aiohttp,
-  async-timeout,
-  defusedxml,
-  python-didl-lite,
-  voluptuous,
-
-  # tests
-  pytest-aiohttp,
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  aiohttp
+, async-timeout
+, defusedxml
+, python-didl-lite
+, voluptuous
+, # tests
+  pytest-aiohttp
+, pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPackages,
-  which,
-  texi2html,
-  enableX11 ? true,
-  libX11,
-  libXext,
-  libXv,
-  libpng,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
+, which
+, texi2html
+, enableX11 ? true
+, libX11
+, libXext
+, libXv
+, libpng
+,
 }:
 
 stdenv.mkDerivation {

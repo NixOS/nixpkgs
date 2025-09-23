@@ -1,20 +1,18 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # checks
-  mock,
-  pytestCheckHook,
-  sh,
-  coverage,
-  docopt,
-  requests,
-  git,
-  responses,
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # checks
+  mock
+, pytestCheckHook
+, sh
+, coverage
+, docopt
+, requests
+, git
+, responses
+,
 }:
 
 buildPythonPackage rec {

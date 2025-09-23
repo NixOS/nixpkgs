@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cups,
-  dpkg,
-  gnused,
-  makeWrapper,
-  ghostscript,
-  coreutils,
-  perl,
-  gnugrep,
-  which,
-  debugLvl ? "0",
+{ lib
+, stdenv
+, fetchurl
+, cups
+, dpkg
+, gnused
+, makeWrapper
+, ghostscript
+, coreutils
+, perl
+, gnugrep
+, which
+, debugLvl ? "0"
+,
 }:
 
 let

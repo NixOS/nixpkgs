@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitea,
-  aiobtclientrpc,
-  async-timeout,
-  httpx,
-  torf,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitea
+, aiobtclientrpc
+, async-timeout
+, httpx
+, torf
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

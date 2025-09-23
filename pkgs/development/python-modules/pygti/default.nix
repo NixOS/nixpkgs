@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  aiohttp,
-  pytz,
-  voluptuous,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, aiohttp
+, pytz
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

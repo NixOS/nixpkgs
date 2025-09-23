@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  dbus,
-  glib,
-  pkg-config,
-  expat,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, dbus
+, glib
+, pkg-config
+, expat
+,
 }:
 
 stdenv.mkDerivation rec {

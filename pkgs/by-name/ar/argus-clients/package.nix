@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libpcap,
-  bison,
-  flex,
-  cyrus_sasl,
-  tcp_wrappers,
-  pkg-config,
-  perl,
-  libtirpc,
-  libnsl,
+{ lib
+, stdenv
+, fetchurl
+, libpcap
+, bison
+, flex
+, cyrus_sasl
+, tcp_wrappers
+, pkg-config
+, perl
+, libtirpc
+, libnsl
+,
 }:
 
 stdenv.mkDerivation rec {

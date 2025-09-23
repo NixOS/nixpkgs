@@ -1,7 +1,7 @@
-{
-  inkscape,
-  runCommand,
-  writeTextFile,
+{ inkscape
+, runCommand
+, writeTextFile
+,
 }:
 
 let
@@ -15,9 +15,9 @@ let
   };
 in
 runCommand "inkscape-test-eps"
-  {
-    nativeBuildInputs = [ inkscape ];
-  }
+{
+  nativeBuildInputs = [ inkscape ];
+}
   ''
     echo ps test
     inkscape ${svg_file} --export-type=ps -o test.ps

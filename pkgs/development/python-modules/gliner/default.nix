@@ -1,18 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  huggingface-hub,
-  onnxruntime,
-  sentencepiece,
-  torch,
-  tqdm,
-  transformers,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  huggingface-hub
+, onnxruntime
+, sentencepiece
+, torch
+, tqdm
+, transformers
+,
 }:
 
 buildPythonPackage rec {

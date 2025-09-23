@@ -1,23 +1,23 @@
-{
-  lib,
-  mkDerivation,
-  defaultMakeFlags,
-  bsdSetupHook,
-  netbsdSetupHook,
-  makeMinimal,
-  install,
-  mandoc,
-  groff,
-  flex,
-  byacc,
-  genassym,
-  gencat,
-  lorder,
-  tsort,
-  statHook,
-  rpcgen,
-  csu,
-  headers,
+{ lib
+, mkDerivation
+, defaultMakeFlags
+, bsdSetupHook
+, netbsdSetupHook
+, makeMinimal
+, install
+, mandoc
+, groff
+, flex
+, byacc
+, genassym
+, gencat
+, lorder
+, tsort
+, statHook
+, rpcgen
+, csu
+, headers
+,
 }:
 
 mkDerivation {

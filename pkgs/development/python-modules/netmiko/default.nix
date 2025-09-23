@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  ntc-templates,
-  paramiko,
-  poetry-core,
-  pyserial,
-  pyyaml,
-  rich,
-  ruamel-yaml,
-  scp,
-  textfsm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ntc-templates
+, paramiko
+, poetry-core
+, pyserial
+, pyyaml
+, rich
+, ruamel-yaml
+, scp
+, textfsm
+,
 }:
 
 buildPythonPackage rec {

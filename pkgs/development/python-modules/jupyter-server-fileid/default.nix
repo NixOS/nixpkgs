@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  hatchling,
-  jupyter-events,
-  jupyter-server,
-  click,
-  pytest-jupyter,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, hatchling
+, jupyter-events
+, jupyter-server
+, click
+, pytest-jupyter
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

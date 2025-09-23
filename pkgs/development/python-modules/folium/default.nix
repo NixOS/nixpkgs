@@ -1,22 +1,22 @@
-{
-  lib,
-  branca,
-  buildPythonPackage,
-  fetchFromGitHub,
-  geodatasets,
-  geopandas,
-  jinja2,
-  nbconvert,
-  numpy,
-  pandas,
-  pillow,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  selenium,
-  setuptools,
-  setuptools-scm,
-  xyzservices,
+{ lib
+, branca
+, buildPythonPackage
+, fetchFromGitHub
+, geodatasets
+, geopandas
+, jinja2
+, nbconvert
+, numpy
+, pandas
+, pillow
+, pytestCheckHook
+, pythonOlder
+, requests
+, selenium
+, setuptools
+, setuptools-scm
+, xyzservices
+,
 }:
 
 buildPythonPackage rec {

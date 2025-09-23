@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gettext,
-  pkg-config,
-  which,
-  glib,
-  gtk3,
-  wrapGAppsHook3,
-  withGui ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gettext
+, pkg-config
+, which
+, glib
+, gtk3
+, wrapGAppsHook3
+, withGui ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

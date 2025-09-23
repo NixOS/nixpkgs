@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildGoModule (finalAttrs: {

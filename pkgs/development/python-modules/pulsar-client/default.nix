@@ -1,27 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build
-  setuptools,
-  cmake,
-  pkg-config,
-
-  # dependencies
-  libpulsar,
-  pybind11,
-  certifi,
-
-  # optional dependencies
-  fastavro,
-  grpcio,
-  prometheus-client,
-  protobuf,
-  ratelimit,
-
-  # test
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build
+  setuptools
+, cmake
+, pkg-config
+, # dependencies
+  libpulsar
+, pybind11
+, certifi
+, # optional dependencies
+  fastavro
+, grpcio
+, prometheus-client
+, protobuf
+, ratelimit
+, # test
+  unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

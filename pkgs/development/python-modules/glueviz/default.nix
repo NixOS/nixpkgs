@@ -1,27 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  astropy,
-  dill,
-  echo,
-  fast-histogram,
-  h5py,
-  ipython,
-  matplotlib,
-  mpl-scatter-density,
-  numpy,
-  openpyxl,
-  pandas,
-  pyqt-builder,
-  pytestCheckHook,
-  qt6,
-  scipy,
-  setuptools,
-  setuptools-scm,
-  shapely,
-  xlrd,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, astropy
+, dill
+, echo
+, fast-histogram
+, h5py
+, ipython
+, matplotlib
+, mpl-scatter-density
+, numpy
+, openpyxl
+, pandas
+, pyqt-builder
+, pytestCheckHook
+, qt6
+, scipy
+, setuptools
+, setuptools-scm
+, shapely
+, xlrd
+,
 }:
 
 buildPythonPackage rec {

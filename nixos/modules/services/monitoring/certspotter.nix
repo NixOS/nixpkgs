@@ -1,18 +1,18 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
   cfg = config.services.certspotter;
 
   configDir = pkgs.linkFarm "certspotter-config" (
-    lib.toList {
-      name = "watchlist";
-      path = pkgs.writeText "certspotter-watchlist" (builtins.concatStringsSep "\n" cfg.watchlist);
-    }
+    lib.toList
+      {
+        name = "watchlist";
+        path = pkgs.writeText "certspotter-watchlist" (builtins.concatStringsSep "\n" cfg.watchlist);
+      }
     ++ lib.optional (cfg.emailRecipients != [ ]) {
       name = "email_recipients";
       path = pkgs.writeText "certspotter-email_recipients" (
@@ -23,10 +23,12 @@ let
     ++ lib.optional (cfg.emailRecipients == [ ] || cfg.hooks != [ ]) {
       name = "hooks.d";
       path = pkgs.linkFarm "certspotter-hooks" (
-        lib.imap1 (i: path: {
-          inherit path;
-          name = "hook${toString i}";
-        }) cfg.hooks
+        lib.imap1
+          (i: path: {
+            inherit path;
+            name = "hook${toString i}";
+          })
+          cfg.hooks
       );
     }
   );

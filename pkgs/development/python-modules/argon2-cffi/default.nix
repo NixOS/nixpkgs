@@ -1,13 +1,13 @@
-{
-  hypothesis,
-  pytestCheckHook,
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  hatchling,
-  hatch-vcs,
-  hatch-fancy-pypi-readme,
-  argon2-cffi-bindings,
+{ hypothesis
+, pytestCheckHook
+, buildPythonPackage
+, fetchPypi
+, lib
+, hatchling
+, hatch-vcs
+, hatch-fancy-pypi-readme
+, argon2-cffi-bindings
+,
 }:
 
 buildPythonPackage rec {

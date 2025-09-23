@@ -1,7 +1,7 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+,
 }:
 buildPythonPackage {
   pname = "morphys";

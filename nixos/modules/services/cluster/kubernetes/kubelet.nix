@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 
 with lib;
@@ -21,9 +20,11 @@ let
     else
       (pkgs.buildEnv {
         name = "kubernetes-cni-config";
-        paths = imap (
-          i: entry: pkgs.writeTextDir "${toString (10 + i)}-${entry.type}.conf" (builtins.toJSON entry)
-        ) cfg.cni.config;
+        paths = imap
+          (
+            i: entry: pkgs.writeTextDir "${toString (10 + i)}-${entry.type}.conf" (builtins.toJSON entry)
+          )
+          cfg.cni.config;
       });
 
   infraContainer = pkgs.dockerTools.buildImage {
@@ -422,13 +423,15 @@ in
     })
 
     (mkIf (cfg.enable && cfg.manifests != { }) {
-      environment.etc = mapAttrs' (
-        name: manifest:
-        nameValuePair "${manifestPath}/${name}.json" {
-          text = builtins.toJSON manifest;
-          mode = "0755";
-        }
-      ) cfg.manifests;
+      environment.etc = mapAttrs'
+        (
+          name: manifest:
+            nameValuePair "${manifestPath}/${name}.json" {
+              text = builtins.toJSON manifest;
+              mode = "0755";
+            }
+        )
+        cfg.manifests;
     })
 
     (mkIf (cfg.unschedulable && cfg.enable) {

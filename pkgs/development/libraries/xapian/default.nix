@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  libuuid,
-  zlib,
-
-  # tests
-  mu,
-  perlPackages,
-  python3,
-  xapian-omega,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, libuuid
+, zlib
+, # tests
+  mu
+, perlPackages
+, python3
+, xapian-omega
+,
 }:
 
 let

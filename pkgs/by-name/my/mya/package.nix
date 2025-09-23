@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  curl,
-  json_c,
-  libbsd,
-  argp-standalone,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, curl
+, json_c
+, libbsd
+, argp-standalone
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

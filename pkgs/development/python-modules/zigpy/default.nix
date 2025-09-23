@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  aiohttp,
-  aioresponses,
-  aiosqlite,
-  async-timeout,
-  attrs,
-  buildPythonPackage,
-  crccheck,
-  cryptography,
-  fetchFromGitHub,
-  freezegun,
-  frozendict,
-  jsonschema,
-  pyserial-asyncio,
-  pytest-asyncio_0,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
-  voluptuous,
+{ lib
+, stdenv
+, aiohttp
+, aioresponses
+, aiosqlite
+, async-timeout
+, attrs
+, buildPythonPackage
+, crccheck
+, cryptography
+, fetchFromGitHub
+, freezegun
+, frozendict
+, jsonschema
+, pyserial-asyncio
+, pytest-asyncio_0
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typing-extensions
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

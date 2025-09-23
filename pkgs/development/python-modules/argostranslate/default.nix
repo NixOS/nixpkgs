@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  ctranslate2,
-  ctranslate2-cpp,
-  sentencepiece,
-  stanza,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, ctranslate2
+, ctranslate2-cpp
+, sentencepiece
+, stanza
+,
 }:
 let
   ctranslate2OneDNN = ctranslate2.override {

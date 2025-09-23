@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  coreutils,
-  diffutils,
-  git,
-  gnugrep,
-  gnused,
-  jq,
-  nix,
-  python3Packages,
+{ lib
+, stdenv
+, makeWrapper
+, coreutils
+, diffutils
+, git
+, gnugrep
+, gnused
+, jq
+, nix
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation {

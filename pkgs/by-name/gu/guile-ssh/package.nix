@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  guile,
-  libssh,
-  autoreconfHook,
-  pkg-config,
-  texinfo,
-  which,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, guile
+, libssh
+, autoreconfHook
+, pkg-config
+, texinfo
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

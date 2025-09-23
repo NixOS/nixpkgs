@@ -1,31 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  pythonOlder,
-
-  # build
-  meson,
-  meson-python,
-  ninja,
-  nukeReferences,
-  pybind11,
-
-  # propagates
-  numpy,
-
-  # optionals
-  bokeh,
-  chromedriver,
-  selenium,
-
-  # tests
-  matplotlib,
-  pillow,
-  pytest-xdist,
-  pytestCheckHook,
-  wurlitzer,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, pythonOlder
+, # build
+  meson
+, meson-python
+, ninja
+, nukeReferences
+, pybind11
+, # propagates
+  numpy
+, # optionals
+  bokeh
+, chromedriver
+, selenium
+, # tests
+  matplotlib
+, pillow
+, pytest-xdist
+, pytestCheckHook
+, wurlitzer
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  perlPackages,
-  pkg-config,
-  fribidi,
+{ lib
+, fetchurl
+, perlPackages
+, pkg-config
+, fribidi
+,
 }:
 
 perlPackages.buildPerlPackage rec {

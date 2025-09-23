@@ -1,11 +1,11 @@
-{
-  lib,
-  aiosmtpd,
-  buildPythonPackage,
-  fetchPypi,
-  werkzeug,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, aiosmtpd
+, buildPythonPackage
+, fetchPypi
+, werkzeug
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

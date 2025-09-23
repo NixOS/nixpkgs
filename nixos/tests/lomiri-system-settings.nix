@@ -124,18 +124,20 @@
 
       # tab through & open all sub-menus, to make sure none of them fail
     ''
-    + (lib.strings.concatMapStringsSep "\n" (
-      page:
-      ''
-        machine.send_key("tab")
-        machine.send_key("kp_enter")
-      ''
-      + lib.optionalString (!(page.skipOCR or false)) ''
-        with subtest("lomiri system settings ${page.name} works"):
-            machine.wait_for_text(r"(${page.element})")
-            machine.screenshot("lss_page_${page.name}")
-      ''
-    ) settingsPages)
+    + (lib.strings.concatMapStringsSep "\n"
+      (
+        page:
+        ''
+          machine.send_key("tab")
+          machine.send_key("kp_enter")
+        ''
+        + lib.optionalString (!(page.skipOCR or false)) ''
+          with subtest("lomiri system settings ${page.name} works"):
+              machine.wait_for_text(r"(${page.element})")
+              machine.screenshot("lss_page_${page.name}")
+        ''
+      )
+      settingsPages)
     + ''
 
       machine.execute("pkill -f lomiri-system-settings")
@@ -155,17 +157,19 @@
       machine.screenshot("lss_focus_localised")
 
     ''
-    + (lib.strings.concatMapStringsSep "\n" (
-      page:
-      ''
-        machine.send_key("tab")
-        machine.send_key("kp_enter")
-      ''
-      + lib.optionalString (page.type == "external") ''
-        with subtest("lomiri system settings ${page.name} localisation works"):
-            machine.wait_for_text(r"(${page.elementLocalised})")
-            machine.screenshot("lss_localised_page_${page.name}")
-      ''
-    ) settingsPages)
+    + (lib.strings.concatMapStringsSep "\n"
+      (
+        page:
+        ''
+          machine.send_key("tab")
+          machine.send_key("kp_enter")
+        ''
+        + lib.optionalString (page.type == "external") ''
+          with subtest("lomiri system settings ${page.name} localisation works"):
+              machine.wait_for_text(r"(${page.elementLocalised})")
+              machine.screenshot("lss_localised_page_${page.name}")
+        ''
+      )
+      settingsPages)
     + '''';
 }

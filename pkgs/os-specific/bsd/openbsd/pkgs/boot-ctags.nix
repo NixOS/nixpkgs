@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  lib,
-  flex,
-  byacc,
-  compatHook,
+{ mkDerivation
+, lib
+, flex
+, byacc
+, compatHook
+,
 }:
 mkDerivation {
   path = "usr.bin/ctags";

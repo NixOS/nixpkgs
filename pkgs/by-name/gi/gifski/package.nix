@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  ffmpeg_6,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, ffmpeg_6
+,
 }:
 
 rustPlatform.buildRustPackage rec {

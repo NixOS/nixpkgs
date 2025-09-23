@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  stdlib,
-  coq-elpi,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, stdlib
+, coq-elpi
+, version ? null
+,
 }:
 
 let
@@ -27,7 +27,8 @@ let
         (case (range "8.13" "8.14") "1.2.0")
         (case (range "8.12" "8.13") "1.1.0")
         (case (isEq "8.11") "0.10.0")
-      ] null;
+      ]
+        null;
     release."1.9.1".sha256 = "sha256-AiS0ezMyfIYlXnuNsVLz1GlKQZzJX+ilkrKkbo0GrF0=";
     release."1.8.1".sha256 = "sha256-Z0WAHDyycqgL+Le/zNfEAoLWzFb7WIL+3G3vEBExlb4=";
     release."1.8.0".sha256 = "sha256-4s/4ZZKj5tiTtSHGIM8Op/Pak4Vp52WVOpd4l9m19fY=";
@@ -59,9 +60,10 @@ let
   };
   hb2 = hb.overrideAttrs (
     o:
-    lib.optionalAttrs (lib.versions.isGe "1.2.0" o.version || o.version == "dev") {
-      buildPhase = "make build";
-    }
+    lib.optionalAttrs (lib.versions.isGe "1.2.0" o.version || o.version == "dev")
+      {
+        buildPhase = "make build";
+      }
     // (
       if lib.versions.isGe "1.1.0" o.version || o.version == "dev" then
         { installFlags = [ "DESTDIR=$(out)" ] ++ o.installFlags; }
@@ -75,7 +77,8 @@ let
 in
 # this is just a wrapper for rocqPackages.hierarchy-builder for Rocq >= 9.0
 if coq.rocqPackages ? hierarchy-builder then
-  coq.rocqPackages.hierarchy-builder.override {
+  coq.rocqPackages.hierarchy-builder.override
+  {
     inherit version;
     inherit (coq.rocqPackages) rocq-core;
     rocq-elpi = coq-elpi;

@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  callPackage,
-  fetchFromGitHub,
-  fetchurl,
-  runCommand,
-  unzip,
-  bchunk,
-  p7zip,
-  cmake,
-  pkg-config,
-  makeWrapper,
-  zlib,
-  bzip2,
-  libpng,
-  dialog,
-  python3,
-  cdparanoia,
-  ffmpeg,
+{ stdenv
+, lib
+, callPackage
+, fetchFromGitHub
+, fetchurl
+, runCommand
+, unzip
+, bchunk
+, p7zip
+, cmake
+, pkg-config
+, makeWrapper
+, zlib
+, bzip2
+, libpng
+, dialog
+, python3
+, cdparanoia
+, ffmpeg
+,
 }:
 
 let

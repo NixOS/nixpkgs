@@ -1,17 +1,17 @@
-{
-  autoreconfHook,
-  autoconf-archive,
-  doxygen,
-  ell,
-  fetchFromGitHub,
-  fontconfig,
-  graphviz,
-  lib,
-  pandoc,
-  perl,
-  pkg-config,
-  stdenv,
-  systemd,
+{ autoreconfHook
+, autoconf-archive
+, doxygen
+, ell
+, fetchFromGitHub
+, fontconfig
+, graphviz
+, lib
+, pandoc
+, perl
+, pkg-config
+, stdenv
+, systemd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,36 +1,35 @@
-{
-  stdenv,
-  lib,
-  makeDesktopItem,
-  makeWrapper,
-  lndir,
-  config,
-  buildPackages,
-  jq,
-  xdg-utils,
-  writeText,
-
-  ## various stuff that can be plugged in
-  ffmpeg,
-  xorg,
-  alsa-lib,
-  libpulseaudio,
-  libcanberra-gtk3,
-  libglvnd,
-  libnotify,
-  opensc,
-  adwaita-icon-theme,
-  pipewire,
-  udev,
-  libkrb5,
-  libva,
-  libgbm,
-  cups,
-  pciutils,
-  vulkan-loader,
-  sndio,
-  libjack2,
-  speechd-minimal,
+{ stdenv
+, lib
+, makeDesktopItem
+, makeWrapper
+, lndir
+, config
+, buildPackages
+, jq
+, xdg-utils
+, writeText
+, ## various stuff that can be plugged in
+  ffmpeg
+, xorg
+, alsa-lib
+, libpulseaudio
+, libcanberra-gtk3
+, libglvnd
+, libnotify
+, opensc
+, adwaita-icon-theme
+, pipewire
+, udev
+, libkrb5
+, libva
+, libgbm
+, cups
+, pciutils
+, vulkan-loader
+, sndio
+, libjack2
+, speechd-minimal
+,
 }:
 
 ## configurability of the wrapper itself
@@ -40,30 +39,31 @@ browser:
 let
   isDarwin = stdenv.hostPlatform.isDarwin;
   wrapper =
-    {
-      applicationName ? browser.binaryName or (lib.getName browser), # Note: this is actually *binary* name and is different from browser.applicationName, which is *app* name!
-      pname ? applicationName,
-      version ? lib.getVersion browser,
-      nameSuffix ? "",
-      icon ? applicationName,
-      wmClass ? applicationName,
-      nativeMessagingHosts ? [ ],
-      pkcs11Modules ? [ ],
-      useGlvnd ? (!isDarwin),
-      cfg ? config.${applicationName} or { },
-
-      ## Following options are needed for extra prefs & policies
+    { applicationName ? browser.binaryName or (lib.getName browser)
+    , # Note: this is actually *binary* name and is different from browser.applicationName, which is *app* name!
+      pname ? applicationName
+    , version ? lib.getVersion browser
+    , nameSuffix ? ""
+    , icon ? applicationName
+    , wmClass ? applicationName
+    , nativeMessagingHosts ? [ ]
+    , pkcs11Modules ? [ ]
+    , useGlvnd ? (!isDarwin)
+    , cfg ? config.${applicationName} or { }
+    , ## Following options are needed for extra prefs & policies
       # For more information about anti tracking (german website)
       # visit https://wiki.kairaven.de/open/app/firefox
-      extraPrefs ? "",
-      extraPrefsFiles ? [ ],
-      # For more information about policies visit
+      extraPrefs ? ""
+    , extraPrefsFiles ? [ ]
+    , # For more information about policies visit
       # https://mozilla.github.io/policy-templates/
-      extraPolicies ? { },
-      extraPoliciesFiles ? [ ],
-      libName ? browser.libName or applicationName, # Important for tor package or the like
-      nixExtensions ? null,
-      hasMozSystemDirPatch ? (lib.hasPrefix "firefox" pname && !lib.hasSuffix "-bin" pname),
+      extraPolicies ? { }
+    , extraPoliciesFiles ? [ ]
+    , libName ? browser.libName or applicationName
+    , # Important for tor package or the like
+      nixExtensions ? null
+    , hasMozSystemDirPatch ? (lib.hasPrefix "firefox" pname && !lib.hasSuffix "-bin" pname)
+    ,
     }:
 
     let
@@ -79,19 +79,20 @@ let
       allNativeMessagingHosts = builtins.map lib.getBin nativeMessagingHosts;
 
       libs =
-        lib.optionals stdenv.hostPlatform.isLinux (
-          [
-            udev
-            libva
-            libgbm
-            libnotify
-            xorg.libXScrnSaver
-            cups
-            pciutils
-            vulkan-loader
-          ]
-          ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
-        )
+        lib.optionals stdenv.hostPlatform.isLinux
+          (
+            [
+              udev
+              libva
+              libgbm
+              libnotify
+              xorg.libXScrnSaver
+              cups
+              pciutils
+              vulkan-loader
+            ]
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
+          )
         ++ lib.optional pipewireSupport pipewire
         ++ lib.optional ffmpegSupport ffmpeg
         ++ lib.optional gssSupport libkrb5
@@ -140,13 +141,15 @@ let
         else if browser.requireSigning || !browser.allowAddonSideload then
           throw "Nix addons are only supported with signature enforcement disabled and addon sideloading enabled (eg. LibreWolf)"
         else
-          builtins.map (
-            a:
-            if !(builtins.hasAttr "extid" a) then
-              throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchFirefoxAddon"
-            else
-              a
-          ) (lib.optionals usesNixExtensions nixExtensions);
+          builtins.map
+            (
+              a:
+              if !(builtins.hasAttr "extid" a) then
+                throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchFirefoxAddon"
+              else
+                a
+            )
+            (lib.optionals usesNixExtensions nixExtensions);
 
       enterprisePolicies = {
         policies = {
@@ -159,15 +162,18 @@ let
               installation_mode = "blocked";
             };
           }
-          // lib.foldr (
-            e: ret:
-            ret
-            // {
-              "${e.extid}" = {
-                installation_mode = "allowed";
-              };
-            }
-          ) { } extensions;
+          // lib.foldr
+            (
+              e: ret:
+                ret
+                  // {
+                  "${e.extid}" = {
+                    installation_mode = "allowed";
+                  };
+                }
+            )
+            { }
+            extensions;
 
           Extensions = {
             Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
@@ -348,10 +354,12 @@ let
 
       ]
       ++ lib.optionals (!hasMozSystemDirPatch) (
-        lib.concatMap (ext: [
-          "--run"
-          ''ln -sfLt ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*''
-        ]) allNativeMessagingHosts
+        lib.concatMap
+          (ext: [
+            "--run"
+            ''ln -sfLt ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*''
+          ])
+          allNativeMessagingHosts
       );
 
       buildCommand =

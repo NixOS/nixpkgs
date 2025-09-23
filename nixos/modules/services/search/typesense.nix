@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib)
@@ -19,9 +18,10 @@ let
   cfg = config.services.typesense;
   settingsFormatIni = pkgs.formats.ini {
     listToValue = concatMapStringsSep " " (generators.mkValueStringDefault { });
-    mkKeyValue = generators.mkKeyValueDefault {
-      mkValueString = v: if v == null then "" else generators.mkValueStringDefault { } v;
-    } "=";
+    mkKeyValue = generators.mkKeyValueDefault
+      {
+        mkValueString = v: if v == null then "" else generators.mkValueStringDefault { } v;
+      } "=";
   };
   configFile = settingsFormatIni.generate "typesense.ini" cfg.settings;
 in

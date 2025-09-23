@@ -1,9 +1,8 @@
 # NixOS module for iodine, ip over dns daemon
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.iodine;
@@ -166,11 +165,14 @@ in
           };
         };
       in
-      lib.listToAttrs (
-        lib.mapAttrsToList (
-          name: value: lib.nameValuePair "iodine-${name}" (createIodineClientService name value)
-        ) cfg.clients
-      )
+      lib.listToAttrs
+        (
+          lib.mapAttrsToList
+            (
+              name: value: lib.nameValuePair "iodine-${name}" (createIodineClientService name value)
+            )
+            cfg.clients
+        )
       // {
         iodined = lib.mkIf (cfg.server.enable) {
           description = "iodine, ip over dns server daemon";

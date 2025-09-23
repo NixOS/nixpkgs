@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchYarnDeps,
-  fetchFromGitHub,
-  nodejs,
-  yarnConfigHook,
-  yarnBuildHook,
-  npmHooks,
+{ lib
+, stdenv
+, fetchYarnDeps
+, fetchFromGitHub
+, nodejs
+, yarnConfigHook
+, yarnBuildHook
+, npmHooks
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "get-graphql-schema";

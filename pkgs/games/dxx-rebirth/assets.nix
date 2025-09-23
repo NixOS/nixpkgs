@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  requireFile,
-  gogUnpackHook,
+{ lib
+, stdenv
+, requireFile
+, gogUnpackHook
+,
 }:
 
 let

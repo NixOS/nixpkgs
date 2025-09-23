@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pdm-backend,
-  pygments,
-  objprint,
-  python-slugify,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pdm-backend
+, pygments
+, objprint
+, python-slugify
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

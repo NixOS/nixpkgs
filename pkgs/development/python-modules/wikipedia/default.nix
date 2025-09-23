@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  beautifulsoup4,
-  requests,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, beautifulsoup4
+, requests
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

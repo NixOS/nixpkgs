@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gtk3,
-  hicolor-icon-theme,
-  jdupes,
-  boldPanelIcons ? false,
-  alternativeIcons ? false,
-  themeVariants ? [ ],
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, hicolor-icon-theme
+, jdupes
+, boldPanelIcons ? false
+, alternativeIcons ? false
+, themeVariants ? [ ]
+,
 }:
 
 let
@@ -29,53 +29,53 @@ lib.checkListOfEnum "${pname}: theme variants"
   themeVariants
 
   stdenvNoCC.mkDerivation
-  rec {
-    inherit pname;
-    version = "2025-08-02";
+rec {
+  inherit pname;
+  version = "2025-08-02";
 
-    src = fetchFromGitHub {
-      owner = "vinceliuice";
-      repo = "WhiteSur-icon-theme";
-      tag = "${version}";
-      hash = "sha256-oBKDvCVHEjN6JT0r0G+VndzijEWU9L8AvDhHQTmw2E4=";
-    };
+  src = fetchFromGitHub {
+    owner = "vinceliuice";
+    repo = "WhiteSur-icon-theme";
+    tag = "${version}";
+    hash = "sha256-oBKDvCVHEjN6JT0r0G+VndzijEWU9L8AvDhHQTmw2E4=";
+  };
 
-    nativeBuildInputs = [
-      gtk3
-      jdupes
-    ];
+  nativeBuildInputs = [
+    gtk3
+    jdupes
+  ];
 
-    buildInputs = [ hicolor-icon-theme ];
+  buildInputs = [ hicolor-icon-theme ];
 
-    # These fixup steps are slow and unnecessary
-    dontPatchELF = true;
-    dontRewriteSymlinks = true;
-    dontDropIconThemeCache = true;
+  # These fixup steps are slow and unnecessary
+  dontPatchELF = true;
+  dontRewriteSymlinks = true;
+  dontDropIconThemeCache = true;
 
-    postPatch = ''
-      patchShebangs install.sh
-    '';
+  postPatch = ''
+    patchShebangs install.sh
+  '';
 
-    installPhase = ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      ./install.sh --dest $out/share/icons \
-        --name WhiteSur \
-        --theme ${builtins.toString themeVariants} \
-        ${lib.optionalString alternativeIcons "--alternative"} \
-        ${lib.optionalString boldPanelIcons "--bold"} \
+    ./install.sh --dest $out/share/icons \
+      --name WhiteSur \
+      --theme ${builtins.toString themeVariants} \
+      ${lib.optionalString alternativeIcons "--alternative"} \
+      ${lib.optionalString boldPanelIcons "--bold"} \
 
-      jdupes --link-soft --recurse $out/share
+    jdupes --link-soft --recurse $out/share
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
-    meta = with lib; {
-      description = "MacOS Big Sur style icon theme for Linux desktops";
-      homepage = "https://github.com/vinceliuice/WhiteSur-icon-theme";
-      license = licenses.gpl3Plus;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ icy-thought ];
-    };
+  meta = with lib; {
+    description = "MacOS Big Sur style icon theme for Linux desktops";
+    homepage = "https://github.com/vinceliuice/WhiteSur-icon-theme";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ icy-thought ];
+  };
 
-  }
+}

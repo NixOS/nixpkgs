@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  coredns,
-  installShellFiles,
-  isFull ? false,
-  enableGateway ? false,
-  pname ? "kuma",
-  components ? lib.optionals isFull [
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, coredns
+, installShellFiles
+, isFull ? false
+, enableGateway ? false
+, pname ? "kuma"
+, components ? lib.optionals isFull [
     "kumactl"
     "kuma-cp"
     "kuma-dp"
-  ],
+  ]
+,
 }:
 
 buildGoModule rec {
@@ -40,12 +40,14 @@ buildGoModule rec {
   subPackages = map (p: "app/" + p) components;
 
   postInstall =
-    lib.concatMapStringsSep "\n" (p: ''
-      installShellCompletion --cmd ${p} \
-        --bash <($out/bin/${p} completion bash) \
-        --fish <($out/bin/${p} completion fish) \
-        --zsh <($out/bin/${p} completion zsh)
-    '') components
+    lib.concatMapStringsSep "\n"
+      (p: ''
+        installShellCompletion --cmd ${p} \
+          --bash <($out/bin/${p} completion bash) \
+          --fish <($out/bin/${p} completion fish) \
+          --zsh <($out/bin/${p} completion zsh)
+      '')
+      components
     + lib.optionalString isFull ''
       ln -sLf ${coredns}/bin/coredns $out/bin
     '';

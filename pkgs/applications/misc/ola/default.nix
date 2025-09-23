@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  bison,
-  flex,
-  pkg-config,
-  libftdi1,
-  libuuid,
-  cppunit,
-  protobuf,
-  zlib,
-  avahi,
-  libmicrohttpd,
-  perl,
-  python3,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, bison
+, flex
+, pkg-config
+, libftdi1
+, libuuid
+, cppunit
+, protobuf
+, zlib
+, avahi
+, libmicrohttpd
+, perl
+, python3
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

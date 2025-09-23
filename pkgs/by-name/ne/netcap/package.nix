@@ -1,15 +1,15 @@
-{
-  lib,
-  callPackage,
-  buildGoModule,
-  fetchFromGitHub,
-  withDpi ? true,
-  libpcap,
-  libprotoident,
-  libflowmanager,
-  libtrace,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, callPackage
+, buildGoModule
+, fetchFromGitHub
+, withDpi ? true
+, libpcap
+, libprotoident
+, libflowmanager
+, libtrace
+, versionCheckHook
+, nix-update-script
+,
 }:
 let
   ndpi = callPackage ./ndpi_4_0.nix { };

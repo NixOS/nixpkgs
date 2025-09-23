@@ -1,25 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  setuptools,
-
-  # nativeBuildInputs
-  pkg-config,
-
-  # buildInputs
-  libraw,
-
-  # dependencies
-  numpy,
-
-  # tests
-  imageio,
-  pytestCheckHook,
-  scikit-image,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, setuptools
+, # nativeBuildInputs
+  pkg-config
+, # buildInputs
+  libraw
+, # dependencies
+  numpy
+, # tests
+  imageio
+, pytestCheckHook
+, scikit-image
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  btrfs-progs,
-  buildGoModule,
-  fetchFromGitHub,
-  glibc,
-  gpgme,
-  installShellFiles,
-  libapparmor,
-  libseccomp,
-  libselinux,
-  lvm2,
-  pkg-config,
-  nixosTests,
-  go-md2man,
+{ lib
+, btrfs-progs
+, buildGoModule
+, fetchFromGitHub
+, glibc
+, gpgme
+, installShellFiles
+, libapparmor
+, libseccomp
+, libselinux
+, lvm2
+, pkg-config
+, nixosTests
+, go-md2man
+,
 }:
 
 buildGoModule rec {

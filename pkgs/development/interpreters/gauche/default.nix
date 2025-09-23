@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  gaucheBootstrap,
-  pkg-config,
-  texinfo,
-  libiconv,
-  gdbm,
-  openssl,
-  zlib,
-  mbedtls,
-  cacert,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, gaucheBootstrap
+, pkg-config
+, texinfo
+, libiconv
+, gdbm
+, openssl
+, zlib
+, mbedtls
+, cacert
+,
 }:
 
 stdenv.mkDerivation rec {

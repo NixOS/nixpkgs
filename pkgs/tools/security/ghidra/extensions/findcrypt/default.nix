@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGhidraExtension,
+{ lib
+, fetchFromGitHub
+, buildGhidraExtension
+,
 }:
 buildGhidraExtension (finalAttrs: {
   pname = "findcrypt";

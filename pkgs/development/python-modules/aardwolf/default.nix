@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  arc4,
-  asn1crypto,
-  asn1tools,
-  asyauth,
-  asysocks,
-  buildPythonPackage,
-  cargo,
-  colorama,
-  fetchFromGitHub,
-  iconv,
-  pillow,
-  pyperclip,
-  rustPlatform,
-  rustc,
-  setuptools,
-  setuptools-rust,
-  tqdm,
-  unicrypto,
+{ lib
+, stdenv
+, arc4
+, asn1crypto
+, asn1tools
+, asyauth
+, asysocks
+, buildPythonPackage
+, cargo
+, colorama
+, fetchFromGitHub
+, iconv
+, pillow
+, pyperclip
+, rustPlatform
+, rustc
+, setuptools
+, setuptools-rust
+, tqdm
+, unicrypto
+,
 }:
 
 buildPythonPackage rec {

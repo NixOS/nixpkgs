@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libX11,
-  libXmu,
-  libXpm,
-  gtk2,
-  libpng,
-  libjpeg,
-  libtiff,
-  librsvg,
-  gdk-pixbuf,
-  gdk-pixbuf-xlib,
-  pypy2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libX11
+, libXmu
+, libXpm
+, gtk2
+, libpng
+, libjpeg
+, libtiff
+, librsvg
+, gdk-pixbuf
+, gdk-pixbuf-xlib
+, pypy2
+,
 }:
 
 stdenv.mkDerivation {

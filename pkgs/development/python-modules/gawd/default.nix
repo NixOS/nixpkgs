@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wheel,
-  ruamel-yaml,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wheel
+, ruamel-yaml
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

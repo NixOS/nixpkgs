@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -19,12 +18,13 @@ in
       See <https://wiki.hyprland.org> for more information'';
 
     package =
-      lib.mkPackageOption pkgs "hyprland" {
-        extraDescription = ''
-          If the package is not overridable with `enableXWayland`, then the module option
-          {option}`xwayland` will have no effect.
-        '';
-      }
+      lib.mkPackageOption pkgs "hyprland"
+        {
+          extraDescription = ''
+            If the package is not overridable with `enableXWayland`, then the module option
+            {option}`xwayland` will have no effect.
+          '';
+        }
       // {
         apply =
           p:
@@ -34,12 +34,13 @@ in
       };
 
     portalPackage =
-      lib.mkPackageOption pkgs "xdg-desktop-portal-hyprland" {
-        extraDescription = ''
-          If the package is not overridable with `hyprland`, then the Hyprland package
-          used by the portal may differ from the one set in the module option {option}`package`.
-        '';
-      }
+      lib.mkPackageOption pkgs "xdg-desktop-portal-hyprland"
+        {
+          extraDescription = ''
+            If the package is not overridable with `hyprland`, then the Hyprland package
+            used by the portal may differ from the one set in the module option {option}`package`.
+          '';
+        }
       // {
         apply =
           p:

@@ -1,39 +1,35 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  jupyter-packaging,
-  setuptools,
-
-  # dependencies
-  narwhals,
-  packaging,
-
-  # optional-dependencies
-  numpy,
-  kaleido,
-
-  # tests
-  anywidget,
-  ipython,
-  ipywidgets,
-  matplotlib,
-  nbformat,
-  pandas,
-  pdfrw,
-  pillow,
-  polars,
-  pyarrow,
-  pytestCheckHook,
-  requests,
-  scikit-image,
-  scipy,
-  statsmodels,
-  which,
-  xarray,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  jupyter-packaging
+, setuptools
+, # dependencies
+  narwhals
+, packaging
+, # optional-dependencies
+  numpy
+, kaleido
+, # tests
+  anywidget
+, ipython
+, ipywidgets
+, matplotlib
+, nbformat
+, pandas
+, pdfrw
+, pillow
+, polars
+, pyarrow
+, pytestCheckHook
+, requests
+, scikit-image
+, scipy
+, statsmodels
+, which
+, xarray
+,
 }:
 
 buildPythonPackage rec {

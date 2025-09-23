@@ -1,8 +1,8 @@
-{
-  callPackage,
-  makeFontsConf,
-  buildFHSEnv,
-  tiling_wm ? false,
+{ callPackage
+, makeFontsConf
+, buildFHSEnv
+, tiling_wm ? false
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  lib,
-  perl,
-  perlPackages,
-  postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestHook,
-  stdenv,
-  which,
+{ fetchFromGitHub
+, lib
+, perl
+, perlPackages
+, postgresql
+, postgresqlBuildExtension
+, postgresqlTestHook
+, stdenv
+, which
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

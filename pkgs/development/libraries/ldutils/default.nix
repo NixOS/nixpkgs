@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitLab,
-  libsForQt5,
-  cmake,
+{ mkDerivation
+, lib
+, fetchFromGitLab
+, libsForQt5
+, cmake
+,
 }:
 mkDerivation rec {
   pname = "ldutils";

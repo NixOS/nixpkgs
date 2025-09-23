@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  python3Packages,
-  libsForQt5,
-  SDL2,
-  fmt,
-  toml11,
-  libunarr,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, python3Packages
+, libsForQt5
+, SDL2
+, fmt
+, toml11
+, libunarr
+,
 }:
 
 let

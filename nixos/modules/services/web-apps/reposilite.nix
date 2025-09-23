@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 let
   cfg = config.services.reposilite;
@@ -367,9 +366,10 @@ in
       }
     ];
 
-    services.reposilite.settings.keyPath = lib.mkIf (
-      cfg.useACMEHost != null
-    ) "${certDir}/fullchain.pem ${certDir}/key.pem";
+    services.reposilite.settings.keyPath = lib.mkIf
+      (
+        cfg.useACMEHost != null
+      ) "${certDir}/fullchain.pem ${certDir}/key.pem";
 
     environment.systemPackages = [ cfg.package ];
 

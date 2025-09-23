@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libglut,
-  libGL,
-  libGLU,
-  libX11,
-  libXext,
-  libXi,
-  libXmu,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libglut
+, libGL
+, libGLU
+, libX11
+, libXext
+, libXi
+, libXmu
+,
 }:
 
 stdenv.mkDerivation rec {

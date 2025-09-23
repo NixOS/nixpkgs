@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  isKde ? false,
-  python3Packages,
-  fetchFromGitHub,
-  copyDesktopItems,
-  makeDesktopItem,
-  wrapGAppsHook4,
-  gobject-introspection,
-  libadwaita,
-  libportal,
-  libportal-gtk4,
-  xdg-desktop-portal,
-  xdg-desktop-portal-gtk,
-  kdotool,
-  udevCheckHook,
+{ stdenv
+, lib
+, isKde ? false
+, python3Packages
+, fetchFromGitHub
+, copyDesktopItems
+, makeDesktopItem
+, wrapGAppsHook4
+, gobject-introspection
+, libadwaita
+, libportal
+, libportal-gtk4
+, xdg-desktop-portal
+, xdg-desktop-portal-gtk
+, kdotool
+, udevCheckHook
+,
 }:
 let
   # We have to hardcode revision because upstream often create multiple releases for the same version number.

@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
+{ lib
+, stdenvNoCC
+, fetchzip
+,
 }:
 
 # Source Sans Pro got renamed to Source Sans 3 (see

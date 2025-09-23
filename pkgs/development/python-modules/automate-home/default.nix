@@ -1,17 +1,17 @@
-{
-  lib,
-  aioredis,
-  apscheduler,
-  buildPythonPackage,
-  ephem,
-  fetchPypi,
-  hiredis,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  pytz,
-  pyyaml,
-  setuptools,
+{ lib
+, aioredis
+, apscheduler
+, buildPythonPackage
+, ephem
+, fetchPypi
+, hiredis
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, pytz
+, pyyaml
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  cmake,
-  ninja,
-  libsForQt5,
-  SDL2,
-  fox_1_6,
-  replaceVars,
-  llvmPackages,
-  dfu-util,
-  gtest,
-  miniz,
-  yaml-cpp,
-  udevCheckHook,
-  # List of targets to build simulators for
-  targetsToBuild ? import ./targets.nix,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, cmake
+, ninja
+, libsForQt5
+, SDL2
+, fox_1_6
+, replaceVars
+, llvmPackages
+, dfu-util
+, gtest
+, miniz
+, yaml-cpp
+, udevCheckHook
+, # List of targets to build simulators for
+  targetsToBuild ? import ./targets.nix
+,
 }:
 
 let

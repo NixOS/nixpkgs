@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 buildDotnetModule (finalAttrs: {

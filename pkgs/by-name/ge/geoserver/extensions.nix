@@ -1,20 +1,20 @@
 # DO *NOT* MODIFY THE LINES CONTAINING "hash = ..." OR "version = ...".
 # THEY ARE GENERATED. SEE ./update.sh.
-{
-  fetchzip,
-  libjpeg,
-  netcdf,
-  pkgs,
-  stdenv,
+{ fetchzip
+, libjpeg
+, netcdf
+, pkgs
+, stdenv
+,
 }:
 
 let
   mkGeoserverExtension =
-    {
-      name,
-      version,
-      hash,
-      buildInputs ? [ ],
+    { name
+    , version
+    , hash
+    , buildInputs ? [ ]
+    ,
     }:
     stdenv.mkDerivation {
       pname = "geoserver-${name}-extension";

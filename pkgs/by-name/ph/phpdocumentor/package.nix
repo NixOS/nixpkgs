@@ -1,9 +1,9 @@
-{
-  lib,
-  php,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  versionCheckHook,
+{ lib
+, php
+, fetchFromGitHub
+, makeBinaryWrapper
+, versionCheckHook
+,
 }:
 
 php.buildComposerProject2 (finalAttrs: {

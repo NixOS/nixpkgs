@@ -1,11 +1,12 @@
-{
-  lib,
-  steam,
-  umu-launcher-unwrapped,
-  extraPkgs ? pkgs: [ ],
-  extraLibraries ? pkgs: [ ],
-  extraProfile ? "", # string to append to shell profile
-  extraEnv ? { }, # Environment variables to include in shell profile
+{ lib
+, steam
+, umu-launcher-unwrapped
+, extraPkgs ? pkgs: [ ]
+, extraLibraries ? pkgs: [ ]
+, extraProfile ? ""
+, # string to append to shell profile
+  extraEnv ? { }
+, # Environment variables to include in shell profile
 }:
 steam.buildRuntimeEnv {
   pname = "umu-launcher";

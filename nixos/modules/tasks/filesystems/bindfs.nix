@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 {
   config = lib.mkIf (config.boot.supportedFilesystems."fuse.bindfs" or false) {

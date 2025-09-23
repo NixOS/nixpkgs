@@ -1,15 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  matplotlib,
-  numpy,
-  pillow,
-  pytestCheckHook,
-  setuptools,
-  tensorflow,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, matplotlib
+, numpy
+, pillow
+, pytestCheckHook
+, setuptools
+, tensorflow
+, torch
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fixDarwinDylibNames,
-  llvmPackages,
-  withOpenMP ? true,
+{ lib
+, stdenv
+, fetchurl
+, fixDarwinDylibNames
+, llvmPackages
+, withOpenMP ? true
+,
 }:
 
 stdenv.mkDerivation rec {

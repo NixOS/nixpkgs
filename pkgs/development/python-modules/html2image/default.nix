@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  requests,
-  websocket-client,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, requests
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

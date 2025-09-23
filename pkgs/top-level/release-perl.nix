@@ -5,11 +5,11 @@
   $ hydra-eval-jobs pkgs/top-level/release-perl.nix
 */
 
-{
-  supportedSystems ? [
+{ supportedSystems ? [
     "x86_64-linux"
     "aarch64-linux"
-  ],
+  ]
+,
 }:
 
 let

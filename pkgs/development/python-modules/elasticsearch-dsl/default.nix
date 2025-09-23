@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  elasticsearch,
-  fetchPypi,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, elasticsearch
+, fetchPypi
+, python-dateutil
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

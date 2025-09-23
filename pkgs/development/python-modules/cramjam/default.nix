@@ -1,14 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-
-  # tests
-  hypothesis,
-  numpy,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, # tests
+  hypothesis
+, numpy
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

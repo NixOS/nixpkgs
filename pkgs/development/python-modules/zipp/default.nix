@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  func-timeout,
-  jaraco-itertools,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, func-timeout
+, jaraco-itertools
+, setuptools
+, setuptools-scm
+,
 }:
 
 let

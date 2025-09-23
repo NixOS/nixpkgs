@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -153,15 +152,17 @@ in
           NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
         };
 
-        etc = lib.concatMapAttrs (
-          desktop: conf:
-          lib.optionalAttrs (conf != { }) {
-            "xdg/xdg-desktop-portal/${
+        etc = lib.concatMapAttrs
+          (
+            desktop: conf:
+              lib.optionalAttrs (conf != { }) {
+                "xdg/xdg-desktop-portal/${
               lib.optionalString (desktop != "common") "${desktop}-"
             }portals.conf".text =
-              lib.generators.toINI { } { preferred = conf; };
-          }
-        ) cfg.config;
+                  lib.generators.toINI { } { preferred = conf; };
+              }
+          )
+          cfg.config;
       };
     };
 }

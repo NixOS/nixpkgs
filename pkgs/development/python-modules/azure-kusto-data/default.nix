@@ -1,20 +1,20 @@
-{
-  lib,
-  aiohttp,
-  asgiref,
-  azure-core,
-  azure-identity,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ijson,
-  msal,
-  pandas,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, aiohttp
+, asgiref
+, azure-core
+, azure-identity
+, buildPythonPackage
+, fetchFromGitHub
+, ijson
+, msal
+, pandas
+, pytest-asyncio
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

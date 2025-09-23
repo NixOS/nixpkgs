@@ -1,10 +1,10 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
-  libxslt,
-  docbook_xsl,
-  postgresql,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+, libxslt
+, docbook_xsl
+, postgresql
+,
 }:
 
 clangStdenv.mkDerivation rec {

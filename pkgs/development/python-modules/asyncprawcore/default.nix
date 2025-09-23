@@ -1,19 +1,19 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  mock,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-vcr,
-  pythonOlder,
-  requests,
-  requests-toolbelt,
-  testfixtures,
-  vcrpy,
-  yarl,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, mock
+, pytestCheckHook
+, pytest-asyncio
+, pytest-vcr
+, pythonOlder
+, requests
+, requests-toolbelt
+, testfixtures
+, vcrpy
+, yarl
+,
 }:
 
 buildPythonPackage rec {

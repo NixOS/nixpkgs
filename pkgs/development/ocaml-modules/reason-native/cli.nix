@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  re,
-  reason,
-  pastel,
-  src,
+{ lib
+, buildDunePackage
+, re
+, reason
+, pastel
+, src
+,
 }:
 
 buildDunePackage {

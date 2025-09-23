@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  qtbase,
-  qttools,
-  lxqt-build-tools,
-  wrapQtAppsHook,
-  gitUpdater,
-  version ? "2.2.0",
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, qtbase
+, qttools
+, lxqt-build-tools
+, wrapQtAppsHook
+, gitUpdater
+, version ? "2.2.0"
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
       {
         "1.4.0" = "sha256-wYUOqAiBjnupX1ITbFMw7sAk42V37yDz9SrjVhE4FgU=";
         "2.2.0" = "sha256-tzgHNGB063rgFB15lHTKQplNhwJZtrRprUhMm5H62AA=";
-      }
-      ."${version}";
+      }."${version}";
   };
 
   nativeBuildInputs = [

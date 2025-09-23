@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  squashfsTools,
-  python3,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, squashfsTools
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

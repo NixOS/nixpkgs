@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtsvg,
-  qtcharts,
-  kholidays,
+{ mkKdeDerivation
+, qtsvg
+, qtcharts
+, kholidays
+,
 }:
 mkKdeDerivation {
   pname = "kweather";

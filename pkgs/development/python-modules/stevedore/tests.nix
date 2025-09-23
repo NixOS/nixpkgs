@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  sphinx,
-  stestr,
-  stevedore,
+{ buildPythonPackage
+, sphinx
+, stestr
+, stevedore
+,
 }:
 
 buildPythonPackage {

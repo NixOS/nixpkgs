@@ -1,18 +1,18 @@
-{
-  lib,
-  cmake,
-  exiv2,
-  extra-cmake-modules,
-  fetchFromGitLab,
-  imagemagick,
-  libarchive,
-  libraw,
-  mpv,
-  pkg-config,
-  qt6Packages,
-  resvg,
-  stdenv,
-  vips,
+{ lib
+, cmake
+, exiv2
+, extra-cmake-modules
+, fetchFromGitLab
+, imagemagick
+, libarchive
+, libraw
+, mpv
+, pkg-config
+, qt6Packages
+, resvg
+, stdenv
+, vips
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

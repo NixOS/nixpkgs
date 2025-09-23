@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  pythonOlder,
-  edlib,
-  cython,
-  python,
-  setuptools,
+{ buildPythonPackage
+, pythonOlder
+, edlib
+, cython
+, python
+, setuptools
+,
 }:
 
 buildPythonPackage {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  bundlerEnv,
-  makeWrapper,
-  ruby,
-  bundlerUpdateScript,
-  testers,
-  papertrail,
+{ lib
+, stdenv
+, bundlerEnv
+, makeWrapper
+, ruby
+, bundlerUpdateScript
+, testers
+, papertrail
+,
 }:
 stdenv.mkDerivation rec {
   pname = "papertrail";

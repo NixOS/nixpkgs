@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  tinycc,
-  binutils,
-  gnumake,
-  gnupatch,
-  gnused,
-  gnugrep,
-  gawk,
-  diffutils,
-  findutils,
-  gnutar,
-  gzip,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, tinycc
+, binutils
+, gnumake
+, gnupatch
+, gnused
+, gnugrep
+, gawk
+, diffutils
+, findutils
+, gnutar
+, gzip
+,
 }:
 let
   pname = "gcc";
@@ -54,39 +54,39 @@ let
   ];
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      binutils
-      gnumake
-      gnupatch
-      gnused
-      gnugrep
-      gawk
-      diffutils
-      findutils
-      gnutar
-      gzip
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    binutils
+    gnumake
+    gnupatch
+    gnused
+    gnugrep
+    gawk
+    diffutils
+    findutils
+    gnutar
+    gzip
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/gcc --version
-        mkdir $out
-      '';
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/gcc --version
+      mkdir $out
+    '';
 
-    meta = with lib; {
-      description = "GNU Compiler Collection, version ${version}";
-      homepage = "https://gcc.gnu.org";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-      mainProgram = "gcc";
-    };
-  }
+  meta = with lib; {
+    description = "GNU Compiler Collection, version ${version}";
+    homepage = "https://gcc.gnu.org";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    platforms = platforms.unix;
+    mainProgram = "gcc";
+  };
+}
   ''
     # Unpack
     tar xzf ${src}

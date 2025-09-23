@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchFromBitbucket,
-  setuptools,
-  numpy,
-  scipy,
-  sympy,
-  recursivenodes,
-  symengine,
-  fenics-ufl,
-  pytestCheckHook,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchFromBitbucket
+, setuptools
+, numpy
+, scipy
+, sympy
+, recursivenodes
+, symengine
+, fenics-ufl
+, pytestCheckHook
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

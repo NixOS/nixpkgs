@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  requests,
-  unittestCheckHook,
-  mock,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, requests
+, unittestCheckHook
+, mock
+,
 }:
 
 buildPythonPackage rec {

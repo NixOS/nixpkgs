@@ -1,30 +1,30 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }:
 
 let
   cfg = config.services.privatebin;
 
   customToINI = lib.generators.toINI {
-    mkKeyValue = lib.generators.mkKeyValueDefault {
-      mkValueString =
-        v:
-        if v == true then
-          ''true''
-        else if v == false then
-          ''false''
-        else if builtins.isInt v then
-          ''${builtins.toString v}''
-        else if builtins.isPath v then
-          ''"${builtins.toString v}"''
-        else if builtins.isString v then
-          ''"${v}"''
-        else
-          lib.generators.mkValueStringDefault { } v;
-    } "=";
+    mkKeyValue = lib.generators.mkKeyValueDefault
+      {
+        mkValueString =
+          v:
+          if v == true then
+            ''true''
+          else if v == false then
+            ''false''
+          else if builtins.isInt v then
+            ''${builtins.toString v}''
+          else if builtins.isPath v then
+            ''"${builtins.toString v}"''
+          else if builtins.isString v then
+            ''"${v}"''
+          else
+            lib.generators.mkValueStringDefault { } v;
+      } "=";
   };
 
   privatebinSettings = pkgs.writeTextDir "conf.php" (customToINI cfg.settings);

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  loguru,
-  poetry-core,
-  pythonOlder,
-  setuptools,
-  standard-imghdr,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, loguru
+, poetry-core
+, pythonOlder
+, setuptools
+, standard-imghdr
+,
 }:
 
 buildPythonPackage rec {

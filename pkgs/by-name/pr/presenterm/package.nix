@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  lld,
-  libsixel,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, makeBinaryWrapper
+, lld
+, libsixel
+, versionCheckHook
+, nix-update-script
+,
 }:
 let
   inherit (stdenv.hostPlatform) isDarwin isx86_64;

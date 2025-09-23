@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  doxygen,
-  ffmpeg,
-  freetype,
-  lua,
-  makeWrapper,
-  SDL2,
-  SDL2_mixer,
-  timidity,
-  # Update
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, curl
+, doxygen
+, ffmpeg
+, freetype
+, lua
+, makeWrapper
+, SDL2
+, SDL2_mixer
+, timidity
+, # Update
+  nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

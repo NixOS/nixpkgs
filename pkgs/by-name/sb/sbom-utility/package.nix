@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchpatch,
-  versionCheckHook,
-  installShellFiles,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, versionCheckHook
+, installShellFiles
+, stdenv
+,
 }:
 
 let

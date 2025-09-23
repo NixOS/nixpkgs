@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  deap,
-  numpy,
-  scikit-learn,
-  scipy,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, deap
+, numpy
+, scikit-learn
+, scipy
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  pkg-config,
-  python3,
-  fetchFromGitLab,
-  fetchpatch,
-  gtk3,
-  glib,
-  gdbm,
-  gtkspell3,
-  ofono,
-  itstool,
-  libayatana-appindicator,
-  perlPackages,
-  meson,
-  ninja,
+{ lib
+, stdenv
+, pkg-config
+, python3
+, fetchFromGitLab
+, fetchpatch
+, gtk3
+, glib
+, gdbm
+, gtkspell3
+, ofono
+, itstool
+, libayatana-appindicator
+, perlPackages
+, meson
+, ninja
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cmake,
-  ninja,
-  oldest-supported-numpy,
-  scikit-build,
-  setuptools,
-  numpy,
-  iisignature,
-  boost,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cmake
+, ninja
+, oldest-supported-numpy
+, scikit-build
+, setuptools
+, numpy
+, iisignature
+, boost
+,
 }:
 
 buildPythonPackage rec {

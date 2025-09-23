@@ -1,16 +1,16 @@
-{
-  lib,
-  mkDerivation,
-  bsdSetupHook,
-  netbsdSetupHook,
-  makeMinimal,
-  install,
-  mandoc,
-  groff,
-  nbperf,
-  rpcgen,
-  defaultMakeFlags,
-  stdenv,
+{ lib
+, mkDerivation
+, bsdSetupHook
+, netbsdSetupHook
+, makeMinimal
+, install
+, mandoc
+, groff
+, nbperf
+, rpcgen
+, defaultMakeFlags
+, stdenv
+,
 }:
 
 mkDerivation {

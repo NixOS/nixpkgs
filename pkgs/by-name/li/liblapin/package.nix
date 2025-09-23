@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  sfml_2,
-  libffcall,
-  libusb-compat-0_1,
-  libudev-zero,
+{ stdenv
+, lib
+, fetchFromGitHub
+, sfml_2
+, libffcall
+, libusb-compat-0_1
+, libudev-zero
+,
 }:
 
 stdenv.mkDerivation {

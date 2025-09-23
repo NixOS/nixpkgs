@@ -1,83 +1,76 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build time
-  autoreconfHook,
-  flex,
-  bison,
-  perl,
-  pkg-config,
-  texinfo,
-  buildPackages,
-  grpc,
-  protobuf,
-  which,
-
-  # runtime
-  c-ares,
-  json_c,
-  libcap,
-  elfutils,
-  libunwind,
-  libyang,
-  net-snmp,
-  openssl,
-  pam,
-  pcre2,
-  python3,
-  readline,
-  rtrlib,
-  protobufc,
-  zeromq,
-
-  # tests
-  net-tools,
-  nixosTests,
-
-  # general options
-  snmpSupport ? true,
-  rpkiSupport ? true,
-  numMultipath ? 64,
-  watchfrrSupport ? true,
-  cumulusSupport ? false,
-  rtadvSupport ? true,
-  irdpSupport ? true,
-  routeReplacementSupport ? true,
-  mgmtdSupport ? true,
-  # Experimental as of 10.1, reconsider if upstream changes defaults
-  grpcSupport ? false,
-
-  # routing daemon options
-  bgpdSupport ? true,
-  ripdSupport ? true,
-  ripngdSupport ? true,
-  ospfdSupport ? true,
-  ospf6dSupport ? true,
-  ldpdSupport ? true,
-  nhrpdSupport ? true,
-  eigrpdSupport ? true,
-  babeldSupport ? true,
-  isisdSupport ? true,
-  pimdSupport ? true,
-  pim6dSupport ? true,
-  sharpdSupport ? true,
-  fabricdSupport ? true,
-  vrrpdSupport ? true,
-  pathdSupport ? true,
-  bfddSupport ? true,
-  pbrdSupport ? true,
-  staticdSupport ? true,
-
-  # BGP options
-  bgpAnnounce ? true,
-  bgpBmp ? true,
-  bgpVnc ? true,
-
-  # OSPF options
-  ospfApi ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, # build time
+  autoreconfHook
+, flex
+, bison
+, perl
+, pkg-config
+, texinfo
+, buildPackages
+, grpc
+, protobuf
+, which
+, # runtime
+  c-ares
+, json_c
+, libcap
+, elfutils
+, libunwind
+, libyang
+, net-snmp
+, openssl
+, pam
+, pcre2
+, python3
+, readline
+, rtrlib
+, protobufc
+, zeromq
+, # tests
+  net-tools
+, nixosTests
+, # general options
+  snmpSupport ? true
+, rpkiSupport ? true
+, numMultipath ? 64
+, watchfrrSupport ? true
+, cumulusSupport ? false
+, rtadvSupport ? true
+, irdpSupport ? true
+, routeReplacementSupport ? true
+, mgmtdSupport ? true
+, # Experimental as of 10.1, reconsider if upstream changes defaults
+  grpcSupport ? false
+, # routing daemon options
+  bgpdSupport ? true
+, ripdSupport ? true
+, ripngdSupport ? true
+, ospfdSupport ? true
+, ospf6dSupport ? true
+, ldpdSupport ? true
+, nhrpdSupport ? true
+, eigrpdSupport ? true
+, babeldSupport ? true
+, isisdSupport ? true
+, pimdSupport ? true
+, pim6dSupport ? true
+, sharpdSupport ? true
+, fabricdSupport ? true
+, vrrpdSupport ? true
+, pathdSupport ? true
+, bfddSupport ? true
+, pbrdSupport ? true
+, staticdSupport ? true
+, # BGP options
+  bgpAnnounce ? true
+, bgpBmp ? true
+, bgpVnc ? true
+, # OSPF options
+  ospfApi ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

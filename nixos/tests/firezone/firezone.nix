@@ -9,11 +9,10 @@ in
 
   nodes = {
     server =
-      {
-        config,
-        lib,
-        pkgs,
-        ...
+      { config
+      , lib
+      , pkgs
+      , ...
       }:
       {
         security.pki.certificateFiles = [ certs.ca.cert ];
@@ -123,11 +122,10 @@ in
       };
 
     relay =
-      {
-        nodes,
-        config,
-        lib,
-        ...
+      { nodes
+      , config
+      , lib
+      , ...
       }:
       {
         security.pki.certificateFiles = [ certs.ca.cert ];
@@ -192,10 +190,9 @@ in
     };
 
     gateway =
-      {
-        nodes,
-        lib,
-        ...
+      { nodes
+      , lib
+      , ...
       }:
       {
         virtualisation.vlans = [
@@ -268,10 +265,9 @@ in
       };
 
     client =
-      {
-        nodes,
-        lib,
-        ...
+      { nodes
+      , lib
+      , ...
       }:
       {
         security.pki.certificateFiles = [ certs.ca.cert ];

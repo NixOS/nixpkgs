@@ -1,24 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  fastprogress,
-  jax,
-  jaxlib,
-  jaxopt,
-  optax,
-  typing-extensions,
-
-  # checks
-  pytestCheckHook,
-  pytest-xdist,
-
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  fastprogress
+, jax
+, jaxlib
+, jaxopt
+, optax
+, typing-extensions
+, # checks
+  pytestCheckHook
+, pytest-xdist
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

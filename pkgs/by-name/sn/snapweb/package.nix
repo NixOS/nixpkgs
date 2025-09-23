@@ -1,9 +1,9 @@
-{
-  buildNpmPackage,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  vips,
+{ buildNpmPackage
+, lib
+, fetchFromGitHub
+, pkg-config
+, vips
+,
 }:
 
 buildNpmPackage rec {

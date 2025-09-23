@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -211,16 +210,17 @@ let
       '';
     };
     wrappedPackage =
-      mkPackageOption pkgs "tsm-client" {
-        default = null;
-        extraDescription = ''
-          This option is to provide the effective derivation,
-          wrapped with the path to the
-          client system-options file "dsm.sys".
-          It should not be changed, but exists
-          for other modules that want to call TSM executables.
-        '';
-      }
+      mkPackageOption pkgs "tsm-client"
+        {
+          default = null;
+          extraDescription = ''
+            This option is to provide the effective derivation,
+            wrapped with the path to the
+            client system-options file "dsm.sys".
+            It should not be changed, but exists
+            for other modules that want to call TSM executables.
+          '';
+        }
       // {
         readOnly = true;
       };
@@ -249,23 +249,27 @@ let
       '';
     }
   ]
-  ++ (mapAttrsToList (name: serverCfg: {
-    assertion = all (key: null != match "[^[:space:]]+" key) (attrNames serverCfg);
-    message = ''
-      TSM server setting names in
-      `programs.tsmClient.servers.${name}.*`
-      contain spaces, but that's not allowed.
-    '';
-  }) cfg.servers)
-  ++ (mapAttrsToList (name: serverCfg: {
-    assertion = allUnique (map toLower (attrNames serverCfg));
-    message = ''
-      TSM server setting names in
-      `programs.tsmClient.servers.${name}.*`
-      contain duplicate names
-      (note that setting names are case insensitive).
-    '';
-  }) cfg.servers);
+  ++ (mapAttrsToList
+    (name: serverCfg: {
+      assertion = all (key: null != match "[^[:space:]]+" key) (attrNames serverCfg);
+      message = ''
+        TSM server setting names in
+        `programs.tsmClient.servers.${name}.*`
+        contain spaces, but that's not allowed.
+      '';
+    })
+    cfg.servers)
+  ++ (mapAttrsToList
+    (name: serverCfg: {
+      assertion = allUnique (map toLower (attrNames serverCfg));
+      message = ''
+        TSM server setting names in
+        `programs.tsmClient.servers.${name}.*`
+        contain duplicate names
+        (note that setting names are case insensitive).
+      '';
+    })
+    cfg.servers);
 
   makeDsmSysLines =
     key: value:

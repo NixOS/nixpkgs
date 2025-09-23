@@ -1,7 +1,7 @@
-{
-  stdenv,
-  coq,
-  wasmcert,
+{ stdenv
+, coq
+, wasmcert
+,
 }:
 
 stdenv.mkDerivation {

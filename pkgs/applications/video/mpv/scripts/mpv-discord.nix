@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  buildGoModule,
-  buildLua,
-  lib,
+{ fetchFromGitHub
+, buildGoModule
+, buildLua
+, lib
+,
 }:
 let
   version = "1.6.1";

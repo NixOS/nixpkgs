@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  cmdliner,
-  findlib,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, cmdliner
+, findlib
+,
 }:
 
 buildDunePackage rec {

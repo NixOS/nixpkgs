@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  xeddsa,
-  cryptography,
-  pydantic,
-  typing-extensions,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, xeddsa
+, cryptography
+, pydantic
+, typing-extensions
+, pytestCheckHook
+, pytest-asyncio
+, pytest-cov-stub
+,
 }:
 buildPythonPackage rec {
   pname = "x3dh";

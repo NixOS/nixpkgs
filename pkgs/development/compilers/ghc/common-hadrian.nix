@@ -1,123 +1,104 @@
-{
-  version,
-  rev ? null,
-  sha256,
-  url ?
-    if rev != null then
-      "https://gitlab.haskell.org/ghc/ghc.git"
-    else
-      "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz",
-  postFetch ? null,
+{ version
+, rev ? null
+, sha256
+, url ? if rev != null then
+    "https://gitlab.haskell.org/ghc/ghc.git"
+  else
+    "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
+, postFetch ? null
+,
 }:
 
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  pkgsBuildTarget,
-  pkgsHostTarget,
-  buildPackages,
-  targetPackages,
-  fetchpatch,
-
-  # build-tools
-  bootPkgs,
-  autoreconfHook,
-  coreutils,
-  fetchurl,
-  fetchgit,
-  perl,
-  python3,
-  sphinx,
-  xattr,
-  autoSignDarwinBinariesHook,
-  bash,
-  srcOnly,
-
-  libiconv ? null,
-  ncurses,
-
-  # GHC can be built with system libffi or a bundled one.
-  libffi ? null,
-
-  useLLVM ? !(import ./common-have-ncg.nix { inherit lib stdenv version; }),
-  # LLVM is conceptually a run-time-only dependency, but for
+{ lib
+, stdenv
+, stdenvNoCC
+, pkgsBuildTarget
+, pkgsHostTarget
+, buildPackages
+, targetPackages
+, fetchpatch
+, # build-tools
+  bootPkgs
+, autoreconfHook
+, coreutils
+, fetchurl
+, fetchgit
+, perl
+, python3
+, sphinx
+, xattr
+, autoSignDarwinBinariesHook
+, bash
+, srcOnly
+, libiconv ? null
+, ncurses
+, # GHC can be built with system libffi or a bundled one.
+  libffi ? null
+, useLLVM ? !(import ./common-have-ncg.nix { inherit lib stdenv version; })
+, # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
-  buildTargetLlvmPackages,
-  llvmPackages,
-
-  # If enabled, GHC will be built with the GPL-free but slightly slower native
+  buildTargetLlvmPackages
+, llvmPackages
+, # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
-  enableNativeBignum ?
-    !(lib.meta.availableOn stdenv.hostPlatform gmp && lib.meta.availableOn stdenv.targetPlatform gmp)
-    || stdenv.targetPlatform.isGhcjs,
-  gmp,
-
-  # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform,
-
-  # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
+  enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp && lib.meta.availableOn stdenv.targetPlatform gmp)
+    || stdenv.targetPlatform.isGhcjs
+, gmp
+, # If enabled, use -fPIC when compiling static libs.
+  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
+, # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
   # A riscv64 cross-compiler fits into the limit comfortably.
-  enableProfiledLibs ? !stdenv.hostPlatform.isRiscV64,
-
-  # Whether to build dynamic libs for the standard library (on the target
+  enableProfiledLibs ? !stdenv.hostPlatform.isRiscV64
+, # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs,
-
-  # Whether to build terminfo.
+  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs
+, # Whether to build terminfo.
   # FIXME(@sternenseemann): This actually doesn't influence what hadrian does,
   # just what buildInputs etc. looks like. It would be best if we could actually
   # tell it what to do like it was possible with make.
-  enableTerminfo ?
-    !(
-      stdenv.targetPlatform.isWindows
-      || stdenv.targetPlatform.isGhcjs
-      # terminfo can't be built for cross
-      || (stdenv.buildPlatform != stdenv.hostPlatform)
-      || (stdenv.hostPlatform != stdenv.targetPlatform)
-    ),
-
-  # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
-  enableDwarf ?
-    (stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isS390 && stdenv.targetPlatform.is64bit))
+  enableTerminfo ? !(
+    stdenv.targetPlatform.isWindows
+    || stdenv.targetPlatform.isGhcjs
+    # terminfo can't be built for cross
+    || (stdenv.buildPlatform != stdenv.hostPlatform)
+    || (stdenv.hostPlatform != stdenv.targetPlatform)
+  )
+, # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
+  enableDwarf ? (stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isS390 && stdenv.targetPlatform.is64bit))
     && lib.meta.availableOn stdenv.hostPlatform elfutils
     && lib.meta.availableOn stdenv.targetPlatform elfutils
     &&
-      # HACK: elfutils is marked as broken on static platforms
-      # which availableOn can't tell.
-      !stdenv.targetPlatform.isStatic
-    && !stdenv.hostPlatform.isStatic,
-  elfutils,
-
-  # Enable NUMA support in RTS
-  enableNuma ? lib.meta.availableOn stdenv.targetPlatform numactl,
-  numactl,
-
-  # What flavour to build. Flavour string may contain a flavour and flavour
+    # HACK: elfutils is marked as broken on static platforms
+    # which availableOn can't tell.
+    !stdenv.targetPlatform.isStatic
+    && !stdenv.hostPlatform.isStatic
+, elfutils
+, # Enable NUMA support in RTS
+  enableNuma ? lib.meta.availableOn stdenv.targetPlatform numactl
+, numactl
+, # What flavour to build. Flavour string may contain a flavour and flavour
   # transformers as accepted by hadrian.
-  ghcFlavour ?
-    let
-      # TODO(@sternenseemann): does using the static flavour make sense?
-      baseFlavour = "release";
-      # Note: in case hadrian's flavour transformers cease being expressive
-      # enough for us, we'll need to resort to defining a "nixpkgs" flavour
-      # in hadrianUserSettings and using that instead.
-      transformers =
-        lib.optionals useLLVM [ "llvm" ]
-        ++ lib.optionals (!enableShared) [
-          "no_dynamic_libs"
-          "no_dynamic_ghc"
-        ]
-        ++ lib.optionals (!enableProfiledLibs) [ "no_profiled_libs" ]
-        # While split sections are now enabled by default in ghc 8.8 for windows,
-        # they seem to lead to `too many sections` errors when building base for
-        # profiling.
-        ++ (if stdenv.targetPlatform.isWindows then [ "no_split_sections" ] else [ "split_sections" ]);
-    in
-    baseFlavour + lib.concatMapStrings (t: "+${t}") transformers,
-
-  # Contents of the UserSettings.hs file to use when compiling hadrian.
+  ghcFlavour ? let
+    # TODO(@sternenseemann): does using the static flavour make sense?
+    baseFlavour = "release";
+    # Note: in case hadrian's flavour transformers cease being expressive
+    # enough for us, we'll need to resort to defining a "nixpkgs" flavour
+    # in hadrianUserSettings and using that instead.
+    transformers =
+      lib.optionals useLLVM [ "llvm" ]
+      ++ lib.optionals (!enableShared) [
+        "no_dynamic_libs"
+        "no_dynamic_ghc"
+      ]
+      ++ lib.optionals (!enableProfiledLibs) [ "no_profiled_libs" ]
+      # While split sections are now enabled by default in ghc 8.8 for windows,
+      # they seem to lead to `too many sections` errors when building base for
+      # profiling.
+      ++ (if stdenv.targetPlatform.isWindows then [ "no_split_sections" ] else [ "split_sections" ]);
+  in
+  baseFlavour + lib.concatMapStrings (t: "+${t}") transformers
+, # Contents of the UserSettings.hs file to use when compiling hadrian.
   hadrianUserSettings ? ''
     module UserSettings (
         userFlavours, userPackages, userDefaultFlavour,
@@ -158,9 +139,8 @@
     verboseCommand = do
         verbosity <- expr getVerbosity
         return $ verbosity >= Verbose
-  '',
-
-  ghcSrc ? srcOnly {
+  ''
+, ghcSrc ? srcOnly {
     name = "ghc-${version}"; # -source appended by srcOnly
     src = (if rev != null then fetchgit else fetchurl) (
       {
@@ -198,29 +178,29 @@
         })
       ]
       ++
-        lib.optionals
-          (
-            # 2025-01-16: unix >= 2.8.6.0 is unaffected which is shipped by GHC 9.12.1 and 9.8.4
-            lib.versionOlder version "9.11"
-            && !(lib.versionAtLeast version "9.6.7" && lib.versionOlder version "9.8")
-            && !(lib.versionAtLeast version "9.8.4" && lib.versionOlder version "9.9")
-            && !(lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.11")
-          )
-          [
-            # Determine size of time related types using hsc2hs instead of assuming CLong.
-            # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
-            # https://github.com/haskell/ghcup-hs/issues/1107
-            # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
-            # Note that in normal situations this shouldn't be the case since nixpkgs
-            # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
-            (fetchpatch {
-              name = "unix-fix-ctimeval-size-32-bit.patch";
-              url = "https://github.com/haskell/unix/commit/8183e05b97ce870dd6582a3677cc82459ae566ec.patch";
-              sha256 = "17q5yyigqr5kxlwwzb95sx567ysfxlw6bp3j4ji20lz0947aw6gv";
-              stripLen = 1;
-              extraPrefix = "libraries/unix/";
-            })
-          ]
+      lib.optionals
+        (
+          # 2025-01-16: unix >= 2.8.6.0 is unaffected which is shipped by GHC 9.12.1 and 9.8.4
+          lib.versionOlder version "9.11"
+          && !(lib.versionAtLeast version "9.6.7" && lib.versionOlder version "9.8")
+          && !(lib.versionAtLeast version "9.8.4" && lib.versionOlder version "9.9")
+          && !(lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.11")
+        )
+        [
+          # Determine size of time related types using hsc2hs instead of assuming CLong.
+          # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
+          # https://github.com/haskell/ghcup-hs/issues/1107
+          # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
+          # Note that in normal situations this shouldn't be the case since nixpkgs
+          # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
+          (fetchpatch {
+            name = "unix-fix-ctimeval-size-32-bit.patch";
+            url = "https://github.com/haskell/unix/commit/8183e05b97ce870dd6582a3677cc82459ae566ec.patch";
+            sha256 = "17q5yyigqr5kxlwwzb95sx567ysfxlw6bp3j4ji20lz0947aw6gv";
+            stripLen = 1;
+            extraPrefix = "libraries/unix/";
+          })
+        ]
       ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.6") [
         (fetchpatch {
           name = "fix-fully_static.patch";
@@ -299,33 +279,30 @@
       ];
 
     stdenv = stdenvNoCC;
-  },
-
-  # GHC's build system hadrian built from the GHC-to-build's source tree
+  }
+, # GHC's build system hadrian built from the GHC-to-build's source tree
   # using our bootstrap GHC.
   hadrian ? import ../../tools/haskell/hadrian/make-hadrian.nix { inherit bootPkgs lib; } {
     inherit ghcSrc;
     ghcVersion = version;
     userSettings = hadrianUserSettings;
-  },
-
-  #  Whether to build sphinx documentation.
+  }
+, #  Whether to build sphinx documentation.
   # TODO(@sternenseemann): Hadrian ignores the --docs flag if finalStage = Stage1
   enableDocs ? (
     # Docs disabled if we are building on musl because it's a large task to keep
     # all `sphinx` dependencies building in this environment.
     !stdenv.buildPlatform.isMusl
-  ),
-
-  # Whether to disable the large address space allocator
+  )
+, # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-  disableLargeAddressSpace ? stdenv.targetPlatform.isiOS,
-
-  # Whether to build an unregisterised version of GHC.
+  disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
+, # Whether to build an unregisterised version of GHC.
   # GHC will normally auto-detect whether it can do a registered build, but this
   # option will force it to do an unregistered build when set to true.
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/building/unregisterised
-  enableUnregisterised ? false,
+  enableUnregisterised ? false
+,
 }:
 
 assert !enableNativeBignum -> gmp != null;
@@ -364,12 +341,14 @@ let
     # https://gitlab.haskell.org/ghc/ghc/-/issues/22081
     ++ lib.optional enableDwarf elfutils
     ++ lib.optional (!enableNativeBignum) gmp
-    ++ lib.optional (
-      platform.libc != "glibc"
-      && !targetPlatform.isWindows
-      && !targetPlatform.isGhcjs
-      && !targetPlatform.useAndroidPrebuilt
-    ) libiconv;
+    ++ lib.optional
+      (
+        platform.libc != "glibc"
+        && !targetPlatform.isWindows
+        && !targetPlatform.isGhcjs
+        && !targetPlatform.useAndroidPrebuilt
+      )
+      libiconv;
 
   # TODO(@sternenseemann): is buildTarget LLVM unnecessary?
   # GHC doesn't seem to have {LLC,OPT}_HOST
@@ -430,8 +409,7 @@ let
 
           # clang is used as an assembler on darwin with the LLVM backend
           clang = cc;
-        }
-        .${name};
+        }.${name};
     in
     getToolExe tools name;
 
@@ -647,12 +625,12 @@ stdenv.mkDerivation (
       "--with-gmp-libraries=${targetLibs.gmp.out}/lib"
     ]
     ++
-      lib.optionals
-        (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows)
-        [
-          "--with-iconv-includes=${libiconv}/include"
-          "--with-iconv-libraries=${libiconv}/lib"
-        ]
+    lib.optionals
+      (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows)
+      [
+        "--with-iconv-includes=${libiconv}/include"
+        "--with-iconv-libraries=${libiconv}/lib"
+      ]
     ++ lib.optionals (targetPlatform != hostPlatform) [
       "--enable-bootstrap-with-devel-snapshot"
     ]
@@ -685,13 +663,13 @@ stdenv.mkDerivation (
       "--enable-unregisterised"
     ]
     ++
-      lib.optionals
-        (stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl && lib.versionOlder version "9.12")
-        [
-          # The bootstrap binaries for aarch64 musl were built for the wrong triple.
-          # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13182
-          "--enable-ignore-build-platform-mismatch"
-        ];
+    lib.optionals
+      (stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl && lib.versionOlder version "9.12")
+      [
+        # The bootstrap binaries for aarch64 musl were built for the wrong triple.
+        # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13182
+        "--enable-ignore-build-platform-mismatch"
+      ];
 
     # Make sure we never relax`$PATH` and hooks support for compatibility.
     strictDeps = true;
@@ -894,7 +872,7 @@ stdenv.mkDerivation (
 
     dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;
   }
-  // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
+    // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
     dontPatchELF = true;
     noAuditTmpdir = true;
   }

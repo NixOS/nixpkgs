@@ -1,7 +1,7 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromSourcehut,
+{ lib
+, buildNimPackage
+, fetchFromSourcehut
+,
 }:
 
 buildNimPackage (finalAttrs: {

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoconf,
-  automake,
-  pkg-config,
-  zlib,
-  libpng,
-  libjpeg,
-  libwebp,
-  libtiff,
-  withXorg ? true,
-  libXpm,
-  libavif,
-  fontconfig,
-  freetype,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoconf
+, automake
+, pkg-config
+, zlib
+, libpng
+, libjpeg
+, libwebp
+, libtiff
+, withXorg ? true
+, libXpm
+, libavif
+, fontconfig
+, freetype
+,
 }:
 
 stdenv.mkDerivation rec {

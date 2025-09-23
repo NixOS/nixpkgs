@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkgsStatic,
-  byacc,
-  ed,
-  ncurses,
-  readline,
-  installShellFiles,
-  historySupport ? true,
-  readlineSupport ? true,
-  lineEditingLibrary ?
-    if (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isStatic) then "null" else "readline",
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkgsStatic
+, byacc
+, ed
+, ncurses
+, readline
+, installShellFiles
+, historySupport ? true
+, readlineSupport ? true
+, lineEditingLibrary ? if (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isStatic) then "null" else "readline"
+,
 }:
 
 assert lib.elem lineEditingLibrary [
@@ -22,11 +21,11 @@ assert lib.elem lineEditingLibrary [
   "vrl"
 ];
 assert
-  !(lib.elem lineEditingLibrary [
-    "edit"
-    "editline"
-    "vrl"
-  ]); # broken
+!(lib.elem lineEditingLibrary [
+  "edit"
+  "editline"
+  "vrl"
+]); # broken
 assert (lineEditingLibrary == "readline") -> readlineSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "rc";

@@ -1,45 +1,42 @@
 # This is an expression meant to be called from `./repart.nix`, it is NOT a
 # NixOS module that can be imported.
 
-{
-  lib,
-  stdenvNoCC,
-  runCommand,
-  python3,
-  black,
-  ruff,
-  mypy,
-  systemd,
-  fakeroot,
-  util-linux,
-
-  # filesystem tools
-  dosfstools,
-  mtools,
-  e2fsprogs,
-  squashfsTools,
-  erofs-utils,
-  btrfs-progs,
-  xfsprogs,
-
-  # compression tools
-  zstd,
-  xz,
-  zeekstd,
-
-  # arguments
-  name,
-  version,
-  imageFileBasename,
-  compression,
-  fileSystems,
-  finalPartitions,
-  split,
-  seed,
-  definitionsDirectory,
-  sectorSize,
-  mkfsEnv ? { },
-  createEmpty ? true,
+{ lib
+, stdenvNoCC
+, runCommand
+, python3
+, black
+, ruff
+, mypy
+, systemd
+, fakeroot
+, util-linux
+, # filesystem tools
+  dosfstools
+, mtools
+, e2fsprogs
+, squashfsTools
+, erofs-utils
+, btrfs-progs
+, xfsprogs
+, # compression tools
+  zstd
+, xz
+, zeekstd
+, # arguments
+  name
+, version
+, imageFileBasename
+, compression
+, fileSystems
+, finalPartitions
+, split
+, seed
+, definitionsDirectory
+, sectorSize
+, mkfsEnv ? { }
+, createEmpty ? true
+,
 }:
 
 let
@@ -118,8 +115,7 @@ let
       "zstd" = zstd;
       "xz" = xz;
       "zstd-seekable" = zeekstd;
-    }
-    ."${compression.algorithm}";
+    }."${compression.algorithm}";
 
   compressionCommand =
     {
@@ -127,8 +123,7 @@ let
       "xz" = "xz --keep --verbose --threads=$NIX_BUILD_CORES -${toString compression.level}";
       "zstd-seekable" =
         "zeekstd --no-progress --frame-size 2M --compression-level ${toString compression.level}";
-    }
-    ."${compression.algorithm}";
+    }."${compression.algorithm}";
 in
 stdenvNoCC.mkDerivation (
   finalAttrs:
@@ -141,7 +136,7 @@ stdenvNoCC.mkDerivation (
     else
       { inherit name; }
   )
-  // {
+    // {
     __structuredAttrs = true;
 
     # the image will be self-contained so we can drop references

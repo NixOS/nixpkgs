@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pytest,
-  pytest-xdist,
-  invoke,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytest
+, pytest-xdist
+, invoke
+,
 }:
 
 buildPythonPackage rec {

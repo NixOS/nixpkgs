@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jinja2,
-  poetry-core,
-  pytest,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, jinja2
+, poetry-core
+, pytest
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

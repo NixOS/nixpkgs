@@ -1,26 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  numpy,
-
-  # optional-dependencies
-  ipython,
-  jax,
-  palettable,
-
-  # tests
-  absl-py,
-  jaxlib,
-  omegaconf,
-  pydantic,
-  pytestCheckHook,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit-core
+, # dependencies
+  numpy
+, # optional-dependencies
+  ipython
+, jax
+, palettable
+, # tests
+  absl-py
+, jaxlib
+, omegaconf
+, pydantic
+, pytestCheckHook
+, torch
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  requests,
-  websocket-client,
-  pyjwt,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, requests
+, websocket-client
+, pyjwt
+,
 }:
 
 buildPythonPackage rec {

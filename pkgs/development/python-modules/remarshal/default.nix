@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build deps
-  poetry-core,
-
-  # propagates
-  cbor2,
-  colorama,
-  python-dateutil,
-  pyyaml,
-  rich-argparse,
-  ruamel-yaml,
-  tomlkit,
-  u-msgpack-python,
-
-  # tested using
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build deps
+  poetry-core
+, # propagates
+  cbor2
+, colorama
+, python-dateutil
+, pyyaml
+, rich-argparse
+, ruamel-yaml
+, tomlkit
+, u-msgpack-python
+, # tested using
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

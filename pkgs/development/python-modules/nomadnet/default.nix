@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lxmf,
-  pythonOlder,
-  qrcode,
-  rns,
-  setuptools,
-  urwid,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, lxmf
+, pythonOlder
+, qrcode
+, rns
+, setuptools
+, urwid
+,
 }:
 
 buildPythonPackage rec {

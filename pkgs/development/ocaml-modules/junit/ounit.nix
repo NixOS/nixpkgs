@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  junit,
-  ounit2,
+{ buildDunePackage
+, junit
+, ounit2
+,
 }:
 
 buildDunePackage ({

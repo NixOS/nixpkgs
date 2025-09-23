@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 
 with lib;
@@ -204,9 +203,11 @@ in
 
       environment =
         let
-          selectedSessionVars = lib.filterAttrs (
-            n: v: builtins.elem n [ "NIX_PATH" ]
-          ) config.environment.sessionVariables;
+          selectedSessionVars = lib.filterAttrs
+            (
+              n: v: builtins.elem n [ "NIX_PATH" ]
+            )
+            config.environment.sessionVariables;
         in
         selectedSessionVars
         // {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  wakatime-cli,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, testers
+, wakatime-cli
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildGoModule rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  dash,
-  scdoc,
-  fetchFromGitHub,
+{ lib
+, stdenvNoCC
+, dash
+, scdoc
+, fetchFromGitHub
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "app2unit";

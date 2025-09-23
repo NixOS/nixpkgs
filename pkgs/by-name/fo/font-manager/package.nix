@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  meson,
-  ninja,
-  gettext,
-  python3,
-  pkg-config,
-  libxml2,
-  json-glib,
-  sqlite,
-  itstool,
-  yelp-tools,
-  vala,
-  gsettings-desktop-schemas,
-  gtk4,
-  adwaita-icon-theme,
-  libarchive,
-  desktop-file-utils,
-  nix-update-script,
-  wrapGAppsHook4,
-  gobject-introspection,
-  # withWebkit enables the "webkit" feature, also known as Google Fonts
-  withWebkit ? true,
-  glib-networking,
-  libsoup_3,
-  webkitgtk_6_0,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, gettext
+, python3
+, pkg-config
+, libxml2
+, json-glib
+, sqlite
+, itstool
+, yelp-tools
+, vala
+, gsettings-desktop-schemas
+, gtk4
+, adwaita-icon-theme
+, libarchive
+, desktop-file-utils
+, nix-update-script
+, wrapGAppsHook4
+, gobject-introspection
+, # withWebkit enables the "webkit" feature, also known as Google Fonts
+  withWebkit ? true
+, glib-networking
+, libsoup_3
+, webkitgtk_6_0
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

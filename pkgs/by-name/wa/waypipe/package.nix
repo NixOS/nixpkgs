@@ -1,25 +1,25 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  libgbm,
-  lz4,
-  zstd,
-  ffmpeg,
-  cargo,
-  rustc,
-  vulkan-headers,
-  vulkan-loader,
-  shaderc,
-  llvmPackages,
-  autoPatchelfHook,
-  wayland-scanner,
-  rust-bindgen,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, scdoc
+, libgbm
+, lz4
+, zstd
+, ffmpeg
+, cargo
+, rustc
+, vulkan-headers
+, vulkan-loader
+, shaderc
+, llvmPackages
+, autoPatchelfHook
+, wayland-scanner
+, rust-bindgen
+, nix-update-script
+,
 }:
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "waypipe";

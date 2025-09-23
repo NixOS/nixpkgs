@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  pytestCheckHook,
-  pkgs,
-  awkward,
-  numpy,
-  pybind11,
-  python,
-  setuptools,
-  setuptools-scm,
-  vector,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pytestCheckHook
+, pkgs
+, awkward
+, numpy
+, pybind11
+, python
+, setuptools
+, setuptools-scm
+, vector
+,
 }:
 
 let

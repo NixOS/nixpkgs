@@ -1,21 +1,21 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  # dependencies
-  eth-typing,
-  eth-utils,
-  # nativeCheckInputs
-  asn1tools,
-  factory-boy,
-  hypothesis,
-  pyasn1,
-  pytestCheckHook,
-  coincurve,
-  eth-hash,
-  isPyPy,
-  pydantic,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, # dependencies
+  eth-typing
+, eth-utils
+, # nativeCheckInputs
+  asn1tools
+, factory-boy
+, hypothesis
+, pyasn1
+, pytestCheckHook
+, coincurve
+, eth-hash
+, isPyPy
+, pydantic
+,
 }:
 
 buildPythonPackage rec {

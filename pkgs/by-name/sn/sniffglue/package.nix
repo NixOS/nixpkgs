@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  libpcap,
-  libseccomp,
-  pkg-config,
-  rustPlatform,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, libpcap
+, libseccomp
+, pkg-config
+, rustPlatform
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

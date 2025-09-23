@@ -1,21 +1,21 @@
-{
-  lib,
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  SDL2,
-  libGL,
-  systemd,
-  libpulseaudio,
-  libselinux,
-  wayland,
-  libdecor,
-  xorg,
-  libxkbcommon,
-  libdrm,
-  withSELinux ? false,
+{ lib
+, buildDotnetModule
+, dotnetCorePackages
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, SDL2
+, libGL
+, systemd
+, libpulseaudio
+, libselinux
+, wayland
+, libdecor
+, xorg
+, libxkbcommon
+, libdrm
+, withSELinux ? false
+,
 }:
 
 buildDotnetModule rec {

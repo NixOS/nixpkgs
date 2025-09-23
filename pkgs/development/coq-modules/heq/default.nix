@@ -1,20 +1,19 @@
-{
-  lib,
-  fetchzip,
-  mkCoqDerivation,
-  coq,
-  version ? null,
+{ lib
+, fetchzip
+, mkCoqDerivation
+, coq
+, version ? null
+,
 }:
 
 let
   fetcher =
-    {
-      rev,
-      repo,
-      owner,
-      sha256,
-      domain,
-      ...
+    { rev
+    , repo
+    , owner
+    , sha256
+    , domain
+    , ...
     }:
     fetchzip {
       url = "https://${domain}/${owner}/${repo}/download/${repo}-${rev}.zip";

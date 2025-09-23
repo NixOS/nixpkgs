@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  apple-sdk,
+{ lib
+, stdenv
+, fetchFromGitHub
+, apple-sdk
+,
 }:
 stdenv.mkDerivation rec {
   pname = "autoraise";

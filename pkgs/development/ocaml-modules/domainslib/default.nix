@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  saturn,
-  domain-local-await,
-  kcas,
-  mirage-clock-unix,
-  qcheck-stm,
+{ lib
+, fetchurl
+, buildDunePackage
+, saturn
+, domain-local-await
+, kcas
+, mirage-clock-unix
+, qcheck-stm
+,
 }:
 
 buildDunePackage rec {

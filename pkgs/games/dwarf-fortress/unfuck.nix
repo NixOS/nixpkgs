@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  libGL,
-  libSM,
-  SDL,
-  SDL_image,
-  SDL_ttf,
-  glew,
-  openalSoft,
-  ncurses,
-  glib,
-  gtk2,
-  gtk3,
-  libsndfile,
-  zlib,
-  dfVersion,
-  pkg-config,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, libGL
+, libSM
+, SDL
+, SDL_image
+, SDL_ttf
+, glew
+, openalSoft
+, ncurses
+, glib
+, gtk2
+, gtk3
+, libsndfile
+, zlib
+, dfVersion
+, pkg-config
+,
 }:
 
 let

@@ -23,12 +23,10 @@ in
   ##
 
   # Utility functions, could just import but passing in for efficiency
-  lib,
-
-  # Use to reevaluate Nixpkgs
-  nixpkgsFun,
-
-  ## Other parameters
+  lib
+, # Use to reevaluate Nixpkgs
+  nixpkgsFun
+, ## Other parameters
   ##
 
   # Either null or an object in the form:
@@ -47,12 +45,10 @@ in
   # they are instead defined internally as the current stage. This allows us to
   # avoid expensive splicing. `pkgsHostTarget` is skipped because it is always
   # defined as the current stage.
-  adjacentPackages,
-
-  # The standard environment to use for building packages.
-  stdenv,
-
-  # `stdenv` without a C compiler. Passing in this helps avoid infinite
+  adjacentPackages
+, # The standard environment to use for building packages.
+  stdenv
+, # `stdenv` without a C compiler. Passing in this helps avoid infinite
   # recursions, and may eventually replace passing in the full stdenv.
   stdenvNoCC ? stdenv.override (
     {
@@ -62,26 +58,22 @@ in
     # Darwin doesn’t need an SDK in `stdenvNoCC`.  Dropping it shrinks the closure
     # size down from ~1 GiB to ~83 MiB, which is a considerable reduction.
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin { extraBuildInputs = [ ]; }
-  ),
-
-  # This is used because stdenv replacement and the stdenvCross do benefit from
+  )
+, # This is used because stdenv replacement and the stdenvCross do benefit from
   # the overridden configuration provided by the user, as opposed to the normal
   # bootstrapping stdenvs.
-  allowCustomOverrides,
-
-  # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
+  allowCustomOverrides
+, # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for files
   # in standard system directories (/usr/include, etc.)
-  noSysDirs ?
-    stdenv.buildPlatform.system != "x86_64-solaris"
-    && stdenv.buildPlatform.system != "x86_64-kfreebsd-gnu",
-
-  # The configuration attribute set
-  config,
-
-  # A list of overlays (Additional `self: super: { .. }` customization
+  noSysDirs ? stdenv.buildPlatform.system != "x86_64-solaris"
+    && stdenv.buildPlatform.system != "x86_64-kfreebsd-gnu"
+, # The configuration attribute set
+  config
+, # A list of overlays (Additional `self: super: { .. }` customization
   # functions) to be fixed together in the produced package set
-  overlays,
+  overlays
+,
 }@args:
 
 let
@@ -110,8 +102,7 @@ let
             musleabihf = lib.systems.parse.abis.musleabihf;
             muslabin32 = lib.systems.parse.abis.muslabin32;
             muslabi64 = lib.systems.parse.abis.muslabi64;
-          }
-          .${parsed.abi.name} or lib.systems.parse.abis.musl;
+          }.${parsed.abi.name} or lib.systems.parse.abis.musl;
       }
     );
 
@@ -178,14 +169,18 @@ let
   allPackages =
     self: super:
     let
-      res = import ./all-packages.nix {
-        inherit
-          lib
-          noSysDirs
-          config
-          overlays
-          ;
-      } res self super;
+      res = import ./all-packages.nix
+        {
+          inherit
+            lib
+            noSysDirs
+            config
+            overlays
+            ;
+        }
+        res
+        self
+        super;
     in
     res;
 
@@ -194,15 +189,18 @@ let
   variants =
     self: super:
     lib.optionalAttrs config.allowVariants (
-      import ./variants.nix {
-        inherit
-          lib
-          nixpkgsFun
-          stdenv
-          overlays
-          makeMuslParsedPlatform
-          ;
-      } self super
+      import ./variants.nix
+        {
+          inherit
+            lib
+            nixpkgsFun
+            stdenv
+            overlays
+            makeMuslParsedPlatform
+            ;
+        }
+        self
+        super
     );
 
   # stdenvOverrides is used to avoid having multiple of versions
@@ -244,39 +242,40 @@ let
         isSupported = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86;
       in
       if !config.allowAliases || isSupported then
-        nixpkgsFun {
-          overlays = [
-            (
-              self': super':
-              {
-                pkgsi686Linux = super';
-              }
-              // lib.optionalAttrs (!isSupported) {
-                # Overrides pkgsi686Linux.stdenv.mkDerivation to produce only broken derivations,
-                # when used on a non x86_64-linux platform in CI.
-                # TODO: Remove this, once pkgsi686Linux can become a variant.
-                stdenv = super'.stdenv // {
-                  mkDerivation =
-                    args:
-                    (super'.stdenv.mkDerivation args).overrideAttrs (prevAttrs: {
-                      meta = prevAttrs.meta or { } // {
-                        broken = true;
-                      };
-                    });
-                };
-              }
-            )
-          ]
-          ++ overlays;
-          ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
-            config = lib.systems.parse.tripleFromSystem (
-              stdenv.hostPlatform.parsed
-              // {
-                cpu = lib.systems.parse.cpuTypes.i686;
-              }
-            );
-          };
-        }
+        nixpkgsFun
+          {
+            overlays = [
+              (
+                self': super':
+                  {
+                    pkgsi686Linux = super';
+                  }
+                  // lib.optionalAttrs (!isSupported) {
+                    # Overrides pkgsi686Linux.stdenv.mkDerivation to produce only broken derivations,
+                    # when used on a non x86_64-linux platform in CI.
+                    # TODO: Remove this, once pkgsi686Linux can become a variant.
+                    stdenv = super'.stdenv // {
+                      mkDerivation =
+                        args:
+                        (super'.stdenv.mkDerivation args).overrideAttrs (prevAttrs: {
+                          meta = prevAttrs.meta or { } // {
+                            broken = true;
+                          };
+                        });
+                    };
+                  }
+              )
+            ]
+            ++ overlays;
+            ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
+              config = lib.systems.parse.tripleFromSystem (
+                stdenv.hostPlatform.parsed
+                // {
+                  cpu = lib.systems.parse.cpuTypes.i686;
+                }
+              );
+            };
+          }
       else
         throw "i686 Linux package set can only be used with the x86 family.";
 

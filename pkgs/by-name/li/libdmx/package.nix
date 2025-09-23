@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xorgproto,
-  libx11,
-  libxext,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorgproto
+, libx11
+, libxext
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdmx";
@@ -27,9 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxext
   ];
 
-  configureFlags = lib.optional (
-    stdenv.hostPlatform != stdenv.buildPlatform
-  ) "--enable-malloc0returnsnull";
+  configureFlags = lib.optional
+    (
+      stdenv.hostPlatform != stdenv.buildPlatform
+    ) "--enable-malloc0returnsnull";
 
   passthru = {
     # updateScript = # libdmx it deprecated and thus needs no updatescript

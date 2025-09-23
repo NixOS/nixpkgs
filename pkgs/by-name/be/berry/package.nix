@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  copyDesktopItems,
-  fontconfig,
-  freetype,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
-  makeDesktopItem,
-  pkg-config,
-  which,
+{ lib
+, stdenv
+, fetchFromGitHub
+, copyDesktopItems
+, fontconfig
+, freetype
+, libX11
+, libXext
+, libXft
+, libXinerama
+, makeDesktopItem
+, pkg-config
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

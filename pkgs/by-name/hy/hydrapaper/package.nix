@@ -1,19 +1,19 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  glib,
-  pkg-config,
-  pandoc,
-  appstream,
-  blueprint-compiler,
-  gobject-introspection,
-  wrapGAppsHook4,
-  dbus,
-  libadwaita,
-  xdg-user-dirs,
+{ lib
+, python3Packages
+, fetchFromGitLab
+, meson
+, ninja
+, glib
+, pkg-config
+, pandoc
+, appstream
+, blueprint-compiler
+, gobject-introspection
+, wrapGAppsHook4
+, dbus
+, libadwaita
+, xdg-user-dirs
+,
 }:
 
 python3Packages.buildPythonApplication rec {

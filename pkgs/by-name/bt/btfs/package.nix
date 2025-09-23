@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  python3,
-  boost,
-  fuse3,
-  libtorrent-rasterbar,
-  curl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, python3
+, boost
+, fuse3
+, libtorrent-rasterbar
+, curl
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  glib,
+{ stdenv
+, lib
+, fetchFromGitLab
+, glib
+,
 }:
 # We package this manually because upstream stopped updating the package to
 # extensions.gnome.org. See:

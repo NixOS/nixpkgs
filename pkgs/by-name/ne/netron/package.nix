@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  electron_36,
-  fetchFromGitHub,
-  jq,
-  makeDesktopItem,
+{ lib
+, stdenv
+, buildNpmPackage
+, electron_36
+, fetchFromGitHub
+, jq
+, makeDesktopItem
+,
 }:
 
 let

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xorgproto,
-  libX11,
-  writeScript,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorgproto
+, libX11
+, writeScript
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxfixes";

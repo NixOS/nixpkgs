@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  testers,
-  validatePkgConfig,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, testers
+, validatePkgConfig
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsfdo";

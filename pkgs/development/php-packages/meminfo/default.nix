@@ -1,8 +1,8 @@
-{
-  buildPecl,
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
+{ buildPecl
+, lib
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 
 buildPecl rec {

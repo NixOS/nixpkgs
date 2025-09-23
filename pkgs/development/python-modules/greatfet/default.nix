@@ -1,18 +1,18 @@
-{
-  buildPythonPackage,
-  cmsis-svd,
-  fetchFromGitHub,
-  future,
-  ipython,
-  lib,
-  prompt-toolkit,
-  pyfwup,
-  pygreat,
-  pythonOlder,
-  pyusb,
-  setuptools,
-  tabulate,
-  tqdm,
+{ buildPythonPackage
+, cmsis-svd
+, fetchFromGitHub
+, future
+, ipython
+, lib
+, prompt-toolkit
+, pyfwup
+, pygreat
+, pythonOlder
+, pyusb
+, setuptools
+, tabulate
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

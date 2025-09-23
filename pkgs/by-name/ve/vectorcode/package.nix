@@ -1,16 +1,15 @@
-{
-  lib,
-  cargo,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  protobuf,
-  python3,
-  rustc,
-  rustPlatform,
-  versionCheckHook,
-
-  lspSupport ? true,
+{ lib
+, cargo
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, protobuf
+, python3
+, rustc
+, rustPlatform
+, versionCheckHook
+, lspSupport ? true
+,
 }:
 
 let

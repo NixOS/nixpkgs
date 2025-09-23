@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  inih,
-  meson,
-  ninja,
-  pkg-config,
-  cmocka,
-  scdoc,
-  wayland-scanner,
-  wayland,
-  wayland-protocols,
-  libseccomp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, inih
+, meson
+, ninja
+, pkg-config
+, cmocka
+, scdoc
+, wayland-scanner
+, wayland
+, wayland-protocols
+, libseccomp
+,
 }:
 
 stdenv.mkDerivation rec {

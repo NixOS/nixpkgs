@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  sqlite,
-  installShellFiles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, sqlite
+, installShellFiles
+,
 }:
 
 buildGoModule rec {

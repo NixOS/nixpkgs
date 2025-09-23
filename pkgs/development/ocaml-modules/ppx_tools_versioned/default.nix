@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  ocaml-migrate-parsetree,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ocaml-migrate-parsetree
+,
 }:
 
 buildDunePackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  qtModule,
-  stdenv,
-  speechd-minimal,
-  pkg-config,
+{ lib
+, qtModule
+, stdenv
+, speechd-minimal
+, pkg-config
+,
 }:
 
 qtModule {

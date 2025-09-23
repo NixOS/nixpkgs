@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  django-stubs,
-  fetchFromGitHub,
-  mypy,
-  py,
-  coreapi,
-  pytest-mypy-plugins,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  types-pyyaml,
-  setuptools,
-  types-markdown,
-  types-requests,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, django-stubs
+, fetchFromGitHub
+, mypy
+, py
+, coreapi
+, pytest-mypy-plugins
+, pytestCheckHook
+, pythonOlder
+, requests
+, types-pyyaml
+, setuptools
+, types-markdown
+, types-requests
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gtk2-x11,
-  pkg-config,
-  python3,
-  gfortran,
-  cfitsio,
-  getopt,
-  perl,
-  groff,
-  which,
-  darwin,
-  ncurses,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, gtk2-x11
+, pkg-config
+, python3
+, gfortran
+, cfitsio
+, getopt
+, perl
+, groff
+, which
+, darwin
+, ncurses
+, makeWrapper
+,
 }:
 
 let

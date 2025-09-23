@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  dulwich,
-  mercurial,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, dulwich
+, mercurial
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

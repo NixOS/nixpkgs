@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -33,23 +32,23 @@ let
 
   addrOpts =
     v:
-    assert v == 4 || v == 6;
-    {
-      options = {
-        address = mkOption {
-          type = types.str;
-          description = "IPv${toString v} address.";
-        };
+      assert v == 4 || v == 6;
+      {
+        options = {
+          address = mkOption {
+            type = types.str;
+            description = "IPv${toString v} address.";
+          };
 
-        prefixLength = mkOption {
-          type = types.ints.between 0 (if v == 4 then 32 else 128);
-          description = ''
-            Subnet mask of the interface, specified as the number of
-            bits in the prefix ("${if v == 4 then "24" else "64"}").
-          '';
+          prefixLength = mkOption {
+            type = types.ints.between 0 (if v == 4 then 32 else 128);
+            description = ''
+              Subnet mask of the interface, specified as the number of
+              bits in the prefix ("${if v == 4 then "24" else "64"}").
+            '';
+          };
         };
       };
-    };
 
   versionOpts = v: {
     options = {

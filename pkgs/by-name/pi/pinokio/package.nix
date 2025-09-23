@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkgs,
-  appimageTools,
+{ lib
+, stdenv
+, fetchurl
+, pkgs
+, appimageTools
+,
 }:
 let
   pname = "pinokio";
@@ -19,8 +19,7 @@ let
           url = "https://github.com/pinokiocomputer/pinokio/releases/download/${version}/Pinokio-${version}.AppImage";
           hash = "sha256-/E/IAOUgxH9RWpE2/vLlQy92LOgwpHF79K/1XEtSpXI=";
         };
-      }
-      .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+      }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
@@ -39,7 +38,8 @@ let
 in
 
 if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+  stdenv.mkDerivation
+  {
     inherit
       pname
       version

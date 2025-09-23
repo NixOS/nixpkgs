@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  darwin,
-  bootstrap-chicken ? null,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, darwin
+, bootstrap-chicken ? null
+, testers
+,
 }:
 
 let

@@ -1,26 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  python3,
-  cmake,
-  gfortran,
-  pkg-config,
-  hdf5-mpi,
-  zpp,
-
-  # buildInputs
-  gbenchmark,
-  libyaml,
-  mpi,
-  spdlog,
-
-  # passthru
-  nix-update-script,
-  testers,
-  pdi,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  python3
+, cmake
+, gfortran
+, pkg-config
+, hdf5-mpi
+, zpp
+, # buildInputs
+  gbenchmark
+, libyaml
+, mpi
+, spdlog
+, # passthru
+  nix-update-script
+, testers
+, pdi
+,
 }:
 let
   python = python3.withPackages (

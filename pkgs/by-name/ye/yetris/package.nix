@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ncurses,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ncurses
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

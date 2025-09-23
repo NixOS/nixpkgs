@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  stdenvNoCC,
-  lib,
-  vcpkg-tool,
-  makeWrapper,
-  doWrap ? true,
+{ fetchFromGitHub
+, stdenvNoCC
+, lib
+, vcpkg-tool
+, makeWrapper
+, doWrap ? true
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

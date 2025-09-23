@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  cudaPackages,
-  buildPythonPackage,
-  fetchurl,
-  python,
-  autoPatchelfHook,
-  filelock,
-  lit,
-  zlib,
+{ lib
+, stdenv
+, cudaPackages
+, buildPythonPackage
+, fetchurl
+, python
+, autoPatchelfHook
+, filelock
+, lit
+, zlib
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,10 @@
-{
-  lib,
-  jre,
-  gradle_8,
-
-  makeWrapper,
-  stdenv,
-  fetchFromGitLab,
+{ lib
+, jre
+, gradle_8
+, makeWrapper
+, stdenv
+, fetchFromGitLab
+,
 }:
 let
   gradle = gradle_8;

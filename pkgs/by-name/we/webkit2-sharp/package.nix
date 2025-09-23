@@ -1,13 +1,13 @@
-{
-  stdenv,
-  autoreconfHook,
-  fetchFromGitHub,
-  gtk-sharp-3_0,
-  lib,
-  libxslt,
-  mono,
-  pkg-config,
-  webkitgtk_4_0,
+{ stdenv
+, autoreconfHook
+, fetchFromGitHub
+, gtk-sharp-3_0
+, lib
+, libxslt
+, mono
+, pkg-config
+, webkitgtk_4_0
+,
 }:
 
 stdenv.mkDerivation rec {

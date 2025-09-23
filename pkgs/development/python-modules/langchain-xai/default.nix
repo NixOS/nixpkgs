@@ -1,26 +1,22 @@
-{
-  lib,
-  stdenvNoCC,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  aiohttp,
-  langchain-core,
-  langchain-openai,
-  requests,
-
-  # tests
-  langchain-tests,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-
-  # passthru
-  gitUpdater,
+{ lib
+, stdenvNoCC
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pdm-backend
+, # dependencies
+  aiohttp
+, langchain-core
+, langchain-openai
+, requests
+, # tests
+  langchain-tests
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

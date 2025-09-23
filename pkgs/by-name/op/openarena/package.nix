@@ -1,25 +1,25 @@
-{
-  lib,
-  fetchzip,
-  fetchFromGitHub,
-  stdenv,
-  fetchpatch,
-  copyDesktopItems,
-  curl,
-  makeBinaryWrapper,
-  pkg-config,
-  which,
-  freetype,
-  libglvnd,
-  libjpeg,
-  libogg,
-  libvorbis,
-  libxmp,
-  openal,
-  SDL2,
-  speex,
-  makeDesktopItem,
-  nixosTests,
+{ lib
+, fetchzip
+, fetchFromGitHub
+, stdenv
+, fetchpatch
+, copyDesktopItems
+, curl
+, makeBinaryWrapper
+, pkg-config
+, which
+, freetype
+, libglvnd
+, libjpeg
+, libogg
+, libvorbis
+, libxmp
+, openal
+, SDL2
+, speex
+, makeDesktopItem
+, nixosTests
+,
 }:
 
 let

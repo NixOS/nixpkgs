@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  boost,
-  rdkafka,
-  gtest,
-  rapidjson,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, boost
+, rdkafka
+, gtest
+, rapidjson
+,
 }:
 
 stdenv.mkDerivation rec {

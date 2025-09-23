@@ -1,7 +1,7 @@
-{
-  lib,
-  elpaBuild,
-  mu,
+{ lib
+, elpaBuild
+, mu
+,
 }:
 
 elpaBuild {

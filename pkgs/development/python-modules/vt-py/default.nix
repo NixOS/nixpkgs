@@ -1,15 +1,15 @@
-{
-  lib,
-  aiofiles,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flask,
-  pytest-asyncio,
-  pytest-httpserver,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiofiles
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, flask
+, pytest-asyncio
+, pytest-httpserver
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

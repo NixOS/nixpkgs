@@ -1,37 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  cmake,
-  ninja,
-  gfortran,
-  pkg-config,
-  python3Packages,
-  mpi,
-  catalyst,
-  bzip2,
-  c-blosc2,
-  hdf5,
-  libfabric,
-  libpng,
-  libsodium,
-  pugixml,
-  sqlite,
-  zeromq,
-  zfp,
-  zlib,
-  ucx,
-  libffi,
-  yaml-cpp,
-  nlohmann_json,
-  llvmPackages,
-  ctestCheckHook,
-  mpiCheckPhaseHook,
-  testers,
-  mpiSupport ? true,
-  pythonSupport ? false,
-  withExamples ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, cmake
+, ninja
+, gfortran
+, pkg-config
+, python3Packages
+, mpi
+, catalyst
+, bzip2
+, c-blosc2
+, hdf5
+, libfabric
+, libpng
+, libsodium
+, pugixml
+, sqlite
+, zeromq
+, zfp
+, zlib
+, ucx
+, libffi
+, yaml-cpp
+, nlohmann_json
+, llvmPackages
+, ctestCheckHook
+, mpiCheckPhaseHook
+, testers
+, mpiSupport ? true
+, pythonSupport ? false
+, withExamples ? false
+,
 }:
 let
   adios2Packages = {
@@ -107,9 +107,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (stdenv.hostPlatform.isLoongArch64) libffi
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform zfp) zfp
   # openmp required by zfp
-  ++ lib.optional (
-    lib.meta.availableOn stdenv.hostPlatform zfp && stdenv.cc.isClang
-  ) llvmPackages.openmp;
+  ++ lib.optional
+    (
+      lib.meta.availableOn stdenv.hostPlatform zfp && stdenv.cc.isClang
+    )
+    llvmPackages.openmp;
 
   propagatedBuildInputs =
     lib.optional mpiSupport mpi

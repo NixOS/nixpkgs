@@ -1,14 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  libspnav,
-  libX11,
-
-  # Qt6 support is close: https://github.com/FreeSpacenav/spnavcfg/issues/43
-  libsForQt5,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, libspnav
+, libX11
+, # Qt6 support is close: https://github.com/FreeSpacenav/spnavcfg/issues/43
+  libsForQt5
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "spnavcfg";

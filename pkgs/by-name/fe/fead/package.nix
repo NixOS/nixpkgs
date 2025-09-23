@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  python3,
-  help2man,
+{ lib
+, stdenv
+, fetchzip
+, python3
+, help2man
+,
 }:
 
 stdenv.mkDerivation rec {

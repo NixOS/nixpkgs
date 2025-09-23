@@ -10,9 +10,11 @@ let
 
   warnAfterVersion =
     ver: pkg:
-    lib.warnIf (lib.versionOlder ver
-      super.${pkg.pname}.version
-    ) "override for haskell.packages.ghc912.${pkg.pname} may no longer be needed" pkg;
+    lib.warnIf
+      (lib.versionOlder ver
+        super.${pkg.pname}.version
+      ) "override for haskell.packages.ghc912.${pkg.pname} may no longer be needed"
+      pkg;
 
 in
 
@@ -72,11 +74,13 @@ in
   # Jailbreaks
   #
   hashing = doJailbreak super.hashing; # bytestring <0.12
-  hevm = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/hellwolf/hevm/commit/338674d1fe22d46ea1e8582b24c224d76d47d0f3.patch";
-    name = "release-0.54.2-ghc-9.8.4-patch";
-    sha256 = "sha256-Mo65FfP1nh7QTY+oLia22hj4eV2v9hpXlYsrFKljA3E=";
-  }) super.hevm;
+  hevm = appendPatch
+    (pkgs.fetchpatch {
+      url = "https://github.com/hellwolf/hevm/commit/338674d1fe22d46ea1e8582b24c224d76d47d0f3.patch";
+      name = "release-0.54.2-ghc-9.8.4-patch";
+      sha256 = "sha256-Mo65FfP1nh7QTY+oLia22hj4eV2v9hpXlYsrFKljA3E=";
+    })
+    super.hevm;
   HaskellNet-SSL = doJailbreak super.HaskellNet-SSL; # bytestring >=0.9 && <0.12
   inflections = doJailbreak super.inflections; # text >=0.2 && <2.1
 
@@ -96,11 +100,13 @@ in
   # 2025-04-21: "flavor" for GHC 9.8.5 is missing a fix introduced for 9.8.4. See:
   # https://github.com/digital-asset/ghc-lib/pull/571#discussion_r2052684630
   ghc-lib-parser = warnAfterVersion "9.8.5.20250214" (
-    overrideCabal {
-      postPatch = ''
-        substituteInPlace compiler/cbits/genSym.c \
-          --replace-fail "HsWord64 u = atomic_inc64" "HsWord64 u = atomic_inc"
-      '';
-    } super.ghc-lib-parser
+    overrideCabal
+      {
+        postPatch = ''
+          substituteInPlace compiler/cbits/genSym.c \
+            --replace-fail "HsWord64 u = atomic_inc64" "HsWord64 u = atomic_inc"
+        '';
+      }
+      super.ghc-lib-parser
   );
 }

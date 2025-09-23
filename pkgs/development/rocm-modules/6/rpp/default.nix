@@ -1,20 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  rocm-docs-core,
-  half,
-  clr,
-  openmp,
-  boost,
-  python3Packages,
-  buildDocs ? false, # Needs internet
-  useOpenCL ? false,
-  useCPU ? false,
-  gpuTargets ? [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, rocm-docs-core
+, half
+, clr
+, openmp
+, boost
+, python3Packages
+, buildDocs ? false
+, # Needs internet
+  useOpenCL ? false
+, useCPU ? false
+, gpuTargets ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

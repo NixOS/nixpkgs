@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cu2qu,
-  defcon,
-  fontfeatures,
-  fonttools,
-  glyphslib,
-  openstep-plist,
-  orjson,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  ufolib2,
-  ufomerge,
-  vfblib,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cu2qu
+, defcon
+, fontfeatures
+, fonttools
+, glyphslib
+, openstep-plist
+, orjson
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, ufolib2
+, ufomerge
+, vfblib
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  asn1crypto,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  versioningit,
+{ lib
+, asn1crypto
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, versioningit
+,
 }:
 
 buildPythonPackage rec {

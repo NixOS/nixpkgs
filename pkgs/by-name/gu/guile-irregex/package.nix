@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchzip,
-  mitscheme,
-  guile,
-  lib,
+{ stdenv
+, fetchzip
+, mitscheme
+, guile
+, lib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-irregex";

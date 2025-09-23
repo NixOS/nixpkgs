@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  texinfo,
-  nano,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, texinfo
+, nano
+, autoreconfHook
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  jetbrains,
-  symlinkJoin,
-  lib,
-  runCommand,
-  # If not set, all IDEs are tested.
-  ideName ? null,
+{ jetbrains
+, symlinkJoin
+, lib
+, runCommand
+, # If not set, all IDEs are tested.
+  ideName ? null
+,
 }:
 
 let
@@ -60,19 +60,21 @@ in
         with lib.asserts;
         ide:
         builtins.map (plugin: plugin.name) (
-          builtins.filter (
-            plugin:
+          builtins.filter
             (
-              # Plugin has to not be broken
-              (!builtins.elem plugin.name broken-plugins)
-              # IDE has to be compatible
-              && (builtins.elem ide.pname plugin.compatible)
-              # Assert: The build number needs to be included (if marked compatible)
-              && (assertMsg (builtins.elem ide.buildNumber (builtins.attrNames plugin.builds)) "For plugin ${plugin.name} no entry for IDE build ${ide.buildNumber} is defined, even though ${ide.pname} is on that build.")
-              # The plugin has to exist for the build
-              && (plugin.builds.${ide.buildNumber} != null)
+              plugin:
+              (
+                # Plugin has to not be broken
+                (!builtins.elem plugin.name broken-plugins)
+                # IDE has to be compatible
+                && (builtins.elem ide.pname plugin.compatible)
+                # Assert: The build number needs to be included (if marked compatible)
+                && (assertMsg (builtins.elem ide.buildNumber (builtins.attrNames plugin.builds)) "For plugin ${plugin.name} no entry for IDE build ${ide.buildNumber} is defined, even though ${ide.pname} is on that build.")
+                # The plugin has to exist for the build
+                && (plugin.builds.${ide.buildNumber} != null)
+              )
             )
-          ) (builtins.attrValues plugins-json.plugins)
+            (builtins.attrValues plugins-json.plugins)
         );
       modify-ide = ide: jetbrains.plugins.addPlugins ide (plugins-for ide);
     in
@@ -94,11 +96,13 @@ in
       ];
       check-if-supported =
         ide:
-        builtins.all (
-          plugin:
-          (builtins.elem ide.pname plugins-json.plugins.${plugin}.compatible)
-          && (plugins-json.plugins.${plugin}.builds.${ide.buildNumber} != null)
-        ) plugin-ids;
+        builtins.all
+          (
+            plugin:
+            (builtins.elem ide.pname plugins-json.plugins.${plugin}.compatible)
+            && (plugins-json.plugins.${plugin}.builds.${ide.buildNumber} != null)
+          )
+          plugin-ids;
       modify-ide = ide: jetbrains.plugins.addPlugins ide plugin-ids;
     in
     runCommand "test-jetbrains-plugins-stored-correctly"

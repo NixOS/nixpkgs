@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  dbus-glib,
-  glib,
-  ORBit2,
-  libxml2,
-  polkit,
-  python312,
-  intltool,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, dbus-glib
+, glib
+, ORBit2
+, libxml2
+, polkit
+, python312
+, intltool
+,
 }:
 
 stdenv.mkDerivation rec {

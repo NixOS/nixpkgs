@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  matplotlib,
-  numpy,
-  pytestCheckHook,
-  pytest-cov-stub,
-  seaborn,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, matplotlib
+, numpy
+, pytestCheckHook
+, pytest-cov-stub
+, seaborn
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

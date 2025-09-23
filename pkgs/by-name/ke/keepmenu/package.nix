@@ -1,11 +1,11 @@
-{
-  dmenu,
-  fetchFromGitHub,
-  lib,
-  python3Packages,
-  xdotool,
-  xsel,
-  xvfb-run,
+{ dmenu
+, fetchFromGitHub
+, lib
+, python3Packages
+, xdotool
+, xsel
+, xvfb-run
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  wayland-scanner,
-  python3,
-  wayland,
-  gitUpdater,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, wayland-scanner
+, python3
+, wayland
+, gitUpdater
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck =
     stdenv.hostPlatform == stdenv.buildPlatform
     &&
-      # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
-      stdenv.hostPlatform.linker == "bfd"
+    # https://gitlab.freedesktop.org/wayland/wayland-protocols/-/issues/48
+    stdenv.hostPlatform.linker == "bfd"
     && lib.meta.availableOn stdenv.hostPlatform wayland;
 
   src = fetchurl {

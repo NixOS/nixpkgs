@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bobcat,
-  icmake,
-  yodl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bobcat
+, icmake
+, yodl
+,
 }:
 
 stdenv.mkDerivation rec {

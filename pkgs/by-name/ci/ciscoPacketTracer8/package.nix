@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenvNoCC,
-  requireFile,
-  autoPatchelfHook,
-  dpkg,
-  makeWrapper,
-  alsa-lib,
-  dbus,
-  expat,
-  fontconfig,
-  glib,
-  libdrm,
-  libglvnd,
-  libpulseaudio,
-  libudev0-shim,
-  libxkbcommon,
-  libxml2_13,
-  libxslt,
-  nspr,
-  nss,
-  wayland,
-  xorg,
-  buildFHSEnv,
-  copyDesktopItems,
-  makeDesktopItem,
-  version ? "8.2.2",
-  packetTracerSource ? null,
+{ lib
+, stdenvNoCC
+, requireFile
+, autoPatchelfHook
+, dpkg
+, makeWrapper
+, alsa-lib
+, dbus
+, expat
+, fontconfig
+, glib
+, libdrm
+, libglvnd
+, libpulseaudio
+, libudev0-shim
+, libxkbcommon
+, libxml2_13
+, libxslt
+, nspr
+, nss
+, wayland
+, xorg
+, buildFHSEnv
+, copyDesktopItems
+, makeDesktopItem
+, version ? "8.2.2"
+, packetTracerSource ? null
+,
 }:
 
 let

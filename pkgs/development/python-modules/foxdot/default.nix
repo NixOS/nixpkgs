@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  tkinter,
-  supercollider,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, tkinter
+, supercollider
+,
 }:
 
 buildPythonPackage rec {

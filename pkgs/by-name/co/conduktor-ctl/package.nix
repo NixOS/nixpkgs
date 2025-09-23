@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-  versionCheckHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, versionCheckHook
+,
 }:
 buildGoModule rec {
   pname = "conduktor-ctl";

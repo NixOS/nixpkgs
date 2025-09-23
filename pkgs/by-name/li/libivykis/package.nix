@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  file,
-  protobufc,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, file
+, protobufc
+,
 }:
 
 stdenv.mkDerivation rec {

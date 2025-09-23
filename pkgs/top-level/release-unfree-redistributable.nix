@@ -20,7 +20,7 @@
 
   Test for example like this:
 
-    $ hydra-eval-jobs pkgs/top-level/release-unfree-redistributable.nix -I .
+  $ hydra-eval-jobs pkgs/top-level/release-unfree-redistributable.nix -I .
 */
 
 {
@@ -28,8 +28,8 @@
   supportedSystems ? [
     "x86_64-linux"
     "aarch64-linux"
-  ],
-  # Attributes passed to nixpkgs.
+  ]
+, # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
       allowAliases = false;
@@ -39,9 +39,10 @@
     };
 
     __allowFileset = false;
-  },
-  # We only build the full package set on infrequently releasing channels.
-  full ? false,
+  }
+, # We only build the full package set on infrequently releasing channels.
+  full ? false
+,
 }:
 
 let
@@ -64,13 +65,14 @@ let
         attrPath = if prefix == "" then name else "${prefix}.${name}";
         res = builtins.tryEval (
           if lib.isDerivation value then
-            lib.optionals (cond attrPath value) (
-              # logic copied from release-lib packagePlatforms
-              value.meta.hydraPlatforms
-                or (lib.subtractLists (value.meta.badPlatforms or [ ]) (value.meta.platforms or [ "x86_64-linux" ]))
-            )
+            lib.optionals (cond attrPath value)
+              (
+                # logic copied from release-lib packagePlatforms
+                value.meta.hydraPlatforms
+                  or (lib.subtractLists (value.meta.badPlatforms or [ ]) (value.meta.platforms or [ "x86_64-linux" ]))
+              )
           else if value.recurseForDerivations or false || value.recurseForRelease or false then
-            # Recurse
+          # Recurse
             packagesWith attrPath cond value
           else
             [ ]
@@ -98,7 +100,7 @@ let
   canSubstituteSrc =
     pkg:
     # requireFile don't allow using substituters and are therefor skipped
-    pkg.src.allowSubstitutes or true;
+      pkg.src.allowSubstitutes or true;
 
   cond =
     attrPath: pkg:
@@ -109,8 +111,8 @@ let
     && (
       full
       ||
-        # We only build these heavy packages on releases
-        ((isNotCudaPackage attrPath) && (isNotLinuxKernel attrPath))
+      # We only build these heavy packages on releases
+      ((isNotCudaPackage attrPath) && (isNotLinuxKernel attrPath))
     );
 
   packages = packagesWith "" cond pkgs;

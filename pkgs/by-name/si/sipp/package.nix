@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ncurses,
-  libpcap,
-  cmake,
-  openssl,
-  lksctp-tools,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ncurses
+, libpcap
+, cmake
+, openssl
+, lksctp-tools
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pixman,
-  fcft,
-  pkg-config,
-  wayland-protocols,
-  wayland-scanner,
-  wayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pixman
+, fcft
+, pkg-config
+, wayland-protocols
+, wayland-scanner
+, wayland
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

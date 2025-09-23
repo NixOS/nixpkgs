@@ -1,9 +1,9 @@
-{
-  appimageTools,
-  symlinkJoin,
-  lib,
-  fetchurl,
-  makeDesktopItem,
+{ appimageTools
+, symlinkJoin
+, lib
+, fetchurl
+, makeDesktopItem
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  flask,
-  flask-httpauth,
-  pytz,
-  six,
-  pymongo,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, flask
+, flask-httpauth
+, pytz
+, six
+, pymongo
+,
 }:
 
 buildPythonPackage rec {

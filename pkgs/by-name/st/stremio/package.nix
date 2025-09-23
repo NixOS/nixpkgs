@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  libsForQt5,
-  ffmpeg,
-  mpv,
-  nodejs,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, libsForQt5
+, ffmpeg
+, mpv
+, nodejs
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "stremio-shell";

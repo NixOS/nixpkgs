@@ -1,6 +1,6 @@
-{
-  mkDerivation,
-  byacc,
+{ mkDerivation
+, byacc
+,
 }:
 mkDerivation {
   path = "sbin/pfctl";

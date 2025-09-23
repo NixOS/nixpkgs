@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitea,
-  async-timeout,
-  httpx,
-  httpx-socks,
-  proxy-py,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  python-socks,
-  rencode,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitea
+, async-timeout
+, httpx
+, httpx-socks
+, proxy-py
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, python-socks
+, rencode
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

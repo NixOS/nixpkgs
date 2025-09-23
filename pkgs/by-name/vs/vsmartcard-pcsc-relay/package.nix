@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  pkg-config,
-  libtool,
-  autoreconfHook,
-  pcsclite,
-  libnfc,
-  python3,
-  help2man,
-  gengetopt,
-  vsmartcard-vpcd,
+{ lib
+, stdenv
+, pkg-config
+, libtool
+, autoreconfHook
+, pcsclite
+, libnfc
+, python3
+, help2man
+, gengetopt
+, vsmartcard-vpcd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

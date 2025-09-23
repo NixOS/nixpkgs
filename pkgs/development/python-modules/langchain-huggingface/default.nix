@@ -1,34 +1,30 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  huggingface-hub,
-  langchain-core,
-  sentence-transformers,
-  tokenizers,
-  transformers,
-
-  # tests
-  freezegun,
-  httpx,
-  lark,
-  pandas,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-socket,
-  pytestCheckHook,
-  requests-mock,
-  responses,
-  syrupy,
-  toml,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pdm-backend
+, # dependencies
+  huggingface-hub
+, langchain-core
+, sentence-transformers
+, tokenizers
+, transformers
+, # tests
+  freezegun
+, httpx
+, lark
+, pandas
+, pytest-asyncio
+, pytest-mock
+, pytest-socket
+, pytestCheckHook
+, requests-mock
+, responses
+, syrupy
+, toml
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

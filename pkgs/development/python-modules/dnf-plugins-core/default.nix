@@ -1,20 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # dependencies
-  cmake,
-  python-dateutil,
-  dbus-python,
-  dnf4,
-  gettext,
-  libcomps,
-  libdnf,
-  python,
-  rpm,
-  sphinx,
-  systemd,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # dependencies
+  cmake
+, python-dateutil
+, dbus-python
+, dnf4
+, gettext
+, libcomps
+, libdnf
+, python
+, rpm
+, sphinx
+, systemd
+,
 }:
 
 let

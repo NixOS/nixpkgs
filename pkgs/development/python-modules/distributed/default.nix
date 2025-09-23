@@ -1,29 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-  versioneer,
-
-  # dependencies
-  click,
-  cloudpickle,
-  dask,
-  jinja2,
-  locket,
-  msgpack,
-  packaging,
-  psutil,
-  pyyaml,
-  sortedcontainers,
-  tblib,
-  toolz,
-  tornado,
-  urllib3,
-  zict,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, versioneer
+, # dependencies
+  click
+, cloudpickle
+, dask
+, jinja2
+, locket
+, msgpack
+, packaging
+, psutil
+, pyyaml
+, sortedcontainers
+, tblib
+, toolz
+, tornado
+, urllib3
+, zict
+,
 }:
 
 buildPythonPackage rec {

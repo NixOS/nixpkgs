@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  itsdangerous,
-  python-multipart,
-  starlette,
-  wtforms,
-  httpx,
-  jinja2,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, itsdangerous
+, python-multipart
+, starlette
+, wtforms
+, httpx
+, jinja2
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

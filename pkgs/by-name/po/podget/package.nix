@@ -1,14 +1,14 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  installShellFiles,
-  coreutils,
-  findutils,
-  gawk,
-  iconv,
-  wget,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, makeWrapper
+, installShellFiles
+, coreutils
+, findutils
+, gawk
+, iconv
+, wget
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "podget";

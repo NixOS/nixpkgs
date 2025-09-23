@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  oniguruma,
-  setuptools,
-  cffi,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, oniguruma
+, setuptools
+, cffi
+,
 }:
 buildPythonPackage rec {
   pname = "onigurumacffi";

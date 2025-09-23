@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  wrapQtAppsHook,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  cmake,
-  ninja,
-  pkg-config,
-  eigen_3_4_0,
-  zlib,
-  libpng,
-  boost,
-  guile,
-  python3,
-  qtbase,
+{ lib
+, stdenv
+, wrapQtAppsHook
+, fetchFromGitHub
+, unstableGitUpdater
+, cmake
+, ninja
+, pkg-config
+, eigen_3_4_0
+, zlib
+, libpng
+, boost
+, guile
+, python3
+, qtbase
+,
 }:
 
 stdenv.mkDerivation {

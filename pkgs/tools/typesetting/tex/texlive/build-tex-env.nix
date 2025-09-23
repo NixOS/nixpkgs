@@ -1,44 +1,42 @@
 {
   # texlive package set
-  tl,
-  bin,
-
-  lib,
-  buildEnv,
-  libfaketime,
-  makeFontsConf,
-  makeWrapper,
-  runCommand,
-  writeShellScript,
-  writeText,
-  toTLPkgSets,
-  bash,
-  perl,
-
-  # common runtime dependencies
-  coreutils,
-  gawk,
-  gnugrep,
-  gnused,
-  ghostscript,
+  tl
+, bin
+, lib
+, buildEnv
+, libfaketime
+, makeFontsConf
+, makeWrapper
+, runCommand
+, writeShellScript
+, writeText
+, toTLPkgSets
+, bash
+, perl
+, # common runtime dependencies
+  coreutils
+, gawk
+, gnugrep
+, gnused
+, ghostscript
+,
 }:
 
 lib.fix (
   self:
-  {
-    withDocs ? false,
-    withSources ? false,
-    requiredTeXPackages ? ps: [ ps.scheme-infraonly ],
-
-    ### texlive.combine backward compatibility
-    __extraName ? "combined",
-    __extraVersion ? "",
-    # emulate the old texlive.combine (e.g. add man pages to main output)
-    __combine ? false,
-    # adjust behavior further if called from the texlive.combine wrapper
-    __fromCombineWrapper ? false,
-    # build only the formats of a package (for internal use!)
-    __formatsOf ? null,
+  { withDocs ? false
+  , withSources ? false
+  , requiredTeXPackages ? ps: [ ps.scheme-infraonly ]
+  , ### texlive.combine backward compatibility
+    __extraName ? "combined"
+  , __extraVersion ? ""
+  , # emulate the old texlive.combine (e.g. add man pages to main output)
+    __combine ? false
+  , # adjust behavior further if called from the texlive.combine wrapper
+    __fromCombineWrapper ? false
+  , # build only the formats of a package (for internal use!)
+    __formatsOf ? null
+  ,
   }@args:
 
   let
@@ -76,15 +74,17 @@ lib.fix (
       all =
         let
           packages = ensurePkgSets (requiredTeXPackages tl);
-          runtime = builtins.partition (
-            p:
-            p.outputSpecified or false
-            -> builtins.elem (p.tlOutputName or p.outputName) [
-              "out"
-              "tex"
-              "tlpkg"
-            ]
-          ) packages;
+          runtime = builtins.partition
+            (
+              p:
+              p.outputSpecified or false
+              -> builtins.elem (p.tlOutputName or p.outputName) [
+                "out"
+                "tex"
+                "tlpkg"
+              ]
+            )
+            packages;
           keySet = p: {
             key =
               p.pname or p.name
@@ -97,12 +97,13 @@ lib.fix (
         if __fromCombineWrapper then
           requiredTeXPackages null
         else
-          builtins.catAttrs "p" (
-            builtins.genericClosure {
-              startSet = map keySet runtime.right;
-              operator = p: map keySet p.tlDeps;
-            }
-          )
+          builtins.catAttrs "p"
+            (
+              builtins.genericClosure {
+                startSet = map keySet runtime.right;
+                operator = p: map keySet p.tlDeps;
+              }
+            )
           ++ runtime.wrong;
 
       # group the specified outputs
@@ -146,12 +147,14 @@ lib.fix (
         else
           (
             if __combine then # texlive.combine: emulate old input ordering to avoid rebuilds
-              lib.concatMap (
-                p:
-                lib.optional (p ? tex) p.tex
-                ++ lib.optional ((withDocs || p ? man) && p ? texdoc) p.texdoc
-                ++ lib.optional (withSources && p ? texsource) p.texsource
-              ) specified.wrong
+              lib.concatMap
+                (
+                  p:
+                  lib.optional (p ? tex) p.tex
+                  ++ lib.optional ((withDocs || p ? man) && p ? texdoc) p.texdoc
+                  ++ lib.optional (withSources && p ? texsource) p.texsource
+                )
+                specified.wrong
             else
               otherOutputs.tex or [ ]
               ++ lib.optionals withDocs (otherOutputs.texdoc or [ ])
@@ -167,45 +170,53 @@ lib.fix (
       # packages that contribute to config files and formats
       fontMaps = lib.filter (p: p ? fontMaps && (p.tlOutputName or p.outputName == "tex")) nonbin;
       sortedFontMaps = builtins.sort (a: b: a.pname < b.pname) fontMaps;
-      hyphenPatterns = lib.filter (
-        p: p ? hyphenPatterns && (p.tlOutputName or p.outputName == "tex")
-      ) nonbin;
+      hyphenPatterns = lib.filter
+        (
+          p: p ? hyphenPatterns && (p.tlOutputName or p.outputName == "tex")
+        )
+        nonbin;
       sortedHyphenPatterns = builtins.sort (a: b: a.pname < b.pname) hyphenPatterns;
-      formatPkgs = lib.filter (
-        p:
-        p ? formats
-        && (p.outputSpecified or false -> p.tlOutputName or p.outputName == "tex")
-        && builtins.any (f: f.enabled or true) p.formats
-      ) all;
+      formatPkgs = lib.filter
+        (
+          p:
+          p ? formats
+          && (p.outputSpecified or false -> p.tlOutputName or p.outputName == "tex")
+          && builtins.any (f: f.enabled or true) p.formats
+        )
+        all;
       sortedFormatPkgs =
         if __formatsOf != null then [ __formatsOf ] else builtins.sort (a: b: a.pname < b.pname) formatPkgs;
-      formats = map (
-        p:
-        self {
-          requiredTeXPackages =
-            ps:
-            [
-              ps.scheme-infraonly
-              p
-            ]
-            ++ hyphenPatterns;
-          __formatsOf = p;
-        }
-      ) sortedFormatPkgs;
+      formats = map
+        (
+          p:
+          self {
+            requiredTeXPackages =
+              ps:
+              [
+                ps.scheme-infraonly
+                p
+              ]
+              ++ hyphenPatterns;
+            __formatsOf = p;
+          }
+        )
+        sortedFormatPkgs;
     };
 
     # list generated by inspecting `grep -IR '\([^a-zA-Z]\|^\)gs\( \|$\|"\)' "$TEXMFDIST"/scripts`
     # and `grep -IR rungs "$TEXMFDIST"`
     # and ignoring luatex, perl, and shell scripts (those must be patched using postFixup)
-    needsGhostscript = lib.any (
-      p:
-      lib.elem p.pname [
-        "context"
-        "dvipdfmx"
-        "latex-papersize"
-        "lyluatex"
-      ]
-    ) pkgList.bin;
+    needsGhostscript = lib.any
+      (
+        p:
+        lib.elem p.pname [
+          "context"
+          "dvipdfmx"
+          "latex-papersize"
+          "lyluatex"
+        ]
+      )
+      pkgList.bin;
 
     name =
       if __combine then
@@ -270,10 +281,12 @@ lib.fix (
       platforms = lib.platforms.all;
       longDescription =
         "Contains the following packages and their transitive dependencies:\n - "
-        + lib.concatMapStringsSep "\n - " (
-          p:
-          p.pname + (lib.optionalString (p.outputSpecified or false) " (${p.tlOutputName or p.outputName})")
-        ) (requiredTeXPackages tl);
+        + lib.concatMapStringsSep "\n - "
+          (
+            p:
+            p.pname + (lib.optionalString (p.outputSpecified or false) " (${p.tlOutputName or p.outputName})")
+          )
+          (requiredTeXPackages tl);
     };
 
     # other outputs
@@ -301,9 +314,11 @@ lib.fix (
         pkgList.bin
         ++ pkgList.nonbin
         ++ lib.optionals (!__fromCombineWrapper) (
-          lib.concatMap (
-            n: (pkgList.otherOutputs.${n} or [ ] ++ pkgList.specifiedOutputs.${n} or [ ])
-          ) pkgList.nonEnvOutputs
+          lib.concatMap
+            (
+              n: (pkgList.otherOutputs.${n} or [ ] ++ pkgList.specifiedOutputs.${n} or [ ])
+            )
+            pkgList.nonEnvOutputs
         )
       );
       # useful for inclusion in the `fonts.packages` nixos option or for use in devshells
@@ -328,13 +343,12 @@ lib.fix (
 
     # TeXLive::TLOBJ::fmtutil_cnf_lines
     fmtutilLine =
-      {
-        name,
-        engine,
-        enabled ? true,
-        patterns ? [ "-" ],
-        options ? "",
-        ...
+      { name
+      , engine
+      , enabled ? true
+      , patterns ? [ "-" ]
+      , options ? ""
+      , ...
       }:
       lib.optionalString (!enabled) "#! "
       + "${name} ${engine} ${lib.concatStringsSep "," patterns} ${options}";
@@ -348,11 +362,10 @@ lib.fix (
 
     # TeXLive::TLOBJ::language_dat_lines
     langDatLine =
-      {
-        name,
-        file,
-        synonyms ? [ ],
-        ...
+      { name
+      , file
+      , synonyms ? [ ]
+      , ...
       }:
       [ "${name} ${file}" ] ++ map (s: "=" + s) synonyms;
     langDatLines =
@@ -362,20 +375,21 @@ lib.fix (
     # TeXLive::TLOBJ::language_def_lines
     # see TeXLive::TLUtils::parse_AddHyphen_line for default values
     langDefLine =
-      {
-        name,
-        file,
-        lefthyphenmin ? "",
-        righthyphenmin ? "",
-        synonyms ? [ ],
-        ...
+      { name
+      , file
+      , lefthyphenmin ? ""
+      , righthyphenmin ? ""
+      , synonyms ? [ ]
+      , ...
       }:
-      map (
-        n:
-        "\\addlanguage{${n}}{${file}}{}{${if lefthyphenmin == "" then "2" else lefthyphenmin}}{${
+      map
+        (
+          n:
+          "\\addlanguage{${n}}{${file}}{}{${if lefthyphenmin == "" then "2" else lefthyphenmin}}{${
           if righthyphenmin == "" then "3" else righthyphenmin
         }}"
-      ) ([ name ] ++ synonyms);
+        )
+        ([ name ] ++ synonyms);
     langDefLines =
       { pname, hyphenPatterns, ... }:
       [ "% from ${pname}:" ] ++ builtins.concatMap langDefLine hyphenPatterns;
@@ -383,13 +397,12 @@ lib.fix (
     # TeXLive::TLOBJ::language_lua_lines
     # see TeXLive::TLUtils::parse_AddHyphen_line for default values
     langLuaLine =
-      {
-        name,
-        file,
-        lefthyphenmin ? "",
-        righthyphenmin ? "",
-        synonyms ? [ ],
-        ...
+      { name
+      , file
+      , lefthyphenmin ? ""
+      , righthyphenmin ? ""
+      , synonyms ? [ ]
+      , ...
       }@args:
       ''
         ''\t['${name}'] = {

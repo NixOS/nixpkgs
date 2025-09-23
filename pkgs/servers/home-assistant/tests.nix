@@ -1,6 +1,6 @@
-{
-  lib,
-  home-assistant,
+{ lib
+, home-assistant
+,
 }:
 
 let
@@ -161,36 +161,38 @@ let
   };
 in
 lib.listToAttrs (
-  map (
-    component:
-    lib.nameValuePair component (
-      home-assistant.overridePythonAttrs (old: {
-        pname = "homeassistant-test-${component}";
-        pyproject = null;
-        format = "other";
+  map
+    (
+      component:
+      lib.nameValuePair component (
+        home-assistant.overridePythonAttrs (old: {
+          pname = "homeassistant-test-${component}";
+          pyproject = null;
+          format = "other";
 
-        dontBuild = true;
-        dontInstall = true;
+          dontBuild = true;
+          dontInstall = true;
 
-        nativeCheckInputs =
-          old.nativeCheckInputs
-          ++ home-assistant.getPackages component home-assistant.python.pkgs
-          ++ extraCheckInputs.${component} or [ ];
+          nativeCheckInputs =
+            old.nativeCheckInputs
+            ++ home-assistant.getPackages component home-assistant.python.pkgs
+            ++ extraCheckInputs.${component} or [ ];
 
-        disabledTests = old.disabledTests or [ ] ++ extraDisabledTests.${component} or [ ];
-        disabledTestPaths = old.disabledTestPaths or [ ] ++ extraDisabledTestPaths.${component} or [ ];
+          disabledTests = old.disabledTests or [ ] ++ extraDisabledTests.${component} or [ ];
+          disabledTestPaths = old.disabledTestPaths or [ ] ++ extraDisabledTestPaths.${component} or [ ];
 
-        # components are more often racy than the core
-        dontUsePytestXdist = true;
+          # components are more often racy than the core
+          dontUsePytestXdist = true;
 
-        enabledTestPaths = [ "tests/components/${component}" ];
+          enabledTestPaths = [ "tests/components/${component}" ];
 
-        meta = old.meta // {
-          broken = lib.elem component [ ];
-          # upstream only tests on Linux, so do we.
-          platforms = lib.platforms.linux;
-        };
-      })
+          meta = old.meta // {
+            broken = lib.elem component [ ];
+            # upstream only tests on Linux, so do we.
+            platforms = lib.platforms.linux;
+          };
+        })
+      )
     )
-  ) home-assistant.supportedComponentsWithTests
+    home-assistant.supportedComponentsWithTests
 )

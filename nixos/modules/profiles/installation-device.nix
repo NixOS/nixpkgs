@@ -1,9 +1,8 @@
 # Provide a basic configuration for installation devices like CDs.
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 with lib;

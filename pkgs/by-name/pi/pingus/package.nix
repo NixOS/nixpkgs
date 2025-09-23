@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  cmake,
-  SDL2,
-  SDL2_image,
-  boost,
-  libpng,
-  SDL2_mixer,
-  pkg-config,
-  libGLU,
-  libGL,
-  git,
-  jsoncpp,
+{ lib
+, stdenv
+, fetchgit
+, cmake
+, SDL2
+, SDL2_image
+, boost
+, libpng
+, SDL2_mixer
+, pkg-config
+, libGLU
+, libGL
+, git
+, jsoncpp
+,
 }:
 stdenv.mkDerivation {
   pname = "pingus";

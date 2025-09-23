@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  davix,
-  cmake,
-  gtest,
-  makeWrapper,
-  pkg-config,
-  curl,
-  isa-l,
-  fuse,
-  libkrb5,
-  libuuid,
-  libxcrypt,
-  libxml2,
-  openssl,
-  readline,
-  scitokens-cpp,
-  systemd,
-  voms,
-  zlib,
-  # If not null, move the default configuration files to "$etc/etc" and look for the configuration
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, fetchpatch2
+, davix
+, cmake
+, gtest
+, makeWrapper
+, pkg-config
+, curl
+, isa-l
+, fuse
+, libkrb5
+, libuuid
+, libxcrypt
+, libxml2
+, openssl
+, readline
+, scitokens-cpp
+, systemd
+, voms
+, zlib
+, # If not null, move the default configuration files to "$etc/etc" and look for the configuration
   # directory at externalEtc.
   # Otherwise, the program will look for the configuration files under $out/etc."
-  externalEtc ? "/etc",
-  removeReferencesTo,
+  externalEtc ? "/etc"
+, removeReferencesTo
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

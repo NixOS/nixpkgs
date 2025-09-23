@@ -1,31 +1,31 @@
-{
-  lib,
-  pythonOlder,
-  buildPythonPackage,
-  fetchFromGitHub,
-  arrow,
-  nest-asyncio,
-  qiskit-terra,
-  requests,
-  requests-ntlm,
-  websocket-client,
-  # Visualization inputs
-  withVisualization ? true,
-  ipython,
-  ipyvuetify,
-  ipywidgets,
-  matplotlib,
-  plotly,
-  pyperclip,
-  seaborn,
-  # check inputs
-  pytestCheckHook,
-  nbconvert,
-  nbformat,
-  pproxy,
-  qiskit-aer,
-  websockets,
-  vcrpy,
+{ lib
+, pythonOlder
+, buildPythonPackage
+, fetchFromGitHub
+, arrow
+, nest-asyncio
+, qiskit-terra
+, requests
+, requests-ntlm
+, websocket-client
+, # Visualization inputs
+  withVisualization ? true
+, ipython
+, ipyvuetify
+, ipywidgets
+, matplotlib
+, plotly
+, pyperclip
+, seaborn
+, # check inputs
+  pytestCheckHook
+, nbconvert
+, nbformat
+, pproxy
+, qiskit-aer
+, websockets
+, vcrpy
+,
 }:
 
 let

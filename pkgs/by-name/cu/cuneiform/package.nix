@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  imagemagick,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, imagemagick
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

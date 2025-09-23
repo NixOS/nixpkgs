@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  jre,
-  makeWrapper,
-  maven,
-  icoutils,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, fetchFromGitHub
+, jre
+, makeWrapper
+, maven
+, icoutils
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 maven.buildMavenPackage rec {

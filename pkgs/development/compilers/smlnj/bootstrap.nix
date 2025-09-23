@@ -2,14 +2,14 @@
 # and is preserved only for pre-existing direct usage. New use cases should
 # just use the regular smlnj derivation.
 
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cpio,
-  rsync,
-  xar,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, cpio
+, rsync
+, xar
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,25 +1,21 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  cysignals,
-  cython,
-  pkgconfig,
-  setuptools,
-
-  gmp,
-  pari,
-  mpfr,
-  fplll,
-  numpy,
-
-  # Reverse dependency
-  sage,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  cysignals
+, cython
+, pkgconfig
+, setuptools
+, gmp
+, pari
+, mpfr
+, fplll
+, numpy
+, # Reverse dependency
+  sage
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

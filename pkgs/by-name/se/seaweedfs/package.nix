@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  testers,
-  seaweedfs,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, testers
+, seaweedfs
+,
 }:
 
 buildGoModule rec {

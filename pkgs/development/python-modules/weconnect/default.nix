@@ -1,15 +1,15 @@
-{
-  lib,
-  ascii-magic,
-  buildPythonPackage,
-  fetchFromGitHub,
-  oauthlib,
-  pillow,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, ascii-magic
+, buildPythonPackage
+, fetchFromGitHub
+, oauthlib
+, pillow
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

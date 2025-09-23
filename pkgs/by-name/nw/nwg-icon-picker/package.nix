@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  gobject-introspection,
-  gtk3,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, wrapGAppsHook3
+, gobject-introspection
+, gtk3
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "nwg-icon-picker";

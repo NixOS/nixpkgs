@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nasm,
-  unixtools,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nasm
+, unixtools
+,
 }:
 
 let

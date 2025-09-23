@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  wrapGAppsHook3,
-  gtk3,
-  intltool,
-  libgcrypt,
-  pilot-link,
-  pkg-config,
-  sqlite,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, wrapGAppsHook3
+, gtk3
+, intltool
+, libgcrypt
+, pilot-link
+, pkg-config
+, sqlite
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  asgiref,
-  autobahn,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  fetchpatch2,
-  hypothesis,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  twisted,
+{ lib
+, stdenv
+, asgiref
+, autobahn
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, fetchpatch2
+, hypothesis
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, twisted
+,
 }:
 
 buildPythonPackage rec {

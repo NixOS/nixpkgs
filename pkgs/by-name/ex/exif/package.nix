@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  libexif,
-  popt,
-  libintl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, libexif
+, popt
+, libintl
+,
 }:
 
 stdenv.mkDerivation rec {

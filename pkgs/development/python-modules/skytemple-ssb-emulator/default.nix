@@ -1,31 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-
-  # build-system
-  meson,
-  setuptools,
-  setuptools-rust,
-
-  # buildInputs
-  SDL2,
-  alsa-lib,
-  glib,
-  libpcap,
-  soundtouch,
-  zlib,
-
-  # nativeBuildInputs
-  cargo,
-  ninja,
-  openal,
-  pkg-config,
-  rustc,
-
-  # dependencies
-  range-typed-integers,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, # build-system
+  meson
+, setuptools
+, setuptools-rust
+, # buildInputs
+  SDL2
+, alsa-lib
+, glib
+, libpcap
+, soundtouch
+, zlib
+, # nativeBuildInputs
+  cargo
+, ninja
+, openal
+, pkg-config
+, rustc
+, # dependencies
+  range-typed-integers
+,
 }:
 buildPythonPackage rec {
   pname = "skytemple-ssb-emulator";

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  fribidi,
-  libGL,
-  libGLU,
-  sfml_2,
-  taglib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, fribidi
+, libGL
+, libGLU
+, sfml_2
+, taglib
+,
 }:
 stdenv.mkDerivation {
   pname = "mars";

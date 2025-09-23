@@ -1,29 +1,29 @@
-{
-  mkDerivation,
-  lib,
-  autoreconfHook,
-  curl,
-  fetchFromGitHub,
-  git,
-  libevent,
-  libtool,
-  qrencode,
-  udev,
-  libusb1,
-  makeWrapper,
-  pkg-config,
-  qtbase,
-  qttools,
-  qtwebsockets,
-  qtmultimedia,
-  udevRule51 ? ''
+{ mkDerivation
+, lib
+, autoreconfHook
+, curl
+, fetchFromGitHub
+, git
+, libevent
+, libtool
+, qrencode
+, udev
+, libusb1
+, makeWrapper
+, pkg-config
+, qtbase
+, qttools
+, qtwebsockets
+, qtmultimedia
+, udevRule51 ? ''
     SUBSYSTEM=="usb", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbb%n", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402"
-  '',
-  udevRule52 ? ''
+  ''
+, udevRule52 ? ''
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2402", TAG+="uaccess", TAG+="udev-acl", SYMLINK+="dbbf%n"
-  '',
-  udevCheckHook,
-  writeText,
+  ''
+, udevCheckHook
+, writeText
+,
 }:
 
 # Enabling the digitalbitbox program

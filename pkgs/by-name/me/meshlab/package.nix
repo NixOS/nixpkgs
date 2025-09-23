@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  llvmPackages,
-  libsForQt5,
-  libGLU,
-  lib3ds,
-  bzip2,
-  muparser,
-  eigen,
-  glew,
-  gmp,
-  levmar,
-  qhull,
-  cmake,
-  cgal,
-  boost,
-  mpfr,
-  xercesc,
-  tbb,
-  embree,
-  vcg,
-  libigl,
-  corto,
-  openctm,
-  structuresynth,
+{ lib
+, stdenv
+, fetchFromGitHub
+, llvmPackages
+, libsForQt5
+, libGLU
+, lib3ds
+, bzip2
+, muparser
+, eigen
+, glew
+, gmp
+, levmar
+, qhull
+, cmake
+, cgal
+, boost
+, mpfr
+, xercesc
+, tbb
+, embree
+, vcg
+, libigl
+, corto
+, openctm
+, structuresynth
+,
 }:
 
 let

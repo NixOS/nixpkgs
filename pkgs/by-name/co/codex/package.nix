@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  pkg-config,
-  openssl,
-  versionCheckHook,
-  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, pkg-config
+, openssl
+, versionCheckHook
+, installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";

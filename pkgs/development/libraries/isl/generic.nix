@@ -1,19 +1,19 @@
-{
-  version,
-  urls,
-  sha256,
-  configureFlags ? [ ],
-  patches ? [ ],
+{ version
+, urls
+, sha256
+, configureFlags ? [ ]
+, patches ? [ ]
+,
 }:
 
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gmp,
-  autoreconfHook,
-  buildPackages,
-  updateAutotoolsGnuConfigScriptsHook,
+{ lib
+, stdenv
+, fetchurl
+, gmp
+, autoreconfHook
+, buildPackages
+, updateAutotoolsGnuConfigScriptsHook
+,
 }:
 
 stdenv.mkDerivation {

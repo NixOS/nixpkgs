@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  speexdsp,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, speexdsp
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  cabextract,
-  bt-fw-converter,
+{ lib
+, stdenvNoCC
+, fetchurl
+, cabextract
+, bt-fw-converter
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

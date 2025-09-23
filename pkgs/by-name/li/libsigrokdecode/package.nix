@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  pkg-config,
-  autoreconfHook,
-  glib,
-  python3,
-  check,
-  libxcrypt,
+{ lib
+, stdenv
+, fetchgit
+, pkg-config
+, autoreconfHook
+, glib
+, python3
+, check
+, libxcrypt
+,
 }:
 
 stdenv.mkDerivation {

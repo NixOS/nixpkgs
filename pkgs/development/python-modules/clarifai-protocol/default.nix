@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  python,
-  pypaInstallHook,
-  wheelUnpackHook,
-  grpcio,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, python
+, pypaInstallHook
+, wheelUnpackHook
+, grpcio
+,
 }:
 
 let

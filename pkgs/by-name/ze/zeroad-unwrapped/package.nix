@@ -1,40 +1,40 @@
-{
-  stdenv,
-  lib,
-  perl,
-  fetchurl,
-  python3,
-  fmt,
-  libidn,
-  pkg-config,
-  spidermonkey_115,
-  boost,
-  icu,
-  libxml2,
-  libpng,
-  libsodium,
-  libjpeg,
-  zlib,
-  curl,
-  libogg,
-  libvorbis,
-  enet,
-  miniupnpc,
-  openal,
-  libGLU,
-  libGL,
-  xorgproto,
-  libX11,
-  libXcursor,
-  nspr,
-  SDL2,
-  gloox,
-  nvidia-texture-tools,
-  premake5,
-  cxxtest,
-  freetype,
-  withEditor ? true,
-  wxGTK,
+{ stdenv
+, lib
+, perl
+, fetchurl
+, python3
+, fmt
+, libidn
+, pkg-config
+, spidermonkey_115
+, boost
+, icu
+, libxml2
+, libpng
+, libsodium
+, libjpeg
+, zlib
+, curl
+, libogg
+, libvorbis
+, enet
+, miniupnpc
+, openal
+, libGLU
+, libGL
+, xorgproto
+, libX11
+, libXcursor
+, nspr
+, SDL2
+, gloox
+, nvidia-texture-tools
+, premake5
+, cxxtest
+, freetype
+, withEditor ? true
+, wxGTK
+,
 }:
 
 # You can find more instructions on how to build 0ad here:

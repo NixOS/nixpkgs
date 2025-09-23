@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  ringo,
-  aches,
-  lwt,
+{ lib
+, buildDunePackage
+, ringo
+, aches
+, lwt
+,
 }:
 
 buildDunePackage {

@@ -1,16 +1,16 @@
-{
-  mkDerivation,
-  lib,
-  stdenv,
-  fetchpatch,
-  extra-cmake-modules,
-  docbook_xml_dtd_45,
-  docbook_xsl_ns,
-  karchive,
-  ki18n,
-  qtbase,
-  perl,
-  perlPackages,
+{ mkDerivation
+, lib
+, stdenv
+, fetchpatch
+, extra-cmake-modules
+, docbook_xml_dtd_45
+, docbook_xsl_ns
+, karchive
+, ki18n
+, qtbase
+, perl
+, perlPackages
+,
 }:
 
 mkDerivation {

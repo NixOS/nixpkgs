@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pkg-config,
-  gettext,
-  dbus,
-  dbus-glib,
-  libgaminggear,
-  libgudev,
-  lua,
-  harfbuzz,
-  runtimeShell,
-  coreutils,
-  kmod,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, gettext
+, dbus
+, dbus-glib
+, libgaminggear
+, libgudev
+, lua
+, harfbuzz
+, runtimeShell
+, coreutils
+, kmod
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

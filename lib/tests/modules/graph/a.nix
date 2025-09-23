@@ -1,7 +1,7 @@
 {
   imports = [
     {
-      imports = [ { } ];
+      imports = [{ }];
     }
   ];
   disabledModules = [ ./b.nix ];

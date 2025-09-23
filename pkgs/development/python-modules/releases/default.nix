@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  semantic-version,
-  sphinx,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, semantic-version
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

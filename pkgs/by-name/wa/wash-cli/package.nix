@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchCrate,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  fetchurl,
+{ lib
+, fetchCrate
+, rustPlatform
+, pkg-config
+, openssl
+, fetchurl
+,
 }:
 
 let

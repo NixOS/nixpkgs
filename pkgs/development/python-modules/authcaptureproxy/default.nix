@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  aiohttp,
-  beautifulsoup4,
-  httpx,
-  multidict,
-  typer,
-  yarl,
-
-  # tests
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  aiohttp
+, beautifulsoup4
+, httpx
+, multidict
+, typer
+, yarl
+, # tests
+  pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

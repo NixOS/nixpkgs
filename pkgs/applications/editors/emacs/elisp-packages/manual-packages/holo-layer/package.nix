@@ -1,15 +1,16 @@
 {
   # Basic
-  lib,
-  melpaBuild,
-  fetchFromGitHub,
-  # Python dependency
-  python3,
-  # Emacs dependencies
-  markdown-mode,
-  posframe,
-  # Updater
-  unstableGitUpdater,
+  lib
+, melpaBuild
+, fetchFromGitHub
+, # Python dependency
+  python3
+, # Emacs dependencies
+  markdown-mode
+, posframe
+, # Updater
+  unstableGitUpdater
+,
 }:
 
 let

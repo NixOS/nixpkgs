@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.cfdyndns;
@@ -64,9 +63,10 @@ in
       startAt = "*:0/5";
       serviceConfig = {
         Type = "simple";
-        LoadCredential = lib.optional (
-          cfg.apiTokenFile != null
-        ) "CLOUDFLARE_APITOKEN_FILE:${cfg.apiTokenFile}";
+        LoadCredential = lib.optional
+          (
+            cfg.apiTokenFile != null
+          ) "CLOUDFLARE_APITOKEN_FILE:${cfg.apiTokenFile}";
         DynamicUser = true;
       };
       environment = {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  gitUpdater,
-  autoreconfHook,
-  autoconf-archive,
-  pkg-config,
-  enable-tools ? true,
+{ lib
+, stdenv
+, fetchgit
+, gitUpdater
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, enable-tools ? true
+,
 }:
 
 stdenv.mkDerivation rec {

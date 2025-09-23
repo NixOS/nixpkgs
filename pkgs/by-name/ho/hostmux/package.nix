@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  openssh,
-  tmux,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, openssh
+, tmux
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,7 +1,7 @@
-{
-  stdenv,
-  pkg-config,
-  criterion,
+{ stdenv
+, pkg-config
+, criterion
+,
 }:
 stdenv.mkDerivation rec {
   name = "version-tester";

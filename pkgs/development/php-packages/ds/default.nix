@@ -1,9 +1,9 @@
-{
-  buildPecl,
-  lib,
-  pcre2,
-  php,
-  fetchFromGitHub,
+{ buildPecl
+, lib
+, pcre2
+, php
+, fetchFromGitHub
+,
 }:
 
 let

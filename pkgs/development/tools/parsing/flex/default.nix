@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  bison,
-  m4,
-  autoreconfHook,
-  help2man,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, bison
+, m4
+, autoreconfHook
+, help2man
+,
 }:
 
 # Avoid 'fetchpatch' to allow 'flex' to be used as a possible 'gcc'

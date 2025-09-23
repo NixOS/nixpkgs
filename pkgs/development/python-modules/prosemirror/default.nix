@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools-scm,
-  pytestCheckHook,
-  fetchPypi,
-  lxml,
-  cssselect,
+{ lib
+, buildPythonPackage
+, setuptools-scm
+, pytestCheckHook
+, fetchPypi
+, lxml
+, cssselect
+,
 }:
 
 buildPythonPackage rec {

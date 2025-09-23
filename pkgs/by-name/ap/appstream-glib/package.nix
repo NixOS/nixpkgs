@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  docbook_xml_dtd_42,
-  docbook_xsl,
-  fontconfig,
-  freetype,
-  gdk-pixbuf,
-  gettext,
-  glib,
-  gobject-introspection,
-  gperf,
-  gtk-doc,
-  gtk3,
-  json-glib,
-  libarchive,
-  curl,
-  libuuid,
-  libxslt,
-  meson,
-  ninja,
-  pkg-config,
-  pngquant,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, docbook_xml_dtd_42
+, docbook_xsl
+, fontconfig
+, freetype
+, gdk-pixbuf
+, gettext
+, glib
+, gobject-introspection
+, gperf
+, gtk-doc
+, gtk3
+, json-glib
+, libarchive
+, curl
+, libuuid
+, libxslt
+, meson
+, ninja
+, pkg-config
+, pngquant
+,
 }:
 stdenv.mkDerivation rec {
   pname = "appstream-glib";

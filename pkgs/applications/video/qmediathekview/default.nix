@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  fetchFromGitHub,
-  boost,
-  qtbase,
-  xz,
-  qmake,
-  pkg-config,
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, boost
+, qtbase
+, xz
+, qmake
+, pkg-config
+,
 }:
 
 mkDerivation rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  aiobotocore,
-  boto3,
-  botocore,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ lib
+, stdenv
+, aiobotocore
+, boto3
+, botocore
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 
 let

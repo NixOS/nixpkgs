@@ -1,48 +1,43 @@
-{
-  lib,
-  fetchFromGitHub,
-  tag ? "",
-
-  # build time
-  gettext,
-  gobject-introspection,
-  wrapGAppsHook3,
-  writableTmpDirAsHomeHook,
-
-  # runtime
-  adwaita-icon-theme,
-  gdk-pixbuf,
-  glib,
-  glib-networking,
-  gtk3,
-  gtksourceview,
-  kakasi,
-  keybinder3,
-  libappindicator-gtk3,
-  libmodplug,
-  librsvg,
-  libsoup_3,
-
-  # optional features
-  withDbusPython ? false,
-  withMusicBrainzNgs ? false,
-  withPahoMqtt ? false,
-  withPypresence ? false,
-  withSoco ? false,
-
-  # backends
-  withGstPlugins ? withGstreamerBackend,
-  withGstreamerBackend ? true,
-  gst_all_1,
-  withXineBackend ? true,
-  xine-lib,
-
-  # tests
-  dbus,
-  glibcLocales,
-  hicolor-icon-theme,
-  python3,
-  xvfb-run,
+{ lib
+, fetchFromGitHub
+, tag ? ""
+, # build time
+  gettext
+, gobject-introspection
+, wrapGAppsHook3
+, writableTmpDirAsHomeHook
+, # runtime
+  adwaita-icon-theme
+, gdk-pixbuf
+, glib
+, glib-networking
+, gtk3
+, gtksourceview
+, kakasi
+, keybinder3
+, libappindicator-gtk3
+, libmodplug
+, librsvg
+, libsoup_3
+, # optional features
+  withDbusPython ? false
+, withMusicBrainzNgs ? false
+, withPahoMqtt ? false
+, withPypresence ? false
+, withSoco ? false
+, # backends
+  withGstPlugins ? withGstreamerBackend
+, withGstreamerBackend ? true
+, gst_all_1
+, withXineBackend ? true
+, xine-lib
+, # tests
+  dbus
+, glibcLocales
+, hicolor-icon-theme
+, python3
+, xvfb-run
+,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "quodlibet${tag}";

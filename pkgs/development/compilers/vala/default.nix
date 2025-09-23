@@ -1,33 +1,33 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  flex,
-  bison,
-  libxslt,
-  autoconf,
-  autoreconfHook,
-  gnome,
-  graphviz,
-  glib,
-  libiconv,
-  libintl,
-  libtool,
-  expat,
-  replaceVars,
-  vala,
-  gobject-introspection,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, flex
+, bison
+, libxslt
+, autoconf
+, autoreconfHook
+, gnome
+, graphviz
+, glib
+, libiconv
+, libintl
+, libtool
+, expat
+, replaceVars
+, vala
+, gobject-introspection
+,
 }:
 
 let
   generic = lib.makeOverridable (
-    {
-      version,
-      hash,
-      extraNativeBuildInputs ? [ ],
-      extraBuildInputs ? [ ],
-      withGraphviz ? false,
+    { version
+    , hash
+    , extraNativeBuildInputs ? [ ]
+    , extraBuildInputs ? [ ]
+    , withGraphviz ? false
+    ,
     }:
     let
       # Build vala (valadoc) without graphviz support. Inspired from the openembedded-core project.
@@ -35,8 +35,7 @@ let
       graphvizPatch =
         {
           "0.56" = ./disable-graphviz-0.56.8.patch;
-        }
-        .${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
+        }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
       disableGraphviz = !withGraphviz;
 
@@ -65,9 +64,10 @@ let
       configureFlags = lib.optional disableGraphviz "--disable-graphviz";
       # when cross-compiling ./compiler/valac is valac for host
       # so add the build vala in nativeBuildInputs
-      preBuild = lib.optionalString (
-        disableGraphviz && (stdenv.buildPlatform == stdenv.hostPlatform)
-      ) "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
+      preBuild = lib.optionalString
+        (
+          disableGraphviz && (stdenv.buildPlatform == stdenv.hostPlatform)
+        ) "buildFlagsArray+=(\"VALAC=$(pwd)/compiler/valac\")";
 
       outputs = [
         "out"

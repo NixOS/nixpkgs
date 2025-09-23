@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  toPythonModule,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  eigen,
-  ipopt,
-  nlopt,
-  pagmo2,
-  python,
-  cloudpickle,
-  ipyparallel,
-  numba,
-  numpy,
-  pybind11,
+{ lib
+, stdenv
+, toPythonModule
+, fetchFromGitHub
+, cmake
+, boost
+, eigen
+, ipopt
+, nlopt
+, pagmo2
+, python
+, cloudpickle
+, ipyparallel
+, numba
+, numpy
+, pybind11
+,
 }:
 
 toPythonModule (

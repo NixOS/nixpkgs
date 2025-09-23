@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  nix-update-script,
-  symlinkJoin,
-  alsa-ucm-conf,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, nix-update-script
+, symlinkJoin
+, alsa-ucm-conf
+,
 }:
 let
   alsa-ucm-conf-asahi = stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  gtk-doc,
-  meson,
-  ninja,
-  pkg-config,
-  glib,
-  json-glib,
-  libuev,
-  gobject-introspection,
-  udevCheckHook,
-  vala,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, gtk-doc
+, meson
+, ninja
+, pkg-config
+, glib
+, json-glib
+, libuev
+, gobject-introspection
+, udevCheckHook
+, vala
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

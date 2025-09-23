@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  pnpm_10,
-  nodejs,
-  dart-sass,
-  nix-update-script,
-  nixosTests,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, pnpm_10
+, nodejs
+, dart-sass
+, nix-update-script
+, nixosTests
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

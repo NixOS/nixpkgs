@@ -1,12 +1,12 @@
-{
-  coreutils,
-  fetchFromGitHub,
-  kernel,
-  kernelModuleMakeFlags,
-  stdenv,
-  lib,
-  udevCheckHook,
-  util-linux,
+{ coreutils
+, fetchFromGitHub
+, kernel
+, kernelModuleMakeFlags
+, stdenv
+, lib
+, udevCheckHook
+, util-linux
+,
 }:
 
 let
@@ -16,7 +16,7 @@ let
 in
 stdenv.mkDerivation (
   common
-  // {
+    // {
     pname = "openrazer";
     version = "${common.version}-${kernel.version}";
 

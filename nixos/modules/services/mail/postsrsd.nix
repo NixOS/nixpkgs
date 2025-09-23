@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 let
 
@@ -62,24 +61,24 @@ in
     )
   ]
   ++
-    map
-      (
-        name:
-        lib.mkRemovedOptionModule [ "services" "postsrsd" name ] ''
-          `postsrsd` was upgraded to `>= 2.0.0`, with some different behaviors and configuration settings:
-            - NixOS Release Notes: https://nixos.org/manual/nixos/unstable/release-notes#sec-nixpkgs-release-25.05-incompatibilities
-            - NixOS Options Reference: https://nixos.org/manual/nixos/unstable/options#opt-services.postsrsd.enable
-            - Migration instructions: https://github.com/roehling/postsrsd/blob/2.0.10/README.rst#migrating-from-version-1x
-            - Postfix Setup: https://github.com/roehling/postsrsd/blob/2.0.10/README.rst#postfix-setup
-        ''
-      )
-      [
-        "domain"
-        "forwardPort"
-        "reversePort"
-        "timeout"
-        "excludeDomains"
-      ];
+  map
+    (
+      name:
+      lib.mkRemovedOptionModule [ "services" "postsrsd" name ] ''
+        `postsrsd` was upgraded to `>= 2.0.0`, with some different behaviors and configuration settings:
+          - NixOS Release Notes: https://nixos.org/manual/nixos/unstable/release-notes#sec-nixpkgs-release-25.05-incompatibilities
+          - NixOS Options Reference: https://nixos.org/manual/nixos/unstable/options#opt-services.postsrsd.enable
+          - Migration instructions: https://github.com/roehling/postsrsd/blob/2.0.10/README.rst#migrating-from-version-1x
+          - Postfix Setup: https://github.com/roehling/postsrsd/blob/2.0.10/README.rst#postfix-setup
+      ''
+    )
+    [
+      "domain"
+      "forwardPort"
+      "reversePort"
+      "timeout"
+      "excludeDomains"
+    ];
 
   options = {
     services.postsrsd = {

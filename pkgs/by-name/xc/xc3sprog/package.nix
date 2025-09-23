@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchsvn,
-  cmake,
-  libusb-compat-0_1,
-  libftdi,
+{ lib
+, stdenv
+, fetchsvn
+, cmake
+, libusb-compat-0_1
+, libftdi
+,
 }:
 
 # The xc3sprog project doesn't seem to make proper releases, they only put out

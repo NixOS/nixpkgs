@@ -1,11 +1,11 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  coreutils,
-  gnused,
-  jq,
-  nix-update-script,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, coreutils
+, gnused
+, jq
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

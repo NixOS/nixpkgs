@@ -1,21 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  numpy,
-  setuptools,
-
-  persim,
-  scikit-learn,
-  scipy,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, numpy
+, setuptools
+, persim
+, scikit-learn
+, scipy
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

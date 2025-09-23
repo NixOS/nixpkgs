@@ -1,8 +1,8 @@
-{
-  wsjtx,
-  fetchgit,
-  qt5,
-  lib,
+{ wsjtx
+, fetchgit
+, qt5
+, lib
+,
 }:
 wsjtx.overrideAttrs (old: {
   pname = "jtdx";

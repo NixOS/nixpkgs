@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  cssselect,
-  fetchPypi,
-  jmespath,
-  lxml,
-  packaging,
-  psutil,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  w3lib,
+{ lib
+, buildPythonPackage
+, cssselect
+, fetchPypi
+, jmespath
+, lxml
+, packaging
+, psutil
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, w3lib
+,
 }:
 
 buildPythonPackage rec {

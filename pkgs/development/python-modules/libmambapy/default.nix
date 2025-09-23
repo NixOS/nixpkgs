@@ -1,24 +1,24 @@
-{
-  lib,
-  python,
-  buildPythonPackage,
-  cmake,
-  ninja,
-  libmamba,
-  pybind11,
-  setuptools,
-  scikit-build,
-  fmt,
-  spdlog,
-  tl-expected,
-  nlohmann_json,
-  yaml-cpp,
-  reproc,
-  libsolv,
-  curl,
-  zstd,
-  bzip2,
-  wheel,
+{ lib
+, python
+, buildPythonPackage
+, cmake
+, ninja
+, libmamba
+, pybind11
+, setuptools
+, scikit-build
+, fmt
+, spdlog
+, tl-expected
+, nlohmann_json
+, yaml-cpp
+, reproc
+, libsolv
+, curl
+, zstd
+, bzip2
+, wheel
+,
 }:
 
 buildPythonPackage {

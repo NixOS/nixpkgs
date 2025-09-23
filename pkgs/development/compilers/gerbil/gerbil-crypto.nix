@@ -1,9 +1,8 @@
-{
-  pkgs,
-  lib,
-  fetchFromGitHub,
-  gerbilPackages,
-  ...
+{ pkgs
+, lib
+, fetchFromGitHub
+, gerbilPackages
+, ...
 }:
 
 {

@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  gcc,
-  musl,
-  binutils,
-  gnumake,
-  gnused,
-  gnugrep,
-  gawk,
-  gzip,
-  gnutarBoot,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, gcc
+, musl
+, binutils
+, gnumake
+, gnused
+, gnugrep
+, gawk
+, gzip
+, gnutarBoot
+,
 }:
 let
   pname = "gnutar";
@@ -24,37 +24,37 @@ let
   };
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      gcc
-      musl
-      binutils
-      gnumake
-      gnused
-      gnugrep
-      gawk
-      gzip
-      gnutarBoot
-    ];
+  nativeBuildInputs = [
+    gcc
+    musl
+    binutils
+    gnumake
+    gnused
+    gnugrep
+    gawk
+    gzip
+    gnutarBoot
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/tar --version
-        mkdir $out
-      '';
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/tar --version
+      mkdir $out
+    '';
 
-    meta = with lib; {
-      description = "GNU implementation of the `tar' archiver";
-      homepage = "https://www.gnu.org/software/tar";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      mainProgram = "tar";
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "GNU implementation of the `tar' archiver";
+    homepage = "https://www.gnu.org/software/tar";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    mainProgram = "tar";
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     tar xzf ${src}

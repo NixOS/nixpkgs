@@ -1,53 +1,50 @@
-{
-  lib,
-  stdenv,
-  src,
-  version,
-  fetchpatch,
-  bashInteractive,
-  diffPlugins,
-  gobject-introspection,
-  gst_all_1,
-  python3Packages,
-  sphinxHook,
-  writableTmpDirAsHomeHook,
-  runtimeShell,
-  writeScript,
-
-  # plugin deps, used indirectly by the @inputs when we `import ./builtin-plugins.nix`
-  aacgain,
-  chromaprint,
-  essentia-extractor,
-  ffmpeg,
-  flac,
-  imagemagick,
-  keyfinder-cli,
-  mp3gain,
-  mp3val,
-
-  extraPatches ? [ ],
-  pluginOverrides ? { },
-  disableAllPlugins ? false,
-  disabledTests ? [ ],
-  extraNativeBuildInputs ? [ ],
-
-  # tests
-  runCommand,
-  beets,
+{ lib
+, stdenv
+, src
+, version
+, fetchpatch
+, bashInteractive
+, diffPlugins
+, gobject-introspection
+, gst_all_1
+, python3Packages
+, sphinxHook
+, writableTmpDirAsHomeHook
+, runtimeShell
+, writeScript
+, # plugin deps, used indirectly by the @inputs when we `import ./builtin-plugins.nix`
+  aacgain
+, chromaprint
+, essentia-extractor
+, ffmpeg
+, flac
+, imagemagick
+, keyfinder-cli
+, mp3gain
+, mp3val
+, extraPatches ? [ ]
+, pluginOverrides ? { }
+, disableAllPlugins ? false
+, disabledTests ? [ ]
+, extraNativeBuildInputs ? [ ]
+, # tests
+  runCommand
+, beets
+,
 }@inputs:
 let
   inherit (lib) attrNames attrValues concatMap;
 
   mkPlugin =
-    {
-      name,
-      enable ? !disableAllPlugins,
-      builtin ? false,
-      propagatedBuildInputs ? [ ],
-      testPaths ? [
+    { name
+    , enable ? !disableAllPlugins
+    , builtin ? false
+    , propagatedBuildInputs ? [ ]
+    , testPaths ? [
         "test/plugins/test_${name}.py"
-      ],
-      wrapperBins ? [ ],
+      ]
+    , wrapperBins ? [ ]
+    ,
     }:
     {
       inherit
@@ -61,11 +58,13 @@ let
     };
 
   basePlugins = lib.mapAttrs (_: a: { builtin = true; } // a) (import ./builtin-plugins.nix inputs);
-  pluginOverrides' = lib.mapAttrs (
-    plugName:
-    lib.throwIf (basePlugins.${plugName}.deprecated or false)
-      "beets evaluation error: Plugin ${plugName} was enabled in pluginOverrides, but it has been removed. Remove the override to fix evaluation."
-  ) pluginOverrides;
+  pluginOverrides' = lib.mapAttrs
+    (
+      plugName:
+      lib.throwIf (basePlugins.${plugName}.deprecated or false)
+        "beets evaluation error: Plugin ${plugName} was enabled in pluginOverrides, but it has been removed. Remove the override to fix evaluation."
+    )
+    pluginOverrides;
 
   allPlugins = lib.mapAttrs (n: a: mkPlugin { name = n; } // a) (
     lib.recursiveUpdate basePlugins pluginOverrides'

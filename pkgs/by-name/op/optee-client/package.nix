@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  isNixOS ? true,
-  lib,
-  libuuid,
-  pkg-config,
-  stdenv,
-  which,
+{ fetchFromGitHub
+, isNixOS ? true
+, lib
+, libuuid
+, pkg-config
+, stdenv
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,13 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
     "LIBDIR=/lib"
   ]
   ++
-    # If we are building for NixOS, change default optee config to use paths
-    # that will work well with NixOS.
-    lib.optionals isNixOS [
-      "CFG_TEE_CLIENT_LOAD_PATH=/run/current-system/sw/lib"
-      "CFG_TEE_PLUGIN_LOAD_PATH=/run/current-system/sw/lib/tee-supplicant/plugins"
-      "CFG_TEE_FS_PARENT_PATH=/var/lib/tee"
-    ];
+  # If we are building for NixOS, change default optee config to use paths
+  # that will work well with NixOS.
+  lib.optionals isNixOS [
+    "CFG_TEE_CLIENT_LOAD_PATH=/run/current-system/sw/lib"
+    "CFG_TEE_PLUGIN_LOAD_PATH=/run/current-system/sw/lib/tee-supplicant/plugins"
+    "CFG_TEE_FS_PARENT_PATH=/var/lib/tee"
+  ];
 
   preFixup = ''
     mkdir -p "$lib" "$dev"

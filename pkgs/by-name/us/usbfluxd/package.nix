@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libimobiledevice,
-  libusb1,
-  libusbmuxd,
-  usbmuxd,
-  libplist,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libimobiledevice
+, libusb1
+, libusbmuxd
+, usbmuxd
+, libplist
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "usbfluxd";

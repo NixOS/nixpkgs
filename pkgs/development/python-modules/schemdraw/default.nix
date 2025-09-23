@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  pyparsing,
-  matplotlib,
-  latex2mathml,
-  ziafont,
-  ziamath,
-  pytestCheckHook,
-  nbval,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, pyparsing
+, matplotlib
+, latex2mathml
+, ziafont
+, ziamath
+, pytestCheckHook
+, nbval
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

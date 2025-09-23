@@ -1,19 +1,19 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  nixosTests,
-  bash,
-  cmake,
-  dbus,
-  deviceinfo,
-  inotify-tools,
-  lomiri,
-  makeWrapper,
-  pkg-config,
-  systemd,
-  xdg-user-dirs,
+{ stdenvNoCC
+, lib
+, fetchFromGitLab
+, gitUpdater
+, nixosTests
+, bash
+, cmake
+, dbus
+, deviceinfo
+, inotify-tools
+, lomiri
+, makeWrapper
+, pkg-config
+, systemd
+, xdg-user-dirs
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  lapack,
-  which,
-  gfortran,
-  blas,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, lapack
+, which
+, gfortran
+, blas
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

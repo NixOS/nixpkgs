@@ -1,10 +1,10 @@
-{
-  lib,
-  maven,
-  fetchFromGitHub,
-  makeWrapper,
-  jre,
-  docbook_xml_dtd_42,
+{ lib
+, maven
+, fetchFromGitHub
+, makeWrapper
+, jre
+, docbook_xml_dtd_42
+,
 }:
 
 maven.buildMavenPackage rec {

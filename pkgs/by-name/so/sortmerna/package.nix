@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  rocksdb_8_3,
-  rapidjson,
-  pkg-config,
-  fetchFromGitHub,
-  zlib,
+{ lib
+, stdenv
+, cmake
+, rocksdb_8_3
+, rapidjson
+, pkg-config
+, fetchFromGitHub
+, zlib
+,
 }:
 
 let

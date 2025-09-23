@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  replaceVars,
-  python3Packages,
-  mpv,
+{ lib
+, fetchFromGitHub
+, replaceVars
+, python3Packages
+, mpv
+,
 }:
 
 python3Packages.buildPythonApplication {

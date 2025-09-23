@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGo125Module,
-  buildNpmPackage,
-  fetchFromGitHub,
-  versionCheckHook,
-  nixosTests,
-  nix-update-script,
-  go_1_25,
+{ lib
+, buildGo125Module
+, buildNpmPackage
+, fetchFromGitHub
+, versionCheckHook
+, nixosTests
+, nix-update-script
+, go_1_25
+,
 }:
 buildGo125Module (finalAttrs: {
   pname = "sshwifty";

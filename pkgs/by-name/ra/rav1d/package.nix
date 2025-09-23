@@ -1,13 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nasm,
-  meson,
-  ninja,
-  pkg-config,
-
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nasm
+, meson
+, ninja
+, pkg-config
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

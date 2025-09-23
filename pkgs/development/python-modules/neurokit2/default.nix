@@ -1,29 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  matplotlib,
-  numpy,
-  pandas,
-  pywavelets,
-  requests,
-  scikit-learn,
-  scipy,
-
-  # tests
-  astropy,
-  coverage,
-  mock,
-  plotly,
-  pytest-cov-stub,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  matplotlib
+, numpy
+, pandas
+, pywavelets
+, requests
+, scikit-learn
+, scipy
+, # tests
+  astropy
+, coverage
+, mock
+, plotly
+, pytest-cov-stub
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

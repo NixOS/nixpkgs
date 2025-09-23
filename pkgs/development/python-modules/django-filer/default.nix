@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  pythonOlder,
-  pytestCheckHook,
-  django-polymorphic,
-  setuptools,
-  python,
-  easy-thumbnails,
-  pillow-heif,
-  django-app-helper,
-  distutils,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, pythonOlder
+, pytestCheckHook
+, django-polymorphic
+, setuptools
+, python
+, easy-thumbnails
+, pillow-heif
+, django-app-helper
+, distutils
+,
 }:
 
 buildPythonPackage rec {

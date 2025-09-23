@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  jdk,
-  maven,
-  which,
+{ stdenv
+, lib
+, fetchFromGitHub
+, jdk
+, maven
+, which
+,
 }:
 let
   pname = "jnr-posix";

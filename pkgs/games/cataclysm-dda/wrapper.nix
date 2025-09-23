@@ -1,7 +1,7 @@
-{
-  lib,
-  symlinkJoin,
-  makeWrapper,
+{ lib
+, symlinkJoin
+, makeWrapper
+,
 }:
 
 unwrapped:

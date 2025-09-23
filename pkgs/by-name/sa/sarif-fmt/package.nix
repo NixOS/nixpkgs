@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchCrate,
-  rustPlatform,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchCrate
+, rustPlatform
+, nix-update-script
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sarif-fmt";

@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  replaceVars,
-  openvpn,
-  gettext,
-  libxml2,
-  pkg-config,
-  file,
-  networkmanager,
-  libsecret,
-  glib,
-  gtk3,
-  gtk4,
-  withGnome ? true,
-  gnome,
-  kmod,
-  libnma,
-  libnma-gtk4,
+{ stdenv
+, lib
+, fetchurl
+, replaceVars
+, openvpn
+, gettext
+, libxml2
+, pkg-config
+, file
+, networkmanager
+, libsecret
+, glib
+, gtk3
+, gtk4
+, withGnome ? true
+, gnome
+, kmod
+, libnma
+, libnma-gtk4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

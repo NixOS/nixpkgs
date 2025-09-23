@@ -1,10 +1,10 @@
-{
-  buildOctavePackage,
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  ffmpeg,
+{ buildOctavePackage
+, stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, ffmpeg
+,
 }:
 
 buildOctavePackage rec {

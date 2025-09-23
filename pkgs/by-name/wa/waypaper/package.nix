@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  gobject-introspection,
-  wrapGAppsHook3,
-  killall,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, gobject-introspection
+, wrapGAppsHook3
+, killall
+,
 }:
 
 python3Packages.buildPythonApplication rec {

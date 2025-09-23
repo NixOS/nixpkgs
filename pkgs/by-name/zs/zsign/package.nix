@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  openssl,
-  pkg-config,
-  minizip,
-  zlib,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, stdenv
+, openssl
+, pkg-config
+, minizip
+, zlib
+, versionCheckHook
+,
 }:
 let
   platformName = if stdenv.hostPlatform.isLinux then "linux" else "macos";

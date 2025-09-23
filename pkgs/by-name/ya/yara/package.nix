@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  protobufc,
-  withCrypto ? true,
-  openssl,
-  enableCuckoo ? true,
-  jansson,
-  enableDex ? true,
-  enableDotNet ? true,
-  enableMacho ? true,
-  enableMagic ? true,
-  file,
-  enableStatic ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, protobufc
+, withCrypto ? true
+, openssl
+, enableCuckoo ? true
+, jansson
+, enableDex ? true
+, enableDotNet ? true
+, enableMacho ? true
+, enableMagic ? true
+, file
+, enableStatic ? false
+,
 }:
 
 stdenv.mkDerivation rec {

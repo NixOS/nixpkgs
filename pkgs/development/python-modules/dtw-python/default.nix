@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  oldest-supported-numpy,
-  setuptools,
-  wheel,
-  scipy,
-  numpy,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, oldest-supported-numpy
+, setuptools
+, wheel
+, scipy
+, numpy
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

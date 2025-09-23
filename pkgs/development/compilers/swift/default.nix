@@ -1,9 +1,9 @@
-{
-  lib,
-  newScope,
-  stdenv,
-  llvmPackages,
-  darwin,
+{ lib
+, newScope
+, stdenv
+, llvmPackages
+, darwin
+,
 }:
 
 let

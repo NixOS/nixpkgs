@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  fastcrc,
-  fetchPypi,
-  lxml,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cython
+, fastcrc
+, fetchPypi
+, lxml
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

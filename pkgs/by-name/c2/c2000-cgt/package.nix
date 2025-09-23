@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  buildFHSEnv,
-  fetchurl,
+{ lib
+, stdenvNoCC
+, buildFHSEnv
+, fetchurl
+,
 }:
 
 let

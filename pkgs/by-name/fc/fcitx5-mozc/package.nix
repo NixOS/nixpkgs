@@ -1,17 +1,17 @@
-{
-  bazel_7,
-  buildBazelPackage,
-  fcitx5,
-  fetchFromGitHub,
-  gettext,
-  lib,
-  mozc,
-  nixosTests,
-  pkg-config,
-  protobuf_27,
-  python3,
-  stdenv,
-  unzip,
+{ bazel_7
+, buildBazelPackage
+, fcitx5
+, fetchFromGitHub
+, gettext
+, lib
+, mozc
+, nixosTests
+, pkg-config
+, protobuf_27
+, python3
+, stdenv
+, unzip
+,
 }:
 
 buildBazelPackage {

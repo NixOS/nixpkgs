@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  cmake,
-  gettext,
-  glib,
-  pkg-config,
-  libdrm,
-  libGL,
-  atkmm,
-  pcre,
-  gtkmm4,
-  pugixml,
-  libgbm,
-  pciutils,
+{ stdenv
+, lib
+, fetchFromGitLab
+, cmake
+, gettext
+, glib
+, pkg-config
+, libdrm
+, libGL
+, atkmm
+, pcre
+, gtkmm4
+, pugixml
+, libgbm
+, pciutils
+,
 }:
 
 stdenv.mkDerivation rec {

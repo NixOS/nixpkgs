@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchurl,
-  gitUpdater,
-  mkRubyVersion,
-  makeBinaryWrapper,
-  jre,
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, gitUpdater
+, mkRubyVersion
+, makeBinaryWrapper
+, jre
+,
 }:
 
 let

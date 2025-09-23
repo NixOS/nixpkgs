@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pycryptodomex,
-  pysocks,
-  pynacl,
-  requests,
-  six,
-  varint,
-  pytestCheckHook,
-  pytest-cov-stub,
-  responses,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pycryptodomex
+, pysocks
+, pynacl
+, requests
+, six
+, varint
+, pytestCheckHook
+, pytest-cov-stub
+, responses
+,
 }:
 
 buildPythonPackage rec {

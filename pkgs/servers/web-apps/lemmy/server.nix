@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  openssl,
-  libpq,
-  libiconv,
-  protobuf,
-  rustfmt,
-  nixosTests,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, openssl
+, libpq
+, libiconv
+, protobuf
+, rustfmt
+, nixosTests
+,
 }:
 let
   pinData = lib.importJSON ./pin.json;

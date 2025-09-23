@@ -1,23 +1,23 @@
-{
-  pname,
-  program,
-  src,
-  year,
-  version,
-  desktopName,
-  longDescription,
-  broken ? false,
-  buildFHSEnv,
-  extraBuildInputs ? [ ],
-  jdk,
-  stdenv,
-  lib,
-  dpkg,
-  makeDesktopItem,
-  copyDesktopItems,
-  autoPatchelfHook,
-  sane-backends,
-  cups,
+{ pname
+, program
+, src
+, year
+, version
+, desktopName
+, longDescription
+, broken ? false
+, buildFHSEnv
+, extraBuildInputs ? [ ]
+, jdk
+, stdenv
+, lib
+, dpkg
+, makeDesktopItem
+, copyDesktopItems
+, autoPatchelfHook
+, sane-backends
+, cups
+,
 }:
 let
   thisPackage = stdenv.mkDerivation rec {

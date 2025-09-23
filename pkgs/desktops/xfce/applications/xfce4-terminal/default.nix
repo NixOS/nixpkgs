@@ -1,25 +1,26 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  glib,
-  libxslt, # xsltproc
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  gtk3,
-  gtk-layer-shell,
-  libutempter,
-  libX11,
-  libxfce4ui,
-  pcre2,
-  vte,
-  xfconf,
-  nixosTests,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, docbook_xml_dtd_45
+, docbook_xsl
+, glib
+, libxslt
+, # xsltproc
+  meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, gtk3
+, gtk-layer-shell
+, libutempter
+, libX11
+, libxfce4ui
+, pcre2
+, vte
+, xfconf
+, nixosTests
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

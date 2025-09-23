@@ -1,43 +1,38 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  installShellFiles,
-
-  # build-system
-  setuptools,
-  versioneer,
-
-  # dependencies
-  attrs,
-  autobahn,
-  automat,
-  click,
-  cryptography,
-  humanize,
-  iterable-io,
-  pynacl,
-  qrcode,
-  spake2,
-  tqdm,
-  twisted,
-  txtorcon,
-  zipstream-ng,
-
-  # optional-dependencies
-  noiseprotocol,
-
-  # tests
-  net-tools,
-  unixtools,
-  magic-wormhole-transit-relay,
-  magic-wormhole-mailbox-server,
-  pytestCheckHook,
-  pytest-twisted,
-
-  gitUpdater,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, installShellFiles
+, # build-system
+  setuptools
+, versioneer
+, # dependencies
+  attrs
+, autobahn
+, automat
+, click
+, cryptography
+, humanize
+, iterable-io
+, pynacl
+, qrcode
+, spake2
+, tqdm
+, twisted
+, txtorcon
+, zipstream-ng
+, # optional-dependencies
+  noiseprotocol
+, # tests
+  net-tools
+, unixtools
+, magic-wormhole-transit-relay
+, magic-wormhole-mailbox-server
+, pytestCheckHook
+, pytest-twisted
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

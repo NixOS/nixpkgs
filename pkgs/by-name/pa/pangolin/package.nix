@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  doxygen,
-  libGL,
-  glew,
-  xorg,
-  ffmpeg,
-  libjpeg,
-  libpng,
-  libtiff,
-  eigen,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, doxygen
+, libGL
+, glew
+, xorg
+, ffmpeg
+, libjpeg
+, libpng
+, libtiff
+, eigen
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

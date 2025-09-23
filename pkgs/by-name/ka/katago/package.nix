@@ -1,25 +1,25 @@
-{
-  stdenv,
-  boost,
-  cmake,
-  config,
-  cudaPackages,
-  eigen,
-  fetchFromGitHub,
-  gperftools,
-  lib,
-  libzip,
-  makeWrapper,
-  ocl-icd,
-  opencl-headers,
-  openssl,
-  writeShellScriptBin,
-  enableAVX2 ? stdenv.hostPlatform.avx2Support,
-  backend ? if config.cudaSupport then "cuda" else "opencl",
-  enableBigBoards ? false,
-  enableContrib ? false,
-  enableTcmalloc ? true,
-  enableTrtPlanCache ? false,
+{ stdenv
+, boost
+, cmake
+, config
+, cudaPackages
+, eigen
+, fetchFromGitHub
+, gperftools
+, lib
+, libzip
+, makeWrapper
+, ocl-icd
+, opencl-headers
+, openssl
+, writeShellScriptBin
+, enableAVX2 ? stdenv.hostPlatform.avx2Support
+, backend ? if config.cudaSupport then "cuda" else "opencl"
+, enableBigBoards ? false
+, enableContrib ? false
+, enableTcmalloc ? true
+, enableTrtPlanCache ? false
+,
 }:
 
 assert lib.assertOneOf "backend" backend [

@@ -1,29 +1,28 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  pythonPackagesExtensions,
-  config,
-  makeScopeWithSplicing',
-  ...
+{ lib
+, stdenv
+, callPackage
+, pythonPackagesExtensions
+, config
+, makeScopeWithSplicing'
+, ...
 }:
 
-{
-  implementation,
-  libPrefix,
-  executable,
-  sourceVersion,
-  pythonVersion,
-  packageOverrides,
-  sitePackages,
-  hasDistutilsCxxPatch,
-  pythonOnBuildForBuild,
-  pythonOnBuildForHost,
-  pythonOnBuildForTarget,
-  pythonOnHostForHost,
-  pythonOnTargetForTarget,
-  pythonAttr ? null,
-  self, # is pythonOnHostForTarget
+{ implementation
+, libPrefix
+, executable
+, sourceVersion
+, pythonVersion
+, packageOverrides
+, sitePackages
+, hasDistutilsCxxPatch
+, pythonOnBuildForBuild
+, pythonOnBuildForHost
+, pythonOnBuildForTarget
+, pythonOnHostForHost
+, pythonOnTargetForTarget
+, pythonAttr ? null
+, self
+, # is pythonOnHostForTarget
 }:
 let
   pythonPackages =
@@ -40,10 +39,13 @@ let
           func =
             name: value:
             if lib.isDerivation value then
-              lib.extendDerivation (
-                valid value
-                || throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set."
-              ) { } value
+              lib.extendDerivation
+                (
+                  valid value
+                  || throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set."
+                )
+                { }
+                value
             else
               value;
         in
@@ -56,11 +58,11 @@ let
         # - adds spliced package sets to the package set
         # - applies overrides from `packageOverrides` and `pythonPackagesOverlays`.
         (
-          {
-            pkgs,
-            stdenv,
-            python,
-            overrides,
+          { pkgs
+          , stdenv
+          , python
+          , overrides
+          ,
           }:
           let
             pythonPackagesFun = import ./python-packages-base.nix {

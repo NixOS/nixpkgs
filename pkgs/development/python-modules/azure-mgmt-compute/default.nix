@@ -1,12 +1,12 @@
-{
-  lib,
-  azure-mgmt-common,
-  azure-mgmt-core,
-  buildPythonPackage,
-  fetchPypi,
-  isodate,
-  pythonOlder,
-  setuptools,
+{ lib
+, azure-mgmt-common
+, azure-mgmt-core
+, buildPythonPackage
+, fetchPypi
+, isodate
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

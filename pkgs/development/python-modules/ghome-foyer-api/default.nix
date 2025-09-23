@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  grpcio,
-  hatchling,
-  hatch-vcs,
-  protobuf,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, grpcio
+, hatchling
+, hatch-vcs
+, protobuf
+,
 }:
 
 buildPythonPackage rec {

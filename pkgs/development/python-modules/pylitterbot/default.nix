@@ -1,18 +1,18 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  deepdiff,
-  fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pycognito,
-  pyjwt,
-  pytest-aiohttp,
-  pytest-freezegun,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, deepdiff
+, fetchFromGitHub
+, poetry-core
+, poetry-dynamic-versioning
+, pycognito
+, pyjwt
+, pytest-aiohttp
+, pytest-freezegun
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

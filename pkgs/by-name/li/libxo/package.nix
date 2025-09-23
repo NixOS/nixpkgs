@@ -1,12 +1,12 @@
-{
-  lib,
-  autoreconfHook,
-  bashNonInteractive,
-  libtool,
-  fetchFromGitHub,
-  nix-update-script,
-  perl,
-  stdenv,
+{ lib
+, autoreconfHook
+, bashNonInteractive
+, libtool
+, fetchFromGitHub
+, nix-update-script
+, perl
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

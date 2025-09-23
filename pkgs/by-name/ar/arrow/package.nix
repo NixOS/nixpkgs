@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  godot_4_4,
-  alsa-lib,
-  libGL,
-  libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
-  udev,
-  vulkan-loader,
-  autoPatchelfHook,
-  writableTmpDirAsHomeHook,
-  makeDesktopItem,
-  copyDesktopItems,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, godot_4_4
+, alsa-lib
+, libGL
+, libpulseaudio
+, libX11
+, libXcursor
+, libXext
+, libXi
+, libXrandr
+, udev
+, vulkan-loader
+, autoPatchelfHook
+, writableTmpDirAsHomeHook
+, makeDesktopItem
+, copyDesktopItems
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

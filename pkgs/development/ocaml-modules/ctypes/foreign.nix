@@ -1,10 +1,10 @@
-{
-  buildDunePackage,
-  ctypes,
-  dune-configurator,
-  libffi,
-  ounit2,
-  lwt,
+{ buildDunePackage
+, ctypes
+, dune-configurator
+, libffi
+, ounit2
+, lwt
+,
 }:
 
 buildDunePackage {

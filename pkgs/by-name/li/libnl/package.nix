@@ -1,20 +1,20 @@
-{
-  stdenv,
-  file,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  bison,
-  flex,
-  pkg-config,
-  doxygen,
-  graphviz,
-  mscgen,
-  asciidoc,
-  sourceHighlight,
-  pythonSupport ? false,
-  swig ? null,
-  python ? null,
+{ stdenv
+, file
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, bison
+, flex
+, pkg-config
+, doxygen
+, graphviz
+, mscgen
+, asciidoc
+, sourceHighlight
+, pythonSupport ? false
+, swig ? null
+, python ? null
+,
 }:
 
 stdenv.mkDerivation rec {

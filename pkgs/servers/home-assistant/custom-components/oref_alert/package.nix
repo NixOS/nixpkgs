@@ -1,13 +1,13 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  aiofiles,
-  shapely,
-  paho-mqtt,
-  pytestCheckHook,
-  pytest-homeassistant-custom-component,
-  pytest-freezer,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, aiofiles
+, shapely
+, paho-mqtt
+, pytestCheckHook
+, pytest-homeassistant-custom-component
+, pytest-freezer
+,
 }:
 
 buildHomeAssistantComponent rec {

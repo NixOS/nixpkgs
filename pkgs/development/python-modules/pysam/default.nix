@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  bzip2,
-  bcftools,
-  curl,
-  cython,
-  htslib,
-  libdeflate,
-  xz,
-  pytestCheckHook,
-  setuptools,
-  samtools,
-  zlib,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, bzip2
+, bcftools
+, curl
+, cython
+, htslib
+, libdeflate
+, xz
+, pytestCheckHook
+, setuptools
+, samtools
+, zlib
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

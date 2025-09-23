@@ -1,6 +1,6 @@
-{
-  mkDerivation,
-  include,
+{ mkDerivation
+, include
+,
 }:
 
 mkDerivation {

@@ -1,13 +1,13 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  marisa,
-  qttools,
-  qtlocation,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, marisa
+, qttools
+, qtlocation
+,
 }:
 
 mkDerivation {

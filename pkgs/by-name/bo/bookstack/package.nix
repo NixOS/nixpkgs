@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  php83,
-  nixosTests,
-  dataDir ? "/var/lib/bookstack",
+{ lib
+, fetchFromGitHub
+, php83
+, nixosTests
+, dataDir ? "/var/lib/bookstack"
+,
 }:
 
 php83.buildComposerProject2 (finalAttrs: {

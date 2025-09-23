@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  ipywidgets,
-  lark,
-  numpy,
-  pyperclip,
-  tqdm,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, ipywidgets
+, lark
+, numpy
+, pyperclip
+, tqdm
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  graphviz,
-  stdlib-list,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  toml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, graphviz
+, stdlib-list
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools
+, toml
+,
 }:
 
 buildPythonPackage rec {

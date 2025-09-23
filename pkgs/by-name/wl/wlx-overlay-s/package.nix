@@ -1,30 +1,30 @@
-{
-  alsa-lib,
-  dbus,
-  fetchFromGitHub,
-  fontconfig,
-  lib,
-  libGL,
-  libX11,
-  libxcb,
-  libXext,
-  libXrandr,
-  libxkbcommon,
-  makeWrapper,
-  nix-update-script,
-  openvr,
-  openxr-loader,
-  pipewire,
-  pkg-config,
-  pulseaudio,
-  rustPlatform,
-  shaderc,
-  stdenv,
-  testers,
-  wayland,
-  wlx-overlay-s,
-  # openvr support is broken on aarch64-linux
-  withOpenVr ? !stdenv.hostPlatform.isAarch64,
+{ alsa-lib
+, dbus
+, fetchFromGitHub
+, fontconfig
+, lib
+, libGL
+, libX11
+, libxcb
+, libXext
+, libXrandr
+, libxkbcommon
+, makeWrapper
+, nix-update-script
+, openvr
+, openxr-loader
+, pipewire
+, pkg-config
+, pulseaudio
+, rustPlatform
+, shaderc
+, stdenv
+, testers
+, wayland
+, wlx-overlay-s
+, # openvr support is broken on aarch64-linux
+  withOpenVr ? !stdenv.hostPlatform.isAarch64
+,
 }:
 
 rustPlatform.buildRustPackage rec {

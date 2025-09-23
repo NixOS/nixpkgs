@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  dune-build-info,
-  bos,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, dune-build-info
+, bos
+,
 }:
 let
   author = "avsm";

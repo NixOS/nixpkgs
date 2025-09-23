@@ -1,9 +1,9 @@
 # Impure functions, for passthru.updateScript runtime only
-{
-  aarch64Url,
-  x86_64Url,
-  version,
-  pkgs ? import ../../../../../default.nix { },
+{ aarch64Url
+, x86_64Url
+, version
+, pkgs ? import ../../../../../default.nix { }
+,
 }:
 let
   inherit (import ./update-utils.nix { inherit (pkgs) lib; })

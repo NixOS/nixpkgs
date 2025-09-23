@@ -1,15 +1,15 @@
-{
-  argon2-cffi,
-  bcrypt,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  hatchling,
-  lib,
-  pytest-archon,
-  pytest-xdist,
-  pytestCheckHook,
-  typing-extensions,
+{ argon2-cffi
+, bcrypt
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, hatchling
+, lib
+, pytest-archon
+, pytest-xdist
+, pytestCheckHook
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

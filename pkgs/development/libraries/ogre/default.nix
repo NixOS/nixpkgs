@@ -1,44 +1,44 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  unzip,
-  SDL2,
-  boost,
-  freetype,
-  libpng,
-  ois,
-  pugixml,
-  zziplib,
-  # linux
-  libglut,
-  libGL,
-  libGLU,
-  libICE,
-  libSM,
-  libX11,
-  libXaw,
-  libXmu,
-  libXrandr,
-  libXrender,
-  libXt,
-  libXxf86vm,
-  xorgproto,
-  # optional
-  withNvidiaCg ? false,
-  nvidia_cg_toolkit,
-  withSamples ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, unzip
+, SDL2
+, boost
+, freetype
+, libpng
+, ois
+, pugixml
+, zziplib
+, # linux
+  libglut
+, libGL
+, libGLU
+, libICE
+, libSM
+, libX11
+, libXaw
+, libXmu
+, libXrandr
+, libXrender
+, libXt
+, libXxf86vm
+, xorgproto
+, # optional
+  withNvidiaCg ? false
+, nvidia_cg_toolkit
+, withSamples ? false
+,
 }:
 
 let
   common =
-    {
-      version,
-      hash,
-      imguiVersion,
-      imguiHash,
+    { version
+    , hash
+    , imguiVersion
+    , imguiHash
+    ,
     }:
     let
       imgui.src = fetchFromGitHub {

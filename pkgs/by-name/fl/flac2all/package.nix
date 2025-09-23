@@ -1,12 +1,12 @@
-{
-  python3Packages,
-  fetchPypi,
-  lib,
-  flac,
-  lame,
-  opusTools,
-  vorbis-tools,
-  ffmpeg,
+{ python3Packages
+, fetchPypi
+, lib
+, flac
+, lame
+, opusTools
+, vorbis-tools
+, ffmpeg
+,
 }:
 
 python3Packages.buildPythonApplication rec {

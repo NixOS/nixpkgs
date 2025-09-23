@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  validatePkgConfig,
-  cairo,
-  curl,
-  fontconfig,
-  freetype,
-  freexl,
-  geos,
-  giflib,
-  libgeotiff,
-  libjpeg,
-  libpng,
-  librttopo,
-  libspatialite,
-  libtiff,
-  libwebp,
-  libxml2,
-  lz4,
-  minizip,
-  openjpeg,
-  pixman,
-  proj,
-  sqlite,
-  xz,
-  zstd,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, validatePkgConfig
+, cairo
+, curl
+, fontconfig
+, freetype
+, freexl
+, geos
+, giflib
+, libgeotiff
+, libjpeg
+, libpng
+, librttopo
+, libspatialite
+, libtiff
+, libwebp
+, libxml2
+, lz4
+, minizip
+, openjpeg
+, pixman
+, proj
+, sqlite
+, xz
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

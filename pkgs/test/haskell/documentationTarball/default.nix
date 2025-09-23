@@ -6,11 +6,11 @@ let
 
 in
 pkgs.runCommand "test haskell.lib.compose.documentationTarball"
-  {
-    meta = {
-      inherit (docs.meta) platforms;
-    };
-  }
+{
+  meta = {
+    inherit (docs.meta) platforms;
+  };
+}
   ''
     tar xvzf "${docs}/${drv.name}-docs.tar.gz"
 

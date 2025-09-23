@@ -193,7 +193,7 @@ in
 {
   curl = curlTest;
 }
-// lib.mapAttrs mkBrowserTest {
+  // lib.mapAttrs mkBrowserTest {
   firefox = {
     error = "Security Risk";
   };

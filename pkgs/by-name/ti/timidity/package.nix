@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  nixosTests,
-  pkg-config,
-  libjack2,
-  ncurses,
-  alsa-lib,
-  buildPackages,
-
-  ## Additional optional output modes
-  enableVorbis ? false,
-  libvorbis,
+{ lib
+, stdenv
+, fetchurl
+, nixosTests
+, pkg-config
+, libjack2
+, ncurses
+, alsa-lib
+, buildPackages
+, ## Additional optional output modes
+  enableVorbis ? false
+, libvorbis
+,
 }:
 
 stdenv.mkDerivation rec {

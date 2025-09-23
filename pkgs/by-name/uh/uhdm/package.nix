@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  capnproto,
-  gtest,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, capnproto
+, gtest
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

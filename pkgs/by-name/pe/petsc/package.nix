@@ -1,63 +1,66 @@
-{
-  lib,
-  newScope,
-  stdenv,
-  fetchzip,
-  replaceVars,
-  bash,
-  pkg-config,
-  gfortran,
-  bison,
-  mpi, # generic mpi dependency
-  mpiCheckPhaseHook,
-  python3Packages,
-
-  # Build options
-  debug ? false,
-  scalarType ? "real",
-  precision ? "double",
-  mpiSupport ? true,
-  fortranSupport ? true,
-  pythonSupport ? false, # petsc python binding
-  withExamples ? false,
-  withFullDeps ? false, # full External libraries support
-  withCommonDeps ? true, # common External libraries support
+{ lib
+, newScope
+, stdenv
+, fetchzip
+, replaceVars
+, bash
+, pkg-config
+, gfortran
+, bison
+, mpi
+, # generic mpi dependency
+  mpiCheckPhaseHook
+, python3Packages
+, # Build options
+  debug ? false
+, scalarType ? "real"
+, precision ? "double"
+, mpiSupport ? true
+, fortranSupport ? true
+, pythonSupport ? false
+, # petsc python binding
+  withExamples ? false
+, withFullDeps ? false
+, # full External libraries support
+  withCommonDeps ? true
+, # common External libraries support
 
   # External libraries options
-  withHdf5 ? withCommonDeps,
-  withMetis ? withCommonDeps,
-  withZlib ? (withP4est || withPtscotch),
-  withScalapack ? withCommonDeps && mpiSupport,
-  withParmetis ? withFullDeps, # parmetis is unfree
-  withPtscotch ? withCommonDeps && mpiSupport,
-  withMumps ? withCommonDeps,
-  withP4est ? withFullDeps,
-  withHypre ? withCommonDeps && mpiSupport,
-  withFftw ? withCommonDeps,
-  withSuperLu ? withCommonDeps,
-  withSuperLuDist ? withCommonDeps && mpiSupport,
-  withSuitesparse ? withCommonDeps,
-
-  # External libraries
-  blas,
-  lapack,
-  hdf5,
-  metis,
-  parmetis,
-  scotch,
-  scalapack,
-  mumps,
-  p4est,
-  zlib, # propagated by p4est but required by petsc
-  hypre,
-  fftw,
-  superlu,
-  superlu_dist,
-  suitesparse,
-
-  # Used in passthru.tests
-  petsc,
-  mpich,
+  withHdf5 ? withCommonDeps
+, withMetis ? withCommonDeps
+, withZlib ? (withP4est || withPtscotch)
+, withScalapack ? withCommonDeps && mpiSupport
+, withParmetis ? withFullDeps
+, # parmetis is unfree
+  withPtscotch ? withCommonDeps && mpiSupport
+, withMumps ? withCommonDeps
+, withP4est ? withFullDeps
+, withHypre ? withCommonDeps && mpiSupport
+, withFftw ? withCommonDeps
+, withSuperLu ? withCommonDeps
+, withSuperLuDist ? withCommonDeps && mpiSupport
+, withSuitesparse ? withCommonDeps
+, # External libraries
+  blas
+, lapack
+, hdf5
+, metis
+, parmetis
+, scotch
+, scalapack
+, mumps
+, p4est
+, zlib
+, # propagated by p4est but required by petsc
+  hypre
+, fftw
+, superlu
+, superlu_dist
+, suitesparse
+, # Used in passthru.tests
+  petsc
+, mpich
+,
 }:
 assert withFullDeps -> withCommonDeps;
 
@@ -210,22 +213,24 @@ stdenv.mkDerivation (finalAttrs: {
   # packages relying on PETSc's runtime configuration (e.g. form compilers, code generators)
   # can correctly compile and link generated code
   postInstall = lib.concatStringsSep "\n" (
-    map (
-      package:
-      let
-        pname = package.pname or package.name;
-        prefix =
-          if (pname == "blas" || pname == "lapack") then
-            "BLASLAPACK"
-          else
-            lib.toUpper (builtins.elemAt (lib.splitString "-" pname) 0);
-      in
-      ''
-        substituteInPlace $out/lib/petsc/conf/petscvariables \
-          --replace-fail "${prefix}_INCLUDE =" "${prefix}_INCLUDE = -I${lib.getDev package}/include" \
-          --replace-fail "${prefix}_LIB =" "${prefix}_LIB = -L${lib.getLib package}/lib"
-      ''
-    ) finalAttrs.buildInputs
+    map
+      (
+        package:
+        let
+          pname = package.pname or package.name;
+          prefix =
+            if (pname == "blas" || pname == "lapack") then
+              "BLASLAPACK"
+            else
+              lib.toUpper (builtins.elemAt (lib.splitString "-" pname) 0);
+        in
+        ''
+          substituteInPlace $out/lib/petsc/conf/petscvariables \
+            --replace-fail "${prefix}_INCLUDE =" "${prefix}_INCLUDE = -I${lib.getDev package}/include" \
+            --replace-fail "${prefix}_LIB =" "${prefix}_LIB = -L${lib.getLib package}/lib"
+        ''
+      )
+      finalAttrs.buildInputs
   );
 
   __darwinAllowLocalNetworking = true;

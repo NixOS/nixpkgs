@@ -3,11 +3,11 @@
 # files were either discarded or moved to outputs.
 # This ensures nothing is forgotten and new files
 # are correctly handled on update.
-{
-  lib,
-  stdenv,
-  file,
-  writeScript,
+{ lib
+, stdenv
+, file
+, writeScript
+,
 }:
 
 let
@@ -21,11 +21,12 @@ let
   commonFileActions =
     {
       # list of fileglobs that are removed from the source dir
-      noiseFiles,
-      # files that are moved to the doc directory ($1)
+      noiseFiles
+    , # files that are moved to the doc directory ($1)
       # TODO(Profpatsch): allow to set target dir with
       # { glob = …; to = "html" } (relative to docdir)
-      docFiles,
+      docFiles
+    ,
     }:
     writeScript "common-file-actions.sh" ''
       #!${stdenv.shell}

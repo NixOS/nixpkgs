@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  gettext,
-  gobject-introspection,
-  pkg-config,
-  wrapGAppsHook3,
-  sqlite,
-  libpinyin,
-  db,
-  ibus,
-  glib,
-  gtk3,
-  python3,
-  lua,
-  opencc,
-  libsoup_3,
-  json-glib,
-  libnotify,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gettext
+, gobject-introspection
+, pkg-config
+, wrapGAppsHook3
+, sqlite
+, libpinyin
+, db
+, ibus
+, glib
+, gtk3
+, python3
+, lua
+, opencc
+, libsoup_3
+, json-glib
+, libnotify
+,
 }:
 
 stdenv.mkDerivation rec {

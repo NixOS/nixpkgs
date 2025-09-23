@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  dask,
-  urllib3,
-  geojson,
-  verlib2,
-  pueblo,
-  pandas,
-  pythonOlder,
-  sqlalchemy,
-  pytestCheckHook,
-  pytz,
-  setuptools,
-  orjson,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, dask
+, urllib3
+, geojson
+, verlib2
+, pueblo
+, pandas
+, pythonOlder
+, sqlalchemy
+, pytestCheckHook
+, pytz
+, setuptools
+, orjson
+,
 }:
 
 buildPythonPackage rec {

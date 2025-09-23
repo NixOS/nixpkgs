@@ -1,7 +1,7 @@
-{
-  callPackage,
-  fetchFromGitHub,
-  nixosTests,
+{ callPackage
+, fetchFromGitHub
+, nixosTests
+,
 }:
 
 callPackage ./generic.nix rec {

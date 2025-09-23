@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  asciidoctor,
-  iniparser,
-  json_c,
-  keyutils,
-  kmod,
-  udev,
-  util-linux,
-  libtracefs,
-  libtraceevent,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, asciidoctor
+, iniparser
+, json_c
+, keyutils
+, kmod
+, udev
+, util-linux
+, libtracefs
+, libtraceevent
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

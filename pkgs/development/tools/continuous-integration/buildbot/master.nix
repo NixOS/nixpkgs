@@ -1,47 +1,47 @@
-{
-  lib,
-  stdenv,
-  buildPythonApplication,
-  fetchFromGitHub,
-  makeWrapper,
-  # Tie withPlugins through the fixed point here, so it will receive an
+{ lib
+, stdenv
+, buildPythonApplication
+, fetchFromGitHub
+, makeWrapper
+, # Tie withPlugins through the fixed point here, so it will receive an
   # overridden version properly
-  buildbot,
-  pythonOlder,
-  python,
-  twisted,
-  jinja2,
-  msgpack,
-  zope-interface,
-  sqlalchemy,
-  alembic,
-  python-dateutil,
-  txaio,
-  autobahn,
-  pyjwt,
-  pyyaml,
-  treq,
-  txrequests,
-  pypugjs,
-  boto3,
-  moto,
-  markdown,
-  lz4,
-  brotli,
-  zstandard,
-  setuptools-trial,
-  buildbot-worker,
-  buildbot-plugins,
-  buildbot-pkg,
-  parameterized,
-  git,
-  openssh,
-  setuptools,
-  croniter,
-  importlib-resources,
-  packaging,
-  unidiff,
-  nixosTests,
+  buildbot
+, pythonOlder
+, python
+, twisted
+, jinja2
+, msgpack
+, zope-interface
+, sqlalchemy
+, alembic
+, python-dateutil
+, txaio
+, autobahn
+, pyjwt
+, pyyaml
+, treq
+, txrequests
+, pypugjs
+, boto3
+, moto
+, markdown
+, lz4
+, brotli
+, zstandard
+, setuptools-trial
+, buildbot-worker
+, buildbot-plugins
+, buildbot-pkg
+, parameterized
+, git
+, openssh
+, setuptools
+, croniter
+, importlib-resources
+, packaging
+, unidiff
+, nixosTests
+,
 }:
 
 let

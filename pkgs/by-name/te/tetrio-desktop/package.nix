@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  dpkg,
-  makeWrapper,
-  addDriverRunpath,
-  electron,
-  withTetrioPlus ? false,
-  tetrio-plus,
+{ stdenv
+, lib
+, fetchzip
+, dpkg
+, makeWrapper
+, addDriverRunpath
+, electron
+, withTetrioPlus ? false
+, tetrio-plus
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

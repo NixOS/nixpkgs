@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  docopt,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, docopt
+,
 }:
 
 buildPythonPackage {

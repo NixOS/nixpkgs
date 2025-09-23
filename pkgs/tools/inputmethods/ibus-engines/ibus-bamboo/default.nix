@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  xorg,
-  pkg-config,
-  wrapGAppsHook3,
-  go,
+{ lib
+, stdenv
+, fetchFromGitHub
+, xorg
+, pkg-config
+, wrapGAppsHook3
+, go
+,
 }:
 
 stdenv.mkDerivation rec {

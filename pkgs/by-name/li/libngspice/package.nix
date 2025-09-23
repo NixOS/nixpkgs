@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  flex,
-  bison,
-  fftw,
-  withNgshared ? true,
-  libXaw,
-  libXext,
-  llvmPackages,
-  readline,
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, fftw
+, withNgshared ? true
+, libXaw
+, libXext
+, llvmPackages
+, readline
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # nativeBuildInputs
-  h5py,
-
-  # tests
-  numpy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # nativeBuildInputs
+  h5py
+, # tests
+  numpy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

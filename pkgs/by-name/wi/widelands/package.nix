@@ -1,30 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config, # needed to find minizip
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_net,
-  SDL2_ttf,
-  cmake,
-  curl,
-  doxygen,
-  gettext,
-  glew,
-  graphviz,
-  icu,
-  installShellFiles,
-  libpng,
-  lua,
-  python3,
-  zlib,
-  minizip,
-  asio,
-  libSM,
-  libICE,
-  libXext,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, # needed to find minizip
+  SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_net
+, SDL2_ttf
+, cmake
+, curl
+, doxygen
+, gettext
+, glew
+, graphviz
+, icu
+, installShellFiles
+, libpng
+, lua
+, python3
+, zlib
+, minizip
+, asio
+, libSM
+, libICE
+, libXext
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  autoreconfHook,
-  fetchFromGitHub,
-  pkg-config,
-  libpng,
+{ stdenv
+, lib
+, autoreconfHook
+, fetchFromGitHub
+, pkg-config
+, libpng
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

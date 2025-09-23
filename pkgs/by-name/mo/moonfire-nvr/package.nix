@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  ncurses,
-  sqlite,
-  testers,
-  moonfire-nvr,
-  nodejs,
-  pnpm_9,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, ncurses
+, sqlite
+, testers
+, moonfire-nvr
+, nodejs
+, pnpm_9
+,
 }:
 
 let

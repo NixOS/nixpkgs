@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  docopt,
-  fetchPypi,
-  freezegun,
-  pytestCheckHook,
-  pythonOlder,
-  selenium,
-  setuptools,
+{ lib
+, buildPythonPackage
+, docopt
+, fetchPypi
+, freezegun
+, pytestCheckHook
+, pythonOlder
+, selenium
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

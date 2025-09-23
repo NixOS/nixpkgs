@@ -1,9 +1,9 @@
-{
-  lib,
-  mkDerivation,
-  buildPackages,
-  rpcgen,
-  mtree,
+{ lib
+, mkDerivation
+, buildPackages
+, rpcgen
+, mtree
+,
 }:
 
 mkDerivation {

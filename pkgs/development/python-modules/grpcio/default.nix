@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  c-ares,
-  cython,
-  fetchPypi,
-  openssl,
-  pkg-config,
-  protobuf,
-  pythonOlder,
-  setuptools,
-  zlib,
+{ lib
+, stdenv
+, buildPythonPackage
+, c-ares
+, cython
+, fetchPypi
+, openssl
+, pkg-config
+, protobuf
+, pythonOlder
+, setuptools
+, zlib
+,
 }:
 
 # This package should be updated together with the main grpc package and other

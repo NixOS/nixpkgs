@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, zlib
+,
 }:
 
 stdenv.mkDerivation {
@@ -23,8 +23,7 @@ stdenv.mkDerivation {
       x86_64-cygwin = "cygwin64";
       x86_64-darwin = "mac64";
       aarch64-darwin = "mac64";
-    }
-    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hardeningDisable = [ "format" ];
 

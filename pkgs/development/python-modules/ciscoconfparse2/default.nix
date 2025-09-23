@@ -1,22 +1,22 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  dnspython,
-  fetchFromGitHub,
-  hatchling,
-  hier-config,
-  loguru,
-  macaddress,
-  passlib,
-  pyparsing,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pyyaml,
-  rich,
-  scrypt,
-  tomlkit,
-  typeguard,
+{ lib
+, attrs
+, buildPythonPackage
+, dnspython
+, fetchFromGitHub
+, hatchling
+, hier-config
+, loguru
+, macaddress
+, passlib
+, pyparsing
+, pytest-cov-stub
+, pytestCheckHook
+, pyyaml
+, rich
+, scrypt
+, tomlkit
+, typeguard
+,
 }:
 
 buildPythonPackage rec {

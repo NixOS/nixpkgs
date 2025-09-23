@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  python3Packages,
-  dnsmasq,
-  gawk,
-  getent,
-  gobject-introspection,
-  gtk3,
-  kmod,
-  lxc,
-  iproute2,
-  iptables,
-  util-linux,
-  wrapGAppsHook3,
-  wl-clipboard,
-  runtimeShell,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, python3Packages
+, dnsmasq
+, gawk
+, getent
+, gobject-introspection
+, gtk3
+, kmod
+, lxc
+, iproute2
+, iptables
+, util-linux
+, wrapGAppsHook3
+, wl-clipboard
+, runtimeShell
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

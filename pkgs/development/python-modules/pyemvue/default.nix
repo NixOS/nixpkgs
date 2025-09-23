@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  hatchling,
-
-  # propagated modules
-  requests,
-  python-dateutil,
-  pycognito,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  hatchling
+, # propagated modules
+  requests
+, python-dateutil
+, pycognito
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

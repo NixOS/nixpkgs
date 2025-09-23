@@ -1,31 +1,33 @@
-{
-  lib,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  mkDerivation,
-  gtk2Support ? true,
-  gtk2,
-  qtbase,
-  qtsvg,
-  qtx11extras, # Toolkit dependencies
-  karchive,
-  kconfig,
-  kconfigwidgets,
-  kio,
-  frameworkintegration,
-  kguiaddons,
-  ki18n,
-  kwindowsystem,
-  kdelibs4support,
-  kiconthemes,
-  libpthreadstubs,
-  pcre,
-  libXdmcp,
-  libX11,
-  libXau, # X11 dependencies
-  fetchpatch,
+{ lib
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, pkg-config
+, mkDerivation
+, gtk2Support ? true
+, gtk2
+, qtbase
+, qtsvg
+, qtx11extras
+, # Toolkit dependencies
+  karchive
+, kconfig
+, kconfigwidgets
+, kio
+, frameworkintegration
+, kguiaddons
+, ki18n
+, kwindowsystem
+, kdelibs4support
+, kiconthemes
+, libpthreadstubs
+, pcre
+, libXdmcp
+, libX11
+, libXau
+, # X11 dependencies
+  fetchpatch
+,
 }:
 
 mkDerivation rec {

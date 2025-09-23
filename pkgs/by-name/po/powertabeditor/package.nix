@@ -1,21 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  cmake,
-  ninja,
-  pkg-config,
-  doctest,
-
-  boost,
-  qt6,
-  nlohmann_json,
-  rtmidi,
-  pugixml,
-  minizip,
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, doctest
+, boost
+, qt6
+, nlohmann_json
+, rtmidi
+, pugixml
+, minizip
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "powertabeditor";

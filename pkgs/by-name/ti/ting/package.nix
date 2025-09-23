@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  alsa-lib,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, alsa-lib
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

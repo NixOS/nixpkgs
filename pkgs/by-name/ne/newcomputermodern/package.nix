@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchgit,
-  fontforge,
-  gitUpdater,
+{ lib
+, stdenvNoCC
+, fetchgit
+, fontforge
+, gitUpdater
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

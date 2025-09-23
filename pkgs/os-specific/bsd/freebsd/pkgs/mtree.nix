@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  compatIfNeeded,
-  compatIsNeeded,
-  libnetbsd,
-  libmd,
+{ lib
+, stdenv
+, mkDerivation
+, compatIfNeeded
+, compatIsNeeded
+, libnetbsd
+, libmd
+,
 }:
 
 let

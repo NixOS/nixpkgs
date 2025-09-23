@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  makeWrapper,
-  perl,
-  ffmpeg-full,
-  gawk,
-  imagemagick,
-  xdpyinfo,
-  xprop,
-  xrectsel,
-  xwininfo,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, makeWrapper
+, perl
+, ffmpeg-full
+, gawk
+, imagemagick
+, xdpyinfo
+, xprop
+, xrectsel
+, xwininfo
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  nix-update-script,
-  runCommand,
-  dieHook,
-  nixosTests,
-  testers,
-  scaphandre,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, nix-update-script
+, runCommand
+, dieHook
+, nixosTests
+, testers
+, scaphandre
+,
 }:
 
 rustPlatform.buildRustPackage rec {

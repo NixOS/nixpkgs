@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  updateAutotoolsGnuConfigScriptsHook,
-  coreutils,
+{ lib
+, stdenv
+, fetchurl
+, updateAutotoolsGnuConfigScriptsHook
+, coreutils
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

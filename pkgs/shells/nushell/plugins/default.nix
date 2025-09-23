@@ -1,11 +1,11 @@
-{
-  lib,
-  config,
-  newScope,
-  dbus,
-  versionCheckHook,
-  nushell,
-  runCommand,
+{ lib
+, config
+, newScope
+, dbus
+, versionCheckHook
+, nushell
+, runCommand
+,
 }:
 
 lib.makeScope newScope (
@@ -60,7 +60,7 @@ lib.makeScope newScope (
         hcl = callPackage ./hcl.nix { };
         desktop_notifications = callPackage ./desktop_notifications.nix { };
       }
-      // lib.optionalAttrs config.allowAliases {
+        // lib.optionalAttrs config.allowAliases {
         regex = throw "`nu_plugin_regex` is no longer compatible with the current Nushell release.";
       }
     )

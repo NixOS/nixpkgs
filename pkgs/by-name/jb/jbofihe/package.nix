@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  flex,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, flex
+, perl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

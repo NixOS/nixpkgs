@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  cymem,
-  cython,
-  fetchPypi,
-  murmurhash,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, cymem
+, cython
+, fetchPypi
+, murmurhash
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

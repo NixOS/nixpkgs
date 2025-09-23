@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gmp,
-  openssl,
-  pkg-config,
-  enableStatic ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gmp
+, openssl
+, pkg-config
+, enableStatic ? stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation rec {

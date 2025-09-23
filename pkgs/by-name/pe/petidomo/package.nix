@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  flex,
-  bison,
-  sendmailPath ? "/run/wrappers/bin/sendmail",
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, sendmailPath ? "/run/wrappers/bin/sendmail"
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  uglify-js,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, uglify-js
+,
 }:
 
 python3Packages.buildPythonApplication rec {

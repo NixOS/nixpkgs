@@ -1,26 +1,26 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  pkg-config,
-  meson,
-  ninja,
-  scdoc,
-  freetype,
-  fontconfig,
-  nanosvg,
-  pixman,
-  tllist,
-  check,
-  # Text shaping methods to enable, empty list disables all text shaping.
+{ stdenv
+, lib
+, fetchFromGitea
+, pkg-config
+, meson
+, ninja
+, scdoc
+, freetype
+, fontconfig
+, nanosvg
+, pixman
+, tllist
+, check
+, # Text shaping methods to enable, empty list disables all text shaping.
   # See `availableShapingTypes` or upstream meson_options.txt for available types.
   withShapingTypes ? [
     "grapheme"
     "run"
-  ],
-  harfbuzz,
-  utf8proc,
-  fcft, # for passthru.tests
+  ]
+, harfbuzz
+, utf8proc
+, fcft
+, # for passthru.tests
 }:
 
 let
@@ -65,9 +65,11 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     (lib.mesonEnable "system-nanosvg" true)
   ]
-  ++ builtins.map (
-    t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)
-  ) availableShapingTypes;
+  ++ builtins.map
+    (
+      t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)
+    )
+    availableShapingTypes;
 
   doCheck = true;
 

@@ -1,17 +1,17 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  kconfig,
-  kcoreaddons,
-  ki18n,
-  kio,
-  kservice,
-  plasma-framework,
-  qtbase,
-  qtdeclarative,
-  solid,
-  threadweaver,
-  kwindowsystem,
+{ mkDerivation
+, extra-cmake-modules
+, kconfig
+, kcoreaddons
+, ki18n
+, kio
+, kservice
+, plasma-framework
+, qtbase
+, qtdeclarative
+, solid
+, threadweaver
+, kwindowsystem
+,
 }:
 
 let

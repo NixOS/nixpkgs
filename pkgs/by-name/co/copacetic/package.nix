@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  installShellFiles,
-  versionCheckHook,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, installShellFiles
+, versionCheckHook
+,
 }:
 buildGoModule rec {
   pname = "copacetic";

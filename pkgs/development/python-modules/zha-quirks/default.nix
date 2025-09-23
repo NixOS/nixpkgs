@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  time-machine,
-  zigpy,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, time-machine
+, zigpy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  stdenvNoCC,
-  fetchurl,
-  dpkg,
-  lib,
-  qt5,
-  autoPatchelfHook,
-  SDL2,
+{ stdenvNoCC
+, fetchurl
+, dpkg
+, lib
+, qt5
+, autoPatchelfHook
+, SDL2
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

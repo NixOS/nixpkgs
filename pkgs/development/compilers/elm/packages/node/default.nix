@@ -1,8 +1,8 @@
-{
-  pkgs,
-  lib,
-  nodejs,
-  makeWrapper,
+{ pkgs
+, lib
+, nodejs
+, makeWrapper
+,
 }:
 self:
 
@@ -28,7 +28,7 @@ with elmLib;
     meta =
       with lib;
       nodePkgs.elm-verify-examples.meta
-      // {
+        // {
         description = "Verify examples in your docs";
         homepage = "https://github.com/stoeffel/elm-verify-examples";
         license = licenses.bsd3;
@@ -40,7 +40,7 @@ with elmLib;
     meta =
       with lib;
       nodePkgs.create-elm-app.meta
-      // {
+        // {
         description = "Create Elm apps with no build configuration";
         homepage = "https://github.com/halfzebra/create-elm-app";
         license = licenses.mit;
@@ -52,7 +52,7 @@ with elmLib;
     meta =
       with lib;
       nodePkgs."@dillonkearns/elm-graphql".meta
-      // {
+        // {
         description = "Autogenerate type-safe GraphQL queries in Elm";
         license = licenses.bsd3;
         maintainers = [ maintainers.pedrohlc ];
@@ -63,7 +63,7 @@ with elmLib;
     meta =
       with lib;
       nodePkgs."@elm-tooling/elm-language-server".meta
-      // {
+        // {
         description = "Language server implementation for Elm";
         homepage = "https://github.com/elm-tooling/elm-language-server";
         license = licenses.mit;
@@ -92,7 +92,7 @@ with elmLib;
     meta =
       with lib;
       nodePkgs."elm-optimize-level-2".meta
-      // {
+        // {
         description = "Second level of optimization for the Javascript that the Elm Compiler produces";
         homepage = "https://github.com/mdgriffith/elm-optimize-level-2";
         license = licenses.bsd3;

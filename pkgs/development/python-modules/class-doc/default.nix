@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  poetry-core,
-  more-itertools,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, poetry-core
+, more-itertools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

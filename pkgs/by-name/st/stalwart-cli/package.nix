@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  versionCheckHook,
-  stalwart-mail,
+{ lib
+, rustPlatform
+, versionCheckHook
+, stalwart-mail
+,
 }:
 
 rustPlatform.buildRustPackage {

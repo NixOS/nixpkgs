@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
+{ pkgs
+, lib
+, config
+, ...
 }:
 # This tests that systemd-ssh-proxy and systemd-ssh-generator work correctly with:
 # - a local unix socket on the same system

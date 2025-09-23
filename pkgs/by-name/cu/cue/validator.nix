@@ -1,7 +1,7 @@
-{
-  cue,
-  writeShellScript,
-  lib,
+{ cue
+, writeShellScript
+, lib
+,
 }:
 # `document` must be a fragment of definition or structure that the input data will be matched against.
 # `document` must exist in the Cue schema file provided (`cueSchemaFile`).
@@ -9,8 +9,8 @@
 # against the fragment described by `document` or the whole definition.
 # The script will be strict and enforce concrete values, i.e. partial documents are not supported.
 cueSchemaFile:
-{
-  document ? null,
+{ document ? null
+,
 }:
 writeShellScript "validate-using-cue" ''
   ${cue}/bin/cue \

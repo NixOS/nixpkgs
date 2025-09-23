@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  bintools,
-  versionCheckHook,
-  runCommand,
-  cctools,
-  darwin,
-  sources ? import ./sources.nix { inherit fetchurl; },
-  version ? sources.versionUsed,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, bintools
+, versionCheckHook
+, runCommand
+, cctools
+, darwin
+, sources ? import ./sources.nix { inherit fetchurl; }
+, version ? sources.versionUsed
+,
 }:
 
 assert sources != null && (builtins.isAttrs sources);

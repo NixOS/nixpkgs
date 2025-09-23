@@ -1,17 +1,17 @@
 # NOTE: Tests related to sortArray go here.
-{
-  lib,
-  sortArray,
-  testers,
+{ lib
+, sortArray
+, testers
+,
 }:
 let
   inherit (lib.attrsets) recurseIntoAttrs;
   inherit (testers) shellcheck shfmt testEqualArrayOrMap;
   check =
-    {
-      name,
-      valuesArray,
-      expectedArray,
+    { name
+    , valuesArray
+    , expectedArray
+    ,
     }:
     (testEqualArrayOrMap {
       inherit name valuesArray expectedArray;
@@ -26,10 +26,10 @@ let
       });
 
   checkInPlace =
-    {
-      name,
-      valuesArray,
-      expectedArray,
+    { name
+    , valuesArray
+    , expectedArray
+    ,
     }:
     (testEqualArrayOrMap {
       inherit name valuesArray expectedArray;

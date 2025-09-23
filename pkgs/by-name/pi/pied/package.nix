@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  flutter327,
-  gst_all_1,
+{ lib
+, fetchFromGitHub
+, flutter327
+, gst_all_1
+,
 }:
 
 flutter327.buildFlutterApplication rec {

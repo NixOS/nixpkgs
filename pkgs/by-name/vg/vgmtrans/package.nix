@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  ninja,
-  qt6,
-  spdlog,
-  zlib-ng,
-  minizip-ng,
-  libbass,
-  libbassmidi,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, ninja
+, qt6
+, spdlog
+, zlib-ng
+, minizip-ng
+, libbass
+, libbassmidi
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vgmtrans";

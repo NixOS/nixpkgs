@@ -6,10 +6,9 @@
 
   nodes = {
     router =
-      {
-        pkgs,
-        config,
-        ...
+      { pkgs
+      , config
+      , ...
       }:
       {
         networking.firewall.allowedTCPPorts = [

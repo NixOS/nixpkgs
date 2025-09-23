@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  imagemagick,
-  libiconv,
-  ffmpeg,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, imagemagick
+, libiconv
+, ffmpeg
+, versionCheckHook
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "t-rec";

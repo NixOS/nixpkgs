@@ -1,21 +1,21 @@
-{
-  aiohttp,
-  anyio,
-  buildPythonPackage,
-  fetchFromGitHub,
-  google-auth,
-  httpx,
-  lib,
-  packaging,
-  pkginfo,
-  pydantic,
-  pytestCheckHook,
-  requests,
-  setuptools,
-  tenacity,
-  twine,
-  typing-extensions,
-  websockets,
+{ aiohttp
+, anyio
+, buildPythonPackage
+, fetchFromGitHub
+, google-auth
+, httpx
+, lib
+, packaging
+, pkginfo
+, pydantic
+, pytestCheckHook
+, requests
+, setuptools
+, tenacity
+, twine
+, typing-extensions
+, websockets
+,
 }:
 
 buildPythonPackage rec {

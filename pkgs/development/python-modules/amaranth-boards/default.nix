@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  amaranth,
-  pdm-backend,
-  unstableGitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, amaranth
+, pdm-backend
+, unstableGitUpdater
+,
 }:
 
 buildPythonPackage rec {

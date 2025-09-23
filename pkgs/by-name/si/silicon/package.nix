@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  expat,
-  freetype,
-  libxcb,
-  python3,
-  libiconv,
-  fira-code,
-  fontconfig,
-  harfbuzz,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, cmake
+, expat
+, freetype
+, libxcb
+, python3
+, libiconv
+, fira-code
+, fontconfig
+, harfbuzz
+,
 }:
 
 rustPlatform.buildRustPackage rec {

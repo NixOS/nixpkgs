@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
+{ lib
+, stdenvNoCC
+, fetchurl
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -10,15 +10,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src =
     if stdenvNoCC.hostPlatform.system == "x86_64-darwin" then
-      fetchurl {
-        url = "https://github.com/camunda/zeebe/releases/download/${finalAttrs.version}/zbctl.darwin";
-        hash = "sha256-RuZX9TWuXBxxegLw0La0l9/6zh96V/2trJvZUoCvTKk=";
-      }
+      fetchurl
+        {
+          url = "https://github.com/camunda/zeebe/releases/download/${finalAttrs.version}/zbctl.darwin";
+          hash = "sha256-RuZX9TWuXBxxegLw0La0l9/6zh96V/2trJvZUoCvTKk=";
+        }
     else if stdenvNoCC.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://github.com/camunda/zeebe/releases/download/${finalAttrs.version}/zbctl";
-        hash = "sha256-NTJqmcOzpOzHjrtOHBU2J3u0f7sESBeZMbb8kx3zR38=";
-      }
+      fetchurl
+        {
+          url = "https://github.com/camunda/zeebe/releases/download/${finalAttrs.version}/zbctl";
+          hash = "sha256-NTJqmcOzpOzHjrtOHBU2J3u0f7sESBeZMbb8kx3zR38=";
+        }
     else
       throw "Unsupported platform ${stdenvNoCC.hostPlatform.system}";
 

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bash,
-  capnproto,
-  cmake,
-  gdb,
-  libpfm,
-  makeWrapper,
-  nix-update-script,
-  pkg-config,
-  procps,
-  python3,
-  which,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bash
+, capnproto
+, cmake
+, gdb
+, libpfm
+, makeWrapper
+, nix-update-script
+, pkg-config
+, procps
+, python3
+, which
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

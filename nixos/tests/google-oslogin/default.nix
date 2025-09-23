@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  hostPkgs,
-  ...
+{ lib
+, pkgs
+, hostPkgs
+, ...
 }:
 let
   inherit (import ./../ssh-keys.nix hostPkgs)

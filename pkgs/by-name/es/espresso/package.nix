@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  cmake,
-  stdenv,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, cmake
+, stdenv
+, nix-update-script
+,
 }:
 stdenv.mkDerivation rec {
   pname = "espresso";

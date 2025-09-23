@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  requireFile,
-  autoPatchelfHook,
-  undmg,
-  fetchurl,
-  makeDesktopItem,
-  makeWrapper,
-  copyDesktopItems,
-  libarchive,
-  imagemagick,
-  runCommand,
-  libgcc,
-  wxGTK32,
-  libGL,
-  SDL2,
-  openal,
-  libmpg123,
-  libxmp,
+{ lib
+, stdenv
+, requireFile
+, autoPatchelfHook
+, undmg
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, copyDesktopItems
+, libarchive
+, imagemagick
+, runCommand
+, libgcc
+, wxGTK32
+, libGL
+, SDL2
+, openal
+, libmpg123
+, libxmp
+,
 }:
 
 let
@@ -65,8 +65,7 @@ let
       i686-linux = "System";
       x86_64-darwin = "System";
       aarch64-darwin = x86_64-darwin;
-    }
-    .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   name = "ut1999";

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  replaceVars,
-  pyparsing,
-  graphviz,
-  pytestCheckHook,
-  texliveSmall,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, replaceVars
+, pyparsing
+, graphviz
+, pytestCheckHook
+, texliveSmall
+,
 }:
 
 buildPythonPackage rec {

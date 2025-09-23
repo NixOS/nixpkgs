@@ -1,9 +1,9 @@
-{
-  lib,
-  mkDerivation,
-  flex,
-  byacc,
-  libjail,
+{ lib
+, mkDerivation
+, flex
+, byacc
+, libjail
+,
 }:
 mkDerivation {
   path = "usr.sbin/jail";

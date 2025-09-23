@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  gmp,
-  ntl,
-  cddlib,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, gmp
+, ntl
+, cddlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

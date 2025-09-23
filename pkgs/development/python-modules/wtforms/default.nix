@@ -1,22 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  babel,
-  hatchling,
-  setuptools,
-
-  # dependencies
-  markupsafe,
-
-  # optional-dependencies
-  email-validator,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  babel
+, hatchling
+, setuptools
+, # dependencies
+  markupsafe
+, # optional-dependencies
+  email-validator
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

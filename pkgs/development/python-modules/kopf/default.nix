@@ -1,25 +1,23 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pytestCheckHook,
-
-  setuptools,
-  setuptools-scm,
-  pyyaml,
-  aiohttp,
-  iso8601,
-  python-json-logger,
-  clickclick,
-  typing-extensions,
-
-  pytest-mock,
-  pytest-timeout,
-  pytest-asyncio,
-  pyngrok,
-  freezegun,
-  certvalidator,
-  aresponses,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, pyyaml
+, aiohttp
+, iso8601
+, python-json-logger
+, clickclick
+, typing-extensions
+, pytest-mock
+, pytest-timeout
+, pytest-asyncio
+, pyngrok
+, freezegun
+, certvalidator
+, aresponses
+,
 }:
 
 buildPythonPackage rec {

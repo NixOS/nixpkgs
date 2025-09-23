@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  dbus,
-  ffmpeg,
-  oniguruma,
-  openssl,
-  sqlite,
-  stdenv,
-  alsa-lib,
-  xorg,
-  apple-sdk_12,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, dbus
+, ffmpeg
+, oniguruma
+, openssl
+, sqlite
+, stdenv
+, alsa-lib
+, xorg
+, apple-sdk_12
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "screen-pipe";

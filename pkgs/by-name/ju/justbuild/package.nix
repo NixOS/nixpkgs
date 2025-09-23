@@ -1,32 +1,28 @@
-{
-  gccStdenv,
-  fetchFromGitHub,
-  fetchurl,
-
-  fmt_10,
-  nlohmann_json,
-  cli11,
-  microsoft-gsl,
-  libgit2,
-  openssl,
-
-  pkg-config,
-  protobuf,
-  grpc,
-  pandoc,
-  python3,
-  unzip,
-  wget,
-  lib,
-  jq,
-  coreutils,
-
-  curl,
-  libarchive,
-
-  nix-update-script,
-  testers,
-  justbuild,
+{ gccStdenv
+, fetchFromGitHub
+, fetchurl
+, fmt_10
+, nlohmann_json
+, cli11
+, microsoft-gsl
+, libgit2
+, openssl
+, pkg-config
+, protobuf
+, grpc
+, pandoc
+, python3
+, unzip
+, wget
+, lib
+, jq
+, coreutils
+, curl
+, libarchive
+, nix-update-script
+, testers
+, justbuild
+,
 }:
 let
   stdenv = gccStdenv;

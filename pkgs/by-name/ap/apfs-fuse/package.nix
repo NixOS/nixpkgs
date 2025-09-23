@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fuse,
-  fuse3,
-  bzip2,
-  zlib,
-  attr,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fuse
+, fuse3
+, bzip2
+, zlib
+, attr
+, cmake
+,
 }:
 
 stdenv.mkDerivation {

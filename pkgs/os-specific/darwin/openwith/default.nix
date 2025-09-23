@@ -1,7 +1,7 @@
-{
-  lib,
-  swiftPackages,
-  fetchFromGitHub,
+{ lib
+, swiftPackages
+, fetchFromGitHub
+,
 }:
 
 let

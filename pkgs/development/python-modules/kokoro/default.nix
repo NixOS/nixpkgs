@@ -1,16 +1,16 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchPypi,
-  hatchling,
-  huggingface-hub,
-  lib,
-  loguru,
-  misaki,
-  numpy,
-  pytestCheckHook,
-  torch,
-  transformers,
+{ buildPythonPackage
+, fetchFromGitHub
+, fetchPypi
+, hatchling
+, huggingface-hub
+, lib
+, loguru
+, misaki
+, numpy
+, pytestCheckHook
+, torch
+, transformers
+,
 }:
 
 buildPythonPackage {

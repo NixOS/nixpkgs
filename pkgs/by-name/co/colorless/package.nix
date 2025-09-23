@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  stdenvNoCC,
-  coreutils,
-  bash,
-  binSh ? "${bash}/bin/bash",
-  gnused,
-  less,
+{ lib
+, fetchurl
+, stdenvNoCC
+, coreutils
+, bash
+, binSh ? "${bash}/bin/bash"
+, gnused
+, less
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

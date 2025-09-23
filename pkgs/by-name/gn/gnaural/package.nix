@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libsndfile,
-  portaudio,
-  gtk2,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libsndfile
+, portaudio
+, gtk2
+,
 }:
 
 stdenv.mkDerivation rec {

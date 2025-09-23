@@ -1,9 +1,8 @@
-{
-  lib,
-  pkgs,
-  config,
-  utils,
-  ...
+{ lib
+, pkgs
+, config
+, utils
+, ...
 }:
 with lib;
 let
@@ -154,23 +153,24 @@ in
       services.lemmy.settings =
         lib.attrsets.recursiveUpdate
           (
-            mapAttrs (name: mkDefault) {
-              bind = "127.0.0.1";
-              tls_enabled = true;
-              pictrs = {
-                url = with config.services.pict-rs; "http://${address}:${toString port}";
-              };
-              actor_name_max_length = 20;
+            mapAttrs (name: mkDefault)
+              {
+                bind = "127.0.0.1";
+                tls_enabled = true;
+                pictrs = {
+                  url = with config.services.pict-rs; "http://${address}:${toString port}";
+                };
+                actor_name_max_length = 20;
 
-              rate_limit.message = 180;
-              rate_limit.message_per_second = 60;
-              rate_limit.post = 6;
-              rate_limit.post_per_second = 600;
-              rate_limit.register = 3;
-              rate_limit.register_per_second = 3600;
-              rate_limit.image = 6;
-              rate_limit.image_per_second = 3600;
-            }
+                rate_limit.message = 180;
+                rate_limit.message_per_second = 60;
+                rate_limit.post = 6;
+                rate_limit.post_per_second = 600;
+                rate_limit.register = 3;
+                rate_limit.register_per_second = 3600;
+                rate_limit.image = 6;
+                rate_limit.image_per_second = 3600;
+              }
             // {
               database = mapAttrs (name: mkDefault) {
                 user = "lemmy";
@@ -182,10 +182,13 @@ in
             }
           )
           (
-            lib.foldlAttrs (
-              acc: option: data:
-              acc // lib.setAttrByPath data.setting { _secret = option; }
-            ) { } secrets
+            lib.foldlAttrs
+              (
+                acc: option: data:
+                  acc // lib.setAttrByPath data.setting { _secret = option; }
+              )
+              { }
+              secrets
           );
       # the option name is the id of the credential loaded by LoadCredential
 
@@ -342,10 +345,12 @@ in
             DynamicUser = true;
             RuntimeDirectory = "lemmy";
             ExecStart = "${cfg.server.package}/bin/lemmy_server";
-            LoadCredential = lib.foldlAttrs (
-              acc: option: data:
-              acc ++ [ "${option}:${toString data.path}" ]
-            ) [ ] secrets;
+            LoadCredential = lib.foldlAttrs
+              (
+                acc: option: data:
+                  acc ++ [ "${option}:${toString data.path}" ]
+              ) [ ]
+              secrets;
             PrivateTmp = true;
             MemoryDenyWriteExecute = true;
             NoNewPrivileges = true;

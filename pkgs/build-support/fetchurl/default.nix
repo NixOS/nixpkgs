@@ -1,12 +1,13 @@
-{
-  lib,
-  buildPackages ? {
+{ lib
+, buildPackages ? {
     inherit stdenvNoCC;
-  },
-  stdenvNoCC,
-  curl, # Note that `curl' may be `null', in case of the native stdenvNoCC.
-  cacert ? null,
-  rewriteURL,
+  }
+, stdenvNoCC
+, curl
+, # Note that `curl' may be `null', in case of the native stdenvNoCC.
+  cacert ? null
+, rewriteURL
+,
 }:
 
 let
@@ -52,74 +53,58 @@ in
 
 {
   # URL to fetch.
-  url ? "",
-
-  # Alternatively, a list of URLs specifying alternative download
+  url ? ""
+, # Alternatively, a list of URLs specifying alternative download
   # locations.  They are tried in order.
-  urls ? [ ],
-
-  # Additional curl options needed for the download to succeed.
+  urls ? [ ]
+, # Additional curl options needed for the download to succeed.
   # Warning: Each space (no matter the escaping) will start a new argument.
   # If you wish to pass arguments with spaces, use `curlOptsList`
-  curlOpts ? "",
-
-  # Additional curl options needed for the download to succeed.
-  curlOptsList ? [ ],
-
-  # Name of the file.  If empty, use the basename of `url' (or of the
+  curlOpts ? ""
+, # Additional curl options needed for the download to succeed.
+  curlOptsList ? [ ]
+, # Name of the file.  If empty, use the basename of `url' (or of the
   # first element of `urls').
-  name ? "",
-
-  # for versioned downloads optionally take pname + version.
-  pname ? "",
-  version ? "",
-
-  # SRI hash.
-  hash ? "",
-
-  # Legacy ways of specifying the hash.
-  outputHash ? "",
-  outputHashAlgo ? "",
-  sha1 ? "",
-  sha256 ? "",
-  sha512 ? "",
-
-  recursiveHash ? false,
-
-  # Shell code to build a netrc file for BASIC auth
-  netrcPhase ? null,
-
-  # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
+  name ? ""
+, # for versioned downloads optionally take pname + version.
+  pname ? ""
+, version ? ""
+, # SRI hash.
+  hash ? ""
+, # Legacy ways of specifying the hash.
+  outputHash ? ""
+, outputHashAlgo ? ""
+, sha1 ? ""
+, sha256 ? ""
+, sha512 ? ""
+, recursiveHash ? false
+, # Shell code to build a netrc file for BASIC auth
+  netrcPhase ? null
+, # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
   # needed for netrcPhase
-  netrcImpureEnvVars ? [ ],
-
-  # Shell code executed after the file has been fetched
+  netrcImpureEnvVars ? [ ]
+, # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
-  postFetch ? "",
-
-  # Whether to download to a temporary path rather than $out. Useful
+  postFetch ? ""
+, # Whether to download to a temporary path rather than $out. Useful
   # in conjunction with postFetch. The location of the temporary file
   # is communicated to postFetch via $downloadedFile.
-  downloadToTemp ? false,
-
-  # If true, set executable bit on downloaded file
-  executable ? false,
-
-  # If set, don't download the file, but write a list of all possible
+  downloadToTemp ? false
+, # If true, set executable bit on downloaded file
+  executable ? false
+, # If set, don't download the file, but write a list of all possible
   # URLs (resulting from resolving mirror:// URLs) to $out.
-  showURLs ? false,
-
-  # Meta information, if any.
-  meta ? { },
-
-  # Passthru information, if any.
-  passthru ? { },
-  # Doing the download on a remote machine just duplicates network
+  showURLs ? false
+, # Meta information, if any.
+  meta ? { }
+, # Passthru information, if any.
+  passthru ? { }
+, # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that by default
-  preferLocalBuild ? true,
-
-  # Additional packages needed as part of a fetch
-  nativeBuildInputs ? [ ],
+  preferLocalBuild ? true
+, # Additional packages needed as part of a fetch
+  nativeBuildInputs ? [ ]
+,
 }@args:
 
 let
@@ -147,51 +132,52 @@ let
   hash_ =
     if
       with lib.lists;
-      length (
-        filter (s: s != "") [
-          hash
-          outputHash
-          sha1
-          sha256
-          sha512
-        ]
-      ) > 1
+      length
+        (
+          filter (s: s != "") [
+            hash
+            outputHash
+            sha1
+            sha256
+            sha512
+          ]
+        ) > 1
     then
       throw "multiple hashes passed to fetchurl: ${lib.generators.toPretty { } urls_}"
     else
 
-    if hash != "" then
-      {
-        outputHashAlgo = null;
-        outputHash = hash;
-      }
-    else if outputHash != "" then
-      if outputHashAlgo != "" then
-        { inherit outputHashAlgo outputHash; }
+      if hash != "" then
+        {
+          outputHashAlgo = null;
+          outputHash = hash;
+        }
+      else if outputHash != "" then
+        if outputHashAlgo != "" then
+          { inherit outputHashAlgo outputHash; }
+        else
+          throw "fetchurl was passed outputHash without outputHashAlgo: ${lib.generators.toPretty { } urls_}"
+      else if sha512 != "" then
+        {
+          outputHashAlgo = "sha512";
+          outputHash = sha512;
+        }
+      else if sha256 != "" then
+        {
+          outputHashAlgo = "sha256";
+          outputHash = sha256;
+        }
+      else if sha1 != "" then
+        {
+          outputHashAlgo = "sha1";
+          outputHash = sha1;
+        }
+      else if cacert != null then
+        {
+          outputHashAlgo = "sha256";
+          outputHash = "";
+        }
       else
-        throw "fetchurl was passed outputHash without outputHashAlgo: ${lib.generators.toPretty { } urls_}"
-    else if sha512 != "" then
-      {
-        outputHashAlgo = "sha512";
-        outputHash = sha512;
-      }
-    else if sha256 != "" then
-      {
-        outputHashAlgo = "sha256";
-        outputHash = sha256;
-      }
-    else if sha1 != "" then
-      {
-        outputHashAlgo = "sha1";
-        outputHash = sha1;
-      }
-    else if cacert != null then
-      {
-        outputHashAlgo = "sha256";
-        outputHash = "";
-      }
-    else
-      throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
+        throw "fetchurl requires a hash for fixed-output derivation: ${lib.generators.toPretty { } urls_}";
 
   resolvedUrl =
     let
@@ -210,15 +196,16 @@ let
 in
 
 assert
-  (lib.isList curlOpts)
+(lib.isList curlOpts)
   -> lib.warn ''
-    fetchurl for ${toString (builtins.head urls_)}: curlOpts is a list (${
-      lib.generators.toPretty { multiline = false; } curlOpts
-    }), which is not supported anymore.
-    - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
-      curlOpts = ${lib.strings.escapeNixString (toString curlOpts)};
-    - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
-      curlOptsList = [ ${lib.concatMapStringsSep " " lib.strings.escapeNixString curlOpts} ];'' true;
+  fetchurl for ${toString (builtins.head urls_)}: curlOpts is a list (${
+    lib.generators.toPretty { multiline = false; } curlOpts
+  }), which is not supported anymore.
+  - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
+    curlOpts = ${lib.strings.escapeNixString (toString curlOpts)};
+  - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
+    curlOptsList = [ ${lib.concatMapStringsSep " " lib.strings.escapeNixString curlOpts} ];''
+  true;
 
 stdenvNoCC.mkDerivation (
   (
@@ -235,7 +222,7 @@ stdenvNoCC.mkDerivation (
             baseNameOf (toString (builtins.head urls_));
       }
   )
-  // {
+    // {
     builder = ./builder.sh;
 
     nativeBuildInputs = [ curl ] ++ nativeBuildInputs;

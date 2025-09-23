@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python312,
-  SDL2,
-  libvorbis,
-  openal,
-  curl,
-  gnugrep,
-  libgcc,
-  makeBinaryWrapper,
-  makeDesktopItem,
-  autoPatchelfHook,
-  copyDesktopItems,
-  writeShellApplication,
-  commandLineArgs ? "",
-  genericUpdater,
+{ lib
+, stdenv
+, fetchurl
+, python312
+, SDL2
+, libvorbis
+, openal
+, curl
+, gnugrep
+, libgcc
+, makeBinaryWrapper
+, makeDesktopItem
+, autoPatchelfHook
+, copyDesktopItems
+, writeShellApplication
+, commandLineArgs ? ""
+, genericUpdater
+,
 }:
 let
   archive =
@@ -28,8 +28,7 @@ let
         name = "BombSquad_Linux_Arm64";
         hash = "sha256-/m0SOQbHssk0CqZJPRLK9YKphup3dtMqkbWGzqcF0+g=";
       };
-    }
-    .${stdenv.targetPlatform.system} or (throw "${stdenv.targetPlatform.system} is unsupported.");
+    }.${stdenv.targetPlatform.system} or (throw "${stdenv.targetPlatform.system} is unsupported.");
 
   bombsquadIcon = fetchurl {
     url = "https://files.ballistica.net/bombsquad/promo/BombSquadIcon.png";

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -33,10 +32,12 @@ let
     (toString cfg.signal)
   ]
   ++ (lib.concatLists (
-    lib.mapAttrsToList (_k: _v: [
-      "--client-option"
-      "${_k}=${_v}"
-    ]) cfg.clientOptions
+    lib.mapAttrsToList
+      (_k: _v: [
+        "--client-option"
+        "${_k}=${_v}"
+      ])
+      cfg.clientOptions
   ))
   ++ [
     "--terminal-type"
@@ -261,9 +262,10 @@ in
 
       serviceConfig = {
         User = cfg.user;
-        LoadCredential = lib.optionalString (
-          cfg.passwordFile != null
-        ) "TTYD_PASSWORD_FILE:${cfg.passwordFile}";
+        LoadCredential = lib.optionalString
+          (
+            cfg.passwordFile != null
+          ) "TTYD_PASSWORD_FILE:${cfg.passwordFile}";
       };
 
       script =

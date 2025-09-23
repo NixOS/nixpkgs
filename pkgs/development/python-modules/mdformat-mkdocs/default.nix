@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  mdformat-beautysh,
-  mdformat-footnote,
-  mdformat-frontmatter,
-  mdformat-gfm,
-  mdformat-simple-breaks,
-  mdformat-tables,
-  mdformat,
-  mdit-py-plugins,
-  more-itertools,
-  pytest-snapshot,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, mdformat-beautysh
+, mdformat-footnote
+, mdformat-frontmatter
+, mdformat-gfm
+, mdformat-simple-breaks
+, mdformat-tables
+, mdformat
+, mdit-py-plugins
+, more-itertools
+, pytest-snapshot
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

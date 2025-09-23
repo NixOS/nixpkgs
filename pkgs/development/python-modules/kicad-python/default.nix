@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  poetry-core,
-  protoletariat,
-  mypy-protobuf,
-  pkgs,
-  protobuf,
-  pynng,
-  pytestCheckHook,
-  gitMinimal,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, poetry-core
+, protoletariat
+, mypy-protobuf
+, pkgs
+, protobuf
+, pynng
+, pytestCheckHook
+, gitMinimal
+, pythonOlder
+, typing-extensions
+,
 }:
 buildPythonPackage rec {
   pname = "kicad-python";

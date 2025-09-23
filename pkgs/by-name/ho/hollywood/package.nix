@@ -1,26 +1,26 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  lib,
-  coreutils,
-  apg,
-  atop,
-  bmon,
-  cmatrix,
-  python3Packages,
-  moreutils,
-  util-linux,
-  jp2a,
-  man,
-  mplayer,
-  openssh,
-  tree,
-  mlocate,
-  findutils,
-  ccze,
-  ncurses,
-  tmux,
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, lib
+, coreutils
+, apg
+, atop
+, bmon
+, cmatrix
+, python3Packages
+, moreutils
+, util-linux
+, jp2a
+, man
+, mplayer
+, openssh
+, tree
+, mlocate
+, findutils
+, ccze
+, ncurses
+, tmux
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyperclip,
-  urwid,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyperclip
+, urwid
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

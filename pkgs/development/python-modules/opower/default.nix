@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  aiozoneinfo,
-  arrow,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  pyotp,
-  pytest-asyncio,
-  python-dotenv,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, aiohttp
+, aiozoneinfo
+, arrow
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, pyotp
+, pytest-asyncio
+, python-dotenv
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

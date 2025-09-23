@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  gitUpdater,
-  testers,
-  webmesh,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, gitUpdater
+, testers
+, webmesh
+,
 }:
 
 buildGoModule rec {

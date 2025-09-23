@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  openssl,
-  protobufc,
-  libconfig,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, openssl
+, protobufc
+, libconfig
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

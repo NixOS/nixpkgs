@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  libressl,
-  fetchzip,
-  pkg-config,
-  sqlite,
+{ lib
+, stdenv
+, libressl
+, fetchzip
+, pkg-config
+, sqlite
+,
 }:
 
 stdenv.mkDerivation rec {

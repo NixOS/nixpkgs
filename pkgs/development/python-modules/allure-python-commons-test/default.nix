@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  attrs,
-  pluggy,
-  six,
-  pyhamcrest,
-  setuptools-scm,
-  python,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, attrs
+, pluggy
+, six
+, pyhamcrest
+, setuptools-scm
+, python
+,
 }:
 
 buildPythonPackage rec {

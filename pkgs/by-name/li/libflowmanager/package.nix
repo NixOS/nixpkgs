@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  bison,
-  flex,
-  libtrace,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, bison
+, flex
+, libtrace
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pyopenssl,
-  tldextract,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pyopenssl
+, tldextract
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage {

@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  slang,
-  popt,
-  python3,
-  gettext,
+{ lib
+, fetchurl
+, stdenv
+, slang
+, popt
+, python3
+, gettext
+,
 }:
 
 let

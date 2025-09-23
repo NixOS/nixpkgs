@@ -1,11 +1,10 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  nix-update-script,
-
-  # support setting socks proxies in `ALL_PROXY` environment variable
-  supportSocks ? true,
+{ lib
+, python3
+, fetchFromGitHub
+, nix-update-script
+, # support setting socks proxies in `ALL_PROXY` environment variable
+  supportSocks ? true
+,
 }:
 let
   version = "1.9.2";

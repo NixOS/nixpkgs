@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  pythonAtLeast,
-  fetchFromGitHub,
-  setuptools,
-  colorama,
-  pytz,
-  requests,
-  six,
-  libunwind,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, pythonAtLeast
+, fetchFromGitHub
+, setuptools
+, colorama
+, pytz
+, requests
+, six
+, libunwind
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

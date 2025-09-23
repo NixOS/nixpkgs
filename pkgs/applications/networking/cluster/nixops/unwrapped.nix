@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  poetry-core,
-  sphinx,
-  pluggy,
-  prettytable,
-  typeguard,
-  typing-extensions,
-  nixosTests,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, unstableGitUpdater
+, poetry-core
+, sphinx
+, pluggy
+, prettytable
+, typeguard
+, typing-extensions
+, nixosTests
+,
 }:
 
 buildPythonApplication rec {

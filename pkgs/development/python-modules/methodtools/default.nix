@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wirerope,
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wirerope
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

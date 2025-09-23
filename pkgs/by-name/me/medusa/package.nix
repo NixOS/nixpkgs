@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  freerdp,
-  libssh2,
-  openssl,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, freerdp
+, libssh2
+, openssl
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

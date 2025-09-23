@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  coreutils,
-  sharutils,
-  version,
-  sha256,
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, sharutils
+, version
+, sha256
+,
 }:
 
 stdenv.mkDerivation {

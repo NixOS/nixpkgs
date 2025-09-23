@@ -1,26 +1,26 @@
-{
-  mkDerivation,
-  base,
-  boost,
-  bytestring,
-  Cabal,
-  cabal-pkg-config-version-hook,
-  conduit,
-  containers,
-  exceptions,
-  hspec,
-  hspec-discover,
-  inline-c,
-  inline-c-cpp,
-  lib,
-  nix,
-  protolude,
-  template-haskell,
-  temporary,
-  text,
-  unix,
-  unliftio-core,
-  vector,
+{ mkDerivation
+, base
+, boost
+, bytestring
+, Cabal
+, cabal-pkg-config-version-hook
+, conduit
+, containers
+, exceptions
+, hspec
+, hspec-discover
+, inline-c
+, inline-c-cpp
+, lib
+, nix
+, protolude
+, template-haskell
+, temporary
+, text
+, unix
+, unliftio-core
+, vector
+,
 }:
 mkDerivation {
   pname = "hercules-ci-cnix-store";

@@ -1,44 +1,41 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  airportsdata,
-  cloudpickle,
-  datasets,
-  diskcache,
-  genson,
-  interegular,
-  iso3166,
-  jinja2,
-  jsonschema,
-  lark,
-  nest-asyncio,
-  numpy,
-  outlines-core,
-  pycountry,
-  pydantic,
-  referencing,
-  requests,
-  torch,
-  transformers,
-
-  # tests
-  anthropic,
-  google-genai,
-  jax,
-  llama-cpp-python,
-  ollama,
-  openai,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  tensorflow,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  airportsdata
+, cloudpickle
+, datasets
+, diskcache
+, genson
+, interegular
+, iso3166
+, jinja2
+, jsonschema
+, lark
+, nest-asyncio
+, numpy
+, outlines-core
+, pycountry
+, pydantic
+, referencing
+, requests
+, torch
+, transformers
+, # tests
+  anthropic
+, google-genai
+, jax
+, llama-cpp-python
+, ollama
+, openai
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, tensorflow
+,
 }:
 
 buildPythonPackage rec {

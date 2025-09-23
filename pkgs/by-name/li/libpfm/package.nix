@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  windows,
+{ lib
+, stdenv
+, fetchurl
+, enableShared ? !stdenv.hostPlatform.isStatic
+, windows
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

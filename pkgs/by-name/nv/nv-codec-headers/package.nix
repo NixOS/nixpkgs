@@ -1,9 +1,9 @@
-{
-  lib,
-  callPackage,
-  stdenvNoCC,
-  # Configurable options
-  majorVersion ? "9",
+{ lib
+, callPackage
+, stdenvNoCC
+, # Configurable options
+  majorVersion ? "9"
+,
 }:
 
 let
@@ -15,8 +15,7 @@ let
       "10" = sources.nv-codec-headers-10;
       "11" = sources.nv-codec-headers-11;
       "12" = sources.nv-codec-headers-12;
-    }
-    .${majorVersion};
+    }.${majorVersion};
 in
 stdenvNoCC.mkDerivation {
   inherit (pick) pname version src;

@@ -1,11 +1,11 @@
-{
-  buildDunePackage,
-  gnuplot,
-  lwt,
-  metrics,
-  metrics-lwt,
-  mtime,
-  uuidm,
+{ buildDunePackage
+, gnuplot
+, lwt
+, metrics
+, metrics-lwt
+, mtime
+, uuidm
+,
 }:
 
 buildDunePackage {

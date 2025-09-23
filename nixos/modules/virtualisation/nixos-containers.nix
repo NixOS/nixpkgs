@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }@host:
 
 with lib;
@@ -528,11 +527,10 @@ in
     containers = mkOption {
       type = types.attrsOf (
         types.submodule (
-          {
-            config,
-            options,
-            name,
-            ...
+          { config
+          , options
+          , name
+          , ...
           }:
           {
             options = {
@@ -565,8 +563,8 @@ in
                                   {
                                     assertion =
                                       (builtins.compareVersions kernelVersion "5.8" <= 0)
-                                      -> config.privateNetwork
-                                      -> stringLength name <= 11;
+                                        -> config.privateNetwork
+                                        -> stringLength name <= 11;
                                     message = ''
                                       Container name `${name}` is too long: When `privateNetwork` is enabled, container names can
                                       not be longer than 11 characters, because the container's interface name is derived from it.
@@ -992,62 +990,65 @@ in
               }
             ]
             # declarative containers
-            ++ (mapAttrsToList (
-              name: cfg:
-              nameValuePair "container@${name}" (
-                let
-                  containerConfig =
-                    cfg
-                    // (optionalAttrs cfg.enableTun {
-                      allowedDevices = cfg.allowedDevices ++ [
-                        {
-                          node = "/dev/net/tun";
-                          modifier = "rwm";
-                        }
-                      ];
-                      additionalCapabilities = cfg.additionalCapabilities ++ [ "CAP_NET_ADMIN" ];
-                    })
-                    // (optionalAttrs
-                      (
-                        !cfg.enableTun
-                        && cfg.privateNetwork
-                        && (cfg.privateUsers == "pick" || (builtins.isInt cfg.privateUsers && cfg.privateUsers > 0))
-                      )
-                      {
-                        allowedDevices = cfg.allowedDevices ++ [
+            ++ (mapAttrsToList
+              (
+                name: cfg:
+                  nameValuePair "container@${name}" (
+                    let
+                      containerConfig =
+                        cfg
+                        // (optionalAttrs cfg.enableTun {
+                          allowedDevices = cfg.allowedDevices ++ [
+                            {
+                              node = "/dev/net/tun";
+                              modifier = "rwm";
+                            }
+                          ];
+                          additionalCapabilities = cfg.additionalCapabilities ++ [ "CAP_NET_ADMIN" ];
+                        })
+                        // (optionalAttrs
+                          (
+                            !cfg.enableTun
+                            && cfg.privateNetwork
+                            && (cfg.privateUsers == "pick" || (builtins.isInt cfg.privateUsers && cfg.privateUsers > 0))
+                          )
                           {
-                            node = "/dev/net/tun";
-                            modifier = "rwm";
+                            allowedDevices = cfg.allowedDevices ++ [
+                              {
+                                node = "/dev/net/tun";
+                                modifier = "rwm";
+                              }
+                            ];
                           }
-                        ];
+                        );
+                    in
+                    recursiveUpdate unit
+                      {
+                        preStart = preStartScript containerConfig;
+                        script = startScript containerConfig;
+                        postStart = postStartScript containerConfig;
+                        serviceConfig = serviceDirectives containerConfig;
+                        unitConfig.RequiresMountsFor =
+                          lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i"
+                          ++ builtins.map (d: if d.hostPath != null then d.hostPath else d.mountPoint) (
+                            builtins.attrValues cfg.bindMounts
+                          );
+                        environment.root =
+                          if containerConfig.ephemeral then "/run/nixos-containers/%i" else "${stateDirectory}/%i";
                       }
-                    );
-                in
-                recursiveUpdate unit {
-                  preStart = preStartScript containerConfig;
-                  script = startScript containerConfig;
-                  postStart = postStartScript containerConfig;
-                  serviceConfig = serviceDirectives containerConfig;
-                  unitConfig.RequiresMountsFor =
-                    lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i"
-                    ++ builtins.map (d: if d.hostPath != null then d.hostPath else d.mountPoint) (
-                      builtins.attrValues cfg.bindMounts
-                    );
-                  environment.root =
-                    if containerConfig.ephemeral then "/run/nixos-containers/%i" else "${stateDirectory}/%i";
-                }
-                // (optionalAttrs containerConfig.autoStart {
-                  wantedBy = [ "machines.target" ];
-                  wants = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
-                  after = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
-                  restartTriggers = [
-                    containerConfig.path
-                    config.environment.etc."${configurationDirectoryName}/${name}.conf".source
-                  ];
-                  restartIfChanged = containerConfig.restartIfChanged;
-                })
+                    // (optionalAttrs containerConfig.autoStart {
+                      wantedBy = [ "machines.target" ];
+                      wants = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
+                      after = [ "network.target" ] ++ (map (i: "sys-subsystem-net-devices-${i}.device") cfg.interfaces);
+                      restartTriggers = [
+                        containerConfig.path
+                        config.environment.etc."${configurationDirectoryName}/${name}.conf".source
+                      ];
+                      restartIfChanged = containerConfig.restartIfChanged;
+                    })
+                  )
               )
-            ) config.containers)
+              config.containers)
           )
         );
 
@@ -1064,62 +1065,66 @@ in
               + ":"
               + (if p.containerPort == null then toString p.hostPort else toString p.containerPort);
           in
-          mapAttrs' (
-            name: cfg:
-            nameValuePair "${configurationDirectoryName}/${name}.conf" {
-              text = ''
-                ${optionalString (cfg.flake == null) ''
-                  SYSTEM_PATH=${cfg.path}
-                ''}
-                ${optionalString (cfg.flake != null) ''
-                  FLAKE=${cfg.flake}
-                ''}
-                ${optionalString cfg.privateNetwork ''
-                  PRIVATE_NETWORK=1
-                  ${optionalString (cfg.hostBridge != null) ''
-                    HOST_BRIDGE=${cfg.hostBridge}
-                  ''}
-                  ${optionalString (length cfg.forwardPorts > 0) ''
-                    HOST_PORT=${concatStringsSep "," (map mkPortStr cfg.forwardPorts)}
-                  ''}
-                  ${optionalString (cfg.hostAddress != null) ''
-                    HOST_ADDRESS=${cfg.hostAddress}
-                  ''}
-                  ${optionalString (cfg.hostAddress6 != null) ''
-                    HOST_ADDRESS6=${cfg.hostAddress6}
-                  ''}
-                  ${optionalString (cfg.localAddress != null) ''
-                    LOCAL_ADDRESS=${cfg.localAddress}
-                  ''}
-                  ${optionalString (cfg.localAddress6 != null) ''
-                    LOCAL_ADDRESS6=${cfg.localAddress6}
-                  ''}
-                ''}
-                ${optionalString (cfg.networkNamespace != null) ''
-                  NETWORK_NAMESPACE_PATH=${cfg.networkNamespace}
-                ''}
-                PRIVATE_USERS=${toString cfg.privateUsers}
-                INTERFACES="${toString cfg.interfaces}"
-                MACVLANS="${toString cfg.macvlans}"
-                ${optionalString cfg.autoStart ''
-                  AUTO_START=1
-                ''}
-                EXTRA_NSPAWN_FLAGS="${
-                  mkBindFlags cfg.bindMounts
-                  + optionalString (cfg.extraFlags != [ ]) (" " + concatStringsSep " " cfg.extraFlags)
-                }"
-              '';
-            }
-          ) config.containers;
+          mapAttrs'
+            (
+              name: cfg:
+                nameValuePair "${configurationDirectoryName}/${name}.conf" {
+                  text = ''
+                    ${optionalString (cfg.flake == null) ''
+                      SYSTEM_PATH=${cfg.path}
+                    ''}
+                    ${optionalString (cfg.flake != null) ''
+                      FLAKE=${cfg.flake}
+                    ''}
+                    ${optionalString cfg.privateNetwork ''
+                      PRIVATE_NETWORK=1
+                      ${optionalString (cfg.hostBridge != null) ''
+                        HOST_BRIDGE=${cfg.hostBridge}
+                      ''}
+                      ${optionalString (length cfg.forwardPorts > 0) ''
+                        HOST_PORT=${concatStringsSep "," (map mkPortStr cfg.forwardPorts)}
+                      ''}
+                      ${optionalString (cfg.hostAddress != null) ''
+                        HOST_ADDRESS=${cfg.hostAddress}
+                      ''}
+                      ${optionalString (cfg.hostAddress6 != null) ''
+                        HOST_ADDRESS6=${cfg.hostAddress6}
+                      ''}
+                      ${optionalString (cfg.localAddress != null) ''
+                        LOCAL_ADDRESS=${cfg.localAddress}
+                      ''}
+                      ${optionalString (cfg.localAddress6 != null) ''
+                        LOCAL_ADDRESS6=${cfg.localAddress6}
+                      ''}
+                    ''}
+                    ${optionalString (cfg.networkNamespace != null) ''
+                      NETWORK_NAMESPACE_PATH=${cfg.networkNamespace}
+                    ''}
+                    PRIVATE_USERS=${toString cfg.privateUsers}
+                    INTERFACES="${toString cfg.interfaces}"
+                    MACVLANS="${toString cfg.macvlans}"
+                    ${optionalString cfg.autoStart ''
+                      AUTO_START=1
+                    ''}
+                    EXTRA_NSPAWN_FLAGS="${
+                      mkBindFlags cfg.bindMounts
+                      + optionalString (cfg.extraFlags != [ ]) (" " + concatStringsSep " " cfg.extraFlags)
+                    }"
+                  '';
+                }
+            )
+            config.containers;
 
         # Generate /etc/hosts entries for the containers.
         networking.extraHosts = concatStrings (
-          mapAttrsToList (
-            name: cfg:
-            optionalString (cfg.localAddress != null) ''
-              ${head (splitString "/" cfg.localAddress)} ${name}.containers
-            ''
-          ) config.containers
+          mapAttrsToList
+            (
+              name: cfg:
+                optionalString (cfg.localAddress != null) ''
+                  ${head (splitString "/" cfg.localAddress)} ${name}.containers
+                ''
+            )
+            config.containers
         );
 
         networking.dhcpcd.denyInterfaces = [

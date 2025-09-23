@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  pkgs,
-  fetchurl,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, pkgs
+, fetchurl
+, wrapGAppsHook3
+,
 }:
 let
   libPathNative = { packages }: lib.makeLibraryPath packages;

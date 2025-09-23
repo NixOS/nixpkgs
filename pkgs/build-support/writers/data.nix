@@ -1,8 +1,8 @@
-{
-  lib,
-  pkgs,
-  formats,
-  runCommand,
+{ lib
+, pkgs
+, formats
+, runCommand
+,
 }:
 let
   inherit (lib)
@@ -35,31 +35,31 @@ in
     ```
   */
   makeDataWriter = lib.warn "pkgs.writers.makeDataWriter is deprecated. Use pkgs.writeTextFile." (
-    {
-      input ? lib.id,
-      output ? "cp $inputPath $out",
+    { input ? lib.id
+    , output ? "cp $inputPath $out"
+    ,
     }:
     nameOrPath: data:
-    assert
+      assert
       (types.path.check nameOrPath)
       || (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
-    let
-      name = last (builtins.split "/" nameOrPath);
-    in
-    runCommand name
-      {
-        input = input data;
-        passAsFile = [ "input" ];
-      }
-      ''
-        ${output}
+      let
+        name = last (builtins.split "/" nameOrPath);
+      in
+      runCommand name
+        {
+          input = input data;
+          passAsFile = [ "input" ];
+        }
+        ''
+          ${output}
 
-        ${optionalString (types.path.check nameOrPath) ''
-          mv $out tmp
-          mkdir -p $out/$(dirname "${nameOrPath}")
-          mv tmp $out/${nameOrPath}
-        ''}
-      ''
+          ${optionalString (types.path.check nameOrPath) ''
+            mv $out tmp
+            mkdir -p $out/$(dirname "${nameOrPath}")
+            mv tmp $out/${nameOrPath}
+          ''}
+        ''
   );
 
   inherit (pkgs) writeText;

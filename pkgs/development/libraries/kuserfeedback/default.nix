@@ -1,9 +1,9 @@
-{
-  lib,
-  mkDerivation,
-  fetchurl,
-  extra-cmake-modules,
-  qttools,
+{ lib
+, mkDerivation
+, fetchurl
+, extra-cmake-modules
+, qttools
+,
 }:
 mkDerivation rec {
   pname = "kuserfeedback";

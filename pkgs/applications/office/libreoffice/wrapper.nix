@@ -1,24 +1,25 @@
-{
-  lib,
-  stdenv,
-  # The unwrapped libreoffice derivation
-  unwrapped,
-  makeWrapper,
-  xorg, # for lndir
-  runCommand,
-  # For Emulating wrapGAppsHook3
-  gsettings-desktop-schemas,
-  hicolor-icon-theme,
-  dconf,
-  librsvg,
-  gdk-pixbuf,
-  # some scripts need these when used in conjunction with firejail
-  coreutils,
-  gnugrep,
-  # Configuration options for the wrapper
-  extraMakeWrapperArgs ? [ ],
-  dbusVerify ? stdenv.hostPlatform.isLinux,
-  dbus,
+{ lib
+, stdenv
+, # The unwrapped libreoffice derivation
+  unwrapped
+, makeWrapper
+, xorg
+, # for lndir
+  runCommand
+, # For Emulating wrapGAppsHook3
+  gsettings-desktop-schemas
+, hicolor-icon-theme
+, dconf
+, librsvg
+, gdk-pixbuf
+, # some scripts need these when used in conjunction with firejail
+  coreutils
+, gnugrep
+, # Configuration options for the wrapper
+  extraMakeWrapperArgs ? [ ]
+, dbusVerify ? stdenv.hostPlatform.isLinux
+, dbus
+,
 }:
 
 let
@@ -122,20 +123,20 @@ let
   );
 in
 runCommand "${unwrapped.name}-wrapped"
-  {
-    inherit (unwrapped) meta;
-    paths = [ unwrapped ];
-    nativeBuildInputs = [
-      makeWrapper
-      xorg.lndir
-    ];
-    passthru = {
-      inherit unwrapped;
-      # For backwards compatibility:
-      libreoffice = lib.warn "libreoffice: Use the unwrapped attributed, using libreoffice.libreoffice is deprecated." unwrapped;
-      inherit (unwrapped) kdeIntegration;
-    };
-  }
+{
+  inherit (unwrapped) meta;
+  paths = [ unwrapped ];
+  nativeBuildInputs = [
+    makeWrapper
+    xorg.lndir
+  ];
+  passthru = {
+    inherit unwrapped;
+    # For backwards compatibility:
+    libreoffice = lib.warn "libreoffice: Use the unwrapped attributed, using libreoffice.libreoffice is deprecated." unwrapped;
+    inherit (unwrapped) kdeIntegration;
+  };
+}
   (
     ''
       mkdir -p $out/share
@@ -170,7 +171,7 @@ runCommand "${unwrapped.name}-wrapped"
       echo 'test -n "$dbus_socket_dir" && { rm -rf "$dbus_socket_dir"; kill $dbus_pid; }' >> $out/lib/libreoffice/program/$i
       echo 'exit "$code"' >> $out/lib/libreoffice/program/$i
     ''
-    + ''
+      + ''
         ln -s $out/lib/libreoffice/program/$i $out/bin/$i
       done
       # A symlink many users rely upon

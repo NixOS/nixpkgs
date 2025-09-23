@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  vala,
-  pkg-config,
-  gobject-introspection,
-  libxml2,
-  libgee,
+{ lib
+, stdenv
+, fetchFromGitHub
+, vala
+, pkg-config
+, gobject-introspection
+, libxml2
+, libgee
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,7 +1,7 @@
-{
-  appimageTools,
-  lib,
-  fetchurl,
+{ appimageTools
+, lib
+, fetchurl
+,
 }:
 let
   pname = "neo4j-desktop";

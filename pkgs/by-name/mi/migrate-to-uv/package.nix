@@ -1,12 +1,12 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  cargo,
-  rustPlatform,
-  rustc,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, python3
+, fetchFromGitHub
+, cargo
+, rustPlatform
+, rustc
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

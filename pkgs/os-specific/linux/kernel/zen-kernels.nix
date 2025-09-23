@@ -1,10 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildLinux,
-  variant,
-  ...
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildLinux
+, variant
+, ...
 }@args:
 
 let
@@ -30,11 +29,11 @@ let
     };
   };
   zenKernelsFor =
-    {
-      version,
-      suffix,
-      sha256,
-      isLqx,
+    { version
+    , suffix
+    , sha256
+    , isLqx
+    ,
     }:
     buildLinux (
       args

@@ -1,24 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  bitarray,
-  datasets,
-  flask,
-  python-dotenv,
-  ninja,
-  scipy,
-  tqdm,
-  transformers,
-  ujson,
-  gitpython,
-  torch,
-  faiss,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  bitarray
+, datasets
+, flask
+, python-dotenv
+, ninja
+, scipy
+, tqdm
+, transformers
+, ujson
+, gitpython
+, torch
+, faiss
+,
 }:
 
 buildPythonPackage rec {

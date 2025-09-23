@@ -1,32 +1,33 @@
-{
-  lib,
-  bundlerApp,
-  bundlerUpdateScript,
-  makeWrapper,
-  withPngcrush ? true,
-  pngcrush,
-  withPngout ? false,
-  pngout, # disabled by default because it's unfree
-  withAdvpng ? true,
-  advancecomp,
-  withOptipng ? true,
-  optipng,
-  withPngquant ? true,
-  pngquant,
-  withOxipng ? true,
-  oxipng,
-  withJhead ? true,
-  jhead,
-  withJpegoptim ? true,
-  jpegoptim,
-  withJpegrecompress ? true,
-  jpeg-archive,
-  withJpegtran ? true,
-  libjpeg,
-  withGifsicle ? true,
-  gifsicle,
-  withSvgo ? true,
-  svgo,
+{ lib
+, bundlerApp
+, bundlerUpdateScript
+, makeWrapper
+, withPngcrush ? true
+, pngcrush
+, withPngout ? false
+, pngout
+, # disabled by default because it's unfree
+  withAdvpng ? true
+, advancecomp
+, withOptipng ? true
+, optipng
+, withPngquant ? true
+, pngquant
+, withOxipng ? true
+, oxipng
+, withJhead ? true
+, jhead
+, withJpegoptim ? true
+, jpegoptim
+, withJpegrecompress ? true
+, jpeg-archive
+, withJpegtran ? true
+, libjpeg
+, withGifsicle ? true
+, gifsicle
+, withSvgo ? true
+, svgo
+,
 }:
 
 let

@@ -1,7 +1,7 @@
-{
-  callPackage,
-  darwin,
-  cudaPackages,
+{ callPackage
+, darwin
+, cudaPackages
+,
 }:
 
 let

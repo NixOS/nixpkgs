@@ -1,12 +1,12 @@
-{
-  lib,
-  nix,
-  nixpkgs-vet,
-  runCommand,
+{ lib
+, nix
+, nixpkgs-vet
+, runCommand
+,
 }:
-{
-  base ? ../.,
-  head ? ../.,
+{ base ? ../.
+, head ? ../.
+,
 }:
 let
   filtered =
@@ -24,12 +24,12 @@ let
   filteredHead = filtered head;
 in
 runCommand "nixpkgs-vet"
-  {
-    nativeBuildInputs = [
-      nixpkgs-vet
-    ];
-    env.NIXPKGS_VET_NIX_PACKAGE = nix;
-  }
+{
+  nativeBuildInputs = [
+    nixpkgs-vet
+  ];
+  env.NIXPKGS_VET_NIX_PACKAGE = nix;
+}
   ''
     export NIX_STATE_DIR=$(mktemp -d)
 

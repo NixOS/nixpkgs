@@ -1,15 +1,15 @@
-{
-  lib,
-  boto3,
-  buildPythonPackage,
-  cryptography,
-  docutils,
-  fetchFromGitHub,
-  fetchpatch,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools,
+{ lib
+, boto3
+, buildPythonPackage
+, cryptography
+, docutils
+, fetchFromGitHub
+, fetchpatch
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

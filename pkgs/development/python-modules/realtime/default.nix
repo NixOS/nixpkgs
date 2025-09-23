@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pydantic,
-  typing-extensions,
-  websockets,
-  aiohttp,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-dotenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pydantic
+, typing-extensions
+, websockets
+, aiohttp
+, pytest-asyncio
+, pytestCheckHook
+, python-dotenv
+,
 }:
 
 buildPythonPackage rec {

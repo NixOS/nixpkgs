@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  file,
-  lib,
-  pkg-config,
-  rustPlatform,
-  sqlite,
-  zstd,
-  cmake,
+{ fetchFromGitHub
+, file
+, lib
+, pkg-config
+, rustPlatform
+, sqlite
+, zstd
+, cmake
+,
 }:
 
 let

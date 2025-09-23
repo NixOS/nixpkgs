@@ -1,36 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  fetchzip,
-  autoconf,
-  automake,
-  autoreconfHook,
-  dos2unix,
-  file,
-  perl,
-  pkg-config,
-  alsa-lib,
-  coreutils,
-  freetype,
-  glib,
-  glibc,
-  gnugrep,
-  libGL,
-  libpulseaudio,
-  libtool,
-  libuuid,
-  openssl,
-  pango,
-  xorg,
-  squeakImageHash ? null,
-  squeakSourcesHash ? null,
-  squeakSourcesVersion ? null,
-  squeakVersion ? null,
-  squeakVmCommitHash ? null,
-  squeakVmCommitHashHash ? null,
-  squeakVmVersion ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, fetchzip
+, autoconf
+, automake
+, autoreconfHook
+, dos2unix
+, file
+, perl
+, pkg-config
+, alsa-lib
+, coreutils
+, freetype
+, glib
+, glibc
+, gnugrep
+, libGL
+, libpulseaudio
+, libtool
+, libuuid
+, openssl
+, pango
+, xorg
+, squeakImageHash ? null
+, squeakSourcesHash ? null
+, squeakSourcesVersion ? null
+, squeakVersion ? null
+, squeakVmCommitHash ? null
+, squeakVmCommitHashHash ? null
+, squeakVmVersion ? null
+,
 }@args:
 
 let

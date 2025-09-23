@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchPypi,
-  python3Packages,
-  writableTmpDirAsHomeHook,
-  gitMinimal,
+{ lib
+, fetchPypi
+, python3Packages
+, writableTmpDirAsHomeHook
+, gitMinimal
+,
 }:
 
 python3Packages.buildPythonApplication rec {

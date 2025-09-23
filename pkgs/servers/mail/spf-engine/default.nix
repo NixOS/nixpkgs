@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchurl,
-  flit-core,
-  pyspf,
-  dnspython,
-  authres,
-  pymilter,
+{ lib
+, buildPythonApplication
+, fetchurl
+, flit-core
+, pyspf
+, dnspython
+, authres
+, pymilter
+,
 }:
 
 buildPythonApplication rec {

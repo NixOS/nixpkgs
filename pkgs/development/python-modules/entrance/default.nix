@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  pythonOlder,
-  routerFeatures,
-  setuptools,
-  janus,
-  ncclient,
-  paramiko,
-  pyyaml,
-  sanic,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, routerFeatures
+, setuptools
+, janus
+, ncclient
+, paramiko
+, pyyaml
+, sanic
+,
 }:
 
 let

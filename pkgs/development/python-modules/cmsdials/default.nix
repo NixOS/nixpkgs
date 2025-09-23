@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pydantic,
-  requests,
-  typing-extensions,
-  pandas,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pydantic
+, requests
+, typing-extensions
+, pandas
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

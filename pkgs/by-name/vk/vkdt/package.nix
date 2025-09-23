@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  vulkan-headers,
-  vulkan-tools,
-  vulkan-loader,
-  glslang,
-  glfw,
-  libjpeg,
-  pkg-config,
-  rsync,
-  cmake,
-  clang,
-  llvm,
-  llvmPackages,
-  pugixml,
-  freetype,
-  exiv2,
-  ffmpeg,
-  libvorbis,
-  libmad,
-  testers,
-  vkdt,
-  xxd,
-  alsa-lib,
-  cargo,
-  rustPlatform,
+{ lib
+, stdenv
+, fetchurl
+, vulkan-headers
+, vulkan-tools
+, vulkan-loader
+, glslang
+, glfw
+, libjpeg
+, pkg-config
+, rsync
+, cmake
+, clang
+, llvm
+, llvmPackages
+, pugixml
+, freetype
+, exiv2
+, ffmpeg
+, libvorbis
+, libmad
+, testers
+, vkdt
+, xxd
+, alsa-lib
+, cargo
+, rustPlatform
+,
 }:
 
 stdenv.mkDerivation rec {

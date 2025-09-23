@@ -1,13 +1,13 @@
-{
-  lib,
-  anyio,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-fancy-pypi-readme,
-  hatchling,
-  pytestCheckHook,
-  pythonOlder,
-  trio,
+{ lib
+, anyio
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-fancy-pypi-readme
+, hatchling
+, pytestCheckHook
+, pythonOlder
+, trio
+,
 }:
 
 buildPythonPackage rec {

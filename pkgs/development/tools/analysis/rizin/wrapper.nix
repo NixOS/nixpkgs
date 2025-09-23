@@ -1,11 +1,11 @@
-{
-  lib,
-  makeWrapper,
-  symlinkJoin,
-  plugins,
-  rizin,
-  isCutter ? false,
-  cutter,
+{ lib
+, makeWrapper
+, symlinkJoin
+, plugins
+, rizin
+, isCutter ? false
+, cutter
+,
 }:
 
 let

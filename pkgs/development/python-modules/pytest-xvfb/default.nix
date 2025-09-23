@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytest,
-  pyvirtualdisplay,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, pyvirtualdisplay
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

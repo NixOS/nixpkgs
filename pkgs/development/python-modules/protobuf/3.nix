@@ -1,13 +1,13 @@
-{
-  buildPackages,
-  buildPythonPackage,
-  fetchpatch,
-  isPyPy,
-  lib,
-  protobuf,
-  pytestCheckHook,
-  pythonAtLeast,
-  tzdata,
+{ buildPackages
+, buildPythonPackage
+, fetchpatch
+, isPyPy
+, lib
+, protobuf
+, pytestCheckHook
+, pythonAtLeast
+, tzdata
+,
 }:
 
 assert lib.versionAtLeast protobuf.version "3.21" -> throw "Protobuf 3.20 or older required";

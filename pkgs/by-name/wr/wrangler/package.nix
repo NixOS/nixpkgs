@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  nodejs,
-  pnpm_9,
-  autoPatchelfHook,
-  cacert,
-  llvmPackages,
-  musl,
-  xorg,
-  jq,
-  moreutils,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, nodejs
+, pnpm_9
+, autoPatchelfHook
+, cacert
+, llvmPackages
+, musl
+, xorg
+, jq
+, moreutils
+, nix-update-script
+, versionCheckHook
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";

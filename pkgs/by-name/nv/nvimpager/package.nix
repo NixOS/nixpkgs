@@ -1,14 +1,14 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  bash,
-  ncurses,
-  neovim,
-  procps,
-  scdoc,
-  lua51Packages,
-  util-linux,
+{ fetchFromGitHub
+, lib
+, stdenv
+, bash
+, ncurses
+, neovim
+, procps
+, scdoc
+, lua51Packages
+, util-linux
+,
 }:
 
 stdenv.mkDerivation rec {

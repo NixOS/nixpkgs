@@ -1,10 +1,10 @@
-{
-  boost186,
-  fetchFromGitHub,
-  lib,
-  postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestExtension,
+{ boost186
+, fetchFromGitHub
+, lib
+, postgresql
+, postgresqlBuildExtension
+, postgresqlTestExtension
+,
 }:
 
 let

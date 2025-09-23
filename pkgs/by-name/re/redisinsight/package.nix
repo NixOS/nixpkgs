@@ -1,21 +1,18 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-  fetchYarnDeps,
-  makeDesktopItem,
-
-  copyDesktopItems,
-  dart-sass,
-  makeWrapper,
-  nodejs_20,
-  pkg-config,
-  yarnConfigHook,
-
-  electron,
-  libsecret,
-  sqlite,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, makeDesktopItem
+, copyDesktopItems
+, dart-sass
+, makeWrapper
+, nodejs_20
+, pkg-config
+, yarnConfigHook
+, electron
+, libsecret
+, sqlite
+,
 }:
 
 let

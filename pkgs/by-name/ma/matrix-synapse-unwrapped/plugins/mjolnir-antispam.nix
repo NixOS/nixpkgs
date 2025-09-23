@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  matrix-synapse-unwrapped,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, matrix-synapse-unwrapped
+,
 }:
 
 buildPythonPackage rec {

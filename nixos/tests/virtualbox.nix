@@ -1,11 +1,11 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-  debug ? false,
-  enableUnfree ? false,
-  enableKvm ? false,
-  use64bitGuest ? true,
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+, debug ? false
+, enableUnfree ? false
+, enableKvm ? false
+, use64bitGuest ? true
+,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -14,11 +14,10 @@ with pkgs.lib;
 let
   testVMConfig =
     vmName: attrs:
-    {
-      config,
-      pkgs,
-      lib,
-      ...
+    { config
+    , pkgs
+    , lib
+    , ...
     }:
     let
       guestAdditions = pkgs.linuxPackages.virtualboxGuestAdditions;
@@ -482,13 +481,15 @@ let
 
   kvmTests =
     mapAttrs
-      (mkVBoxTest {
-        enableKvm = true;
+      (mkVBoxTest
+        {
+          enableKvm = true;
 
-        # Once the KVM version supports these, we can enable them.
-        addNetworkInterface = false;
-        enableHardening = false;
-      } vboxVMs)
+          # Once the KVM version supports these, we can enable them.
+          addNetworkInterface = false;
+          enableHardening = false;
+        }
+        vboxVMs)
       {
         kvm-headless = ''
           create_vm_headless()
@@ -501,116 +502,117 @@ let
       };
 
 in
-mapAttrs (mkVBoxTest { } vboxVMs) {
-  simple-gui = ''
-    # Home to select Tools, down to move to the VM, enter to start it.
-    def send_vm_startup():
-        machine.send_key("home")
-        machine.send_key("down")
-        machine.send_key("ret")
+mapAttrs (mkVBoxTest { } vboxVMs)
+  {
+    simple-gui = ''
+      # Home to select Tools, down to move to the VM, enter to start it.
+      def send_vm_startup():
+          machine.send_key("home")
+          machine.send_key("down")
+          machine.send_key("ret")
 
 
-    create_vm_simple()
-    machine.succeed(ru("VirtualBox >&2 &"))
-    machine.wait_until_succeeds(ru("xprop -name 'Oracle VirtualBox Manager'"))
-    machine.sleep(5)
-    machine.screenshot("gui_manager_started")
-    send_vm_startup()
-    machine.screenshot("gui_manager_sent_startup")
-    wait_for_startup_simple(send_vm_startup)
-    machine.screenshot("gui_started")
-    wait_for_vm_boot_simple()
-    machine.screenshot("gui_booted")
-    shutdown_vm_simple()
-    machine.sleep(5)
-    machine.screenshot("gui_stopped")
-    machine.send_key("ctrl-q")
-    machine.sleep(5)
-    machine.screenshot("gui_manager_stopped")
-    destroy_vm_simple()
-  '';
+      create_vm_simple()
+      machine.succeed(ru("VirtualBox >&2 &"))
+      machine.wait_until_succeeds(ru("xprop -name 'Oracle VirtualBox Manager'"))
+      machine.sleep(5)
+      machine.screenshot("gui_manager_started")
+      send_vm_startup()
+      machine.screenshot("gui_manager_sent_startup")
+      wait_for_startup_simple(send_vm_startup)
+      machine.screenshot("gui_started")
+      wait_for_vm_boot_simple()
+      machine.screenshot("gui_booted")
+      shutdown_vm_simple()
+      machine.sleep(5)
+      machine.screenshot("gui_stopped")
+      machine.send_key("ctrl-q")
+      machine.sleep(5)
+      machine.screenshot("gui_manager_stopped")
+      destroy_vm_simple()
+    '';
 
-  simple-cli = ''
-    create_vm_simple()
-    vbm("startvm simple")
-    wait_for_startup_simple()
-    machine.screenshot("cli_started")
-    wait_for_vm_boot_simple()
-    machine.screenshot("cli_booted")
+    simple-cli = ''
+      create_vm_simple()
+      vbm("startvm simple")
+      wait_for_startup_simple()
+      machine.screenshot("cli_started")
+      wait_for_vm_boot_simple()
+      machine.screenshot("cli_booted")
 
-    with machine.nested("Checking for privilege escalation"):
-        machine.fail("test -e '/root/VirtualBox VMs'")
-        machine.fail("test -e '/root/.config/VirtualBox'")
-        machine.succeed("test -e '/home/alice/VirtualBox VMs'")
+      with machine.nested("Checking for privilege escalation"):
+          machine.fail("test -e '/root/VirtualBox VMs'")
+          machine.fail("test -e '/root/.config/VirtualBox'")
+          machine.succeed("test -e '/home/alice/VirtualBox VMs'")
 
-    shutdown_vm_simple()
-    destroy_vm_simple()
-  '';
+      shutdown_vm_simple()
+      destroy_vm_simple()
+    '';
 
-  headless = ''
-    create_vm_headless()
-    machine.succeed(ru("VBoxHeadless --startvm headless >&2 & disown %1"))
-    wait_for_startup_headless()
-    wait_for_vm_boot_headless()
-    shutdown_vm_headless()
-    destroy_vm_headless()
-  '';
+    headless = ''
+      create_vm_headless()
+      machine.succeed(ru("VBoxHeadless --startvm headless >&2 & disown %1"))
+      wait_for_startup_headless()
+      wait_for_vm_boot_headless()
+      shutdown_vm_headless()
+      destroy_vm_headless()
+    '';
 
-  host-usb-permissions = ''
-    import sys
+    host-usb-permissions = ''
+      import sys
 
-    user_usb = remove_uuids(vbm("list usbhost"))
-    print(user_usb, file=sys.stderr)
-    root_usb = remove_uuids(machine.succeed("VBoxManage list usbhost"))
-    print(root_usb, file=sys.stderr)
+      user_usb = remove_uuids(vbm("list usbhost"))
+      print(user_usb, file=sys.stderr)
+      root_usb = remove_uuids(machine.succeed("VBoxManage list usbhost"))
+      print(root_usb, file=sys.stderr)
 
-    if user_usb != root_usb:
-        raise Exception("USB host devices differ for root and normal user")
-    if "<none>" in user_usb:
-        raise Exception("No USB host devices found")
-  '';
+      if user_usb != root_usb:
+          raise Exception("USB host devices differ for root and normal user")
+      if "<none>" in user_usb:
+          raise Exception("No USB host devices found")
+    '';
 
-  systemd-detect-virt = ''
-    create_vm_detectvirt()
-    vbm("startvm detectvirt")
-    wait_for_startup_detectvirt()
-    wait_for_vm_boot_detectvirt()
-    shutdown_vm_detectvirt()
-    result = machine.succeed(f"cat '{detectvirt_sharepath}/result'").strip()
-    destroy_vm_detectvirt()
-    if result != "oracle":
-        raise Exception(f'systemd-detect-virt returned "{result}" instead of "oracle"')
-  '';
+    systemd-detect-virt = ''
+      create_vm_detectvirt()
+      vbm("startvm detectvirt")
+      wait_for_startup_detectvirt()
+      wait_for_vm_boot_detectvirt()
+      shutdown_vm_detectvirt()
+      result = machine.succeed(f"cat '{detectvirt_sharepath}/result'").strip()
+      destroy_vm_detectvirt()
+      if result != "oracle":
+          raise Exception(f'systemd-detect-virt returned "{result}" instead of "oracle"')
+    '';
 
-  net-hostonlyif = ''
-    create_vm_test1()
-    create_vm_test2()
+    net-hostonlyif = ''
+      create_vm_test1()
+      create_vm_test2()
 
-    vbm("startvm test1")
-    wait_for_startup_test1()
-    wait_for_vm_boot_test1()
+      vbm("startvm test1")
+      wait_for_startup_test1()
+      wait_for_vm_boot_test1()
 
-    vbm("startvm test2")
-    wait_for_startup_test2()
-    wait_for_vm_boot_test2()
+      vbm("startvm test2")
+      wait_for_startup_test2()
+      wait_for_vm_boot_test2()
 
-    machine.screenshot("net_booted")
+      machine.screenshot("net_booted")
 
-    test1_ip = wait_for_ip_test1(1)
-    test2_ip = wait_for_ip_test2(1)
+      test1_ip = wait_for_ip_test1(1)
+      test2_ip = wait_for_ip_test2(1)
 
-    machine.succeed(f"echo '{test2_ip}' | nc -N '{test1_ip}' 1234")
-    machine.succeed(f"echo '{test1_ip}' | nc -N '{test2_ip}' 1234")
+      machine.succeed(f"echo '{test2_ip}' | nc -N '{test1_ip}' 1234")
+      machine.succeed(f"echo '{test1_ip}' | nc -N '{test2_ip}' 1234")
 
-    machine.wait_until_succeeds(f"nc -N '{test1_ip}' 5678 < /dev/null >&2")
-    machine.wait_until_succeeds(f"nc -N '{test2_ip}' 5678 < /dev/null >&2")
+      machine.wait_until_succeeds(f"nc -N '{test1_ip}' 5678 < /dev/null >&2")
+      machine.wait_until_succeeds(f"nc -N '{test2_ip}' 5678 < /dev/null >&2")
 
-    shutdown_vm_test1()
-    shutdown_vm_test2()
+      shutdown_vm_test1()
+      shutdown_vm_test2()
 
-    destroy_vm_test1()
-    destroy_vm_test2()
-  '';
-}
+      destroy_vm_test1()
+      destroy_vm_test2()
+    '';
+  }
 // (optionalAttrs enableKvm kvmTests)
-// (optionalAttrs enableUnfree unfreeTests)
+  // (optionalAttrs enableUnfree unfreeTests)

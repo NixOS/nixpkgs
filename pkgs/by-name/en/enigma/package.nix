@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  makeWrapper,
-  pkg-config,
-  gettext,
-  imagemagick,
-  curl,
-  libpng,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
-  xercesc,
-  xdg-utils,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, makeWrapper
+, pkg-config
+, gettext
+, imagemagick
+, curl
+, libpng
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, xercesc
+, xdg-utils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

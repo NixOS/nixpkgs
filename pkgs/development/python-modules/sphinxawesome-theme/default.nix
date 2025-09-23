@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  poetry-core,
-  sphinx,
-  beautifulsoup4,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, poetry-core
+, sphinx
+, beautifulsoup4
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  libusbsio,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, libusbsio
+,
 }:
 
 buildPythonPackage rec {

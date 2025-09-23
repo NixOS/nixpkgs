@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  pillow,
-  scipy,
-  numpy,
-  pytestCheckHook,
-  imread,
-  lib,
-  stdenv,
+{ buildPythonPackage
+, fetchFromGitHub
+, pillow
+, scipy
+, numpy
+, pytestCheckHook
+, imread
+, lib
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

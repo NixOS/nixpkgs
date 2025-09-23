@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchurl,
-  callPackage,
-  mock,
-  cairosvg,
-  klein,
-  jinja2,
-  buildbot-pkg,
+{ lib
+, buildPythonPackage
+, fetchurl
+, callPackage
+, mock
+, cairosvg
+, klein
+, jinja2
+, buildbot-pkg
+,
 }:
 {
   # this is exposed for potential plugins to use and for nix-update

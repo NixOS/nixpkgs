@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  pkg-config,
-  openssl,
+{ lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, openssl
+,
 }:
 
 rustPlatform.buildRustPackage rec {

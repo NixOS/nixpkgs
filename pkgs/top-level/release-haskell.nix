@@ -9,8 +9,8 @@
 
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
 */
-{
-  supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
+{ supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json)
+,
 }:
 
 let
@@ -38,13 +38,15 @@ let
   # [ drv1 drv2 drv3 ]
   accumulateDerivations =
     jobList:
-    lib.concatMap (
-      attrs:
-      if lib.isDerivation attrs then
-        [ attrs ]
-      else
-        lib.optionals (lib.isAttrs attrs) (accumulateDerivations (lib.attrValues attrs))
-    ) jobList;
+    lib.concatMap
+      (
+        attrs:
+        if lib.isDerivation attrs then
+          [ attrs ]
+        else
+          lib.optionals (lib.isAttrs attrs) (accumulateDerivations (lib.attrValues attrs))
+      )
+      jobList;
 
   # names of all subsets of `pkgs.haskell.packages`
   #
@@ -162,16 +164,20 @@ let
           onlyConfigJobs =
             ghc: jobs:
             let
-              configFilteredJobset = lib.filterAttrs (
-                jobName: platforms: lib.elem ghc (config."${jobName}" or [ ])
-              ) jobs;
+              configFilteredJobset = lib.filterAttrs
+                (
+                  jobName: platforms: lib.elem ghc (config."${jobName}" or [ ])
+                )
+                jobs;
 
               # Remove platforms from each job that are not supported by GHC.
               # This is important so that we don't build jobs for platforms
               # where GHC can't be compiled.
-              jobsetWithGHCPlatforms = lib.mapAttrs (
-                _: platforms: lib.intersectLists jobs.ghc platforms
-              ) configFilteredJobset;
+              jobsetWithGHCPlatforms = lib.mapAttrs
+                (
+                  _: platforms: lib.intersectLists jobs.ghc platforms
+                )
+                configFilteredJobset;
             in
             jobsetWithGHCPlatforms;
         in
@@ -221,9 +227,11 @@ let
   # }
   removePlatforms =
     platformsToRemove: packageSet:
-    lib.mapAttrsRecursive (
-      _: val: if lib.isList val then removeMany platformsToRemove val else val
-    ) packageSet;
+    lib.mapAttrsRecursive
+      (
+        _: val: if lib.isList val then removeMany platformsToRemove val else val
+      )
+      packageSet;
 
   jobs = recursiveUpdateMany [
     (mapTestOn {
@@ -413,8 +421,8 @@ let
                 random
                 QuickCheck
                 cabal2nix
-                terminfo # isn't bundled for cross
-                xhtml # isn't bundled for cross
+                terminfo# isn't bundled for cross
+                xhtml# isn't bundled for cross
                 postgrest
                 ;
             };
@@ -426,8 +434,8 @@ let
                 random
                 QuickCheck
                 cabal2nix
-                terminfo # isn't bundled for cross
-                xhtml # isn't bundled for cross
+                terminfo# isn't bundled for cross
+                xhtml# isn't bundled for cross
                 postgrest
                 ;
             };
@@ -437,7 +445,7 @@ let
                 hello
                 random
                 QuickCheck
-                terminfo # isn't bundled for cross
+                terminfo# isn't bundled for cross
                 ;
             };
           };
@@ -547,12 +555,14 @@ let
         # of core packages, it is not always reasonable to get cabal-install to
         # work with older compilers.
         compilerNames.ghc948
-      ] released;
+      ]
+        released;
       Cabal_3_10_3_0 = lib.subtractLists [
         # time < 1.13 conflicts with time == 1.14.*
         compilerNames.ghc9121
         compilerNames.ghc9122
-      ] released;
+      ]
+        released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_2_0 = released;
       cabal2nix = released;
@@ -569,7 +579,8 @@ let
         compilerNames.ghc9101
         compilerNames.ghc9102
         compilerNames.ghc9122
-      ] released;
+      ]
+        released;
       hpack = released;
       hsdns = released;
       jailbreak-cabal = released;
@@ -581,10 +592,12 @@ let
       ghc-lib-parser-ex = released;
       ghc-source-gen = lib.subtractLists [
         compilerNames.ghc9122
-      ] released;
+      ]
+        released;
       ghc-tags = lib.subtractLists [
         compilerNames.ghc9122
-      ] released;
+      ]
+        released;
       hashable = released;
       primitive = released;
       semaphore-compat = [
@@ -596,7 +609,8 @@ let
         compilerNames.ghc9101
         compilerNames.ghc9102
         compilerNames.ghc9122
-      ] released;
+      ]
+        released;
     })
     {
       mergeable = pkgs.releaseTools.aggregate {

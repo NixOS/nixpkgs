@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  aiohttp,
-
-  # tests
-  aioresponses,
-  pytest-aiohttp,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  aiohttp
+, # tests
+  aioresponses
+, pytest-aiohttp
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

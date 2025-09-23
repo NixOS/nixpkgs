@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

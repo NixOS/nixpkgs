@@ -1,15 +1,15 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  html5lib,
-  lxml,
-  mock,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, html5lib
+, lxml
+, mock
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, requests
+,
 }:
 
 buildPythonPackage rec {

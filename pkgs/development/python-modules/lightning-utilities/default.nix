@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  jsonargparse,
-  looseversion,
-  packaging,
-  tomlkit,
-  typing-extensions,
-
-  # tests
-  pytest-timeout,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  jsonargparse
+, looseversion
+, packaging
+, tomlkit
+, typing-extensions
+, # tests
+  pytest-timeout
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

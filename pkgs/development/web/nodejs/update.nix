@@ -1,15 +1,15 @@
-{
-  lib,
-  writeScript,
-  common-updater-scripts,
-  coreutils,
-  curl,
-  fetchurl,
-  gnugrep,
-  gnupg,
-  jq,
-  majorVersion,
-  runtimeShell,
+{ lib
+, writeScript
+, common-updater-scripts
+, coreutils
+, curl
+, fetchurl
+, gnugrep
+, gnupg
+, jq
+, majorVersion
+, runtimeShell
+,
 }:
 
 let

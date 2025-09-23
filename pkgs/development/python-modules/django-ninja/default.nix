@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  flit-core,
-  psycopg2,
-  pydantic,
-  pytest-asyncio,
-  pytest-django,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, flit-core
+, psycopg2
+, pydantic
+, pytest-asyncio
+, pytest-django
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

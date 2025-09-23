@@ -1,9 +1,9 @@
-{
-  lib,
-  mkCoqDerivation,
-  autoreconfHook,
-  coq,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, autoreconfHook
+, coq
+, version ? null
+,
 }:
 
 let
@@ -34,7 +34,8 @@ in
       (case "8.9" "0.6.5")
       (case "8.8" "0.6.3")
       (case "8.7" "0.6.2")
-    ] null;
+    ]
+      null;
 
   release."1.0+9.0".sha256 = "sha256-gXy70fj2bAkE0did4gI0wTyWp9AIvOo4xTTihaFIpZ0=";
   release."1.0+8.20".sha256 = "sha256-szfH/OksCH3SCbcFjwEvLwHE5avmHp1vYiJM6KAXFqs=";

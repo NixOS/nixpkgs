@@ -1,12 +1,11 @@
 # Generates the documentation for library functions via nixdoc.
 # To build this derivation, run `nix-build -A nixpkgs-manual.lib-docs`
-{
-  lib,
-  stdenvNoCC,
-  nixdoc,
-  nix,
-  nixpkgs ? { },
-  libsets ? [
+{ lib
+, stdenvNoCC
+, nixdoc
+, nix
+, nixpkgs ? { }
+, libsets ? [
     {
       name = "asserts";
       description = "assertion functions";
@@ -88,7 +87,8 @@
       name = "derivations";
       description = "miscellaneous derivation-specific functions";
     }
-  ],
+  ]
+,
 }:
 
 stdenvNoCC.mkDerivation {

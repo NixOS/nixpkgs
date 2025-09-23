@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchFromSourcehut,
-  pkg-config,
-  river-classic,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  zig_0_14,
+{ lib
+, stdenv
+, callPackage
+, fetchFromSourcehut
+, pkg-config
+, river-classic
+, wayland
+, wayland-protocols
+, wayland-scanner
+, zig_0_14
+,
 }:
 
 let

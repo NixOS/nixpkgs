@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  indi-3rdparty,
-  indilib,
-  indi-with-drivers,
+{ lib
+, stdenv
+, indi-3rdparty
+, indilib
+, indi-with-drivers
+,
 }:
 
 indi-with-drivers.override {

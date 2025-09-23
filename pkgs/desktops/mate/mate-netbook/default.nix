@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  gtk3,
-  libwnck,
-  libfakekey,
-  libXtst,
-  mate,
-  wrapGAppsHook3,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, libwnck
+, libfakekey
+, libXtst
+, mate
+, wrapGAppsHook3
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

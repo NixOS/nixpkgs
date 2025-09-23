@@ -1,6 +1,6 @@
-{
-  lib,
-  bundlerApp,
+{ lib
+, bundlerApp
+,
 }:
 
 # Jupyter console:

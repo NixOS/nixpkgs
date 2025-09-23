@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
-  fetchurl,
-  linkFarm,
-  ffmpeg-headless,
-  numpy,
-  pillow,
-  pkg-config,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, fetchurl
+, linkFarm
+, ffmpeg-headless
+, numpy
+, pillow
+, pkg-config
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
+{ lib
+, config
+, pkgs
+,
 }:
 
 let
@@ -214,13 +214,15 @@ let
           else if isDerivation item then
             [ ]
           else if isAttrs item then
-            map (
-              name:
-              let
-                escapedName = ''"${replaceStrings [ ''"'' "\\" ] [ ''\"'' "\\\\" ] name}"'';
-              in
-              recurse (prefix + (if prefix == "." then "" else ".") + escapedName) item.${name}
-            ) (attrNames item)
+            map
+              (
+                name:
+                let
+                  escapedName = ''"${replaceStrings [ ''"'' "\\" ] [ ''\"'' "\\\\" ] name}"'';
+                in
+                recurse (prefix + (if prefix == "." then "" else ".") + escapedName) item.${name}
+              )
+              (attrNames item)
           else if isList item then
             imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
           else
@@ -339,13 +341,15 @@ let
       let
         secretsRaw = recursiveGetAttrsetWithJqPrefix set attr;
         # Set default option values
-        secrets = mapAttrs (
-          _name: set:
-          {
-            quote = true;
-          }
-          // set
-        ) secretsRaw;
+        secrets = mapAttrs
+          (
+            _name: set:
+              {
+                quote = true;
+              }
+              // set
+          )
+          secretsRaw;
         stringOrDefault = str: def: if str == "" then def else str;
       in
       ''
@@ -358,20 +362,25 @@ let
         shopt -s inherit_errexit
       ''
       + concatStringsSep "\n" (
-        imap1 (index: name: ''
-          secret${toString index}=$(<'${secrets.${name}.${attr}}')
-          export secret${toString index}
-        '') (attrNames secrets)
+        imap1
+          (index: name: ''
+            secret${toString index}=$(<'${secrets.${name}.${attr}}')
+            export secret${toString index}
+          '')
+          (attrNames secrets)
       )
       + "\n"
       + "${pkgs.jq}/bin/jq >'${output}' "
       + escapeShellArg (
-        stringOrDefault (concatStringsSep " | " (
-          imap1 (
-            index: name:
-            ''${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})''
-          ) (attrNames secrets)
-        )) "."
+        stringOrDefault
+          (concatStringsSep " | " (
+            imap1
+              (
+                index: name:
+                ''${name} = ($ENV.secret${toString index}${optionalString (!secrets.${name}.quote) " | fromjson"})''
+              )
+              (attrNames secrets)
+          )) "."
       )
       + ''
          <<'EOF'
@@ -417,7 +426,7 @@ let
       let
         namesToDisable = map getName packagesToDisable;
       in
-      !elem (getName package) namesToDisable;
+        !elem (getName package) namesToDisable;
 
     systemdUtils = {
       lib = import ./systemd-lib.nix {

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  libpcap,
-  nixosTests,
+{ stdenv
+, lib
+, fetchurl
+, libpcap
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

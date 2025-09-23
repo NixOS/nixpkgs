@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildHomeAssistantComponent,
-  websockets,
+{ lib
+, fetchFromGitHub
+, buildHomeAssistantComponent
+, websockets
+,
 }:
 buildHomeAssistantComponent rec {
   owner = "iprak";

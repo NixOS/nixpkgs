@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flexmock,
-  pytestCheckHook,
-  pytest-cov-stub,
-  six,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flexmock
+, pytestCheckHook
+, pytest-cov-stub
+, six
+,
 }:
 
 buildPythonPackage rec {

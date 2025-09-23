@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cairocffi,
-  cffi,
-  psutil,
-  xcffib,
-  uv-build,
-  pyside6,
-  pyvirtualdisplay,
-  pytestCheckHook,
-  qtile,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cairocffi
+, cffi
+, psutil
+, xcffib
+, uv-build
+, pyside6
+, pyvirtualdisplay
+, pytestCheckHook
+, qtile
+,
 }:
 buildPythonPackage rec {
   pname = "qtile-bonsai";

@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  lib,
-  paho-mqtt,
-  voluptuous,
+{ buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, lib
+, paho-mqtt
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

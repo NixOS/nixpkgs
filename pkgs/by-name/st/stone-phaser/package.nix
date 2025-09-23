@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  xorg,
-  cairo,
-  libGL,
-  lv2,
-  libjack2,
-  libgbm,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, xorg
+, cairo
+, libGL
+, lv2
+, libjack2
+, libgbm
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

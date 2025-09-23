@@ -21,7 +21,7 @@
 
   `replacements` (AttrsOf String)
   : Each entry in this set corresponds to a `--subst-var-by` entry in [`substitute`](https://nixos.org/manual/nixpkgs/stable/#fun-substitute) or
-    null to keep it unchanged.
+  null to keep it unchanged.
 
   # Example
 

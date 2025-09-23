@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  installShellFiles,
-  libX11,
-  ncurses,
-  pkg-config,
-  enableXwinGraphics ? false,
+{ stdenv
+, lib
+, fetchzip
+, installShellFiles
+, libX11
+, ncurses
+, pkg-config
+, enableXwinGraphics ? false
+,
 }:
 
 let

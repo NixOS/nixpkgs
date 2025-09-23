@@ -5,4 +5,4 @@
   importDubLock = callPackage ./builddubpackage/import-dub-lock.nix { };
   buildDubPackage = callPackage ./builddubpackage { };
 }
-// import ./builddubpackage/hooks { inherit callPackage; }
+  // import ./builddubpackage/hooks { inherit callPackage; }

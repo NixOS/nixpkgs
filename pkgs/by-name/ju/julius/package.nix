@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  SDL2,
-  SDL2_mixer,
-  cmake,
-  libpng,
-  darwin,
-  libicns,
-  imagemagick,
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, SDL2_mixer
+, cmake
+, libpng
+, darwin
+, libicns
+, imagemagick
+,
 }:
 stdenv.mkDerivation rec {
   pname = "julius";

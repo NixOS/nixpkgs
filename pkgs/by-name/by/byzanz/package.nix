@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  wrapGAppsHook3,
-  cairo,
-  gettext,
-  glib,
-  gnome-common,
-  gst_all_1,
-  gtk3,
-  intltool,
-  libtool,
-  pkg-config,
-  which,
-  xorg,
+{ lib
+, stdenv
+, fetchgit
+, wrapGAppsHook3
+, cairo
+, gettext
+, glib
+, gnome-common
+, gst_all_1
+, gtk3
+, intltool
+, libtool
+, pkg-config
+, which
+, xorg
+,
 }:
 
 stdenv.mkDerivation {

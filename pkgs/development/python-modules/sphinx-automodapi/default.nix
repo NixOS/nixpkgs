@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchurl,
-  setuptools-scm,
-  git,
-  sphinx,
-  pytestCheckHook,
-  cython,
-  gcc,
-  graphviz,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchurl
+, setuptools-scm
+, git
+, sphinx
+, pytestCheckHook
+, cython
+, gcc
+, graphviz
+,
 }:
 
 buildPythonPackage rec {

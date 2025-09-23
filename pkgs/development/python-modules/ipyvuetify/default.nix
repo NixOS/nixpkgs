@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  # Python Inputs
-  setuptools,
-  ipyvue,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # Python Inputs
+  setuptools
+, ipyvue
+,
 }:
 
 buildPythonPackage rec {

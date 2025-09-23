@@ -1,99 +1,98 @@
-{
-  lib,
-  suffix ? "",
-  version,
-  src,
-  # For Lix versions >= 2.92, Rust sources are in the Lix repository root.
-  cargoDeps ? null,
-  # For previous versions, Rust sources are only in a subdirectory for
+{ lib
+, suffix ? ""
+, version
+, src
+, # For Lix versions >= 2.92, Rust sources are in the Lix repository root.
+  cargoDeps ? null
+, # For previous versions, Rust sources are only in a subdirectory for
   # `lix-doc`.
-  docCargoDeps ? null,
-  patches ? [ ],
-  knownVulnerabilities ? [ ],
+  docCargoDeps ? null
+, patches ? [ ]
+, knownVulnerabilities ? [ ]
+,
 }@args:
 
-assert lib.assertMsg (
-  lib.versionOlder version "2.92" -> docCargoDeps != null
-) "`lix-doc` `cargoDeps` must be set for Lix < 2.92";
-assert lib.assertMsg (
-  lib.versionAtLeast version "2.92" -> cargoDeps != null
-) "`cargoDeps` must be set for Lix ≥ 2.92";
+assert lib.assertMsg
+  (
+    lib.versionOlder version "2.92" -> docCargoDeps != null
+  ) "`lix-doc` `cargoDeps` must be set for Lix < 2.92";
+assert lib.assertMsg
+  (
+    lib.versionAtLeast version "2.92" -> cargoDeps != null
+  ) "`cargoDeps` must be set for Lix ≥ 2.92";
 
-{
-  stdenv,
-  meson,
-  bison,
-  boehmgc,
-  boost,
-  brotli,
-  busybox,
-  busybox-sandbox-shell,
-  bzip2,
-  callPackage,
-  capnproto,
-  cargo,
-  curl,
-  cmake,
-  doxygen,
-  editline,
-  flex,
-  git,
-  gtest,
-  jq,
-  lib,
-  libarchive,
-  libcpuid,
-  libsodium,
-  libsystemtap,
-  llvmPackages,
-  lowdown,
-  lowdown-unsandboxed,
-  lsof,
-  mercurial,
-  mdbook,
-  mdbook-linkcheck,
-  nlohmann_json,
-  ninja,
-  openssl,
-  rustc,
-  toml11,
-  pegtl,
-  buildPackages,
-  pkg-config,
-  rapidcheck,
-  sqlite,
-  systemtap-sdt,
-  util-linuxMinimal,
-  removeReferencesTo,
-  xz,
-  yq,
-  nixosTests,
-  rustPlatform,
-  # Only used for versions before 2.92.
+{ stdenv
+, meson
+, bison
+, boehmgc
+, boost
+, brotli
+, busybox
+, busybox-sandbox-shell
+, bzip2
+, callPackage
+, capnproto
+, cargo
+, curl
+, cmake
+, doxygen
+, editline
+, flex
+, git
+, gtest
+, jq
+, lib
+, libarchive
+, libcpuid
+, libsodium
+, libsystemtap
+, llvmPackages
+, lowdown
+, lowdown-unsandboxed
+, lsof
+, mercurial
+, mdbook
+, mdbook-linkcheck
+, nlohmann_json
+, ninja
+, openssl
+, rustc
+, toml11
+, pegtl
+, buildPackages
+, pkg-config
+, rapidcheck
+, sqlite
+, systemtap-sdt
+, util-linuxMinimal
+, removeReferencesTo
+, xz
+, yq
+, nixosTests
+, rustPlatform
+, # Only used for versions before 2.92.
   lix-doc ? callPackage ./doc {
     inherit src;
     version = "${version}${suffix}";
     cargoDeps = docCargoDeps;
-  },
-
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  enableStrictLLVMChecks ? true,
-  withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
-  aws-sdk-cpp,
-  # FIXME support Darwin once https://github.com/NixOS/nixpkgs/pull/392918 lands
-  withDtrace ?
-    lib.meta.availableOn stdenv.hostPlatform libsystemtap
-    && lib.meta.availableOn stdenv.buildPlatform systemtap-sdt,
-  # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-  withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
-  libseccomp,
-  pastaFod ? lib.meta.availableOn stdenv.hostPlatform passt,
-  passt,
-
-  confDir,
-  stateDir,
-  storeDir,
+  }
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableStrictLLVMChecks ? true
+, withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
+, aws-sdk-cpp
+, # FIXME support Darwin once https://github.com/NixOS/nixpkgs/pull/392918 lands
+  withDtrace ? lib.meta.availableOn stdenv.hostPlatform libsystemtap
+    && lib.meta.availableOn stdenv.buildPlatform systemtap-sdt
+, # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
+  withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp
+, libseccomp
+, pastaFod ? lib.meta.availableOn stdenv.hostPlatform passt
+, passt
+, confDir
+, stateDir
+, storeDir
+,
 }:
 let
   isLLVMOnly = lib.versionAtLeast version "2.92";
@@ -104,7 +103,7 @@ let
   usesCapnp = lib.versionAtLeast version "2.94";
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
-# do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
+  # do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
 assert lib.assertMsg (enableStrictLLVMChecks && isLLVMOnly -> stdenv.cc.isClang)
   "Lix upstream strongly discourage the usage of GCC to compile Lix as there's known miscompilations in important places. If you are a compiler developer, please get in touch with us.";
 stdenv.mkDerivation (finalAttrs: {
@@ -142,13 +141,13 @@ stdenv.mkDerivation (finalAttrs: {
     (buildPackages.python3.withPackages (
       p:
       [ p.python-frontmatter ]
-      ++ lib.optionals (lib.versionOlder version "2.94") [ p.toml ]
-      ++ lib.optionals finalAttrs.doInstallCheck [
+        ++ lib.optionals (lib.versionOlder version "2.94") [ p.toml ]
+        ++ lib.optionals finalAttrs.doInstallCheck [
         p.aiohttp
         p.pytest
         p.pytest-xdist
       ]
-      ++ lib.optionals usesCapnp [ p.pycapnp ]
+        ++ lib.optionals usesCapnp [ p.pycapnp ]
     ))
     pkg-config
     flex
@@ -288,11 +287,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
   ]
   ++
-    lib.optionals
-      (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.94")
-      [
-        (lib.mesonOption "build-test-shell" "${busybox}/bin")
-      ];
+  lib.optionals
+    (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.94")
+    [
+      (lib.mesonOption "build-test-shell" "${busybox}/bin")
+    ];
 
   ninjaFlags = [ "-v" ];
 

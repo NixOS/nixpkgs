@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  darwin,
-  fetchFromGitHub,
-  buildDunePackage,
-  ocaml,
-  cppo,
-  camlp-streams,
-  dune-site,
-  version ? if lib.versionAtLeast ocaml.version "4.08" then "2.0.0" else "1.0.2",
+{ stdenv
+, lib
+, darwin
+, fetchFromGitHub
+, buildDunePackage
+, ocaml
+, cppo
+, camlp-streams
+, dune-site
+, version ? if lib.versionAtLeast ocaml.version "4.08" then "2.0.0" else "1.0.2"
+,
 }:
 
 let
@@ -58,7 +58,7 @@ in
 
 buildDunePackage (
   params."${version}"
-  // {
+    // {
     pname = "camomile";
     inherit version;
 

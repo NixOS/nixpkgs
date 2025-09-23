@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  wayfire,
-  wf-shell,
-  wayland-scanner,
-  wayland-protocols,
-  gtk3,
-  gtkmm3,
-  libevdev,
-  libxml2,
-  libxkbcommon,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, wayfire
+, wf-shell
+, wayland-scanner
+, wayland-protocols
+, gtk3
+, gtkmm3
+, libevdev
+, libxml2
+, libxkbcommon
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

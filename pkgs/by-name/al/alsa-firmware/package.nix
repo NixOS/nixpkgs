@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  autoreconfHook,
-  fetchurl,
-  fetchpatch,
-  directoryListingUpdater,
+{ lib
+, stdenv
+, buildPackages
+, autoreconfHook
+, fetchurl
+, fetchpatch
+, directoryListingUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,12 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--with-hotplug-dir=$(out)/lib/firmware" ];
 
-  depsBuildBuild = lib.optional (
-    stdenv.buildPlatform != stdenv.hostPlatform
-    || stdenv.hostPlatform.isAarch64
-    || stdenv.hostPlatform.isLoongArch64
-    || stdenv.hostPlatform.isRiscV64
-  ) buildPackages.stdenv.cc;
+  depsBuildBuild = lib.optional
+    (
+      stdenv.buildPlatform != stdenv.hostPlatform
+      || stdenv.hostPlatform.isAarch64
+      || stdenv.hostPlatform.isLoongArch64
+      || stdenv.hostPlatform.isRiscV64
+    )
+    buildPackages.stdenv.cc;
 
   dontStrip = true;
 

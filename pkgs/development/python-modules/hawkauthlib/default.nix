@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  requests,
-  webob,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, requests
+, webob
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

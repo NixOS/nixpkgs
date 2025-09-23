@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  python,
-  makeWrapper,
-  unzip,
-  pipInstallHook,
-  setuptoolsBuildHook,
-  wheel,
-  pip,
-  setuptools,
+{ lib
+, stdenv
+, python
+, makeWrapper
+, unzip
+, pipInstallHook
+, setuptoolsBuildHook
+, wheel
+, pip
+, setuptools
+,
 }:
 
 stdenv.mkDerivation rec {

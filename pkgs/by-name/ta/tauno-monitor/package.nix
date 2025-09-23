@@ -1,15 +1,15 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  appstream,
-  desktop-file-utils,
-  gobject-introspection,
-  wrapGAppsHook4,
-  libadwaita,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, appstream
+, desktop-file-utils
+, gobject-introspection
+, wrapGAppsHook4
+, libadwaita
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "tauno-monitor";

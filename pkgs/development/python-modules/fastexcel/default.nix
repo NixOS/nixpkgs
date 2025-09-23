@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-
-  # nativeBuildInputs
-  cargo,
-  rustc,
-
-  # optional-dependencies
-  pandas,
-  polars,
-  pyarrow,
-
-  # tests
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, # nativeBuildInputs
+  cargo
+, rustc
+, # optional-dependencies
+  pandas
+, polars
+, pyarrow
+, # tests
+  pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

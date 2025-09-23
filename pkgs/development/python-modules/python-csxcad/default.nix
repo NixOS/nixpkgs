@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  openems,
-  csxcad,
-  numpy,
-  matplotlib,
+{ lib
+, buildPythonPackage
+, cython
+, openems
+, csxcad
+, numpy
+, matplotlib
+,
 }:
 
 buildPythonPackage rec {

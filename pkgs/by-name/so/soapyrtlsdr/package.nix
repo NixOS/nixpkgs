@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  rtl-sdr,
-  soapysdr,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, rtl-sdr
+, soapysdr
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

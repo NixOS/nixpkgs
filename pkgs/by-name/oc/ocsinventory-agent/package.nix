@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  perlPackages,
-  fetchFromGitHub,
-  fetchpatch,
-  makeWrapper,
-  shortenPerlShebang,
-  coreutils,
-  dmidecode,
-  findutils,
-  inetutils,
-  ipmitool,
-  iproute2,
-  lvm2,
-  nmap,
-  pciutils,
-  usbutils,
-  util-linux,
-  nixosTests,
-  testers,
-  ocsinventory-agent,
-  nix-update-script,
+{ lib
+, stdenv
+, perlPackages
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, shortenPerlShebang
+, coreutils
+, dmidecode
+, findutils
+, inetutils
+, ipmitool
+, iproute2
+, lvm2
+, nmap
+, pciutils
+, usbutils
+, util-linux
+, nixosTests
+, testers
+, ocsinventory-agent
+, nix-update-script
+,
 }:
 
 perlPackages.buildPerlPackage rec {

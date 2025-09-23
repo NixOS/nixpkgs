@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -768,7 +767,7 @@ in
     query = paramsToOptions params.query // {
       enable = mkEnableOption (
         "the Thanos query node exposing PromQL enabled Query API "
-        + "with data retrieved from multiple store nodes"
+          + "with data retrieved from multiple store nodes"
       );
       arguments = mkArgumentsOption "query";
     };
@@ -784,7 +783,7 @@ in
     rule = paramsToOptions params.rule // {
       enable = mkEnableOption (
         "the Thanos ruler service which evaluates Prometheus rules against"
-        + " given Query nodes, exposing Store API and storing old blocks in bucket"
+          + " given Query nodes, exposing Store API and storing old blocks in bucket"
       );
       arguments = mkArgumentsOption "rule";
     };

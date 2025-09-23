@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGo125Module,
-  fetchFromGitHub,
-  makeWrapper,
-  nix-update-script,
+{ lib
+, buildGo125Module
+, fetchFromGitHub
+, makeWrapper
+, nix-update-script
+,
 }:
 
 buildGo125Module (finalAttrs: {

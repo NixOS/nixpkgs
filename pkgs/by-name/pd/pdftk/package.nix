@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  gradle_8,
-  jre_headless,
-  jre_minimal,
-  runtimeShell,
+{ lib
+, stdenv
+, fetchFromGitLab
+, gradle_8
+, jre_headless
+, jre_minimal
+, runtimeShell
+,
 }:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."

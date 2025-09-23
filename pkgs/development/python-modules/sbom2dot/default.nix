@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  lib4sbom,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, lib4sbom
+,
 }:
 
 buildPythonPackage rec {

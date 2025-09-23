@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchpatch,
-  horizon-eda,
-  pycairo,
-  python,
-  pythonOlder,
+{ buildPythonPackage
+, fetchpatch
+, horizon-eda
+, pycairo
+, python
+, pythonOlder
+,
 }:
 
 let

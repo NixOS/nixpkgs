@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xorgproto,
-  libX11,
-  libXext,
-  writeScript,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorgproto
+, libX11
+, libXext
+, writeScript
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxv";
@@ -34,9 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
   ];
 
-  configureFlags = lib.optional (
-    stdenv.hostPlatform != stdenv.buildPlatform
-  ) "--enable-malloc0returnsnull";
+  configureFlags = lib.optional
+    (
+      stdenv.hostPlatform != stdenv.buildPlatform
+    ) "--enable-malloc0returnsnull";
 
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''

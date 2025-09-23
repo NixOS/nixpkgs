@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  colorama,
-  docstring-parser,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, colorama
+, docstring-parser
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

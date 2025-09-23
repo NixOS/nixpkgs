@@ -1,16 +1,16 @@
-{
-  csv-files,
-  device-name-strategy,
-  discovery-mode,
-  mounts,
-  glibc,
-  jq,
-  lib,
-  nvidia-container-toolkit,
-  nvidia-driver,
-  runtimeShell,
-  writeScriptBin,
-  extraArgs,
+{ csv-files
+, device-name-strategy
+, discovery-mode
+, mounts
+, glibc
+, jq
+, lib
+, nvidia-container-toolkit
+, nvidia-driver
+, runtimeShell
+, writeScriptBin
+, extraArgs
+,
 }:
 let
   mountToCommand =

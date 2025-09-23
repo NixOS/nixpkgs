@@ -1,38 +1,38 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  vala,
-  meson,
-  ninja,
-  python3,
-  pkg-config,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  gtk4,
-  libadwaita,
-  json-glib,
-  gexiv2,
-  glib,
-  glib-networking,
-  gnome,
-  gobject-introspection,
-  gtksourceview5,
-  libxml2,
-  libgee,
-  librsvg,
-  libsoup_3,
-  libsecret,
-  libwebp,
-  libspelling,
-  webkitgtk_6_0,
-  webp-pixbuf-loader,
-  icu,
-  gst_all_1,
-  clapper-enhancers,
-  clapper-unwrapped,
-  clapperSupport ? true,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, vala
+, meson
+, ninja
+, python3
+, pkg-config
+, wrapGAppsHook4
+, desktop-file-utils
+, gtk4
+, libadwaita
+, json-glib
+, gexiv2
+, glib
+, glib-networking
+, gnome
+, gobject-introspection
+, gtksourceview5
+, libxml2
+, libgee
+, librsvg
+, libsoup_3
+, libsecret
+, libwebp
+, libspelling
+, webkitgtk_6_0
+, webp-pixbuf-loader
+, icu
+, gst_all_1
+, clapper-enhancers
+, clapper-unwrapped
+, clapperSupport ? true
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

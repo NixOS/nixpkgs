@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  pkg-config,
-  fontconfig,
-  freetype,
-  libX11,
-  libXft,
-  ncurses,
-  writeText,
-  config,
-  conf ? config.st.conf or null,
-  patches ? config.st.patches or [ ],
-  extraLibs ? config.st.extraLibs or [ ],
-  nixosTests,
-  # update script dependencies
-  gitUpdater,
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, fontconfig
+, freetype
+, libX11
+, libXft
+, ncurses
+, writeText
+, config
+, conf ? config.st.conf or null
+, patches ? config.st.patches or [ ]
+, extraLibs ? config.st.extraLibs or [ ]
+, nixosTests
+, # update script dependencies
+  gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

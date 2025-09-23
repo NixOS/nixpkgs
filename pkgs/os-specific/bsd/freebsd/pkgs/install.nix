@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  writeShellScript,
-  freebsd-lib,
-  bsdSetupHook,
-  freebsdSetupHook,
-  makeMinimal,
-  mandoc,
-  groff,
-  boot-install,
-  install,
-  compatIfNeeded,
-  libmd,
-  libnetbsd,
+{ lib
+, stdenv
+, mkDerivation
+, writeShellScript
+, freebsd-lib
+, bsdSetupHook
+, freebsdSetupHook
+, makeMinimal
+, mandoc
+, groff
+, boot-install
+, install
+, compatIfNeeded
+, libmd
+, libnetbsd
+,
 }:
 
 # HACK: to ensure parent directories exist. This emulates GNU

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  enableShared ? !enableStatic,
-  # Multi-threading with OpenMP is disabled by default
+{ lib
+, stdenv
+, fetchFromGitHub
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !enableStatic
+, # Multi-threading with OpenMP is disabled by default
   # more info on https://www.cryptopp.com/wiki/OpenMP
-  withOpenMP ? false,
-  llvmPackages,
+  withOpenMP ? false
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation rec {

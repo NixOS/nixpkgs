@@ -1,11 +1,11 @@
-{
-  fetchurl,
-  stdenv,
-  lib,
-  updateAutotoolsGnuConfigScriptsHook,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableDarwinABICompat ? false,
+{ fetchurl
+, stdenv
+, lib
+, updateAutotoolsGnuConfigScriptsHook
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableDarwinABICompat ? false
+,
 }:
 
 # assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross

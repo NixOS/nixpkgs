@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  idris2Packages,
-  makeWrapper,
+{ lib
+, fetchFromGitHub
+, idris2Packages
+, makeWrapper
+,
 }:
 
 let

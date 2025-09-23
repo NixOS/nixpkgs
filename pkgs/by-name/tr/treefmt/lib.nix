@@ -1,7 +1,7 @@
-{
-  lib,
-  pkgs,
-  treefmt,
+{ lib
+, pkgs
+, treefmt
+,
 }:
 {
   /**

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  makeWrapper,
-  perl,
-  gnused,
-  ghostscript,
-  file,
-  coreutils,
-  gnugrep,
-  which,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, makeWrapper
+, perl
+, gnused
+, ghostscript
+, file
+, coreutils
+, gnugrep
+, which
+,
 }:
 let
   arches = [
@@ -55,10 +55,12 @@ stdenv.mkDerivation {
 
     # delete unnecessary files for the current architecture
   ''
-  + lib.concatMapStrings (arch: ''
-    echo Deleting files for ${arch}
-    rm -r "$out/opt/brother/Printers/MFCL2800DW/lpd/${arch}"
-  '') (builtins.filter (arch: arch != stdenv.hostPlatform.linuxArch) arches)
+  + lib.concatMapStrings
+    (arch: ''
+      echo Deleting files for ${arch}
+      rm -r "$out/opt/brother/Printers/MFCL2800DW/lpd/${arch}"
+    '')
+    (builtins.filter (arch: arch != stdenv.hostPlatform.linuxArch) arches)
   + ''
 
     # bundled scripts don't understand the arch subdirectories for some reason

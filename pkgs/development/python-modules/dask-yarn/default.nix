@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  fetchpatch,
-  setuptools,
-  versioneer,
-  dask,
-  distributed,
-  grpcio,
-  skein,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, fetchpatch
+, setuptools
+, versioneer
+, dask
+, distributed
+, grpcio
+, skein
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

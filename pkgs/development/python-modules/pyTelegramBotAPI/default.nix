@@ -1,21 +1,21 @@
-{
-  lib,
-  aiohttp,
-  aioredis,
-  buildPythonPackage,
-  coloredlogs,
-  fastapi,
-  fetchFromGitHub,
-  hatchling,
-  pillow,
-  psutil,
-  pytestCheckHook,
-  pythonOlder,
-  redis,
-  requests,
-  ujson,
-  uvicorn,
-  watchdog,
+{ lib
+, aiohttp
+, aioredis
+, buildPythonPackage
+, coloredlogs
+, fastapi
+, fetchFromGitHub
+, hatchling
+, pillow
+, psutil
+, pytestCheckHook
+, pythonOlder
+, redis
+, requests
+, ujson
+, uvicorn
+, watchdog
+,
 }:
 
 buildPythonPackage rec {

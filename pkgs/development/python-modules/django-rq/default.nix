@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  django,
-  redis,
-  rq,
-  prometheus-client,
-  sentry-sdk,
-  psycopg,
-  pytest-django,
-  pytestCheckHook,
-  redisTestHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, django
+, redis
+, rq
+, prometheus-client
+, sentry-sdk
+, psycopg
+, pytest-django
+, pytestCheckHook
+, redisTestHook
+,
 }:
 
 buildPythonPackage rec {

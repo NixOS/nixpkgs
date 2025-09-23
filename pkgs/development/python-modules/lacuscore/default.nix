@@ -1,18 +1,18 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  defang,
-  dnspython,
-  eval-type-backport,
-  fetchFromGitHub,
-  playwrightcapture,
-  poetry-core,
-  pydantic,
-  pythonOlder,
-  redis,
-  requests,
-  ua-parser,
+{ lib
+, async-timeout
+, buildPythonPackage
+, defang
+, dnspython
+, eval-type-backport
+, fetchFromGitHub
+, playwrightcapture
+, poetry-core
+, pydantic
+, pythonOlder
+, redis
+, requests
+, ua-parser
+,
 }:
 
 buildPythonPackage rec {

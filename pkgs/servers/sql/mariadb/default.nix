@@ -1,60 +1,60 @@
 let
   # shared across all versions
   generic =
-    {
-      version,
-      hash,
-      lib,
-      stdenv,
-      fetchurl,
-      nixosTests,
-      buildPackages,
-      # Native buildInputs components
-      bison,
-      boost,
-      cmake,
-      fixDarwinDylibNames,
-      flex,
-      makeWrapper,
-      pkg-config,
-      # Common components
-      curl,
-      libiconv,
-      ncurses,
-      openssl,
-      pcre2,
-      libkrb5,
-      libaio,
-      liburing,
-      systemd,
-      cctools,
-      perl,
-      jemalloc,
-      less,
-      libedit,
-      # Server components
-      bzip2,
-      lz4,
-      lzo,
-      snappy,
-      xz,
-      zlib,
-      zstd,
-      cracklib,
-      judy,
-      libevent,
-      libxml2,
-      linux-pam,
-      numactl,
-      fmt_11,
-      withStorageMroonga ? true,
-      kytea,
-      libsodium,
-      msgpack,
-      zeromq,
-      withStorageRocks ? true,
-      withEmbedded ? false,
-      withNuma ? false,
+    { version
+    , hash
+    , lib
+    , stdenv
+    , fetchurl
+    , nixosTests
+    , buildPackages
+    , # Native buildInputs components
+      bison
+    , boost
+    , cmake
+    , fixDarwinDylibNames
+    , flex
+    , makeWrapper
+    , pkg-config
+    , # Common components
+      curl
+    , libiconv
+    , ncurses
+    , openssl
+    , pcre2
+    , libkrb5
+    , libaio
+    , liburing
+    , systemd
+    , cctools
+    , perl
+    , jemalloc
+    , less
+    , libedit
+    , # Server components
+      bzip2
+    , lz4
+    , lzo
+    , snappy
+    , xz
+    , zlib
+    , zstd
+    , cracklib
+    , judy
+    , libevent
+    , libxml2
+    , linux-pam
+    , numactl
+    , fmt_11
+    , withStorageMroonga ? true
+    , kytea
+    , libsodium
+    , msgpack
+    , zeromq
+    , withStorageRocks ? true
+    , withEmbedded ? false
+    , withNuma ? false
+    ,
     }:
 
     let
@@ -128,9 +128,10 @@ let
         ]
         # Fixes a build issue as documented on
         # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
-        ++ lib.optional (
-          !stdenv.hostPlatform.isLinux && lib.versionAtLeast version "10.6"
-        ) ./patch/macos-MDEV-26769-regression-fix.patch;
+        ++ lib.optional
+          (
+            !stdenv.hostPlatform.isLinux && lib.versionAtLeast version "10.6"
+          ) ./patch/macos-MDEV-26769-regression-fix.patch;
 
         cmakeFlags = [
           "-DBUILD_CONFIG=mysql_release"

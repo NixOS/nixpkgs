@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.networking.modemmanager;
@@ -54,12 +53,14 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.etc = builtins.listToAttrs (
-      map (
-        e:
-        lib.nameValuePair "ModemManager/fcc-unlock.d/${e.id}" {
-          source = e.path;
-        }
-      ) cfg.fccUnlockScripts
+      map
+        (
+          e:
+          lib.nameValuePair "ModemManager/fcc-unlock.d/${e.id}" {
+            source = e.path;
+          }
+        )
+        cfg.fccUnlockScripts
     );
 
     systemd.services.ModemManager = {

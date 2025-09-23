@@ -1,27 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  bokeh,
-  colorcet,
-  holoviews,
-  pandas,
-
-  # tests
-  pytestCheckHook,
-  dask,
-  xarray,
-  bokeh-sampledata,
-  parameterized,
-  selenium,
-  matplotlib,
-  scipy,
-  plotly,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  bokeh
+, colorcet
+, holoviews
+, pandas
+, # tests
+  pytestCheckHook
+, dask
+, xarray
+, bokeh-sampledata
+, parameterized
+, selenium
+, matplotlib
+, scipy
+, plotly
+,
 }:
 
 buildPythonPackage rec {

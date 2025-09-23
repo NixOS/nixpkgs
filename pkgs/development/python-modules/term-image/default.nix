@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pillow,
-  requests,
-  urwid,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pillow
+, requests
+, urwid
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

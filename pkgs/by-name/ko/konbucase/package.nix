@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  vala,
-  pkg-config,
-  wrapGAppsHook3,
-  blueprint-compiler,
-  pantheon,
-  gtksourceview5,
-  chcase,
-  libadwaita,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, vala
+, pkg-config
+, wrapGAppsHook3
+, blueprint-compiler
+, pantheon
+, gtksourceview5
+, chcase
+, libadwaita
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

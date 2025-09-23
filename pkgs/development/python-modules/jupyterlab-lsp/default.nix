@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  jupyterlab,
-  jupyter-lsp,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, jupyterlab
+, jupyter-lsp
+,
 }:
 
 buildPythonPackage rec {

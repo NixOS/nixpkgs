@@ -2,26 +2,25 @@ let
   withGold = platform: platform.isElf && !platform.isRiscV && !platform.isLoongArch64;
 in
 
-{
-  stdenv,
-  autoconf269,
-  automake,
-  libtool,
-  bison,
-  buildPackages,
-  fetchurl,
-  gettext,
-  lib,
-  noSysDirs,
-  perl,
-  runCommand,
-  zlib,
-
-  enableGold ? withGold stdenv.targetPlatform,
-  enableGoldDefault ? false,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  # WARN: Enabling all targets increases output size to a multiple.
-  withAllTargets ? false,
+{ stdenv
+, autoconf269
+, automake
+, libtool
+, bison
+, buildPackages
+, fetchurl
+, gettext
+, lib
+, noSysDirs
+, perl
+, runCommand
+, zlib
+, enableGold ? withGold stdenv.targetPlatform
+, enableGoldDefault ? false
+, enableShared ? !stdenv.hostPlatform.isStatic
+, # WARN: Enabling all targets increases output size to a multiple.
+  withAllTargets ? false
+,
 }:
 
 # WARN: configure silently disables ld.gold if it's unsupported, so we need to
@@ -48,9 +47,11 @@ let
   # additional targets here as required.
   allGasTargets =
     allGasTargets'
-    ++ lib.optional (
-      targetHasGas && !lib.elem targetPlatform.config allGasTargets'
-    ) targetPlatform.config;
+    ++ lib.optional
+      (
+        targetHasGas && !lib.elem targetPlatform.config allGasTargets'
+      )
+      targetPlatform.config;
   allGasTargets' = [
     "aarch64-unknown-linux-gnu"
     "alpha-unknown-linux-gnu"

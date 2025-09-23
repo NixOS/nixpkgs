@@ -1,21 +1,21 @@
-{
-  lib,
-  writeText,
-  rustPlatform,
-  fetchFromGitHub,
-  curl,
-  installShellFiles,
-  pkg-config,
-  bzip2,
-  libgit2,
-  openssl,
-  zlib,
-  zstd,
-  spdx-license-list-data,
-  nix,
-  nurl,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, writeText
+, rustPlatform
+, fetchFromGitHub
+, curl
+, installShellFiles
+, pkg-config
+, bzip2
+, libgit2
+, openssl
+, zlib
+, zstd
+, spdx-license-list-data
+, nix
+, nurl
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 let

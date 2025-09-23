@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  gitUpdater,
-  writeShellApplication,
-  _experimental-update-script-combinators,
-  galene,
-  nix,
-  sd,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, gitUpdater
+, writeShellApplication
+, _experimental-update-script-combinators
+, galene
+, nix
+, sd
+,
 }:
 
 buildGoModule (finalAttrs: {

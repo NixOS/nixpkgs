@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  fixup-yarn-lock,
-  nodejs,
-  yarn,
-  textlint,
-  textlint-rule-period-in-list-item,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, fixup-yarn-lock
+, nodejs
+, yarn
+, textlint
+, textlint-rule-period-in-list-item
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

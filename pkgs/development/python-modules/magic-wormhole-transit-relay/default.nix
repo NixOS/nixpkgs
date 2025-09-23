@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  setuptools,
-  autobahn,
-  twisted,
-  python,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, setuptools
+, autobahn
+, twisted
+, python
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

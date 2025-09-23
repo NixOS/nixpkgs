@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libclthreads,
-  zita-alsa-pcmi,
-  alsa-lib,
-  libjack2,
-  libclxclient,
-  libX11,
-  libXft,
-  readline,
-  aeolus-stops,
+{ lib
+, stdenv
+, fetchurl
+, libclthreads
+, zita-alsa-pcmi
+, alsa-lib
+, libjack2
+, libclxclient
+, libX11
+, libXft
+, readline
+, aeolus-stops
+,
 }:
 
 stdenv.mkDerivation rec {

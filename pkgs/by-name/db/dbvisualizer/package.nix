@@ -1,11 +1,11 @@
-{
-  lib,
-  copyDesktopItems,
-  fetchurl,
-  makeDesktopItem,
-  makeWrapper,
-  openjdk17,
-  stdenv,
+{ lib
+, copyDesktopItems
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, openjdk17
+, stdenv
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  cargo,
-  fetchPypi,
-  pytestCheckHook,
-  rustc,
-  rustPlatform,
-  libiconv,
+{ stdenv
+, lib
+, buildPythonPackage
+, cargo
+, fetchPypi
+, pytestCheckHook
+, rustc
+, rustPlatform
+, libiconv
+,
 }:
 
 buildPythonPackage rec {

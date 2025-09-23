@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  testers,
-  avml,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, testers
+, avml
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

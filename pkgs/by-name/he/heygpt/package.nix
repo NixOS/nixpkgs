@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  lib,
-  openssl,
-  rustPlatform,
+{ fetchFromGitHub
+, lib
+, openssl
+, rustPlatform
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "heygpt";

@@ -1,41 +1,40 @@
-{
-  lib,
-  stdenv,
-  llvm_meta,
-  pkgsBuildBuild,
-  src ? null,
-  monorepoSrc ? null,
-  runCommand,
-  cmake,
-  darwin,
-  ninja,
-  python3,
-  python3Packages,
-  libffi,
-  ld64,
-  libbfd,
-  libpfm,
-  libxml2,
-  ncurses,
-  version,
-  release_version,
-  zlib,
-  which,
-  sysctl,
-  buildLlvmTools,
-  updateAutotoolsGnuConfigScriptsHook,
-  enableManpages ? false,
-  enableSharedLibraries ? !stdenv.hostPlatform.isStatic,
-  enablePFM ?
-    stdenv.hostPlatform.isLinux # PFM only supports Linux
+{ lib
+, stdenv
+, llvm_meta
+, pkgsBuildBuild
+, src ? null
+, monorepoSrc ? null
+, runCommand
+, cmake
+, darwin
+, ninja
+, python3
+, python3Packages
+, libffi
+, ld64
+, libbfd
+, libpfm
+, libxml2
+, ncurses
+, version
+, release_version
+, zlib
+, which
+, sysctl
+, buildLlvmTools
+, updateAutotoolsGnuConfigScriptsHook
+, enableManpages ? false
+, enableSharedLibraries ? !stdenv.hostPlatform.isStatic
+, enablePFM ? stdenv.hostPlatform.isLinux # PFM only supports Linux
     # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
     # broken for the armv7l builder
-    && !stdenv.hostPlatform.isAarch,
-  enablePolly ? true,
-  enableTerminfo ? true,
-  devExtraCmakeFlags ? [ ],
-  getVersionFile,
-  fetchpatch,
+    && !stdenv.hostPlatform.isAarch
+, enablePolly ? true
+, enableTerminfo ? true
+, devExtraCmakeFlags ? [ ]
+, getVersionFile
+, fetchpatch
+,
 }:
 
 let
@@ -69,9 +68,9 @@ stdenv.mkDerivation (
     # on, taking into account whether checks are enabled or not:
     python =
       if finalAttrs.finalPackage.doCheck && !isDarwinBootstrap then
-        # Note that we _explicitly_ ask for a python interpreter for our host
-        # platform here; the splicing that would ordinarily take care of this for
-        # us does not seem to work once we use `withPackages`.
+      # Note that we _explicitly_ ask for a python interpreter for our host
+      # platform here; the splicing that would ordinarily take care of this for
+      # us does not seem to work once we use `withPackages`.
         let
           checkDeps = ps: [ ps.psutil ];
         in
@@ -88,21 +87,22 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "llvm-src-${version}" { inherit (monorepoSrc) passthru; } (
-          ''
-            mkdir -p "$out"
-            cp -r ${monorepoSrc}/llvm "$out"
-            cp -r ${monorepoSrc}/cmake "$out"
-            cp -r ${monorepoSrc}/third-party "$out"
-          ''
-          + lib.optionalString enablePolly ''
-            chmod u+w "$out/llvm/tools"
-            cp -r ${monorepoSrc}/polly "$out/llvm/tools"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "21") ''
-            cp -r ${monorepoSrc}/libc "$out"
-          ''
-        )
+        runCommand "llvm-src-${version}" { inherit (monorepoSrc) passthru; }
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/llvm "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/third-party "$out"
+            ''
+            + lib.optionalString enablePolly ''
+              chmod u+w "$out/llvm/tools"
+              cp -r ${monorepoSrc}/polly "$out/llvm/tools"
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "21") ''
+              cp -r ${monorepoSrc}/libc "$out"
+            ''
+          )
       else
         src;
 
@@ -168,16 +168,16 @@ stdenv.mkDerivation (
         (getVersionFile "llvm/lit-shell-script-runner-set-dyld-library-path.patch")
       ]
       ++
-        lib.optional (lib.versionOlder release_version "19")
-          # Add missing include headers to build against gcc-15:
-          #   https://github.com/llvm/llvm-project/pull/101761
-          (
-            fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/7e44305041d96b064c197216b931ae3917a34ac1.patch";
-              hash = "sha256-1htuzsaPHbYgravGc1vrR8sqpQ/NSQ8PUZeAU8ucCFk=";
-              stripLen = 1;
-            }
-          )
+      lib.optional (lib.versionOlder release_version "19")
+        # Add missing include headers to build against gcc-15:
+        #   https://github.com/llvm/llvm-project/pull/101761
+        (
+          fetchpatch {
+            url = "https://github.com/llvm/llvm-project/commit/7e44305041d96b064c197216b931ae3917a34ac1.patch";
+            hash = "sha256-1htuzsaPHbYgravGc1vrR8sqpQ/NSQ8PUZeAU8ucCFk=";
+            stripLen = 1;
+          }
+        )
       ++ lib.optionals (lib.versions.major release_version == "18") [
         # Reorgs one test so the next patch applies
         (fetchpatch {
@@ -212,16 +212,16 @@ stdenv.mkDerivation (
         (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
       ]
       ++
-        lib.optional (lib.versions.major release_version == "20")
-          # Test failure on riscv64, fixed in llvm 21
-          # https://github.com/llvm/llvm-project/issues/150818
-          (
-            fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/bd49bbaaafc98433a2cb4e95ce25b7a201baf5a5.patch";
-              hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
-              stripLen = 1;
-            }
-          );
+      lib.optional (lib.versions.major release_version == "20")
+        # Test failure on riscv64, fixed in llvm 21
+        # https://github.com/llvm/llvm-project/issues/150818
+        (
+          fetchpatch {
+            url = "https://github.com/llvm/llvm-project/commit/bd49bbaaafc98433a2cb4e95ce25b7a201baf5a5.patch";
+            hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
+            stripLen = 1;
+          }
+        );
 
     nativeBuildInputs = [
       cmake
@@ -255,26 +255,27 @@ stdenv.mkDerivation (
     ++ lib.optional stdenv.hostPlatform.isDarwin sysctl;
 
     postPatch =
-      optionalString stdenv.hostPlatform.isDarwin (
-        ''
-          substituteInPlace cmake/modules/AddLLVM.cmake \
-            --replace-fail 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)"
-        ''
-        +
+      optionalString stdenv.hostPlatform.isDarwin
+        (
+          ''
+            substituteInPlace cmake/modules/AddLLVM.cmake \
+              --replace-fail 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)"
+          ''
+          +
           # As of LLVM 15, marked as XFAIL on arm64 macOS but lit doesn't seem to pick
           # this up: https://github.com/llvm/llvm-project/blob/c344d97a125b18f8fed0a64aace73c49a870e079/llvm/test/MC/ELF/cfi-version.ll#L7
           ''
             rm test/MC/ELF/cfi-version.ll
 
           ''
-        +
+          +
           # This test tries to call `sw_vers` by absolute path (`/usr/bin/sw_vers`)
           # and thus fails under the sandbox:
           ''
             substituteInPlace unittests/TargetParser/Host.cpp \
               --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
           ''
-        +
+          +
           # This test tries to call the intrinsics `@llvm.roundeven.f32` and
           # `@llvm.roundeven.f64` which seem to (incorrectly?) lower to `roundevenf`
           # and `roundeven` on macOS and FreeBSD.
@@ -290,89 +291,89 @@ stdenv.mkDerivation (
               --replace-fail "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
               --replace-fail "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
           ''
-        +
+          +
           # fails when run in sandbox
           optionalString (!stdenv.hostPlatform.isx86) ''
             substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
               --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
           ''
-      )
-      +
-        # dup of above patch with different conditions
-        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) (
-          # fails when run in sandbox
-          (
-            ''
-              substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
-                --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
-            ''
-            +
-              # This test fails on darwin x86_64 because `sw_vers` reports a different
-              # macOS version than what LLVM finds by reading
-              # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
-              # the sandbox on macOS).
-              #
-              # The `sw_vers` provided by nixpkgs reports the macOS version associated
-              # with the `CoreFoundation` framework with which it was built. Because
-              # nixpkgs pins the SDK for `aarch64-darwin` and `x86_64-darwin` what
-              # `sw_vers` reports is not guaranteed to match the macOS version of the host
-              # that's building this derivation.
-              #
-              # Astute readers will note that we only _patch_ this test on aarch64-darwin
-              # (to use the nixpkgs provided `sw_vers`) instead of disabling it outright.
-              # So why does this test pass on aarch64?
-              #
-              # Well, it seems that `sw_vers` on aarch64 actually links against the _host_
-              # CoreFoundation framework instead of the nixpkgs provided one.
-              #
-              # Not entirely sure what the right fix is here. I'm assuming aarch64
-              # `sw_vers` doesn't intentionally link against the host `CoreFoundation`
-              # (still digging into how this ends up happening, will follow up) but that
-              # aside I think the more pertinent question is: should we be patching LLVM's
-              # macOS version detection logic to use `sw_vers` instead of reading host
-              # paths? This *is* a way in which details about builder machines can creep
-              # into the artifacts that are produced, affecting reproducibility, but it's
-              # not clear to me when/where/for what this even gets used in LLVM.
-              #
-              # TODO(@rrbutani): fix/follow-up
-              ''
-                substituteInPlace unittests/TargetParser/Host.cpp \
-                  --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-              ''
-            +
-              # This test fails with a `dysmutil` crash; have not yet dug into what's
-              # going on here (TODO(@rrbutani)).
-              lib.optionalString (lib.versionOlder release_version "19") ''
-                rm test/tools/dsymutil/ARM/obfuscated.test
-              ''
-          )
         )
       +
-        # FileSystem permissions tests fail with various special bits
-        ''
-          substituteInPlace unittests/Support/CMakeLists.txt \
-            --replace-fail "Path.cpp" ""
-          rm unittests/Support/Path.cpp
-          substituteInPlace unittests/IR/CMakeLists.txt \
-            --replace-fail "PassBuilderCallbacksTest.cpp" ""
-          rm unittests/IR/PassBuilderCallbacksTest.cpp
-          rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
-        ''
+      # dup of above patch with different conditions
+      optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) (
+        # fails when run in sandbox
+        (
+          ''
+            substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
+              --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
+          ''
+          +
+          # This test fails on darwin x86_64 because `sw_vers` reports a different
+          # macOS version than what LLVM finds by reading
+          # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
+          # the sandbox on macOS).
+          #
+          # The `sw_vers` provided by nixpkgs reports the macOS version associated
+          # with the `CoreFoundation` framework with which it was built. Because
+          # nixpkgs pins the SDK for `aarch64-darwin` and `x86_64-darwin` what
+          # `sw_vers` reports is not guaranteed to match the macOS version of the host
+          # that's building this derivation.
+          #
+          # Astute readers will note that we only _patch_ this test on aarch64-darwin
+          # (to use the nixpkgs provided `sw_vers`) instead of disabling it outright.
+          # So why does this test pass on aarch64?
+          #
+          # Well, it seems that `sw_vers` on aarch64 actually links against the _host_
+          # CoreFoundation framework instead of the nixpkgs provided one.
+          #
+          # Not entirely sure what the right fix is here. I'm assuming aarch64
+          # `sw_vers` doesn't intentionally link against the host `CoreFoundation`
+          # (still digging into how this ends up happening, will follow up) but that
+          # aside I think the more pertinent question is: should we be patching LLVM's
+          # macOS version detection logic to use `sw_vers` instead of reading host
+          # paths? This *is* a way in which details about builder machines can creep
+          # into the artifacts that are produced, affecting reproducibility, but it's
+          # not clear to me when/where/for what this even gets used in LLVM.
+          #
+          # TODO(@rrbutani): fix/follow-up
+          ''
+            substituteInPlace unittests/TargetParser/Host.cpp \
+              --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
+          ''
+          +
+          # This test fails with a `dysmutil` crash; have not yet dug into what's
+          # going on here (TODO(@rrbutani)).
+          lib.optionalString (lib.versionOlder release_version "19") ''
+            rm test/tools/dsymutil/ARM/obfuscated.test
+          ''
+        )
+      )
       +
-        # Fails in the presence of anti-virus software or other intrusion-detection software that
-        # modifies the atime when run. See #284056.
-        ''
-          rm test/tools/llvm-objcopy/ELF/strip-preserve-atime.test
-        ''
+      # FileSystem permissions tests fail with various special bits
+      ''
+        substituteInPlace unittests/Support/CMakeLists.txt \
+          --replace-fail "Path.cpp" ""
+        rm unittests/Support/Path.cpp
+        substituteInPlace unittests/IR/CMakeLists.txt \
+          --replace-fail "PassBuilderCallbacksTest.cpp" ""
+        rm unittests/IR/PassBuilderCallbacksTest.cpp
+        rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
+      ''
       +
-        # valgrind unhappy with musl or glibc, but fails w/musl only
-        optionalString stdenv.hostPlatform.isMusl ''
-          patch -p1 -i ${./TLI-musl.patch}
-          substituteInPlace unittests/Support/CMakeLists.txt \
-            --replace-fail "add_subdirectory(DynamicLibrary)" ""
-          rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
-          rm test/CodeGen/AArch64/wineh4.mir
-        ''
+      # Fails in the presence of anti-virus software or other intrusion-detection software that
+      # modifies the atime when run. See #284056.
+      ''
+        rm test/tools/llvm-objcopy/ELF/strip-preserve-atime.test
+      ''
+      +
+      # valgrind unhappy with musl or glibc, but fails w/musl only
+      optionalString stdenv.hostPlatform.isMusl ''
+        patch -p1 -i ${./TLI-musl.patch}
+        substituteInPlace unittests/Support/CMakeLists.txt \
+          --replace-fail "add_subdirectory(DynamicLibrary)" ""
+        rm unittests/Support/DynamicLibrary/DynamicLibraryTest.cpp
+        rm test/CodeGen/AArch64/wineh4.mir
+      ''
       + optionalString stdenv.hostPlatform.isAarch32 ''
         # skip failing X86 test cases on 32-bit ARM
         rm test/DebugInfo/X86/convert-debugloc.ll
@@ -383,29 +384,29 @@ stdenv.mkDerivation (
         rm test/tools/llvm-objcopy/MachO/universal-object.test
       ''
       +
-        # Seems to require certain floating point hardware (NEON?)
-        optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
-          rm test/ExecutionEngine/frem.ll
-        ''
+      # Seems to require certain floating point hardware (NEON?)
+      optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
+        rm test/ExecutionEngine/frem.ll
+      ''
       +
-        # 1. TODO: Why does this test fail on FreeBSD?
-        # It seems to reference /usr/local/lib/libfile.a, which is clearly a problem.
-        # 2. This test fails for the same reason it fails on MacOS, but the fix is
-        # not trivial to apply.
-        optionalString stdenv.hostPlatform.isFreeBSD ''
-          rm test/tools/llvm-libtool-darwin/L-and-l.test
-          rm test/ExecutionEngine/Interpreter/intrinsics.ll
-          # Fails in sandbox
-          substituteInPlace unittests/Support/LockFileManagerTest.cpp --replace-fail "Basic" "DISABLED_Basic"
-        ''
+      # 1. TODO: Why does this test fail on FreeBSD?
+      # It seems to reference /usr/local/lib/libfile.a, which is clearly a problem.
+      # 2. This test fails for the same reason it fails on MacOS, but the fix is
+      # not trivial to apply.
+      optionalString stdenv.hostPlatform.isFreeBSD ''
+        rm test/tools/llvm-libtool-darwin/L-and-l.test
+        rm test/ExecutionEngine/Interpreter/intrinsics.ll
+        # Fails in sandbox
+        substituteInPlace unittests/Support/LockFileManagerTest.cpp --replace-fail "Basic" "DISABLED_Basic"
+      ''
       +
-        # https://github.com/llvm/llvm-project/issues/149616
-        optionalString stdenv.hostPlatform.isLoongArch64 ''
-          substituteInPlace unittests/tools/llvm-exegesis/X86/SnippetRepetitorTest.cpp \
-            --replace-fail \
-              "TEST_F(X86SnippetRepetitorTest, Loop)" \
-              "TEST_F(X86SnippetRepetitorTest, DISABLED_Loop)"
-        ''
+      # https://github.com/llvm/llvm-project/issues/149616
+      optionalString stdenv.hostPlatform.isLoongArch64 ''
+        substituteInPlace unittests/tools/llvm-exegesis/X86/SnippetRepetitorTest.cpp \
+          --replace-fail \
+            "TEST_F(X86SnippetRepetitorTest, Loop)" \
+            "TEST_F(X86SnippetRepetitorTest, DISABLED_Loop)"
+      ''
       + ''
         patchShebangs test/BugPoint/compile-custom.ll.py
       '';
@@ -452,9 +453,10 @@ stdenv.mkDerivation (
       '';
 
     # E.g. Mesa uses the build-id as a cache key (see #93946):
-    LDFLAGS = optionalString (
-      enableSharedLibraries && !stdenv.hostPlatform.isDarwin
-    ) "-Wl,--build-id=sha1";
+    LDFLAGS = optionalString
+      (
+        enableSharedLibraries && !stdenv.hostPlatform.isDarwin
+      ) "-Wl,--build-id=sha1";
 
     cmakeBuildType = "Release";
 
@@ -515,45 +517,45 @@ stdenv.mkDerivation (
         (lib.cmakeBool "CAN_TARGET_i386" false)
       ]
       ++
-        optionals
+      optionals
+        (
+          (stdenv.hostPlatform != stdenv.buildPlatform)
+          && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+        )
+        [
+          (lib.cmakeBool "CMAKE_CROSSCOMPILING" true)
           (
-            (stdenv.hostPlatform != stdenv.buildPlatform)
-            && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)
-          )
-          [
-            (lib.cmakeBool "CMAKE_CROSSCOMPILING" true)
-            (
-              let
-                nativeCC = pkgsBuildBuild.targetPackages.stdenv.cc;
-                nativeBintools = nativeCC.bintools.bintools;
-                nativeToolchainFlags = [
-                  (lib.cmakeFeature "CMAKE_C_COMPILER" "${nativeCC}/bin/${nativeCC.targetPrefix}cc")
-                  (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${nativeCC}/bin/${nativeCC.targetPrefix}c++")
-                  (lib.cmakeFeature "CMAKE_AR" "${nativeBintools}/bin/${nativeBintools.targetPrefix}ar")
-                  (lib.cmakeFeature "CMAKE_STRIP" "${nativeBintools}/bin/${nativeBintools.targetPrefix}strip")
-                  (lib.cmakeFeature "CMAKE_RANLIB" "${nativeBintools}/bin/${nativeBintools.targetPrefix}ranlib")
-                ];
-                # We need to repass the custom GNUInstallDirs values, otherwise CMake
-                # will choose them for us, leading to wrong results in llvm-config-native
-                nativeInstallFlags = [
-                  (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "out"))
-                  (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "${placeholder "out"}/bin")
-                  (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "${placeholder "dev"}/include")
-                  (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "${placeholder "lib"}/lib")
-                  (lib.cmakeFeature "CMAKE_INSTALL_LIBEXECDIR" "${placeholder "lib"}/libexec")
-                ];
-              in
-              lib.cmakeOptionType "list" "CROSS_TOOLCHAIN_FLAGS_NATIVE" (
-                lib.concatStringsSep ";" (
-                  lib.concatLists [
-                    flagsForLlvmConfig
-                    nativeToolchainFlags
-                    nativeInstallFlags
-                  ]
-                )
+            let
+              nativeCC = pkgsBuildBuild.targetPackages.stdenv.cc;
+              nativeBintools = nativeCC.bintools.bintools;
+              nativeToolchainFlags = [
+                (lib.cmakeFeature "CMAKE_C_COMPILER" "${nativeCC}/bin/${nativeCC.targetPrefix}cc")
+                (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${nativeCC}/bin/${nativeCC.targetPrefix}c++")
+                (lib.cmakeFeature "CMAKE_AR" "${nativeBintools}/bin/${nativeBintools.targetPrefix}ar")
+                (lib.cmakeFeature "CMAKE_STRIP" "${nativeBintools}/bin/${nativeBintools.targetPrefix}strip")
+                (lib.cmakeFeature "CMAKE_RANLIB" "${nativeBintools}/bin/${nativeBintools.targetPrefix}ranlib")
+              ];
+              # We need to repass the custom GNUInstallDirs values, otherwise CMake
+              # will choose them for us, leading to wrong results in llvm-config-native
+              nativeInstallFlags = [
+                (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "out"))
+                (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "${placeholder "out"}/bin")
+                (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "${placeholder "dev"}/include")
+                (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "${placeholder "lib"}/lib")
+                (lib.cmakeFeature "CMAKE_INSTALL_LIBEXECDIR" "${placeholder "lib"}/libexec")
+              ];
+            in
+            lib.cmakeOptionType "list" "CROSS_TOOLCHAIN_FLAGS_NATIVE" (
+              lib.concatStringsSep ";" (
+                lib.concatLists [
+                  flagsForLlvmConfig
+                  nativeToolchainFlags
+                  nativeInstallFlags
+                ]
               )
             )
-          ]
+          )
+        ]
       ++ devExtraCmakeFlags;
 
     postInstall = ''
@@ -614,7 +616,7 @@ stdenv.mkDerivation (
       '';
     };
   }
-  // lib.optionalAttrs enableManpages {
+    // lib.optionalAttrs enableManpages {
     pname = "llvm-manpages";
 
     propagatedBuildInputs = [ ];

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  attr,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, attr
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

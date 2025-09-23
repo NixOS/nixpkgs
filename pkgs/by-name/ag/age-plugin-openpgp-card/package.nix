@@ -1,11 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-
-  rustPlatform,
-
-  pcsclite,
-  pkg-config,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pcsclite
+, pkg-config
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "age-plugin-openpgp-card";

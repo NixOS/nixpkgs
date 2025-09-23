@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools-scm,
-  more-itertools,
-  cssselect,
-  jaraco-test,
-  lxml,
-  mock,
-  pytestCheckHook,
-  importlib-resources,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools-scm
+, more-itertools
+, cssselect
+, jaraco-test
+, lxml
+, mock
+, pytestCheckHook
+, importlib-resources
+,
 }:
 
 buildPythonPackage rec {

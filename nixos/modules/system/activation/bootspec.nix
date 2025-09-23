@@ -3,17 +3,18 @@
 # Changes to the structure of the document, or the semantics of the values should go through an RFC.
 #
 # See: https://github.com/NixOS/rfcs/pull/125
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.boot.bootspec;
-  children = lib.mapAttrs (
-    childName: childConfig: childConfig.configuration.system.build.toplevel
-  ) config.specialisation;
+  children = lib.mapAttrs
+    (
+      childName: childConfig: childConfig.configuration.system.build.toplevel
+    )
+    config.specialisation;
   hasAtLeastOneInitrdSecret = lib.length (lib.attrNames config.boot.initrd.secrets) > 0;
   schemas = {
     v1 = rec {
@@ -71,14 +72,16 @@ let
           specialisationInjector =
             let
               specialisationLoader = (
-                lib.mapAttrsToList (
-                  childName: childToplevel:
-                  lib.escapeShellArgs [
-                    "--slurpfile"
-                    childName
-                    "${childToplevel}/${filename}"
-                  ]
-                ) children
+                lib.mapAttrsToList
+                  (
+                    childName: childToplevel:
+                      lib.escapeShellArgs [
+                        "--slurpfile"
+                        childName
+                        "${childToplevel}/${filename}"
+                      ]
+                  )
+                  children
               );
             in
             lib.escapeShellArgs [

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  patchelf,
-  xorg,
-  openal,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, patchelf
+, xorg
+, openal
+,
 }:
 
 let

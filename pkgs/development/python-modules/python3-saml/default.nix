@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  freezegun,
-  isodate,
-  lxml,
-  pytestCheckHook,
-  pythonOlder,
-  poetry-core,
-  xmlsec,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, freezegun
+, isodate
+, lxml
+, pytestCheckHook
+, pythonOlder
+, poetry-core
+, xmlsec
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitLab,
-  stdenv,
-  zig_0_14,
+{ lib
+, fetchFromGitLab
+, stdenv
+, zig_0_14
+,
 }:
 
 let

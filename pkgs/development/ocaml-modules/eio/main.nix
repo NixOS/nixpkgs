@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildDunePackage,
-  eio,
-  eio_posix,
-  eio_linux,
+{ lib
+, stdenv
+, buildDunePackage
+, eio
+, eio_posix
+, eio_linux
+,
 }:
 
 buildDunePackage {

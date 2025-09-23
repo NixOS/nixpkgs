@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  gobject-introspection,
-  blueprint-compiler,
-  wrapGAppsHook4,
-  libadwaita,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, gobject-introspection
+, blueprint-compiler
+, wrapGAppsHook4
+, libadwaita
+,
 }:
 
 buildGoModule rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  shared-mime-info,
-  libiconv,
-  installShellFiles,
-  nix-update-script,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, shared-mime-info
+, libiconv
+, installShellFiles
+, nix-update-script
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  SDL,
-  SDL_image,
-  SDL_mixer,
-  SDL_ttf,
-  fetchFromGitHub,
-  freetype,
-  libjpeg,
-  libogg,
-  libpng,
-  libvorbis,
-  pkg-config,
-  smpeg,
-  stdenv,
+{ lib
+, SDL
+, SDL_image
+, SDL_mixer
+, SDL_ttf
+, fetchFromGitHub
+, freetype
+, libjpeg
+, libogg
+, libpng
+, libvorbis
+, pkg-config
+, smpeg
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

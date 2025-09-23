@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  pnpm_9,
-  fetchFromGitHub,
-  unstableGitUpdater,
+{ lib
+, buildNpmPackage
+, pnpm_9
+, fetchFromGitHub
+, unstableGitUpdater
+,
 }:
 
 buildNpmPackage rec {

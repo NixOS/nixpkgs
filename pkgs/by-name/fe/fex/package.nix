@@ -1,31 +1,31 @@
-{
-  lib,
-  llvmPackages,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  pkg-config,
-  python3,
-  nix-update-script,
-  xxHash,
-  fmt,
-  libxml2,
-  openssl,
-  range-v3,
-  catch2_3,
-  nasm,
-  buildEnv,
-  writeText,
-  pkgsCross,
-  libclang,
-  libllvm,
-  alsa-lib,
-  libdrm,
-  libGL,
-  wayland,
-  xorg,
-  withQt ? true,
-  qt6,
+{ lib
+, llvmPackages
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, python3
+, nix-update-script
+, xxHash
+, fmt
+, libxml2
+, openssl
+, range-v3
+, catch2_3
+, nasm
+, buildEnv
+, writeText
+, pkgsCross
+, libclang
+, libllvm
+, alsa-lib
+, libdrm
+, libGL
+, wayland
+, xorg
+, withQt ? true
+, qt6
+,
 }:
 
 let

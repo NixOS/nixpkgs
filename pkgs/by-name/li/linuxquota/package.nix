@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  e2fsprogs,
-  openldap,
-  pkg-config,
-  binlore,
-  linuxquota,
+{ lib
+, stdenv
+, fetchurl
+, e2fsprogs
+, openldap
+, pkg-config
+, binlore
+, linuxquota
+,
 }:
 
 stdenv.mkDerivation rec {

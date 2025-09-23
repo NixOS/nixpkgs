@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mock,
-  oauthlib,
-  pytestCheckHook,
-  requests,
-  requests-mock,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, oauthlib
+, pytestCheckHook
+, requests
+, requests-mock
+,
 }:
 
 buildPythonPackage rec {

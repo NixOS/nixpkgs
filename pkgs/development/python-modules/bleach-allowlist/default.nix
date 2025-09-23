@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  bleach,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, bleach
+,
 }:
 
 buildPythonPackage rec {

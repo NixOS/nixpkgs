@@ -1,20 +1,20 @@
-{
-  buildGoModule,
-  copyDesktopItems,
-  fetchFromGitLab,
-  lib,
-  libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXxf86vm,
-  makeDesktopItem,
-  libgbm,
-  pkg-config,
-  stdenv,
+{ buildGoModule
+, copyDesktopItems
+, fetchFromGitLab
+, lib
+, libGL
+, libX11
+, libXcursor
+, libXext
+, libXi
+, libXinerama
+, libXrandr
+, libXxf86vm
+, makeDesktopItem
+, libgbm
+, pkg-config
+, stdenv
+,
 }:
 
 buildGoModule rec {

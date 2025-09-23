@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.programs.uwsm;
@@ -113,13 +112,15 @@ in
 
     services.displayManager = {
       enable = true;
-      sessionPackages = lib.mapAttrsToList (
-        name: value:
-        mk_uwsm_desktop_entry {
-          inherit name;
-          inherit (value) prettyName comment binPath;
-        }
-      ) cfg.waylandCompositors;
+      sessionPackages = lib.mapAttrsToList
+        (
+          name: value:
+            mk_uwsm_desktop_entry {
+              inherit name;
+              inherit (value) prettyName comment binPath;
+            }
+        )
+        cfg.waylandCompositors;
     };
   };
 

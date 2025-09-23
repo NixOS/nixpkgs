@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pygments,
-  gitMinimal,
-  mercurial,
-  subversion,
-  p4,
-  less,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pygments
+, gitMinimal
+, mercurial
+, subversion
+, p4
+, less
+,
 }:
 
 buildPythonPackage rec {

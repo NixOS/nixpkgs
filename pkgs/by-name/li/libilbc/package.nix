@@ -1,13 +1,13 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  testers,
-  lib,
-  cmake,
-  ninja,
-  pkg-config,
-  abseil-cpp_202103,
+{ stdenv
+, fetchFromGitHub
+, gitUpdater
+, testers
+, lib
+, cmake
+, ninja
+, pkg-config
+, abseil-cpp_202103
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

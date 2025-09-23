@@ -1,12 +1,12 @@
-{
-  lib,
-  qttools,
-  qmake,
-  qtwebkit,
-  wrapQtAppsHook,
-  readline,
-  openmodelica,
-  mkOpenModelicaDerivation,
+{ lib
+, qttools
+, qmake
+, qtwebkit
+, wrapQtAppsHook
+, readline
+, openmodelica
+, mkOpenModelicaDerivation
+,
 }:
 
 mkOpenModelicaDerivation {

@@ -1,11 +1,11 @@
-{
-  stdenvNoCC,
-  fetchurl,
-  unzip,
-  runtimeShell,
-  pname,
-  version,
-  meta,
+{ stdenvNoCC
+, fetchurl
+, unzip
+, runtimeShell
+, pname
+, version
+, meta
+,
 }:
 
 let
@@ -22,8 +22,7 @@ let
         arch = "x64";
         sha256 = "sha256-TnoXaiSNYiblgJS5nygTHOe9HBgVCTfffX37wrwtxZ8=";
       };
-    }
-    .${stdenvNoCC.hostPlatform.system}
+    }.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
 in

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  rpmextract,
-  patchelf,
-  makeWrapper,
-  file,
-  requireFile,
-  glib,
-  zlib,
-  freetype,
-  fontconfig,
-  xorg,
-  libusb-compat-0_1,
-  coreutils,
+{ lib
+, stdenv
+, rpmextract
+, patchelf
+, makeWrapper
+, file
+, requireFile
+, glib
+, zlib
+, freetype
+, fontconfig
+, xorg
+, libusb-compat-0_1
+, coreutils
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  fetchFromGitHub,
-  gnused,
-  ncurses,
-  xorg,
-  rlwrap,
+{ lib
+, stdenv
+, replaceVars
+, fetchFromGitHub
+, gnused
+, ncurses
+, xorg
+, rlwrap
+,
 }:
 
 stdenv.mkDerivation {

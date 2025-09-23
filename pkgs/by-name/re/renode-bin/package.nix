@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchurl,
-  fetchpatch,
-  autoPatchelfHook,
-  makeWrapper,
-  nix-update-script,
-  glibcLocales,
-  python3Packages,
-  dotnetCorePackages,
-  gtk-sharp-3_0,
-  gtk3-x11,
-  dconf,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchurl
+, fetchpatch
+, autoPatchelfHook
+, makeWrapper
+, nix-update-script
+, glibcLocales
+, python3Packages
+, dotnetCorePackages
+, gtk-sharp-3_0
+, gtk3-x11
+, dconf
+,
 }:
 
 let

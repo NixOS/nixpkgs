@@ -1,20 +1,19 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  pkg-config,
-  cmake,
-  libiconv,
-  cargo,
-  gcc,
-  mold,
-  rustc,
-  nix-update-script,
-
-  # On non-darwin, `mold` is the default linker, but it's broken on Darwin.
-  withMold ? with stdenv.hostPlatform; isUnix && !isDarwin,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, pkg-config
+, cmake
+, libiconv
+, cargo
+, gcc
+, mold
+, rustc
+, nix-update-script
+, # On non-darwin, `mold` is the default linker, but it's broken on Darwin.
+  withMold ? with stdenv.hostPlatform; isUnix && !isDarwin
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

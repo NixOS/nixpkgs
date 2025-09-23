@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  django-allauth,
-  djangorestframework,
-  djangorestframework-simplejwt,
-  fetchFromGitHub,
-  fetchpatch,
-  python,
-  responses,
-  setuptools,
-  unittest-xml-reporting,
-  pytestCheckHook,
-  pytest-django,
+{ lib
+, buildPythonPackage
+, django
+, django-allauth
+, djangorestframework
+, djangorestframework-simplejwt
+, fetchFromGitHub
+, fetchpatch
+, python
+, responses
+, setuptools
+, unittest-xml-reporting
+, pytestCheckHook
+, pytest-django
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  libffi,
-  openssl,
-  readline,
-  stdenv,
-  testers,
-  valgrind,
-  xxd,
-  # Boolean flags
-  checkLeaks ? false,
-  enableFFI ? true,
-  enableSSL ? true,
-  enableThreads ? true,
-  # Configurable inputs
-  lineEditingLibrary ? "isocline",
+{ lib
+, fetchFromGitHub
+, libffi
+, openssl
+, readline
+, stdenv
+, testers
+, valgrind
+, xxd
+, # Boolean flags
+  checkLeaks ? false
+, enableFFI ? true
+, enableSSL ? true
+, enableThreads ? true
+, # Configurable inputs
+  lineEditingLibrary ? "isocline"
+,
 }:
 
 assert lib.elem lineEditingLibrary [

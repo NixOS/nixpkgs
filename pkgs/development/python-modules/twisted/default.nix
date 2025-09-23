@@ -1,56 +1,51 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonAtLeast,
-  pythonOlder,
-  fetchPypi,
-  python,
-
-  # build-system
-  hatchling,
-  hatch-fancy-pypi-readme,
-
-  # dependencies
-  attrs,
-  automat,
-  constantly,
-  hyperlink,
-  incremental,
-  typing-extensions,
-  zope-interface,
-
-  # optional-dependencies
-  appdirs,
-  bcrypt,
-  cryptography,
-  h2,
-  idna,
-  priority,
-  pyopenssl,
-  pyserial,
-  service-identity,
-
-  # tests
-  cython-test-exception-raiser,
-  gitMinimal,
-  glibcLocales,
-  pyhamcrest,
-  hypothesis,
-
-  # for passthru.tests
-  cassandra-driver,
-  httpx,
-  klein,
-  magic-wormhole,
-  scrapy,
-  treq,
-  txaio,
-  txamqp,
-  txrequests,
-  txtorcon,
-  thrift,
-  nixosTests,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonAtLeast
+, pythonOlder
+, fetchPypi
+, python
+, # build-system
+  hatchling
+, hatch-fancy-pypi-readme
+, # dependencies
+  attrs
+, automat
+, constantly
+, hyperlink
+, incremental
+, typing-extensions
+, zope-interface
+, # optional-dependencies
+  appdirs
+, bcrypt
+, cryptography
+, h2
+, idna
+, priority
+, pyopenssl
+, pyserial
+, service-identity
+, # tests
+  cython-test-exception-raiser
+, gitMinimal
+, glibcLocales
+, pyhamcrest
+, hypothesis
+, # for passthru.tests
+  cassandra-driver
+, httpx
+, klein
+, magic-wormhole
+, scrapy
+, treq
+, txaio
+, txamqp
+, txrequests
+, txtorcon
+, thrift
+, nixosTests
+,
 }:
 
 buildPythonPackage rec {
@@ -174,11 +169,14 @@ buildPythonPackage rec {
         ];
       };
     in
-    lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        file: tests: lib.concatMapStringsSep "\n" (test: ''echo '${test}.skip = ""' >> "${file}"'') tests
-      ) skippedTests
-    )
+    lib.concatStringsSep "\n"
+      (
+        lib.mapAttrsToList
+          (
+            file: tests: lib.concatMapStringsSep "\n" (test: ''echo '${test}.skip = ""' >> "${file}"'') tests
+          )
+          skippedTests
+      )
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       # Patch t.p._inotify to point to libc. Without this,
       # twisted.python.runtime.platform.supportsINotify() == False

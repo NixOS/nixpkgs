@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  jinja2,
-  setuptools,
-  fetchFromGitHub,
-  rich,
-  versionCheckHook,
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, jinja2
+, setuptools
+, fetchFromGitHub
+, rich
+, versionCheckHook
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

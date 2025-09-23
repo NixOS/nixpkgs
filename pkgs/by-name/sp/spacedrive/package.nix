@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  undmg,
-  nix-update-script,
-  #linux required
-  autoPatchelfHook,
-  dpkg,
-  gdk-pixbuf,
-  glib,
-  gst_all_1,
-  libsoup_3,
-  webkitgtk_4_1,
-  xdotool,
+{ lib
+, stdenv
+, fetchurl
+, undmg
+, nix-update-script
+, #linux required
+  autoPatchelfHook
+, dpkg
+, gdk-pixbuf
+, glib
+, gst_all_1
+, libsoup_3
+, webkitgtk_4_1
+, xdotool
+,
 }:
 
 let
@@ -34,8 +34,7 @@ let
           url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.deb";
           hash = "sha256-MLCAHNLJ/9bdCBLBBssrpk98uvKTfHs9YGxmxJ11/oY=";
         };
-      }
-      .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
+      }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
   meta = {
     description = "Open source file manager, powered by a virtual distributed filesystem";
@@ -60,7 +59,8 @@ let
   passthru.updateScript = nix-update-script { };
 in
 if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+  stdenv.mkDerivation
+  {
     inherit
       pname
       version

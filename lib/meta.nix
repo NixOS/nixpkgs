@@ -52,9 +52,10 @@ rec {
   addMetaAttrs =
     newAttrs: drv:
     if drv ? overrideAttrs then
-      drv.overrideAttrs (old: {
-        meta = (old.meta or { }) // newAttrs;
-      })
+      drv.overrideAttrs
+        (old: {
+          meta = (old.meta or { }) // newAttrs;
+        })
     else
       drv // { meta = (drv.meta or { }) // newAttrs; };
 
@@ -262,10 +263,12 @@ rec {
       if isString elem then
         platform ? system && elem == platform.system
       else
-        matchAttrs (
-          # Normalize platform attrset.
-          if elem ? parsed then elem else { parsed = elem; }
-        ) platform
+        matchAttrs
+          (
+            # Normalize platform attrset.
+            if elem ? parsed then elem else { parsed = elem; }
+          )
+          platform
     );
 
   /**
@@ -323,10 +326,12 @@ rec {
 
     :::
   */
-  licensesSpdx = mapAttrs' (_key: license: {
-    name = license.spdxId;
-    value = license;
-  }) (filterAttrs (_key: license: license ? spdxId) lib.licenses);
+  licensesSpdx = mapAttrs'
+    (_key: license: {
+      name = license.spdxId;
+      value = license;
+    })
+    (filterAttrs (_key: license: license ? spdxId) lib.licenses);
 
   /**
     Get the corresponding attribute in lib.licenses from the SPDX ID
@@ -406,10 +411,12 @@ rec {
   */
   getLicenseFromSpdxIdOr =
     let
-      lowercaseLicenses = lib.mapAttrs' (name: value: {
-        name = lib.toLower name;
-        inherit value;
-      }) licensesSpdx;
+      lowercaseLicenses = lib.mapAttrs'
+        (name: value: {
+          name = lib.toLower name;
+          inherit value;
+        })
+        licensesSpdx;
     in
     licstr: default: lowercaseLicenses.${lib.toLower licstr} or default;
 
@@ -489,13 +496,13 @@ rec {
   */
   getExe' =
     x: y:
-    assert assertMsg (isDerivation x)
-      "lib.meta.getExe': The first argument is of type ${typeOf x}, but it should be a derivation instead.";
-    assert assertMsg (isString y)
-      "lib.meta.getExe': The second argument is of type ${typeOf y}, but it should be a string instead.";
-    assert assertMsg (match ".*/.*" y == null)
-      "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
-    "${getBin x}/bin/${y}";
+      assert assertMsg (isDerivation x)
+        "lib.meta.getExe': The first argument is of type ${typeOf x}, but it should be a derivation instead.";
+      assert assertMsg (isString y)
+        "lib.meta.getExe': The second argument is of type ${typeOf y}, but it should be a string instead.";
+      assert assertMsg (match ".*/.*" y == null)
+        "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
+      "${getBin x}/bin/${y}";
 
   /**
     Generate [CPE parts](#var-meta-identifiers-cpeParts) from inputs. Copies `vendor` and `version` to the output, and sets `update` to `*`.

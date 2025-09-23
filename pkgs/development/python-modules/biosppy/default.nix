@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  bidict,
-  h5py,
-  matplotlib,
-  numpy,
-  scikit-learn,
-  scipy,
-  shortuuid,
-  six,
-  joblib,
-  pywavelets,
-  mock,
-  tkinter,
-  opencv-python,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, bidict
+, h5py
+, matplotlib
+, numpy
+, scikit-learn
+, scipy
+, shortuuid
+, six
+, joblib
+, pywavelets
+, mock
+, tkinter
+, opencv-python
+,
 }:
 
 buildPythonPackage rec {

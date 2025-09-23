@@ -1,10 +1,10 @@
-{
-  expect,
-  fetchFromGitHub,
-  lib,
-  rustPlatform,
-  stdenv,
-  fetchpatch,
+{ expect
+, fetchFromGitHub
+, lib
+, rustPlatform
+, stdenv
+, fetchpatch
+,
 }:
 
 rustPlatform.buildRustPackage rec {

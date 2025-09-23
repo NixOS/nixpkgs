@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  gettext,
-  perl,
-  pkg-config,
-  libxml2,
-  pango,
-  cairo,
-  groff,
-  tcl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, gettext
+, perl
+, pkg-config
+, libxml2
+, pango
+, cairo
+, groff
+, tcl
+,
 }:
 
 perl.pkgs.toPerlModule (

@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  adwaita-icon-theme,
-  desktop-file-utils,
-  docbook-xsl-nons,
-  gettext,
-  glib,
-  gnome,
-  gnome-settings-daemon,
-  gsettings-desktop-schemas,
-  gtk3,
-  itstool,
-  libcanberra-gtk3,
-  libdvdread,
-  libhandy,
-  libnotify,
-  libpwquality,
-  libsecret,
-  libxml2,
-  libxslt,
-  meson,
-  ninja,
-  pkg-config,
-  systemd,
-  udisks2,
-  wrapGAppsHook3,
-  xz,
+{ lib
+, stdenv
+, fetchurl
+, adwaita-icon-theme
+, desktop-file-utils
+, docbook-xsl-nons
+, gettext
+, glib
+, gnome
+, gnome-settings-daemon
+, gsettings-desktop-schemas
+, gtk3
+, itstool
+, libcanberra-gtk3
+, libdvdread
+, libhandy
+, libnotify
+, libpwquality
+, libsecret
+, libxml2
+, libxslt
+, meson
+, ninja
+, pkg-config
+, systemd
+, udisks2
+, wrapGAppsHook3
+, xz
+,
 }:
 
 stdenv.mkDerivation rec {

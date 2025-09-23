@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  logs,
-  fmt,
-  ptime,
-  mirage-clock,
-  cmdliner,
-  lwt,
-  alcotest,
+{ lib
+, fetchurl
+, buildDunePackage
+, logs
+, fmt
+, ptime
+, mirage-clock
+, cmdliner
+, lwt
+, alcotest
+,
 }:
 
 buildDunePackage rec {

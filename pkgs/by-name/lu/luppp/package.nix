@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  jack2,
-  cairo,
-  liblo,
-  libsndfile,
-  libsamplerate,
-  ntk,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, jack2
+, cairo
+, liblo
+, libsndfile
+, libsamplerate
+, ntk
+,
 }:
 
 stdenv.mkDerivation rec {

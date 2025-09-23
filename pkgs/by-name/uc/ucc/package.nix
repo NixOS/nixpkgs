@@ -1,18 +1,18 @@
-inputs@{
-  autoconf,
-  automake,
-  config,
-  cudaPackages,
-  fetchFromGitHub,
-  lib,
-  libtool,
-  stdenv,
-  ucx,
-  # Configuration options
-  enableAvx ? stdenv.hostPlatform.avxSupport,
-  enableCuda ? config.cudaSupport,
-  enableSse41 ? stdenv.hostPlatform.sse4_1Support,
-  enableSse42 ? stdenv.hostPlatform.sse4_2Support,
+inputs@{ autoconf
+, automake
+, config
+, cudaPackages
+, fetchFromGitHub
+, lib
+, libtool
+, stdenv
+, ucx
+, # Configuration options
+  enableAvx ? stdenv.hostPlatform.avxSupport
+, enableCuda ? config.cudaSupport
+, enableSse41 ? stdenv.hostPlatform.sse4_1Support
+, enableSse42 ? stdenv.hostPlatform.sse4_2Support
+,
 }:
 let
   inherit (lib.attrsets) getLib;

@@ -1,12 +1,12 @@
-{
-  lib,
-  nix-update-script,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nodejs_22,
-  kwin,
-  kpackage,
-  zip,
+{ lib
+, nix-update-script
+, buildNpmPackage
+, fetchFromGitHub
+, nodejs_22
+, kwin
+, kpackage
+, zip
+,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "krohnkite";

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pnpm_10,
-  nodejs_24,
-  makeWrapper,
-  prisma-engines,
-  ffmpeg,
-  openssl,
-  vips,
-  versionCheckHook,
-  nix-update-script,
-  nixosTests,
-  node-gyp,
-  pkg-config,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pnpm_10
+, nodejs_24
+, makeWrapper
+, prisma-engines
+, ffmpeg
+, openssl
+, vips
+, versionCheckHook
+, nix-update-script
+, nixosTests
+, node-gyp
+, pkg-config
+, python3
+,
 }:
 
 let

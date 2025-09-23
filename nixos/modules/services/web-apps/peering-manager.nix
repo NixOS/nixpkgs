@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  buildEnv,
-  ...
+{ config
+, lib
+, pkgs
+, buildEnv
+, ...
 }:
 
 let

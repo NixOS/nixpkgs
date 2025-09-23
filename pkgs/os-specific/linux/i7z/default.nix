@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  ncurses,
-  withGui ? false,
-  qtbase,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, ncurses
+, withGui ? false
+, qtbase
+,
 }:
 
 stdenv.mkDerivation rec {

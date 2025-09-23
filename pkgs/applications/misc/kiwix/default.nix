@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  libkiwix,
-  pkg-config,
-  qmake,
-  qtbase,
-  qtwebengine,
-  qtsvg,
-  qtimageformats,
-  wrapQtAppsHook,
-  aria2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, libkiwix
+, pkg-config
+, qmake
+, qtbase
+, qtwebengine
+, qtsvg
+, qtimageformats
+, wrapQtAppsHook
+, aria2
+,
 }:
 
 stdenv.mkDerivation rec {

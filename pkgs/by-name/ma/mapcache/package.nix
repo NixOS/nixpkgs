@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  apacheHttpd,
-  apr,
-  aprutil,
-  curl,
-  db,
-  fcgi,
-  gdal,
-  geos,
-  gfortran,
-  libgeotiff,
-  libjpeg,
-  libpng,
-  libtiff,
-  pcre2,
-  pixman,
-  proj,
-  sqlite,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, apacheHttpd
+, apr
+, aprutil
+, curl
+, db
+, fcgi
+, gdal
+, geos
+, gfortran
+, libgeotiff
+, libjpeg
+, libpng
+, libtiff
+, pcre2
+, pixman
+, proj
+, sqlite
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

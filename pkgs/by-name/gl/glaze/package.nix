@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  enableAvx2 ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, enableAvx2 ? false
+,
 }:
 
 stdenv.mkDerivation (final: {

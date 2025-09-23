@@ -1,42 +1,40 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  qt6,
-  perl,
-
-  # Cantata doesn't build with cdparanoia enabled so we disable that
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qt6
+, perl
+, # Cantata doesn't build with cdparanoia enabled so we disable that
   # default for now until I (or someone else) figure it out.
-  withCdda ? false,
-  cdparanoia,
-  withCddb ? false,
-  libcddb,
-  withLame ? false,
-  lame,
-  withMusicbrainz ? false,
-  libmusicbrainz,
-
-  withTaglib ? true,
-  taglib_1,
-  taglib_extras,
-  withHttpStream ? true,
-  gst_all_1,
-  withReplaygain ? true,
-  ffmpeg,
-  speex,
-  mpg123,
-  withMtp ? true,
-  libmtp,
-  withOnlineServices ? true,
-  withDevices ? true,
-  udisks2,
-  withDynamic ? true,
-  withHttpServer ? true,
-  withLibVlc ? true,
-  libvlc,
-  withStreams ? true,
+  withCdda ? false
+, cdparanoia
+, withCddb ? false
+, libcddb
+, withLame ? false
+, lame
+, withMusicbrainz ? false
+, libmusicbrainz
+, withTaglib ? true
+, taglib_1
+, taglib_extras
+, withHttpStream ? true
+, gst_all_1
+, withReplaygain ? true
+, ffmpeg
+, speex
+, mpg123
+, withMtp ? true
+, libmtp
+, withOnlineServices ? true
+, withDevices ? true
+, udisks2
+, withDynamic ? true
+, withHttpServer ? true
+, withLibVlc ? true
+, libvlc
+, withStreams ? true
+,
 }:
 
 # Inter-dependencies.

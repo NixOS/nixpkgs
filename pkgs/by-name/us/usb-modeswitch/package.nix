@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  makeWrapper,
-  libusb1,
-  tcl,
-  util-linux,
-  coreutils,
-  bash,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, makeWrapper
+, libusb1
+, tcl
+, util-linux
+, coreutils
+, bash
+,
 }:
 
 stdenv.mkDerivation rec {

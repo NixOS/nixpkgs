@@ -1,14 +1,14 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromSourcehut,
-  makeWrapper,
-  scdoc,
-  installShellFiles,
-  xclip,
-  wl-clipboard,
-  xdotool,
-  wtype,
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, makeWrapper
+, scdoc
+, installShellFiles
+, xclip
+, wl-clipboard
+, xdotool
+, wtype
+,
 }:
 
 buildGoModule rec {

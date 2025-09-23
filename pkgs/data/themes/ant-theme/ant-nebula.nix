@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gtk-engine-murrine,
+{ lib
+, stdenv
+, fetchurl
+, gtk-engine-murrine
+,
 }:
 
 let

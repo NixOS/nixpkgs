@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  bash-completion,
-  gst-plugins-base,
-  gst-plugins-bad,
-  gst-devtools,
-  libxml2,
-  flex,
-  gettext,
-  gobject-introspection,
-  # Checks meson.is_cross_build(), so even canExecute isn't enough.
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
-  hotdoc,
-  directoryListingUpdater,
-  apple-sdk_gstreamer,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, python3
+, bash-completion
+, gst-plugins-base
+, gst-plugins-bad
+, gst-devtools
+, libxml2
+, flex
+, gettext
+, gobject-introspection
+, # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, hotdoc
+, directoryListingUpdater
+, apple-sdk_gstreamer
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

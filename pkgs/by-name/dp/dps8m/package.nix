@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  libuv,
-  coreutils-full,
-  pkg-config,
-  gnugrep,
-  gnused,
+{ lib
+, stdenv
+, fetchFromGitLab
+, libuv
+, coreutils-full
+, pkg-config
+, gnugrep
+, gnused
+,
 }:
 
 stdenv.mkDerivation rec {

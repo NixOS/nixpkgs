@@ -1,17 +1,17 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  compressed-rtf,
-  ebcdic,
-  fetchFromGitHub,
-  olefile,
-  pytestCheckHook,
-  pythonOlder,
-  red-black-tree-mod,
-  rtfde,
-  setuptools,
-  tzlocal,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, compressed-rtf
+, ebcdic
+, fetchFromGitHub
+, olefile
+, pytestCheckHook
+, pythonOlder
+, red-black-tree-mod
+, rtfde
+, setuptools
+, tzlocal
+,
 }:
 
 buildPythonPackage rec {

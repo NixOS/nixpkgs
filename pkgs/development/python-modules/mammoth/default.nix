@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cobble,
-  funk,
-  pytestCheckHook,
-  spur,
-  tempman,
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cobble
+, funk
+, pytestCheckHook
+, spur
+, tempman
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

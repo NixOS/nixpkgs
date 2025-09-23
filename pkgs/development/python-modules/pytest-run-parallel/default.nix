@@ -1,21 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  pytest,
-
-  # optional-dependencies
-  psutil,
-
-  # tests
-  pytest-cov-stub,
-  pytest-order,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  pytest
+, # optional-dependencies
+  psutil
+, # tests
+  pytest-cov-stub
+, pytest-order
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

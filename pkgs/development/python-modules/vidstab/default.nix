@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  numpy,
-  pandas,
-  imutils,
-  progress,
-  matplotlib,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, numpy
+, pandas
+, imutils
+, progress
+, matplotlib
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  stdenvNoCC,
-  makeWrapper,
-  lib,
-  fetchFromGitHub,
-  bash,
-  nix,
-  nixos-install,
-  coreutils,
-  testers,
+{ stdenvNoCC
+, makeWrapper
+, lib
+, fetchFromGitHub
+, bash
+, nix
+, nixos-install
+, coreutils
+, testers
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  typing-extensions,
-
-  # tests
-  cython,
-  numpy,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  scikit-image,
-  scikit-learn,
-  torchtnt-nightly,
-  torchvision,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  typing-extensions
+, # tests
+  cython
+, numpy
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, scikit-image
+, scikit-learn
+, torchtnt-nightly
+, torchvision
+,
 }:
 let
   pname = "torcheval";

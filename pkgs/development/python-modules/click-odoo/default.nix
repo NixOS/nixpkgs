@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  setuptools-scm,
+{ buildPythonPackage
+, click
+, fetchFromGitHub
+, lib
+, nix-update-script
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -2,15 +2,14 @@
 # When using as a callable script, passing `--argstr path some/path` overrides $PWD.
 #!nix-shell -p nix -i "nix-env -qaP --no-name --out-path -f ci/eval/outpaths.nix"
 
-{
-  includeBroken ? true, # set this to false to exclude meta.broken packages from the output
-  path ? ./../..,
-
-  # used by ./attrpaths.nix
-  attrNamesOnly ? false,
-
-  # Set this to `null` to build for builtins.currentSystem only
-  systems ? builtins.fromJSON (builtins.readFile ../supportedSystems.json),
+{ includeBroken ? true
+, # set this to false to exclude meta.broken packages from the output
+  path ? ./../..
+, # used by ./attrpaths.nix
+  attrNamesOnly ? false
+, # Set this to `null` to build for builtins.currentSystem only
+  systems ? builtins.fromJSON (builtins.readFile ../supportedSystems.json)
+,
 }:
 let
   lib = import (path + "/lib");
@@ -72,12 +71,12 @@ let
   # that would break nix-env and we also need to recurse everywhere.
   tweak = lib.mapAttrs (
     name: val:
-    if name == "recurseForDerivations" then
-      true
-    else if lib.isAttrs val && val.type or null != "derivation" then
-      recurseIntoAttrs (tweak val)
-    else
-      val
+      if name == "recurseForDerivations" then
+        true
+      else if lib.isAttrs val && val.type or null != "derivation" then
+        recurseIntoAttrs (tweak val)
+      else
+        val
   );
 
   # Some of these contain explicit references to platform(s) we want to avoid;
@@ -96,7 +95,7 @@ let
 in
 tweak (
   (builtins.removeAttrs nixpkgsJobs blacklist)
-  // {
+    // {
     nixosTests.simple = nixosJobs.tests.simple;
   }
 )

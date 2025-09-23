@@ -1,23 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  bitstruct,
-  pyparsing,
-
-  # optional-dependencies
-  prompt-toolkit,
-  diskcache,
-
-  # tests
-  pytest-xdist,
-  pytestCheckHook,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  bitstruct
+, pyparsing
+, # optional-dependencies
+  prompt-toolkit
+, diskcache
+, # tests
+  pytest-xdist
+, pytestCheckHook
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  openssl,
-  pkg-config,
-  lib,
-  unstableGitUpdater,
+{ stdenv
+, fetchFromGitHub
+, alsa-lib
+, openssl
+, pkg-config
+, lib
+, unstableGitUpdater
+,
 }:
 
 let

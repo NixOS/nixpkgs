@@ -1,10 +1,10 @@
-{
-  lib,
-  python3,
-  fetchFromGitLab,
-  git,
-  openssh,
-  nix-update-script,
+{ lib
+, python3
+, fetchFromGitLab
+, git
+, openssh
+, nix-update-script
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

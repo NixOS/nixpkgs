@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  libpcap,
-  libxcrypt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, libpcap
+, libxcrypt
+,
 }:
 
 stdenv.mkDerivation {

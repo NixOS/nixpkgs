@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  dpkg,
-  sdbus-cpp,
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, sdbus-cpp
+,
 }:
 stdenv.mkDerivation rec {
   pname = "msalsdk-dbusclient";

@@ -1,10 +1,10 @@
-{
-  lib,
-  xvfb-run,
-  zoom-us,
-  runCommand,
-  writeShellApplication,
-  xorg,
+{ lib
+, xvfb-run
+, zoom-us
+, runCommand
+, writeShellApplication
+, xorg
+,
 }:
 
 let

@@ -1,31 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-
-  # build-system
-  pybind11,
-  nanobind,
-  ninja,
-  scikit-build-core,
-  setuptools-scm,
-
-  # buildInputs
-  boost,
-
-  # dependencies
-  numpy,
-
-  # tests
-  pytestCheckHook,
-  pytest-benchmark,
-  pytest-xdist,
-  cloudpickle,
-  hypothesis,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # nativeBuildInputs
+  cmake
+, # build-system
+  pybind11
+, nanobind
+, ninja
+, scikit-build-core
+, setuptools-scm
+, # buildInputs
+  boost
+, # dependencies
+  numpy
+, # tests
+  pytestCheckHook
+, pytest-benchmark
+, pytest-xdist
+, cloudpickle
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

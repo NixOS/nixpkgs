@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  intltool,
-  pkg-config,
-  ffmpeg,
-  wxGTK32,
-  gtk3,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, intltool
+, pkg-config
+, ffmpeg
+, wxGTK32
+, gtk3
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

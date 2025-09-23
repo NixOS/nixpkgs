@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  makeWrapper,
-  fetchurl,
-  numactl,
-  python3,
+{ stdenv
+, lib
+, makeWrapper
+, fetchurl
+, numactl
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

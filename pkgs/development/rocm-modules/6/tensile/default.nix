@@ -1,22 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  rocmUpdateScript,
-  buildPythonPackage,
-  pytestCheckHook,
-  setuptools,
-  pyyaml,
-  msgpack,
-  simplejson,
-  ujson,
-  orjson,
-  pandas,
-  joblib,
-  filelock,
-  clr,
-  rich,
-  isTensileLite ? false,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, rocmUpdateScript
+, buildPythonPackage
+, pytestCheckHook
+, setuptools
+, pyyaml
+, msgpack
+, simplejson
+, ujson
+, orjson
+, pandas
+, joblib
+, filelock
+, clr
+, rich
+, isTensileLite ? false
+,
 }:
 
 buildPythonPackage rec {

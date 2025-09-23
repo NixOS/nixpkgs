@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchzip,
-  buildDunePackage,
-  js_of_ocaml-compiler,
-  gen_js_api,
-  ojs,
+{ lib
+, fetchzip
+, buildDunePackage
+, js_of_ocaml-compiler
+, gen_js_api
+, ojs
+,
 }:
 
 buildDunePackage rec {

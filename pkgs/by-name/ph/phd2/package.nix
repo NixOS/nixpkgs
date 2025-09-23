@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  gtk3,
-  wxGTK32,
-  curl,
-  gettext,
-  glib,
-  indi-full,
-  libnova,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, gtk3
+, wxGTK32
+, curl
+, gettext
+, glib
+, indi-full
+, libnova
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

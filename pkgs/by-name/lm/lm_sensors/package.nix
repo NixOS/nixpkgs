@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bash,
-  bison,
-  flex,
-  which,
-  perl,
-  rrdtool,
-  sensord ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bash
+, bison
+, flex
+, which
+, perl
+, rrdtool
+, sensord ? false
+,
 }:
 
 let

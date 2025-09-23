@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -397,9 +396,10 @@ in
         cfg.nginx
         {
           root = mkForce "${snipe-it}/share/php/snipe-it/public";
-          extraConfig = optionalString (
-            cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME
-          ) "fastcgi_param HTTPS on;";
+          extraConfig = optionalString
+            (
+              cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME
+            ) "fastcgi_param HTTPS on;";
           locations = {
             "/" = {
               index = "index.php";
@@ -449,22 +449,22 @@ in
             mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
               mkValueString =
                 v:
-                with builtins;
-                if isInt v then
-                  toString v
-                else if isString v then
-                  "\"${v}\""
-                else if true == v then
-                  "true"
-                else if false == v then
-                  "false"
-                else if isSecret v then
-                  if (isString v._secret) then
-                    hashString "sha256" v._secret
+                  with builtins;
+                  if isInt v then
+                    toString v
+                  else if isString v then
+                    "\"${v}\""
+                  else if true == v then
+                    "true"
+                  else if false == v then
+                    "false"
+                  else if isSecret v then
+                    if (isString v._secret) then
+                      hashString "sha256" v._secret
+                    else
+                      hashString "sha256" (builtins.readFile v._secret)
                   else
-                    hashString "sha256" (builtins.readFile v._secret)
-                else
-                  throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty { }) v}";
+                    throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty { }) v}";
             };
           };
           secretPaths = lib.mapAttrsToList (_: v: v._secret) (lib.filterAttrs (_: isSecret) cfg.config);
@@ -483,13 +483,15 @@ in
             }
           '';
           secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
-          filteredConfig = lib.converge (lib.filterAttrsRecursive (
-            _: v:
-            !elem v [
-              { }
-              null
-            ]
-          )) cfg.config;
+          filteredConfig = lib.converge
+            (lib.filterAttrsRecursive (
+              _: v:
+                !elem v [
+                  { }
+                  null
+                ]
+            ))
+            cfg.config;
           snipeITEnv = pkgs.writeText "snipeIT.env" (snipeITEnvVars filteredConfig);
         in
         ''

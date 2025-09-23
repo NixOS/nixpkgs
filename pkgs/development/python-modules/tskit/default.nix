@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pythonOlder,
-  numpy,
-  jsonschema,
-  svgwrite,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pythonOlder
+, numpy
+, jsonschema
+, svgwrite
+,
 }:
 
 buildPythonPackage rec {

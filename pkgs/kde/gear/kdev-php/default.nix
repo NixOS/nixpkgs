@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  kdevelop-pg-qt,
+{ mkKdeDerivation
+, kdevelop-pg-qt
+,
 }:
 mkKdeDerivation {
   pname = "kdev-php";

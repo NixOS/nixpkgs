@@ -1,21 +1,21 @@
-{
-  buildPythonApplication,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  setuptools,
-  setuptools-rust,
-  rustPlatform,
-  cargo,
-  rustc,
-  breezy,
-  dulwich,
-  jinja2,
-  libiconv,
-  openssl,
-  pyyaml,
-  ruamel-yaml,
+{ buildPythonApplication
+, lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, setuptools
+, setuptools-rust
+, rustPlatform
+, cargo
+, rustc
+, breezy
+, dulwich
+, jinja2
+, libiconv
+, openssl
+, pyyaml
+, ruamel-yaml
+,
 }:
 
 buildPythonApplication rec {

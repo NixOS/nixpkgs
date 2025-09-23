@@ -1,14 +1,14 @@
-{
-  symlinkJoin,
-  lib,
-  fetchNupkg,
+{ symlinkJoin
+, lib
+, fetchNupkg
+,
 }:
 lib.makeOverridable (
-  {
-    name,
-    nugetDeps ? null,
-    sourceFile ? null,
-    installable ? false,
+  { name
+  , nugetDeps ? null
+  , sourceFile ? null
+  , installable ? false
+  ,
   }:
   (symlinkJoin {
     name = "${name}-nuget-deps";
@@ -27,7 +27,7 @@ lib.makeOverridable (
         fetchNuGet = args: fetchNupkg (args // { inherit installable; });
       };
   })
-  // {
+    // {
     inherit sourceFile;
   }
 )

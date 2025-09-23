@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  gitMinimal,
-  pkg-config,
-  lcms2,
-  tinyxml,
-  boost,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, gitMinimal
+, pkg-config
+, lcms2
+, tinyxml
+, boost
+,
 }:
 
 stdenv.mkDerivation (finalAtts: {
@@ -53,9 +53,10 @@ stdenv.mkDerivation (finalAtts: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "-DOCIO_USE_BOOST_PTR=ON"
   ++ lib.optional (!stdenv.hostPlatform.isx86) "-DOCIO_USE_SSE=OFF"
-  ++ lib.optional (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-  ) "-DCMAKE_OSX_ARCHITECTURES=arm64";
+  ++ lib.optional
+    (
+      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+    ) "-DCMAKE_OSX_ARCHITECTURES=arm64";
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     # yaml-cpp uses std::auto_ptr and std::binary_function which has

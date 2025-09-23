@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  exampleSupport ? false, # Example encoding program
+{ lib
+, stdenv
+, fetchurl
+, exampleSupport ? false
+, # Example encoding program
 }:
 
 stdenv.mkDerivation rec {

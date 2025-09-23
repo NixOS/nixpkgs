@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  pkg-config,
-  cstruct,
-  bigarray-compat,
-  ounit,
+{ lib
+, fetchurl
+, buildDunePackage
+, pkg-config
+, cstruct
+, bigarray-compat
+, ounit
+,
 }:
 
 buildDunePackage rec {

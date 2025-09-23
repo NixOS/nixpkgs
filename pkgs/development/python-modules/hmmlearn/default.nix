@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  numpy,
-  scikit-learn,
-  pybind11,
-  setuptools-scm,
-  cython,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, numpy
+, scikit-learn
+, pybind11
+, setuptools-scm
+, cython
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  qttools,
-  ninja,
-  cups,
-  curl,
-  libGL,
-  qtbase,
-  qt5compat,
-  qtcreator,
-  vulkan-headers,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qttools
+, ninja
+, cups
+, curl
+, libGL
+, qtbase
+, qt5compat
+, qtcreator
+, vulkan-headers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "qodeassist-plugin";

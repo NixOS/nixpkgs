@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  alarmdecoder,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, alarmdecoder
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

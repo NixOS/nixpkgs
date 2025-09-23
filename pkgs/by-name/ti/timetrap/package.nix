@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  ruby_3_4,
-  bundlerEnv,
-  bundlerApp,
-  bundlerUpdateScript,
-  installShellFiles,
+{ stdenv
+, lib
+, ruby_3_4
+, bundlerEnv
+, bundlerApp
+, bundlerUpdateScript
+, installShellFiles
+,
 }:
 
 let

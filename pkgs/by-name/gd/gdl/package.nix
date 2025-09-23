@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libxml2,
-  gtk3,
-  gnome,
-  intltool,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libxml2
+, gtk3
+, gnome
+, intltool
+,
 }:
 
 stdenv.mkDerivation rec {

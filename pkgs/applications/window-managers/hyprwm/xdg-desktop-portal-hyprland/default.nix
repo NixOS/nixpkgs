@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  makeWrapper,
-  pkg-config,
-  wrapQtAppsHook,
-  nix-update-script,
-  hyprland,
-  hyprland-protocols,
-  hyprlang,
-  hyprutils,
-  hyprwayland-scanner,
-  libdrm,
-  libgbm,
-  pipewire,
-  qtbase,
-  qttools,
-  qtwayland,
-  sdbus-cpp_2,
-  slurp,
-  systemd,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  debug ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, pkg-config
+, wrapQtAppsHook
+, nix-update-script
+, hyprland
+, hyprland-protocols
+, hyprlang
+, hyprutils
+, hyprwayland-scanner
+, libdrm
+, libgbm
+, pipewire
+, qtbase
+, qttools
+, qtwayland
+, sdbus-cpp_2
+, slurp
+, systemd
+, wayland
+, wayland-protocols
+, wayland-scanner
+, debug ? false
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";

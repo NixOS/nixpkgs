@@ -1,17 +1,16 @@
-{
-  buildPackages,
-  cctools,
-  fetchpatch,
-  fetchurl,
-  lib,
-  live555,
-  openssl,
-  runCommand,
-  stdenv,
-  writeScript,
-
-  # tests
-  vlc,
+{ buildPackages
+, cctools
+, fetchpatch
+, fetchurl
+, lib
+, live555
+, openssl
+, runCommand
+, stdenv
+, writeScript
+, # tests
+  vlc
+,
 }:
 let
   isStatic = stdenv.hostPlatform.isStatic;
@@ -77,15 +76,15 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   # condition from icu/base.nix
   +
-    lib.optionalString
-      (lib.elem stdenv.hostPlatform.libc [
-        "glibc"
-        "musl"
-      ])
-      ''
-        substituteInPlace liveMedia/include/Locale.hh \
-          --replace '<xlocale.h>' '<locale.h>'
-      '';
+  lib.optionalString
+    (lib.elem stdenv.hostPlatform.libc [
+      "glibc"
+      "musl"
+    ])
+    ''
+      substituteInPlace liveMedia/include/Locale.hh \
+        --replace '<xlocale.h>' '<locale.h>'
+    '';
 
   configurePhase =
     let

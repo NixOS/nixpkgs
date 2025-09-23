@@ -1,13 +1,12 @@
-{
-  stdenv,
-  toKodiAddon,
-  addonDir,
+{ stdenv
+, toKodiAddon
+, addonDir
+,
 }:
-{
-  name ? "${attrs.pname}-${attrs.version}",
-  namespace,
-  sourceDir ? "",
-  ...
+{ name ? "${attrs.pname}-${attrs.version}"
+, namespace
+, sourceDir ? ""
+, ...
 }@attrs:
 toKodiAddon (
   stdenv.mkDerivation (
@@ -31,6 +30,6 @@ toKodiAddon (
         runHook postInstall
       '';
     }
-    // attrs
+      // attrs
   )
 )

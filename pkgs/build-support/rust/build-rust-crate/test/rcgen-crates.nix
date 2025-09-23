@@ -2,34 +2,33 @@
 #   "generate"
 # See https://github.com/kolloch/crate2nix for more info.
 
-{
-  nixpkgs ? <nixpkgs>,
-  pkgs ? import nixpkgs { config = { }; },
-  lib ? pkgs.lib,
-  stdenv ? pkgs.stdenv,
-  buildRustCrateForPkgs ?
-    if buildRustCrate != null then
-      lib.warn
-        "crate2nix: Passing `buildRustCrate` as argument to Cargo.nix is deprecated. If you don't customize `buildRustCrate`, replace `callPackage ./Cargo.nix {}` by `import ./Cargo.nix { inherit pkgs; }`, and if you need to customize `buildRustCrate`, use `buildRustCrateForPkgs` instead."
-        (_: buildRustCrate)
-    else
-      pkgs: pkgs.buildRustCrate,
-  # Deprecated
-  buildRustCrate ? null,
-  # This is used as the `crateOverrides` argument for `buildRustCrate`.
-  defaultCrateOverrides ? pkgs.defaultCrateOverrides,
-  # The features to enable for the root_crate or the workspace_members.
-  rootFeatures ? [ "default" ],
-  # If true, throw errors instead of issuing deprecation warnings.
-  strictDeprecation ? false,
-  # Used for conditional compilation based on CPU feature detection.
-  targetFeatures ? [ ],
-  # Whether to perform release builds: longer compile times, faster binaries.
-  release ? true,
-  # Additional crate2nix configuration if it exists.
+{ nixpkgs ? <nixpkgs>
+, pkgs ? import nixpkgs { config = { }; }
+, lib ? pkgs.lib
+, stdenv ? pkgs.stdenv
+, buildRustCrateForPkgs ? if buildRustCrate != null then
+    lib.warn
+      "crate2nix: Passing `buildRustCrate` as argument to Cargo.nix is deprecated. If you don't customize `buildRustCrate`, replace `callPackage ./Cargo.nix {}` by `import ./Cargo.nix { inherit pkgs; }`, and if you need to customize `buildRustCrate`, use `buildRustCrateForPkgs` instead."
+      (_: buildRustCrate)
+  else
+    pkgs: pkgs.buildRustCrate
+, # Deprecated
+  buildRustCrate ? null
+, # This is used as the `crateOverrides` argument for `buildRustCrate`.
+  defaultCrateOverrides ? pkgs.defaultCrateOverrides
+, # The features to enable for the root_crate or the workspace_members.
+  rootFeatures ? [ "default" ]
+, # If true, throw errors instead of issuing deprecation warnings.
+  strictDeprecation ? false
+, # Used for conditional compilation based on CPU feature detection.
+  targetFeatures ? [ ]
+, # Whether to perform release builds: longer compile times, faster binaries.
+  release ? true
+, # Additional crate2nix configuration if it exists.
   crateConfig ? lib.optionalAttrs (builtins.pathExists ./crate-config.nix) (
     pkgs.callPackage ./crate-config.nix { }
-  ),
+  )
+,
 }:
 
 rec {
@@ -359,8 +358,7 @@ rec {
         authors = [
           "Nick Fitzgerald <fitzgen@gmail.com>"
         ];
-        features = {
-        };
+        features = { };
         resolvedDefaultFeatures = [ "default" ];
       };
       "byteorder" = rec {
@@ -414,8 +412,7 @@ rec {
         authors = [
           "RustCrypto Developers"
         ];
-        features = {
-        };
+        features = { };
       };
       "crypto-bigint" = rec {
         crateName = "crypto-bigint";
@@ -2367,8 +2364,7 @@ rec {
           "Jacob Pratt <open-source@jhpratt.dev>"
           "Time contributors"
         ];
-        features = {
-        };
+        features = { };
       };
       "typenum" = rec {
         crateName = "typenum";
@@ -2395,8 +2391,7 @@ rec {
           "kwantam <kwantam@gmail.com>"
           "Manish Goregaokar <manishsmail@gmail.com>"
         ];
-        features = {
-        };
+        features = { };
         resolvedDefaultFeatures = [ "default" ];
       };
       "untrusted" = rec {
@@ -4349,41 +4344,41 @@ rec {
       let
         baseName = builtins.baseNameOf (builtins.toString name);
       in
-      !(
-        # Filter out git
-        baseName == ".gitignore"
-        || (type == "directory" && baseName == ".git")
+        !(
+          # Filter out git
+          baseName == ".gitignore"
+          || (type == "directory" && baseName == ".git")
 
-        # Filter out build results
-        || (
-          type == "directory"
-          && (
-            baseName == "target"
-            || baseName == "_site"
-            || baseName == ".sass-cache"
-            || baseName == ".jekyll-metadata"
-            || baseName == "build-artifacts"
+          # Filter out build results
+          || (
+            type == "directory"
+            && (
+              baseName == "target"
+              || baseName == "_site"
+              || baseName == ".sass-cache"
+              || baseName == ".jekyll-metadata"
+              || baseName == "build-artifacts"
+            )
           )
-        )
 
-        # Filter out nix-build result symlinks
-        || (type == "symlink" && lib.hasPrefix "result" baseName)
+          # Filter out nix-build result symlinks
+          || (type == "symlink" && lib.hasPrefix "result" baseName)
 
-        # Filter out IDE config
-        || (type == "directory" && (baseName == ".idea" || baseName == ".vscode"))
-        || lib.hasSuffix ".iml" baseName
+          # Filter out IDE config
+          || (type == "directory" && (baseName == ".idea" || baseName == ".vscode"))
+          || lib.hasSuffix ".iml" baseName
 
-        # Filter out nix build files
-        || baseName == "Cargo.nix"
+          # Filter out nix build files
+          || baseName == "Cargo.nix"
 
-        # Filter out editor backup / swap files.
-        || lib.hasSuffix "~" baseName
-        || builtins.match "^\\.sw[a-z]$$" baseName != null
-        || builtins.match "^\\..*\\.sw[a-z]$$" baseName != null
-        || lib.hasSuffix ".tmp" baseName
-        || lib.hasSuffix ".bak" baseName
-        || baseName == "tests.nix"
-      );
+          # Filter out editor backup / swap files.
+          || lib.hasSuffix "~" baseName
+          || builtins.match "^\\.sw[a-z]$$" baseName != null
+          || builtins.match "^\\..*\\.sw[a-z]$$" baseName != null
+          || lib.hasSuffix ".tmp" baseName
+          || lib.hasSuffix ".bak" baseName
+          || baseName == "tests.nix"
+        );
 
     /*
       Returns a crate which depends on successful test execution
@@ -4393,113 +4388,113 @@ rec {
       testInputs: list of packages that should be available during test execution
     */
     crateWithTest =
-      {
-        crate,
-        testCrate,
-        testCrateFlags,
-        testInputs,
-        testPreRun,
-        testPostRun,
+      { crate
+      , testCrate
+      , testCrateFlags
+      , testInputs
+      , testPreRun
+      , testPostRun
+      ,
       }:
-      assert builtins.typeOf testCrateFlags == "list";
-      assert builtins.typeOf testInputs == "list";
-      assert builtins.typeOf testPreRun == "string";
-      assert builtins.typeOf testPostRun == "string";
-      let
-        # override the `crate` so that it will build and execute tests instead of
-        # building the actual lib and bin targets We just have to pass `--test`
-        # to rustc and it will do the right thing.  We execute the tests and copy
-        # their log and the test executables to $out for later inspection.
-        test =
-          let
-            drv = testCrate.override (_: {
-              buildTests = true;
-            });
-            # If the user hasn't set any pre/post commands, we don't want to
-            # insert empty lines. This means that any existing users of crate2nix
-            # don't get a spurious rebuild unless they set these explicitly.
-            testCommand = pkgs.lib.concatStringsSep "\n" (
-              pkgs.lib.filter (s: s != "") [
-                testPreRun
-                "$f $testCrateFlags 2>&1 | tee -a $out"
-                testPostRun
-              ]
-            );
-          in
-          pkgs.runCommand "run-tests-${testCrate.name}"
-            {
-              inherit testCrateFlags;
-              buildInputs = testInputs;
-            }
-            ''
-              set -ex
+        assert builtins.typeOf testCrateFlags == "list";
+        assert builtins.typeOf testInputs == "list";
+        assert builtins.typeOf testPreRun == "string";
+        assert builtins.typeOf testPostRun == "string";
+        let
+          # override the `crate` so that it will build and execute tests instead of
+          # building the actual lib and bin targets We just have to pass `--test`
+          # to rustc and it will do the right thing.  We execute the tests and copy
+          # their log and the test executables to $out for later inspection.
+          test =
+            let
+              drv = testCrate.override (_: {
+                buildTests = true;
+              });
+              # If the user hasn't set any pre/post commands, we don't want to
+              # insert empty lines. This means that any existing users of crate2nix
+              # don't get a spurious rebuild unless they set these explicitly.
+              testCommand = pkgs.lib.concatStringsSep "\n" (
+                pkgs.lib.filter (s: s != "") [
+                  testPreRun
+                  "$f $testCrateFlags 2>&1 | tee -a $out"
+                  testPostRun
+                ]
+              );
+            in
+            pkgs.runCommand "run-tests-${testCrate.name}"
+              {
+                inherit testCrateFlags;
+                buildInputs = testInputs;
+              }
+              ''
+                set -ex
 
-              export RUST_BACKTRACE=1
+                export RUST_BACKTRACE=1
 
-              # recreate a file hierarchy as when running tests with cargo
+                # recreate a file hierarchy as when running tests with cargo
 
-              # the source for test data
-              ${pkgs.xorg.lndir}/bin/lndir ${crate.src}
+                # the source for test data
+                ${pkgs.xorg.lndir}/bin/lndir ${crate.src}
 
-              # build outputs
-              testRoot=target/debug
-              mkdir -p $testRoot
+                # build outputs
+                testRoot=target/debug
+                mkdir -p $testRoot
 
-              # executables of the crate
-              # we copy to prevent std::env::current_exe() to resolve to a store location
-              for i in ${crate}/bin/*; do
-                cp "$i" "$testRoot"
-              done
-              chmod +w -R .
+                # executables of the crate
+                # we copy to prevent std::env::current_exe() to resolve to a store location
+                for i in ${crate}/bin/*; do
+                  cp "$i" "$testRoot"
+                done
+                chmod +w -R .
 
-              # test harness executables are suffixed with a hash, like cargo does
-              # this allows to prevent name collision with the main
-              # executables of the crate
-              hash=$(basename $out)
-              for file in ${drv}/tests/*; do
-                f=$testRoot/$(basename $file)-$hash
-                cp $file $f
-                ${testCommand}
-              done
-            '';
-      in
-      pkgs.runCommand "${crate.name}-linked"
-        {
-          inherit (crate) outputs crateName;
-          passthru = (crate.passthru or { }) // {
-            inherit test;
-          };
-        }
-        ''
-          echo tested by ${test}
-          ${lib.concatMapStringsSep "\n" (output: "ln -s ${crate.${output}} ${"$"}${output}") crate.outputs}
-        '';
+                # test harness executables are suffixed with a hash, like cargo does
+                # this allows to prevent name collision with the main
+                # executables of the crate
+                hash=$(basename $out)
+                for file in ${drv}/tests/*; do
+                  f=$testRoot/$(basename $file)-$hash
+                  cp $file $f
+                  ${testCommand}
+                done
+              '';
+        in
+        pkgs.runCommand "${crate.name}-linked"
+          {
+            inherit (crate) outputs crateName;
+            passthru = (crate.passthru or { }) // {
+              inherit test;
+            };
+          }
+          ''
+            echo tested by ${test}
+            ${lib.concatMapStringsSep "\n" (output: "ln -s ${crate.${output}} ${"$"}${output}") crate.outputs}
+          '';
 
     # A restricted overridable version of builtRustCratesWithFeatures.
     buildRustCrateWithFeatures =
-      {
-        packageId,
-        features ? rootFeatures,
-        crateOverrides ? defaultCrateOverrides,
-        buildRustCrateForPkgsFunc ? null,
-        runTests ? false,
-        testCrateFlags ? [ ],
-        testInputs ? [ ],
-        # Any command to run immediately before a test is executed.
-        testPreRun ? "",
-        # Any command run immediately after a test is executed.
-        testPostRun ? "",
+      { packageId
+      , features ? rootFeatures
+      , crateOverrides ? defaultCrateOverrides
+      , buildRustCrateForPkgsFunc ? null
+      , runTests ? false
+      , testCrateFlags ? [ ]
+      , testInputs ? [ ]
+      , # Any command to run immediately before a test is executed.
+        testPreRun ? ""
+      , # Any command run immediately after a test is executed.
+        testPostRun ? ""
+      ,
       }:
       lib.makeOverridable
         (
-          {
-            features,
-            crateOverrides,
-            runTests,
-            testCrateFlags,
-            testInputs,
-            testPreRun,
-            testPostRun,
+          { features
+          , crateOverrides
+          , runTests
+          , testCrateFlags
+          , testInputs
+          , testPreRun
+          , testPostRun
+          ,
           }:
           let
             buildRustCrateForPkgsFuncOverriden =
@@ -4529,16 +4524,17 @@ rec {
             testDrv = builtTestRustCrates.crates.${packageId};
             derivation =
               if runTests then
-                crateWithTest {
-                  crate = drv;
-                  testCrate = testDrv;
-                  inherit
-                    testCrateFlags
-                    testInputs
-                    testPreRun
-                    testPostRun
-                    ;
-                }
+                crateWithTest
+                  {
+                    crate = drv;
+                    testCrate = testDrv;
+                    inherit
+                      testCrateFlags
+                      testInputs
+                      testPreRun
+                      testPostRun
+                      ;
+                  }
               else
                 drv;
           in
@@ -4561,150 +4557,152 @@ rec {
       for the corresponding crate.
     */
     builtRustCratesWithFeatures =
-      {
-        packageId,
-        features,
-        crateConfigs ? crates,
-        buildRustCrateForPkgsFunc,
-        runTests,
-        target ? defaultTarget,
+      { packageId
+      , features
+      , crateConfigs ? crates
+      , buildRustCrateForPkgsFunc
+      , runTests
+      , target ? defaultTarget
+      ,
       }@args:
-      assert (builtins.isAttrs crateConfigs);
-      assert (builtins.isString packageId);
-      assert (builtins.isList features);
-      assert (builtins.isAttrs target);
-      assert (builtins.isBool runTests);
-      let
-        rootPackageId = packageId;
-        mergedFeatures = mergePackageFeatures (
-          args
-          // {
-            inherit rootPackageId;
-            target = target // {
-              test = runTests;
-            };
-          }
-        );
-        # Memoize built packages so that reappearing packages are only built once.
-        builtByPackageIdByPkgs = mkBuiltByPackageIdByPkgs pkgs;
-        mkBuiltByPackageIdByPkgs =
-          pkgs:
-          let
-            self = {
-              crates = lib.mapAttrs (
-                packageId: value: buildByPackageIdForPkgsImpl self pkgs packageId
-              ) crateConfigs;
-              build = mkBuiltByPackageIdByPkgs pkgs.buildPackages;
-            };
-          in
-          self;
-        buildByPackageIdForPkgsImpl =
-          self: pkgs: packageId:
-          let
-            features = mergedFeatures."${packageId}" or [ ];
-            crateConfig' = crateConfigs."${packageId}";
-            crateConfig = builtins.removeAttrs crateConfig' [
-              "resolvedDefaultFeatures"
-              "devDependencies"
-            ];
-            devDependencies = lib.optionals (runTests && packageId == rootPackageId) (
-              crateConfig'.devDependencies or [ ]
-            );
-            dependencies = dependencyDerivations {
-              inherit features target;
-              buildByPackageId =
-                depPackageId:
-                # proc_macro crates must be compiled for the build architecture
-                if crateConfigs.${depPackageId}.procMacro or false then
-                  self.build.crates.${depPackageId}
-                else
-                  self.crates.${depPackageId};
-              dependencies = (crateConfig.dependencies or [ ]) ++ devDependencies;
-            };
-            buildDependencies = dependencyDerivations {
-              inherit features target;
-              buildByPackageId = depPackageId: self.build.crates.${depPackageId};
-              dependencies = crateConfig.buildDependencies or [ ];
-            };
-            filterEnabledDependenciesForThis =
-              dependencies:
-              filterEnabledDependencies {
-                inherit dependencies features target;
-              };
-            dependenciesWithRenames = lib.filter (d: d ? "rename") (
-              filterEnabledDependenciesForThis (
-                (crateConfig.buildDependencies or [ ]) ++ (crateConfig.dependencies or [ ]) ++ devDependencies
-              )
-            );
-            # Crate renames have the form:
-            #
-            # {
-            #    crate_name = [
-            #       { version = "1.2.3"; rename = "crate_name01"; }
-            #    ];
-            #    # ...
-            # }
-            crateRenames =
-              let
-                grouped = lib.groupBy (dependency: dependency.name) dependenciesWithRenames;
-                versionAndRename =
-                  dep:
-                  let
-                    package = crateConfigs."${dep.packageId}";
-                  in
-                  {
-                    inherit (dep) rename;
-                    version = package.version;
-                  };
-              in
-              lib.mapAttrs (name: choices: builtins.map versionAndRename choices) grouped;
-          in
-          buildRustCrateForPkgsFunc pkgs (
-            crateConfig
+        assert (builtins.isAttrs crateConfigs);
+        assert (builtins.isString packageId);
+        assert (builtins.isList features);
+        assert (builtins.isAttrs target);
+        assert (builtins.isBool runTests);
+        let
+          rootPackageId = packageId;
+          mergedFeatures = mergePackageFeatures (
+            args
             // {
-              src =
-                crateConfig.src or (pkgs.fetchurl rec {
-                  name = "${crateConfig.crateName}-${crateConfig.version}.tar.gz";
-                  # https://www.pietroalbini.org/blog/downloading-crates-io/
-                  # Not rate-limited, CDN URL.
-                  url = "https://static.crates.io/crates/${crateConfig.crateName}/${crateConfig.crateName}-${crateConfig.version}.crate";
-                  sha256 =
-                    assert (lib.assertMsg (crateConfig ? sha256) "Missing sha256 for ${name}");
-                    crateConfig.sha256;
-                });
-              extraRustcOpts =
-                lib.lists.optional (targetFeatures != [ ])
-                  "-C target-feature=${lib.concatMapStringsSep "," (x: "+${x}") targetFeatures}";
-              inherit
-                features
-                dependencies
-                buildDependencies
-                crateRenames
-                release
-                ;
+              inherit rootPackageId;
+              target = target // {
+                test = runTests;
+              };
             }
           );
-      in
-      builtByPackageIdByPkgs;
+          # Memoize built packages so that reappearing packages are only built once.
+          builtByPackageIdByPkgs = mkBuiltByPackageIdByPkgs pkgs;
+          mkBuiltByPackageIdByPkgs =
+            pkgs:
+            let
+              self = {
+                crates = lib.mapAttrs
+                  (
+                    packageId: value: buildByPackageIdForPkgsImpl self pkgs packageId
+                  )
+                  crateConfigs;
+                build = mkBuiltByPackageIdByPkgs pkgs.buildPackages;
+              };
+            in
+            self;
+          buildByPackageIdForPkgsImpl =
+            self: pkgs: packageId:
+            let
+              features = mergedFeatures."${packageId}" or [ ];
+              crateConfig' = crateConfigs."${packageId}";
+              crateConfig = builtins.removeAttrs crateConfig' [
+                "resolvedDefaultFeatures"
+                "devDependencies"
+              ];
+              devDependencies = lib.optionals (runTests && packageId == rootPackageId) (
+                crateConfig'.devDependencies or [ ]
+              );
+              dependencies = dependencyDerivations {
+                inherit features target;
+                buildByPackageId =
+                  depPackageId:
+                  # proc_macro crates must be compiled for the build architecture
+                  if crateConfigs.${depPackageId}.procMacro or false then
+                    self.build.crates.${depPackageId}
+                  else
+                    self.crates.${depPackageId};
+                dependencies = (crateConfig.dependencies or [ ]) ++ devDependencies;
+              };
+              buildDependencies = dependencyDerivations {
+                inherit features target;
+                buildByPackageId = depPackageId: self.build.crates.${depPackageId};
+                dependencies = crateConfig.buildDependencies or [ ];
+              };
+              filterEnabledDependenciesForThis =
+                dependencies:
+                filterEnabledDependencies {
+                  inherit dependencies features target;
+                };
+              dependenciesWithRenames = lib.filter (d: d ? "rename") (
+                filterEnabledDependenciesForThis (
+                  (crateConfig.buildDependencies or [ ]) ++ (crateConfig.dependencies or [ ]) ++ devDependencies
+                )
+              );
+              # Crate renames have the form:
+              #
+              # {
+              #    crate_name = [
+              #       { version = "1.2.3"; rename = "crate_name01"; }
+              #    ];
+              #    # ...
+              # }
+              crateRenames =
+                let
+                  grouped = lib.groupBy (dependency: dependency.name) dependenciesWithRenames;
+                  versionAndRename =
+                    dep:
+                    let
+                      package = crateConfigs."${dep.packageId}";
+                    in
+                    {
+                      inherit (dep) rename;
+                      version = package.version;
+                    };
+                in
+                lib.mapAttrs (name: choices: builtins.map versionAndRename choices) grouped;
+            in
+            buildRustCrateForPkgsFunc pkgs (
+              crateConfig
+              // {
+                src =
+                  crateConfig.src or (pkgs.fetchurl rec {
+                    name = "${crateConfig.crateName}-${crateConfig.version}.tar.gz";
+                    # https://www.pietroalbini.org/blog/downloading-crates-io/
+                    # Not rate-limited, CDN URL.
+                    url = "https://static.crates.io/crates/${crateConfig.crateName}/${crateConfig.crateName}-${crateConfig.version}.crate";
+                    sha256 =
+                      assert (lib.assertMsg (crateConfig ? sha256) "Missing sha256 for ${name}");
+                      crateConfig.sha256;
+                  });
+                extraRustcOpts =
+                  lib.lists.optional (targetFeatures != [ ])
+                    "-C target-feature=${lib.concatMapStringsSep "," (x: "+${x}") targetFeatures}";
+                inherit
+                  features
+                  dependencies
+                  buildDependencies
+                  crateRenames
+                  release
+                  ;
+              }
+            );
+        in
+        builtByPackageIdByPkgs;
 
     # Returns the actual derivations for the given dependencies.
     dependencyDerivations =
-      {
-        buildByPackageId,
-        features,
-        dependencies,
-        target,
+      { buildByPackageId
+      , features
+      , dependencies
+      , target
+      ,
       }:
-      assert (builtins.isList features);
-      assert (builtins.isList dependencies);
-      assert (builtins.isAttrs target);
-      let
-        enabledDependencies = filterEnabledDependencies {
-          inherit dependencies features target;
-        };
-        depDerivation = dependency: buildByPackageId dependency.packageId;
-      in
-      map depDerivation enabledDependencies;
+        assert (builtins.isList features);
+        assert (builtins.isList dependencies);
+        assert (builtins.isAttrs target);
+        let
+          enabledDependencies = filterEnabledDependencies {
+            inherit dependencies features target;
+          };
+          depDerivation = dependency: buildByPackageId dependency.packageId;
+        in
+        map depDerivation enabledDependencies;
 
     /*
       Returns a sanitized version of val with all values substituted that cannot
@@ -4723,39 +4721,39 @@ rec {
 
     # Returns various tools to debug a crate.
     debugCrate =
-      {
-        packageId,
-        target ? defaultTarget,
+      { packageId
+      , target ? defaultTarget
+      ,
       }:
-      assert (builtins.isString packageId);
-      let
-        debug = rec {
-          # The built tree as passed to buildRustCrate.
-          buildTree = buildRustCrateWithFeatures {
-            buildRustCrateForPkgsFunc = _: lib.id;
-            inherit packageId;
-          };
-          sanitizedBuildTree = sanitizeForJson buildTree;
-          dependencyTree = sanitizeForJson (buildRustCrateWithFeatures {
-            buildRustCrateForPkgsFunc = _: crate: {
-              "01_crateName" = crate.crateName or false;
-              "02_features" = crate.features or [ ];
-              "03_dependencies" = crate.dependencies or [ ];
+        assert (builtins.isString packageId);
+        let
+          debug = rec {
+            # The built tree as passed to buildRustCrate.
+            buildTree = buildRustCrateWithFeatures {
+              buildRustCrateForPkgsFunc = _: lib.id;
+              inherit packageId;
             };
-            inherit packageId;
-          });
-          mergedPackageFeatures = mergePackageFeatures {
-            features = rootFeatures;
-            inherit packageId target;
+            sanitizedBuildTree = sanitizeForJson buildTree;
+            dependencyTree = sanitizeForJson (buildRustCrateWithFeatures {
+              buildRustCrateForPkgsFunc = _: crate: {
+                "01_crateName" = crate.crateName or false;
+                "02_features" = crate.features or [ ];
+                "03_dependencies" = crate.dependencies or [ ];
+              };
+              inherit packageId;
+            });
+            mergedPackageFeatures = mergePackageFeatures {
+              features = rootFeatures;
+              inherit packageId target;
+            };
+            diffedDefaultPackageFeatures = diffDefaultPackageFeatures {
+              inherit packageId target;
+            };
           };
-          diffedDefaultPackageFeatures = diffDefaultPackageFeatures {
-            inherit packageId target;
-          };
+        in
+        {
+          internal = debug;
         };
-      in
-      {
-        internal = debug;
-      };
 
     /*
       Returns differences between cargo default features and crate2nix default
@@ -4764,39 +4762,41 @@ rec {
       This is useful for verifying the feature resolution in crate2nix.
     */
     diffDefaultPackageFeatures =
-      {
-        crateConfigs ? crates,
-        packageId,
-        target,
+      { crateConfigs ? crates
+      , packageId
+      , target
+      ,
       }:
-      assert (builtins.isAttrs crateConfigs);
-      let
-        prefixValues = prefix: lib.mapAttrs (n: v: { "${prefix}" = v; });
-        mergedFeatures = prefixValues "crate2nix" (mergePackageFeatures {
-          inherit crateConfigs packageId target;
-          features = [ "default" ];
-        });
-        configs = prefixValues "cargo" crateConfigs;
-        combined = lib.foldAttrs (a: b: a // b) { } [
-          mergedFeatures
-          configs
-        ];
-        onlyInCargo = builtins.attrNames (
-          lib.filterAttrs (n: v: !(v ? "crate2nix") && (v ? "cargo")) combined
-        );
-        onlyInCrate2Nix = builtins.attrNames (
-          lib.filterAttrs (n: v: (v ? "crate2nix") && !(v ? "cargo")) combined
-        );
-        differentFeatures = lib.filterAttrs (
-          n: v:
-          (v ? "crate2nix")
-          && (v ? "cargo")
-          && (v.crate2nix.features or [ ]) != (v."cargo".resolved_default_features or [ ])
-        ) combined;
-      in
-      builtins.toJSON {
-        inherit onlyInCargo onlyInCrate2Nix differentFeatures;
-      };
+        assert (builtins.isAttrs crateConfigs);
+        let
+          prefixValues = prefix: lib.mapAttrs (n: v: { "${prefix}" = v; });
+          mergedFeatures = prefixValues "crate2nix" (mergePackageFeatures {
+            inherit crateConfigs packageId target;
+            features = [ "default" ];
+          });
+          configs = prefixValues "cargo" crateConfigs;
+          combined = lib.foldAttrs (a: b: a // b) { } [
+            mergedFeatures
+            configs
+          ];
+          onlyInCargo = builtins.attrNames (
+            lib.filterAttrs (n: v: !(v ? "crate2nix") && (v ? "cargo")) combined
+          );
+          onlyInCrate2Nix = builtins.attrNames (
+            lib.filterAttrs (n: v: (v ? "crate2nix") && !(v ? "cargo")) combined
+          );
+          differentFeatures = lib.filterAttrs
+            (
+              n: v:
+                (v ? "crate2nix")
+                && (v ? "cargo")
+                && (v.crate2nix.features or [ ]) != (v."cargo".resolved_default_features or [ ])
+            )
+            combined;
+        in
+        builtins.toJSON {
+          inherit onlyInCargo onlyInCrate2Nix differentFeatures;
+        };
 
     /*
       Returns an attrset mapping packageId to the list of enabled features.
@@ -4805,111 +4805,112 @@ rec {
       corresponding feature sets are merged. Features in rust are additive.
     */
     mergePackageFeatures =
-      {
-        crateConfigs ? crates,
-        packageId,
-        rootPackageId ? packageId,
-        features ? rootFeatures,
-        dependencyPath ? [ crates.${packageId}.crateName ],
-        featuresByPackageId ? { },
-        target,
-        # Adds devDependencies to the crate with rootPackageId.
-        runTests ? false,
-        ...
+      { crateConfigs ? crates
+      , packageId
+      , rootPackageId ? packageId
+      , features ? rootFeatures
+      , dependencyPath ? [ crates.${packageId}.crateName ]
+      , featuresByPackageId ? { }
+      , target
+      , # Adds devDependencies to the crate with rootPackageId.
+        runTests ? false
+      , ...
       }@args:
-      assert (builtins.isAttrs crateConfigs);
-      assert (builtins.isString packageId);
-      assert (builtins.isString rootPackageId);
-      assert (builtins.isList features);
-      assert (builtins.isList dependencyPath);
-      assert (builtins.isAttrs featuresByPackageId);
-      assert (builtins.isAttrs target);
-      assert (builtins.isBool runTests);
-      let
-        crateConfig = crateConfigs."${packageId}" or (builtins.throw "Package not found: ${packageId}");
-        expandedFeatures = expandFeatures (crateConfig.features or { }) features;
-        enabledFeatures = enableFeatures (crateConfig.dependencies or [ ]) expandedFeatures;
-        depWithResolvedFeatures =
-          dependency:
-          let
-            packageId = dependency.packageId;
-            features = dependencyFeatures enabledFeatures dependency;
-          in
-          {
-            inherit packageId features;
-          };
-        resolveDependencies =
-          cache: path: dependencies:
-          assert (builtins.isAttrs cache);
-          assert (builtins.isList dependencies);
-          let
-            enabledDependencies = filterEnabledDependencies {
-              inherit dependencies target;
-              features = enabledFeatures;
-            };
-            directDependencies = map depWithResolvedFeatures enabledDependencies;
-            foldOverCache = op: lib.foldl op cache directDependencies;
-          in
-          foldOverCache (
-            cache:
-            { packageId, features }:
+        assert (builtins.isAttrs crateConfigs);
+        assert (builtins.isString packageId);
+        assert (builtins.isString rootPackageId);
+        assert (builtins.isList features);
+        assert (builtins.isList dependencyPath);
+        assert (builtins.isAttrs featuresByPackageId);
+        assert (builtins.isAttrs target);
+        assert (builtins.isBool runTests);
+        let
+          crateConfig = crateConfigs."${packageId}" or (builtins.throw "Package not found: ${packageId}");
+          expandedFeatures = expandFeatures (crateConfig.features or { }) features;
+          enabledFeatures = enableFeatures (crateConfig.dependencies or [ ]) expandedFeatures;
+          depWithResolvedFeatures =
+            dependency:
             let
-              cacheFeatures = cache.${packageId} or [ ];
-              combinedFeatures = sortedUnique (cacheFeatures ++ features);
+              packageId = dependency.packageId;
+              features = dependencyFeatures enabledFeatures dependency;
             in
-            if cache ? ${packageId} && cache.${packageId} == combinedFeatures then
-              cache
-            else
-              mergePackageFeatures {
-                features = combinedFeatures;
-                featuresByPackageId = cache;
-                inherit
-                  crateConfigs
-                  packageId
-                  target
-                  runTests
-                  rootPackageId
-                  ;
-              }
+            {
+              inherit packageId features;
+            };
+          resolveDependencies =
+            cache: path: dependencies:
+              assert (builtins.isAttrs cache);
+              assert (builtins.isList dependencies);
+              let
+                enabledDependencies = filterEnabledDependencies {
+                  inherit dependencies target;
+                  features = enabledFeatures;
+                };
+                directDependencies = map depWithResolvedFeatures enabledDependencies;
+                foldOverCache = op: lib.foldl op cache directDependencies;
+              in
+              foldOverCache (
+                cache:
+                { packageId, features }:
+                let
+                  cacheFeatures = cache.${packageId} or [ ];
+                  combinedFeatures = sortedUnique (cacheFeatures ++ features);
+                in
+                if cache ? ${packageId} && cache.${packageId} == combinedFeatures then
+                  cache
+                else
+                  mergePackageFeatures {
+                    features = combinedFeatures;
+                    featuresByPackageId = cache;
+                    inherit
+                      crateConfigs
+                      packageId
+                      target
+                      runTests
+                      rootPackageId
+                      ;
+                  }
+              );
+          cacheWithSelf =
+            let
+              cacheFeatures = featuresByPackageId.${packageId} or [ ];
+              combinedFeatures = sortedUnique (cacheFeatures ++ enabledFeatures);
+            in
+            featuresByPackageId
+            // {
+              "${packageId}" = combinedFeatures;
+            };
+          cacheWithDependencies = resolveDependencies cacheWithSelf "dep" (
+            crateConfig.dependencies or [ ]
+            ++ lib.optionals (runTests && packageId == rootPackageId) (crateConfig.devDependencies or [ ])
           );
-        cacheWithSelf =
-          let
-            cacheFeatures = featuresByPackageId.${packageId} or [ ];
-            combinedFeatures = sortedUnique (cacheFeatures ++ enabledFeatures);
-          in
-          featuresByPackageId
-          // {
-            "${packageId}" = combinedFeatures;
-          };
-        cacheWithDependencies = resolveDependencies cacheWithSelf "dep" (
-          crateConfig.dependencies or [ ]
-          ++ lib.optionals (runTests && packageId == rootPackageId) (crateConfig.devDependencies or [ ])
-        );
-        cacheWithAll = resolveDependencies cacheWithDependencies "build" (
-          crateConfig.buildDependencies or [ ]
-        );
-      in
-      cacheWithAll;
+          cacheWithAll = resolveDependencies cacheWithDependencies "build" (
+            crateConfig.buildDependencies or [ ]
+          );
+        in
+        cacheWithAll;
 
     # Returns the enabled dependencies given the enabled features.
     filterEnabledDependencies =
-      {
-        dependencies,
-        features,
-        target,
+      { dependencies
+      , features
+      , target
+      ,
       }:
-      assert (builtins.isList dependencies);
-      assert (builtins.isList features);
-      assert (builtins.isAttrs target);
+        assert (builtins.isList dependencies);
+        assert (builtins.isList features);
+        assert (builtins.isAttrs target);
 
-      lib.filter (
-        dep:
-        let
-          targetFunc = dep.target or (features: true);
-        in
-        targetFunc { inherit features target; }
-        && (!(dep.optional or false) || builtins.any (doesFeatureEnableDependency dep) features)
-      ) dependencies;
+        lib.filter
+          (
+            dep:
+            let
+              targetFunc = dep.target or (features: true);
+            in
+            targetFunc { inherit features target; }
+            && (!(dep.optional or false) || builtins.any (doesFeatureEnableDependency dep) features)
+          )
+          dependencies;
 
     # Returns whether the given feature should enable the given dependency.
     doesFeatureEnableDependency =
@@ -4931,16 +4932,16 @@ rec {
     */
     expandFeatures =
       featureMap: inputFeatures:
-      assert (builtins.isAttrs featureMap);
-      assert (builtins.isList inputFeatures);
-      let
-        expandFeature =
-          feature:
-          assert (builtins.isString feature);
-          [ feature ] ++ (expandFeatures featureMap (featureMap."${feature}" or [ ]));
-        outFeatures = lib.concatMap expandFeature inputFeatures;
-      in
-      sortedUnique outFeatures;
+        assert (builtins.isAttrs featureMap);
+        assert (builtins.isList inputFeatures);
+        let
+          expandFeature =
+            feature:
+              assert (builtins.isString feature);
+              [ feature ] ++ (expandFeatures featureMap (featureMap."${feature}" or [ ]));
+          outFeatures = lib.concatMap expandFeature inputFeatures;
+        in
+        sortedUnique outFeatures;
 
     /*
       This function adds optional dependencies as features if they are enabled
@@ -4950,22 +4951,24 @@ rec {
     */
     enableFeatures =
       dependencies: features:
-      assert (builtins.isList features);
-      assert (builtins.isList dependencies);
-      let
-        additionalFeatures = lib.concatMap (
-          dependency:
-          assert (builtins.isAttrs dependency);
-          let
-            enabled = builtins.any (doesFeatureEnableDependency dependency) features;
-          in
-          if (dependency.optional or false) && enabled then
-            [ (dependency.rename or dependency.name) ]
-          else
-            [ ]
-        ) dependencies;
-      in
-      sortedUnique (features ++ additionalFeatures);
+        assert (builtins.isList features);
+        assert (builtins.isList dependencies);
+        let
+          additionalFeatures = lib.concatMap
+            (
+              dependency:
+                assert (builtins.isAttrs dependency);
+                let
+                  enabled = builtins.any (doesFeatureEnableDependency dependency) features;
+                in
+                if (dependency.optional or false) && enabled then
+                  [ (dependency.rename or dependency.name) ]
+                else
+                  [ ]
+            )
+            dependencies;
+        in
+        sortedUnique (features ++ additionalFeatures);
 
     /*
       Returns the actual features for the given dependency.
@@ -4974,30 +4977,30 @@ rec {
     */
     dependencyFeatures =
       features: dependency:
-      assert (builtins.isList features);
-      assert (builtins.isAttrs dependency);
-      let
-        defaultOrNil = if dependency.usesDefaultFeatures or true then [ "default" ] else [ ];
-        explicitFeatures = dependency.features or [ ];
-        additionalDependencyFeatures =
-          let
-            dependencyPrefix = (dependency.rename or dependency.name) + "/";
-            dependencyFeatures = builtins.filter (f: lib.hasPrefix dependencyPrefix f) features;
-          in
-          builtins.map (lib.removePrefix dependencyPrefix) dependencyFeatures;
-      in
-      defaultOrNil ++ explicitFeatures ++ additionalDependencyFeatures;
+        assert (builtins.isList features);
+        assert (builtins.isAttrs dependency);
+        let
+          defaultOrNil = if dependency.usesDefaultFeatures or true then [ "default" ] else [ ];
+          explicitFeatures = dependency.features or [ ];
+          additionalDependencyFeatures =
+            let
+              dependencyPrefix = (dependency.rename or dependency.name) + "/";
+              dependencyFeatures = builtins.filter (f: lib.hasPrefix dependencyPrefix f) features;
+            in
+            builtins.map (lib.removePrefix dependencyPrefix) dependencyFeatures;
+        in
+        defaultOrNil ++ explicitFeatures ++ additionalDependencyFeatures;
 
     # Sorts and removes duplicates from a list of strings.
     sortedUnique =
       features:
-      assert (builtins.isList features);
-      assert (builtins.all builtins.isString features);
-      let
-        outFeaturesSet = lib.foldl (set: feature: set // { "${feature}" = 1; }) { } features;
-        outFeaturesUnique = builtins.attrNames outFeaturesSet;
-      in
-      builtins.sort (a: b: a < b) outFeaturesUnique;
+        assert (builtins.isList features);
+        assert (builtins.all builtins.isString features);
+        let
+          outFeaturesSet = lib.foldl (set: feature: set // { "${feature}" = 1; }) { } features;
+          outFeaturesUnique = builtins.attrNames outFeaturesSet;
+        in
+        builtins.sort (a: b: a < b) outFeaturesUnique;
 
     deprecationWarning =
       message: value:

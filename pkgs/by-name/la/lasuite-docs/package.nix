@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  python3,
-  fetchFromGitHub,
-  nixosTests,
-  fetchPypi,
-  fetchYarnDeps,
-  nodejs,
-  yarnBuildHook,
-  yarnConfigHook,
+{ stdenv
+, lib
+, python3
+, fetchFromGitHub
+, nixosTests
+, fetchPypi
+, fetchYarnDeps
+, nodejs
+, yarnBuildHook
+, yarnConfigHook
+,
 }:
 let
   python = python3.override {

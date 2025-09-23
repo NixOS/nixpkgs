@@ -1,29 +1,29 @@
-{
-  buildPythonPackage,
-  colorama,
-  decorator,
-  dunamai,
-  fetchFromGitHub,
-  funcy,
-  git,
-  hatchling,
-  hatch-vcs,
-  iteration-utilities,
-  jinja2,
-  jinja2-ansible-filters,
-  lib,
-  mkdocs-material,
-  mkdocs-mermaid2-plugin,
-  nix-update-script,
-  mkdocstrings,
-  packaging,
-  pathspec,
-  plumbum,
-  pydantic,
-  pygments,
-  pyyaml,
-  pyyaml-include,
-  questionary,
+{ buildPythonPackage
+, colorama
+, decorator
+, dunamai
+, fetchFromGitHub
+, funcy
+, git
+, hatchling
+, hatch-vcs
+, iteration-utilities
+, jinja2
+, jinja2-ansible-filters
+, lib
+, mkdocs-material
+, mkdocs-mermaid2-plugin
+, nix-update-script
+, mkdocstrings
+, packaging
+, pathspec
+, plumbum
+, pydantic
+, pygments
+, pyyaml
+, pyyaml-include
+, questionary
+,
 }:
 
 buildPythonPackage rec {

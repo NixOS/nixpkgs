@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hypothesis,
-  poetry-core,
-  pydantic,
-  pytest,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hypothesis
+, poetry-core
+, pydantic
+, pytest
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

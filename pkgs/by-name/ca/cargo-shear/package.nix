@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  rustPlatform,
-  testers,
-  cargo-shear,
+{ fetchFromGitHub
+, lib
+, rustPlatform
+, testers
+, cargo-shear
+,
 }:
 let
   version = "1.5.1";

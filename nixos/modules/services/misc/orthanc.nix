@@ -1,9 +1,8 @@
-{
-  config,
-  options,
-  lib,
-  pkgs,
-  ...
+{ config
+, options
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib) types;
@@ -28,8 +27,7 @@ in
 
       environment = lib.mkOption {
         type = types.attrsOf types.str;
-        default = {
-        };
+        default = { };
         example = ''
           {
             ORTHANC_NAME = "Orthanc server";

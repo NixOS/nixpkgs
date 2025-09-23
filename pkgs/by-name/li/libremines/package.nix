@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qt6,
-  qt6Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qt6
+, qt6Packages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

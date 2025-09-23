@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  glibcLocales,
-  mono,
-  unzip,
-  dotnetCorePackages,
-  roslyn,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, glibcLocales
+, mono
+, unzip
+, dotnetCorePackages
+, roslyn
+,
 }:
 
 let
@@ -25,12 +25,15 @@ let
     attrs:
     stdenv.mkDerivation (
       finalAttrs:
-      dotnetCorePackages.addNuGetDeps {
-        nugetDeps = ./deps.json;
-        overrideFetchAttrs = a: {
-          dontBuild = false;
-        };
-      } attrs finalAttrs
+      dotnetCorePackages.addNuGetDeps
+        {
+          nugetDeps = ./deps.json;
+          overrideFetchAttrs = a: {
+            dontBuild = false;
+          };
+        }
+        attrs
+        finalAttrs
     );
 
 in

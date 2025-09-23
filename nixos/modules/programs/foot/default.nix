@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -12,20 +11,21 @@ let
     listsAsDuplicateKeys = true;
     mkKeyValue =
       with lib.generators;
-      mkKeyValueDefault {
-        mkValueString =
-          v:
-          mkValueStringDefault { } (
-            if v == true then
-              "yes"
-            else if v == false then
-              "no"
-            else if v == null then
-              "none"
-            else
-              v
-          );
-      } "=";
+      mkKeyValueDefault
+        {
+          mkValueString =
+            v:
+            mkValueStringDefault { } (
+              if v == true then
+                "yes"
+              else if v == false then
+                "no"
+              else if v == null then
+                "none"
+              else
+                v
+            );
+        } "=";
   };
 in
 {

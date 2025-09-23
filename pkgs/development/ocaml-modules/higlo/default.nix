@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitLab,
-  sedlex,
-  xtmpl,
+{ lib
+, buildDunePackage
+, fetchFromGitLab
+, sedlex
+, xtmpl
+,
 }:
 
 buildDunePackage rec {

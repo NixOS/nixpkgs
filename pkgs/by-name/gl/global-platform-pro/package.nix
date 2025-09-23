@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  jdk11,
-  maven,
-  makeWrapper,
-  jre_headless,
-  pcsclite,
-  proot,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, jdk11
+, maven
+, makeWrapper
+, jre_headless
+, pcsclite
+, proot
+, zlib
+,
 }:
 
 let

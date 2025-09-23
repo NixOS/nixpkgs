@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cython,
-  jinja2,
-  numpy,
-  pyparsing,
-  setuptools,
-  sympy,
-  pytest,
-  pythonOlder,
-  pytest-xdist,
-  setuptools-scm,
-  python,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cython
+, jinja2
+, numpy
+, pyparsing
+, setuptools
+, sympy
+, pytest
+, pythonOlder
+, pytest-xdist
+, setuptools-scm
+, python
+, scipy
+,
 }:
 
 buildPythonPackage rec {

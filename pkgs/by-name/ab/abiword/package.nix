@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  autoconf-archive,
-  pkg-config,
-  gtk3,
-  fribidi,
-  libpng,
-  popt,
-  libgsf,
-  enchant,
-  wv,
-  librsvg,
-  bzip2,
-  libjpeg,
-  perl,
-  boost,
-  libxslt,
-  goffice,
-  wrapGAppsHook3,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, gtk3
+, fribidi
+, libpng
+, popt
+, libgsf
+, enchant
+, wv
+, librsvg
+, bzip2
+, libjpeg
+, perl
+, boost
+, libxslt
+, goffice
+, wrapGAppsHook3
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

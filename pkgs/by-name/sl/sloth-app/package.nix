@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  makeBinaryWrapper,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, makeBinaryWrapper
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  gettext,
-  itstool,
-  pkg-config,
-  libxml2,
-  libjpeg,
-  libpeas,
-  libportal-gtk3,
-  gnome,
-  gtk3,
-  libhandy,
-  glib,
-  gsettings-desktop-schemas,
-  gnome-desktop,
-  lcms2,
-  gdk-pixbuf,
-  exempi,
-  shared-mime-info,
-  wrapGAppsHook3,
-  libjxl,
-  librsvg,
-  webp-pixbuf-loader,
-  libheif,
-  libexif,
-  gobject-introspection,
-  gi-docgen,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, gettext
+, itstool
+, pkg-config
+, libxml2
+, libjpeg
+, libpeas
+, libportal-gtk3
+, gnome
+, gtk3
+, libhandy
+, glib
+, gsettings-desktop-schemas
+, gnome-desktop
+, lcms2
+, gdk-pixbuf
+, exempi
+, shared-mime-info
+, wrapGAppsHook3
+, libjxl
+, librsvg
+, webp-pixbuf-loader
+, libheif
+, libexif
+, gobject-introspection
+, gi-docgen
+,
 }:
 
 stdenv.mkDerivation rec {

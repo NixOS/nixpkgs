@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  docbook_xsl,
-  docbook_xml_dtd_45,
-  python3,
-  libxslt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, docbook_xsl
+, docbook_xml_dtd_45
+, python3
+, libxslt
+,
 }:
 
 stdenv.mkDerivation rec {

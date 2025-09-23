@@ -1,28 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  django,
-
-  # optionals
-  bleach,
-  docutils,
-  markdown,
-  pygments,
-  python-creole,
-  smartypants,
-  textile,
-
-  # tests
-  pytest-cov-stub,
-  pytest-django,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  poetry-core
+, # dependencies
+  django
+, # optionals
+  bleach
+, docutils
+, markdown
+, pygments
+, python-creole
+, smartypants
+, textile
+, # tests
+  pytest-cov-stub
+, pytest-django
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

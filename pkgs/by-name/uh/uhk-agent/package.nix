@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  fetchurl,
-  appimageTools,
-  electron,
-  makeWrapper,
-  asar,
-  autoPatchelfHook,
-  libusb1,
+{ lib
+, stdenv
+, stdenvNoCC
+, fetchurl
+, appimageTools
+, electron
+, makeWrapper
+, asar
+, autoPatchelfHook
+, libusb1
+,
 }:
 
 let

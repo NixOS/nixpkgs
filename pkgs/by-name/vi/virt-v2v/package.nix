@@ -1,30 +1,31 @@
-{
-  stdenv,
-  lib,
-  testers,
-  fetchurl,
-  pkg-config,
-  makeWrapper,
-  autoreconfHook,
-  bash-completion,
-  OVMF,
-  qemu,
-  ocamlPackages,
-  perl,
-  cpio,
-  getopt,
-  libosinfo,
-  pcre2,
-  libxml2,
-  json_c,
-  glib,
-  libguestfs-with-appliance,
-  cdrkit,
-  nbdkit,
-  withWindowsGuestSupport ? true,
-  pkgsCross, # for rsrvany
-  virtio-win,
-  gitUpdater,
+{ stdenv
+, lib
+, testers
+, fetchurl
+, pkg-config
+, makeWrapper
+, autoreconfHook
+, bash-completion
+, OVMF
+, qemu
+, ocamlPackages
+, perl
+, cpio
+, getopt
+, libosinfo
+, pcre2
+, libxml2
+, json_c
+, glib
+, libguestfs-with-appliance
+, cdrkit
+, nbdkit
+, withWindowsGuestSupport ? true
+, pkgsCross
+, # for rsrvany
+  virtio-win
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

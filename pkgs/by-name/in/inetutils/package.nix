@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  ncurses,
-  perl,
-  help2man,
-  apparmorRulesFromClosure,
-  libxcrypt,
-  util-linux,
+{ stdenv
+, lib
+, fetchurl
+, ncurses
+, perl
+, help2man
+, apparmorRulesFromClosure
+, libxcrypt
+, util-linux
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  jdk,
-  maven,
-  makeWrapper,
-  fetchFromGitHub,
-  libGL,
-  libxkbcommon,
-  wayland,
-  fontconfig,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libXxf86vm,
-  libXtst,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, jdk
+, maven
+, makeWrapper
+, fetchFromGitHub
+, libGL
+, libxkbcommon
+, wayland
+, fontconfig
+, libX11
+, libXcursor
+, libXi
+, libXrandr
+, libXxf86vm
+, libXtst
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 let
   libPath = lib.makeLibraryPath [

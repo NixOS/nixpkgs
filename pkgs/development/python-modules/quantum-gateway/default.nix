@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  esprima,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-mock,
-  urllib3,
+{ lib
+, buildPythonPackage
+, esprima
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

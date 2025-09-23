@@ -1,22 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # native dependencies
-  taskwarrior2,
-  distutils,
-
-  # dependencies
-  kitchen,
-  python-dateutil,
-  pytz,
-
-  # tests
-  pytest7CheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # native dependencies
+  taskwarrior2
+, distutils
+, # dependencies
+  kitchen
+, python-dateutil
+, pytz
+, # tests
+  pytest7CheckHook
+,
 }:
 
 buildPythonPackage rec {

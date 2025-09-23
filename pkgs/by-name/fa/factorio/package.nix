@@ -1,37 +1,37 @@
-{
-  lib,
-  alsa-lib,
-  factorio-utils,
-  fetchurl,
-  libGL,
-  libICE,
-  libSM,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libpulseaudio,
-  libxkbcommon,
-  makeDesktopItem,
-  makeWrapper,
-  releaseType,
-  stdenv,
-  wayland,
-
-  mods-dat ? null,
-  versionsJson ? ./versions.json,
-  username ? "",
-  token ? "", # get/reset token at https://factorio.com/profile
-  experimental ? false, # true means to always use the latest branch
+{ lib
+, alsa-lib
+, factorio-utils
+, fetchurl
+, libGL
+, libICE
+, libSM
+, libX11
+, libXcursor
+, libXext
+, libXi
+, libXinerama
+, libXrandr
+, libpulseaudio
+, libxkbcommon
+, makeDesktopItem
+, makeWrapper
+, releaseType
+, stdenv
+, wayland
+, mods-dat ? null
+, versionsJson ? ./versions.json
+, username ? ""
+, token ? ""
+, # get/reset token at https://factorio.com/profile
+  experimental ? false
+, # true means to always use the latest branch
   ...
 }@args:
 
 assert
-  releaseType == "alpha"
-  || releaseType == "headless"
-  || releaseType == "demo"
+releaseType == "alpha"
+|| releaseType == "headless"
+|| releaseType == "demo"
   || releaseType == "expansion";
 
 let
@@ -113,14 +113,14 @@ let
     in
     builtins.mapAttrs (f [ ]) versions;
   makeBinDist =
-    {
-      name,
-      version,
-      tarDirectory,
-      url,
-      sha256,
-      needsAuth,
-      candidateHashFilenames ? [ ],
+    { name
+    , version
+    , tarDirectory
+    , url
+    , sha256
+    , needsAuth
+    , candidateHashFilenames ? [ ]
+    ,
     }:
     {
       inherit version tarDirectory;

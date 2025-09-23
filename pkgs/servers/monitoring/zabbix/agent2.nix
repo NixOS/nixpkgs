@@ -1,21 +1,20 @@
-{
-  lib,
-  buildGoModule,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  libiconv,
-  openssl,
-  pcre,
-  pcre2,
-  zlib,
+{ lib
+, buildGoModule
+, fetchurl
+, autoreconfHook
+, pkg-config
+, libiconv
+, openssl
+, pcre
+, pcre2
+, zlib
+,
 }:
 
 import ./versions.nix (
-  {
-    version,
-    hash,
-    ...
+  { version
+  , hash
+  , ...
   }:
   buildGoModule {
     pname = "zabbix-agent2";

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  boost,
-  capstone_4,
-  double-conversion,
-  graphviz,
-  qtxmlpatterns,
-  qttools,
-  qtbase,
-  wrapQtAppsHook,
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, boost
+, capstone_4
+, double-conversion
+, graphviz
+, qtxmlpatterns
+, qttools
+, qtbase
+, wrapQtAppsHook
+, testers
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

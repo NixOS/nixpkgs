@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  imath,
-  rapidjson,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, imath
+, rapidjson
+,
 }:
 
 stdenv.mkDerivation rec {

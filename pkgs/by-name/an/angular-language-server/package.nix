@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  nodejs,
-  makeBinaryWrapper,
-  runCommand,
-  angular-language-server,
-  writeShellApplication,
-  curl,
-  common-updater-scripts,
-  jq,
-  unzip,
-  typescript,
+{ lib
+, stdenvNoCC
+, fetchurl
+, nodejs
+, makeBinaryWrapper
+, runCommand
+, angular-language-server
+, writeShellApplication
+, curl
+, common-updater-scripts
+, jq
+, unzip
+, typescript
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

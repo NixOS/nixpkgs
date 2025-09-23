@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  imagemagick,
-  makeWrapper,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, imagemagick
+, makeWrapper
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "yunfaavatar";

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  libGLU,
-  libGL,
-  qt6,
-  boost,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, libGLU
+, libGL
+, qt6
+, boost
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gtk2,
-  glibmm,
-  cairomm,
-  pangomm,
-  atkmm,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk2
+, glibmm
+, cairomm
+, pangomm
+, atkmm
+,
 }:
 
 stdenv.mkDerivation rec {

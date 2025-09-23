@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  p7zip,
+{ lib
+, stdenvNoCC
+, fetchurl
+, p7zip
+,
 }:
 let
   version = "1.022";
@@ -12,10 +12,10 @@ let
     mapAttrs'
       (
         name: hash:
-        nameValuePair (lib.strings.toLower name) (fetchurl {
-          url = "https://github.com/GuiWonder/Shanggu/releases/download/${version}/Shanggu${name}TTCs.7z";
-          inherit hash;
-        })
+          nameValuePair (lib.strings.toLower name) (fetchurl {
+            url = "https://github.com/GuiWonder/Shanggu/releases/download/${version}/Shanggu${name}TTCs.7z";
+            inherit hash;
+          })
       )
       {
         Mono = "sha256-kRUnhNXTcU6DCgM0yDVZTzr+2SooANoSkj5bJ1zK+YI=";
@@ -38,9 +38,11 @@ stdenvNoCC.mkDerivation {
     runHook preUnpack
   ''
   + lib.strings.concatLines (
-    lib.attrsets.mapAttrsToList (name: value: ''
-      7z x ${value} -o${name}
-    '') source
+    lib.attrsets.mapAttrsToList
+      (name: value: ''
+        7z x ${value} -o${name}
+      '')
+      source
   )
   + ''
     runHook postUnpack

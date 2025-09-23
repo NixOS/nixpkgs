@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  humanfriendly,
-  pytestCheckHook,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, humanfriendly
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

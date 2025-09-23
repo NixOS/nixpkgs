@@ -152,10 +152,11 @@ in
   freebsd = filterDoubles predicates.isFreeBSD;
   # Should be better, but MinGW is unclear.
   gnu =
-    filterDoubles (matchAttrs {
-      kernel = parse.kernels.linux;
-      abi = parse.abis.gnu;
-    })
+    filterDoubles
+      (matchAttrs {
+        kernel = parse.kernels.linux;
+        abi = parse.abis.gnu;
+      })
     ++ filterDoubles (matchAttrs {
       kernel = parse.kernels.linux;
       abi = parse.abis.gnueabi;

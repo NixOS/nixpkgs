@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  doxygen,
-  gettext,
-  graphviz,
-  libxslt,
-  removeReferencesTo,
-  libiconv,
-  brotli,
-  expat,
-  inih,
-  zlib,
-  libxml2,
-  python3,
-  which,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, doxygen
+, gettext
+, graphviz
+, libxslt
+, removeReferencesTo
+, libiconv
+, brotli
+, expat
+, inih
+, zlib
+, libxml2
+, python3
+, which
+,
 }:
 
 stdenv.mkDerivation rec {

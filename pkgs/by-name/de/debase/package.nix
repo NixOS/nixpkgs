@@ -1,9 +1,10 @@
-{
-  fetchFromGitHub,
-  fetchpatch, # Delete at next version bump.
-  lib,
-  libgit2,
-  stdenv,
+{ fetchFromGitHub
+, fetchpatch
+, # Delete at next version bump.
+  lib
+, libgit2
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

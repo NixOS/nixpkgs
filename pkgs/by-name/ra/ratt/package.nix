@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  fetchFromSourcehut,
-  lib,
-  scdoc,
-  installShellFiles,
+{ buildGoModule
+, fetchFromSourcehut
+, lib
+, scdoc
+, installShellFiles
+,
 }:
 buildGoModule {
   pname = "ratt";

@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  curl-impersonate-chrome,
-  cffi,
-  certifi,
-  charset-normalizer,
-  cryptography,
-  fastapi,
-  httpx,
-  proxy-py,
-  pytest-asyncio,
-  pytest-trio,
-  pytestCheckHook,
-  python-multipart,
-  trustme,
-  uvicorn,
-  websockets,
-  writableTmpDirAsHomeHook,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, curl-impersonate-chrome
+, cffi
+, certifi
+, charset-normalizer
+, cryptography
+, fastapi
+, httpx
+, proxy-py
+, pytest-asyncio
+, pytest-trio
+, pytestCheckHook
+, python-multipart
+, trustme
+, uvicorn
+, websockets
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

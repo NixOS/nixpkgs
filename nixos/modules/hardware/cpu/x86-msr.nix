@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  options,
-  ...
+{ lib
+, config
+, options
+, ...
 }:
 let
   inherit (builtins) hasAttr;
@@ -17,23 +16,24 @@ let
   # If `module = baz` is passed, generates `baz.foo=bar`.
   # Adds double quotes on demand to handle `foo="bar baz"`.
   kernelParam =
-    {
-      module ? null,
+    { module ? null
+    ,
     }:
     name: value:
-    assert lib.asserts.assertMsg (
-      !lib.strings.hasInfix "=" name
-    ) "kernel parameter cannot have '=' in name";
-    let
-      key = (if module == null then "" else module + ".") + name;
-      valueString = lib.generators.mkValueStringDefault { } value;
-      quotedValueString =
-        if lib.strings.hasInfix " " valueString then
-          lib.strings.escape [ "\"" ] valueString
-        else
-          valueString;
-    in
-    "${key}=${quotedValueString}";
+      assert lib.asserts.assertMsg
+        (
+          !lib.strings.hasInfix "=" name
+        ) "kernel parameter cannot have '=' in name";
+      let
+        key = (if module == null then "" else module + ".") + name;
+        valueString = lib.generators.mkValueStringDefault { } value;
+        quotedValueString =
+          if lib.strings.hasInfix " " valueString then
+            lib.strings.escape [ "\"" ] valueString
+          else
+            valueString;
+      in
+      "${key}=${quotedValueString}";
   msrKernelParam = kernelParam { module = "msr"; };
 in
 {

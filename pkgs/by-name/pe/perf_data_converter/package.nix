@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildBazelPackage,
-  fetchFromGitHub,
-  bazel_7,
-  jdk,
-  elfutils,
-  libcap,
+{ lib
+, stdenv
+, buildBazelPackage
+, fetchFromGitHub
+, bazel_7
+, jdk
+, elfutils
+, libcap
+,
 }:
 
 let
@@ -40,8 +40,7 @@ buildBazelPackage {
       {
         aarch64-linux = "sha256-GvuOEQfzPF5J75TRlEc4oDiXXUN4G3fMfRhMDmg3FL0=";
         x86_64-linux = "sha256-A47JJg+GUIhR7FhufxEsfsIuSg6dd7sPNzSWiQZXIEE=";
-      }
-      .${system} or (throw "No hash for system: ${system}");
+      }.${system} or (throw "No hash for system: ${system}");
   };
 
   nativeBuildInputs = [ jdk ];

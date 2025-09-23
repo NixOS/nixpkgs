@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gtk-doc,
-  docbook-xsl-nons,
-  glib,
-  ncurses,
-  libxml2,
-  buildDocs ? true,
-  mesonEmulatorHook,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gtk-doc
+, docbook-xsl-nons
+, glib
+, ncurses
+, libxml2
+, buildDocs ? true
+, mesonEmulatorHook
+,
 }:
 stdenv.mkDerivation rec {
   pname = "libgnt";

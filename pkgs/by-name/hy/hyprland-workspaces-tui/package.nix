@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  hyprland-workspaces,
-  installShellFiles,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, hyprland-workspaces
+, installShellFiles
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "hyprland-workspaces-tui";

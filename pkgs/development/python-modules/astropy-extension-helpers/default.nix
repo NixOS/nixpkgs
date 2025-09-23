@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  findutils,
-  pytestCheckHook,
-  pythonOlder,
-  pip,
-  setuptools,
-  setuptools-scm,
-  tomli,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, findutils
+, pytestCheckHook
+, pythonOlder
+, pip
+, setuptools
+, setuptools-scm
+, tomli
+, wheel
+,
 }:
 
 buildPythonPackage rec {

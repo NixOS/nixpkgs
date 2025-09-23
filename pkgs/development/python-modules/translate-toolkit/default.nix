@@ -1,29 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  cwcwidth,
-  lxml,
-
-  # tests
-  aeidon,
-  charset-normalizer,
-  cheroot,
-  fluent-syntax,
-  gettext,
-  iniparse,
-  mistletoe,
-  phply,
-  pyparsing,
-  pytestCheckHook,
-  ruamel-yaml,
-  syrupy,
-  vobject,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  cwcwidth
+, lxml
+, # tests
+  aeidon
+, charset-normalizer
+, cheroot
+, fluent-syntax
+, gettext
+, iniparse
+, mistletoe
+, phply
+, pyparsing
+, pytestCheckHook
+, ruamel-yaml
+, syrupy
+, vobject
+,
 }:
 
 buildPythonPackage rec {

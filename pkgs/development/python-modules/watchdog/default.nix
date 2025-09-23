@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  eventlet,
-  fetchPypi,
-  flaky,
-  pytest-cov-stub,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, eventlet
+, fetchPypi
+, flaky
+, pytest-cov-stub
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

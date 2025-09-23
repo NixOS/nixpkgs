@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  wayland-scanner,
-  nix-update-script,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, wayland-scanner
+, nix-update-script
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation {

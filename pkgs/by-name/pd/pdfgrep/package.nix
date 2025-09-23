@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  poppler,
-  libgcrypt,
-  pcre2,
-  asciidoc,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, poppler
+, libgcrypt
+, pcre2
+, asciidoc
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pythonOlder,
-  types-awscrt,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pythonOlder
+, types-awscrt
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

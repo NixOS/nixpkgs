@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  chardet,
-  hypothesis,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, chardet
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

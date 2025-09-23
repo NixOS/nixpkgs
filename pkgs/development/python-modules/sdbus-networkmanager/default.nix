@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  sdbus,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, sdbus
+,
 }:
 
 let

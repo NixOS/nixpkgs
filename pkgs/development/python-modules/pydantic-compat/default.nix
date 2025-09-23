@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  gitMinimal,
-  importlib-metadata,
-  pydantic,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, gitMinimal
+, importlib-metadata
+, pydantic
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

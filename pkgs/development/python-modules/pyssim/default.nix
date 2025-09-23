@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  scipy,
-  pillow,
-  pywavelets,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, scipy
+, pillow
+, pywavelets
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

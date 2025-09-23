@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  curl,
-  tzdata,
-  autoPatchelfHook,
-  fixDarwinDylibNames,
-  libxml2,
+{ lib
+, stdenv
+, fetchurl
+, curl
+, tzdata
+, autoPatchelfHook
+, fixDarwinDylibNames
+, libxml2
+,
 }:
 
 let

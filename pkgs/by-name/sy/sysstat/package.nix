@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gettext,
-  bzip2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gettext
+, bzip2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

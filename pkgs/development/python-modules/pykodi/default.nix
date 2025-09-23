@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  aiohttp,
-  jsonrpc-async,
-  jsonrpc-websocket,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, aiohttp
+, jsonrpc-async
+, jsonrpc-websocket
+,
 }:
 
 buildPythonPackage rec {

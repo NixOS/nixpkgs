@@ -1,14 +1,14 @@
-{
-  asciidoctor,
-  fetchFromRadicle,
-  git,
-  installShellFiles,
-  lib,
-  makeWrapper,
-  man-db,
-  rustPlatform,
-  stdenv,
-  xdg-utils,
+{ asciidoctor
+, fetchFromRadicle
+, git
+, installShellFiles
+, lib
+, makeWrapper
+, man-db
+, rustPlatform
+, stdenv
+, xdg-utils
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "radicle-httpd";

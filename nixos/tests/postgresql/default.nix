@@ -1,7 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../../.. { inherit system config; }
+,
 }:
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
@@ -14,9 +14,9 @@ let
     const
     ;
   genTests =
-    {
-      makeTestFor,
-      filter ? (_: _: true),
+    { makeTestFor
+    , filter ? (_: _: true)
+    ,
     }:
     recurseIntoAttrs (
       mapAttrs (const makeTestFor) (filterAttrs filter pkgs.postgresqlVersions)

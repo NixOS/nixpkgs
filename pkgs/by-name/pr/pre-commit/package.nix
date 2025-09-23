@@ -1,24 +1,22 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-
-  # tests
-  cabal-install,
-  cargo,
-  gitMinimal,
-  go,
-  perl,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
-  coursier,
-  dotnet-sdk,
-  nodejs,
-
-  # passthru
-  callPackage,
-  pre-commit,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, # tests
+  cabal-install
+, cargo
+, gitMinimal
+, go
+, perl
+, versionCheckHook
+, writableTmpDirAsHomeHook
+, coursier
+, dotnet-sdk
+, nodejs
+, # passthru
+  callPackage
+, pre-commit
+,
 }:
 
 let

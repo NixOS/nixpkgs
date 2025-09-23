@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  aiohttp,
-  aiohttp-jinja2,
-  jinja2,
-  rich,
-  textual,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  hatchling
+, # dependencies
+  aiohttp
+, aiohttp-jinja2
+, jinja2
+, rich
+, textual
+,
 }:
 
 buildPythonPackage rec {

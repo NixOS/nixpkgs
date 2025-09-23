@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  SDL2,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, SDL2
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

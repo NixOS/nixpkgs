@@ -1,68 +1,68 @@
-{
-  lib,
-  config,
-  clangStdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  libtool,
-  intltool,
-  pkg-config,
-  jansson,
-  swift-corelibs-libdispatch,
-  # deadbeef can use either gtk2 or gtk3
-  gtk2Support ? false,
-  gtk2,
-  gtk3Support ? true,
-  gtk3,
-  gsettings-desktop-schemas,
-  wrapGAppsHook3,
-  # input plugins
-  vorbisSupport ? true,
-  libvorbis,
-  mp123Support ? true,
-  libmad,
-  flacSupport ? true,
-  flac,
-  wavSupport ? true,
-  libsndfile,
-  cdaSupport ? true,
-  libcdio,
-  libcddb,
-  aacSupport ? true,
-  faad2,
-  opusSupport ? true,
-  opusfile,
-  wavpackSupport ? false,
-  wavpack,
-  ffmpegSupport ? false,
-  ffmpeg,
-  apeSupport ? true,
-  yasm,
-  # misc plugins
-  zipSupport ? true,
-  libzip,
-  artworkSupport ? true,
-  imlib2,
-  hotkeysSupport ? true,
-  libX11,
-  osdSupport ? true,
-  dbus,
-  # output plugins
-  alsaSupport ? true,
-  alsa-lib,
-  pulseSupport ? config.pulseaudio or true,
-  libpulseaudio,
-  pipewireSupport ? true,
-  pipewire,
-  # effect plugins
-  resamplerSupport ? true,
-  libsamplerate,
-  overloadSupport ? true,
-  zlib,
-  # transports
-  remoteSupport ? true,
-  curl,
+{ lib
+, config
+, clangStdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, intltool
+, pkg-config
+, jansson
+, swift-corelibs-libdispatch
+, # deadbeef can use either gtk2 or gtk3
+  gtk2Support ? false
+, gtk2
+, gtk3Support ? true
+, gtk3
+, gsettings-desktop-schemas
+, wrapGAppsHook3
+, # input plugins
+  vorbisSupport ? true
+, libvorbis
+, mp123Support ? true
+, libmad
+, flacSupport ? true
+, flac
+, wavSupport ? true
+, libsndfile
+, cdaSupport ? true
+, libcdio
+, libcddb
+, aacSupport ? true
+, faad2
+, opusSupport ? true
+, opusfile
+, wavpackSupport ? false
+, wavpack
+, ffmpegSupport ? false
+, ffmpeg
+, apeSupport ? true
+, yasm
+, # misc plugins
+  zipSupport ? true
+, libzip
+, artworkSupport ? true
+, imlib2
+, hotkeysSupport ? true
+, libX11
+, osdSupport ? true
+, dbus
+, # output plugins
+  alsaSupport ? true
+, alsa-lib
+, pulseSupport ? config.pulseaudio or true
+, libpulseaudio
+, pipewireSupport ? true
+, pipewire
+, # effect plugins
+  resamplerSupport ? true
+, libsamplerate
+, overloadSupport ? true
+, zlib
+, # transports
+  remoteSupport ? true
+, curl
+,
 }:
 
 assert gtk2Support || gtk3Support;

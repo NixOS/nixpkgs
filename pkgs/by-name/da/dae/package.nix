@@ -1,11 +1,11 @@
-{
-  lib,
-  clang,
-  fetchFromGitHub,
-  buildGoModule,
-  versionCheckHook,
-  nixosTests,
-  nix-update-script,
+{ lib
+, clang
+, fetchFromGitHub
+, buildGoModule
+, versionCheckHook
+, nixosTests
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

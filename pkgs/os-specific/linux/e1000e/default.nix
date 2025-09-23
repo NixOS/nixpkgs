@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  kernel,
+{ lib
+, stdenv
+, fetchurl
+, kernel
+,
 }:
 
 assert lib.versionOlder kernel.version "4.10";

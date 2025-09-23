@@ -1,20 +1,20 @@
-{
-  lib,
-  config,
-  callPackage,
-  newScope,
-  recurseIntoAttrs,
-  symlinkJoin,
-  fetchFromGitHub,
-  ffmpeg_4,
-  boost179,
-  opencv,
-  libjpeg_turbo,
-  python3Packages,
-  triton-llvm,
-  openmpi,
-  stdenv,
-  rocmGpuArches ? [ ],
+{ lib
+, config
+, callPackage
+, newScope
+, recurseIntoAttrs
+, symlinkJoin
+, fetchFromGitHub
+, ffmpeg_4
+, boost179
+, opencv
+, libjpeg_turbo
+, python3Packages
+, triton-llvm
+, openmpi
+, stdenv
+, rocmGpuArches ? [ ]
+,
 }:
 
 let
@@ -478,12 +478,14 @@ let
 in
 outer
 // builtins.listToAttrs (
-  builtins.map (arch: {
-    name = arch;
-    value = scopeForArches [ arch ];
-  }) outer.clr.gpuTargets
+  builtins.map
+    (arch: {
+      name = arch;
+      value = scopeForArches [ arch ];
+    })
+    outer.clr.gpuTargets
 )
-// {
+  // {
   gfx9 = scopeForArches [
     "gfx906"
     "gfx908"

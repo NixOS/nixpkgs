@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
+{ lib
+, stdenv
+, mkDerivation
+,
 }:
 mkDerivation {
   path = "usr.bin/ldd";

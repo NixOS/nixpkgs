@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  sassc,
-  vala,
-  wrapGAppsHook4,
-  appstream,
-  dbus,
-  flatpak,
-  glib,
-  granite7,
-  gtk4,
-  json-glib,
-  libadwaita,
-  libgee,
-  libportal-gtk4,
-  libsoup_3,
-  libxml2,
-  polkit,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, sassc
+, vala
+, wrapGAppsHook4
+, appstream
+, dbus
+, flatpak
+, glib
+, granite7
+, gtk4
+, json-glib
+, libadwaita
+, libgee
+, libportal-gtk4
+, libsoup_3
+, libxml2
+, polkit
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  runCommandLocal,
-  nix,
+{ lib
+, runCommandLocal
+, nix
+,
 }:
 
 # Replace some direct dependencies of drv, not recursing into the dependency tree.
 # You likely want to use replaceDependencies instead, unless you plan to implement your own recursion mechanism.
-{
-  drv,
-  replacements ? [ ],
+{ drv
+, replacements ? [ ]
+,
 }:
 let
   inherit (lib)
@@ -26,10 +26,10 @@ else
   let
     drvName =
       if isStorePath drv then
-        # Reconstruct the name from the actual store path if available.
+      # Reconstruct the name from the actual store path if available.
         substring 33 (stringLength (baseNameOf drv)) (baseNameOf drv)
       else if drv ? drvAttrs.name then
-        # Try to get the name from the derivation arguments otherwise (for floating or deferred derivations).
+      # Try to get the name from the derivation arguments otherwise (for floating or deferred derivations).
         drv.drvAttrs.name
         + (
           let

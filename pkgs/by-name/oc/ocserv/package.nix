@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  pkg-config,
-  ipcalc,
-  nettle,
-  gnutls,
-  libev,
-  protobufc,
-  guile,
-  geoip,
-  libseccomp,
-  gperf,
-  readline,
-  lz4,
-  ronn,
-  pam,
-  libxcrypt,
-  oath-toolkit,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, ipcalc
+, nettle
+, gnutls
+, libev
+, protobufc
+, guile
+, geoip
+, libseccomp
+, gperf
+, readline
+, lz4
+, ronn
+, pam
+, libxcrypt
+, oath-toolkit
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qmake,
-  qtbase,
-  qttools,
-  subversion,
-  apr,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, qtbase
+, qttools
+, subversion
+, apr
+,
 }:
 
 let

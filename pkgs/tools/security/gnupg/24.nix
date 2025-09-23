@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitLab,
-  buildPackages,
-  pkg-config,
-  texinfo,
-  gettext,
-  libassuan,
-  libgcrypt,
-  libgpg-error,
-  libiconv,
-  libksba,
-  npth,
-  adns,
-  bzip2,
-  gnutls,
-  libusb1,
-  openldap,
-  readline,
-  sqlite,
-  zlib,
-  openssh,
-  enableMinimal ? false,
-  withPcsc ? !enableMinimal,
-  pcsclite,
-  guiSupport ? stdenv.hostPlatform.isDarwin,
-  pinentry,
-  withTpm2Tss ? !stdenv.hostPlatform.isDarwin && !enableMinimal,
-  tpm2-tss,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitLab
+, buildPackages
+, pkg-config
+, texinfo
+, gettext
+, libassuan
+, libgcrypt
+, libgpg-error
+, libiconv
+, libksba
+, npth
+, adns
+, bzip2
+, gnutls
+, libusb1
+, openldap
+, readline
+, sqlite
+, zlib
+, openssh
+, enableMinimal ? false
+, withPcsc ? !enableMinimal
+, pcsclite
+, guiSupport ? stdenv.hostPlatform.isDarwin
+, pinentry
+, withTpm2Tss ? !stdenv.hostPlatform.isDarwin && !enableMinimal
+, tpm2-tss
+, nixosTests
+,
 }:
 
 assert guiSupport -> !enableMinimal;

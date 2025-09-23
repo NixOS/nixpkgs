@@ -1,19 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  python3,
-  eigen,
-  python3Packages,
-  icestorm,
-  trellis,
-  llvmPackages,
-
-  enableGui ? false,
-  wrapQtAppsHook ? null,
-  qtbase ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, python3
+, eigen
+, python3Packages
+, icestorm
+, trellis
+, llvmPackages
+, enableGui ? false
+, wrapQtAppsHook ? null
+, qtbase ? null
+,
 }:
 
 let

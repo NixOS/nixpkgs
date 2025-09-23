@@ -1,17 +1,17 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
-  nodejs,
-  nix-update-script,
-  testers,
-  writeText,
-  runCommand,
-  blade-formatter,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, yarnInstallHook
+, nodejs
+, nix-update-script
+, testers
+, writeText
+, runCommand
+, blade-formatter
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

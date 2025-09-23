@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  setuptools,
-  python,
-  docutils,
-  jaraco-collections,
-  jaraco-functools,
-  jaraco-envs,
-  jaraco-path,
-  jaraco-text,
-  more-itertools,
-  packaging,
-  path,
-  pyfakefs,
-  pytestCheckHook,
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, setuptools
+, python
+, docutils
+, jaraco-collections
+, jaraco-functools
+, jaraco-envs
+, jaraco-path
+, jaraco-text
+, more-itertools
+, packaging
+, path
+, pyfakefs
+, pytestCheckHook
+, stdenv
+,
 }:
 
 buildPythonPackage {

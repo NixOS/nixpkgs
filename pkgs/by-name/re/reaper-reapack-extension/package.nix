@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  callPackage,
+{ lib
+, stdenvNoCC
+, callPackage
+,
 }:
 let
   p = if stdenvNoCC.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix;

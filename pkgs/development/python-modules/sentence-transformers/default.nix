@@ -1,28 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  accelerate,
-  datasets,
-  huggingface-hub,
-  optimum,
-  pillow,
-  scikit-learn,
-  scipy,
-  torch,
-  tqdm,
-  transformers,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  accelerate
+, datasets
+, huggingface-hub
+, optimum
+, pillow
+, scikit-learn
+, scipy
+, torch
+, tqdm
+, transformers
+, typing-extensions
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

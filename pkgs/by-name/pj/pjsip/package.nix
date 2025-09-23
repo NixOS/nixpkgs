@@ -1,15 +1,15 @@
-{
-  lib,
-  testers,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  libsamplerate,
-  swig,
-  alsa-lib,
-  python3,
-  pythonSupport ? true,
-  runCommand,
+{ lib
+, testers
+, stdenv
+, fetchFromGitHub
+, openssl
+, libsamplerate
+, swig
+, alsa-lib
+, python3
+, pythonSupport ? true
+, runCommand
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pjsip";

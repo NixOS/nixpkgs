@@ -1,27 +1,27 @@
-{
-  lib,
-  SDL2,
-  curl,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  fetchurl,
-  gtk3,
-  libGL,
-  libGLU,
-  libX11,
-  libXpm,
-  libtool,
-  ncurses,
-  pkg-config,
-  readline,
-  stdenv,
-  wget,
-  wxGTK32,
-  # Boolean flags
-  enableSDL2 ? true,
-  enableTerm ? true,
-  enableWx ? !stdenv.hostPlatform.isDarwin,
-  enableX11 ? !stdenv.hostPlatform.isDarwin,
+{ lib
+, SDL2
+, curl
+, docbook_xml_dtd_45
+, docbook_xsl
+, fetchurl
+, gtk3
+, libGL
+, libGLU
+, libX11
+, libXpm
+, libtool
+, ncurses
+, pkg-config
+, readline
+, stdenv
+, wget
+, wxGTK32
+, # Boolean flags
+  enableSDL2 ? true
+, enableTerm ? true
+, enableWx ? !stdenv.hostPlatform.isDarwin
+, enableX11 ? !stdenv.hostPlatform.isDarwin
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

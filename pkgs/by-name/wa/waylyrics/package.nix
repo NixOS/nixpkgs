@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook4,
-  openssl,
-  dbus,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook4
+, openssl
+, dbus
+,
 }:
 
 rustPlatform.buildRustPackage rec {

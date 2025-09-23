@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  autoreconfHook,
-  bison,
-  flex,
-  openssl,
-  gnutls,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, autoreconfHook
+, bison
+, flex
+, openssl
+, gnutls
+,
 }:
 
 stdenv.mkDerivation rec {

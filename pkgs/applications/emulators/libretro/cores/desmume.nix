@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mkLibretroCore,
-  libpcap,
-  libGLU,
-  libGL,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, mkLibretroCore
+, libpcap
+, libGLU
+, libGL
+, xorg
+,
 }:
 mkLibretroCore {
   core = "desmume";

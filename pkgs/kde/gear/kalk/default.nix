@@ -1,12 +1,12 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  pkg-config,
-  bison,
-  flex,
-  gmp,
-  mpfr,
-  libqalculate,
+{ mkKdeDerivation
+, qtdeclarative
+, pkg-config
+, bison
+, flex
+, gmp
+, mpfr
+, libqalculate
+,
 }:
 mkKdeDerivation {
   pname = "kalk";

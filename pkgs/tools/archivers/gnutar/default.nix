@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  updateAutotoolsGnuConfigScriptsHook,
-  libintl,
-  aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl,
-  acl,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, updateAutotoolsGnuConfigScriptsHook
+, libintl
+, aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl
+, acl
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -50,9 +50,10 @@ stdenv.mkDerivation rec {
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
-  FORCE_UNSAFE_CONFIGURE = lib.optionalString (
-    stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.isSunOS
-  ) "1";
+  FORCE_UNSAFE_CONFIGURE = lib.optionalString
+    (
+      stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.isSunOS
+    ) "1";
 
   preConfigure =
     if stdenv.hostPlatform.isCygwin then

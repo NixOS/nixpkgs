@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchurl,
-  fetchpatch,
-  cmake,
-  boost,
-  gflags,
-  glog,
-  hdf5-cpp,
-  opencv4,
-  protobuf,
-  doxygen,
-  blas,
-  lmdbSupport ? true,
-  lmdb,
-  leveldbSupport ? true,
-  leveldb,
-  snappy,
-  pythonSupport ? false,
-  python ? null,
-  numpy ? null,
-  replaceVars,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchurl
+, fetchpatch
+, cmake
+, boost
+, gflags
+, glog
+, hdf5-cpp
+, opencv4
+, protobuf
+, doxygen
+, blas
+, lmdbSupport ? true
+, lmdb
+, leveldbSupport ? true
+, leveldb
+, snappy
+, pythonSupport ? false
+, python ? null
+, numpy ? null
+, replaceVars
+,
 }:
 
 let

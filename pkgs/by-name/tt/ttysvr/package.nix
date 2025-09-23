@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  versionCheckHook,
-  nix-update-script,
-  # Runtime deps:
-  alsa-lib,
-  udev,
-  libGL,
-  vulkan-headers,
-  vulkan-loader,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, versionCheckHook
+, nix-update-script
+, # Runtime deps:
+  alsa-lib
+, udev
+, libGL
+, vulkan-headers
+, vulkan-loader
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "ttysvr";

@@ -32,11 +32,10 @@ import ../make-test-python.nix {
   name = "prosody-mysql";
   nodes = {
     client =
-      {
-        nodes,
-        pkgs,
-        config,
-        ...
+      { nodes
+      , pkgs
+      , config
+      , ...
       }:
       {
         security.pki.certificateFiles = [ "${cert pkgs}/cert.pem" ];

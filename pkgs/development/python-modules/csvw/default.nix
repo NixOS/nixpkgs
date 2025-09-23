@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-  pythonOlder,
-  attrs,
-  isodate,
-  python-dateutil,
-  rfc3986,
-  uritemplate,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, pythonOlder
+, attrs
+, isodate
+, python-dateutil
+, rfc3986
+, uritemplate
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

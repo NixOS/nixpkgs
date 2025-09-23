@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  ffmpeg,
-  writableTmpDirAsHomeHook,
+{ lib
+, python3Packages
+, fetchPypi
+, ffmpeg
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,35 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-
-  # nativeBuildInputs
-  bison,
-  flex,
-  pkg-config,
-
-  # propagatedBuildInputs
-  libffi,
-  python3,
-  readline,
-  tcl,
-  zlib,
-
-  # tests
-  gtkwave,
-  iverilog,
-
-  # passthru
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, # nativeBuildInputs
+  bison
+, flex
+, pkg-config
+, # propagatedBuildInputs
+  libffi
+, python3
+, readline
+, tcl
+, zlib
+, # tests
+  gtkwave
+, iverilog
+, # passthru
   # plugins
-  symlinkJoin,
-  yosys,
-  makeWrapper,
-  yosys-bluespec,
-  yosys-ghdl,
-  yosys-symbiflow,
-  nix-update-script,
-  enablePython ? true, # enable python binding
+  symlinkJoin
+, yosys
+, makeWrapper
+, yosys-bluespec
+, yosys-ghdl
+, yosys-symbiflow
+, nix-update-script
+, enablePython ? true
+, # enable python binding
 }:
 
 # NOTE: as of late 2020, yosys has switched to an automation robot that

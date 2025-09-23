@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  libpcap,
-  versionCheckHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, libpcap
+, versionCheckHook
+,
 }:
 
 buildGoModule rec {

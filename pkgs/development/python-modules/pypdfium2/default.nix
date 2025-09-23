@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  pkgs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchgit,
-  setuptools-scm,
-  pdfium-binaries,
-  numpy,
-  pillow,
-  pytestCheckHook,
-  removeReferencesTo,
-  python,
-  replaceVars,
+{ stdenv
+, lib
+, pkgs
+, buildPythonPackage
+, fetchFromGitHub
+, fetchgit
+, setuptools-scm
+, pdfium-binaries
+, numpy
+, pillow
+, pytestCheckHook
+, removeReferencesTo
+, python
+, replaceVars
+,
 }:
 
 let

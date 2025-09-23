@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  fetchPypi,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  hatchling,
-  hatch-vcs,
-  toolz,
+{ lib
+, buildPythonPackage
+, cython
+, fetchPypi
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, hatchling
+, hatch-vcs
+, toolz
+,
 }:
 
 buildPythonPackage rec {

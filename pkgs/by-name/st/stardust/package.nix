@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  zlib,
-  libtiff,
-  libxml2,
-  SDL_compat,
-  libX11,
-  libXi,
-  libXmu,
-  libXext,
-  libGLU,
-  libGL,
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, libtiff
+, libxml2
+, SDL_compat
+, libX11
+, libXi
+, libXmu
+, libXext
+, libGLU
+, libGL
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

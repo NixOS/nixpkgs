@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  poetry-core,
-  pytestCheckHook,
-  pytest-cov-stub,
-  multidict,
-  xmljson,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
+, pytest-cov-stub
+, multidict
+, xmljson
+,
 }:
 
 buildPythonPackage rec {

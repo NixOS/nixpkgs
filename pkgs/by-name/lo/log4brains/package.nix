@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
-  nodejs,
-  yarn,
-  moreutils,
-  jq,
-  makeBinaryWrapper,
-  fetchpatch2,
-  replaceVars,
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, yarnInstallHook
+, nodejs
+, yarn
+, moreutils
+, jq
+, makeBinaryWrapper
+, fetchpatch2
+, replaceVars
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "log4brains";

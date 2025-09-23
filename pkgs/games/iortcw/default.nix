@@ -1,7 +1,7 @@
-{
-  buildEnv,
-  callPackage,
-  makeWrapper,
+{ buildEnv
+, callPackage
+, makeWrapper
+,
 }:
 
 let

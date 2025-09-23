@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchzip,
-  openjdk,
-  openjfx,
-  writeScript,
-  runCommandLocal,
-  bash,
-  unzip,
-  makeWrapper,
-  libredirect,
-  xsettingsd,
-  makeDesktopItem,
-  copyDesktopItems,
-  python3,
+{ stdenv
+, lib
+, fetchurl
+, fetchzip
+, openjdk
+, openjfx
+, writeScript
+, runCommandLocal
+, bash
+, unzip
+, makeWrapper
+, libredirect
+, xsettingsd
+, makeDesktopItem
+, copyDesktopItems
+, python3
+,
 }:
 let
   # Run update.py to update this file.

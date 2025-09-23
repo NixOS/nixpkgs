@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchYarnDeps,
-  fetchFromGitHub,
-  yarnConfigHook,
-  npmHooks,
-  nodejs,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchYarnDeps
+, fetchFromGitHub
+, yarnConfigHook
+, npmHooks
+, nodejs
+, nix-update-script
+,
 }:
 stdenv.mkDerivation rec {
   pname = "dotenv-cli";

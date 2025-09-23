@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  setuptools-scm,
-  rich,
-  pytest-mock,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, setuptools-scm
+, rich
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

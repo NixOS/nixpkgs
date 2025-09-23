@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  npmHooks,
-  python3,
-  cacert,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, fetchNpmDeps
+, npmHooks
+, python3
+, cacert
+,
 }:
 
 buildNpmPackage (finalAttrs: {

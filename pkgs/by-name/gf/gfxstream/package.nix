@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitiles,
-  fetchpatch,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  aemu,
-  libdrm,
-  libglvnd,
-  vulkan-headers,
-  vulkan-loader,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitiles
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, python3
+, aemu
+, libdrm
+, libglvnd
+, vulkan-headers
+, vulkan-loader
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

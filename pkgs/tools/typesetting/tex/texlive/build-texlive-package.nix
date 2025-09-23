@@ -1,20 +1,18 @@
-{
-  lib,
-  fetchurl,
-  runCommand,
-  writeShellScript,
-
-  # script interpreters
-  bash,
-  jdk,
-  perl,
-  python3,
-  ruby,
-  snobol4,
-  tk,
-
-  # TeX Live prerequisites
-  texliveBinaries,
+{ lib
+, fetchurl
+, runCommand
+, writeShellScript
+, # script interpreters
+  bash
+, jdk
+, perl
+, python3
+, ruby
+, snobol4
+, tk
+, # TeX Live prerequisites
+  texliveBinaries
+,
 }:
 
 /*
@@ -24,9 +22,9 @@
 
   The multi-output is emulated as follows:
   - the main derivation is a multi-output derivation that builds links to the
-    containers (tex, texdoc, ...)
+  containers (tex, texdoc, ...)
   - the output attributes are replaced with the actual containers with the
-    outputSpecified attribute set to true
+  outputSpecified attribute set to true
 
   In this way, when texlive.withPackages picks an output such as drv.tex, it
   receives the actual container, avoiding superfluous dependencies on the other
@@ -35,28 +33,27 @@
 
 # TODO stabilise a generic interface decoupled from the finer details of the
 # translation from texlive.tlpdb to tlpdb.nix
-{
-  pname,
-  revision,
-  version ? toString revision,
-  extraRevision ? "",
-  extraVersion ? "",
-  sha512 ? { },
-  mirrors,
-  fixedHashes ? { },
-  postUnpack ? "",
-  postFixup ? "",
-  stripPrefix ? 1,
-  license ? [ ],
-  hasHyphens ? false,
-  hasInfo ? false,
-  hasManpages ? false,
-  hasRunfiles ? (sha512 ? run),
-  hasTlpkg ? false,
-  hasCatalogue ? true,
-  catalogue ? pname,
-  extraNativeBuildInputs ? [ ],
-  ...
+{ pname
+, revision
+, version ? toString revision
+, extraRevision ? ""
+, extraVersion ? ""
+, sha512 ? { }
+, mirrors
+, fixedHashes ? { }
+, postUnpack ? ""
+, postFixup ? ""
+, stripPrefix ? 1
+, license ? [ ]
+, hasHyphens ? false
+, hasInfo ? false
+, hasManpages ? false
+, hasRunfiles ? (sha512 ? run)
+, hasTlpkg ? false
+, hasCatalogue ? true
+, catalogue ? pname
+, extraNativeBuildInputs ? [ ]
+, ...
 }@args:
 
 let
@@ -94,10 +91,10 @@ let
     ++ lib.optional hasRunfiles "tex"
     ++ lib.optional hasDocfiles "texdoc"
     ++
-      # omit building sources, since as far as we know, installing them is not common
-      # the sources will still be available under drv.texsource
-      # lib.optional hasSource "texsource" ++
-      lib.optional hasTlpkg "tlpkg"
+    # omit building sources, since as far as we know, installing them is not common
+    # the sources will still be available under drv.texsource
+    # lib.optional hasSource "texsource" ++
+    lib.optional hasTlpkg "tlpkg"
     ++ lib.optional hasManpages "man"
     ++ lib.optional hasInfo "info";
   outputDrvs = lib.getAttrs outputs containers;
@@ -235,33 +232,35 @@ let
 
     # build man, info containers
     man =
-      removeAttrs (runCommand "${name}-man"
-        {
-          inherit meta texdoc;
-          passthru = passthru // {
-            tlOutputName = "man";
-          };
-        }
-        ''
-          mkdir -p "$out"/share
-          ln -s {"$texdoc"/doc,"$out"/share}/man
-        ''
-      ) [ "out" ]
+      removeAttrs
+        (runCommand "${name}-man"
+          {
+            inherit meta texdoc;
+            passthru = passthru // {
+              tlOutputName = "man";
+            };
+          }
+          ''
+            mkdir -p "$out"/share
+            ln -s {"$texdoc"/doc,"$out"/share}/man
+          ''
+        ) [ "out" ]
       // outputDrvs;
 
     info =
-      removeAttrs (runCommand "${name}-info"
-        {
-          inherit meta texdoc;
-          passthru = passthru // {
-            tlOutputName = "info";
-          };
-        }
-        ''
-          mkdir -p "$out"/share
-          ln -s {"$texdoc"/doc,"$out"/share}/info
-        ''
-      ) [ "out" ]
+      removeAttrs
+        (runCommand "${name}-info"
+          {
+            inherit meta texdoc;
+            passthru = passthru // {
+              tlOutputName = "info";
+            };
+          }
+          ''
+            mkdir -p "$out"/share
+            ln -s {"$texdoc"/doc,"$out"/share}/info
+          ''
+        ) [ "out" ]
       // outputDrvs;
   };
 

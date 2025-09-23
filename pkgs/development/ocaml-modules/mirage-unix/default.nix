@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  lwt,
-  duration,
-  mirage-runtime,
+{ lib
+, buildDunePackage
+, fetchurl
+, lwt
+, duration
+, mirage-runtime
+,
 }:
 
 buildDunePackage rec {

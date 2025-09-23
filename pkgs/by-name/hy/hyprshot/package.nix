@@ -1,16 +1,16 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  hyprland,
-  jq,
-  grim,
-  slurp,
-  wl-clipboard,
-  libnotify,
-  withFreeze ? true,
-  hyprpicker,
-  makeWrapper,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, hyprland
+, jq
+, grim
+, slurp
+, wl-clipboard
+, libnotify
+, withFreeze ? true
+, hyprpicker
+, makeWrapper
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

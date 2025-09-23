@@ -1,27 +1,27 @@
-{
-  stdenv,
-  fetchzip,
-  jam,
-  unzip,
-  libX11,
-  libXxf86vm,
-  libXrandr,
-  libXinerama,
-  libXrender,
-  libXext,
-  libtiff,
-  libjpeg,
-  libpng,
-  libXScrnSaver,
-  writeText,
-  libXdmcp,
-  libXau,
-  lib,
-  openssl,
-  buildPackages,
-  replaceVars,
-  udevCheckHook,
-  writeScript,
+{ stdenv
+, fetchzip
+, jam
+, unzip
+, libX11
+, libXxf86vm
+, libXrandr
+, libXinerama
+, libXrender
+, libXext
+, libtiff
+, libjpeg
+, libpng
+, libXScrnSaver
+, writeText
+, libXdmcp
+, libXau
+, lib
+, openssl
+, buildPackages
+, replaceVars
+, udevCheckHook
+, writeScript
+,
 }:
 
 stdenv.mkDerivation rec {

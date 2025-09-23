@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  brotli,
-  brotlicffi,
-  starlette,
-  zstandard,
-  pytestCheckHook,
-  httpx,
-  trio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, brotli
+, brotlicffi
+, starlette
+, zstandard
+, pytestCheckHook
+, httpx
+, trio
+,
 }:
 
 buildPythonPackage rec {

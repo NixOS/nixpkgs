@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  click,
-  psutil,
-  pytestCheckHook,
-  lsof,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, click
+, psutil
+, pytestCheckHook
+, lsof
+,
 }:
 
 buildPythonPackage rec {

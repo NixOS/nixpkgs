@@ -1,28 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # builds
-  poetry-core,
-
-  # propagates
-  isodate,
-  pyparsing,
-
-  # extras: networkx
-  networkx,
-
-  # extras: html
-  html5lib,
-
-  # tests
-  pip,
-  pytest-cov-stub,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # builds
+  poetry-core
+, # propagates
+  isodate
+, pyparsing
+, # extras: networkx
+  networkx
+, # extras: html
+  html5lib
+, # tests
+  pip
+, pytest-cov-stub
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

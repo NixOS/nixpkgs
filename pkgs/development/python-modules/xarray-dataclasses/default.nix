@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  poetry-core,
-  pytestCheckHook,
-  numpy,
-  typing-extensions,
-  xarray,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, poetry-core
+, pytestCheckHook
+, numpy
+, typing-extensions
+, xarray
+,
 }:
 
 buildPythonPackage rec {

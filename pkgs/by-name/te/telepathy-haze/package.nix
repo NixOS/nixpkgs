@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pidgin,
-  telepathy-glib,
-  python3,
-  glib,
-  dbus-glib,
-  pkg-config,
-  libxslt,
+{ lib
+, stdenv
+, fetchurl
+, pidgin
+, telepathy-glib
+, python3
+, glib
+, dbus-glib
+, pkg-config
+, libxslt
+,
 }:
 
 stdenv.mkDerivation rec {

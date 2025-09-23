@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  imagemagick,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, imagemagick
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation {

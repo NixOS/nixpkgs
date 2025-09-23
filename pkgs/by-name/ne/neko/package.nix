@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boehmgc,
-  zlib,
-  sqlite,
-  pcre2,
-  cmake,
-  pkg-config,
-  git,
-  apacheHttpd,
-  apr,
-  aprutil,
-  libmysqlclient,
-  mbedtls,
-  openssl,
-  gtk3,
-  libpthreadstubs,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boehmgc
+, zlib
+, sqlite
+, pcre2
+, cmake
+, pkg-config
+, git
+, apacheHttpd
+, apr
+, aprutil
+, libmysqlclient
+, mbedtls
+, openssl
+, gtk3
+, libpthreadstubs
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

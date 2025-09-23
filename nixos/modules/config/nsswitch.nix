@@ -1,9 +1,8 @@
 # Configuration for the Name Service Switch (/etc/nsswitch.conf).
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 {
   options = {

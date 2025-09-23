@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  ordered-set,
-  pytestCheckHook,
-  matplotlib,
-  quantities,
-  texlive,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, ordered-set
+, pytestCheckHook
+, matplotlib
+, quantities
+, texlive
+,
 }:
 
 buildPythonPackage rec {

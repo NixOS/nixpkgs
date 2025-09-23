@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  dune-configurator,
-  posix-socket,
-  srt,
-  ctypes-foreign,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, dune-configurator
+, posix-socket
+, srt
+, ctypes-foreign
+,
 }:
 
 buildDunePackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  stdenv,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
-  enableLegacySg ? false,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, installShellFiles
+, versionCheckHook
+, nix-update-script
+, enableLegacySg ? false
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

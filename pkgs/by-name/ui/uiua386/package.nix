@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  uiua,
+{ lib
+, stdenvNoCC
+, uiua
+,
 }:
 
 stdenvNoCC.mkDerivation {

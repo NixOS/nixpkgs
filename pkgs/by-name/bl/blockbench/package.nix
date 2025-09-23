@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  makeWrapper,
-  imagemagick,
-  copyDesktopItems,
-  makeDesktopItem,
-  electron,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, makeWrapper
+, imagemagick
+, copyDesktopItems
+, makeDesktopItem
+, electron
+,
 }:
 
 buildNpmPackage rec {

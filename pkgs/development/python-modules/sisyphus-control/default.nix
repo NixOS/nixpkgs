@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  netifaces,
-  poetry-core,
-  python-engineio-v3,
-  python-socketio-v4,
-  pythonOlder,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, netifaces
+, poetry-core
+, python-engineio-v3
+, python-socketio-v4
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

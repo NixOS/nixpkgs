@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  ncurses,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, ncurses
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

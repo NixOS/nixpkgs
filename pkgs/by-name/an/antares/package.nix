@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  lib,
-  buildNpmPackage,
-  electron,
-  nodejs,
-  makeDesktopItem,
-  copyDesktopItems,
-  icoutils,
+{ fetchFromGitHub
+, lib
+, buildNpmPackage
+, electron
+, nodejs
+, makeDesktopItem
+, copyDesktopItems
+, icoutils
+,
 }:
 
 buildNpmPackage rec {

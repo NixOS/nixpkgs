@@ -1,25 +1,25 @@
-{
-  lib,
-  buildFHSEnv,
-  callPackage,
-  makeDesktopItem,
-  runtimeShell,
-  runCommand,
-  unstick,
-  quartus-prime-lite,
-  libfaketime,
-  pkgsi686Linux,
-  withQuesta ? true,
-  supportedDevices ? [
+{ lib
+, buildFHSEnv
+, callPackage
+, makeDesktopItem
+, runtimeShell
+, runCommand
+, unstick
+, quartus-prime-lite
+, libfaketime
+, pkgsi686Linux
+, withQuesta ? true
+, supportedDevices ? [
     "Arria II"
     "Cyclone V"
     "Cyclone IV"
     "Cyclone 10 LP"
     "MAX II/V"
     "MAX 10 FPGA"
-  ],
-  unwrapped ? callPackage ./quartus.nix { inherit unstick supportedDevices withQuesta; },
-  extraProfile ? "",
+  ]
+, unwrapped ? callPackage ./quartus.nix { inherit unstick supportedDevices withQuesta; }
+, extraProfile ? ""
+,
 }:
 
 let
@@ -73,27 +73,27 @@ buildFHSEnv rec {
   # these libs are installed as 64 bit, plus as 32 bit when multiArch is true
   multiPkgs =
     pkgs:
-    with pkgs;
-    let
-      # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
-      freetype = pkgs.freetype.override { libpng = libpng12; };
-      fontconfig = pkgs.fontconfig.override { inherit freetype; };
-      libXft = pkgs.xorg.libXft.override { inherit freetype fontconfig; };
-    in
-    [
-      # questa requirements
-      libxml2
-      ncurses5
-      unixODBC
-      libXft
-      # common requirements
-      freetype
-      fontconfig
-      xorg.libX11
-      xorg.libXext
-      xorg.libXrender
-      libxcrypt-legacy
-    ];
+      with pkgs;
+      let
+        # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
+        freetype = pkgs.freetype.override { libpng = libpng12; };
+        fontconfig = pkgs.fontconfig.override { inherit freetype; };
+        libXft = pkgs.xorg.libXft.override { inherit freetype fontconfig; };
+      in
+      [
+        # questa requirements
+        libxml2
+        ncurses5
+        unixODBC
+        libXft
+        # common requirements
+        freetype
+        fontconfig
+        xorg.libX11
+        xorg.libXext
+        xorg.libXrender
+        libxcrypt-legacy
+      ];
 
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/hicolor/64x64/apps

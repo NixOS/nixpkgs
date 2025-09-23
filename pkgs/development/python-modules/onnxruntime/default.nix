@@ -1,18 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  onnxruntime,
-  autoPatchelfHook,
-
-  # buildInputs
-  oneDNN,
-  re2,
-
-  # dependencies
-  coloredlogs,
-  numpy,
-  packaging,
+{ lib
+, stdenv
+, buildPythonPackage
+, onnxruntime
+, autoPatchelfHook
+, # buildInputs
+  oneDNN
+, re2
+, # dependencies
+  coloredlogs
+, numpy
+, packaging
+,
 }:
 
 # onnxruntime requires an older protobuf.

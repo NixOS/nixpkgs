@@ -3,11 +3,10 @@
   name = "boot-stage2";
 
   nodes.machine =
-    {
-      config,
-      pkgs,
-      lib,
-      ...
+    { config
+    , pkgs
+    , lib
+    , ...
     }:
     let
       # Prints the user's UID. Can't just do a shell script

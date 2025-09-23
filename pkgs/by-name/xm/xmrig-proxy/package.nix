@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  libuv,
-  libmicrohttpd,
-  openssl,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libuv
+, libmicrohttpd
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

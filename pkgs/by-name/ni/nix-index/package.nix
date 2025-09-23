@@ -1,9 +1,9 @@
-{
-  lib,
-  symlinkJoin,
-  nix-index-unwrapped,
-  makeWrapper,
-  nix,
+{ lib
+, symlinkJoin
+, nix-index-unwrapped
+, makeWrapper
+, nix
+,
 }:
 
 symlinkJoin {

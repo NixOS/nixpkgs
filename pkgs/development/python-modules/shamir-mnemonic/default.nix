@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  click,
-  colorama,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, click
+, colorama
+,
 }:
 
 buildPythonPackage rec {

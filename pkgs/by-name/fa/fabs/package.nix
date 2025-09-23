@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  perl,
-  python3,
-  sqlite,
+{ lib
+, fetchFromGitHub
+, perl
+, python3
+, sqlite
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

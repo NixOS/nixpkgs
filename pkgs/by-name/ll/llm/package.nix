@@ -24,9 +24,11 @@ let
 
   # Filter to just the attributes which are named "enable-<plugin-name>"
   enableArgs = lib.filterAttrs (name: value: hasEnablePrefix name) args;
-  pluginArgs = lib.mapAttrs' (
-    name: value: lib.nameValuePair (removeEnablePrefix name) value
-  ) enableArgs;
+  pluginArgs = lib.mapAttrs'
+    (
+      name: value: lib.nameValuePair (removeEnablePrefix name) value
+    )
+    enableArgs;
 
   # Provide some diagnostics for the plugin names
   pluginNames = lib.attrNames (lib.functionArgs llm.withPlugins);

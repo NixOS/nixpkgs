@@ -1,7 +1,7 @@
 # Hooks for building lua packages.
-{
-  lua,
-  makeSetupHook,
+{ lua
+, makeSetupHook
+,
 }:
 
 let
@@ -9,18 +9,22 @@ let
 in
 {
 
-  luarocksCheckHook = callPackage (
-    { luarocks }:
-    makeSetupHook {
-      name = "luarocks-check-hook";
-      propagatedBuildInputs = [ luarocks ];
-    } ./luarocks-check-hook.sh
-  ) { };
+  luarocksCheckHook = callPackage
+    (
+      { luarocks }:
+      makeSetupHook
+        {
+          name = "luarocks-check-hook";
+          propagatedBuildInputs = [ luarocks ];
+        } ./luarocks-check-hook.sh
+    )
+    { };
 
   # luarocks installs data in a non-overridable location. Until a proper luarocks patch,
   # we move the files around ourselves
-  luarocksMoveDataFolder = makeSetupHook {
-    name = "luarocks-move-rock";
-    propagatedBuildInputs = [ ];
-  } ./luarocks-move-data.sh;
+  luarocksMoveDataFolder = makeSetupHook
+    {
+      name = "luarocks-move-rock";
+      propagatedBuildInputs = [ ];
+    } ./luarocks-move-data.sh;
 }

@@ -1,11 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # dependencies
-  numpy,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # dependencies
+  numpy
+, torch
+,
 }:
 
 buildPythonPackage rec {

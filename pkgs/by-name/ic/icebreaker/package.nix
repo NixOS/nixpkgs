@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeBinaryWrapper,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeBinaryWrapper
+,
 }:
 
 buildGoModule {

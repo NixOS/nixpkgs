@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  getPackage ? pkgs: pkgs.cassandra_4,
-  ...
+{ pkgs
+, lib
+, getPackage ? pkgs: pkgs.cassandra_4
+, ...
 }:
 let
   testPackage = getPackage pkgs;

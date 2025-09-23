@@ -1,14 +1,14 @@
-{
-  lib,
-  buildGoModule,
-  cairo,
-  fetchFromGitHub,
-  gobject-introspection,
-  gtk-layer-shell,
-  gtk3,
-  pkg-config,
-  wrapGAppsHook3,
-  xdg-utils,
+{ lib
+, buildGoModule
+, cairo
+, fetchFromGitHub
+, gobject-introspection
+, gtk-layer-shell
+, gtk3
+, pkg-config
+, wrapGAppsHook3
+, xdg-utils
+,
 }:
 
 let

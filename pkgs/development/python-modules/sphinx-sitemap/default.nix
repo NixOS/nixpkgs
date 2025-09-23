@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  sphinx,
-  sphinx-pytest,
-  defusedxml,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, sphinx
+, sphinx-pytest
+, defusedxml
+, pytestCheckHook
+,
 }:
 let
   pname = "sphinx-sitemap";

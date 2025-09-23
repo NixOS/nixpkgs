@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libbsd,
-  libgcrypt,
-  xxHash,
-  pkg-config,
-  glib,
-  linuxHeaders ? stdenv.cc.libc.linuxHeaders,
-  sqlite,
-  util-linux,
-  testers,
-  duperemove,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libbsd
+, libgcrypt
+, xxHash
+, pkg-config
+, glib
+, linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, sqlite
+, util-linux
+, testers
+, duperemove
+,
 }:
 
 stdenv.mkDerivation rec {

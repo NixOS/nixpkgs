@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  raspberrypifw,
-  pcre,
-  boost,
-  freetype,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, raspberrypifw
+, pcre
+, boost
+, freetype
+, zlib
+,
 }:
 
 let

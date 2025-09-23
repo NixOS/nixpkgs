@@ -1,14 +1,14 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  ocaml,
-  ppxlib,
-  ounit,
-  ounit2,
-  ppx_deriving,
-  result,
-  yojson,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, ocaml
+, ppxlib
+, ounit
+, ounit2
+, ppx_deriving
+, result
+, yojson
+,
 }:
 
 let

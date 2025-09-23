@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  libtool,
-  openssh,
-  pkg-config,
-  qt5,
-  rsync,
-  stdenv,
+{ lib
+, fetchurl
+, libtool
+, openssh
+, pkg-config
+, qt5
+, rsync
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

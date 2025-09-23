@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  setuptools,
-  tqdm,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

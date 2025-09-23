@@ -1,20 +1,19 @@
-{
-  stdenvNoCC,
-  fetchzip,
-  lib,
-  writeScript,
-  autoPatchelfHook,
-  testGaugePlugins,
+{ stdenvNoCC
+, fetchzip
+, lib
+, writeScript
+, autoPatchelfHook
+, testGaugePlugins
+,
 }:
 
-{
-  pname,
-  data,
-  repo,
-  releasePrefix,
-  isCrossArch ? false,
-  meta,
-  ...
+{ pname
+, data
+, repo
+, releasePrefix
+, isCrossArch ? false
+, meta
+, ...
 }@args:
 let
   otherArgs = lib.attrsets.removeAttrs args [
@@ -26,12 +25,10 @@ let
   ];
   inherit (stdenvNoCC.hostPlatform) system;
   inherit
-    (
-      if isCrossArch then
-        data
-      else
-        data.${system} or (throw "gaugePlugins.${pname}: No source for system: ${system}")
-    )
+    (if isCrossArch then
+      data
+    else
+      data.${system} or (throw "gaugePlugins.${pname}: No source for system: ${system}"))
     url
     hash
     ;
@@ -45,7 +42,8 @@ let
 in
 stdenvNoCC.mkDerivation (
   finalAttrs:
-  (lib.recursiveUpdate {
+  (lib.recursiveUpdate
+  {
     pname = "gauge-plugin-${pname}";
     inherit (data) version;
 
@@ -122,5 +120,6 @@ stdenvNoCC.mkDerivation (
         mv "$tempfile" "$dirname/data.json"
       '';
     };
-  } otherArgs)
+  }
+    otherArgs)
 )

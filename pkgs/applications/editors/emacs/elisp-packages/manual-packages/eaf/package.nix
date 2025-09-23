@@ -1,5 +1,5 @@
-{
-  emacs-application-framework,
+{ emacs-application-framework
+,
 }:
 
 let

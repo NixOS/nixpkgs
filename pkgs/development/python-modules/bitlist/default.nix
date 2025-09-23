@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  wheel,
-  parts,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, wheel
+, parts
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

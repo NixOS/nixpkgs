@@ -1,10 +1,10 @@
-{
-  _experimental-update-script-combinators,
-  fetchFromSourcehut,
-  gitUpdater,
-  lib,
-  qbe,
-  stdenv,
+{ _experimental-update-script-combinators
+, fetchFromSourcehut
+, gitUpdater
+, lib
+, qbe
+, stdenv
+,
 }:
 let
   platform = lib.toLower stdenv.hostPlatform.uname.system;
@@ -14,8 +14,7 @@ let
       x86_64 = "amd64_sysv";
       aarch64 = "arm64";
       riscv64 = "rv64";
-    }
-    .${arch};
+    }.${arch};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "harec";

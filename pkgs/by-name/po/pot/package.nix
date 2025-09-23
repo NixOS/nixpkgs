@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  nodejs,
-  pnpm_9,
-  wrapGAppsHook3,
-  cargo,
-  rustc,
-  cargo-tauri_1,
-  pkg-config,
-  esbuild,
-  buildGoModule,
-  libayatana-appindicator,
-  gtk3,
-  webkitgtk_4_0,
-  libsoup_2_4,
-  openssl,
-  xdotool,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, nodejs
+, pnpm_9
+, wrapGAppsHook3
+, cargo
+, rustc
+, cargo-tauri_1
+, pkg-config
+, esbuild
+, buildGoModule
+, libayatana-appindicator
+, gtk3
+, webkitgtk_4_0
+, libsoup_2_4
+, openssl
+, xdotool
+,
 }:
 
 let

@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromSourcehut,
-  rustPlatform,
-  nix-update-script,
+{ lib
+, fetchFromSourcehut
+, rustPlatform
+, nix-update-script
+,
 }:
 
 let

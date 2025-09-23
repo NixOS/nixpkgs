@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libgit2,
-  openssl,
-  coreutils,
-  gitMinimal,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libgit2
+, openssl
+, coreutils
+, gitMinimal
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

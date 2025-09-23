@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  build2,
+{ lib
+, stdenv
+, fetchgit
+, build2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

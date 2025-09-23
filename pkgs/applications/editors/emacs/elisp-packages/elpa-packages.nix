@@ -20,10 +20,10 @@
   formats commits for you.
 */
 
-{
-  lib,
-  pkgs,
-  buildPackages,
+{ lib
+, pkgs
+, buildPackages
+,
 }:
 
 self:
@@ -38,8 +38,8 @@ let
   fetchurl = buildPackages.callPackage ./fetchelpa.nix { };
 
   generateElpa = lib.makeOverridable (
-    {
-      generated ? ./elpa-generated.nix,
+    { generated ? ./elpa-generated.nix
+    ,
     }:
     let
 

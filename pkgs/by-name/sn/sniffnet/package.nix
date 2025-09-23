@@ -1,27 +1,23 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  pkg-config,
-
-  # buildInputs
-  libpcap,
-  openssl,
-  alsa-lib,
-  expat,
-  fontconfig,
-  vulkan-loader,
-  xorg,
-
-  # wrapper
-  libxkbcommon,
-  wayland,
-
-  # tests
-  versionCheckHook,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, # nativeBuildInputs
+  pkg-config
+, # buildInputs
+  libpcap
+, openssl
+, alsa-lib
+, expat
+, fontconfig
+, vulkan-loader
+, xorg
+, # wrapper
+  libxkbcommon
+, wayland
+, # tests
+  versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

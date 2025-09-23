@@ -1,15 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  pkg-config,
-  wrapGAppsHook3,
-  installShellFiles,
-
-  # buildInputs
-  gtk3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  pkg-config
+, wrapGAppsHook3
+, installShellFiles
+, # buildInputs
+  gtk3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

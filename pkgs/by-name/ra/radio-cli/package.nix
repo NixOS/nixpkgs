@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  pkg-config,
-  openssl,
-  mpv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, pkg-config
+, openssl
+, mpv
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "radio-cli";

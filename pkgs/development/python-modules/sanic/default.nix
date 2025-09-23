@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  aiofiles,
-  aioquic,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gunicorn,
-  html5tagger,
-  httptools,
-  multidict,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  sanic-ext,
-  sanic-routing,
-  sanic-testing,
-  setuptools,
-  tracerite,
-  typing-extensions,
-  ujson,
-  uvicorn,
-  uvloop,
-  websockets,
+{ lib
+, stdenv
+, aiofiles
+, aioquic
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, gunicorn
+, html5tagger
+, httptools
+, multidict
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, sanic-ext
+, sanic-routing
+, sanic-testing
+, setuptools
+, tracerite
+, typing-extensions
+, ujson
+, uvicorn
+, uvloop
+, websockets
+,
 }:
 
 buildPythonPackage rec {

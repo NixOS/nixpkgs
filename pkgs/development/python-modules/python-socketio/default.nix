@@ -1,27 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  bidict,
-  python-engineio,
-
-  # optional-dependencies
-  aiohttp,
-  requests,
-  websocket-client,
-
-  # tests
-  msgpack,
-  pytest7CheckHook,
-  simple-websocket,
-  uvicorn,
-
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  bidict
+, python-engineio
+, # optional-dependencies
+  aiohttp
+, requests
+, websocket-client
+, # tests
+  msgpack
+, pytest7CheckHook
+, simple-websocket
+, uvicorn
+,
 }:
 
 buildPythonPackage rec {

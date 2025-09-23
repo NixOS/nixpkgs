@@ -1,10 +1,10 @@
-{
-  buildDunePackage,
-  dolmen,
-  dolmen_type,
-  gen,
-  pp_loc,
-  mdx,
+{ buildDunePackage
+, dolmen
+, dolmen_type
+, gen
+, pp_loc
+, mdx
+,
 }:
 
 buildDunePackage {

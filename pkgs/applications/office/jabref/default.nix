@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  makeDesktopItem,
-  copyDesktopItems,
-  unzip,
-  xdg-utils,
-  gtk3,
-  jdk,
-  gradle_8,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapGAppsHook3
+, makeDesktopItem
+, copyDesktopItems
+, unzip
+, xdg-utils
+, gtk3
+, jdk
+, gradle_8
+, python3
+,
 }:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."

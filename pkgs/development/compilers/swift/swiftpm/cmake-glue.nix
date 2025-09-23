@@ -2,10 +2,10 @@
 # CMake modules to link them together in a build tree. We have separate
 # derivations, so need a real install step. Here we provide our own minimal
 # CMake modules to install along with the build products.
-{
-  lib,
-  stdenv,
-  swift,
+{ lib
+, stdenv
+, swift
+,
 }:
 let
 

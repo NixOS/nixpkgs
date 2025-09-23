@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  aws-c-common,
-  cmake,
-  nix,
+{ lib
+, stdenv
+, fetchFromGitHub
+, aws-c-common
+, cmake
+, nix
+,
 }:
 
 stdenv.mkDerivation rec {

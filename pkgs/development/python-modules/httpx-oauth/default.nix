@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fastapi,
-  fetchFromGitHub,
-  hatchling,
-  hatch-regex-commit,
-  httpx,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  respx,
+{ lib
+, buildPythonPackage
+, fastapi
+, fetchFromGitHub
+, hatchling
+, hatch-regex-commit
+, httpx
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, respx
+,
 }:
 
 buildPythonPackage rec {

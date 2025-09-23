@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libX11,
-  libXft,
+{ lib
+, stdenv
+, fetchurl
+, libX11
+, libXft
+,
 }:
 stdenv.mkDerivation rec {
   pname = "xfractint";

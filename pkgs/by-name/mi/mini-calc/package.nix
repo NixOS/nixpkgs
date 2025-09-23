@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  gnuplot,
-  makeWrapper,
-  testers,
-  mini-calc,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, gnuplot
+, makeWrapper
+, testers
+, mini-calc
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mini-calc";

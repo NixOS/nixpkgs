@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  e2tools,
-  makeWrapper,
-  mtools,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, e2tools
+, makeWrapper
+, mtools
+,
 }:
 
 buildGoModule rec {

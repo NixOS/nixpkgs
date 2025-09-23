@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 
 with lib;
@@ -58,9 +57,10 @@ let
       bindAddress = head (clientListener.bind_addresses ++ [ "127.0.0.1" ]);
       listenerProtocol = if clientListener.tls then "https" else "http";
     in
-    assert assertMsg (
-      clientListener != null
-    ) "No client listener found in synapse or one of its workers";
+    assert assertMsg
+      (
+        clientListener != null
+      ) "No client listener found in synapse or one of its workers";
     pkgs.writeShellScriptBin "matrix-synapse-register_new_matrix_user" ''
       exec ${cfg.package}/bin/register_new_matrix_user \
         $@ \
@@ -985,8 +985,7 @@ in
                     {
                       sqlite3 = "${cfg.dataDir}/homeserver.db";
                       psycopg2 = "matrix-synapse";
-                    }
-                    .${cfg.settings.database.name};
+                    }.${cfg.settings.database.name};
                   defaultText = literalExpression ''
                     {
                       sqlite3 = "''${${options.services.matrix-synapse.dataDir}}/homeserver.db";
@@ -1005,8 +1004,7 @@ in
                     {
                       sqlite3 = null;
                       psycopg2 = "matrix-synapse";
-                    }
-                    .${cfg.settings.database.name};
+                    }.${cfg.settings.database.name};
                   defaultText = lib.literalExpression ''
                     {
                       sqlite3 = null;
@@ -1071,15 +1069,17 @@ in
                 url_preview_url_blacklist = mkOption {
                   # FIXME revert to just `listOf (attrsOf str)` after some time(tm).
                   type = types.listOf (
-                    types.coercedTo types.str (const (throw ''
-                      Setting `config.services.matrix-synapse.settings.url_preview_url_blacklist`
-                      to a list of strings has never worked. Due to a bug, this was the type accepted
-                      by the module, but in practice it broke on runtime and as a result, no URL
-                      preview worked anywhere if this was set.
+                    types.coercedTo types.str
+                      (const (throw ''
+                        Setting `config.services.matrix-synapse.settings.url_preview_url_blacklist`
+                        to a list of strings has never worked. Due to a bug, this was the type accepted
+                        by the module, but in practice it broke on runtime and as a result, no URL
+                        preview worked anywhere if this was set.
 
-                      See https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#url_preview_url_blacklist
-                      on how to configure it properly.
-                    '')) (types.attrsOf types.str)
+                        See https://element-hq.github.io/synapse/latest/usage/configuration/config_documentation.html#url_preview_url_blacklist
+                        on how to configure it properly.
+                      ''))
+                      (types.attrsOf types.str)
                   );
                   default = [ ];
                   example = literalExpression ''
@@ -1340,19 +1340,22 @@ in
         assertion =
           let
             main = cfg.settings.instance_map.main;
-            listener = lib.findFirst (
-              listener:
+            listener = lib.findFirst
               (
-                lib.hasAttr "port" main && listener.port or null == main.port
-                || lib.hasAttr "path" main && listener.path or null == main.path
+                listener:
+                (
+                  lib.hasAttr "port" main && listener.port or null == main.port
+                    || lib.hasAttr "path" main && listener.path or null == main.path
+                )
+                && listenerSupportsResource "replication" listener
+                && (
+                  lib.hasAttr "host" main
+                    && lib.any (bind: bind == main.host || bind == "0.0.0.0" || bind == "::") listener.bind_addresses
+                    || lib.hasAttr "path" main
+                )
               )
-              && listenerSupportsResource "replication" listener
-              && (
-                lib.hasAttr "host" main
-                && lib.any (bind: bind == main.host || bind == "0.0.0.0" || bind == "::") listener.bind_addresses
-                || lib.hasAttr "path" main
-              )
-            ) null cfg.settings.listeners;
+              null
+              cfg.settings.listeners;
           in
           hasWorkers -> (cfg.settings.instance_map ? main && listener != null);
         message = ''
@@ -1373,31 +1376,37 @@ in
         '';
       }
     ]
-    ++ (map (listener: {
-      assertion = (listener.path == null) != (listener.bind_addresses == null);
-      message = ''
-        Listeners require either a UNIX domain socket `path` or `bind_addresses` for a TCP socket.
-      '';
-    }) cfg.settings.listeners)
-    ++ (map (listener: {
-      assertion =
-        listener.path != null
-        -> (listener.bind_addresses == null && listener.port == null && listener.tls == null);
-      message =
-        let
-          formatKeyValue = key: value: lib.optionalString (value != null) "  - ${key}=${toString value}\n";
-        in
-        ''
-          Listener configured with UNIX domain socket (${toString listener.path}) ignores the following options:
-          ${formatKeyValue "bind_addresses" listener.bind_addresses}${formatKeyValue "port" listener.port}${formatKeyValue "tls" listener.tls}
+    ++ (map
+      (listener: {
+        assertion = (listener.path == null) != (listener.bind_addresses == null);
+        message = ''
+          Listeners require either a UNIX domain socket `path` or `bind_addresses` for a TCP socket.
         '';
-    }) cfg.settings.listeners)
-    ++ (map (listener: {
-      assertion = listener.path == null || listener.type == "http";
-      message = ''
-        Listener configured with UNIX domain socket (${toString listener.path}) only supports the "http" listener type.
-      '';
-    }) cfg.settings.listeners);
+      })
+      cfg.settings.listeners)
+    ++ (map
+      (listener: {
+        assertion =
+          listener.path != null
+            -> (listener.bind_addresses == null && listener.port == null && listener.tls == null);
+        message =
+          let
+            formatKeyValue = key: value: lib.optionalString (value != null) "  - ${key}=${toString value}\n";
+          in
+          ''
+            Listener configured with UNIX domain socket (${toString listener.path}) ignores the following options:
+            ${formatKeyValue "bind_addresses" listener.bind_addresses}${formatKeyValue "port" listener.port}${formatKeyValue "tls" listener.tls}
+          '';
+      })
+      cfg.settings.listeners)
+    ++ (map
+      (listener: {
+        assertion = listener.path == null || listener.type == "http";
+        message = ''
+          Listener configured with UNIX domain socket (${toString listener.path}) only supports the "http" listener type.
+        '';
+      })
+      cfg.settings.listeners);
 
     services.matrix-synapse.settings.redis = lib.mkIf cfg.configureRedisLocally {
       enabled = true;

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  deprecated,
-  fetchFromGitea,
-  importlib-resources,
-  jaconv,
-  py-cpuinfo,
-  pytest-benchmark,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, deprecated
+, fetchFromGitea
+, importlib-resources
+, jaconv
+, py-cpuinfo
+, pytest-benchmark
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

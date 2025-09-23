@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, testers
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "JankyBorders";

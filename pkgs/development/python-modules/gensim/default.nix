@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  cython_0,
-  oldest-supported-numpy,
-  setuptools,
-  fetchPypi,
-  mock,
-  numpy,
-  scipy,
-  smart-open,
-  pyemd,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, cython_0
+, oldest-supported-numpy
+, setuptools
+, fetchPypi
+, mock
+, numpy
+, scipy
+, smart-open
+, pyemd
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

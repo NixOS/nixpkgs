@@ -1,10 +1,10 @@
-{
-  cmake,
-  eigen,
-  fetchFromGitHub,
-  gtest,
-  lib,
-  stdenv,
+{ cmake
+, eigen
+, fetchFromGitHub
+, gtest
+, lib
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

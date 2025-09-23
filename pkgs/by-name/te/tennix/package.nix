@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  which,
-  SDL2,
-  SDL2_gfx,
-  SDL2_mixer,
-  SDL2_image,
-  SDL2_ttf,
-  SDL2_net,
-  python3,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchgit
+, which
+, SDL2
+, SDL2_gfx
+, SDL2_mixer
+, SDL2_image
+, SDL2_ttf
+, SDL2_net
+, python3
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

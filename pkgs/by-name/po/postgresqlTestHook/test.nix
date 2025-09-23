@@ -1,7 +1,7 @@
-{
-  postgresql,
-  postgresqlTestHook,
-  stdenv,
+{ postgresql
+, postgresqlTestHook
+, stdenv
+,
 }:
 
 stdenv.mkDerivation {

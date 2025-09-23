@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  colorama,
-  fetchPypi,
-  lib,
-  setuptools,
+{ buildPythonPackage
+, colorama
+, fetchPypi
+, lib
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  runtimeShell,
-  replaceVarsWith,
-  nix,
-  coreutils,
-  jq,
-  xmlstarlet,
-  curl,
-  gnugrep,
-  gawk,
-  cacert,
+{ lib
+, runtimeShell
+, replaceVarsWith
+, nix
+, coreutils
+, jq
+, xmlstarlet
+, curl
+, gnugrep
+, gawk
+, cacert
+,
 }:
 
 replaceVarsWith {

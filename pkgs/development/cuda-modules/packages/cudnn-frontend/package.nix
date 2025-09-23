@@ -1,19 +1,19 @@
-{
-  autoAddDriverRunpath,
-  catch2_3,
-  cmake,
-  fetchFromGitHub,
-  gitUpdater,
-  lib,
-  ninja,
-  nlohmann_json,
-  stdenv,
-  cuda_cccl ? null,
-  cuda_cudart ? null,
-  cuda_nvcc ? null,
-  cuda_nvrtc ? null,
-  cudnn ? null,
-  libcublas ? null,
+{ autoAddDriverRunpath
+, catch2_3
+, cmake
+, fetchFromGitHub
+, gitUpdater
+, lib
+, ninja
+, nlohmann_json
+, stdenv
+, cuda_cccl ? null
+, cuda_cudart ? null
+, cuda_nvcc ? null
+, cuda_nvrtc ? null
+, cudnn ? null
+, libcublas ? null
+,
 }:
 let
   inherit (lib.lists) optionals;

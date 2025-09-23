@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  scikit-build,
-  # Check Inputs
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, ninja
+, scikit-build
+, # Check Inputs
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

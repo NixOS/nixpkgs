@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  callPackage,
+{ lib
+, stdenv
+, callPackage
+,
 }:
 
 let
@@ -25,7 +25,8 @@ let
 in
 
 if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix {
+  callPackage ./darwin.nix
+  {
     inherit
       stdenv
       pname

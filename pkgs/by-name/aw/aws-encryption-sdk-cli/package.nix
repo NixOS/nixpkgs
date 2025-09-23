@@ -1,10 +1,10 @@
-{
-  lib,
-  aws-encryption-sdk-cli,
-  fetchPypi,
-  nix-update-script,
-  python3,
-  testers,
+{ lib
+, aws-encryption-sdk-cli
+, fetchPypi
+, nix-update-script
+, python3
+, testers
+,
 }:
 
 let

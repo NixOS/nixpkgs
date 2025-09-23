@@ -1,8 +1,8 @@
-{
-  lib,
-  chatterino2,
-  fetchFromGitHub,
-  gitUpdater,
+{ lib
+, chatterino2
+, fetchFromGitHub
+, gitUpdater
+,
 }:
 
 (chatterino2.buildChatterino {

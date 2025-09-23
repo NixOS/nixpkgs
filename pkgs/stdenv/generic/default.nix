@@ -2,40 +2,33 @@ let
   lib = import ../../../lib;
   stdenv-overridable = lib.makeOverridable (
 
-    argsStdenv@{
-      name ? "stdenv",
-      preHook ? "",
-      initialPath,
-
-      # If we don't have a C compiler, we might either have `cc = null` or `cc =
+    argsStdenv@{ name ? "stdenv"
+    , preHook ? ""
+    , initialPath
+    , # If we don't have a C compiler, we might either have `cc = null` or `cc =
       # throw ...`, but if we do have a C compiler we should definiely have `cc !=
       # null`.
       #
       # TODO(@Ericson2314): Add assert without creating infinite recursion
-      hasCC ? cc != null,
-      cc,
-
-      shell,
-      allowedRequisites ? null,
-      extraAttrs ? { },
-      overrides ? (self: super: { }),
-      config,
-      disallowedRequisites ? [ ],
-
-      # The `fetchurl' to use for downloading curl and its dependencies
+      hasCC ? cc != null
+    , cc
+    , shell
+    , allowedRequisites ? null
+    , extraAttrs ? { }
+    , overrides ? (self: super: { })
+    , config
+    , disallowedRequisites ? [ ]
+    , # The `fetchurl' to use for downloading curl and its dependencies
       # (see all-packages.nix).
-      fetchurlBoot,
-
-      setupScript ? ./setup.sh,
-
-      extraNativeBuildInputs ? [ ],
-      extraBuildInputs ? [ ],
-      __stdenvImpureHostDeps ? [ ],
-      __extraImpureHostDeps ? [ ],
-      stdenvSandboxProfile ? "",
-      extraSandboxProfile ? "",
-
-      ## Platform parameters
+      fetchurlBoot
+    , setupScript ? ./setup.sh
+    , extraNativeBuildInputs ? [ ]
+    , extraBuildInputs ? [ ]
+    , __stdenvImpureHostDeps ? [ ]
+    , __extraImpureHostDeps ? [ ]
+    , stdenvSandboxProfile ? ""
+    , extraSandboxProfile ? ""
+    , ## Platform parameters
       ##
       ## The "build" "host" "target" terminology below comes from GNU Autotools. See
       ## its documentation for more information on what those words mean. Note that
@@ -51,18 +44,15 @@ let
       # The platform on which packages are built. Consists of `system`, a
       # string (e.g.,`i686-linux') identifying the most import attributes of the
       # build platform, and `platform` a set of other details.
-      buildPlatform,
-
-      # The platform on which packages run.
-      hostPlatform,
-
-      # The platform which build tools (especially compilers) build for in this stage,
-      targetPlatform,
-
-      # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
+      buildPlatform
+    , # The platform on which packages run.
+      hostPlatform
+    , # The platform which build tools (especially compilers) build for in this stage,
+      targetPlatform
+    , # The implementation of `mkDerivation`, parameterized with the final stdenv so we can tie the knot.
       # This is convenient to have as a parameter so the stdenv "adapters" work better
-      mkDerivationFromStdenv ?
-        stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation,
+      mkDerivationFromStdenv ? stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation
+    ,
     }:
 
     let
@@ -92,71 +82,73 @@ let
 
     in
     # The stdenv that we are producing.
-    derivation (
-      lib.optionalAttrs (allowedRequisites != null) {
-        allowedRequisites = allowedRequisites ++ defaultNativeBuildInputs ++ defaultBuildInputs;
-      }
-      // lib.optionalAttrs config.contentAddressedByDefault {
-        __contentAddressed = true;
-        outputHashAlgo = "sha256";
-        outputHashMode = "recursive";
-      }
-      // {
-        inherit name;
-        inherit disallowedRequisites;
+    derivation
+      (
+        lib.optionalAttrs (allowedRequisites != null)
+          {
+            allowedRequisites = allowedRequisites ++ defaultNativeBuildInputs ++ defaultBuildInputs;
+          }
+        // lib.optionalAttrs config.contentAddressedByDefault {
+          __contentAddressed = true;
+          outputHashAlgo = "sha256";
+          outputHashMode = "recursive";
+        }
+        // {
+          inherit name;
+          inherit disallowedRequisites;
 
-        # Nix itself uses the `system` field of a derivation to decide where to
-        # build it. This is a bit confusing for cross compilation.
-        inherit (buildPlatform) system;
+          # Nix itself uses the `system` field of a derivation to decide where to
+          # build it. This is a bit confusing for cross compilation.
+          inherit (buildPlatform) system;
 
-        builder = shell;
+          builder = shell;
 
-        args = [
-          "-e"
-          ./builder.sh
-        ];
+          args = [
+            "-e"
+            ./builder.sh
+          ];
 
-        setup = setupScript;
+          setup = setupScript;
 
-        # We pretty much never need rpaths on Darwin, since all library path references
-        # are absolute unless we go out of our way to make them relative (like with CF)
-        # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
-        # there (yet?) so it goes here until then.
-        preHook =
-          preHook
-          + lib.optionalString buildPlatform.isDarwin ''
-            export NIX_DONT_SET_RPATH_FOR_BUILD=1
-          ''
-          + lib.optionalString (hostPlatform.isDarwin || (!hostPlatform.isElf && !hostPlatform.isMacho)) ''
-            export NIX_DONT_SET_RPATH=1
-            export NIX_NO_SELF_RPATH=1
-          ''
-          + lib.optionalString (hostPlatform.isDarwin && hostPlatform.isMacOS) ''
-            export MACOSX_DEPLOYMENT_TARGET=${hostPlatform.darwinMinVersion}
-          ''
-        # TODO this should be uncommented, but it causes stupid mass rebuilds due to
-        # `pkgsCross.*.buildPackages` not being the same, resulting in cross-compiling
-        # for a target rebuilding all of `nativeBuildInputs` for that target.
-        #
-        # I think the best solution would just be to fixup linux RPATHs so we don't
-        # need to set `-rpath` anywhere.
-        # + lib.optionalString targetPlatform.isDarwin ''
-        #   export NIX_DONT_SET_RPATH_FOR_TARGET=1
-        # ''
-        ;
-
-        inherit
-          initialPath
-          shell
-          defaultNativeBuildInputs
-          defaultBuildInputs
+          # We pretty much never need rpaths on Darwin, since all library path references
+          # are absolute unless we go out of our way to make them relative (like with CF)
+          # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
+          # there (yet?) so it goes here until then.
+          preHook =
+            preHook
+            + lib.optionalString buildPlatform.isDarwin ''
+              export NIX_DONT_SET_RPATH_FOR_BUILD=1
+            ''
+            + lib.optionalString (hostPlatform.isDarwin || (!hostPlatform.isElf && !hostPlatform.isMacho)) ''
+              export NIX_DONT_SET_RPATH=1
+              export NIX_NO_SELF_RPATH=1
+            ''
+            + lib.optionalString (hostPlatform.isDarwin && hostPlatform.isMacOS) ''
+              export MACOSX_DEPLOYMENT_TARGET=${hostPlatform.darwinMinVersion}
+            ''
+            # TODO this should be uncommented, but it causes stupid mass rebuilds due to
+            # `pkgsCross.*.buildPackages` not being the same, resulting in cross-compiling
+            # for a target rebuilding all of `nativeBuildInputs` for that target.
+            #
+            # I think the best solution would just be to fixup linux RPATHs so we don't
+            # need to set `-rpath` anywhere.
+            # + lib.optionalString targetPlatform.isDarwin ''
+            #   export NIX_DONT_SET_RPATH_FOR_TARGET=1
+            # ''
           ;
-      }
-      // lib.optionalAttrs buildPlatform.isDarwin {
-        __sandboxProfile = stdenvSandboxProfile;
-        __impureHostDeps = __stdenvImpureHostDeps;
-      }
-    )
+
+          inherit
+            initialPath
+            shell
+            defaultNativeBuildInputs
+            defaultBuildInputs
+            ;
+        }
+        // lib.optionalAttrs buildPlatform.isDarwin {
+          __sandboxProfile = stdenvSandboxProfile;
+          __impureHostDeps = __stdenvImpureHostDeps;
+        }
+      )
 
     // {
 

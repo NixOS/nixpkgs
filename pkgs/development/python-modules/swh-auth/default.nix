@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  setuptools-scm,
-  click,
-  python-keycloak,
-  python-jose,
-  pyyaml,
-  swh-core,
-  aiocache,
-  httpx,
-  pytestCheckHook,
-  pytest-django,
-  pytest-mock,
-  djangorestframework,
-  starlette,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, setuptools-scm
+, click
+, python-keycloak
+, python-jose
+, pyyaml
+, swh-core
+, aiocache
+, httpx
+, pytestCheckHook
+, pytest-django
+, pytest-mock
+, djangorestframework
+, starlette
+,
 }:
 
 buildPythonPackage rec {

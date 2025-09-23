@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  SDL2,
-  bzip2,
-  cmake,
-  game-music-emu,
-  gtk3,
-  imagemagick,
-  libGL,
-  libjpeg,
-  libvpx,
-  libwebp,
-  ninja,
-  openal,
-  pkg-config,
-  vulkan-loader,
-  zlib,
-  zmusic,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, SDL2
+, bzip2
+, cmake
+, game-music-emu
+, gtk3
+, imagemagick
+, libGL
+, libjpeg
+, libvpx
+, libwebp
+, ninja
+, openal
+, pkg-config
+, vulkan-loader
+, zlib
+, zmusic
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  wheel,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-timeout,
-  numpy,
-  pandas,
-  rich,
-  tkinter,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, wheel
+, pytestCheckHook
+, pytest-asyncio
+, pytest-timeout
+, numpy
+, pandas
+, rich
+, tkinter
+,
 }:
 
 buildPythonPackage rec {

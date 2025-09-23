@@ -1,29 +1,29 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  nix-update-script,
-  meson,
-  ninja,
-  gettext,
-  desktop-file-utils,
-  appstream-glib,
-  pkg-config,
-  txt2man,
-  vala,
-  wrapGAppsHook3,
-  gsettings-desktop-schemas,
-  gtk3,
-  glib,
-  cairo,
-  keybinder3,
-  ffmpeg-full,
-  python3,
-  libxml2,
-  gst_all_1,
-  which,
-  gifski,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, meson
+, ninja
+, gettext
+, desktop-file-utils
+, appstream-glib
+, pkg-config
+, txt2man
+, vala
+, wrapGAppsHook3
+, gsettings-desktop-schemas
+, gtk3
+, glib
+, cairo
+, keybinder3
+, ffmpeg-full
+, python3
+, libxml2
+, gst_all_1
+, which
+, gifski
+,
 }:
 
 stdenv.mkDerivation rec {

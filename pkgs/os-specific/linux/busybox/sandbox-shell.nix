@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  busybox,
-  musl,
+{ lib
+, stdenv
+, busybox
+, musl
+,
 }:
 
 # Minimal shell for use as basic /bin/sh in sandbox builds
@@ -31,7 +31,7 @@ busybox.override (
       CONFIG_ASH_TEST y
     '';
   }
-  // lib.optionalAttrs (stdenv.hostPlatform.isGnu && lib.meta.availableOn stdenv.hostPlatform musl) {
+    // lib.optionalAttrs (stdenv.hostPlatform.isGnu && lib.meta.availableOn stdenv.hostPlatform musl) {
     useMusl = true;
   }
 )

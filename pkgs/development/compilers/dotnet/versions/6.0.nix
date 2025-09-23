@@ -1,8 +1,8 @@
-{
-  buildAspNetCore,
-  buildNetRuntime,
-  buildNetSdk,
-  fetchNupkg,
+{ buildAspNetCore
+, buildNetRuntime
+, buildNetSdk
+, fetchNupkg
+,
 }:
 
 # v6.0 (maintenance)

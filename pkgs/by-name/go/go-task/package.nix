@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 buildGoModule (finalAttrs: {

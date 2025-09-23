@@ -1,12 +1,12 @@
-{
-  lib,
-  qt6,
-  python3,
-  fetchFromGitHub,
-  ffmpeg,
-  pkg-config,
-  meson,
-  ninja,
+{ lib
+, qt6
+, python3
+, fetchFromGitHub
+, ffmpeg
+, pkg-config
+, meson
+, ninja
+,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "persepolis";

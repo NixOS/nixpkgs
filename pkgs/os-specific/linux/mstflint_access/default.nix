@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  kernel,
-  kmod,
-  mstflint,
-  kernelModuleMakeFlags,
+{ lib
+, stdenv
+, fetchurl
+, kernel
+, kmod
+, mstflint
+, kernelModuleMakeFlags
+,
 }:
 
 stdenv.mkDerivation rec {

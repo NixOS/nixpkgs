@@ -1,12 +1,12 @@
-{
-  rustPlatform,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  protobuf,
-  webrtc,
-  pkg-config,
-  cubeb,
+{ rustPlatform
+, lib
+, fetchFromGitHub
+, cmake
+, protobuf
+, webrtc
+, pkg-config
+, cubeb
+,
 }:
 let
   cubeb' = cubeb.override {

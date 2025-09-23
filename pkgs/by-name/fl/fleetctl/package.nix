@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fleet,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
-  stdenv,
+{ lib
+, buildGoModule
+, fleet
+, writableTmpDirAsHomeHook
+, versionCheckHook
+, stdenv
+,
 }:
 
 buildGoModule (finalAttrs: {

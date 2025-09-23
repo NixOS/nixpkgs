@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromSourcehut,
-  scdoc,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, scdoc
+, installShellFiles
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 let

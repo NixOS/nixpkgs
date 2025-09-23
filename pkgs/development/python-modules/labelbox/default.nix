@@ -1,31 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  geojson,
-  google-api-core,
-  hatchling,
-  imagesize,
-  mypy,
-  nbconvert,
-  nbformat,
-  numpy,
-  opencv-python-headless,
-  pillow,
-  pydantic,
-  pyproj,
-  pytest-cov-stub,
-  pytest-order,
-  pytest-rerunfailures,
-  pytest-xdist,
-  pytestCheckHook,
-  python-dateutil,
-  requests,
-  shapely,
-  strenum,
-  tqdm,
-  typeguard,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, geojson
+, google-api-core
+, hatchling
+, imagesize
+, mypy
+, nbconvert
+, nbformat
+, numpy
+, opencv-python-headless
+, pillow
+, pydantic
+, pyproj
+, pytest-cov-stub
+, pytest-order
+, pytest-rerunfailures
+, pytest-xdist
+, pytestCheckHook
+, python-dateutil
+, requests
+, shapely
+, strenum
+, tqdm
+, typeguard
+, typing-extensions
+,
 }:
 
 let

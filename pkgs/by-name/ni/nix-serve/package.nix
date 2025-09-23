@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bzip2,
-  nix,
-  makeWrapper,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bzip2
+, nix
+, makeWrapper
+, nixosTests
+,
 }:
 
 let

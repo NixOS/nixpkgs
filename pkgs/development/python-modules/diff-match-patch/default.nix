@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

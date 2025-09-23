@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  cmake,
-  bzip2,
-  curl,
-  zlib,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, cmake
+, bzip2
+, curl
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  poetry-core,
-  aiohttp,
-  async-upnp-client,
-  attrs,
-  click,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, aiohttp
+, async-upnp-client
+, attrs
+, click
+,
 }:
 
 buildPythonPackage rec {

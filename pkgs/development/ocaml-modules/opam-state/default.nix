@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  opam,
-  opam-repository,
-  spdx_licenses,
+{ lib
+, buildDunePackage
+, opam
+, opam-repository
+, spdx_licenses
+,
 }:
 
 buildDunePackage {

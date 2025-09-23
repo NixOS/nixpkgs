@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gi-docgen,
-  gobject-introspection,
-  lcms2,
-  vala,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gi-docgen
+, gobject-introspection
+, lcms2
+, vala
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

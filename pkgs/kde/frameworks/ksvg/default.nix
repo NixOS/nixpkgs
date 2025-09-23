@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  qtsvg,
+{ mkKdeDerivation
+, qtdeclarative
+, qtsvg
+,
 }:
 mkKdeDerivation {
   pname = "ksvg";

@@ -1,23 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  pkg-config,
-  libGLU,
-  libGL,
-  SDL2,
-  libpng,
-  libvorbis,
-  libogg,
-  libmikmod,
-
-  use3DOVideos ? false,
-  requireFile ? null,
-  writeText ? null,
-  haskellPackages ? null,
-
-  useRemixPacks ? false,
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, pkg-config
+, libGLU
+, libGL
+, SDL2
+, libpng
+, libvorbis
+, libogg
+, libmikmod
+, use3DOVideos ? false
+, requireFile ? null
+, writeText ? null
+, haskellPackages ? null
+, useRemixPacks ? false
+,
 }:
 
 assert use3DOVideos -> requireFile != null && writeText != null && haskellPackages != null;
@@ -38,11 +36,11 @@ let
     lib.imap1
       (
         num: sha256:
-        fetchurl rec {
-          name = "uqm-remix-disc${toString num}.uqm";
-          url = "mirror://sourceforge/sc2/${name}";
-          inherit sha256;
-        }
+          fetchurl rec {
+            name = "uqm-remix-disc${toString num}.uqm";
+            url = "mirror://sourceforge/sc2/${name}";
+            inherit sha256;
+          }
       )
       [
         "1s470i6hm53l214f2rkrbp111q4jyvnxbzdziqg32ffr8m3nk5xn"
@@ -95,9 +93,11 @@ stdenv.mkDerivation rec {
     ln -s "$voice" "uqm-${version}/content/addons/uqm-${version}-voice.uqm"
   ''
   + lib.optionalString useRemixPacks (
-    lib.concatMapStrings (disc: ''
-      ln -s "${disc}" "uqm-$version/content/addons/${disc.name}"
-    '') remixPacks
+    lib.concatMapStrings
+      (disc: ''
+        ln -s "${disc}" "uqm-$version/content/addons/${disc.name}"
+      '')
+      remixPacks
   )
   + lib.optionalString use3DOVideos ''
     ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"

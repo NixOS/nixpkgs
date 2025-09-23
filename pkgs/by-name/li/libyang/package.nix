@@ -1,18 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-
-  # build time
-  cmake,
-  pkg-config,
-
-  # dependencies
-  pcre2,
-  xxHash,
-
-  # update script
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitHub
+, # build time
+  cmake
+, pkg-config
+, # dependencies
+  pcre2
+, xxHash
+, # update script
+  gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

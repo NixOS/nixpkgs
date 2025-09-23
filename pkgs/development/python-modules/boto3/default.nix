@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  botocore,
-  jmespath,
-  s3transfer,
-
-  # tests
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  botocore
+, jmespath
+, s3transfer
+, # tests
+  pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

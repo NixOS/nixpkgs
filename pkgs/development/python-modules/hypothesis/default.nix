@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  isPyPy,
-  fetchFromGitHub,
-  setuptools,
-  attrs,
-  exceptiongroup,
-  pexpect,
-  doCheck ? true,
-  pytestCheckHook,
-  pytest-xdist,
-  python,
-  sortedcontainers,
-  stdenv,
-  pythonAtLeast,
-  pythonOlder,
-  sphinxHook,
-  sphinx-rtd-theme,
-  sphinx-hoverxref,
-  sphinx-codeautolink,
-  tzdata,
+{ lib
+, buildPythonPackage
+, isPyPy
+, fetchFromGitHub
+, setuptools
+, attrs
+, exceptiongroup
+, pexpect
+, doCheck ? true
+, pytestCheckHook
+, pytest-xdist
+, python
+, sortedcontainers
+, stdenv
+, pythonAtLeast
+, pythonOlder
+, sphinxHook
+, sphinx-rtd-theme
+, sphinx-hoverxref
+, sphinx-codeautolink
+, tzdata
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  mkTmuxPlugin,
-  thumbs,
-  replaceVars,
+{ mkTmuxPlugin
+, thumbs
+, replaceVars
+,
 }:
 
 mkTmuxPlugin {

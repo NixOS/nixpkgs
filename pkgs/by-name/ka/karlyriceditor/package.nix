@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  qt6,
-  ffmpeg_4,
-  pkg-config,
+{ stdenv
+, lib
+, fetchFromGitHub
+, qt6
+, ffmpeg_4
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

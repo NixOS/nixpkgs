@@ -1,67 +1,67 @@
-{
-  lib,
-  stdenv,
-  coreutils,
-  fetchurl,
-  zlib,
-  libX11,
-  libXext,
-  libSM,
-  libICE,
-  libxkbcommon,
-  libxshmfence,
-  libXfixes,
-  libXt,
-  libXi,
-  libXcursor,
-  libXScrnSaver,
-  libXcomposite,
-  libXdamage,
-  libXtst,
-  libXrandr,
-  alsa-lib,
-  dbus,
-  cups,
-  libexif,
-  ffmpeg,
-  systemd,
-  libva,
-  libGL,
-  freetype,
-  fontconfig,
-  libXft,
-  libXrender,
-  libxcb,
-  expat,
-  libuuid,
-  libxml2,
-  glib,
-  gtk3,
-  pango,
-  gdk-pixbuf,
-  cairo,
-  atk,
-  at-spi2-atk,
-  at-spi2-core,
-  qt6,
-  libdrm,
-  libgbm,
-  vulkan-loader,
-  nss,
-  nspr,
-  patchelf,
-  makeWrapper,
-  wayland,
-  pipewire,
-  proprietaryCodecs ? false,
-  vivaldi-ffmpeg-codecs ? null,
-  enableWidevine ? false,
-  widevine-cdm ? null,
-  commandLineArgs ? "",
-  pulseSupport ? stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  kerberosSupport ? true,
-  libkrb5,
+{ lib
+, stdenv
+, coreutils
+, fetchurl
+, zlib
+, libX11
+, libXext
+, libSM
+, libICE
+, libxkbcommon
+, libxshmfence
+, libXfixes
+, libXt
+, libXi
+, libXcursor
+, libXScrnSaver
+, libXcomposite
+, libXdamage
+, libXtst
+, libXrandr
+, alsa-lib
+, dbus
+, cups
+, libexif
+, ffmpeg
+, systemd
+, libva
+, libGL
+, freetype
+, fontconfig
+, libXft
+, libXrender
+, libxcb
+, expat
+, libuuid
+, libxml2
+, glib
+, gtk3
+, pango
+, gdk-pixbuf
+, cairo
+, atk
+, at-spi2-atk
+, at-spi2-core
+, qt6
+, libdrm
+, libgbm
+, vulkan-loader
+, nss
+, nspr
+, patchelf
+, makeWrapper
+, wayland
+, pipewire
+, proprietaryCodecs ? false
+, vivaldi-ffmpeg-codecs ? null
+, enableWidevine ? false
+, widevine-cdm ? null
+, commandLineArgs ? ""
+, pulseSupport ? stdenv.hostPlatform.isLinux
+, libpulseaudio
+, kerberosSupport ? true
+, libkrb5
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -72,8 +72,7 @@ stdenv.mkDerivation rec {
     {
       aarch64-linux = "arm64";
       x86_64-linux = "amd64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
@@ -81,8 +80,7 @@ stdenv.mkDerivation rec {
       {
         aarch64-linux = "sha256-K+bPy4yd1GdXsIDYNUYx3aAlcXYwX2rAN9GAR8c3tzA=";
         x86_64-linux = "sha256-cDYn6Vj+S/pft5jF2ItSUKIILCGHF++ZhH794BLNxQQ=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   unpackPhase = ''

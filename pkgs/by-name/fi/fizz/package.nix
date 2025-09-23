@@ -1,26 +1,20 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-
-  cmake,
-  ninja,
-
-  openssl,
-  glog,
-  double-conversion,
-  zstd,
-  gflags,
-  libevent,
-
-  folly,
-  libsodium,
-  zlib,
-
-  gtest,
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, openssl
+, glog
+, double-conversion
+, zstd
+, gflags
+, libevent
+, folly
+, libsodium
+, zlib
+, gtest
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

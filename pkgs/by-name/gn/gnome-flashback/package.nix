@@ -1,37 +1,37 @@
-{
-  stdenv,
-  lib,
-  autoreconfHook,
-  fetchurl,
-  gettext,
-  glib,
-  gnome-bluetooth,
-  gnome-desktop,
-  gnome-panel,
-  gnome-session,
-  gnome,
-  gsettings-desktop-schemas,
-  gtk3,
-  ibus,
-  libcanberra-gtk3,
-  libpulseaudio,
-  libxkbfile,
-  libxml2,
-  pkg-config,
-  polkit,
-  gdm,
-  replaceVars,
-  systemd,
-  tecla,
-  upower,
-  pam,
-  wrapGAppsHook3,
-  writeTextFile,
-  xkeyboard_config,
-  xorg,
-  nixosTests,
-  runCommand,
-  buildEnv,
+{ stdenv
+, lib
+, autoreconfHook
+, fetchurl
+, gettext
+, glib
+, gnome-bluetooth
+, gnome-desktop
+, gnome-panel
+, gnome-session
+, gnome
+, gsettings-desktop-schemas
+, gtk3
+, ibus
+, libcanberra-gtk3
+, libpulseaudio
+, libxkbfile
+, libxml2
+, pkg-config
+, polkit
+, gdm
+, replaceVars
+, systemd
+, tecla
+, upower
+, pam
+, wrapGAppsHook3
+, writeTextFile
+, xkeyboard_config
+, xorg
+, nixosTests
+, runCommand
+, buildEnv
+,
 }:
 
 let
@@ -141,10 +141,10 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     mkWmApplication =
-      {
-        wmName,
-        wmLabel,
-        wmCommand,
+      { wmName
+      , wmLabel
+      , wmCommand
+      ,
       }:
       writeTextFile {
         name = "gnome-flashback-${wmName}-wm";
@@ -164,10 +164,10 @@ stdenv.mkDerivation (finalAttrs: {
       };
 
     mkGnomeSession =
-      {
-        wmName,
-        wmLabel,
-        enableGnomePanel,
+      { wmName
+      , wmLabel
+      , enableGnomePanel
+      ,
       }:
       writeTextFile {
         name = "gnome-flashback-${wmName}-gnome-session";
@@ -180,34 +180,35 @@ stdenv.mkDerivation (finalAttrs: {
       };
 
     mkSessionForWm =
-      {
-        wmName,
-        wmLabel,
-        wmCommand,
+      { wmName
+      , wmLabel
+      , wmCommand
+      ,
       }:
-      writeTextFile {
-        name = "gnome-flashback-${wmName}-xsession";
-        destination = "/share/xsessions/gnome-flashback-${wmName}.desktop";
-        text = ''
-          [Desktop Entry]
-          Name=GNOME Flashback (${wmLabel})
-          Comment=This session logs you into GNOME Flashback with ${wmLabel}
-          Exec=${gnome-session}/bin/gnome-session --session=gnome-flashback-${wmName}
-          TryExec=${wmCommand}
-          Type=Application
-          DesktopNames=GNOME-Flashback;GNOME;
-        '';
-      }
+      writeTextFile
+        {
+          name = "gnome-flashback-${wmName}-xsession";
+          destination = "/share/xsessions/gnome-flashback-${wmName}.desktop";
+          text = ''
+            [Desktop Entry]
+            Name=GNOME Flashback (${wmLabel})
+            Comment=This session logs you into GNOME Flashback with ${wmLabel}
+            Exec=${gnome-session}/bin/gnome-session --session=gnome-flashback-${wmName}
+            TryExec=${wmCommand}
+            Type=Application
+            DesktopNames=GNOME-Flashback;GNOME;
+          '';
+        }
       // {
         providedSessions = [ "gnome-flashback-${wmName}" ];
       };
 
     mkSystemdTargetForWm =
-      {
-        wmName,
-        wmLabel,
-        wmCommand,
-        enableGnomePanel,
+      { wmName
+      , wmLabel
+      , wmCommand
+      , enableGnomePanel
+      ,
       }:
       runCommand "gnome-flashback-${wmName}.target" { } ''
         mkdir -p $out/lib/systemd/user

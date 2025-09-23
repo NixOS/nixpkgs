@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  autoreconfHook,
-  allegro,
-  libsamplerate,
-  libX11,
-  SDL2,
-  SDL2_mixer,
-  readline,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, autoreconfHook
+, allegro
+, libsamplerate
+, libX11
+, SDL2
+, SDL2_mixer
+, readline
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

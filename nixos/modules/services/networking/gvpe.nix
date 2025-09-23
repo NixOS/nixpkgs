@@ -1,10 +1,9 @@
 # GNU Virtual Private Ethernet
 
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -16,10 +15,11 @@ let
     if cfg.configFile != null then
       cfg.configFile
     else if cfg.configText != null then
-      pkgs.writeTextFile {
-        name = "gvpe.conf";
-        text = cfg.configText;
-      }
+      pkgs.writeTextFile
+        {
+          name = "gvpe.conf";
+          text = cfg.configText;
+        }
     else
       throw "You must either specify contents of the config file or the config file itself for GVPE";
 

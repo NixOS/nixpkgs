@@ -11,9 +11,8 @@ in
   };
 
   nodes.primary =
-    {
-      pkgs,
-      ...
+    { pkgs
+    , ...
     }:
     {
       services.postgresql = {
@@ -43,9 +42,8 @@ in
     };
 
   nodes.backup =
-    {
-      nodes,
-      ...
+    { nodes
+    , ...
     }:
     {
       services.openssh.enable = true;

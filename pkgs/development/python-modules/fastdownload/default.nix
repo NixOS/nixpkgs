@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fastprogress,
-  fastcore,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fastprogress
+, fastcore
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

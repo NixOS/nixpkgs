@@ -1,17 +1,17 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  fetchFromGitHub,
-  clang,
-  clang-tools,
-  cppcheck,
-  gcc,
-  makeWrapper,
-  withClang ? false,
-  withClangTools ? false,
-  withCppcheck ? false,
-  withGcc ? false,
+{ lib
+, python3
+, fetchPypi
+, fetchFromGitHub
+, clang
+, clang-tools
+, cppcheck
+, gcc
+, makeWrapper
+, withClang ? false
+, withClangTools ? false
+, withCppcheck ? false
+, withGcc ? false
+,
 }:
 let
   python = python3.override {
@@ -28,9 +28,11 @@ let
         };
         doCheck = false;
         # That test does not exist in the 1.3 branch so we get an error for disabling it
-        disabledTestPaths = builtins.filter (
-          testPath: testPath != "test/ext/mypy"
-        ) oldAttrs.disabledTestPaths;
+        disabledTestPaths = builtins.filter
+          (
+            testPath: testPath != "test/ext/mypy"
+          )
+          oldAttrs.disabledTestPaths;
       });
       sqlalchemy_1_4 = sqlalchemy;
 

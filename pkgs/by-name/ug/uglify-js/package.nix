@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  testers,
-  runCommand,
-  writeText,
-  uglify-js,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, testers
+, runCommand
+, writeText
+, uglify-js
+,
 }:
 
 buildNpmPackage rec {

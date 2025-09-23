@@ -1,21 +1,20 @@
-{
-  lib,
-  buildGoModule,
-  buildGo124Module,
-  fetchFromGitHub,
-  nixosTests,
-  installShellFiles,
+{ lib
+, buildGoModule
+, buildGo124Module
+, fetchFromGitHub
+, nixosTests
+, installShellFiles
+,
 }:
 
 let
   generic =
-    {
-      buildGoModule,
-      version,
-      hash,
-      vendorHash,
-      license,
-      ...
+    { buildGoModule
+    , version
+    , hash
+    , vendorHash
+    , license
+    , ...
     }@attrs:
     let
       attrs' = builtins.removeAttrs attrs [

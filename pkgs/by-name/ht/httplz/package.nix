@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  installShellFiles,
-  makeWrapper,
-  pkg-config,
-  ronn,
-  openssl,
+{ lib
+, rustPlatform
+, fetchCrate
+, installShellFiles
+, makeWrapper
+, pkg-config
+, ronn
+, openssl
+,
 }:
 
 rustPlatform.buildRustPackage rec {

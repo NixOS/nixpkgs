@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  itstool,
-  gtk3,
-  wrapGAppsHook3,
-  meson,
-  librsvg,
-  libxml2,
-  desktop-file-utils,
-  guile,
-  libcanberra-gtk3,
-  ninja,
-  yelp-tools,
-  gnome,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, itstool
+, gtk3
+, wrapGAppsHook3
+, meson
+, librsvg
+, libxml2
+, desktop-file-utils
+, guile
+, libcanberra-gtk3
+, ninja
+, yelp-tools
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

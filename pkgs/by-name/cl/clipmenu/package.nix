@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  clipnotify,
-  coreutils,
-  gawk,
-  util-linux,
-  xdotool,
-  xsel,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, clipnotify
+, coreutils
+, gawk
+, util-linux
+, xdotool
+, xsel
+,
 }:
 stdenv.mkDerivation rec {
   pname = "clipmenu";

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  diff-match-patch,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, diff-match-patch
+,
 }:
 
 buildPythonPackage rec {

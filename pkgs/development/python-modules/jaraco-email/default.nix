@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  aiosmtpd,
-  jaraco-text,
-  jaraco-collections,
-  keyring,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, aiosmtpd
+, jaraco-text
+, jaraco-collections
+, keyring
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

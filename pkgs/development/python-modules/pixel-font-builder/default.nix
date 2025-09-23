@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pytestCheckHook,
-  nix-update-script,
-  hatchling,
-  fonttools,
-  brotli,
-  bdffont,
-  pcffont,
-  pypng,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+, nix-update-script
+, hatchling
+, fonttools
+, brotli
+, bdffont
+, pcffont
+, pypng
+,
 }:
 
 buildPythonPackage rec {

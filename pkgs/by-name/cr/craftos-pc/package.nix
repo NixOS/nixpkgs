@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  callPackage,
-  patchelf,
-  unzip,
-  poco,
-  openssl,
-  SDL2,
-  SDL2_mixer,
-  ncurses,
-  libpng,
-  pngpp,
-  libwebp,
-  libX11,
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, patchelf
+, unzip
+, poco
+, openssl
+, SDL2
+, SDL2_mixer
+, ncurses
+, libpng
+, pngpp
+, libwebp
+, libX11
+,
 }:
 
 let

@@ -1,19 +1,19 @@
-{
-  lib,
-  dpkg,
-  stdenv,
-  fetchurl,
-  buildFHSEnv,
-  autoPatchelfHook,
-  writeShellScript,
-  zenity,
-  nss,
-  gtk2,
-  alsa-lib,
-  dbus-glib,
-  libXtst,
-  libXdamage,
-  libXScrnSaver,
+{ lib
+, dpkg
+, stdenv
+, fetchurl
+, buildFHSEnv
+, autoPatchelfHook
+, writeShellScript
+, zenity
+, nss
+, gtk2
+, alsa-lib
+, dbus-glib
+, libXtst
+, libXdamage
+, libXScrnSaver
+,
 }:
 
 let
@@ -37,8 +37,7 @@ let
           url = sources.loongarch64_url;
           hash = sources.loongarch64_hash;
         };
-      }
-      .${stdenv.hostPlatform.system}
+      }.${stdenv.hostPlatform.system}
         or (throw "${pname}-${version}: ${stdenv.hostPlatform.system} is unsupported.");
 
     buildInputs = [

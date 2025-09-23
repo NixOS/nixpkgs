@@ -1,10 +1,10 @@
-{
-  fetchzip,
-  lib,
-  mecab,
-  postgresql,
-  postgresqlTestExtension,
-  stdenv,
+{ fetchzip
+, lib
+, mecab
+, postgresql
+, postgresqlTestExtension
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

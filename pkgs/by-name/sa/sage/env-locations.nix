@@ -1,17 +1,17 @@
-{
-  writeTextFile,
-  pari_data,
-  pari,
-  singular,
-  maxima,
-  graphs,
-  elliptic_curves,
-  polytopes_db,
-  gap,
-  combinatorial_designs,
-  mathjax,
-  three,
-  cysignals,
+{ writeTextFile
+, pari_data
+, pari
+, singular
+, maxima
+, graphs
+, elliptic_curves
+, polytopes_db
+, gap
+, combinatorial_designs
+, mathjax
+, three
+, cysignals
+,
 }:
 
 # A bash script setting various environment variables to tell sage where

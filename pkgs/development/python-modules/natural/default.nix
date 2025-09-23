@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  setuptools,
-  six,
-  django,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, setuptools
+, six
+, django
+,
 }:
 buildPythonPackage rec {
   pname = "natural";

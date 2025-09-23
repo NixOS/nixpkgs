@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  electron,
-  copyDesktopItems,
-  makeDesktopItem,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, electron
+, copyDesktopItems
+, makeDesktopItem
+, nix-update-script
+,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "slacky";

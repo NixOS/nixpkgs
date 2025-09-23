@@ -1,11 +1,11 @@
 # Heavily based on
 # https://github.com/risicle/nix-heuristic-gc/blob/0.6.0/default.nix
-{
-  lib,
-  fetchFromGitHub,
-  nixVersions,
-  boost,
-  python3Packages,
+{ lib
+, fetchFromGitHub
+, nixVersions
+, boost
+, python3Packages
+,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "nix-heuristic-gc";

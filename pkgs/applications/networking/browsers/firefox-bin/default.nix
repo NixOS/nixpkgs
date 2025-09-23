@@ -1,32 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  config,
-  wrapGAppsHook3,
-  autoPatchelfHook,
-  alsa-lib,
-  curl,
-  dbus-glib,
-  gtk3,
-  libXtst,
-  libva,
-  pciutils,
-  pipewire,
-  adwaita-icon-theme,
-  generated,
-  writeScript,
-  writeText,
-  xidel,
-  coreutils,
-  gnused,
-  gnugrep,
-  gnupg,
-  runtimeShell,
-  systemLocale ? config.i18n.defaultLocale or "en_US",
-  patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
-  applicationName ? "Firefox",
-  undmg,
+{ lib
+, stdenv
+, fetchurl
+, config
+, wrapGAppsHook3
+, autoPatchelfHook
+, alsa-lib
+, curl
+, dbus-glib
+, gtk3
+, libXtst
+, libva
+, pciutils
+, pipewire
+, adwaita-icon-theme
+, generated
+, writeScript
+, writeText
+, xidel
+, coreutils
+, gnused
+, gnugrep
+, gnupg
+, runtimeShell
+, systemLocale ? config.i18n.defaultLocale or "en_US"
+, patchelfUnstable
+, # have to use patchelfUnstable to support --no-clobber-old-sections
+  applicationName ? "Firefox"
+, undmg
+,
 }:
 
 let

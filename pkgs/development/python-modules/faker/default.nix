@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  freezegun,
-  pillow,
-  pytestCheckHook,
-  python-dateutil,
-  setuptools,
-  typing-extensions,
-  tzdata,
-  ukpostcodeparser,
-  validators,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, freezegun
+, pillow
+, pytestCheckHook
+, python-dateutil
+, setuptools
+, typing-extensions
+, tzdata
+, ukpostcodeparser
+, validators
+,
 }:
 
 buildPythonPackage rec {

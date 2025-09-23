@@ -1,10 +1,10 @@
-{
-  buildNpmPackage,
-  fetchFromGitHub,
-  lib,
-  electron,
-  makeWrapper,
-  writableTmpDirAsHomeHook,
+{ buildNpmPackage
+, fetchFromGitHub
+, lib
+, electron
+, makeWrapper
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildNpmPackage rec {

@@ -62,10 +62,11 @@ let
   };
   # Used later when checking whether settings were set in config.xml:
   checkSettingWithId =
-    {
-      t, # t for type
-      id,
-      not ? false,
+    { t
+    , # t for type
+      id
+    , not ? false
+    ,
     }:
     ''
       print("Searching for a ${t} with id ${id}")
@@ -78,11 +79,14 @@ let
     '';
   # Same as checkSettingWithId, but for 'options' and 'gui'
   checkSettingWithoutId =
-    {
-      t, # t for type
-      n, # n for name
-      v, # v for value
-      not ? false,
+    { t
+    , # t for type
+      n
+    , # n for name
+      v
+    , # v for value
+      not ? false
+    ,
     }:
     ''
       print("checking whether setting ${t}.${n} is set to ${v}")
@@ -98,8 +102,8 @@ let
   # systemd unit's bash script ran, and afterwards - whether the systemd unit
   # worked.
   checkSettingsToDelete =
-    {
-      not,
+    { not
+    ,
     }:
     lib.pipe IDsToDelete [
       (lib.mapAttrsToList (
@@ -166,11 +170,11 @@ in
     # Check that folders and devices were added properly and that all IDs exist
     (lib.mapAttrsRecursive (
       path: id:
-      checkSettingWithId {
-        # plural -> solitary
-        t = (lib.removeSuffix "s" (builtins.elemAt path 0));
-        inherit id;
-      }
+        checkSettingWithId {
+          # plural -> solitary
+          t = (lib.removeSuffix "s" (builtins.elemAt path 0));
+          inherit id;
+        }
     ))
     # Get all the values we applied the above function upon
     (lib.collect builtins.isString)
@@ -181,11 +185,11 @@ in
     # values
     (lib.mapAttrsRecursive (
       path: value:
-      checkSettingWithoutId {
-        t = (builtins.elemAt path 0);
-        n = (builtins.elemAt path 1);
-        v = (builtins.toString value);
-      }
+        checkSettingWithoutId {
+          t = (builtins.elemAt path 0);
+          n = (builtins.elemAt path 1);
+          v = (builtins.toString value);
+        }
     ))
     # Get all the values we applied the above function upon
     (lib.collect builtins.isString)

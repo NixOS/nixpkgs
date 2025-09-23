@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  bundlewrap,
-  passlib,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, bundlewrap
+, passlib
+, requests
+,
 }:
 
 buildPythonPackage rec {

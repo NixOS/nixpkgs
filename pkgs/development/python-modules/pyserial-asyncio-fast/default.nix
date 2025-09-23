@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  pyserial,
-
-  # tests
-  pytestCheckHook,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  pyserial
+, # tests
+  pytestCheckHook
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

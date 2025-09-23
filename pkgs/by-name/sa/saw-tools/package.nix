@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  makeWrapper,
-  gmp,
-  ncurses,
-  zlib,
-  readline,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, makeWrapper
+, gmp
+, ncurses
+, zlib
+, readline
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

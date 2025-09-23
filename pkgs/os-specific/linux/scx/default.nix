@@ -1,7 +1,7 @@
-{
-  lib,
-  callPackage,
-  fetchFromGitHub,
+{ lib
+, callPackage
+, fetchFromGitHub
+,
 }:
 let
   scx-common = rec {
@@ -36,6 +36,6 @@ let
   ];
 in
 (lib.mapAttrs (name: scheduler: callPackage scheduler { inherit scx-common; }) schedulers)
-// {
+  // {
   inherit scx-common;
 }

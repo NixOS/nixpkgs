@@ -1,10 +1,9 @@
 # opinionated module that can be used to build nixos images with
 # a dm-verity protected nix store
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.image.repart.verityStore;
@@ -17,15 +16,13 @@ let
       {
         "x86_64" = "usr-x86-64";
         "arm64" = "usr-arm64";
-      }
-      ."${pkgs.stdenv.hostPlatform.linuxArch}";
+      }."${pkgs.stdenv.hostPlatform.linuxArch}";
 
     usr-verity =
       {
         "x86_64" = "usr-x86-64-verity";
         "arm64" = "usr-arm64-verity";
-      }
-      ."${pkgs.stdenv.hostPlatform.linuxArch}";
+      }."${pkgs.stdenv.hostPlatform.linuxArch}";
   };
 
   verityHashCheck =

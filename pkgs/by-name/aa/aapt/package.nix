@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  autoPatchelfHook,
-  libcxx,
+{ lib
+, stdenvNoCC
+, fetchzip
+, autoPatchelfHook
+, libcxx
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

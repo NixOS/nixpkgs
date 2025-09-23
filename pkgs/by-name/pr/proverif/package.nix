@@ -1,13 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ocamlPackages,
-  makeBinaryWrapper,
-  graphviz,
-  m4,
-
-  enable_interact ? false,
+{ lib
+, stdenv
+, fetchurl
+, ocamlPackages
+, makeBinaryWrapper
+, graphviz
+, m4
+, enable_interact ? false
+,
 }:
 
 stdenv.mkDerivation rec {

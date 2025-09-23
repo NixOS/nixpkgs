@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  makeDesktopItem,
-  copyDesktopItems,
-  installShellFiles,
-  motif,
-  openssl,
-  groff,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, makeDesktopItem
+, copyDesktopItems
+, installShellFiles
+, motif
+, openssl
+, groff
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

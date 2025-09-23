@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  gpgme,
-  installShellFiles,
-  pkg-config,
-  python3,
-  writableTmpDirAsHomeHook,
-
-  # buildInputs
-  libgpg-error,
-  nettle,
-  openssl,
-  xorg,
-
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, # nativeBuildInputs
+  gpgme
+, installShellFiles
+, pkg-config
+, python3
+, writableTmpDirAsHomeHook
+, # buildInputs
+  libgpg-error
+, nettle
+, openssl
+, xorg
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

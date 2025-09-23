@@ -1,30 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  callPackage,
-  pythonOlder,
-  fetchPypi,
-  writeText,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  attrs,
-  exceptiongroup,
-  iniconfig,
-  packaging,
-  pluggy,
-  tomli,
-
-  # optional-dependencies
-  argcomplete,
-  hypothesis,
-  mock,
-  pygments,
-  requests,
-  xmlschema,
+{ lib
+, buildPythonPackage
+, callPackage
+, pythonOlder
+, fetchPypi
+, writeText
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  attrs
+, exceptiongroup
+, iniconfig
+, packaging
+, pluggy
+, tomli
+, # optional-dependencies
+  argcomplete
+, hypothesis
+, mock
+, pygments
+, requests
+, xmlschema
+,
 }:
 
 buildPythonPackage rec {

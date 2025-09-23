@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  meson,
-  pkg-config,
-  ninja,
-  libdrm,
-  version,
-  src,
-  patches,
+{ lib
+, stdenv
+, meson
+, pkg-config
+, ninja
+, libdrm
+, version
+, src
+, patches
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

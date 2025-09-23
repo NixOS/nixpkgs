@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  poetry-core,
-  gobject-introspection,
-  gtk3,
-  pycairo,
-  pygobject3,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, poetry-core
+, gobject-introspection
+, gtk3
+, pycairo
+, pygobject3
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

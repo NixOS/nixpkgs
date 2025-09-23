@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  doxygen,
-  cmake,
-  readline,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, doxygen
+, cmake
+, readline
+,
 }:
 
 stdenv.mkDerivation rec {

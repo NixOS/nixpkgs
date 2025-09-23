@@ -1,11 +1,11 @@
-{
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ attrs
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

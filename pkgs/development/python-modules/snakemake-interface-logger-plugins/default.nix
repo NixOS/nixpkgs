@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  snakemake-interface-common,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, snakemake-interface-common
+,
 }:
 
 buildPythonPackage rec {

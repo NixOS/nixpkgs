@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cargo,
-  rustc,
-  autoreconfHook,
-  jdk,
-  glib,
-  firefox-unwrapped,
-  zip,
-  pkg-config,
-  npapi_sdk,
-  bash,
-  bc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cargo
+, rustc
+, autoreconfHook
+, jdk
+, glib
+, firefox-unwrapped
+, zip
+, pkg-config
+, npapi_sdk
+, bash
+, bc
+,
 }:
 
 stdenv.mkDerivation rec {

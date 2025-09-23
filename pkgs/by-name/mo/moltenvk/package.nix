@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  apple-sdk_15,
-  cereal,
-  glslang,
-  spirv-cross,
-  spirv-headers,
-  spirv-tools,
-  vulkan-headers,
-  xcbuildHook,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  # MoltenVK supports using private APIs to implement some Vulkan functionality.
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, apple-sdk_15
+, cereal
+, glslang
+, spirv-cross
+, spirv-headers
+, spirv-tools
+, vulkan-headers
+, xcbuildHook
+, enableStatic ? stdenv.hostPlatform.isStatic
+, # MoltenVK supports using private APIs to implement some Vulkan functionality.
   # Applications that use private APIs can’t be distributed on the App Store,
   # but that’s not really a concern for nixpkgs, so use them by default.
   # See: https://github.com/KhronosGroup/MoltenVK/blob/main/README.md#metal_private_api
-  enablePrivateAPIUsage ? true,
+  enablePrivateAPIUsage ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

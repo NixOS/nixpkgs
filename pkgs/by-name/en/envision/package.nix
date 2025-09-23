@@ -1,9 +1,9 @@
-{
-  lib,
-  buildFHSEnv,
-  envision-unwrapped,
-  envision,
-  testers,
+{ lib
+, buildFHSEnv
+, envision-unwrapped
+, envision
+, testers
+,
 }:
 
 buildFHSEnv {
@@ -130,9 +130,11 @@ buildFHSEnv {
     let
       kebabToPascal =
         kebab:
-        lib.foldl' (
-          acc: part: acc + lib.substring 0 1 (lib.toUpper part) + lib.substring 1 (lib.stringLength part) part
-        ) "" (lib.splitString "-" kebab);
+        lib.foldl'
+          (
+            acc: part: acc + lib.substring 0 1 (lib.toUpper part) + lib.substring 1 (lib.stringLength part) part
+          ) ""
+          (lib.splitString "-" kebab);
       pascalToCamel =
         pascal: lib.substring 0 1 (lib.toLower pascal) + lib.substring 1 (lib.stringLength pascal) pascal;
       kebabToCamel = x: pascalToCamel (kebabToPascal x);
@@ -174,17 +176,19 @@ buildFHSEnv {
       };
     }
     // lib.listToAttrs (
-      lib.map (profile: {
-        name = "${kebabToCamel profile}DependenciesMet";
-        value = testers.runCommand {
-          name = "envision-profile-${profile}-dependencies-met-test";
-          script = ''
-            envision -c ${profile}
-            touch $out
-          '';
-          nativeBuildInputs = [ envision ];
-        };
-      }) profiles
+      lib.map
+        (profile: {
+          name = "${kebabToCamel profile}DependenciesMet";
+          value = testers.runCommand {
+            name = "envision-profile-${profile}-dependencies-met-test";
+            script = ''
+              envision -c ${profile}
+              touch $out
+            '';
+            nativeBuildInputs = [ envision ];
+          };
+        })
+        profiles
     );
 
   meta = envision-unwrapped.meta // {

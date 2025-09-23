@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  zope-event,
-  zope-interface,
-  unittestCheckHook,
-  zope-i18nmessageid,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, zope-event
+, zope-interface
+, unittestCheckHook
+, zope-i18nmessageid
+,
 }:
 
 buildPythonPackage rec {

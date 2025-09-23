@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  samba,
+{ lib
+, fetchFromGitHub
+, python3
+, samba
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

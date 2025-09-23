@@ -1,14 +1,14 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchPypi,
-  pillow,
-  hatchling,
-  pythonOlder,
-  requests,
-  rich,
-  uv-dynamic-versioning,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchPypi
+, pillow
+, hatchling
+, pythonOlder
+, requests
+, rich
+, uv-dynamic-versioning
+,
 }:
 
 buildPythonPackage rec {

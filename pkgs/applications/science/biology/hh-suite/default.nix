@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  xxd,
-  enableMpi ? false,
-  mpi,
-  openmp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, xxd
+, enableMpi ? false
+, mpi
+, openmp
+,
 }:
 stdenv.mkDerivation rec {
   pname = "hh-suite";

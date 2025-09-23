@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  bison,
-  flex,
-  geoip,
-  geolite-legacy,
-  libcli,
-  libnet,
-  libnetfilter_conntrack,
-  libnl,
-  libpcap,
-  libsodium,
-  liburcu,
-  ncurses,
-  pkg-config,
-  zlib,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, bison
+, flex
+, geoip
+, geolite-legacy
+, libcli
+, libnet
+, libnetfilter_conntrack
+, libnl
+, libpcap
+, libsodium
+, liburcu
+, ncurses
+, pkg-config
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

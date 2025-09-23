@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qt6,
-  spdlog,
-  fmt,
-  nlohmann_json,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qt6
+, spdlog
+, fmt
+, nlohmann_json
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,9 @@
 # This module manages the terminfo database
 # and its integration in the system.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 {
 

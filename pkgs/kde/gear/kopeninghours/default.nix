@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  bison,
-  flex,
-  boost,
-  python3,
+{ mkKdeDerivation
+, qtdeclarative
+, bison
+, flex
+, boost
+, python3
+,
 }:
 mkKdeDerivation {
   pname = "kopeninghours";

@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  python,
-  runCommand,
-  fetchFromGitHub,
-  configargparse,
-  acme,
-  configobj,
-  cryptography,
-  distro,
-  josepy,
-  parsedatetime,
-  pyrfc3339,
-  pytz,
-  setuptools,
-  dialog,
-  gnureadline,
-  pytest-xdist,
-  pytestCheckHook,
-  python-dateutil,
+{ lib
+, buildPythonPackage
+, python
+, runCommand
+, fetchFromGitHub
+, configargparse
+, acme
+, configobj
+, cryptography
+, distro
+, josepy
+, parsedatetime
+, pyrfc3339
+, pytz
+, setuptools
+, dialog
+, gnureadline
+, pytest-xdist
+, pytestCheckHook
+, python-dateutil
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-  lib ? pkgs.lib,
-  testing ? import ../lib/testing-python.nix { inherit system pkgs; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+, lib ? pkgs.lib
+, testing ? import ../lib/testing-python.nix { inherit system pkgs; }
+,
 }:
 let
   secretInStore = pkgs.writeText "topsecret" "iamasecret";

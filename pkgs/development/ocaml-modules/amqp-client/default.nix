@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  version ? "2.3.0",
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, version ? "2.3.0"
+,
 }:
 
 buildDunePackage {

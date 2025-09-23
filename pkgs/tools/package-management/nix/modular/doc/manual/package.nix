@@ -1,20 +1,18 @@
-{
-  lib,
-  mkMesonDerivation,
+{ lib
+, mkMesonDerivation
+, meson
+, ninja
+, lowdown-unsandboxed
+, mdbook
+, mdbook-linkcheck
+, jq
+, python3
+, rsync
+, nix-cli
+, # Configuration Options
 
-  meson,
-  ninja,
-  lowdown-unsandboxed,
-  mdbook,
-  mdbook-linkcheck,
-  jq,
-  python3,
-  rsync,
-  nix-cli,
-
-  # Configuration Options
-
-  version,
+  version
+,
 }:
 
 mkMesonDerivation (finalAttrs: {

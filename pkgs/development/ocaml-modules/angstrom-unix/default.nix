@@ -1,7 +1,7 @@
-{
-  lib,
-  buildDunePackage,
-  angstrom,
+{ lib
+, buildDunePackage
+, angstrom
+,
 }:
 
 buildDunePackage {

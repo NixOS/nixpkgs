@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libassuan,
-  libgpg-error,
-  makeBinaryWrapper,
-  texinfo,
-  xcbuild,
-  common-updater-scripts,
-  writers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libassuan
+, libgpg-error
+, makeBinaryWrapper
+, texinfo
+, xcbuild
+, common-updater-scripts
+, writers
+,
 }:
 
 stdenv.mkDerivation rec {

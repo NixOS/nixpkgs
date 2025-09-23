@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gnum4,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gnum4
+,
 }:
 stdenv.mkDerivation rec {
   pname = "nvidia-modprobe";

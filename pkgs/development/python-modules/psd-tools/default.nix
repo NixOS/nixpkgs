@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  attrs,
-  docopt,
-  pillow,
-  scikit-image,
-  scipy,
-  numpy,
-  aggdraw,
-  pytestCheckHook,
-  pytest-cov-stub,
-  ipython,
-  cython,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, attrs
+, docopt
+, pillow
+, scikit-image
+, scipy
+, numpy
+, aggdraw
+, pytestCheckHook
+, pytest-cov-stub
+, ipython
+, cython
+,
 }:
 
 buildPythonPackage rec {

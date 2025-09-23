@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  unittestCheckHook,
-  zhon,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, unittestCheckHook
+, zhon
+,
 }:
 
 buildPythonPackage rec {

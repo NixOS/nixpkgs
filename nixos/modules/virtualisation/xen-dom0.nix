@@ -1,10 +1,9 @@
 # Xen Project Hypervisor (Dom0) support.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -409,14 +408,16 @@ in
               burstLimit = mkOption {
                 default = 5.0;
                 example = 15.0;
-                type = addCheck (
-                  float
-                  // {
-                    name = "nonnegativeFloat";
-                    description = "nonnegative floating point number, meaning >=0";
-                    descriptionClass = "nonRestrictiveClause";
-                  }
-                ) (n: n >= 0);
+                type = addCheck
+                  (
+                    float
+                    // {
+                      name = "nonnegativeFloat";
+                      description = "nonnegative floating point number, meaning >=0";
+                      descriptionClass = "nonRestrictiveClause";
+                    }
+                  )
+                  (n: n >= 0);
                 description = ''
                   Limits applied to domains whose writes cause other domains' transaction
                   commits to fail. Must include decimal point.
@@ -638,14 +639,16 @@ in
             ringScanInterval = mkOption {
               default = 20;
               example = 30;
-              type = addCheck (
-                int
-                // {
-                  name = "nonzeroInt";
-                  description = "nonzero signed integer, meaning !=0";
-                  descriptionClass = "nonRestrictiveClause";
-                }
-              ) (n: n != 0);
+              type = addCheck
+                (
+                  int
+                  // {
+                    name = "nonzeroInt";
+                    description = "nonzero signed integer, meaning !=0";
+                    descriptionClass = "nonRestrictiveClause";
+                  }
+                )
+                (n: n != 0);
               description = ''
                 Perodic scanning for all the rings as a safenet for lazy clients.
                 Define the interval in seconds; set to a negative integer to disable.
@@ -702,15 +705,16 @@ in
         "guest_loglvl=all"
       ]
       ++
-        optional (cfg.dom0Resources.memory != 0)
-          "dom0_mem=${toString cfg.dom0Resources.memory}M${
+      optional (cfg.dom0Resources.memory != 0)
+        "dom0_mem=${toString cfg.dom0Resources.memory}M${
             optionalString (
               cfg.dom0Resources.memory != cfg.dom0Resources.maxMemory
             ) ",max:${toString cfg.dom0Resources.maxMemory}M"
           }"
-      ++ optional (
-        cfg.dom0Resources.maxVCPUs != 0
-      ) "dom0_max_vcpus=${toString cfg.dom0Resources.maxVCPUs}";
+      ++ optional
+        (
+          cfg.dom0Resources.maxVCPUs != 0
+        ) "dom0_max_vcpus=${toString cfg.dom0Resources.maxVCPUs}";
 
     boot = {
       kernelModules = [

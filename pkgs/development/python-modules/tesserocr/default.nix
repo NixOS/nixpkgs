@@ -1,23 +1,19 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  lib,
-
-  # build-system
-  cython,
-  pkg-config,
-  setuptools,
-
-  # native dependencies
-  leptonica,
-  tesseract4,
-
-  # dependencies
-  pillow,
-
-  # tests
-  unittestCheckHook,
+{ buildPythonPackage
+, fetchPypi
+, fetchpatch
+, lib
+, # build-system
+  cython
+, pkg-config
+, setuptools
+, # native dependencies
+  leptonica
+, tesseract4
+, # dependencies
+  pillow
+, # tests
+  unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

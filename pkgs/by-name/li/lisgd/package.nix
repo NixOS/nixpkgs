@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  writeText,
-  libinput,
-  libX11,
-  wayland,
-  conf ? null,
-  patches ? [ ],
+{ lib
+, stdenv
+, fetchFromSourcehut
+, writeText
+, libinput
+, libX11
+, wayland
+, conf ? null
+, patches ? [ ]
+,
 }:
 
 stdenv.mkDerivation rec {

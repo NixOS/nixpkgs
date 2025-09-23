@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  file,
-  licenseFile ? null,
-  optgamsFile ? null,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, file
+, licenseFile ? null
+, optgamsFile ? null
+,
 }:
 
 stdenv.mkDerivation rec {

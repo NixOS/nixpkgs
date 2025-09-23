@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kpackage,
-  kwin,
-  nodejs,
-  typescript,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kpackage
+, kwin
+, nodejs
+, typescript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,21 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-
-  # Runtime dependencies
-  networkx,
-  matplotlib,
-  numpy,
-  tqdm,
-  scipy,
-
-  # Build, dev and test dependencies
-  setuptools-scm,
-  pytestCheckHook,
-  pytest-check,
-  pytest-mock,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, # Runtime dependencies
+  networkx
+, matplotlib
+, numpy
+, tqdm
+, scipy
+, # Build, dev and test dependencies
+  setuptools-scm
+, pytestCheckHook
+, pytest-check
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

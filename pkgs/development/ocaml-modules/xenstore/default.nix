@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  lwt,
-  ounit2,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, lwt
+, ounit2
+,
 }:
 
 buildDunePackage rec {

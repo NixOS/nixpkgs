@@ -1,27 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pdm-backend,
-  loguru,
-  platformdirs,
-  requests,
-  setuptools,
-  toml,
-  websocket-client,
-  asciimatics,
-  pyperclip,
-  aria2,
-  fastapi,
-  psutil,
-  pytest-xdist,
-  pytestCheckHook,
-  responses,
-  uvicorn,
-
-  withTui ? true,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pdm-backend
+, loguru
+, platformdirs
+, requests
+, setuptools
+, toml
+, websocket-client
+, asciimatics
+, pyperclip
+, aria2
+, fastapi
+, psutil
+, pytest-xdist
+, pytestCheckHook
+, responses
+, uvicorn
+, withTui ? true
+,
 }:
 
 buildPythonPackage rec {

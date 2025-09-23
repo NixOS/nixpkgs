@@ -1,11 +1,11 @@
-{
-  buildDunePackage,
-  camlp-streams,
-  optint,
-  alcotest,
-  uri,
-  base64,
-  seppo,
+{ buildDunePackage
+, camlp-streams
+, optint
+, alcotest
+, uri
+, base64
+, seppo
+,
 }:
 
 buildDunePackage {

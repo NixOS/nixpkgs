@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "binsider";

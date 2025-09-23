@@ -1,16 +1,16 @@
-{
-  autoPatchelfHook,
-  cacert,
-  common-updater-scripts,
-  curl,
-  gcc,
-  jq,
-  lib,
-  libGL,
-  libcxx,
-  runCommandLocal,
-  stdenv,
-  writeShellApplication,
+{ autoPatchelfHook
+, cacert
+, common-updater-scripts
+, curl
+, gcc
+, jq
+, lib
+, libGL
+, libcxx
+, runCommandLocal
+, stdenv
+, writeShellApplication
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blackmagic-desktop-video";

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  jdk,
-  ant,
-  git,
-  coreutils,
-  hostname,
-  gawk,
-  unzip,
+{ lib
+, stdenv
+, fetchFromGitHub
+, jdk
+, ant
+, git
+, coreutils
+, hostname
+, gawk
+, unzip
+,
 }:
 
 stdenv.mkDerivation rec {

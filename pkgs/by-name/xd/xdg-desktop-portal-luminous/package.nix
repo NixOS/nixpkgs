@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  meson,
-  ninja,
-  rustc,
-  cargo,
-  rustPlatform,
-  xdg-desktop-portal,
-  slurp,
-  cairo,
-  pango,
-  libxkbcommon,
-  glib,
-  pipewire,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, meson
+, ninja
+, rustc
+, cargo
+, rustPlatform
+, xdg-desktop-portal
+, slurp
+, cairo
+, pango
+, libxkbcommon
+, glib
+, pipewire
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

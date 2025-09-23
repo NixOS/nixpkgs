@@ -1,18 +1,18 @@
-{
-  lib,
-  writeText,
-  runCommand,
-  writeClosure,
+{ lib
+, writeText
+, runCommand
+, writeClosure
+,
 }:
 
 {
   buildContainer =
-    {
-      args,
-      mounts ? { },
-      os ? "linux",
-      arch ? "x86_64",
-      readonly ? false,
+    { args
+    , mounts ? { }
+    , os ? "linux"
+    , arch ? "x86_64"
+    , readonly ? false
+    ,
     }:
     let
       sysMounts = {
@@ -115,22 +115,24 @@
             cwd = "/";
           };
 
-          mounts = lib.mapAttrsToList (
-            destination:
-            {
-              type,
-              source,
-              options ? null,
-            }:
-            {
-              inherit
-                destination
-                type
-                source
-                options
-                ;
-            }
-          ) sysMounts;
+          mounts = lib.mapAttrsToList
+            (
+              destination:
+              { type
+              , source
+              , options ? null
+              ,
+              }:
+              {
+                inherit
+                  destination
+                  type
+                  source
+                  options
+                  ;
+              }
+            )
+            sysMounts;
         }
       );
     in

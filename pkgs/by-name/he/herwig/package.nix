@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  boost,
-  fastjet,
-  gfortran,
-  gsl,
-  lhapdf,
-  thepeg,
-  zlib,
-  autoconf,
-  automake,
-  libtool,
+{ lib
+, stdenv
+, fetchurl
+, boost
+, fastjet
+, gfortran
+, gsl
+, lhapdf
+, thepeg
+, zlib
+, autoconf
+, automake
+, libtool
+,
 }:
 
 stdenv.mkDerivation rec {

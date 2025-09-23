@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pbkdf2,
-  pytestCheckHook,
-  pythonOlder,
-  wirelesstools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pbkdf2
+, pytestCheckHook
+, pythonOlder
+, wirelesstools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildNpmPackage,
-  nodejs_20,
-  nix-update-script,
-  pkg-config,
-  xcbuild,
-  pango,
-  giflib,
-  jellyfin,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildNpmPackage
+, nodejs_20
+, nix-update-script
+, pkg-config
+, xcbuild
+, pango
+, giflib
+, jellyfin
+,
 }:
 buildNpmPackage rec {
   pname = "jellyfin-web";

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  mpi,
-  attr,
-  dtcmp,
-  libarchive,
-  libcircle,
-  bzip2,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, mpi
+, attr
+, dtcmp
+, libarchive
+, libcircle
+, bzip2
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

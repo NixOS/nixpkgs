@@ -1,14 +1,14 @@
-{
-  lib,
-  aiofiles,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  httpx,
-  orjson,
-  poetry-core,
-  pythonOlder,
-  rich,
+{ lib
+, aiofiles
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, httpx
+, orjson
+, poetry-core
+, pythonOlder
+, rich
+,
 }:
 
 buildPythonPackage rec {

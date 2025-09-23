@@ -1,11 +1,11 @@
 # Based upon https://src.fedoraproject.org/rpms/twitter-twemoji-fonts
 # The main difference is that we use “Twitter Color Emoji” name (which is recognized by upstream fontconfig)
 
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  noto-fonts-color-emoji,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, noto-fonts-color-emoji
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  kubectl,
-  lib,
+{ buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, kubectl
+, lib
+,
 }:
 
 buildGoModule rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  writableTmpDirAsHomeHook,
-  libGL,
-  libX11,
-  libxkbcommon,
-  libxcb,
-  wayland,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, makeBinaryWrapper
+, writableTmpDirAsHomeHook
+, libGL
+, libX11
+, libxkbcommon
+, libxcb
+, wayland
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

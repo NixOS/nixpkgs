@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-docstring-description,
-  hatch-vcs,
-  hatchling,
-  coverage,
-  ipykernel,
-  jupyter-client,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-subprocess,
-  testing-common-database,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-docstring-description
+, hatch-vcs
+, hatchling
+, coverage
+, ipykernel
+, jupyter-client
+, pytestCheckHook
+, pytest-asyncio
+, pytest-subprocess
+, testing-common-database
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

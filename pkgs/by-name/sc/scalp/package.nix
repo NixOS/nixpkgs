@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  cmake,
-  withGurobi ? false,
-  gurobi,
-  withCplex ? false,
-  cplex,
-  withLpsolve ? true,
-  lp_solve,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchgit
+, cmake
+, withGurobi ? false
+, gurobi
+, withCplex ? false
+, cplex
+, withLpsolve ? true
+, lp_solve
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  garth,
-  pdm-backend,
-  pythonOlder,
-  requests,
-  withings-sync,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, garth
+, pdm-backend
+, pythonOlder
+, requests
+, withings-sync
+,
 }:
 
 buildPythonPackage rec {

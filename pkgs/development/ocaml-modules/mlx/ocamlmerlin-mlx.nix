@@ -1,13 +1,13 @@
-{
-  lib,
-  mlx,
-  buildDunePackage,
-  ppxlib,
-  merlin-lib,
-  cppo,
-  csexp,
-  menhir,
-  odoc,
+{ lib
+, mlx
+, buildDunePackage
+, ppxlib
+, merlin-lib
+, cppo
+, csexp
+, menhir
+, odoc
+,
 }:
 buildDunePackage {
   pname = "ocamlmerlin-mlx";

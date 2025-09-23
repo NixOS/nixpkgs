@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  glib,
-  python3,
-  gtk2,
-  readline,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, python3
+, gtk2
+, readline
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {

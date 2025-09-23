@@ -1,9 +1,9 @@
-{
-  lib,
-  apple-sdk,
-  buildPackages,
-  mkAppleDerivation,
-  unifdef,
+{ lib
+, apple-sdk
+, buildPackages
+, mkAppleDerivation
+, unifdef
+,
 }:
 
 let

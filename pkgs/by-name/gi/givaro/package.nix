@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  automake,
-  autoconf,
-  libtool,
-  autoreconfHook,
-  gmpxx,
+{ lib
+, stdenv
+, fetchFromGitHub
+, automake
+, autoconf
+, libtool
+, autoreconfHook
+, gmpxx
+,
 }:
 stdenv.mkDerivation rec {
   pname = "givaro";

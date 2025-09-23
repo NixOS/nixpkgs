@@ -1,10 +1,10 @@
-{
-  lib,
-  config,
-  stdenvNoCC,
-  xwin,
-  testers,
-  llvmPackages,
+{ lib
+, config
+, stdenvNoCC
+, xwin
+, testers
+, llvmPackages
+,
 }:
 let
   version = (builtins.fromJSON (builtins.readFile ./manifest.json)).info.buildVersion;

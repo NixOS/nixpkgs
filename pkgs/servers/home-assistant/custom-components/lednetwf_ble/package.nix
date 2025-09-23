@@ -1,11 +1,11 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  bluetooth-sensor-state-data,
-  bleak-retry-connector,
-  bleak,
-  nix-update-script,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, bluetooth-sensor-state-data
+, bleak-retry-connector
+, bleak
+, nix-update-script
+,
 }:
 let
   version = "0.0.15.1";

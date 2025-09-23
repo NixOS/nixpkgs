@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  foomatic-filters,
-  bc,
-  ghostscript,
-  systemd,
-  udevCheckHook,
-  vim,
-  time,
+{ lib
+, stdenv
+, fetchurl
+, foomatic-filters
+, bc
+, ghostscript
+, systemd
+, udevCheckHook
+, vim
+, time
+,
 }:
 
 stdenv.mkDerivation rec {

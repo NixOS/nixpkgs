@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  perl,
-  gfortran,
-  automake,
-  autoconf,
-  openssh,
-  hwloc,
-  python3,
-  # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
+{ stdenv
+, lib
+, fetchurl
+, perl
+, gfortran
+, automake
+, autoconf
+, openssh
+, hwloc
+, python3
+, # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
   # these libraries currently build so this argument is ignored on Darwin.
-  ch4backend,
-  # Process managers to build (`--with-pm`),
+  ch4backend
+, # Process managers to build (`--with-pm`),
   # cf. https://github.com/pmodels/mpich/blob/b80a6d7c24defe7cdf6c57c52430f8075a0a41d6/README.vin#L562-L586
   withPm ? [
     "hydra"
     "gforker"
-  ],
-  pmix,
-  # PMIX support is likely incompatible with process managers (`--with-pm`)
+  ]
+, pmix
+, # PMIX support is likely incompatible with process managers (`--with-pm`)
   # https://github.com/NixOS/nixpkgs/pull/274804#discussion_r1432601476
-  pmixSupport ? false,
+  pmixSupport ? false
+,
 }:
 
 let

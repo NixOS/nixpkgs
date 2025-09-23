@@ -1,15 +1,13 @@
-{
-  lib,
-  mkMesonExecutable,
+{ lib
+, mkMesonExecutable
+, nix-store
+, nix-expr
+, nix-main
+, nix-cmd
+, # Configuration Options
 
-  nix-store,
-  nix-expr,
-  nix-main,
-  nix-cmd,
-
-  # Configuration Options
-
-  version,
+  version
+,
 }:
 
 mkMesonExecutable (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  pugixml,
-  updfparser,
-  curl,
-  openssl,
-  libzip,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitea
+, pugixml
+, updfparser
+, curl
+, openssl
+, libzip
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

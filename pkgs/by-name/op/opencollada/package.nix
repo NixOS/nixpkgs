@@ -1,12 +1,12 @@
-{
-  cmake,
-  fetchFromGitHub,
-  fetchurl,
-  lib,
-  libxml2,
-  pcre,
-  pkg-config,
-  stdenv,
+{ cmake
+, fetchFromGitHub
+, fetchurl
+, lib
+, libxml2
+, pcre
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

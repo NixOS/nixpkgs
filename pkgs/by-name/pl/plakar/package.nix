@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fuse,
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, fuse
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "plakar";

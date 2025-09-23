@@ -1,7 +1,7 @@
-{
-  lib,
-  buildGo125Module,
-  fetchFromGitHub,
+{ lib
+, buildGo125Module
+, fetchFromGitHub
+,
 }:
 
 buildGo125Module rec {

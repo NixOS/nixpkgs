@@ -1,9 +1,9 @@
-{
-  stdenv,
-  usbrelay,
-  python3,
-  installShellFiles,
-  udevCheckHook,
+{ stdenv
+, usbrelay
+, python3
+, installShellFiles
+, udevCheckHook
+,
 }:
 let
   python = python3.withPackages (
@@ -14,8 +14,8 @@ let
   );
 in
 # This is a separate derivation, not just an additional output of
-# usbrelay, because otherwise, we have a cyclic dependency between
-# usbrelay (default.nix) and the python module (python.nix).
+  # usbrelay, because otherwise, we have a cyclic dependency between
+  # usbrelay (default.nix) and the python module (python.nix).
 stdenv.mkDerivation {
   pname = "usbrelayd";
 

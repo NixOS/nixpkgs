@@ -1,18 +1,18 @@
-{
-  lib,
-  aws-sam-cli,
-  boto3,
-  buildPythonPackage,
-  cfn-lint,
-  fetchFromGitHub,
-  mock,
-  moto,
-  mypy-boto3-ebs,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  typer,
-  urllib3,
+{ lib
+, aws-sam-cli
+, boto3
+, buildPythonPackage
+, cfn-lint
+, fetchFromGitHub
+, mock
+, moto
+, mypy-boto3-ebs
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, typer
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

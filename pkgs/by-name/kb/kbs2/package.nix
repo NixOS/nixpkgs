@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  python3,
-  libxcb,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, python3
+, libxcb
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,57 +1,58 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  dbus,
-  file,
-  glib,
-  gnutls,
-  iptables,
-  libmnl,
-  libnftnl, # for nftables
-  nixosTests,
-  openconnect,
-  openvpn,
-  pkg-config,
-  polkit,
-  ppp,
-  pptp,
-  readline,
-  vpnc,
-  dnsType ? "internal", # or "systemd-resolved"
-  enableBluetooth ? true,
-  enableClient ? true,
-  enableDatafiles ? true,
-  enableDundee ? true,
-  enableEthernet ? true,
-  enableGadget ? true,
-  enableHh2serialGps ? false,
-  enableIospm ? false,
-  enableL2tp ? false,
-  enableLoopback ? true,
-  enableNeard ? true,
-  enableNetworkManager ? null,
-  enableNetworkManagerCompatibility ?
-    if enableNetworkManager == null then
-      false
-    else
-      lib.warn "enableNetworkManager option is deprecated; use enableNetworkManagerCompatibility instead" enableNetworkManager,
-  enableOfono ? true,
-  enableOpenconnect ? true,
-  enableOpenvpn ? true,
-  enablePacrunner ? true,
-  enablePolkit ? true,
-  enablePptp ? true,
-  enableStats ? true,
-  enableTist ? false,
-  enableTools ? true,
-  enableVpnc ? true,
-  enableWifi ? true,
-  enableWireguard ? true,
-  enableWispr ? true,
-  firewallType ? "iptables", # or "nftables"
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, dbus
+, file
+, glib
+, gnutls
+, iptables
+, libmnl
+, libnftnl
+, # for nftables
+  nixosTests
+, openconnect
+, openvpn
+, pkg-config
+, polkit
+, ppp
+, pptp
+, readline
+, vpnc
+, dnsType ? "internal"
+, # or "systemd-resolved"
+  enableBluetooth ? true
+, enableClient ? true
+, enableDatafiles ? true
+, enableDundee ? true
+, enableEthernet ? true
+, enableGadget ? true
+, enableHh2serialGps ? false
+, enableIospm ? false
+, enableL2tp ? false
+, enableLoopback ? true
+, enableNeard ? true
+, enableNetworkManager ? null
+, enableNetworkManagerCompatibility ? if enableNetworkManager == null then
+    false
+  else
+    lib.warn "enableNetworkManager option is deprecated; use enableNetworkManagerCompatibility instead" enableNetworkManager
+, enableOfono ? true
+, enableOpenconnect ? true
+, enableOpenvpn ? true
+, enablePacrunner ? true
+, enablePolkit ? true
+, enablePptp ? true
+, enableStats ? true
+, enableTist ? false
+, enableTools ? true
+, enableVpnc ? true
+, enableWifi ? true
+, enableWireguard ? true
+, enableWispr ? true
+, firewallType ? "iptables"
+, # or "nftables"
 }:
 
 let

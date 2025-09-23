@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  buildPackages,
-  gettext,
-  meson,
-  ninja,
-  rustc,
-  rustPlatform,
-  cargo,
-  fetchurl,
-  apacheHttpdPackages,
-  pkg-config,
-  glib,
-  libxml2,
-  wrapGAppsNoGuiHook,
-  itstool,
-  gnome,
-  _experimental-update-script-combinators,
-  common-updater-scripts,
+{ stdenv
+, lib
+, buildPackages
+, gettext
+, meson
+, ninja
+, rustc
+, rustPlatform
+, cargo
+, fetchurl
+, apacheHttpdPackages
+, pkg-config
+, glib
+, libxml2
+, wrapGAppsNoGuiHook
+, itstool
+, gnome
+, _experimental-update-script-combinators
+, common-updater-scripts
+,
 }:
 
 let

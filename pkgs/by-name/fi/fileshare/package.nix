@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  pkg-config,
-  git,
-  libmicrohttpd,
+{ stdenv
+, lib
+, fetchFromGitea
+, pkg-config
+, git
+, libmicrohttpd
+,
 }:
 
 stdenv.mkDerivation rec {

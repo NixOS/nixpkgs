@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  appstream-glib,
-  desktop-file-utils,
-  itstool,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  evolution-data-server,
-  feedbackd,
-  glibmm,
-  libsecret,
-  gnome-desktop,
-  gspell,
-  gtk4,
-  gtksourceview5,
-  gst_all_1,
-  libcmatrix,
-  libadwaita,
-  libphonenumber,
-  modemmanager,
-  pidgin,
-  protobuf,
-  sqlite,
-  plugins ? [ ],
+{ lib
+, stdenv
+, fetchFromGitLab
+, appstream-glib
+, desktop-file-utils
+, itstool
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, evolution-data-server
+, feedbackd
+, glibmm
+, libsecret
+, gnome-desktop
+, gspell
+, gtk4
+, gtksourceview5
+, gst_all_1
+, libcmatrix
+, libadwaita
+, libphonenumber
+, modemmanager
+, pidgin
+, protobuf
+, sqlite
+, plugins ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

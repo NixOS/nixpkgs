@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  qt5,
-  libsForQt5,
-  cmake,
-  extra-cmake-modules,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitLab
+, qt5
+, libsForQt5
+, cmake
+, extra-cmake-modules
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

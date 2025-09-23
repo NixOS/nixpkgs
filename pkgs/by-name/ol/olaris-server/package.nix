@@ -1,11 +1,11 @@
-{
-  buildGoModule,
-  fetchFromGitLab,
-  fetchzip,
-  ffmpeg,
-  installShellFiles,
-  lib,
-  makeWrapper,
+{ buildGoModule
+, fetchFromGitLab
+, fetchzip
+, ffmpeg
+, installShellFiles
+, lib
+, makeWrapper
+,
 }:
 
 buildGoModule rec {

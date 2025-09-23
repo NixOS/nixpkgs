@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  pkg-config,
-  libxml2,
-  glib,
-  openssl,
-  zchunk,
-  curl,
-  check,
-  gpgme,
-  libselinux,
-  nix-update-script,
-  doxygen,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, pkg-config
+, libxml2
+, glib
+, openssl
+, zchunk
+, curl
+, check
+, gpgme
+, libselinux
+, nix-update-script
+, doxygen
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

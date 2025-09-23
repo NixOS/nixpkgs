@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  fltk,
-  fontconfig,
-  fmt,
-  rtmidi,
-  libsamplerate,
-  libmpg123,
-  libsndfile,
-  jack2,
-  alsa-lib,
-  libpulseaudio,
-  libXpm,
-  libXrandr,
-  flac,
-  libogg,
-  libvorbis,
-  libopus,
-  nlohmann_json,
-  expat,
-  libGL,
-  curl,
-  webkitgtk_4_1,
-  gtk3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, fltk
+, fontconfig
+, fmt
+, rtmidi
+, libsamplerate
+, libmpg123
+, libsndfile
+, jack2
+, alsa-lib
+, libpulseaudio
+, libXpm
+, libXrandr
+, flac
+, libogg
+, libvorbis
+, libopus
+, nlohmann_json
+, expat
+, libGL
+, curl
+, webkitgtk_4_1
+, gtk3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

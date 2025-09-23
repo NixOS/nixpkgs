@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.pantalaimon-headless;
@@ -18,16 +17,18 @@ let
       };
 
       ${name} = (
-        lib.recursiveUpdate {
-          Homeserver = instanceConfig.homeserver;
-          ListenAddress = instanceConfig.listenAddress;
-          ListenPort = instanceConfig.listenPort;
-          SSL = instanceConfig.ssl;
+        lib.recursiveUpdate
+          {
+            Homeserver = instanceConfig.homeserver;
+            ListenAddress = instanceConfig.listenAddress;
+            ListenPort = instanceConfig.listenPort;
+            SSL = instanceConfig.ssl;
 
-          # Set some settings to prevent user interaction for headless operation
-          IgnoreVerification = true;
-          UseKeyring = false;
-        } instanceConfig.extraSettings
+            # Set some settings to prevent user interaction for headless operation
+            IgnoreVerification = true;
+            UseKeyring = false;
+          }
+          instanceConfig.extraSettings
       );
     };
 

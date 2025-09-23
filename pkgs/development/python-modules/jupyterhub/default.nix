@@ -1,52 +1,48 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  configurable-http-proxy,
-
-  # nativeBuildInputs
-  nodejs,
-  npmHooks,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  alembic,
-  certipy,
-  idna,
-  jinja2,
-  jupyter-events,
-  oauthlib,
-  packaging,
-  pamela,
-  prometheus-client,
-  pydantic,
-  python-dateutil,
-  requests,
-  sqlalchemy,
-  tornado,
-  traitlets,
-  pythonOlder,
-  async-generator,
-  importlib-metadata,
-
-  # tests
-  addBinToPathHook,
-  beautifulsoup4,
-  cryptography,
-  jsonschema,
-  jupyterlab,
-  mock,
-  nbclassic,
-  playwright,
-  pytest-asyncio,
-  pytestCheckHook,
-  requests-mock,
-  versionCheckHook,
-  virtualenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchNpmDeps
+, configurable-http-proxy
+, # nativeBuildInputs
+  nodejs
+, npmHooks
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  alembic
+, certipy
+, idna
+, jinja2
+, jupyter-events
+, oauthlib
+, packaging
+, pamela
+, prometheus-client
+, pydantic
+, python-dateutil
+, requests
+, sqlalchemy
+, tornado
+, traitlets
+, pythonOlder
+, async-generator
+, importlib-metadata
+, # tests
+  addBinToPathHook
+, beautifulsoup4
+, cryptography
+, jsonschema
+, jupyterlab
+, mock
+, nbclassic
+, playwright
+, pytest-asyncio
+, pytestCheckHook
+, requests-mock
+, versionCheckHook
+, virtualenv
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  dbus-glib,
-  fetchurl,
-  glib,
-  gnome-common,
-  libnotify,
-  libtool,
-  libwnck,
-  makeWrapper,
-  pkg-config,
-  gsettings-desktop-schemas,
+{ lib
+, stdenv
+, dbus-glib
+, fetchurl
+, glib
+, gnome-common
+, libnotify
+, libtool
+, libwnck
+, makeWrapper
+, pkg-config
+, gsettings-desktop-schemas
+,
 }:
 
 let

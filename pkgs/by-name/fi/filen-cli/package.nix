@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  makeWrapper,
-  nix-update-script,
-  versionCheckHook,
-  libsecret,
-  nodejs,
-  perl,
-  pkg-config,
+{ stdenv
+, lib
+, buildNpmPackage
+, fetchFromGitHub
+, makeWrapper
+, nix-update-script
+, versionCheckHook
+, libsecret
+, nodejs
+, perl
+, pkg-config
+,
 }:
 
 buildNpmPackage (finalAttrs: {

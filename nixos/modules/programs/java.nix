@@ -1,11 +1,10 @@
 # This module provides JAVA_HOME, with a different way to install java
 # system-wide.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let

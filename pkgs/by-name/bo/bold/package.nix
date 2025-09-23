@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  callPackage,
-  zig_0_14,
-  versionCheckHook,
-  gitUpdater,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, zig_0_14
+, versionCheckHook
+, gitUpdater
+, fetchpatch
+,
 }:
 
 let

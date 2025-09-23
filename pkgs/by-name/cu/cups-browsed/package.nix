@@ -1,14 +1,14 @@
-{
-  autoreconfHook,
-  avahi,
-  cups,
-  fetchFromGitHub,
-  glib,
-  lib,
-  libcupsfilters,
-  libppd,
-  pkg-config,
-  stdenv,
+{ autoreconfHook
+, avahi
+, cups
+, fetchFromGitHub
+, glib
+, lib
+, libcupsfilters
+, libppd
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

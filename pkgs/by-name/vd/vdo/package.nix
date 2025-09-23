@@ -1,12 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  libuuid,
-  lvm2_dmeventd, # <libdevmapper-event.h>
-  zlib,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, libuuid
+, lvm2_dmeventd
+, # <libdevmapper-event.h>
+  zlib
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

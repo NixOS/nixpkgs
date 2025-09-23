@@ -1,8 +1,8 @@
-{
-  fasm,
-  lib,
-  stdenv,
-  fetchFromGitHub,
+{ fasm
+, lib
+, stdenv
+, fetchFromGitHub
+,
 }:
 
 stdenv.mkDerivation (finalAttr: {

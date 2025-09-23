@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytest,
-  readme-renderer,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, readme-renderer
+,
 }:
 
 buildPythonPackage rec {

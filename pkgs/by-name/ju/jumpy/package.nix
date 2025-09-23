@@ -1,18 +1,18 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchpatch2,
-  makeWrapper,
-  pkg-config,
-  zstd,
-  stdenv,
-  alsa-lib,
-  libxkbcommon,
-  udev,
-  vulkan-loader,
-  wayland,
-  xorg,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch2
+, makeWrapper
+, pkg-config
+, zstd
+, stdenv
+, alsa-lib
+, libxkbcommon
+, udev
+, vulkan-loader
+, wayland
+, xorg
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

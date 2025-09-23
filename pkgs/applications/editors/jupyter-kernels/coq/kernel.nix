@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  coq,
+{ lib
+, fetchFromGitHub
+, python3
+, coq
+,
 }:
 
 python3.pkgs.buildPythonPackage rec {

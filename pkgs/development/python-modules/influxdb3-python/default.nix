@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  certifi,
-  fetchFromGitHub,
-  pyarrow,
-  python-dateutil,
-  pythonOlder,
-  reactivex,
-  setuptools,
-  pandas,
-  polars,
-  urllib3,
+{ lib
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
+, pyarrow
+, python-dateutil
+, pythonOlder
+, reactivex
+, setuptools
+, pandas
+, polars
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

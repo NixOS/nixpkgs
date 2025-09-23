@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  davfs2,
-  cmake,
-  extra-cmake-modules,
-  stdenv,
-  pkg-config,
-  kdePackages,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, davfs2
+, cmake
+, extra-cmake-modules
+, stdenv
+, pkg-config
+, kdePackages
+,
 }:
 
 stdenv.mkDerivation rec {

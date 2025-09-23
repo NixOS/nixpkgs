@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  unzip,
-  fetchurl,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, unzip
+, fetchurl
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

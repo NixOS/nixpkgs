@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  chardet,
-  humanfriendly,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
-  smartmontools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, chardet
+, humanfriendly
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, smartmontools
+,
 }:
 
 buildPythonPackage rec {

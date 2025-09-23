@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -37,9 +36,10 @@ in
       group = "root";
       setuid = lib.mkIf cfg.tunMode.setuid true;
       # Taken from https://github.com/SagerNet/sing-box/blob/dev-next/release/config/sing-box.service
-      capabilities = lib.mkIf (
-        !cfg.tunMode.setuid
-      ) "cap_net_admin,cap_net_raw,cap_net_bind_service,cap_sys_ptrace,cap_dac_read_search+ep";
+      capabilities = lib.mkIf
+        (
+          !cfg.tunMode.setuid
+        ) "cap_net_admin,cap_net_raw,cap_net_bind_service,cap_sys_ptrace,cap_dac_read_search+ep";
     };
 
     # avoid resolvectl password prompt popping up three times

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  colorama,
-  exceptiongroup,
-  fetchFromGitHub,
-  flit-core,
-  freezegun,
-  pytest-mypy-plugins,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, stdenv
+, buildPythonPackage
+, colorama
+, exceptiongroup
+, fetchFromGitHub
+, flit-core
+, freezegun
+, pytest-mypy-plugins
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

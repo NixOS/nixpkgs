@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  fuse3,
-  readline,
-  pkg-config,
-  qt6,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, fuse3
+, readline
+, pkg-config
+, qt6
+,
 }:
 
 stdenv.mkDerivation rec {

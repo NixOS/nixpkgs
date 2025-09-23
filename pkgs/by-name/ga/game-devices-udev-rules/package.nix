@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  bash,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitea
+, bash
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

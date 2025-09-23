@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  glib,
-  vala,
-  libcanberra,
-  gobject-introspection,
-  libtool,
-  gnome,
-  meson,
-  ninja,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, vala
+, libcanberra
+, gobject-introspection
+, libtool
+, gnome
+, meson
+, ninja
+,
 }:
 
 stdenv.mkDerivation rec {

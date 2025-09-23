@@ -1,20 +1,20 @@
-{
-  lib,
-  cmake,
-  dbus,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  freetype,
-  gtk3,
-  libsoup_2_4,
-  stdenvNoCC,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  webkitgtk_4_0,
+{ lib
+, cmake
+, dbus
+, fetchFromGitHub
+, fetchYarnDeps
+, freetype
+, gtk3
+, libsoup_2_4
+, stdenvNoCC
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
+, openssl
+, pkg-config
+, rustPlatform
+, webkitgtk_4_0
+,
 }:
 
 let

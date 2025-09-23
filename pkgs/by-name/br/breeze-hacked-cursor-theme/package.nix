@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  inkscape,
-  xcursorgen,
-  accentColor ? null,
-  baseColor ? null,
-  borderColor ? null,
-  logoColor ? null,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, inkscape
+, xcursorgen
+, accentColor ? null
+, baseColor ? null
+, borderColor ? null
+, logoColor ? null
+,
 }:
 
 stdenvNoCC.mkDerivation {

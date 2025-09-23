@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  blueprint-compiler,
-  desktop-file-utils,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wrapGAppsHook4,
-  glib-networking,
-  gst_all_1,
-  gtk4,
-  json-glib,
-  libadwaita,
-  libgee,
-  libsoup_3,
-  libxml2,
-  sqlite,
-  webkitgtk_6_0,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, blueprint-compiler
+, desktop-file-utils
+, meson
+, ninja
+, pkg-config
+, vala
+, wrapGAppsHook4
+, glib-networking
+, gst_all_1
+, gtk4
+, json-glib
+, libadwaita
+, libgee
+, libsoup_3
+, libxml2
+, sqlite
+, webkitgtk_6_0
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

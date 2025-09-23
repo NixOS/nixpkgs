@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  mdformat,
-  mdit-py-plugins,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, mdformat
+, mdit-py-plugins
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

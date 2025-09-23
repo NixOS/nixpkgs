@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  buildNpmPackage,
-  nixosTests,
-  testers,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, buildNpmPackage
+, nixosTests
+, testers
+,
 }:
 
 buildGoModule (finalAttrs: {

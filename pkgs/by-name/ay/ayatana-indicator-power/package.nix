@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  gitUpdater,
-  fetchFromGitHub,
-  nixosTests,
-  cmake,
-  dbus,
-  dbus-test-runner,
-  glib,
-  gtest,
-  intltool,
-  libayatana-common,
-  libnotify,
-  librda,
-  lomiri,
-  pkg-config,
-  python3,
-  systemd,
-  wrapGAppsHook3,
+{ stdenv
+, lib
+, gitUpdater
+, fetchFromGitHub
+, nixosTests
+, cmake
+, dbus
+, dbus-test-runner
+, glib
+, gtest
+, intltool
+, libayatana-common
+, libnotify
+, librda
+, lomiri
+, pkg-config
+, python3
+, systemd
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

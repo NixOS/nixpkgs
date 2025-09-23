@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  amdsmi,
-  rocm-smi,
-  rocm-runtime,
-  libcap,
-  libdrm,
-  grpc,
-  protobuf,
-  openssl,
-  doxygen,
-  graphviz,
-  texliveSmall,
-  gtest,
-  buildDocs ? true,
-  buildTests ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, amdsmi
+, rocm-smi
+, rocm-runtime
+, libcap
+, libdrm
+, grpc
+, protobuf
+, openssl
+, doxygen
+, graphviz
+, texliveSmall
+, gtest
+, buildDocs ? true
+, buildTests ? false
+,
 }:
 
 let

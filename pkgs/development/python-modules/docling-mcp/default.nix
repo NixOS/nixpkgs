@@ -1,31 +1,31 @@
-{
-  lib,
-  accelerate,
-  buildPythonPackage,
-  docling,
-  fetchFromGitHub,
-  hatchling,
-  httpx,
-  llama-index-core,
-  llama-index-embeddings-huggingface,
-  llama-index-embeddings-openai,
-  llama-index-llms-openai-like,
-  llama-index-node-parser-docling,
-  llama-index-readers-docling,
-  llama-index-readers-file,
-  llama-index-vector-stores-milvus,
-  llama-index,
-  llama-stack-client,
-  mcp,
-  ollama,
-  pydantic-settings,
-  pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-dotenv,
-  smolagents,
-  torch,
-  transformers,
+{ lib
+, accelerate
+, buildPythonPackage
+, docling
+, fetchFromGitHub
+, hatchling
+, httpx
+, llama-index-core
+, llama-index-embeddings-huggingface
+, llama-index-embeddings-openai
+, llama-index-llms-openai-like
+, llama-index-node-parser-docling
+, llama-index-readers-docling
+, llama-index-readers-file
+, llama-index-vector-stores-milvus
+, llama-index
+, llama-stack-client
+, mcp
+, ollama
+, pydantic-settings
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, python-dotenv
+, smolagents
+, torch
+, transformers
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pkg-config,
-  setuptools,
-  libjpeg,
-  libpng,
-  libtiff,
-  libwebp,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pkg-config
+, setuptools
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, numpy
+,
 }:
 
 buildPythonPackage rec {

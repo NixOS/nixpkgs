@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  django,
-  stripe,
-  mysqlclient,
-  psycopg2,
-  pytest-django,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, django
+, stripe
+, mysqlclient
+, psycopg2
+, pytest-django
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildOasisPackage,
-  ounit,
-  tcslib,
-  ocaml-sat-solvers,
+{ lib
+, fetchFromGitHub
+, buildOasisPackage
+, ounit
+, tcslib
+, ocaml-sat-solvers
+,
 }:
 
 buildOasisPackage rec {

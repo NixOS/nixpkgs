@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fixtures,
-  jsonschema,
-  openstacksdk,
-  oslotest,
-  pbr,
-  python-glanceclient,
-  setuptools,
-  stestr,
-  subunit,
-  testscenarios,
-  testtools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fixtures
+, jsonschema
+, openstacksdk
+, oslotest
+, pbr
+, python-glanceclient
+, setuptools
+, stestr
+, subunit
+, testscenarios
+, testtools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  enableAvifSupport ? false,
-  stdenv,
-  lib,
-  cmake,
-  pkg-config,
-  boost,
-  openssl,
-  libsecret,
-  libnotify,
-  libavif,
-  kdePackages,
+{ enableAvifSupport ? false
+, stdenv
+, lib
+, cmake
+, pkg-config
+, boost
+, openssl
+, libsecret
+, libnotify
+, libavif
+, kdePackages
+,
 }:
 
 stdenv.mkDerivation {

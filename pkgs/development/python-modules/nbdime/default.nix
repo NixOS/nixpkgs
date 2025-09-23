@@ -1,30 +1,27 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  hatch-jupyter-builder,
-  hatchling,
-  jupyterlab,
-
-  # dependencies
-  colorama,
-  gitpython,
-  jinja2,
-  jupyter-server,
-  jupyter-server-mathjax,
-  nbformat,
-  pygments,
-  requests,
-  tornado,
-
-  # tests
-  gitMinimal,
-  pytest-tornado,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  hatch-jupyter-builder
+, hatchling
+, jupyterlab
+, # dependencies
+  colorama
+, gitpython
+, jinja2
+, jupyter-server
+, jupyter-server-mathjax
+, nbformat
+, pygments
+, requests
+, tornado
+, # tests
+  gitMinimal
+, pytest-tornado
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

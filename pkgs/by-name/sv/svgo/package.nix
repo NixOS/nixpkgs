@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  nodejs,
-  stdenv,
-  yarn-berry_3,
+{ fetchFromGitHub
+, lib
+, makeWrapper
+, nodejs
+, stdenv
+, yarn-berry_3
+,
 }:
 
 let

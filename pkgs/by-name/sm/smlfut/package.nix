@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mlton,
-  mlkit,
-  futhark,
+{ lib
+, stdenv
+, fetchFromGitHub
+, mlton
+, mlkit
+, futhark
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

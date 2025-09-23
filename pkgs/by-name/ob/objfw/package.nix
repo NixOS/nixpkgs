@@ -1,12 +1,12 @@
-{
-  autoconf,
-  autogen,
-  automake,
-  clangStdenv,
-  fetchfossil,
-  lib,
-  objfw,
-  writeTextDir,
+{ autoconf
+, autogen
+, automake
+, clangStdenv
+, fetchfossil
+, lib
+, objfw
+, writeTextDir
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

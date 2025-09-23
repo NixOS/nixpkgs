@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  python312Packages,
-  qt5,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
+{ stdenv
+, lib
+, fetchFromGitHub
+, python312Packages
+, qt5
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 let

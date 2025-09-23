@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pytestCheckHook,
-  pytest-cov-stub,
-  mock,
-  six,
-  isPyPy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pytestCheckHook
+, pytest-cov-stub
+, mock
+, six
+, isPyPy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  perl,
-  pkg-config,
-
-  json_c,
-  libaio,
-  liburcu,
-  linuxHeaders,
-  lvm2,
-  readline,
-  systemd,
-  udevCheckHook,
-  util-linuxMinimal,
-
-  cmocka,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, pkg-config
+, json_c
+, libaio
+, liburcu
+, linuxHeaders
+, lvm2
+, readline
+, systemd
+, udevCheckHook
+, util-linuxMinimal
+, cmocka
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

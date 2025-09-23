@@ -1,24 +1,24 @@
-{
-  appstream-glib,
-  cargo,
-  dbus,
-  desktop-file-utils,
-  fetchFromGitLab,
-  git,
-  glib,
-  gst_all_1,
-  gtk4,
-  lib,
-  libadwaita,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  python3,
-  rustPlatform,
-  rustc,
-  stdenv,
-  wrapGAppsHook4,
+{ appstream-glib
+, cargo
+, dbus
+, desktop-file-utils
+, fetchFromGitLab
+, git
+, glib
+, gst_all_1
+, gtk4
+, lib
+, libadwaita
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, python3
+, rustPlatform
+, rustc
+, stdenv
+, wrapGAppsHook4
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audio-sharing";

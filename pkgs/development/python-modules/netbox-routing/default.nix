@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  netbox,
-  pytestCheckHook,
-  python,
-  django-polymorphic,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, netbox
+, pytestCheckHook
+, python
+, django-polymorphic
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  authres,
-  buildPythonPackage,
-  dkimpy,
-  dnspython,
-  fetchFromGitHub,
-  publicsuffix2,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, authres
+, buildPythonPackage
+, dkimpy
+, dnspython
+, fetchFromGitHub
+, publicsuffix2
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

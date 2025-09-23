@@ -1,8 +1,8 @@
-{
-  lib,
-  callPackage,
-  boost-build,
-  fetchurl,
+{ lib
+, callPackage
+, boost-build
+, fetchurl
+,
 }:
 
 let

@@ -1,23 +1,23 @@
-{
-  aseprite,
-  clangStdenv,
-  expat,
-  fetchFromGitHub,
-  fetchgit,
-  fontconfig,
-  gn,
-  harfbuzzFull,
-  icu,
-  lib,
-  libglvnd,
-  libjpeg,
-  libpng,
-  libwebp,
-  libX11,
-  libgbm,
-  ninja,
-  python3,
-  zlib,
+{ aseprite
+, clangStdenv
+, expat
+, fetchFromGitHub
+, fetchgit
+, fontconfig
+, gn
+, harfbuzzFull
+, icu
+, lib
+, libglvnd
+, libjpeg
+, libpng
+, libwebp
+, libX11
+, libgbm
+, ninja
+, python3
+, zlib
+,
 }:
 
 let

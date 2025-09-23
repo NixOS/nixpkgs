@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  cargo-tauri,
-  nodejs,
-  npmHooks,
-  pkg-config,
-  wrapGAppsHook3,
-  openssl,
-  webkitgtk_4_1,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchNpmDeps
+, cargo-tauri
+, nodejs
+, npmHooks
+, pkg-config
+, wrapGAppsHook3
+, openssl
+, webkitgtk_4_1
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

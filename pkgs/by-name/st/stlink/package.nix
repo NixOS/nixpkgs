@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  libusb1,
-  gtk3,
-  pkg-config,
-  wrapGAppsHook3,
-  withGUI ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, libusb1
+, gtk3
+, pkg-config
+, wrapGAppsHook3
+, withGUI ? false
+,
 }:
 
 let

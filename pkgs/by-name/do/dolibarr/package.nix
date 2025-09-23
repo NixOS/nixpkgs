@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nixosTests,
-  stateDir ? "/var/lib/dolibarr",
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixosTests
+, stateDir ? "/var/lib/dolibarr"
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

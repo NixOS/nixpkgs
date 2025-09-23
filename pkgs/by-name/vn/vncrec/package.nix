@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libX11,
-  xorgproto,
-  imake,
-  gccmakedep,
-  libXt,
-  libXmu,
-  libXaw,
-  libXext,
-  libSM,
-  libICE,
-  libXpm,
-  libXp,
+{ lib
+, stdenv
+, fetchurl
+, libX11
+, xorgproto
+, imake
+, gccmakedep
+, libXt
+, libXmu
+, libXaw
+, libXext
+, libSM
+, libICE
+, libXpm
+, libXp
+,
 }:
 
 stdenv.mkDerivation {

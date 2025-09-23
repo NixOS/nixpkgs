@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  flit-core,
-  typing-extensions,
-  azure-identity,
-  azure-storage-blob,
-  azure-storage-file-datalake,
-  google-cloud-storage,
-  boto3,
-  psutil,
-  pydantic,
-  pytestCheckHook,
-  pytest-cases,
-  pytest-cov-stub,
-  pytest-xdist,
-  python-dotenv,
-  shortuuid,
-  tenacity,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, flit-core
+, typing-extensions
+, azure-identity
+, azure-storage-blob
+, azure-storage-file-datalake
+, google-cloud-storage
+, boto3
+, psutil
+, pydantic
+, pytestCheckHook
+, pytest-cases
+, pytest-cov-stub
+, pytest-xdist
+, python-dotenv
+, shortuuid
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

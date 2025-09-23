@@ -1,7 +1,7 @@
-{
-  lib,
-  mkTclDerivation,
-  fetchzip,
+{ lib
+, mkTclDerivation
+, fetchzip
+,
 }:
 
 mkTclDerivation {

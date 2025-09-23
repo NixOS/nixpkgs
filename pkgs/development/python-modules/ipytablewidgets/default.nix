@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pythonOlder,
-  ipywidgets,
-  jupyter-packaging,
-  jupyterlab,
-  lz4,
-  numpy,
-  pandas,
-  setuptools,
-  traitlets,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, ipywidgets
+, jupyter-packaging
+, jupyterlab
+, lz4
+, numpy
+, pandas
+, setuptools
+, traitlets
+,
 }:
 
 buildPythonPackage rec {

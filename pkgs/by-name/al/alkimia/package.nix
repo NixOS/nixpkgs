@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  doxygen,
-  graphviz,
-  mpir,
-  kdePackages,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, doxygen
+, graphviz
+, mpir
+, kdePackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

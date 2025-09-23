@@ -2,12 +2,12 @@ let
   autoCalledPackages = import ./by-name-overlay.nix ../development/tcl-modules/by-name;
 in
 
-{
-  lib,
-  newScope,
-  tcl,
-  tk,
-  pkgs,
+{ lib
+, newScope
+, tcl
+, tk
+, pkgs
+,
 }:
 
 lib.makeScope newScope (

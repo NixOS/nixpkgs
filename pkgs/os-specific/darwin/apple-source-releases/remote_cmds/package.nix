@@ -1,9 +1,9 @@
-{
-  lib,
-  libedit,
-  mkAppleDerivation,
-  ncurses,
-  pkg-config,
+{ lib
+, libedit
+, mkAppleDerivation
+, ncurses
+, pkg-config
+,
 }:
 
 mkAppleDerivation {

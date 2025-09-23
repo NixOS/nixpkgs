@@ -1,36 +1,36 @@
-{
-  stdenv,
-  clang,
-  callPackage,
-  lib,
-  gn,
-  fetchurl,
-  fetchpatch,
-  xcbuild,
-  python3,
-  ninja,
-  apple-sdk_14,
-  darwinMinVersionHook,
-  git,
-  cpio,
-  pkg-config,
-  glib,
-  alsa-lib,
-  pulseaudio,
-  nasm,
-  brotli,
-  fontconfig,
-  freetype,
-  harfbuzz,
-  icu,
-  jsoncpp,
-  libpng,
-  libwebp,
-  libxml2,
-  libxslt,
-  minizip,
-  ffmpeg_6,
-  writeShellScript,
+{ stdenv
+, clang
+, callPackage
+, lib
+, gn
+, fetchurl
+, fetchpatch
+, xcbuild
+, python3
+, ninja
+, apple-sdk_14
+, darwinMinVersionHook
+, git
+, cpio
+, pkg-config
+, glib
+, alsa-lib
+, pulseaudio
+, nasm
+, brotli
+, fontconfig
+, freetype
+, harfbuzz
+, icu
+, jsoncpp
+, libpng
+, libwebp
+, libxml2
+, libxslt
+, minizip
+, ffmpeg_6
+, writeShellScript
+,
 }:
 let
   sources = callPackage ./sources.nix { };
@@ -169,9 +169,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs =
     (builtins.concatLists (
-      lib.mapAttrsToList (
-        _: library: if (library.package ? dev) then [ library.package.dev ] else [ ]
-      ) gnSystemLibraries
+      lib.mapAttrsToList
+        (
+          _: library: if (library.package ? dev) then [ library.package.dev ] else [ ]
+        )
+        gnSystemLibraries
     ))
     ++ [
       gn

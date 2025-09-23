@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  buildPythonApplication,
-  lib,
-  pandocfilters,
-  six,
+{ fetchFromGitHub
+, buildPythonApplication
+, lib
+, pandocfilters
+, six
+,
 }:
 
 buildPythonApplication rec {

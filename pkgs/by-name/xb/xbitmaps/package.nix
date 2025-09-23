@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  testers,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, testers
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xbitmaps";

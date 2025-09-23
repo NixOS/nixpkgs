@@ -1,26 +1,26 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  python3,
-  lndir,
-  libxcrypt,
-  openssl,
-  openldap,
-  sope,
-  libmemcached,
-  curl,
-  libsodium,
-  libytnef,
-  libzip,
-  pkg-config,
-  nixosTests,
-  oath-toolkit,
-  gnustep-make,
-  gnustep-base,
-  enableActiveSync ? false,
-  libwbxml,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+, makeWrapper
+, python3
+, lndir
+, libxcrypt
+, openssl
+, openldap
+, sope
+, libmemcached
+, curl
+, libsodium
+, libytnef
+, libzip
+, pkg-config
+, nixosTests
+, oath-toolkit
+, gnustep-make
+, gnustep-base
+, enableActiveSync ? false
+, libwbxml
+,
 }:
 
 clangStdenv.mkDerivation rec {

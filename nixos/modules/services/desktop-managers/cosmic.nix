@@ -3,12 +3,11 @@
 # Portions of this code are adapted from nixos-cosmic
 # https://github.com/lilyinstarlight/nixos-cosmic
 
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -72,32 +71,34 @@ in
       "/share/backgrounds"
       "/share/cosmic"
     ];
-    environment.systemPackages = utils.removePackagesByName (
-      corePkgs
-      ++ (
-        with pkgs;
-        [
-          adwaita-icon-theme
-          alsa-utils
-          cosmic-edit
-          cosmic-icons
-          cosmic-player
-          cosmic-randr
-          cosmic-screenshot
-          cosmic-term
-          cosmic-wallpapers
-          hicolor-icon-theme
-          playerctl
-          pop-icon-theme
-          pop-launcher
-          xdg-user-dirs
-        ]
-        ++ lib.optionals config.services.flatpak.enable [
-          # User may have Flatpaks enabled but might not want the `cosmic-store` package.
-          cosmic-store
-        ]
+    environment.systemPackages = utils.removePackagesByName
+      (
+        corePkgs
+        ++ (
+          with pkgs;
+          [
+            adwaita-icon-theme
+            alsa-utils
+            cosmic-edit
+            cosmic-icons
+            cosmic-player
+            cosmic-randr
+            cosmic-screenshot
+            cosmic-term
+            cosmic-wallpapers
+            hicolor-icon-theme
+            playerctl
+            pop-icon-theme
+            pop-launcher
+            xdg-user-dirs
+          ]
+          ++ lib.optionals config.services.flatpak.enable [
+            # User may have Flatpaks enabled but might not want the `cosmic-store` package.
+            cosmic-store
+          ]
+        )
       )
-    ) config.environment.cosmic.excludePackages;
+      config.environment.cosmic.excludePackages;
 
     # Distro-wide defaults for graphical sessions
     services.graphical-desktop.enable = true;

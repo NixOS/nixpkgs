@@ -1,44 +1,44 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  autoreconfHook,
-  makeWrapper,
-  removeReferencesTo,
-  libxcrypt,
-  ncurses,
-  cpio,
-  gperf,
-  cdrkit,
-  qemu,
-  pcre2,
-  augeas,
-  libxml2,
-  acl,
-  libcap,
-  libcap_ng,
-  libconfig,
-  systemdLibs,
-  fuse,
-  yajl,
-  libvirt,
-  hivex,
-  db,
-  gmp,
-  readline,
-  numactl,
-  libapparmor,
-  json_c,
-  getopt,
-  perlPackages,
-  python3,
-  ocamlPackages,
-  libtirpc,
-  appliance ? null,
-  javaSupport ? false,
-  jdk,
-  zstd,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, autoreconfHook
+, makeWrapper
+, removeReferencesTo
+, libxcrypt
+, ncurses
+, cpio
+, gperf
+, cdrkit
+, qemu
+, pcre2
+, augeas
+, libxml2
+, acl
+, libcap
+, libcap_ng
+, libconfig
+, systemdLibs
+, fuse
+, yajl
+, libvirt
+, hivex
+, db
+, gmp
+, readline
+, numactl
+, libapparmor
+, json_c
+, getopt
+, perlPackages
+, python3
+, ocamlPackages
+, libtirpc
+, appliance ? null
+, javaSupport ? false
+, jdk
+, zstd
+,
 }:
 
 assert appliance == null || lib.isDerivation appliance;

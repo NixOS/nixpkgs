@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cargo-tauri,
-  jq,
-  libsoup_3,
-  moreutils,
-  nodejs,
-  openssl,
-  pkg-config,
-  pnpm_9,
-  rustPlatform,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cargo-tauri
+, jq
+, libsoup_3
+, moreutils
+, nodejs
+, openssl
+, pkg-config
+, pnpm_9
+, rustPlatform
+, webkitgtk_4_1
+, wrapGAppsHook3
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

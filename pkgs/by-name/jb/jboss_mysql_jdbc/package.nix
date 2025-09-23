@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  mysql_jdbc,
+{ lib
+, stdenv
+, mysql_jdbc
+,
 }:
 
 stdenv.mkDerivation {

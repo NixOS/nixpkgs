@@ -1,15 +1,15 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  celery,
-  django,
-  fetchFromGitHub,
-  importlib-metadata,
-  python,
-  requests,
-  setuptools,
-  structlog,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, celery
+, django
+, fetchFromGitHub
+, importlib-metadata
+, python
+, requests
+, setuptools
+, structlog
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  gettext,
-  git,
-  qt5,
-  versionCheckHook,
-  copyDesktopItems,
-  imagemagick,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, python3Packages
+, gettext
+, git
+, qt5
+, versionCheckHook
+, copyDesktopItems
+, imagemagick
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,11 +1,11 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libGL,
-  glfw,
-  soil,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, pkg-config
+, libGL
+, glfw
+, soil
+, lib
+,
 }:
 
 stdenv.mkDerivation {

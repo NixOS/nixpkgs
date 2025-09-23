@@ -1,10 +1,9 @@
 # This module provides configuration for the PAM (Pluggable
 # Authentication Modules) system.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -108,10 +107,10 @@ let
               args = lib.concatLists (
                 lib.flip lib.mapAttrsToList config.settings (
                   name: value:
-                  if lib.isBool value then
-                    lib.optional value name
-                  else
-                    lib.optional (value != null) "${name}=${toString value}"
+                    if lib.isBool value then
+                      lib.optional value name
+                    else
+                      lib.optional (value != null) "${name}=${toString value}"
                 )
               );
             };
@@ -668,9 +667,9 @@ let
               let
                 checkPair =
                   a: b:
-                  assert lib.assertMsg (a.order != b.order)
-                    "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})";
-                  b;
+                    assert lib.assertMsg (a.order != b.order)
+                      "security.pam.services.${name}.rules.${type}: rules '${a.name}' and '${b.name}' cannot have the same order value (${toString a.order})";
+                    b;
                 checked = lib.zipListsWith checkPair rules (lib.drop 1 rules);
               in
               lib.take 1 rules ++ checked;
@@ -946,137 +945,137 @@ let
                 }
               ]
               ++
-                # Modules in this block require having the password set in PAM_AUTHTOK.
-                # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
-                # after it succeeds. Certain modules need to run after pam_unix
-                # prompts the user for password so we run it once with 'optional' at an
-                # earlier point and it will run again with 'sufficient' further down.
-                # We use try_first_pass the second time to avoid prompting password twice.
-                #
-                # The same principle applies to systemd-homed
-                (lib.optionals
-                  (
-                    (cfg.unixAuth || config.services.homed.enable)
-                    && (
-                      config.security.pam.enableEcryptfs
-                      || config.security.pam.enableFscrypt
-                      || cfg.pamMount
-                      || cfg.kwallet.enable
-                      || cfg.enableGnomeKeyring
-                      || config.services.intune.enable
-                      || cfg.googleAuthenticator.enable
-                      || cfg.gnupg.enable
-                      || cfg.failDelay.enable
-                      || cfg.duoSecurity.enable
-                      || cfg.zfs
-                    )
+              # Modules in this block require having the password set in PAM_AUTHTOK.
+              # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
+              # after it succeeds. Certain modules need to run after pam_unix
+              # prompts the user for password so we run it once with 'optional' at an
+              # earlier point and it will run again with 'sufficient' further down.
+              # We use try_first_pass the second time to avoid prompting password twice.
+              #
+              # The same principle applies to systemd-homed
+              (lib.optionals
+                (
+                  (cfg.unixAuth || config.services.homed.enable)
+                  && (
+                    config.security.pam.enableEcryptfs
+                    || config.security.pam.enableFscrypt
+                    || cfg.pamMount
+                    || cfg.kwallet.enable
+                    || cfg.enableGnomeKeyring
+                    || config.services.intune.enable
+                    || cfg.googleAuthenticator.enable
+                    || cfg.gnupg.enable
+                    || cfg.failDelay.enable
+                    || cfg.duoSecurity.enable
+                    || cfg.zfs
                   )
-                  [
-                    {
-                      name = "systemd_home-early";
-                      enable = config.services.homed.enable;
-                      control = "optional";
-                      modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
-                    }
-                    {
-                      name = "unix-early";
-                      enable = cfg.unixAuth;
-                      control = "optional";
-                      modulePath = "${package}/lib/security/pam_unix.so";
-                      settings = {
-                        nullok = cfg.allowNullPassword;
-                        inherit (cfg) nodelay;
-                        likeauth = true;
-                      };
-                    }
-                    {
-                      name = "ecryptfs";
-                      enable = config.security.pam.enableEcryptfs;
-                      control = "optional";
-                      modulePath = "${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so";
-                      settings = {
-                        unwrap = true;
-                      };
-                    }
-                    {
-                      name = "fscrypt";
-                      enable = config.security.pam.enableFscrypt;
-                      control = "optional";
-                      modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
-                    }
-                    {
-                      name = "zfs_key";
-                      enable = cfg.zfs;
-                      control = "optional";
-                      modulePath = "${config.boot.zfs.package}/lib/security/pam_zfs_key.so";
-                      settings = {
-                        inherit (config.security.pam.zfs) homes;
-                      };
-                    }
-                    {
-                      name = "mount";
-                      enable = cfg.pamMount;
-                      control = "optional";
-                      modulePath = "${pkgs.pam_mount}/lib/security/pam_mount.so";
-                      settings = {
-                        disable_interactive = true;
-                      };
-                    }
-                    {
-                      name = "kwallet";
-                      enable = cfg.kwallet.enable;
-                      control = "optional";
-                      modulePath = "${cfg.kwallet.package}/lib/security/pam_kwallet5.so";
-                    }
-                    {
-                      name = "gnome_keyring";
-                      enable = cfg.enableGnomeKeyring;
-                      control = "optional";
-                      modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so";
-                    }
-                    {
-                      name = "intune";
-                      enable = config.services.intune.enable;
-                      control = "optional";
-                      modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so";
-                    }
-                    {
-                      name = "gnupg";
-                      enable = cfg.gnupg.enable;
-                      control = "optional";
-                      modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so";
-                      settings = {
-                        store-only = cfg.gnupg.storeOnly;
-                      };
-                    }
-                    {
-                      name = "faildelay";
-                      enable = cfg.failDelay.enable;
-                      control = "optional";
-                      modulePath = "${package}/lib/security/pam_faildelay.so";
-                      settings = {
-                        inherit (cfg.failDelay) delay;
-                      };
-                    }
-                    {
-                      name = "google_authenticator";
-                      enable = cfg.googleAuthenticator.enable;
-                      control = "required";
-                      modulePath = "${pkgs.google-authenticator}/lib/security/pam_google_authenticator.so";
-                      settings = {
-                        no_increment_hotp = true;
-                        forward_pass = cfg.googleAuthenticator.forwardPass;
-                        nullok = cfg.googleAuthenticator.allowNullOTP;
-                      };
-                    }
-                    {
-                      name = "duo";
-                      enable = cfg.duoSecurity.enable;
-                      control = "required";
-                      modulePath = "${pkgs.duo-unix}/lib/security/pam_duo.so";
-                    }
-                  ]
                 )
+                [
+                  {
+                    name = "systemd_home-early";
+                    enable = config.services.homed.enable;
+                    control = "optional";
+                    modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
+                  }
+                  {
+                    name = "unix-early";
+                    enable = cfg.unixAuth;
+                    control = "optional";
+                    modulePath = "${package}/lib/security/pam_unix.so";
+                    settings = {
+                      nullok = cfg.allowNullPassword;
+                      inherit (cfg) nodelay;
+                      likeauth = true;
+                    };
+                  }
+                  {
+                    name = "ecryptfs";
+                    enable = config.security.pam.enableEcryptfs;
+                    control = "optional";
+                    modulePath = "${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so";
+                    settings = {
+                      unwrap = true;
+                    };
+                  }
+                  {
+                    name = "fscrypt";
+                    enable = config.security.pam.enableFscrypt;
+                    control = "optional";
+                    modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                  }
+                  {
+                    name = "zfs_key";
+                    enable = cfg.zfs;
+                    control = "optional";
+                    modulePath = "${config.boot.zfs.package}/lib/security/pam_zfs_key.so";
+                    settings = {
+                      inherit (config.security.pam.zfs) homes;
+                    };
+                  }
+                  {
+                    name = "mount";
+                    enable = cfg.pamMount;
+                    control = "optional";
+                    modulePath = "${pkgs.pam_mount}/lib/security/pam_mount.so";
+                    settings = {
+                      disable_interactive = true;
+                    };
+                  }
+                  {
+                    name = "kwallet";
+                    enable = cfg.kwallet.enable;
+                    control = "optional";
+                    modulePath = "${cfg.kwallet.package}/lib/security/pam_kwallet5.so";
+                  }
+                  {
+                    name = "gnome_keyring";
+                    enable = cfg.enableGnomeKeyring;
+                    control = "optional";
+                    modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+                  }
+                  {
+                    name = "intune";
+                    enable = config.services.intune.enable;
+                    control = "optional";
+                    modulePath = "${pkgs.intune-portal}/lib/security/pam_intune.so";
+                  }
+                  {
+                    name = "gnupg";
+                    enable = cfg.gnupg.enable;
+                    control = "optional";
+                    modulePath = "${pkgs.pam_gnupg}/lib/security/pam_gnupg.so";
+                    settings = {
+                      store-only = cfg.gnupg.storeOnly;
+                    };
+                  }
+                  {
+                    name = "faildelay";
+                    enable = cfg.failDelay.enable;
+                    control = "optional";
+                    modulePath = "${package}/lib/security/pam_faildelay.so";
+                    settings = {
+                      inherit (cfg.failDelay) delay;
+                    };
+                  }
+                  {
+                    name = "google_authenticator";
+                    enable = cfg.googleAuthenticator.enable;
+                    control = "required";
+                    modulePath = "${pkgs.google-authenticator}/lib/security/pam_google_authenticator.so";
+                    settings = {
+                      no_increment_hotp = true;
+                      forward_pass = cfg.googleAuthenticator.forwardPass;
+                      nullok = cfg.googleAuthenticator.allowNullOTP;
+                    };
+                  }
+                  {
+                    name = "duo";
+                    enable = cfg.duoSecurity.enable;
+                    control = "required";
+                    modulePath = "${pkgs.duo-unix}/lib/security/pam_duo.so";
+                  }
+                ]
+              )
               ++ [
                 {
                   name = "systemd_home";
@@ -1502,15 +1501,17 @@ let
   makeLimitsConf =
     limits:
     pkgs.writeText "limits.conf" (
-      lib.concatMapStrings (
-        {
-          domain,
-          type,
-          item,
-          value,
-        }:
-        "${domain} ${type} ${item} ${toString value}\n"
-      ) limits
+      lib.concatMapStrings
+        (
+          { domain
+          , type
+          , item
+          , value
+          ,
+          }:
+          "${domain} ${type} ${item} ${toString value}\n"
+        )
+        limits
     );
 
   limitsType =
@@ -2271,16 +2272,16 @@ in
           See https://github.com/NixOS/nixpkgs/issues/31611
         ''
       ++
-        lib.optional
-          (
-            with config.security.pam.rssh;
-            enable && settings.auth_key_file or null != null && settings.authorized_keys_command or null != null
-          )
-          ''
-            security.pam.rssh.settings.auth_key_file will be ignored as
-            security.pam.rssh.settings.authorized_keys_command has been specified.
-            Explictly set the former to null to silence this warning.
-          '';
+      lib.optional
+        (
+          with config.security.pam.rssh;
+          enable && settings.auth_key_file or null != null && settings.authorized_keys_command or null != null
+        )
+        ''
+          security.pam.rssh.settings.auth_key_file will be ignored as
+          security.pam.rssh.settings.authorized_keys_command has been specified.
+          Explictly set the former to null to silence this warning.
+        '';
 
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.
@@ -2375,9 +2376,10 @@ in
     };
 
     security.apparmor.includes."abstractions/pam" =
-      lib.concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n") (
-        lib.attrNames enabledServices
-      )
+      lib.concatMapStrings (name: "r ${config.environment.etc."pam.d/${name}".source},\n")
+        (
+          lib.attrNames enabledServices
+        )
       + (
         with lib;
         pipe enabledServices [

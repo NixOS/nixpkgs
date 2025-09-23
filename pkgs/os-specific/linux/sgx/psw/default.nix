@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  cmake,
-  coreutils,
-  curl,
-  file,
-  git,
-  makeWrapper,
-  nixosTests,
-  protobuf,
-  python3,
-  ocaml,
-  ocamlPackages,
-  which,
-  debug ? false,
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, cmake
+, coreutils
+, curl
+, file
+, git
+, makeWrapper
+, nixosTests
+, protobuf
+, python3
+, ocaml
+, ocamlPackages
+, which
+, debug ? false
+,
 }:
 stdenv.mkDerivation rec {
   pname = "sgx-psw";

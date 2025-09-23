@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  wrapGAppsHook3,
-  glib,
-  intltool,
-  gtk3,
-  gtksourceview4,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, wrapGAppsHook3
+, glib
+, intltool
+, gtk3
+, gtksourceview4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

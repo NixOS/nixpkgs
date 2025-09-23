@@ -1,20 +1,20 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitLab,
-  clang,
-  libclang,
-  libllvm,
-  flint3,
-  mpfr,
-  pplite,
-  ocaml,
-  menhir,
-  apron,
-  arg-complete,
-  camlidl,
-  yojson,
-  zarith,
+{ lib
+, buildDunePackage
+, fetchFromGitLab
+, clang
+, libclang
+, libllvm
+, flint3
+, mpfr
+, pplite
+, ocaml
+, menhir
+, apron
+, arg-complete
+, camlidl
+, yojson
+, zarith
+,
 }:
 
 buildDunePackage rec {

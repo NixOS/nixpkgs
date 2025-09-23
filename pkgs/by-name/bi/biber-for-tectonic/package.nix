@@ -13,11 +13,11 @@
   user experience of tectonic in nixpkgs.
 */
 
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  biber,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, biber
+,
 }:
 
 let

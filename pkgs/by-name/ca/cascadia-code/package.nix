@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  useVariableFont ? false,
+{ lib
+, stdenvNoCC
+, fetchzip
+, useVariableFont ? false
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

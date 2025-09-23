@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  kdePackages,
-  kdsingleapplication,
-  zxing-cpp,
-  qxmpp,
-  gst_all_1,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitLab
+, cmake
+, extra-cmake-modules
+, pkg-config
+, kdePackages
+, kdsingleapplication
+, zxing-cpp
+, qxmpp
+, gst_all_1
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

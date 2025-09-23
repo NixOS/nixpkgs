@@ -1,8 +1,8 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-  systemdStage1 ? false,
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+, systemdStage1 ? false
+,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -12,15 +12,15 @@ let
 
   # The configuration to install.
   makeConfig =
-    {
-      bootLoader,
-      grubDevice,
-      grubIdentifier,
-      grubUseEfi,
-      extraConfig,
-      forceGrubReinstallCount ? 0,
-      withTestInstrumentation ? true,
-      clevisTest,
+    { bootLoader
+    , grubDevice
+    , grubIdentifier
+    , grubUseEfi
+    , extraConfig
+    , forceGrubReinstallCount ? 0
+    , withTestInstrumentation ? true
+    , clevisTest
+    ,
     }:
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
@@ -95,21 +95,21 @@ let
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
   testScriptFun =
-    {
-      bootLoader,
-      createPartitions,
-      grubDevice,
-      grubUseEfi,
-      grubIdentifier,
-      postInstallCommands,
-      postBootCommands,
-      extraConfig,
-      testSpecialisationConfig,
-      testFlakeSwitch,
-      testByAttrSwitch,
-      clevisTest,
-      clevisFallbackTest,
-      disableFileSystems,
+    { bootLoader
+    , createPartitions
+    , grubDevice
+    , grubUseEfi
+    , grubIdentifier
+    , postInstallCommands
+    , postBootCommands
+    , extraConfig
+    , testSpecialisationConfig
+    , testFlakeSwitch
+    , testByAttrSwitch
+    , clevisTest
+    , clevisFallbackTest
+    , disableFileSystems
+    ,
     }:
     let
       startTarget = ''
@@ -620,26 +620,27 @@ let
 
   makeInstallerTest =
     name:
-    {
-      createPartitions,
-      postInstallCommands ? "",
-      postBootCommands ? "",
-      extraConfig ? "",
-      extraInstallerConfig ? { },
-      bootLoader ? "grub", # either "grub" or "systemd-boot"
-      grubDevice ? "/dev/vda",
-      grubIdentifier ? "uuid",
-      grubUseEfi ? false,
-      enableOCR ? false,
-      meta ? { },
-      passthru ? { },
-      testSpecialisationConfig ? false,
-      testFlakeSwitch ? false,
-      testByAttrSwitch ? false,
-      clevisTest ? false,
-      clevisFallbackTest ? false,
-      disableFileSystems ? false,
-      selectNixPackage ? pkgs: pkgs.nixVersions.stable,
+    { createPartitions
+    , postInstallCommands ? ""
+    , postBootCommands ? ""
+    , extraConfig ? ""
+    , extraInstallerConfig ? { }
+    , bootLoader ? "grub"
+    , # either "grub" or "systemd-boot"
+      grubDevice ? "/dev/vda"
+    , grubIdentifier ? "uuid"
+    , grubUseEfi ? false
+    , enableOCR ? false
+    , meta ? { }
+    , passthru ? { }
+    , testSpecialisationConfig ? false
+    , testFlakeSwitch ? false
+    , testByAttrSwitch ? false
+    , clevisTest ? false
+    , clevisFallbackTest ? false
+    , disableFileSystems ? false
+    , selectNixPackage ? pkgs: pkgs.nixVersions.stable
+    ,
     }:
     let
       isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
@@ -940,8 +941,8 @@ let
   };
 
   mkClevisBcachefsTest =
-    {
-      fallback ? false,
+    { fallback ? false
+    ,
     }:
     makeInstallerTest "clevis-bcachefs${optionalString fallback "-fallback"}" {
       clevisTest = true;
@@ -987,8 +988,8 @@ let
     };
 
   mkClevisLuksTest =
-    {
-      fallback ? false,
+    { fallback ? false
+    ,
     }:
     makeInstallerTest "clevis-luks${optionalString fallback "-fallback"}" {
       clevisTest = true;
@@ -1035,9 +1036,9 @@ let
     };
 
   mkClevisZfsTest =
-    {
-      fallback ? false,
-      parentDataset ? false,
+    { fallback ? false
+    , parentDataset ? false
+    ,
     }:
     makeInstallerTest
       "clevis-zfs${optionalString parentDataset "-parent-dataset"}${optionalString fallback "-fallback"}"
@@ -1725,7 +1726,7 @@ in
     fallback = true;
   };
 }
-// optionalAttrs systemdStage1 {
+  // optionalAttrs systemdStage1 {
   stratisRoot = makeInstallerTest "stratisRoot" {
     createPartitions = ''
       installer.succeed(
@@ -1771,8 +1772,7 @@ in
           x64 = "4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709";
           arm = "69DAD710-2CE4-4E3C-B16C-21A1D49ABED3";
           aa64 = "B921B045-1DF0-41C3-AF44-4C6F280D3FAE";
-        }
-        .${pkgs.stdenv.hostPlatform.efiArch};
+        }.${pkgs.stdenv.hostPlatform.efiArch};
     in
     makeInstallerTest "gptAutoRoot" {
       disableFileSystems = true;

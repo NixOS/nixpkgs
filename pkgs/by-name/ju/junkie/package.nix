@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  libpcap,
-  guile_2_2,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, libpcap
+, guile_2_2
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

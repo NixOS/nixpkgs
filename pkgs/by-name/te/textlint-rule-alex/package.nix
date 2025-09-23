@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  textlint,
-  textlint-rule-alex,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, textlint
+, textlint-rule-alex
+,
 }:
 
 buildNpmPackage rec {

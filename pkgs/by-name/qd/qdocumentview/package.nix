@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  kdePackages,
-  meson,
-  ninja,
-  pkg-config,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitLab
+, kdePackages
+, meson
+, ninja
+, pkg-config
+, cmake
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

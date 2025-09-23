@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  chardet,
-  diff-match-patch,
-  django,
-  fetchFromGitHub,
-  psycopg2,
-  python,
-  pytz,
-  setuptools-scm,
-  tablib,
+{ lib
+, buildPythonPackage
+, chardet
+, diff-match-patch
+, django
+, fetchFromGitHub
+, psycopg2
+, python
+, pytz
+, setuptools-scm
+, tablib
+,
 }:
 
 buildPythonPackage rec {

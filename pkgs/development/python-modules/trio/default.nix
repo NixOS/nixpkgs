@@ -1,28 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  stdenv,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  attrs,
-  exceptiongroup,
-  idna,
-  outcome,
-  sniffio,
-  sortedcontainers,
-
-  # tests
-  astor,
-  jedi,
-  pyopenssl,
-  pytestCheckHook,
-  pytest-trio,
-  trustme,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, stdenv
+, # build-system
+  setuptools
+, # dependencies
+  attrs
+, exceptiongroup
+, idna
+, outcome
+, sniffio
+, sortedcontainers
+, # tests
+  astor
+, jedi
+, pyopenssl
+, pytestCheckHook
+, pytest-trio
+, trustme
+,
 }:
 
 let

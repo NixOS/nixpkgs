@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libosmocore,
-  libosmoabis,
-  libosmo-netif,
-  osmo-hlr,
-  osmo-ggsn,
-  c-ares,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libosmocore
+, libosmoabis
+, libosmo-netif
+, osmo-hlr
+, osmo-ggsn
+, c-ares
+,
 }:
 
 stdenv.mkDerivation rec {

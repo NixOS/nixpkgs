@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libsndfile,
-  libsamplerate,
-  flex,
-  bison,
-  boost,
-  gettext,
-  portaudio,
-  alsa-lib ? null,
-  libpulseaudio ? null,
-  libjack2 ? null,
-  liblo ? null,
-  ladspa-sdk ? null,
-  fluidsynth ? null,
-  # , gmm ? null  # opcodes don't build with gmm 5.1
-  eigen ? null,
-  curl ? null,
-  tcltk ? null,
-  fltk ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libsndfile
+, libsamplerate
+, flex
+, bison
+, boost
+, gettext
+, portaudio
+, alsa-lib ? null
+, libpulseaudio ? null
+, libjack2 ? null
+, liblo ? null
+, ladspa-sdk ? null
+, fluidsynth ? null
+, # , gmm ? null  # opcodes don't build with gmm 5.1
+  eigen ? null
+, curl ? null
+, tcltk ? null
+, fltk ? null
+,
 }:
 
 stdenv.mkDerivation {
@@ -41,9 +41,10 @@ stdenv.mkDerivation {
   ] # fails to find Score.hpp
   ++ lib.optional stdenv.hostPlatform.isDarwin "-DCS_FRAMEWORK_DEST=${placeholder "out"}/lib"
   # Ignore gettext in CMAKE_PREFIX_PATH on cross to prevent find_program picking up the wrong gettext
-  ++ lib.optional (
-    stdenv.hostPlatform != stdenv.buildPlatform
-  ) "-DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin";
+  ++ lib.optional
+    (
+      stdenv.hostPlatform != stdenv.buildPlatform
+    ) "-DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin";
 
   nativeBuildInputs = [
     cmake

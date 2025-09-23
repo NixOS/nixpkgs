@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  # build-system
-  setuptools,
-  llm,
-  # dependencies
-  prompt-toolkit,
-  pygments,
-  # tests
-  pytestCheckHook,
-  llm-cmd,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, llm
+, # dependencies
+  prompt-toolkit
+, pygments
+, # tests
+  pytestCheckHook
+, llm-cmd
+,
 }:
 
 buildPythonPackage rec {

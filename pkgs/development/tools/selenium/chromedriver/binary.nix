@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  unzip,
-  testers,
-  chromedriver,
+{ lib
+, stdenv
+, fetchzip
+, unzip
+, testers
+, chromedriver
+,
 }:
 
 let
   upstream-info =
-    (lib.importJSON ../../../../applications/networking/browsers/chromium/info.json)
-    .chromium.chromedriver;
+    (lib.importJSON ../../../../applications/networking/browsers/chromium/info.json).chromium.chromedriver;
 
   # See ./source.nix for Linux
   allSpecs = {

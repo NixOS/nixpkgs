@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromSourcehut,
-  pkg-config,
-  meson,
-  ninja,
-  lv2,
-  lilv,
-  curl,
-  elfutils,
-  xorg,
+{ stdenv
+, lib
+, fetchFromSourcehut
+, pkg-config
+, meson
+, ninja
+, lv2
+, lilv
+, curl
+, elfutils
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

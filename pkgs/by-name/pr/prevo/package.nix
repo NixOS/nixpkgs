@@ -1,10 +1,10 @@
-{
-  lib,
-  symlinkJoin,
-  man,
-  prevo-tools,
-  prevo-data,
-  makeWrapper,
+{ lib
+, symlinkJoin
+, man
+, prevo-tools
+, prevo-data
+, makeWrapper
+,
 }:
 
 symlinkJoin rec {

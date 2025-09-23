@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitiles,
-  pkg-config,
-  libuuid,
-  openssl,
-  libyaml,
-  xz,
+{ lib
+, stdenv
+, fetchFromGitiles
+, pkg-config
+, libuuid
+, openssl
+, libyaml
+, xz
+,
 }:
 
 stdenv.mkDerivation {

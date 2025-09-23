@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  zlib,
-  pcre,
-  xorg,
-  libjpeg,
-  libtiff,
-  libpng,
-  gtk2,
-  libpaper,
-  makeWrapper,
-  ghostscript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, zlib
+, pcre
+, xorg
+, libjpeg
+, libtiff
+, libpng
+, gtk2
+, libpaper
+, makeWrapper
+, ghostscript
+,
 }:
 
 stdenv.mkDerivation rec {

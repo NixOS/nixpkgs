@@ -1,22 +1,22 @@
-{
-  lib,
-  ahocorasick-rs,
-  babel,
-  banal,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fingerprints,
-  hatchling,
-  jellyfish,
-  jinja2,
-  normality,
-  orjson,
-  pytestCheckHook,
-  python-stdnum,
-  pytz,
-  pyyaml,
-  rapidfuzz,
-  typing-extensions,
+{ lib
+, ahocorasick-rs
+, babel
+, banal
+, buildPythonPackage
+, fetchFromGitHub
+, fingerprints
+, hatchling
+, jellyfish
+, jinja2
+, normality
+, orjson
+, pytestCheckHook
+, python-stdnum
+, pytz
+, pyyaml
+, rapidfuzz
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

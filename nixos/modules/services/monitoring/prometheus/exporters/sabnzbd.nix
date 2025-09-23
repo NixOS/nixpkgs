@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  options,
-  ...
+{ config
+, lib
+, pkgs
+, options
+, ...
 }:
 
 let
@@ -42,10 +41,12 @@ in
   serviceOpts =
     let
       servers = lib.zipAttrs cfg.servers;
-      credentials = lib.imap0 (i: v: {
-        name = "apikey-${toString i}";
-        path = v;
-      }) servers.apiKeyFile;
+      credentials = lib.imap0
+        (i: v: {
+          name = "apikey-${toString i}";
+          path = v;
+        })
+        servers.apiKeyFile;
     in
     {
       serviceConfig.LoadCredential = builtins.map ({ name, path }: "${name}:${path}") credentials;

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  installShellFiles,
-  versionCheckHook,
+{ lib
+, buildGoModule
+, buildNpmPackage
+, fetchFromGitHub
+, nix-update-script
+, installShellFiles
+, versionCheckHook
+,
 }:
 
 let

@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hypothesis,
-  packaging,
-  parameterized,
-  msgpack,
-  pyserial,
-  pytest-cov-stub,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  typing-extensions,
-  wrapt,
-  uptime,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, hypothesis
+, packaging
+, parameterized
+, msgpack
+, pyserial
+, pytest-cov-stub
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, typing-extensions
+, wrapt
+, uptime
+,
 }:
 
 buildPythonPackage rec {

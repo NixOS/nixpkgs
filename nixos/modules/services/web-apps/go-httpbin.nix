@@ -1,16 +1,17 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
   cfg = config.services.go-httpbin;
 
-  environment = lib.mapAttrs (
-    _: value: if lib.isBool value then lib.boolToString value else toString value
-  ) cfg.settings;
+  environment = lib.mapAttrs
+    (
+      _: value: if lib.isBool value then lib.boolToString value else toString value
+    )
+    cfg.settings;
 in
 
 {

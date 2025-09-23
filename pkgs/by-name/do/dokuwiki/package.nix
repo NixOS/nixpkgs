@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeText,
-  nixosTests,
-  dokuwiki,
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeText
+, nixosTests
+, dokuwiki
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,14 +58,14 @@ stdenv.mkDerivation rec {
 
   passthru = {
     combine =
-      {
-        basePackage ? dokuwiki,
-        plugins ? [ ],
-        templates ? [ ],
-        localConfig ? null,
-        pluginsConfig ? null,
-        aclConfig ? null,
-        pname ? (p: "${p.pname}-combined"),
+      { basePackage ? dokuwiki
+      , plugins ? [ ]
+      , templates ? [ ]
+      , localConfig ? null
+      , pluginsConfig ? null
+      , aclConfig ? null
+      , pname ? (p: "${p.pname}-combined")
+      ,
       }:
       let
         isNotEmpty =

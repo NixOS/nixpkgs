@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  cython,
-  libjxl,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, cython
+, libjxl
+,
 }:
 
 buildPythonPackage rec {

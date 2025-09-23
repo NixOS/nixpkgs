@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pythonRelaxDepsHook,
-  pydub,
-  pysocks,
-  requests,
-  selenium,
-  speechrecognition,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pythonRelaxDepsHook
+, pydub
+, pysocks
+, requests
+, selenium
+, speechrecognition
+,
 }:
 
 buildPythonPackage rec {

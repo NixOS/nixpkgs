@@ -1,17 +1,17 @@
-{
-  lib,
-  aliyun-python-sdk-core,
-  aliyun-python-sdk-kms,
-  aliyun-python-sdk-sts,
-  buildPythonPackage,
-  crcmod,
-  fetchFromGitHub,
-  mock,
-  pycryptodome,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  six,
+{ lib
+, aliyun-python-sdk-core
+, aliyun-python-sdk-kms
+, aliyun-python-sdk-sts
+, buildPythonPackage
+, crcmod
+, fetchFromGitHub
+, mock
+, pycryptodome
+, pytestCheckHook
+, pythonOlder
+, requests
+, six
+,
 }:
 
 buildPythonPackage rec {

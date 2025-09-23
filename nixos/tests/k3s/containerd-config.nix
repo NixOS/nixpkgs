@@ -1,10 +1,9 @@
 # A test that containerdConfigTemplate settings get written to containerd/config.toml
 import ../make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    k3s,
-    ...
+  { pkgs
+  , lib
+  , k3s
+  , ...
   }:
   let
     nodeName = "test";

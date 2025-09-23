@@ -1,15 +1,16 @@
-{
-  lib,
-  stdenv,
-  python3,
-  fetchFromGitHub,
-  fetchpatch,
-  withXmpp ? false, # sleekxmpp doesn't support python 3.10, see https://github.com/dschep/ntfy/issues/266
-  withMatrix ? true,
-  withSlack ? true,
-  withEmoji ? true,
-  withPid ? true,
-  withDbus ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+, fetchpatch
+, withXmpp ? false
+, # sleekxmpp doesn't support python 3.10, see https://github.com/dschep/ntfy/issues/266
+  withMatrix ? true
+, withSlack ? true
+, withEmoji ? true
+, withPid ? true
+, withDbus ? stdenv.hostPlatform.isLinux
+,
 }:
 
 let

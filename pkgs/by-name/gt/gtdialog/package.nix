@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cdk,
-  unzip,
-  gtk2,
-  glib,
-  ncurses,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, cdk
+, unzip
+, gtk2
+, glib
+, ncurses
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

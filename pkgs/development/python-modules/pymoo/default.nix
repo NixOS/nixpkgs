@@ -1,28 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  setuptools,
-
-  # dependencies
-  autograd,
-  cma,
-  deprecated,
-  dill,
-  matplotlib,
-  numpy,
-  scipy,
-
-  # tests
-  pytestCheckHook,
-  nbformat,
-  notebook,
-  numba,
-  pythonAtLeast,
-  writeText,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, setuptools
+, # dependencies
+  autograd
+, cma
+, deprecated
+, dill
+, matplotlib
+, numpy
+, scipy
+, # tests
+  pytestCheckHook
+, nbformat
+, notebook
+, numba
+, pythonAtLeast
+, writeText
+,
 }:
 
 let

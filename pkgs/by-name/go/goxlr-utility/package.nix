@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  installShellFiles,
-  pkg-config,
-  libpulseaudio,
-  dbus,
-  openssl,
-  speechd-minimal,
-  udevCheckHook,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, pkg-config
+, libpulseaudio
+, dbus
+, openssl
+, speechd-minimal
+, udevCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

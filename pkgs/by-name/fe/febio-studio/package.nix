@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  zlib,
-  libGLU,
-  qt6Packages,
-  febio,
-  glew,
-  fetchpatch,
-  sshSupport ? true,
-  openssl,
-  libssh,
-  tetgenSupport ? true,
-  tetgen,
-  ffmpegSupport ? true,
-  ffmpeg,
-  dicomSupport ? false,
-  dcmtk,
-  withModelRepo ? true,
-  withCadFeatures ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, zlib
+, libGLU
+, qt6Packages
+, febio
+, glew
+, fetchpatch
+, sshSupport ? true
+, openssl
+, libssh
+, tetgenSupport ? true
+, tetgen
+, ffmpegSupport ? true
+, ffmpeg
+, dicomSupport ? false
+, dcmtk
+, withModelRepo ? true
+, withCadFeatures ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

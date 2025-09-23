@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  asciidoctor,
-  gawk,
-  gnused,
-  runtimeShell,
-  binlore,
-  esh,
+{ lib
+, stdenv
+, fetchFromGitHub
+, asciidoctor
+, gawk
+, gnused
+, runtimeShell
+, binlore
+, esh
+,
 }:
 
 stdenv.mkDerivation rec {

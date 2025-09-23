@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkLibretroCore,
-  xorg,
+{ lib
+, fetchFromGitHub
+, mkLibretroCore
+, xorg
+,
 }:
 mkLibretroCore {
   core = "bsnes-hd-beta";

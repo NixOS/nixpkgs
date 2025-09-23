@@ -1,20 +1,20 @@
-{
-  lib,
-  async-timeout,
-  beartype,
-  buildPythonPackage,
-  setuptools,
-  versioneer,
-  deprecated,
-  fetchFromGitHub,
-  packaging,
-  pympler,
-  pytest-asyncio,
-  pytest-lazy-fixtures,
-  pytestCheckHook,
-  redis,
-  typing-extensions,
-  wrapt,
+{ lib
+, async-timeout
+, beartype
+, buildPythonPackage
+, setuptools
+, versioneer
+, deprecated
+, fetchFromGitHub
+, packaging
+, pympler
+, pytest-asyncio
+, pytest-lazy-fixtures
+, pytestCheckHook
+, redis
+, typing-extensions
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  tailwindcss,
-  oniguruma,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, tailwindcss
+, oniguruma
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

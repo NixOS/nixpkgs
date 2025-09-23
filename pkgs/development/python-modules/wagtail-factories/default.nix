@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  callPackage,
-  factory-boy,
-  fetchFromGitHub,
-  setuptools,
-  wagtail,
+{ lib
+, buildPythonPackage
+, callPackage
+, factory-boy
+, fetchFromGitHub
+, setuptools
+, wagtail
+,
 }:
 
 buildPythonPackage rec {

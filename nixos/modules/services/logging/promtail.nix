@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 with lib;
 let
@@ -11,11 +10,11 @@ let
   format = pkgs.formats.json { };
   prettyJSON =
     conf:
-    with lib;
-    pipe conf [
-      (flip removeAttrs [ "_module" ])
-      (format.generate "promtail-config.json")
-    ];
+      with lib;
+      pipe conf [
+        (flip removeAttrs [ "_module" ])
+        (format.generate "promtail-config.json")
+      ];
 
   allowSystemdJournal =
     cfg.configuration ? scrape_configs && lib.any (v: v ? journal) cfg.configuration.scrape_configs;

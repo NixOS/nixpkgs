@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  boost,
-  robin-map,
-  catch2_3,
-  fmt,
-  xbyak,
-  zydis,
-  nix-update-script,
-  azahar,
-  darwin,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, ninja
+, boost
+, robin-map
+, catch2_3
+, fmt
+, xbyak
+, zydis
+, nix-update-script
+, azahar
+, darwin
+,
 }:
 let
   oaknut = stdenv.mkDerivation {

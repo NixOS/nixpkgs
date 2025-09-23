@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  darwin,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  lima,
-  makeWrapper,
-  qemu,
-  testers,
-  colima,
+{ lib
+, stdenv
+, darwin
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, lima
+, makeWrapper
+, qemu
+, testers
+, colima
+,
 }:
 
 buildGoModule rec {

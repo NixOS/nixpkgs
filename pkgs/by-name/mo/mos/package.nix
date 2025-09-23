@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  undmg,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchurl
+, undmg
+, nix-update-script
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mos";

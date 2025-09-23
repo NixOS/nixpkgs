@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenvNoCC,
-  gitRepo,
-  cacert,
-  copyPathsToStore,
+{ lib
+, stdenvNoCC
+, gitRepo
+, cacert
+, copyPathsToStore
+,
 }:
 lib.fetchers.withNormalizedHash { } (
-  {
-    name,
-    manifest,
-    rev ? "HEAD",
-    outputHash,
-    outputHashAlgo,
-    # Optional parameters:
-    repoRepoURL ? "",
-    repoRepoRev ? "",
-    referenceDir ? "",
-    manifestName ? "",
-    localManifests ? [ ],
-    createMirror ? false,
-    useArchive ? false,
+  { name
+  , manifest
+  , rev ? "HEAD"
+  , outputHash
+  , outputHashAlgo
+  , # Optional parameters:
+    repoRepoURL ? ""
+  , repoRepoRev ? ""
+  , referenceDir ? ""
+  , manifestName ? ""
+  , localManifests ? [ ]
+  , createMirror ? false
+  , useArchive ? false
+  ,
   }:
 
   assert repoRepoRev != "" -> repoRepoURL != "";

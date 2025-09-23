@@ -1,12 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # pythonPackages
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # pythonPackages
+  pytestCheckHook
+, pythonOlder
+, pyyaml
+,
 }:
 
 buildPythonPackage {

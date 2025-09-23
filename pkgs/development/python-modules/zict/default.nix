@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-repeat,
-  pytest-timeout,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pytest-asyncio
+, pytest-repeat
+, pytest-timeout
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

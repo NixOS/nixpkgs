@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  formulaic,
-  frozendict,
-  click,
-  num2words,
-  numpy,
-  scipy,
-  pandas,
-  nibabel,
-  bids-validator,
-  sqlalchemy,
-  universal-pathlib,
-  pytestCheckHook,
-  versioneer,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, formulaic
+, frozendict
+, click
+, num2words
+, numpy
+, scipy
+, pandas
+, nibabel
+, bids-validator
+, sqlalchemy
+, universal-pathlib
+, pytestCheckHook
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

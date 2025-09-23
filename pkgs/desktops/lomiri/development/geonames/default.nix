@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  testers,
-  buildPackages,
-  cmake,
-  docbook-xsl-nons,
-  docbook_xml_dtd_45,
-  gettext,
-  glib,
-  glibcLocales,
-  withExamples ? true,
-  gtk3,
-  # Uses gtkdoc-scan* tools, which produces a binary linked against lib for hostPlatform and executes it to generate docs
-  withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  gtk-doc,
-  pkg-config,
-  validatePkgConfig,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, testers
+, buildPackages
+, cmake
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+, gettext
+, glib
+, glibcLocales
+, withExamples ? true
+, gtk3
+, # Uses gtkdoc-scan* tools, which produces a binary linked against lib for hostPlatform and executes it to generate docs
+  withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, gtk-doc
+, pkg-config
+, validatePkgConfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

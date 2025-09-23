@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  pkg-config,
-  arpa2cm,
-  arpa2common,
-  db,
-  gnutls,
-  ldns,
-  libkrb5,
-  libtasn1,
-  openldap,
-  p11-kit,
-  quickder,
-  unbound,
-  openssl,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, pkg-config
+, arpa2cm
+, arpa2common
+, db
+, gnutls
+, ldns
+, libkrb5
+, libtasn1
+, openldap
+, p11-kit
+, quickder
+, unbound
+, openssl
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

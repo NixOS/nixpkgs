@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  libxcb,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, libxcb
+,
 }:
 
 rustPlatform.buildRustPackage rec {

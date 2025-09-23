@@ -1,7 +1,7 @@
-{
-  stdenv,
-  pdfium-binaries,
-  replaceVars,
+{ stdenv
+, pdfium-binaries
+, replaceVars
+,
 }:
 
 { version, src, ... }:

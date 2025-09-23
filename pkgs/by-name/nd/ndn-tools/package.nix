@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  boost ? ndn-cxx.boost,
-  fetchFromGitHub,
-  libpcap,
-  ndn-cxx,
-  openssl,
-  pkg-config,
-  sphinx,
-  wafHook,
+{ lib
+, stdenv
+, boost ? ndn-cxx.boost
+, fetchFromGitHub
+, libpcap
+, ndn-cxx
+, openssl
+, pkg-config
+, sphinx
+, wafHook
+,
 }:
 
 stdenv.mkDerivation rec {

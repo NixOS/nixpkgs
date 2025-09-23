@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  fetchDebianPatch,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, fetchDebianPatch
+,
 }:
 
 stdenv.mkDerivation rec {

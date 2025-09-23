@@ -1,17 +1,17 @@
-{
-  lib,
-  boto3,
-  botocore,
-  buildPythonPackage,
-  dateparser,
-  fetchFromGitHub,
-  matplotlib,
-  numpy,
-  pandas,
-  poetry-core,
-  prometheus-api-client,
-  pydantic,
-  requests,
+{ lib
+, boto3
+, botocore
+, buildPythonPackage
+, dateparser
+, fetchFromGitHub
+, matplotlib
+, numpy
+, pandas
+, poetry-core
+, prometheus-api-client
+, pydantic
+, requests
+,
 }:
 
 buildPythonPackage {

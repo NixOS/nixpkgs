@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  coreutils,
-  gawk,
-  curl,
-  gnugrep,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, gawk
+, curl
+, gnugrep
+,
 }:
 
 stdenv.mkDerivation rec {

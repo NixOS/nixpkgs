@@ -1,13 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-  writableTmpDirAsHomeHook,
-  pytestCheckHook,
-  xonsh,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, writableTmpDirAsHomeHook
+, pytestCheckHook
+, xonsh
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

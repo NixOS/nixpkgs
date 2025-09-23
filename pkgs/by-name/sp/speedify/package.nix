@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  dpkg,
-  fetchurl,
-  procps,
-  net-tools,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, dpkg
+, fetchurl
+, procps
+, net-tools
+, autoPatchelfHook
+,
 }:
 stdenv.mkDerivation rec {
   pname = "speedify";

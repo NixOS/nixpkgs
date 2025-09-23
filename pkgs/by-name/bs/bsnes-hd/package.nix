@@ -1,22 +1,22 @@
-{
-  lib,
-  SDL2,
-  alsa-lib,
-  fetchFromGitHub,
-  gtk3,
-  gtksourceview3,
-  libX11,
-  libXv,
-  libao,
-  libicns,
-  libpulseaudio,
-  makeWrapper,
-  openal,
-  pkg-config,
-  stdenv,
-  udev,
-  unstableGitUpdater,
-  wrapGAppsHook3,
+{ lib
+, SDL2
+, alsa-lib
+, fetchFromGitHub
+, gtk3
+, gtksourceview3
+, libX11
+, libXv
+, libao
+, libicns
+, libpulseaudio
+, makeWrapper
+, openal
+, pkg-config
+, stdenv
+, udev
+, unstableGitUpdater
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation {

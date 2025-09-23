@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  callPackage,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, callPackage
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

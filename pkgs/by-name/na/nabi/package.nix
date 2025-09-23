@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  gtk2,
-  libhangul,
-  autoconf,
-  automake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, gtk2
+, libhangul
+, autoconf
+, automake
+,
 }:
 
 stdenv.mkDerivation rec {

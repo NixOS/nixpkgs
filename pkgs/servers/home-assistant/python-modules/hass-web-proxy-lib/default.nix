@@ -1,25 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch2,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  aiohttp,
-
-  # tests
-  home-assistant,
-  pytest-aiohttp,
-  pytest-cov-stub,
-  pytest-homeassistant-custom-component,
-  pytest-timeout,
-  pytestCheckHook,
-
-  # reverse dependencies
-  home-assistant-custom-components,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch2
+, # build-system
+  poetry-core
+, # dependencies
+  aiohttp
+, # tests
+  home-assistant
+, pytest-aiohttp
+, pytest-cov-stub
+, pytest-homeassistant-custom-component
+, pytest-timeout
+, pytestCheckHook
+, # reverse dependencies
+  home-assistant-custom-components
+,
 }:
 
 buildPythonPackage rec {

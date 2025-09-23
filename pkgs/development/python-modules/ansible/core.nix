@@ -1,33 +1,33 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  python,
-  pythonOlder,
-  installShellFiles,
-  docutils,
-  setuptools,
-  ansible,
-  cryptography,
-  jinja2,
-  junit-xml,
-  lxml,
-  ncclient,
-  packaging,
-  paramiko,
-  ansible-pylibssh,
-  pexpect,
-  psutil,
-  pycrypto,
-  pyyaml,
-  requests,
-  resolvelib,
-  scp,
-  windowsSupport ? false,
-  pywinrm,
-  xmltodict,
-  # Additional packages to add to dependencies
-  extraPackages ? _: [ ],
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+, pythonOlder
+, installShellFiles
+, docutils
+, setuptools
+, ansible
+, cryptography
+, jinja2
+, junit-xml
+, lxml
+, ncclient
+, packaging
+, paramiko
+, ansible-pylibssh
+, pexpect
+, psutil
+, pycrypto
+, pyyaml
+, requests
+, resolvelib
+, scp
+, windowsSupport ? false
+, pywinrm
+, xmltodict
+, # Additional packages to add to dependencies
+  extraPackages ? _: [ ]
+,
 }:
 
 buildPythonPackage rec {

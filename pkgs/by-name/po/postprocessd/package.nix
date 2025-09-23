@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromSourcehut,
-  libexif,
-  libraw,
-  libtiff,
-  meson,
-  ninja,
-  opencv4,
-  pkg-config,
-  scdoc,
-  stdenv,
+{ lib
+, fetchFromSourcehut
+, libexif
+, libraw
+, libtiff
+, meson
+, ninja
+, opencv4
+, pkg-config
+, scdoc
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

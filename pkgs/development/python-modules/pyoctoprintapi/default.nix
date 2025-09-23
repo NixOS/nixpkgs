@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-
-  # propagated
-  aiohttp,
-
-  # tests
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, # propagated
+  aiohttp
+, # tests
+  pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 let

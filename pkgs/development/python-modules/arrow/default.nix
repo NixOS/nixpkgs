@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  flit-core,
-  python-dateutil,
-  types-python-dateutil,
-  pytestCheckHook,
-  pytest-mock,
-  pytz,
-  simplejson,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, flit-core
+, python-dateutil
+, types-python-dateutil
+, pytestCheckHook
+, pytest-mock
+, pytz
+, simplejson
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  prompt-toolkit,
-  pycryptodome,
-  pydantic,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiohttp
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, prompt-toolkit
+, pycryptodome
+, pydantic
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

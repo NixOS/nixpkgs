@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  flit-core,
-  importlib-metadata,
-  ipython,
-  jupyter-cache,
-  nbclient,
-  myst-parser,
-  nbformat,
-  pyyaml,
-  sphinx,
-  sphinx-togglebutton,
-  typing-extensions,
-  ipykernel,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, flit-core
+, importlib-metadata
+, ipython
+, jupyter-cache
+, nbclient
+, myst-parser
+, nbformat
+, pyyaml
+, sphinx
+, sphinx-togglebutton
+, typing-extensions
+, ipykernel
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchurl,
-  swift,
-  swiftpm,
-  swiftpm2nix,
-  swiftPackages,
-  libarchive,
-  p7zip,
-  # Building from source on x86_64 fails (among other things) due to:
+{ lib
+, stdenv
+, stdenvNoCC
+, fetchFromGitHub
+, fetchurl
+, swift
+, swiftpm
+, swiftpm2nix
+, swiftPackages
+, libarchive
+, p7zip
+, # Building from source on x86_64 fails (among other things) due to:
   # error: cannot load underlying module for 'Darwin'
-  fromSource ? (stdenv.system != "x86_64-darwin"),
+  fromSource ? (stdenv.system != "x86_64-darwin")
+,
 }:
 
 let

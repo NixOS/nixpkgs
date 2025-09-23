@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  aiodns,
-  aiohttp,
-  aresponses,
-  poetry-core,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-freezer,
-  pytestCheckHook,
-  syrupy,
-  yarl,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, aiodns
+, aiohttp
+, aresponses
+, poetry-core
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-freezer
+, pytestCheckHook
+, syrupy
+, yarl
+,
 }:
 
 buildPythonPackage rec {

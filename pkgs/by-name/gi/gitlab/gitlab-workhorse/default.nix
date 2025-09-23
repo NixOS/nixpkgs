@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitLab,
-  git,
-  buildGoModule,
+{ lib
+, fetchFromGitLab
+, git
+, buildGoModule
+,
 }:
 let
   data = lib.importJSON ../data.json;

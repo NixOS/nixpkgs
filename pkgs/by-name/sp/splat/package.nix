@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  groff,
-  ncurses,
-  bzip2,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, groff
+, ncurses
+, bzip2
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

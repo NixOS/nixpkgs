@@ -1,10 +1,10 @@
-{
-  lib,
-  asciidoctor,
-  fetchurl,
-  libpng,
-  netpbm,
-  stdenv,
+{ lib
+, asciidoctor
+, fetchurl
+, libpng
+, netpbm
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

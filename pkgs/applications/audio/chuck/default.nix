@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  alsa-lib,
-  bison,
-  flex,
-  libsndfile,
-  which,
-  DarwinTools,
-  xcbuild,
+{ stdenv
+, lib
+, fetchurl
+, alsa-lib
+, bison
+, flex
+, libsndfile
+, which
+, DarwinTools
+, xcbuild
+,
 }:
 
 stdenv.mkDerivation rec {

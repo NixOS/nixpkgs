@@ -1,29 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  defusedxml,
-  fetchFromGitHub,
-  gql,
-  graphql-core,
-  marshmallow,
-  pydantic-extra-types,
-  pydantic,
-  pytest-cov-stub,
-  pytest-datafiles,
-  pytest-vcr,
-  pytestCheckHook,
-  python-box,
-  python-dateutil,
-  pythonOlder,
-  requests-pkcs12,
-  requests-toolbelt,
-  requests,
-  responses,
-  restfly,
-  semver,
-  setuptools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, cryptography
+, defusedxml
+, fetchFromGitHub
+, gql
+, graphql-core
+, marshmallow
+, pydantic-extra-types
+, pydantic
+, pytest-cov-stub
+, pytest-datafiles
+, pytest-vcr
+, pytestCheckHook
+, python-box
+, python-dateutil
+, pythonOlder
+, requests-pkcs12
+, requests-toolbelt
+, requests
+, responses
+, restfly
+, semver
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

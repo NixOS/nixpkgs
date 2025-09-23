@@ -1,14 +1,14 @@
-{
-  fetchhg,
-  lib,
-  stdenv,
-  cmake,
-  coin3d,
-  motif,
-  libXext,
-  libXmu,
-  libGLU,
-  libGL,
+{ fetchhg
+, lib
+, stdenv
+, cmake
+, coin3d
+, motif
+, libXext
+, libXmu
+, libGLU
+, libGL
+,
 }:
 
 stdenv.mkDerivation {

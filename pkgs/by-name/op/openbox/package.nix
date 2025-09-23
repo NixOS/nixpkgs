@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  python3,
-  libxml2,
-  libXinerama,
-  libXcursor,
-  libXau,
-  libXrandr,
-  libICE,
-  libSM,
-  imlib2,
-  pango,
-  libstartup_notification,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, python3
+, libxml2
+, libXinerama
+, libXcursor
+, libXau
+, libXrandr
+, libICE
+, libSM
+, imlib2
+, pango
+, libstartup_notification
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

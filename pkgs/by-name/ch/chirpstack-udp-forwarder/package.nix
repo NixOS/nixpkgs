@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  versionCheckHook,
-  protobuf,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, versionCheckHook
+, protobuf
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "chirpstack-udp-forwarder";

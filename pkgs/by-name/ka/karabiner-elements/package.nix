@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cpio,
-  xar,
-  undmg,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, cpio
+, xar
+, undmg
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

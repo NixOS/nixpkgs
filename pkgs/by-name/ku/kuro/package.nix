@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  electron,
-  imagemagick,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, electron
+, imagemagick
+,
 }:
 
 stdenv.mkDerivation rec {

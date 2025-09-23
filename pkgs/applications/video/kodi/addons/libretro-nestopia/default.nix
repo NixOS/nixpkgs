@@ -1,10 +1,10 @@
-{
-  lib,
-  rel,
-  buildKodiBinaryAddon,
-  fetchFromGitHub,
-  libretro,
-  nestopia,
+{ lib
+, rel
+, buildKodiBinaryAddon
+, fetchFromGitHub
+, libretro
+, nestopia
+,
 }:
 
 buildKodiBinaryAddon rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  meson,
-  ninja,
-  gettext,
-  mateUpdateScript,
+{ lib
+, stdenvNoCC
+, fetchurl
+, meson
+, ninja
+, gettext
+, mateUpdateScript
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

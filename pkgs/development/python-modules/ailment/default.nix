@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pyvex,
-  setuptools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pyvex
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -10,12 +10,12 @@
 # This test is written as a fixed-output derivation, because we need to access
 # accesses the internet to download the upstream stack release.
 
-{
-  cacert,
-  curl,
-  lib,
-  stack,
-  stdenv,
+{ cacert
+, curl
+, lib
+, stack
+, stdenv
+,
 }:
 
 let

@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  alsa-lib,
-  acpid,
-  bc,
-  ddcutil,
-  efl,
-  libexif,
-  pam,
-  xkeyboard_config,
-  udisks2,
-  waylandSupport ? false,
-  wayland-protocols,
-  xwayland,
-  bluetoothSupport ? true,
-  bluez5,
-  pulseSupport ? !stdenv.hostPlatform.isDarwin,
-  libpulseaudio,
-  directoryListingUpdater,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gettext
+, alsa-lib
+, acpid
+, bc
+, ddcutil
+, efl
+, libexif
+, pam
+, xkeyboard_config
+, udisks2
+, waylandSupport ? false
+, wayland-protocols
+, xwayland
+, bluetoothSupport ? true
+, bluez5
+, pulseSupport ? !stdenv.hostPlatform.isDarwin
+, libpulseaudio
+, directoryListingUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

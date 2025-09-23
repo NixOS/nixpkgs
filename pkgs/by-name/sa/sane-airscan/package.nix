@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  avahi,
-  libjpeg,
-  libpng,
-  libtiff,
-  libxml2,
-  gnutls,
-  sane-backends,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, avahi
+, libjpeg
+, libpng
+, libtiff
+, libxml2
+, gnutls
+, sane-backends
+,
 }:
 stdenv.mkDerivation rec {
   pname = "sane-airscan";

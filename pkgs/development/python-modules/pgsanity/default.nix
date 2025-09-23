@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  postgresql,
-  unittestCheckHook,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, postgresql
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

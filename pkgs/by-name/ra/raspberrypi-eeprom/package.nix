@@ -1,16 +1,16 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  python3,
-  binutils-unwrapped,
-  findutils,
-  flashrom,
-  gawk,
-  kmod,
-  pciutils,
-  libraspberrypi,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, makeWrapper
+, python3
+, binutils-unwrapped
+, findutils
+, flashrom
+, gawk
+, kmod
+, pciutils
+, libraspberrypi
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raspberrypi-eeprom";

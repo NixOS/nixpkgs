@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libunwind,
-  cmake,
-  pcre,
-  gdb,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libunwind
+, cmake
+, pcre
+, gdb
+,
 }:
 
 stdenv.mkDerivation rec {

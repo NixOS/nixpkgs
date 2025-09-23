@@ -1,106 +1,90 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  fetchgit,
-
-  # build dependencies
-  autoconf-archive,
-  autoreconfHook,
-  nukeReferences,
-  pkg-config,
-  python-setup-hook,
-
-  # high level switches
-  withMinimalDeps ? false,
-
-  # runtime dependencies
-  bzip2,
-  withExpat ? !withMinimalDeps,
-  expat,
-  libffi,
-  libuuid,
-  libxcrypt,
-  withMpdecimal ? !withMinimalDeps,
-  mpdecimal,
-  ncurses,
-  withOpenssl ? !withMinimalDeps,
-  openssl,
-  withSqlite ? !withMinimalDeps,
-  sqlite,
-  xz,
-  zlib,
-  zstd,
-
-  # platform-specific dependencies
-  bashNonInteractive,
-  windows,
-
-  # optional dependencies
-  bluezSupport ? !withMinimalDeps && stdenv.hostPlatform.isLinux,
-  bluez-headers,
-  mimetypesSupport ? !withMinimalDeps,
-  mailcap,
-  tzdata,
-  withGdbm ? !withMinimalDeps && !stdenv.hostPlatform.isWindows,
-  gdbm,
-  withReadline ? !withMinimalDeps && !stdenv.hostPlatform.isWindows,
-  readline,
-
-  # splicing/cross
-  pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}",
-  self,
-  pkgsBuildBuild,
-  pkgsBuildHost,
-  pkgsBuildTarget,
-  pkgsHostHost,
-  pkgsTargetTarget,
-  __splices ? { },
-
-  # build customization
-  sourceVersion,
-  hash,
-  passthruFun,
-  stripConfig ? withMinimalDeps,
-  stripIdlelib ? withMinimalDeps,
-  stripTests ? withMinimalDeps,
-  stripTkinter ? withMinimalDeps,
-  rebuildBytecode ? !withMinimalDeps,
-  stripBytecode ? true,
-  includeSiteCustomize ? !withMinimalDeps,
-  static ? stdenv.hostPlatform.isStatic,
-  enableFramework ? false,
-  noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch",
-  enableGIL ? true,
-  enableDebug ? false,
-
-  # pgo (not reproducible) + -fno-semantic-interposition
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, fetchgit
+, # build dependencies
+  autoconf-archive
+, autoreconfHook
+, nukeReferences
+, pkg-config
+, python-setup-hook
+, # high level switches
+  withMinimalDeps ? false
+, # runtime dependencies
+  bzip2
+, withExpat ? !withMinimalDeps
+, expat
+, libffi
+, libuuid
+, libxcrypt
+, withMpdecimal ? !withMinimalDeps
+, mpdecimal
+, ncurses
+, withOpenssl ? !withMinimalDeps
+, openssl
+, withSqlite ? !withMinimalDeps
+, sqlite
+, xz
+, zlib
+, zstd
+, # platform-specific dependencies
+  bashNonInteractive
+, windows
+, # optional dependencies
+  bluezSupport ? !withMinimalDeps && stdenv.hostPlatform.isLinux
+, bluez-headers
+, mimetypesSupport ? !withMinimalDeps
+, mailcap
+, tzdata
+, withGdbm ? !withMinimalDeps && !stdenv.hostPlatform.isWindows
+, gdbm
+, withReadline ? !withMinimalDeps && !stdenv.hostPlatform.isWindows
+, readline
+, # splicing/cross
+  pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
+, self
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
+, __splices ? { }
+, # build customization
+  sourceVersion
+, hash
+, passthruFun
+, stripConfig ? withMinimalDeps
+, stripIdlelib ? withMinimalDeps
+, stripTests ? withMinimalDeps
+, stripTkinter ? withMinimalDeps
+, rebuildBytecode ? !withMinimalDeps
+, stripBytecode ? true
+, includeSiteCustomize ? !withMinimalDeps
+, static ? stdenv.hostPlatform.isStatic
+, enableFramework ? false
+, noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch"
+, enableGIL ? true
+, enableDebug ? false
+, # pgo (not reproducible) + -fno-semantic-interposition
   # https://docs.python.org/3/using/configure.html#cmdoption-enable-optimizations
-  enableOptimizations ? false,
-
-  # improves performance, but remains reproducible
-  enableNoSemanticInterposition ? true,
-
-  # enabling LTO on 32bit arch causes downstream packages to fail when linking
-  enableLTO ?
-    !withMinimalDeps
-    && (stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.is64bit && stdenv.hostPlatform.isLinux)),
-
-  # enable asserts to ensure the build remains reproducible
-  reproducibleBuild ? false,
-
-  # for the Python package set
-  packageOverrides ? (self: super: { }),
-
-  # tests
-  testers,
-
-  # allow pythonMinimal to prevent accidental dependencies it doesn't want
+  enableOptimizations ? false
+, # improves performance, but remains reproducible
+  enableNoSemanticInterposition ? true
+, # enabling LTO on 32bit arch causes downstream packages to fail when linking
+  enableLTO ? !withMinimalDeps
+    && (stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.is64bit && stdenv.hostPlatform.isLinux))
+, # enable asserts to ensure the build remains reproducible
+  reproducibleBuild ? false
+, # for the Python package set
+  packageOverrides ? (self: super: { })
+, # tests
+  testers
+, # allow pythonMinimal to prevent accidental dependencies it doesn't want
   # Having this as an option is useful to allow overriding, eg. adding things to
   # python3Minimal
-  allowedReferenceNames ? if withMinimalDeps then [ "bashNonInteractive" ] else [ ],
-
+  allowedReferenceNames ? if withMinimalDeps then [ "bashNonInteractive" ] else [ ]
+,
 }@inputs:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -108,21 +92,25 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-assert lib.assertMsg (
-  enableFramework -> stdenv.hostPlatform.isDarwin
-) "Framework builds are only supported on Darwin.";
+assert lib.assertMsg
+  (
+    enableFramework -> stdenv.hostPlatform.isDarwin
+  ) "Framework builds are only supported on Darwin.";
 
-assert lib.assertMsg (
-  reproducibleBuild -> stripBytecode
-) "Deterministic builds require stripping bytecode.";
+assert lib.assertMsg
+  (
+    reproducibleBuild -> stripBytecode
+  ) "Deterministic builds require stripping bytecode.";
 
-assert lib.assertMsg (
-  reproducibleBuild -> (!enableOptimizations)
-) "Deterministic builds are not achieved when optimizations are enabled.";
+assert lib.assertMsg
+  (
+    reproducibleBuild -> (!enableOptimizations)
+  ) "Deterministic builds are not achieved when optimizations are enabled.";
 
-assert lib.assertMsg (
-  reproducibleBuild -> (!rebuildBytecode)
-) "Deterministic builds are not achieved when (default unoptimized) bytecode is created.";
+assert lib.assertMsg
+  (
+    reproducibleBuild -> (!rebuildBytecode)
+  ) "Deterministic builds are not achieved when (default unoptimized) bytecode is created.";
 
 let
   inherit (lib)
@@ -139,11 +127,11 @@ let
   withLibxcrypt =
     (!withMinimalDeps)
     &&
-      # mixes libc and libxcrypt headers and libs and causes segfaults on importing crypt
-      (!stdenv.hostPlatform.isFreeBSD)
+    # mixes libc and libxcrypt headers and libs and causes segfaults on importing crypt
+    (!stdenv.hostPlatform.isFreeBSD)
     &&
-      # crypt module was removed in 3.13
-      passthru.pythonOlder "3.13";
+    # crypt module was removed in 3.13
+    passthru.pythonOlder "3.13";
 
   buildPackages = pkgsBuildHost;
   inherit (passthru) pythonOnBuildForHost;
@@ -207,24 +195,24 @@ let
     autoreconfHook
   ]
   ++
-    optionals ((!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") && !withMinimalDeps)
-      [
-        pkg-config
-      ]
+  optionals ((!stdenv.hostPlatform.isDarwin || passthru.pythonAtLeast "3.14") && !withMinimalDeps)
+    [
+      pkg-config
+    ]
   ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonOnBuildForHost
   ]
   ++
-    optionals
-      (
-        stdenv.cc.isClang
+  optionals
+    (
+      stdenv.cc.isClang
         && (!stdenv.hostPlatform.useAndroidPrebuilt or false)
         && (enableLTO || enableOptimizations)
-      )
-      [
-        stdenv.cc.cc.libllvm.out
-      ];
+    )
+    [
+      stdenv.cc.cc.libllvm.out
+    ];
 
   buildInputs = lib.filter (p: p != null) (
     optionals (!withMinimalDeps) [
@@ -306,8 +294,7 @@ let
           powerpcle = "ppcle";
           powerpc64 = "ppc64";
           powerpc64le = "ppc64le";
-        }
-        .${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
+        }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
     in
     "${machdep}-${cpu}";
 
@@ -439,8 +426,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         "glibc" = "-lgcc_s";
         "musl" = "-lgcc_eh";
-      }
-      ."${stdenv.hostPlatform.libc}" or ""
+      }."${stdenv.hostPlatform.libc}" or ""
     );
     # Determinism: We fix the hashes of str, bytes and datetime objects.
     PYTHONHASHSEED = 0;
@@ -567,16 +553,16 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   +
 
-    # enableNoSemanticInterposition essentially sets that CFLAG -fno-semantic-interposition
-    # which changes how symbols are looked up. This essentially means we can't override
-    # libpython symbols via LD_PRELOAD anymore. This is common enough as every build
-    # that uses --enable-optimizations has the same "issue".
-    #
-    # The Fedora wiki has a good article about their journey towards enabling this flag:
-    # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
-    optionalString enableNoSemanticInterposition ''
-      export CFLAGS_NODIST="-fno-semantic-interposition"
-    '';
+  # enableNoSemanticInterposition essentially sets that CFLAG -fno-semantic-interposition
+  # which changes how symbols are looked up. This essentially means we can't override
+  # libpython symbols via LD_PRELOAD anymore. This is common enough as every build
+  # that uses --enable-optimizations has the same "issue".
+  #
+  # The Fedora wiki has a good article about their journey towards enabling this flag:
+  # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
+  optionalString enableNoSemanticInterposition ''
+    export CFLAGS_NODIST="-fno-semantic-interposition"
+  '';
 
   # Our aarch64-linux bootstrap files lack Scrt1.o, which fails the config test
   hardeningEnable = lib.optionals (!withMinimalDeps && !stdenv.hostPlatform.isAarch64) [ "pie" ];

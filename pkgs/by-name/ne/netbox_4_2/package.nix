@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  plugins ? _ps: [ ],
-  nixosTests,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, python3
+, plugins ? _ps: [ ]
+, nixosTests
+, nix-update-script
+,
 }:
 let
   py = python3.override {

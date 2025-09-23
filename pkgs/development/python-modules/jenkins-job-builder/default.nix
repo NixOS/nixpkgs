@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fasteners,
-  jinja2,
-  pbr,
-  python-jenkins,
-  pyyaml,
-  six,
-  stevedore,
-  pytestCheckHook,
-  setuptools,
-  testtools,
-  pytest-mock,
-  nixosTests,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fasteners
+, jinja2
+, pbr
+, python-jenkins
+, pyyaml
+, six
+, stevedore
+, pytestCheckHook
+, setuptools
+, testtools
+, pytest-mock
+, nixosTests
+,
 }:
 
 buildPythonPackage rec {

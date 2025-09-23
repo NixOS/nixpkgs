@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchPypi,
-  xstatic-jquery,
+{ buildPythonPackage
+, lib
+, fetchPypi
+, xstatic-jquery
+,
 }:
 
 buildPythonPackage rec {

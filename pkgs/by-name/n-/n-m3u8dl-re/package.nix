@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+,
 }:
 buildDotnetModule rec {
   pname = "n-m3u8dl-re";

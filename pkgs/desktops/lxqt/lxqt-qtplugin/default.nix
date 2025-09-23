@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libdbusmenu-lxqt,
-  libfm-qt,
-  libqtxdg,
-  lxqt-build-tools,
-  gitUpdater,
-  qtbase,
-  qtsvg,
-  qttools,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libdbusmenu-lxqt
+, libfm-qt
+, libqtxdg
+, lxqt-build-tools
+, gitUpdater
+, qtbase
+, qtsvg
+, qttools
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

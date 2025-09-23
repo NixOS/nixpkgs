@@ -1,18 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # tests
-  tree-sitter-python,
-  tree-sitter-rust,
-  tree-sitter-html,
-  tree-sitter-javascript,
-  tree-sitter-json,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # tests
+  tree-sitter-python
+, tree-sitter-rust
+, tree-sitter-html
+, tree-sitter-javascript
+, tree-sitter-json
+,
 }:
 
 buildPythonPackage rec {

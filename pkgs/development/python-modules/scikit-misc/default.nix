@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  gfortran,
-  git,
-  meson-python,
-  pkg-config,
-  numpy,
-  setuptools,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, gfortran
+, git
+, meson-python
+, pkg-config
+, numpy
+, setuptools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

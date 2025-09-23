@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  llm,
-  llm-docs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, llm
+, llm-docs
+,
 }:
 
 buildPythonPackage rec {

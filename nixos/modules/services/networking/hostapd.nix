@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 # All hope abandon ye who enter here. hostapd's configuration
 # format is ... special, and you won't be able to infer any
@@ -66,23 +65,26 @@ let
     generate =
       name: value:
       pkgs.writeText name (
-        generators.toKeyValue {
-          listsAsDuplicateKeys = true;
-          mkKeyValue = generators.mkKeyValueDefault {
-            mkValueString =
-              v:
-              if isInt v then
-                toString v
-              else if isString v then
-                v
-              else if true == v then
-                "1"
-              else if false == v then
-                "0"
-              else
-                throw "unsupported type ${builtins.typeOf v}: ${(generators.toPretty { }) v}";
-          } "=";
-        } value
+        generators.toKeyValue
+          {
+            listsAsDuplicateKeys = true;
+            mkKeyValue = generators.mkKeyValueDefault
+              {
+                mkValueString =
+                  v:
+                  if isInt v then
+                    toString v
+                  else if isString v then
+                    v
+                  else if true == v then
+                    "1"
+                  else if false == v then
+                    "0"
+                  else
+                    throw "unsupported type ${builtins.typeOf v}: ${(generators.toPretty { }) v}";
+              } "=";
+          }
+          value
       );
   };
 
@@ -117,23 +119,25 @@ let
       ''
       + concatMapStrings (x: "${x}\n") (
         imap0 (i: f: f i) (
-          mapAttrsToList (bss: bssCfg: bssIdx: ''
-            ''\n# BSS configuration: ${bss}
+          mapAttrsToList
+            (bss: bssCfg: bssIdx: ''
+              ''\n# BSS configuration: ${bss}
 
-            mac_allow_file=/run/hostapd/${escapeShellArg bss}.mac.allow
-            rm -f "$mac_allow_file"
-            touch "$mac_allow_file"
+              mac_allow_file=/run/hostapd/${escapeShellArg bss}.mac.allow
+              rm -f "$mac_allow_file"
+              touch "$mac_allow_file"
 
-            mac_deny_file=/run/hostapd/${escapeShellArg bss}.mac.deny
-            rm -f "$mac_deny_file"
-            touch "$mac_deny_file"
+              mac_deny_file=/run/hostapd/${escapeShellArg bss}.mac.deny
+              rm -f "$mac_deny_file"
+              touch "$mac_deny_file"
 
-            cat ${writeBssHeader radio bss bssIdx} >> "$hostapd_config_file"
-            cat ${escapeShellArg (extraSettingsFormat.generate "hostapd-radio-${radio}-bss-${bss}-extra.conf" bssCfg.settings)} >> "$hostapd_config_file"
-            ${concatMapStrings (
-              script: "${script} \"$hostapd_config_file\" \"$mac_allow_file\" \"$mac_deny_file\"\n"
-            ) (attrValues bssCfg.dynamicConfigScripts)}
-          '') radioCfg.networks
+              cat ${writeBssHeader radio bss bssIdx} >> "$hostapd_config_file"
+              cat ${escapeShellArg (extraSettingsFormat.generate "hostapd-radio-${radio}-bss-${bss}-extra.conf" bssCfg.settings)} >> "$hostapd_config_file"
+              ${concatMapStrings (
+                script: "${script} \"$hostapd_config_file\" \"$mac_allow_file\" \"$mac_deny_file\"\n"
+              ) (attrValues bssCfg.dynamicConfigScripts)}
+            '')
+            radioCfg.networks
         )
       )
     );
@@ -1060,11 +1064,11 @@ in
                           bssid = bssCfg.bssid;
                         }
                         //
-                          optionalAttrs
-                            (bssCfg.macAllow != [ ] || bssCfg.macAllowFile != null || bssCfg.authentication.saeAddToMacAllow)
-                            {
-                              accept_mac_file = "/run/hostapd/${bssCfg._module.args.name}.mac.allow";
-                            }
+                        optionalAttrs
+                          (bssCfg.macAllow != [ ] || bssCfg.macAllowFile != null || bssCfg.authentication.saeAddToMacAllow)
+                          {
+                            accept_mac_file = "/run/hostapd/${bssCfg._module.args.name}.mac.allow";
+                          }
                         // optionalAttrs (bssCfg.macDeny != [ ] || bssCfg.macDenyFile != null) {
                           deny_mac_file = "/run/hostapd/${bssCfg._module.args.name}.mac.deny";
                         }
@@ -1183,24 +1187,26 @@ in
                                 ''
                                   HOSTAPD_CONFIG_FILE=$1
                                 ''
-                                + concatMapStrings (
-                                  entry:
-                                  let
-                                    lineSuffix =
-                                      optionalString (entry.password != null) entry.password
-                                      + optionalString (entry.mac != null) "|mac=${entry.mac}"
-                                      + optionalString (entry.vlanid != null) "|vlanid=${toString entry.vlanid}"
-                                      + optionalString (entry.pk != null) "|pk=${entry.pk}"
-                                      + optionalString (entry.id != null) "|id=${entry.id}";
-                                  in
-                                  ''
-                                    (
-                                      echo -n 'sae_password='
-                                      ${optionalString (entry.passwordFile != null) ''tr -d '\n' < ${entry.passwordFile}''}
-                                      echo ${escapeShellArg lineSuffix}
-                                    ) >> "$HOSTAPD_CONFIG_FILE"
-                                  ''
-                                ) bssCfg.authentication.saePasswords
+                                + concatMapStrings
+                                  (
+                                    entry:
+                                    let
+                                      lineSuffix =
+                                        optionalString (entry.password != null) entry.password
+                                        + optionalString (entry.mac != null) "|mac=${entry.mac}"
+                                        + optionalString (entry.vlanid != null) "|vlanid=${toString entry.vlanid}"
+                                        + optionalString (entry.pk != null) "|pk=${entry.pk}"
+                                        + optionalString (entry.id != null) "|id=${entry.id}";
+                                    in
+                                    ''
+                                      (
+                                        echo -n 'sae_password='
+                                        ${optionalString (entry.passwordFile != null) ''tr -d '\n' < ${entry.passwordFile}''}
+                                        echo ${escapeShellArg lineSuffix}
+                                      ) >> "$HOSTAPD_CONFIG_FILE"
+                                    ''
+                                  )
+                                  bssCfg.authentication.saePasswords
                               )
                             );
                           };
@@ -1222,8 +1228,7 @@ in
                     "5g" = "a";
                     "6g" = "a";
                     "60g" = "ad";
-                  }
-                  .${radioCfg.band};
+                  }.${radioCfg.band};
                 channel = radioCfg.channel;
                 noscan = radioCfg.noScan;
               }
@@ -1357,86 +1362,92 @@ in
     ]
     # Radio warnings
     ++ (concatLists (
-      mapAttrsToList (
-        radio: radioCfg:
-        [
-          {
-            assertion = radioCfg.networks != { };
-            message = "hostapd radio ${radio}: At least one network must be configured!";
-          }
-          # XXX: There could be many more useful assertions about (band == xy) -> ensure other required settings.
-          # see https://github.com/openwrt/openwrt/blob/539cb5389d9514c99ec1f87bd4465f77c7ed9b93/package/kernel/mac80211/files/lib/netifd/wireless/mac80211.sh#L158
-          {
-            assertion = length (filter (bss: bss == radio) (attrNames radioCfg.networks)) == 1;
-            message = ''hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.'';
-          }
-          {
-            assertion =
-              (radioCfg.wifi4.enable && builtins.elem "HT40-" radioCfg.wifi4.capabilities)
-              -> radioCfg.channel != 0;
-            message = ''hostapd radio ${radio}: using ACS (channel = 0) together with HT40- (wifi4.capabilities) is unsupported by hostapd'';
-          }
-        ]
-        # BSS warnings
-        ++ (concatLists (
-          mapAttrsToList (
-            bss: bssCfg:
-            let
-              auth = bssCfg.authentication;
-              countWpaPasswordDefinitions = count (x: x != null) [
-                auth.wpaPassword
-                auth.wpaPasswordFile
-                auth.wpaPskFile
-              ];
-            in
+      mapAttrsToList
+        (
+          radio: radioCfg:
             [
               {
-                assertion = hasPrefix radio bss;
-                message = "hostapd radio ${radio} bss ${bss}: The bss (network) name ${bss} is invalid. It must be prefixed by the radio name for reasons internal to hostapd. A valid name would be e.g. ${radio}, ${radio}-1, ...";
+                assertion = radioCfg.networks != { };
+                message = "hostapd radio ${radio}: At least one network must be configured!";
               }
+              # XXX: There could be many more useful assertions about (band == xy) -> ensure other required settings.
+              # see https://github.com/openwrt/openwrt/blob/539cb5389d9514c99ec1f87bd4465f77c7ed9b93/package/kernel/mac80211/files/lib/netifd/wireless/mac80211.sh#L158
               {
-                assertion = (length (attrNames radioCfg.networks) > 1) -> (bssCfg.bssid != null);
-                message = ''hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.'';
-              }
-              {
-                assertion = countWpaPasswordDefinitions <= 1;
-                message = ''hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)'';
-              }
-              {
-                assertion =
-                  auth.wpaPassword != null
-                  -> (stringLength auth.wpaPassword >= 8 && stringLength auth.wpaPassword <= 63);
-                message = ''hostapd radio ${radio} bss ${bss}: uses a wpaPassword of invalid length (must be in [8,63]).'';
-              }
-              {
-                assertion = auth.saePasswords == [ ] || auth.saePasswordsFile == null;
-                message = ''hostapd radio ${radio} bss ${bss}: must use only one SAE password option (saePasswords or saePasswordsFile)'';
-              }
-              {
-                assertion = auth.mode == "wpa3-sae" -> (auth.saePasswords != [ ] || auth.saePasswordsFile != null);
-                message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE which requires defining a sae password option'';
+                assertion = length (filter (bss: bss == radio) (attrNames radioCfg.networks)) == 1;
+                message = ''hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.'';
               }
               {
                 assertion =
-                  auth.mode == "wpa3-sae-transition"
-                  -> (auth.saePasswords != [ ] || auth.saePasswordsFile != null) && countWpaPasswordDefinitions == 1;
-                message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode requires defining both a wpa password option and a sae password option'';
-              }
-              {
-                assertion =
-                  (auth.mode == "wpa2-sha1" || auth.mode == "wpa2-sha256") -> countWpaPasswordDefinitions == 1;
-                message = ''hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option'';
+                  (radioCfg.wifi4.enable && builtins.elem "HT40-" radioCfg.wifi4.capabilities)
+                    -> radioCfg.channel != 0;
+                message = ''hostapd radio ${radio}: using ACS (channel = 0) together with HT40- (wifi4.capabilities) is unsupported by hostapd'';
               }
             ]
-            ++ optionals (auth.saePasswords != [ ]) (
-              imap1 (i: entry: {
-                assertion = (entry.password == null) != (entry.passwordFile == null);
-                message = ''hostapd radio ${radio} bss ${bss} saePassword entry ${i}: must set exactly one of `password` or `passwordFile`'';
-              }) auth.saePasswords
-            )
-          ) radioCfg.networks
-        ))
-      ) cfg.radios
+            # BSS warnings
+            ++ (concatLists (
+              mapAttrsToList
+                (
+                  bss: bssCfg:
+                    let
+                      auth = bssCfg.authentication;
+                      countWpaPasswordDefinitions = count (x: x != null) [
+                        auth.wpaPassword
+                        auth.wpaPasswordFile
+                        auth.wpaPskFile
+                      ];
+                    in
+                    [
+                      {
+                        assertion = hasPrefix radio bss;
+                        message = "hostapd radio ${radio} bss ${bss}: The bss (network) name ${bss} is invalid. It must be prefixed by the radio name for reasons internal to hostapd. A valid name would be e.g. ${radio}, ${radio}-1, ...";
+                      }
+                      {
+                        assertion = (length (attrNames radioCfg.networks) > 1) -> (bssCfg.bssid != null);
+                        message = ''hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.'';
+                      }
+                      {
+                        assertion = countWpaPasswordDefinitions <= 1;
+                        message = ''hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)'';
+                      }
+                      {
+                        assertion =
+                          auth.wpaPassword != null
+                            -> (stringLength auth.wpaPassword >= 8 && stringLength auth.wpaPassword <= 63);
+                        message = ''hostapd radio ${radio} bss ${bss}: uses a wpaPassword of invalid length (must be in [8,63]).'';
+                      }
+                      {
+                        assertion = auth.saePasswords == [ ] || auth.saePasswordsFile == null;
+                        message = ''hostapd radio ${radio} bss ${bss}: must use only one SAE password option (saePasswords or saePasswordsFile)'';
+                      }
+                      {
+                        assertion = auth.mode == "wpa3-sae" -> (auth.saePasswords != [ ] || auth.saePasswordsFile != null);
+                        message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE which requires defining a sae password option'';
+                      }
+                      {
+                        assertion =
+                          auth.mode == "wpa3-sae-transition"
+                            -> (auth.saePasswords != [ ] || auth.saePasswordsFile != null) && countWpaPasswordDefinitions == 1;
+                        message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode requires defining both a wpa password option and a sae password option'';
+                      }
+                      {
+                        assertion =
+                          (auth.mode == "wpa2-sha1" || auth.mode == "wpa2-sha256") -> countWpaPasswordDefinitions == 1;
+                        message = ''hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option'';
+                      }
+                    ]
+                    ++ optionals (auth.saePasswords != [ ]) (
+                      imap1
+                        (i: entry: {
+                          assertion = (entry.password == null) != (entry.passwordFile == null);
+                          message = ''hostapd radio ${radio} bss ${bss} saePassword entry ${i}: must set exactly one of `password` or `passwordFile`'';
+                        })
+                        auth.saePasswords
+                    )
+                )
+                radioCfg.networks
+            ))
+        )
+        cfg.radios
     ));
 
     environment.systemPackages = [ cfg.package ];

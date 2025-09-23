@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  pyudev,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, pyudev
+,
 }:
 
 buildPythonPackage rec {

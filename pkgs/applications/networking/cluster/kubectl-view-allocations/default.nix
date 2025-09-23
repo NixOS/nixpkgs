@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  versionCheckHook,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

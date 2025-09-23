@@ -1,25 +1,25 @@
-{
-  lib,
-  fetchFromGitHub,
-  flutter329,
-  autoPatchelfHook,
-  makeDesktopItem,
-  copyDesktopItems,
-  alsa-lib,
-  libepoxy,
-  libpulseaudio,
-  libdrm,
-  libgbm,
-  buildGoModule,
-  stdenv,
-  mpv-unwrapped,
-  mpv,
-  mimalloc,
-  runCommand,
-  yq,
-  oneanime,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, fetchFromGitHub
+, flutter329
+, autoPatchelfHook
+, makeDesktopItem
+, copyDesktopItems
+, alsa-lib
+, libepoxy
+, libpulseaudio
+, libdrm
+, libgbm
+, buildGoModule
+, stdenv
+, mpv-unwrapped
+, mpv
+, mimalloc
+, runCommand
+, yq
+, oneanime
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 let

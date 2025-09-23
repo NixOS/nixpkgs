@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  bluepy,
-  cryptography,
-
-  # checks
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  bluepy
+, cryptography
+, # checks
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

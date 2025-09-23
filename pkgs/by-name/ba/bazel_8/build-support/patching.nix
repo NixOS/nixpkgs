@@ -1,5 +1,5 @@
-{
-  stdenv,
+{ stdenv
+,
 }:
 {
   # If there's a need to patch external dependencies managed by Bazel
@@ -7,9 +7,9 @@
   # allow patches to be in absolute paths so this helper will produce
   # sources patch that adds given file to given location
   addFilePatch =
-    {
-      path,
-      file,
+    { path
+    , file
+    ,
     }:
     stdenv.mkDerivation {
       name = "add_file.patch";

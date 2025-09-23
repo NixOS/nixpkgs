@@ -1,25 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeDesktopItem,
-  makeWrapper,
-  freetype,
-  fontconfig,
-  libX11,
-  libXrender,
-  zlib,
-  glib,
-  gtk3,
-  gtk2,
-  libXtst,
-  jdk,
-  jdk8,
-  gsettings-desktop-schemas,
-  webkitgtk_4_1 ? null, # for internal web browser
-  buildEnv,
-  runCommand,
-  callPackage,
+{ lib
+, stdenv
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, freetype
+, fontconfig
+, libX11
+, libXrender
+, zlib
+, glib
+, gtk3
+, gtk2
+, libXtst
+, jdk
+, jdk8
+, gsettings-desktop-schemas
+, webkitgtk_4_1 ? null
+, # for internal web browser
+  buildEnv
+, runCommand
+, callPackage
+,
 }:
 
 # use ./update.sh to help with updating for each quarterly release
@@ -74,10 +75,10 @@ let
 
   generateEclipse =
     id:
-    {
-      description,
-      hashes,
-      dropUrl,
+    { description
+    , hashes
+    , dropUrl
+    ,
     }:
     builtins.listToAttrs [
       {
@@ -101,7 +102,7 @@ let
 
 in
 generatedEclipses
-// {
+  // {
   # expose this function so users can build their own eclipses if needed
   inherit buildEclipse;
 
@@ -110,10 +111,10 @@ generatedEclipses
   # Function that assembles a complete Eclipse environment from an
   # Eclipse package and list of Eclipse plugins.
   eclipseWithPlugins =
-    {
-      eclipse,
-      plugins ? [ ],
-      jvmArgs ? [ ],
+    { eclipse
+    , plugins ? [ ]
+    , jvmArgs ? [ ]
+    ,
     }:
     let
       # Gather up the desired plugins.

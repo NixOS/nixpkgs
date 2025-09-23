@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  sqlite,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, sqlite
+,
 }:
 let
 

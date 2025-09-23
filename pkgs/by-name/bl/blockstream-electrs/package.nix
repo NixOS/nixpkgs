@@ -1,11 +1,11 @@
-{
-  bitcoind,
-  electrum,
-  fetchFromGitHub,
-  lib,
-  rocksdb_8_3,
-  rustPlatform,
-  stdenv,
+{ bitcoind
+, electrum
+, fetchFromGitHub
+, lib
+, rocksdb_8_3
+, rustPlatform
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

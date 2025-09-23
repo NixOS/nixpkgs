@@ -1,14 +1,15 @@
 {
   # Basic
-  lib,
-  melpaBuild,
-  fetchFromGitHub,
-  # Java Script dependency
-  nodejs,
-  fetchNpmDeps,
-  npmHooks,
-  # Updater
-  nix-update-script,
+  lib
+, melpaBuild
+, fetchFromGitHub
+, # Java Script dependency
+  nodejs
+, fetchNpmDeps
+, npmHooks
+, # Updater
+  nix-update-script
+,
 }:
 
 melpaBuild (finalAttrs: {

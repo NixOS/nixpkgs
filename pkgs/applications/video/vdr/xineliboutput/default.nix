@@ -1,24 +1,24 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  vdr,
-  libcap,
-  libvdpau,
-  xine-lib,
-  libjpeg,
-  libextractor,
-  libglvnd,
-  libGLU,
-  libX11,
-  libXext,
-  libXrender,
-  libXrandr,
-  ffmpeg,
-  avahi,
-  wayland,
-  makeWrapper,
-  dbus-glib,
+{ stdenv
+, fetchurl
+, lib
+, vdr
+, libcap
+, libvdpau
+, xine-lib
+, libjpeg
+, libextractor
+, libglvnd
+, libGLU
+, libX11
+, libXext
+, libXrender
+, libXrandr
+, ffmpeg
+, avahi
+, wayland
+, makeWrapper
+, dbus-glib
+,
 }:
 let
   makeXinePluginPath = l: lib.concatStringsSep ":" (map (p: "${p}/lib/xine/plugins") l);

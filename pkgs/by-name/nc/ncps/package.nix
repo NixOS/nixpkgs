@@ -1,8 +1,8 @@
-{
-  buildGoModule,
-  dbmate,
-  fetchFromGitHub,
-  lib,
+{ buildGoModule
+, dbmate
+, fetchFromGitHub
+, lib
+,
 }:
 
 let

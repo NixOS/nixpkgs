@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  dbus,
-  pkgsLibpcap,
-  pkg-about,
-  setuptools,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, dbus
+, pkgsLibpcap
+, pkg-about
+, setuptools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  oath-toolkit,
-  openldap,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, oath-toolkit
+, openldap
+,
 }:
 
 buildGoModule rec {

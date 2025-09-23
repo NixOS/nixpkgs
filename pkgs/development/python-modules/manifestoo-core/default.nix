@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  typing-extensions,
-  fetchPypi,
-  lib,
-  nix-update-script,
-  hatch-vcs,
-  pythonOlder,
-  importlib-resources,
+{ buildPythonPackage
+, typing-extensions
+, fetchPypi
+, lib
+, nix-update-script
+, hatch-vcs
+, pythonOlder
+, importlib-resources
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  python-dateutil,
-  python-socks,
-  pythonOlder,
-  tldextract,
-  whodap,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, python-dateutil
+, python-socks
+, pythonOlder
+, tldextract
+, whodap
+,
 }:
 
 buildPythonPackage rec {

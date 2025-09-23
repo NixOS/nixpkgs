@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  unzip,
-  dfVersion,
+{ stdenvNoCC
+, lib
+, fetchurl
+, unzip
+, dfVersion
+,
 }:
 
 let

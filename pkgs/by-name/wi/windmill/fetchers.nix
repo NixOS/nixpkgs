@@ -1,8 +1,8 @@
 # not a stable interface, do not reference outside the windmill package but make a copy if you need
-{
-  lib,
-  stdenv,
-  fetchurl,
+{ lib
+, stdenv
+, fetchurl
+,
 }:
 
 {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromSourcehut,
-  pkg-config,
-  vulkan-headers,
-  libxkbcommon,
-  wayland,
-  xorg,
-  libGL,
-  sqlite,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromSourcehut
+, pkg-config
+, vulkan-headers
+, libxkbcommon
+, wayland
+, xorg
+, libGL
+, sqlite
+,
 }:
 
 buildGoModule rec {

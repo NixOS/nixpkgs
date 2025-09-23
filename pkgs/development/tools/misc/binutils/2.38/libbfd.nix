@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  gnu-config,
-  autoreconfHook,
-  bison,
-  binutils-unwrapped_2_38,
-  libiberty,
-  libintl,
-  zlib,
+{ lib
+, stdenv
+, fetchpatch
+, gnu-config
+, autoreconfHook
+, bison
+, binutils-unwrapped_2_38
+, libiberty
+, libintl
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

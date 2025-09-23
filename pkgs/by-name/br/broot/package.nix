@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  makeBinaryWrapper,
-  pkg-config,
-  libgit2,
-  zlib,
-  buildPackages,
-  versionCheckHook,
-  withClipboard ? true,
-  withTrash ? !stdenv.hostPlatform.isDarwin,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, makeBinaryWrapper
+, pkg-config
+, libgit2
+, zlib
+, buildPackages
+, versionCheckHook
+, withClipboard ? true
+, withTrash ? !stdenv.hostPlatform.isDarwin
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

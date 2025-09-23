@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  common-updater-scripts,
-  coreutils,
-  git,
-  gnused,
-  makeWrapper,
-  nix,
-  jdk21,
-  writeScript,
-  nixosTests,
-  jq,
-  cacert,
-  curl,
+{ lib
+, stdenv
+, fetchurl
+, common-updater-scripts
+, coreutils
+, git
+, gnused
+, makeWrapper
+, nix
+, jdk21
+, writeScript
+, nixosTests
+, jq
+, cacert
+, curl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

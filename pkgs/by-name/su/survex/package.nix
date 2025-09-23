@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ffmpeg,
-  glib,
-  libGLU,
-  libICE,
-  libX11,
-  libgbm,
-  perl,
-  pkg-config,
-  proj,
-  gdal,
-  python3,
-  wrapGAppsHook3,
-  wxGTK32,
+{ lib
+, stdenv
+, fetchurl
+, ffmpeg
+, glib
+, libGLU
+, libICE
+, libX11
+, libgbm
+, perl
+, pkg-config
+, proj
+, gdal
+, python3
+, wrapGAppsHook3
+, wxGTK32
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  stdlib,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, stdlib
+, version ? null
+,
 }:
 
 let
@@ -32,7 +32,8 @@ let
         case = "8.16";
         out = "1.3.2+8.16";
       }
-    ] null;
+    ]
+      null;
 
   release = {
     "1.3.2+8.20".sha256 = "sha256-RuX2aInSjwebs/aEOoisNxqcIPqDA2kWehN9tFYqOx4=";

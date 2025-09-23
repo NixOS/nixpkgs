@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  crystal,
-  openssl,
-  testers,
-  amqpcat,
+{ lib
+, fetchFromGitHub
+, crystal
+, openssl
+, testers
+, amqpcat
+,
 }:
 
 crystal.buildCrystalPackage rec {

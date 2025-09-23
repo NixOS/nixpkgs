@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  llama-index-core,
-  hatchling,
-  pyowm,
-  pythonOlder,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, llama-index-core
+, hatchling
+, pyowm
+, pythonOlder
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

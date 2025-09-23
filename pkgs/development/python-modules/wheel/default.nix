@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+,
 }:
 
 buildPythonPackage rec {

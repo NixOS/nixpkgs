@@ -1,14 +1,14 @@
-{
-  coq,
-  mkCoqDerivation,
-  mathcomp,
-  coqeal,
-  mathcomp-real-closed,
-  mathcomp-bigenough,
-  mathcomp-zify,
-  mathcomp-algebra-tactics,
-  lib,
-  version ? null,
+{ coq
+, mkCoqDerivation
+, mathcomp
+, coqeal
+, mathcomp-real-closed
+, mathcomp-bigenough
+, mathcomp-zify
+, mathcomp-algebra-tactics
+, lib
+, version ? null
+,
 }:
 
 mkCoqDerivation {

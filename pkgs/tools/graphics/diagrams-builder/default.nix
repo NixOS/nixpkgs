@@ -5,18 +5,18 @@
 
   ~~~
   diagrams-builder.override {
-    extraPackages = self : [myHaskellPackage];
+  extraPackages = self : [myHaskellPackage];
   }
   ­~~~
 */
 
-{
-  lib,
-  stdenv,
-  ghcWithPackages,
-  makeWrapper,
-  diagrams-builder,
-  extraPackages ? (self: [ ]),
+{ lib
+, stdenv
+, ghcWithPackages
+, makeWrapper
+, diagrams-builder
+, extraPackages ? (self: [ ])
+,
 }:
 
 let

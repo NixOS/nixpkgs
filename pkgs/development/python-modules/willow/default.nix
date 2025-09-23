@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  defusedxml,
-  fetchFromGitHub,
-  filetype,
-  flit-core,
-  numpy,
-  opencv4,
-  pillow-heif,
-  pillow,
-  pytestCheckHook,
-  pythonOlder,
-  wand,
+{ lib
+, buildPythonPackage
+, defusedxml
+, fetchFromGitHub
+, filetype
+, flit-core
+, numpy
+, opencv4
+, pillow-heif
+, pillow
+, pytestCheckHook
+, pythonOlder
+, wand
+,
 }:
 
 buildPythonPackage rec {

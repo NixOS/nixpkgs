@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  gdown,
-  keras,
-  numpy,
-  opencv-python,
-  pillow,
-  tensorflow,
-  tf-keras,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  gdown
+, keras
+, numpy
+, opencv-python
+, pillow
+, tensorflow
+, tf-keras
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

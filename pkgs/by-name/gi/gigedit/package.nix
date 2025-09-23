@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoconf,
-  automake,
-  intltool,
-  libtool,
-  pkg-config,
-  which,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  gtkmm2,
-  pangomm_2_42,
-  libgig,
-  libsndfile,
-  libxslt,
-  linuxsampler,
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, intltool
+, libtool
+, pkg-config
+, which
+, docbook_xml_dtd_45
+, docbook_xsl
+, gtkmm2
+, pangomm_2_42
+, libgig
+, libsndfile
+, libxslt
+, linuxsampler
+,
 }:
 
 let

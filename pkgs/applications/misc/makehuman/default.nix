@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  python3,
-  qtbase,
-  git-lfs,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, python3
+, qtbase
+, git-lfs
+, wrapQtAppsHook
+,
 }:
 
 let

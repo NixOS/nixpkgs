@@ -1,21 +1,18 @@
-{
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  buildPythonPackage,
-  python,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  otb,
-
-  # tests
-  pytestCheckHook,
-  pytest-cov-stub,
-  requests,
-  writableTmpDirAsHomeHook,
+{ lib
+, fetchurl
+, fetchFromGitHub
+, buildPythonPackage
+, python
+, # build-system
+  setuptools
+, # dependencies
+  otb
+, # tests
+  pytestCheckHook
+, pytest-cov-stub
+, requests
+, writableTmpDirAsHomeHook
+,
 }:
 let
   # fetch the test data separately or else none of the test will work

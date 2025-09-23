@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  python3,
-  fetchFromGitHub,
-
-  # tests
-  addBinToPathHook,
-  gitMinimal,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+, # tests
+  addBinToPathHook
+, gitMinimal
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 let
   python = python3.override {

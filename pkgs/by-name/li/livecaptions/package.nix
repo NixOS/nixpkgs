@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  cmake,
-  appstream-glib,
-  desktop-file-utils,
-  wrapGAppsHook4,
-  onnxruntime,
-  libadwaita,
-  libpulseaudio,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, cmake
+, appstream-glib
+, desktop-file-utils
+, wrapGAppsHook4
+, onnxruntime
+, libadwaita
+, libpulseaudio
+, xorg
+,
 }:
 let
   aprilAsr = fetchFromGitHub {

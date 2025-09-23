@@ -1,12 +1,12 @@
 # cd nixpkgs
 # nix-build -A tests.testers.hasPkgConfigModules
-{
-  lib,
-  testers,
-  miniz,
-  zlib,
-  openssl,
-  runCommand,
+{ lib
+, testers
+, miniz
+, zlib
+, openssl
+, runCommand
+,
 }:
 
 lib.recurseIntoAttrs {

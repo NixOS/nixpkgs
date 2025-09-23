@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  runtimeShell,
-  SDL2,
-  freealut,
-  SDL2_image,
-  openal,
-  physfs,
-  zlib,
-  libGLU,
-  libGL,
-  glew,
-  tinyxml-2,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, fetchurl
+, stdenv
+, runtimeShell
+, SDL2
+, freealut
+, SDL2_image
+, openal
+, physfs
+, zlib
+, libGLU
+, libGL
+, glew
+, tinyxml-2
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {

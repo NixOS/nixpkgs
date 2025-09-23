@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchgit,
-  autoreconfHook,
-  dejagnu,
-  elfutils,
+{ lib
+, stdenv
+, fetchurl
+, fetchgit
+, autoreconfHook
+, dejagnu
+, elfutils
+,
 }:
 
 stdenv.mkDerivation {

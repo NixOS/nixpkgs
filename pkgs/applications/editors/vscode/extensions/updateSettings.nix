@@ -1,18 +1,18 @@
 # Updates the vscode setting file base on a nix expression
 # should run from the workspace root.
-{
-  writeShellScriptBin,
-  lib,
-  jq,
+{ writeShellScriptBin
+, lib
+, jq
+,
 }:
 ##User Input
-{
-  settings ? { },
-  # if marked as true will create an empty json file if does not exist
-  createIfDoesNotExists ? true,
-  vscodeSettingsFile ? ".vscode/settings.json",
-  userSettingsFolder ? "",
-  symlinkFromUserSetting ? false,
+{ settings ? { }
+, # if marked as true will create an empty json file if does not exist
+  createIfDoesNotExists ? true
+, vscodeSettingsFile ? ".vscode/settings.json"
+, userSettingsFolder ? ""
+, symlinkFromUserSetting ? false
+,
 }:
 let
 

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  cunit,
-  sphinx,
-  autoreconfHook,
-  nettle,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, cunit
+, sphinx
+, autoreconfHook
+, nettle
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

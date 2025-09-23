@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libloragw-sx1302";

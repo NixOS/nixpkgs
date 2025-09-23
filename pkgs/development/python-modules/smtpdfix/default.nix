@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
-  setuptools,
-  pytest,
-  portpicker,
-  cryptography,
-  aiosmtpd,
-  pytestCheckHook,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, setuptools
+, pytest
+, portpicker
+, cryptography
+, aiosmtpd
+, pytestCheckHook
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

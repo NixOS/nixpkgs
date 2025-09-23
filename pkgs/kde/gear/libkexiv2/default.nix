@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qt5compat,
-  pkg-config,
-  exiv2,
+{ mkKdeDerivation
+, qt5compat
+, pkg-config
+, exiv2
+,
 }:
 mkKdeDerivation {
   pname = "libkexiv2";

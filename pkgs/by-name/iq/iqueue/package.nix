@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libbsd,
-  microsoft-gsl,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libbsd
+, microsoft-gsl
+,
 }:
 
 stdenv.mkDerivation rec {

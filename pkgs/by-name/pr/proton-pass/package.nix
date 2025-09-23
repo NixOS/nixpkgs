@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  dpkg,
-  makeWrapper,
-  electron,
-  asar,
+{ lib
+, stdenvNoCC
+, fetchurl
+, dpkg
+, makeWrapper
+, electron
+, asar
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-pass";

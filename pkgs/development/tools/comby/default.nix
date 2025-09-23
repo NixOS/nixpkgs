@@ -1,23 +1,23 @@
-{
-  ocamlPackages,
-  fetchFromGitHub,
-  lib,
-  zlib,
-  pkg-config,
-  cacert,
-  gmp,
-  libev,
-  autoconf,
-  sqlite,
-  stdenv,
+{ ocamlPackages
+, fetchFromGitHub
+, lib
+, zlib
+, pkg-config
+, cacert
+, gmp
+, libev
+, autoconf
+, sqlite
+, stdenv
+,
 }:
 let
   mkCombyPackage =
-    {
-      pname,
-      extraBuildInputs ? [ ],
-      extraNativeInputs ? [ ],
-      preBuild ? "",
+    { pname
+    , extraBuildInputs ? [ ]
+    , extraNativeInputs ? [ ]
+    , preBuild ? ""
+    ,
     }:
     ocamlPackages.buildDunePackage rec {
       inherit pname preBuild;

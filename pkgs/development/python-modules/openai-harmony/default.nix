@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  rustPlatform,
-
-  # dependencies
-  pydantic,
-
-  # optional-dependencies
-  fastapi,
-  uvicorn,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  rustPlatform
+, # dependencies
+  pydantic
+, # optional-dependencies
+  fastapi
+, uvicorn
+,
 }:
 
 buildPythonPackage rec {

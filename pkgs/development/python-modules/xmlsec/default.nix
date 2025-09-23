@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hypothesis,
-  libtool,
-  libxml2,
-  libxslt,
-  lxml,
-  pkg-config,
-  pkgconfig,
-  pytestCheckHook,
-  setuptools-scm,
-  xmlsec,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hypothesis
+, libtool
+, libxml2
+, libxslt
+, lxml
+, pkg-config
+, pkgconfig
+, pytestCheckHook
+, setuptools-scm
+, xmlsec
+,
 }:
 
 buildPythonPackage rec {

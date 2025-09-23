@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  distro,
-  fetchFromGitHub,
-  pyasyncore,
-  pysnmp,
-  pysnmplib,
-  pytestCheckHook,
-  python-gnupg,
-  pythonAtLeast,
-  pythonOlder,
-  qrcode,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, distro
+, fetchFromGitHub
+, pyasyncore
+, pysnmp
+, pysnmplib
+, pytestCheckHook
+, python-gnupg
+, pythonAtLeast
+, pythonOlder
+, qrcode
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

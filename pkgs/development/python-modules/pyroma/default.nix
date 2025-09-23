@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  build,
-  docutils,
-  flit-core,
-  packaging,
-  pygments,
-  requests,
-  trove-classifiers,
-
-  # test
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, # build-system
+  setuptools
+, # dependencies
+  build
+, docutils
+, flit-core
+, packaging
+, pygments
+, requests
+, trove-classifiers
+, # test
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

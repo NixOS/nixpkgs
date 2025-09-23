@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libpcap,
-  sqlite,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, libpcap
+, sqlite
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

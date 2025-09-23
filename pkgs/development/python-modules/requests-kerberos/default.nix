@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  pyspnego,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
+{ lib
+, stdenv
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, pyspnego
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, requests
+,
 }:
 
 buildPythonPackage rec {

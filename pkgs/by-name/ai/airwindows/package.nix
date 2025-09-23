@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  cmake,
-  nix-update-script,
-  vst2-sdk,
+{ stdenv
+, fetchFromGitHub
+, lib
+, cmake
+, nix-update-script
+, vst2-sdk
+,
 }:
 stdenv.mkDerivation {
   pname = "airwindows";

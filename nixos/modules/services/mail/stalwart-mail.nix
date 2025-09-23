@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.stalwart-mail;
@@ -76,10 +75,12 @@ in
         assertion =
           !(
             (lib.hasAttrByPath [ "settings" "queue" ] cfg)
-            && (builtins.any (lib.hasAttrByPath [
-              "value"
-              "next-hop"
-            ]) (lib.attrsToList cfg.settings.queue))
+            && (builtins.any
+              (lib.hasAttrByPath [
+                "value"
+                "next-hop"
+              ])
+              (lib.attrsToList cfg.settings.queue))
           );
         message = ''
           Stalwart deprecated `next-hop` in favor of "virtual queues" `queue.strategy.route` \

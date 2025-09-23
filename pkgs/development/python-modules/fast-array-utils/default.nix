@@ -1,19 +1,19 @@
-{
-  buildPythonPackage,
-  dask,
-  fetchFromGitHub,
-  hatch-docstring-description,
-  hatch-fancy-pypi-readme,
-  hatch-min-requirements,
-  hatch-vcs,
-  hatchling,
-  lib,
-  numba,
-  numpy,
-  pytest-codspeed,
-  pytest-doctestplus,
-  pytestCheckHook,
-  scipy,
+{ buildPythonPackage
+, dask
+, fetchFromGitHub
+, hatch-docstring-description
+, hatch-fancy-pypi-readme
+, hatch-min-requirements
+, hatch-vcs
+, hatchling
+, lib
+, numba
+, numpy
+, pytest-codspeed
+, pytest-doctestplus
+, pytestCheckHook
+, scipy
+,
 }:
 
 buildPythonPackage rec {

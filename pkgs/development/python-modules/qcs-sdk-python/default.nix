@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  qcs-api-client-common,
-  quil,
-  rustPlatform,
-  libiconv,
-  syrupy,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, opentelemetry-api
+, opentelemetry-sdk
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, qcs-api-client-common
+, quil
+, rustPlatform
+, libiconv
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

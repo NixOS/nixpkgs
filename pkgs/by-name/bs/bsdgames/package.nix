@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  openssl,
-  flex,
-  bison,
-  less,
-  miscfiles,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, openssl
+, flex
+, bison
+, less
+, miscfiles
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

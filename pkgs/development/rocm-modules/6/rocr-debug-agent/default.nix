@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  clr,
-  git,
-  rocdbgapi,
-  elfutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, clr
+, git
+, rocdbgapi
+, elfutils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

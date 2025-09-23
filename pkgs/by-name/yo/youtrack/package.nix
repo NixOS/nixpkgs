@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  makeBinaryWrapper,
-  jdk21_headless,
-  gawk,
-  statePath ? "/var/lib/youtrack",
+{ lib
+, stdenvNoCC
+, fetchzip
+, makeBinaryWrapper
+, jdk21_headless
+, gawk
+, statePath ? "/var/lib/youtrack"
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

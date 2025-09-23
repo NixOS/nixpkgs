@@ -1,7 +1,7 @@
-{
-  buildNpmPackage,
-  fetchFromGitHub,
-  lib,
+{ buildNpmPackage
+, fetchFromGitHub
+, lib
+,
 }:
 
 buildNpmPackage (finalAttrs: {

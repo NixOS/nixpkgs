@@ -1,26 +1,26 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeWrapper,
-  writeText,
-  fpc,
-  gtk2,
-  glib,
-  pango,
-  atk,
-  gdk-pixbuf,
-  libXi,
-  xorgproto,
-  libX11,
-  libXext,
-  gdb,
-  gnumake,
-  binutils,
-  withQt ? false,
-  qtbase ? null,
-  libqtpas ? null,
-  wrapQtAppsHook ? null,
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, writeText
+, fpc
+, gtk2
+, glib
+, pango
+, atk
+, gdk-pixbuf
+, libXi
+, xorgproto
+, libX11
+, libXext
+, gdb
+, gnumake
+, binutils
+, withQt ? false
+, qtbase ? null
+, libqtpas ? null
+, wrapQtAppsHook ? null
+,
 }:
 
 # TODO:

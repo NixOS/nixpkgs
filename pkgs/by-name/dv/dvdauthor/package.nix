@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchpatch2,
-  fetchurl,
-  autoreconfHook,
-  libdvdread,
-  libxml2,
-  freetype,
-  fribidi,
-  libpng,
-  zlib,
-  pkg-config,
-  flex,
-  bison,
+{ lib
+, stdenv
+, fetchpatch2
+, fetchurl
+, autoreconfHook
+, libdvdread
+, libxml2
+, freetype
+, fribidi
+, libpng
+, zlib
+, pkg-config
+, flex
+, bison
+,
 }:
 
 stdenv.mkDerivation rec {

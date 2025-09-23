@@ -1,11 +1,11 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

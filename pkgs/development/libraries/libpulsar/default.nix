@@ -1,26 +1,26 @@
-{
-  lib,
-  asioSupport ? true,
-  asio,
-  boost,
-  log4cxxSupport ? false,
-  log4cxx,
-  snappySupport ? false,
-  snappy,
-  zlibSupport ? true,
-  zlib,
-  zstdSupport ? true,
-  zstd,
-  gtest,
-  gtestSupport ? false,
-  cmake,
-  curl,
-  fetchFromGitHub,
-  protobuf,
-  jsoncpp,
-  openssl,
-  pkg-config,
-  stdenv,
+{ lib
+, asioSupport ? true
+, asio
+, boost
+, log4cxxSupport ? false
+, log4cxx
+, snappySupport ? false
+, snappy
+, zlibSupport ? true
+, zlib
+, zstdSupport ? true
+, zstd
+, gtest
+, gtestSupport ? false
+, cmake
+, curl
+, fetchFromGitHub
+, protobuf
+, jsoncpp
+, openssl
+, pkg-config
+, stdenv
+,
 }:
 
 let

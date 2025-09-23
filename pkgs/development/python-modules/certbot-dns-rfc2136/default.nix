@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  acme,
-  certbot,
-  dnspython,
-  pytestCheckHook,
-  pythonOlder,
+{ buildPythonPackage
+, acme
+, certbot
+, dnspython
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

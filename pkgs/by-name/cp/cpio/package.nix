@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-
-  # for passthru.tests
-  git,
-  libguestfs,
-  nixosTests,
-  rpm,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, # for passthru.tests
+  git
+, libguestfs
+, nixosTests
+, rpm
+,
 }:
 
 stdenv.mkDerivation rec {

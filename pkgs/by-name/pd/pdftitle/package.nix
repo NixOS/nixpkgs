@@ -1,11 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  openai,
-  pdfminer,
-
-  withOpenai ? false,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, openai
+, pdfminer
+, withOpenai ? false
+,
 }:
 
 python3Packages.buildPythonApplication rec {

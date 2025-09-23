@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  glibcLocales,
-  glib-networking,
-  gobject-introspection,
-  gtk3,
-  libnotify,
-  nix-update-script,
-  python3Packages,
-  steam-run,
-  replaceVars,
-  unzip,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  xdg-utils,
+{ lib
+, fetchFromGitHub
+, glibcLocales
+, glib-networking
+, gobject-introspection
+, gtk3
+, libnotify
+, nix-update-script
+, python3Packages
+, steam-run
+, replaceVars
+, unzip
+, webkitgtk_4_1
+, wrapGAppsHook3
+, xdg-utils
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,7 +1,7 @@
-{
-  gitMinimal,
-  lib,
-  runCommand,
+{ gitMinimal
+, lib
+, runCommand
+,
 }:
 
 {
@@ -15,9 +15,10 @@
     # derivation like "python3" as well. Is there a robust way to determine if
     # this Python is already wrapped?
     if python ? "env" && lib.isDerivation python.env then
-      python.override (old: {
-        extraLibs = old.extraLibs ++ packages;
-      })
+      python.override
+        (old: {
+          extraLibs = old.extraLibs ++ packages;
+        })
     else
       python.withPackages (ps: packages);
 

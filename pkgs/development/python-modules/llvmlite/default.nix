@@ -1,23 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  isPyPy,
-  pythonAtLeast,
-
-  setuptools,
-
-  cmake,
-  ninja,
-
-  llvm_20,
-  libxml2,
-
-  # tests
-  pytestCheckHook,
-
-  withStaticLLVM ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, isPyPy
+, pythonAtLeast
+, setuptools
+, cmake
+, ninja
+, llvm_20
+, libxml2
+, # tests
+  pytestCheckHook
+, withStaticLLVM ? true
+,
 }:
 
 let

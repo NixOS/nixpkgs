@@ -18631,18 +18631,20 @@ self: super: with self; {
     lib.mapAttrs
       (
         name: grammarDrv:
-        callPackage ../development/python-modules/tree-sitter-grammars { inherit name grammarDrv; }
+          callPackage ../development/python-modules/tree-sitter-grammars { inherit name grammarDrv; }
       )
       (
         # Filtering grammars not compatible with current py-tree-sitter version
-        lib.filterAttrs (
-          name: value:
-          !(builtins.elem name [
-            "tree-sitter-go-template"
-            "tree-sitter-sql"
-            "tree-sitter-templ"
-          ])
-        ) pkgs.tree-sitter.builtGrammars
+        lib.filterAttrs
+          (
+            name: value:
+              !(builtins.elem name [
+                "tree-sitter-go-template"
+                "tree-sitter-sql"
+                "tree-sitter-templ"
+              ])
+          )
+          pkgs.tree-sitter.builtGrammars
       )
   );
 

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  wrapRustc,
-  bash,
-  curl,
-  zlib,
-  autoPatchelfHook,
-  gcc,
-  version,
-  src,
-  platform,
-  versionType,
+{ lib
+, stdenv
+, makeWrapper
+, wrapRustc
+, bash
+, curl
+, zlib
+, autoPatchelfHook
+, gcc
+, version
+, src
+, platform
+, versionType
+,
 }:
 
 let

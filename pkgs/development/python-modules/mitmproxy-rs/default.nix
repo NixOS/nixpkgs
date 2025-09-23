@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mitmproxy,
-  mitmproxy-linux,
-  mitmproxy-macos,
-  rustPlatform,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, mitmproxy
+, mitmproxy-linux
+, mitmproxy-macos
+, rustPlatform
+,
 }:
 
 buildPythonPackage rec {

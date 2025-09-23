@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch2,
-  joblib,
-  segments,
-  attrs,
-  dlinfo,
-  typing-extensions,
-  espeak-ng,
-  setuptools,
-  pytest,
+{ lib
+, stdenv
+, replaceVars
+, buildPythonPackage
+, fetchPypi
+, fetchpatch2
+, joblib
+, segments
+, attrs
+, dlinfo
+, typing-extensions
+, espeak-ng
+, setuptools
+, pytest
+,
 }:
 
 buildPythonPackage rec {

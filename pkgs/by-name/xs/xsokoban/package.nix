@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libX11,
-  xorgproto,
-  libXpm,
-  libXt,
+{ lib
+, stdenv
+, fetchurl
+, libX11
+, xorgproto
+, libXpm
+, libXt
+,
 }:
 
 stdenv.mkDerivation rec {

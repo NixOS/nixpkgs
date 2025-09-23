@@ -1,18 +1,18 @@
-{
-  gcc13Stdenv,
-  lib,
-  fetchzip,
-  autoconf,
-  automake,
-  libtool,
-  cups,
-  popt,
-  libtiff,
-  libpng,
-  ghostscript,
-  glib,
-  libusb1,
-  libxml2,
+{ gcc13Stdenv
+, lib
+, fetchzip
+, autoconf
+, automake
+, libtool
+, cups
+, popt
+, libtiff
+, libpng
+, ghostscript
+, glib
+, libusb1
+, libxml2
+,
 }:
 
 /*

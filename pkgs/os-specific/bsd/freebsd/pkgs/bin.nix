@@ -1,25 +1,25 @@
-{
-  mkDerivation,
-  pkgsBuildBuild,
-  libjail,
-  libnetbsd,
-  libcapsicum,
-  libcasper,
-  libxo,
-  libncurses-tinfo,
-  libedit,
-  lib,
-  stdenv,
-  bsdSetupHook,
-  freebsdSetupHook,
-  makeMinimal,
-  install,
-  tsort,
-  lorder,
-  mandoc,
-  groff,
-  byacc,
-  gencat,
+{ mkDerivation
+, pkgsBuildBuild
+, libjail
+, libnetbsd
+, libcapsicum
+, libcasper
+, libxo
+, libncurses-tinfo
+, libedit
+, lib
+, stdenv
+, bsdSetupHook
+, freebsdSetupHook
+, makeMinimal
+, install
+, tsort
+, lorder
+, mandoc
+, groff
+, byacc
+, gencat
+,
 }:
 mkDerivation {
   pname = "bins";

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  libtool,
-  popt,
-  alsa-lib,
-  alsa-plugins,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, popt
+, alsa-lib
+, alsa-plugins
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation {

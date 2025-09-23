@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch2,
-  pkg-config,
-  wrapQtAppsHook,
-  alsa-lib,
-  boost,
-  bzip2,
-  fftw,
-  fftwFloat,
-  libX11,
-  libfishsound,
-  libid3tag,
-  libjack2,
-  liblo,
-  libmad,
-  libogg,
-  liboggz,
-  libpulseaudio,
-  libsamplerate,
-  libsndfile,
-  lrdf,
-  opusfile,
-  qtbase,
-  qtsvg,
-  rubberband,
-  serd,
-  sord,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch2
+, pkg-config
+, wrapQtAppsHook
+, alsa-lib
+, boost
+, bzip2
+, fftw
+, fftwFloat
+, libX11
+, libfishsound
+, libid3tag
+, libjack2
+, liblo
+, libmad
+, libogg
+, liboggz
+, libpulseaudio
+, libsamplerate
+, libsndfile
+, lrdf
+, opusfile
+, qtbase
+, qtsvg
+, rubberband
+, serd
+, sord
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  boto3,
-  botocore,
-  poetry-core,
-  snakemake,
-  snakemake-interface-storage-plugins,
-  snakemake-interface-common,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, boto3
+, botocore
+, poetry-core
+, snakemake
+, snakemake-interface-storage-plugins
+, snakemake-interface-common
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

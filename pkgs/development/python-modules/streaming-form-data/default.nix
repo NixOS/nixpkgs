@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  cython,
-  pytestCheckHook,
-  requests-toolbelt,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, cython
+, pytestCheckHook
+, requests-toolbelt
+,
 }:
 
 buildPythonPackage rec {

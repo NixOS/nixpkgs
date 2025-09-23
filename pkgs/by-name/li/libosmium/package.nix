@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  protozero,
-  expat,
-  zlib,
-  bzip2,
-  boost,
-  lz4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, protozero
+, expat
+, zlib
+, bzip2
+, boost
+, lz4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

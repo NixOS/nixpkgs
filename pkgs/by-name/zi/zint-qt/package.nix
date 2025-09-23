@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  libpng,
-  qt6,
-  versionCheckHook,
-  zlib,
-  withGUI ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, libpng
+, qt6
+, versionCheckHook
+, zlib
+, withGUI ? true
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zint${lib.optionalString withGUI "-qt"}";

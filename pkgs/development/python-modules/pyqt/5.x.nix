@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  setuptools,
-  isPy27,
-  fetchPypi,
-  pkg-config,
-  dbus,
-  lndir,
-  dbus-python,
-  sip,
-  pyqt5-sip,
-  pyqt-builder,
-  libsForQt5,
-  mesa,
-  enableVerbose ? true,
-  withConnectivity ? false,
-  withMultimedia ? false,
-  withWebKit ? false,
-  withWebSockets ? false,
-  withLocation ? false,
-  withSerialPort ? false,
-  withTools ? false,
-  pkgsBuildTarget,
-  dbusSupport ? !stdenv.hostPlatform.isDarwin,
+{ lib
+, stdenv
+, buildPythonPackage
+, setuptools
+, isPy27
+, fetchPypi
+, pkg-config
+, dbus
+, lndir
+, dbus-python
+, sip
+, pyqt5-sip
+, pyqt-builder
+, libsForQt5
+, mesa
+, enableVerbose ? true
+, withConnectivity ? false
+, withMultimedia ? false
+, withWebKit ? false
+, withWebSockets ? false
+, withLocation ? false
+, withSerialPort ? false
+, withTools ? false
+, pkgsBuildTarget
+, dbusSupport ? !stdenv.hostPlatform.isDarwin
+,
 }:
 
 buildPythonPackage rec {
@@ -130,20 +130,20 @@ buildPythonPackage rec {
   ++ (
     with pkgsBuildTarget.targetPackages.libsForQt5;
     [ ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ qmake ]
-    ++ [
+      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ qmake ]
+      ++ [
       qtbase
       qtsvg
       qtdeclarative
       qtwebchannel
     ]
-    ++ lib.optional withConnectivity qtconnectivity
-    ++ lib.optional withMultimedia qtmultimedia
-    ++ lib.optional withWebKit qtwebkit
-    ++ lib.optional withWebSockets qtwebsockets
-    ++ lib.optional withLocation qtlocation
-    ++ lib.optional withSerialPort qtserialport
-    ++ lib.optional withTools qttools
+      ++ lib.optional withConnectivity qtconnectivity
+      ++ lib.optional withMultimedia qtmultimedia
+      ++ lib.optional withWebKit qtwebkit
+      ++ lib.optional withWebSockets qtwebsockets
+      ++ lib.optional withLocation qtlocation
+      ++ lib.optional withSerialPort qtserialport
+      ++ lib.optional withTools qttools
   );
 
   buildInputs =

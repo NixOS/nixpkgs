@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  h5py,
-  ipython,
-  numba,
-  numpy,
-  pytestCheckHook,
-  setuptools,
-  scipy,
-  sparse,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, h5py
+, ipython
+, numba
+, numpy
+, pytestCheckHook
+, setuptools
+, scipy
+, sparse
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  melpaBuild,
-  prop-menu,
-  gitUpdater,
+{ lib
+, fetchFromGitHub
+, melpaBuild
+, prop-menu
+, gitUpdater
+,
 }:
 
 let

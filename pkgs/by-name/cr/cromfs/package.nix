@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  fuse,
-  perl,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, fuse
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

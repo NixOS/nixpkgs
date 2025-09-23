@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pygtail,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pygtail
+,
 }:
 
 buildPythonPackage rec {

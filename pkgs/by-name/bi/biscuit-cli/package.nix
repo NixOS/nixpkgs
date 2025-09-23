@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  testers,
-  nix-update-script,
-  biscuit-cli,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, testers
+, nix-update-script
+, biscuit-cli
+,
 }:
 
 rustPlatform.buildRustPackage rec {

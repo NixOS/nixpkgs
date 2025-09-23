@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenvNoCC,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  undmg,
-  zstd,
-  alsa-lib,
-  curl,
-  fontconfig,
-  libglvnd,
-  libxkbcommon,
-  vulkan-loader,
-  wayland,
-  xdg-utils,
-  xorg,
-  zlib,
-  makeWrapper,
-  waylandSupport ? false,
+{ lib
+, stdenvNoCC
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, undmg
+, zstd
+, alsa-lib
+, curl
+, fontconfig
+, libglvnd
+, libxkbcommon
+, vulkan-loader
+, wayland
+, xdg-utils
+, xorg
+, zlib
+, makeWrapper
+, waylandSupport ? false
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  parsec,
-  MenhirLib,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, parsec
+, MenhirLib
+, version ? null
+,
 }:
 
 (mkCoqDerivation {
@@ -21,7 +21,8 @@
     lib.switch coq.coq-version [
       (case (range "8.14" "9.1") "0.2.0")
       (case (range "8.14" "8.20") "0.1.3")
-    ] null;
+    ]
+      null;
   release = {
     "0.2.0".sha256 = "sha256-qDRTgWLUvu4x3/d3BDcqo2I4W5ZmLyRiwuY/Tm/FuKA=";
     "0.1.3".sha256 = "sha256-lElAzW4IuX+BB6ngDjlyKn0MytLRfbhQanB+Lct/WR0=";

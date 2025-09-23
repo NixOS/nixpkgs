@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  openssl,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableManpages ? false,
-  pandoc,
+{ stdenv
+, lib
+, fetchzip
+, openssl
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableManpages ? false
+, pandoc
+,
 }:
 
 stdenv.mkDerivation rec {

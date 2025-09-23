@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  buildPackages,
-  pkg-config,
-  icu,
-  catch2_3,
-  enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, buildPackages
+, pkg-config
+, icu
+, catch2_3
+, enableManpages ? buildPackages.pandoc.compiler.bootstrapAvailable
+,
 }:
 
 stdenv.mkDerivation rec {

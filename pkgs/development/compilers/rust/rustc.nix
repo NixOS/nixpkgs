@@ -1,45 +1,45 @@
-{
-  lib,
-  stdenv,
-  removeReferencesTo,
-  pkgsBuildBuild,
-  pkgsBuildHost,
-  pkgsBuildTarget,
-  targetPackages,
-  llvmShared,
-  llvmSharedForBuild,
-  llvmSharedForHost,
-  llvmSharedForTarget,
-  llvmPackages,
-  runCommandLocal,
-  fetchurl,
-  file,
-  python3,
-  cargo,
-  cmake,
-  rustc,
-  rustfmt,
-  pkg-config,
-  openssl,
-  xz,
-  zlib,
-  bintools,
-  which,
-  libffi,
-  withBundledLLVM ? false,
-  enableRustcDev ? true,
-  version,
-  sha256,
-  patches ? [ ],
-  fd,
-  ripgrep,
-  wezterm,
-  firefox,
-  thunderbird,
-  # This only builds std for target and reuses the rustc from build.
-  fastCross,
-  lndir,
-  makeWrapper,
+{ lib
+, stdenv
+, removeReferencesTo
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, targetPackages
+, llvmShared
+, llvmSharedForBuild
+, llvmSharedForHost
+, llvmSharedForTarget
+, llvmPackages
+, runCommandLocal
+, fetchurl
+, file
+, python3
+, cargo
+, cmake
+, rustc
+, rustfmt
+, pkg-config
+, openssl
+, xz
+, zlib
+, bintools
+, which
+, libffi
+, withBundledLLVM ? false
+, enableRustcDev ? true
+, version
+, sha256
+, patches ? [ ]
+, fd
+, ripgrep
+, wezterm
+, firefox
+, thunderbird
+, # This only builds std for target and reuses the rustc from build.
+  fastCross
+, lndir
+, makeWrapper
+,
 }:
 
 let
@@ -86,13 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
     # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
     # This doesn't apply to cross-building for FreeBSD because the host
     # uses libstdc++, but the target (used for building std) uses libc++
-    optional (
-      stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && !useLLVM
-    ) "--push-state --as-needed -lstdc++ --pop-state"
+    optional
+      (
+        stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && !useLLVM
+      ) "--push-state --as-needed -lstdc++ --pop-state"
     ++
-      optional
-        (stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && useLLVM)
-        "--push-state --as-needed -L${llvmPackages.libcxx}/lib -lc++ -lc++abi -lLLVM-${lib.versions.major llvmPackages.llvm.version} --pop-state"
+    optional
+      (stdenv.hostPlatform.isLinux && !withBundledLLVM && !stdenv.targetPlatform.isFreeBSD && useLLVM)
+      "--push-state --as-needed -L${llvmPackages.libcxx}/lib -lc++ -lc++abi -lLLVM-${lib.versions.major llvmPackages.llvm.version} --pop-state"
     ++ optional (stdenv.hostPlatform.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
     ++ optional stdenv.hostPlatform.isDarwin "-rpath ${llvmSharedForHost.lib}/lib"
   );

@@ -1,32 +1,32 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkLibretroCore,
-  nix-update-script,
-  asciidoctor,
-  cmake,
-  doxygen,
-  pkg-config,
-  flac,
-  fluidsynth,
-  fmt,
-  freetype,
-  glib,
-  harfbuzz,
-  lhasa,
-  liblcf,
-  libpng,
-  libsndfile,
-  libsysprof-capture,
-  libvorbis,
-  libxmp,
-  mpg123,
-  nlohmann_json,
-  opusfile,
-  pcre2,
-  pixman,
-  speexdsp,
-  wildmidi,
+{ lib
+, fetchFromGitHub
+, mkLibretroCore
+, nix-update-script
+, asciidoctor
+, cmake
+, doxygen
+, pkg-config
+, flac
+, fluidsynth
+, fmt
+, freetype
+, glib
+, harfbuzz
+, lhasa
+, liblcf
+, libpng
+, libsndfile
+, libsysprof-capture
+, libvorbis
+, libxmp
+, mpg123
+, nlohmann_json
+, opusfile
+, pcre2
+, pixman
+, speexdsp
+, wildmidi
+,
 }:
 mkLibretroCore rec {
   core = "easyrpg";

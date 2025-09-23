@@ -1,10 +1,10 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  msmart-ng,
-  pytestCheckHook,
-  pytest-homeassistant-custom-component,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, msmart-ng
+, pytestCheckHook
+, pytest-homeassistant-custom-component
+,
 }:
 
 buildHomeAssistantComponent rec {

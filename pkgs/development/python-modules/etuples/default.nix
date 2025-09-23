@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cons,
-  multipledispatch,
-  py,
-  pytestCheckHook,
-  pytest-html,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cons
+, multipledispatch
+, py
+, pytestCheckHook
+, pytest-html
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

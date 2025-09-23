@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  R,
-  readline,
-  gmp,
-  zlib,
-  librdf_raptor2,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, R
+, readline
+, gmp
+, zlib
+, librdf_raptor2
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  more-itertools,
-  click,
-  hyprland,
-  makeWrapper,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, more-itertools
+, click
+, hyprland
+, makeWrapper
+,
 }:
 
 buildPythonPackage rec {

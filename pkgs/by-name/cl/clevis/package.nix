@@ -1,23 +1,23 @@
-{
-  lib,
-  asciidoc-full,
-  coreutils,
-  cryptsetup,
-  curl,
-  fetchFromGitHub,
-  gnugrep,
-  gnused,
-  jansson,
-  jose,
-  libpwquality,
-  luksmeta,
-  makeWrapper,
-  meson,
-  ninja,
-  nixosTests,
-  pkg-config,
-  stdenv,
-  tpm2-tools,
+{ lib
+, asciidoc-full
+, coreutils
+, cryptsetup
+, curl
+, fetchFromGitHub
+, gnugrep
+, gnused
+, jansson
+, jose
+, libpwquality
+, luksmeta
+, makeWrapper
+, meson
+, ninja
+, nixosTests
+, pkg-config
+, stdenv
+, tpm2-tools
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

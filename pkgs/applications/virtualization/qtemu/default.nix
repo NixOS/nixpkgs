@@ -1,11 +1,11 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitLab,
-  pkg-config,
-  qmake,
-  qtbase,
-  qemu,
+{ lib
+, mkDerivation
+, fetchFromGitLab
+, pkg-config
+, qmake
+, qtbase
+, qemu
+,
 }:
 
 mkDerivation rec {

@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  nodejs,
-  libelf,
-  libunwind,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, nodejs
+, libelf
+, libunwind
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  symlinkJoin,
-  lib,
-  makeWrapper,
-  wayfire,
-  plugins ? [ ],
+{ symlinkJoin
+, lib
+, makeWrapper
+, wayfire
+, plugins ? [ ]
+,
 }:
 
 symlinkJoin {

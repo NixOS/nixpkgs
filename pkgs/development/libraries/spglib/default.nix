@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  gfortran,
-  gtest,
-  openmp,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, gfortran
+, gtest
+, openmp
+,
 }:
 
 stdenv.mkDerivation rec {

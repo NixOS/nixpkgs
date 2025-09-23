@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  pkgsCross,
+{ lib
+, fetchFromGitHub
+, pkgsCross
+,
 }:
 let
   inherit (pkgsCross.musl64) rustPlatform;

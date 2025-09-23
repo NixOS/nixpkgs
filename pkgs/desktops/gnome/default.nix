@@ -1,34 +1,35 @@
-{
-  config,
-  pkgs,
-  lib,
+{ config
+, pkgs
+, lib
+,
 }:
 
 # NOTE: New packages should generally go to top-level instead of here!
-lib.makeScope pkgs.newScope (
-  self:
-  let
-    inherit (self) callPackage;
-  in
-  {
-    updateScript = callPackage ./update.nix { };
+lib.makeScope pkgs.newScope
+  (
+    self:
+    let
+      inherit (self) callPackage;
+    in
+    {
+      updateScript = callPackage ./update.nix { };
 
-    # Temporary helper until gdk-pixbuf supports multiple cache files.
-    # This will go away, do not use outside Nixpkgs.
-    _gdkPixbufCacheBuilder_DO_NOT_USE = callPackage ./gdk-pixbuf-cache-builder.nix { };
+      # Temporary helper until gdk-pixbuf supports multiple cache files.
+      # This will go away, do not use outside Nixpkgs.
+      _gdkPixbufCacheBuilder_DO_NOT_USE = callPackage ./gdk-pixbuf-cache-builder.nix { };
 
-    # ISO installer
-    # installerIso = callPackage ./installer.nix {};
+      # ISO installer
+      # installerIso = callPackage ./installer.nix {};
 
-    #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
+      #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
-    gvfs = pkgs.gvfs.override { gnomeSupport = true; };
+      gvfs = pkgs.gvfs.override { gnomeSupport = true; };
 
-    nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
+      nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
 
-  }
-)
-// lib.optionalAttrs config.allowAliases {
+    }
+  )
+  // lib.optionalAttrs config.allowAliases {
   #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
   libgnome-keyring = throw "The ‘gnome.libgnome-keyring’ was moved to top-level. Please use ‘pkgs.libgnome-keyring’ directly."; # Added on 2024-06-22.
   libchamplain = throw "The ‘gnome.libchamplain’ was removed as unused. Please use ‘pkgs.libchamplain’ directly."; # Added on 2024-08-11.

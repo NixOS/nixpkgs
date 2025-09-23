@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gtk3,
-  sassc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gtk3
+, sassc
+,
 }:
 
 stdenv.mkDerivation rec {

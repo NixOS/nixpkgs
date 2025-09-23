@@ -1,10 +1,10 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  imagemagick,
-  installShellFiles,
-  nix-update-script,
+{ lib
+, python3
+, fetchFromGitHub
+, imagemagick
+, installShellFiles
+, nix-update-script
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

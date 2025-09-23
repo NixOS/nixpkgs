@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pkg-config,
-  lndir,
-  sip,
-  pyqt-builder,
-  qt6Packages,
-  pyqt6,
-  python,
-  mesa,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pkg-config
+, lndir
+, sip
+, pyqt-builder
+, qt6Packages
+, pyqt6
+, python
+, mesa
+,
 }:
 
 buildPythonPackage rec {

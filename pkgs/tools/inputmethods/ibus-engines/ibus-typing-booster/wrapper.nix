@@ -1,10 +1,9 @@
-{
-  typing-booster,
-  symlinkJoin,
-  hunspellDicts,
-  lib,
-  makeWrapper,
-  langs ? [
+{ typing-booster
+, symlinkJoin
+, hunspellDicts
+, lib
+, makeWrapper
+, langs ? [
     "de-de"
     "en-gb-ise"
     "en-us"
@@ -13,7 +12,8 @@
     "it-it"
     "sv-se"
     "sv-fi"
-  ],
+  ]
+,
 }:
 
 let

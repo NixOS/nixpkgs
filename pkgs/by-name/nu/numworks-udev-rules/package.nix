@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  udevCheckHook,
+{ lib
+, stdenv
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

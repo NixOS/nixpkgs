@@ -1,15 +1,15 @@
-{
-  lib,
-  buildGo124Module,
-  fetchFromGitHub,
-  go-swag,
-  versionCheckHook,
-  dbip-country-lite,
-  formats,
-  nix-update-script,
-  nezha-theme-admin,
-  nezha-theme-user,
-  withThemes ? [ ],
+{ lib
+, buildGo124Module
+, fetchFromGitHub
+, go-swag
+, versionCheckHook
+, dbip-country-lite
+, formats
+, nix-update-script
+, nezha-theme-admin
+, nezha-theme-user
+, withThemes ? [ ]
+,
 }:
 
 let

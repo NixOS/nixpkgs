@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  cargo-tauri_1,
-  nodejs,
-  npmHooks,
-  pkg-config,
-  wrapGAppsHook3,
-  webkitgtk_4_0,
-  dbus,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchNpmDeps
+, cargo-tauri_1
+, nodejs
+, npmHooks
+, pkg-config
+, wrapGAppsHook3
+, webkitgtk_4_0
+, dbus
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "restic-browser";

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  eslint_d,
-  testers,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, eslint_d
+, testers
+,
 }:
 
 buildNpmPackage rec {

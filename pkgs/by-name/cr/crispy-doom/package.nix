@@ -1,18 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libpng,
-  libsamplerate,
-  pkg-config,
-  python3,
-  SDL2,
-  SDL2_mixer,
-  SDL2_net,
-  zlib,
-
-  enableTruecolor ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libpng
+, libsamplerate
+, pkg-config
+, python3
+, SDL2
+, SDL2_mixer
+, SDL2_net
+, zlib
+, enableTruecolor ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

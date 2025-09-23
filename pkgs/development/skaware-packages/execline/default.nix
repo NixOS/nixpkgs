@@ -1,9 +1,9 @@
-{
-  lib,
-  skawarePackages,
-  skalibs,
-  execline,
-  writeTextFile,
+{ lib
+, skawarePackages
+, skalibs
+, execline
+, writeTextFile
+,
 }:
 
 let

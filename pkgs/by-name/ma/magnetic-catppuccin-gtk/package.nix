@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gtk-engine-murrine,
-  jdupes,
-  sassc,
-  accent ? [ "default" ],
-  shade ? "dark",
-  size ? "standard",
-  tweaks ? [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, gtk-engine-murrine
+, jdupes
+, sassc
+, accent ? [ "default" ]
+, shade ? "dark"
+, size ? "standard"
+, tweaks ? [ ]
+,
 }:
 let
   validAccents = [
@@ -57,55 +57,55 @@ lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent lib.che
   tweaks
 
   stdenv.mkDerivation
-  {
-    pname = "magnetic-${lib.toLower pname}";
-    version = "0-unstable-2025-04-25";
+{
+  pname = "magnetic-${lib.toLower pname}";
+  version = "0-unstable-2025-04-25";
 
-    src = fetchFromGitHub {
-      owner = "Fausto-Korpsvart";
-      repo = "Catppuccin-GTK-Theme";
-      rev = "c961826d027ed93fae12a9a309616e36d140e6b9";
-      hash = "sha256-7F4FrhM+kBFPeLp2mjmYkoDiF9iKDUkC27LUBuFyz7g=";
-    };
+  src = fetchFromGitHub {
+    owner = "Fausto-Korpsvart";
+    repo = "Catppuccin-GTK-Theme";
+    rev = "c961826d027ed93fae12a9a309616e36d140e6b9";
+    hash = "sha256-7F4FrhM+kBFPeLp2mjmYkoDiF9iKDUkC27LUBuFyz7g=";
+  };
 
-    nativeBuildInputs = [
-      jdupes
-      sassc
-    ];
+  nativeBuildInputs = [
+    jdupes
+    sassc
+  ];
 
-    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-    postPatch = ''
-      find -name "*.sh" -print0 | while IFS= read -r -d ''' file; do
-        patchShebangs "$file"
-      done
-    '';
+  postPatch = ''
+    find -name "*.sh" -print0 | while IFS= read -r -d ''' file; do
+      patchShebangs "$file"
+    done
+  '';
 
-    dontBuild = true;
+  dontBuild = true;
 
-    installPhase = ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out/share/themes
+    mkdir -p $out/share/themes
 
-      ./themes/install.sh \
-        --name ${pname} \
-        ${toString (map (x: "--theme " + x) accent)} \
-        ${lib.optionalString (shade != null) ("--color " + shade)} \
-        ${lib.optionalString (size != null) ("--size " + size)} \
-        ${toString (map (x: "--tweaks " + x) tweaks)} \
-        --dest $out/share/themes
+    ./themes/install.sh \
+      --name ${pname} \
+      ${toString (map (x: "--theme " + x) accent)} \
+      ${lib.optionalString (shade != null) ("--color " + shade)} \
+      ${lib.optionalString (size != null) ("--size " + size)} \
+      ${toString (map (x: "--tweaks " + x) tweaks)} \
+      --dest $out/share/themes
 
-      jdupes --quiet --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
-    meta = {
-      description = "GTK Theme with Catppuccin colour scheme";
-      homepage = "https://github.com/Fausto-Korpsvart/Catppuccin-GTK-Theme";
-      license = lib.licenses.gpl3Only;
-      maintainers = with lib.maintainers; [ icy-thought ];
-      platforms = lib.platforms.all;
-    };
-  }
+  meta = {
+    description = "GTK Theme with Catppuccin colour scheme";
+    homepage = "https://github.com/Fausto-Korpsvart/Catppuccin-GTK-Theme";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ icy-thought ];
+    platforms = lib.platforms.all;
+  };
+}

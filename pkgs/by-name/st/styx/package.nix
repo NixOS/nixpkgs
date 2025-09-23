@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  caddy,
-  asciidoctor,
-  file,
-  lessc,
-  sass,
-  multimarkdown,
-  linkchecker,
-  perlPackages,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, caddy
+, asciidoctor
+, file
+, lessc
+, sass
+, multimarkdown
+, linkchecker
+, perlPackages
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation rec {

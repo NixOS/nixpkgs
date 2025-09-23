@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  js_of_ocaml,
-  js_of_ocaml-ppx,
-  lwd,
-  tyxml,
+{ lib
+, buildDunePackage
+, js_of_ocaml
+, js_of_ocaml-ppx
+, lwd
+, tyxml
+,
 }:
 
 buildDunePackage {

@@ -1,24 +1,23 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  coreutils,
-  runCommand,
-  runtimeShell,
-  writeText,
-  terraform-providers,
-  installShellFiles,
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, runCommand
+, runtimeShell
+, writeText
+, terraform-providers
+, installShellFiles
+,
 }:
 
 let
   generic =
-    {
-      version,
-      hash,
-      vendorHash ? null,
-      ...
+    { version
+    , hash
+    , vendorHash ? null
+    , ...
     }@attrs:
     let
       attrs' = builtins.removeAttrs attrs [
@@ -138,11 +137,12 @@ let
           };
         in
         # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
-        # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
+          # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
         if actualPlugins == [ ] then
-          terraform.overrideAttrs (orig: {
-            passthru = orig.passthru // passthru;
-          })
+          terraform.overrideAttrs
+            (orig: {
+              passthru = orig.passthru // passthru;
+            })
         else
           lib.appendToName "with-plugins" (
             stdenv.mkDerivation {

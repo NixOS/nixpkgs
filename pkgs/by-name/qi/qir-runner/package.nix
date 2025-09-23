@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  llvmPackages_19,
-  libffi,
-  zlib,
-  libxml2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, llvmPackages_19
+, libffi
+, zlib
+, libxml2
+,
 }:
 
 rustPlatform.buildRustPackage rec {

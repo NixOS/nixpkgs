@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  sabnzbd,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, sabnzbd
+,
 }:
 buildPythonPackage rec {
   pname = "sabctools";

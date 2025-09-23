@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  testers,
-  gitUpdater,
-  autoreconfHook,
-  util-macros,
+{ lib
+, stdenv
+, fetchFromGitLab
+, testers
+, gitUpdater
+, autoreconfHook
+, util-macros
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

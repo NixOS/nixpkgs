@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  icalendar,
-  lxml,
-  pytestCheckHook,
-  python,
-  recurring-ical-events,
-  requests,
-  hatchling,
-  hatch-vcs,
-  proxy-py,
-  pyfakefs,
-  toPythonModule,
-  tzlocal,
-  vobject,
-  xandikos,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, icalendar
+, lxml
+, pytestCheckHook
+, python
+, recurring-ical-events
+, requests
+, hatchling
+, hatch-vcs
+, proxy-py
+, pyfakefs
+, toPythonModule
+, tzlocal
+, vobject
+, xandikos
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

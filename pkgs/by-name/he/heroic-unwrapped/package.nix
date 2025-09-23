@@ -1,20 +1,20 @@
-{
-  lib,
-  callPackage,
-  stdenv,
-  fetchFromGitHub,
-  # Pinned, because our FODs are not guaranteed to be stable between major versions.
-  pnpm_10,
-  nodejs,
-  python3,
-  makeWrapper,
-  # Electron updates frequently break Heroic, so pin same version as upstream, or newest non-EOL.
-  electron_36,
-  vulkan-helper,
-  gogdl,
-  nile,
-  comet-gog_heroic,
-  umu-launcher,
+{ lib
+, callPackage
+, stdenv
+, fetchFromGitHub
+, # Pinned, because our FODs are not guaranteed to be stable between major versions.
+  pnpm_10
+, nodejs
+, python3
+, makeWrapper
+, # Electron updates frequently break Heroic, so pin same version as upstream, or newest non-EOL.
+  electron_36
+, vulkan-helper
+, gogdl
+, nile
+, comet-gog_heroic
+, umu-launcher
+,
 }:
 
 let

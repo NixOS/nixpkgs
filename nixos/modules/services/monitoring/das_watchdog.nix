@@ -1,10 +1,9 @@
 # A general watchdog for the linux operating system that should run in the
 # background at all times to ensure a realtime process won't hang the machine
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 

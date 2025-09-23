@@ -1,69 +1,62 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  cmake,
-
-  # dependencies
-  glib,
-  libXinerama,
-  catch2,
-  gperf,
-
-  # lib.optional features without extra dependencies
-  mpdSupport ? true,
-  ibmSupport ? true, # IBM/Lenovo notebooks
+{ config
+, lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, cmake
+, # dependencies
+  glib
+, libXinerama
+, catch2
+, gperf
+, # lib.optional features without extra dependencies
+  mpdSupport ? true
+, ibmSupport ? true
+, # IBM/Lenovo notebooks
 
   # lib.optional features with extra dependencies
 
-  docsSupport ? true,
-  buildPackages,
-  pandoc,
-  python3,
-
-  ncursesSupport ? true,
-  ncurses ? null,
-  x11Support ? true,
-  freetype,
-  xorg,
-  waylandSupport ? true,
-  pango,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  xdamageSupport ? x11Support,
-  libXdamage ? null,
-  doubleBufferSupport ? x11Support,
-  imlib2Support ? x11Support,
-  imlib2 ? null,
-
-  luaSupport ? true,
-  lua ? null,
-  luaImlib2Support ? luaSupport && imlib2Support,
-  luaCairoSupport ? luaSupport && (x11Support || waylandSupport),
-  cairo ? null,
-  toluapp ? null,
-
-  wirelessSupport ? true,
-  wirelesstools ? null,
-  nvidiaSupport ? false,
-  libXNVCtrl ? null,
-  pulseSupport ? config.pulseaudio or false,
-  libpulseaudio ? null,
-
-  curlSupport ? true,
-  curl ? null,
-  rssSupport ? curlSupport,
-  journalSupport ? true,
-  systemd ? null,
-  libxml2 ? null,
-
-  extrasSupport ? true,
-
-  versionCheckHook,
+  docsSupport ? true
+, buildPackages
+, pandoc
+, python3
+, ncursesSupport ? true
+, ncurses ? null
+, x11Support ? true
+, freetype
+, xorg
+, waylandSupport ? true
+, pango
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xdamageSupport ? x11Support
+, libXdamage ? null
+, doubleBufferSupport ? x11Support
+, imlib2Support ? x11Support
+, imlib2 ? null
+, luaSupport ? true
+, lua ? null
+, luaImlib2Support ? luaSupport && imlib2Support
+, luaCairoSupport ? luaSupport && (x11Support || waylandSupport)
+, cairo ? null
+, toluapp ? null
+, wirelessSupport ? true
+, wirelesstools ? null
+, nvidiaSupport ? false
+, libXNVCtrl ? null
+, pulseSupport ? config.pulseaudio or false
+, libpulseaudio ? null
+, curlSupport ? true
+, curl ? null
+, rssSupport ? curlSupport
+, journalSupport ? true
+, systemd ? null
+, libxml2 ? null
+, extrasSupport ? true
+, versionCheckHook
+,
 }:
 
 assert docsSupport -> pandoc != null && python3 != null;

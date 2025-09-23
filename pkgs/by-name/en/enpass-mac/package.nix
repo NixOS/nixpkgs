@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  gzip,
-  xar,
-  cpio,
-  writeShellApplication,
-  curl,
-  cacert,
-  gawk,
-  common-updater-scripts,
-  versionCheckHook,
-  writeShellScript,
-  coreutils,
-  xcbuild,
+{ lib
+, stdenvNoCC
+, fetchurl
+, gzip
+, xar
+, cpio
+, writeShellApplication
+, curl
+, cacert
+, gawk
+, common-updater-scripts
+, versionCheckHook
+, writeShellScript
+, coreutils
+, xcbuild
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

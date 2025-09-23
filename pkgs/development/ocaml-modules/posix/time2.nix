@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  posix-base,
-  posix-types,
-  unix-errno,
+{ lib
+, buildDunePackage
+, posix-base
+, posix-types
+, unix-errno
+,
 }:
 
 buildDunePackage {

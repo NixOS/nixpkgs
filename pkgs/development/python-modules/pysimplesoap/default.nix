@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchDebianPatch,
-  fetchPypi,
-  buildPythonPackage,
-  m2crypto,
-  nix-update-script,
+{ lib
+, fetchDebianPatch
+, fetchPypi
+, buildPythonPackage
+, m2crypto
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

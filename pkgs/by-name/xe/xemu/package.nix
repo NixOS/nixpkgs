@@ -1,33 +1,33 @@
-{
-  lib,
-  SDL2,
-  SDL2_image,
-  fetchFromGitHub,
-  gettext,
-  git,
-  glib,
-  gtk3,
-  cmake,
-  curl,
-  libdrm,
-  libepoxy,
-  libpcap,
-  libsamplerate,
-  libslirp,
-  libgbm,
-  vulkan-headers,
-  vulkan-loader,
-  meson,
-  ninja,
-  openssl,
-  perl,
-  pkg-config,
-  python3Packages,
-  stdenv,
-  vte,
-  which,
-  wrapGAppsHook3,
-  cacert,
+{ lib
+, SDL2
+, SDL2_image
+, fetchFromGitHub
+, gettext
+, git
+, glib
+, gtk3
+, cmake
+, curl
+, libdrm
+, libepoxy
+, libpcap
+, libsamplerate
+, libslirp
+, libgbm
+, vulkan-headers
+, vulkan-loader
+, meson
+, ninja
+, openssl
+, perl
+, pkg-config
+, python3Packages
+, stdenv
+, vte
+, which
+, wrapGAppsHook3
+, cacert
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

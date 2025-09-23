@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  cmake,
-  extra-cmake-modules,
-  kxmlgui,
-  fetchFromGitLab,
-  kdelibs4support,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, cmake
+, extra-cmake-modules
+, kxmlgui
+, fetchFromGitLab
+, kdelibs4support
+, wrapQtAppsHook
+,
 }:
 stdenv.mkDerivation rec {
   pname = "systemdgenie";

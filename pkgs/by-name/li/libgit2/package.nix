@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  python3,
-  zlib,
-  libssh2,
-  openssl,
-  pcre2,
-  libiconv,
-  staticBuild ? stdenv.hostPlatform.isStatic,
-  # for passthru.tests
-  libgit2-glib,
-  python3Packages,
-  gitstatus,
-  llhttp,
-  withGssapi ? false,
-  krb5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, python3
+, zlib
+, libssh2
+, openssl
+, pcre2
+, libiconv
+, staticBuild ? stdenv.hostPlatform.isStatic
+, # for passthru.tests
+  libgit2-glib
+, python3Packages
+, gitstatus
+, llhttp
+, withGssapi ? false
+, krb5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

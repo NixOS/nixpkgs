@@ -1,5 +1,5 @@
-{
-  pkgs ? import ../.. { },
+{ pkgs ? import ../.. { }
+,
 }:
 let
   prevNixpkgs = pkgs.fetchFromGitHub {
@@ -12,9 +12,9 @@ let
   };
 in
 (pkgs.runCommand "lib-cross-eval-merge-v2"
-  {
-    nativeBuildInputs = [ pkgs.nix-unit ];
-  }
+{
+  nativeBuildInputs = [ pkgs.nix-unit ];
+}
   ''
     export HOME=$TMPDIR
     nix-unit --eval-store "$HOME" ${./checkAndMergeCompat.nix} \

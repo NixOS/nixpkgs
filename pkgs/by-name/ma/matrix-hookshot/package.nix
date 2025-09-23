@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  makeWrapper,
-  matrix-sdk-crypto-nodejs,
-  mkYarnPackage,
-  cargo,
-  rustPlatform,
-  rustc,
-  napi-rs-cli,
-  pkg-config,
-  nodejs_24,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, makeWrapper
+, matrix-sdk-crypto-nodejs
+, mkYarnPackage
+, cargo
+, rustPlatform
+, rustc
+, napi-rs-cli
+, pkg-config
+, nodejs_24
+, openssl
+,
 }:
 
 let

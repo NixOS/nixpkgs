@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  cairo,
-  cargo,
-  desktop-file-utils,
-  gettext,
-  glib,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  nix-update-script,
-  pango,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
+{ stdenv
+, lib
+, fetchFromGitLab
+, cairo
+, cargo
+, desktop-file-utils
+, gettext
+, glib
+, gtk4
+, libadwaita
+, meson
+, ninja
+, nix-update-script
+, pango
+, pkg-config
+, rustPlatform
+, rustc
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation rec {

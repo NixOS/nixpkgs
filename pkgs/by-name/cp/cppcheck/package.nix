@@ -1,22 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  installShellFiles,
-  libxslt,
-  pkg-config,
-  python3,
-  which,
-
-  # buildInputs
-  pcre,
-
-  versionCheckHook,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  docbook_xml_dtd_45
+, docbook_xsl
+, installShellFiles
+, libxslt
+, pkg-config
+, python3
+, which
+, # buildInputs
+  pcre
+, versionCheckHook
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

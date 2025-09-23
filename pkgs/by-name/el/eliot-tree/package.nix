@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  addBinToPathHook,
+{ lib
+, python3Packages
+, fetchPypi
+, addBinToPathHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

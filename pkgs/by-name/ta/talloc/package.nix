@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python3,
-  pkg-config,
-  readline,
-  libxslt,
-  libxcrypt,
-  docbook-xsl-nons,
-  docbook_xml_dtd_42,
-  fixDarwinDylibNames,
-  wafHook,
-  buildPackages,
+{ lib
+, stdenv
+, fetchurl
+, python3
+, pkg-config
+, readline
+, libxslt
+, libxcrypt
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, fixDarwinDylibNames
+, wafHook
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -66,9 +66,10 @@ stdenv.mkDerivation rec {
   PYTHON_CONFIG = "/invalid";
 
   # https://reviews.llvm.org/D135402
-  NIX_LDFLAGS = lib.optional (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
+  NIX_LDFLAGS = lib.optional
+    (
+      stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+    ) "--undefined-version";
 
   # this must not be exported before the ConfigurePhase otherwise waf whines
   preBuild = lib.optionalString stdenv.hostPlatform.isMusl ''

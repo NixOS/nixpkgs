@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  fontconfig,
-  freetype,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, fontconfig
+, freetype
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "figma-agent";

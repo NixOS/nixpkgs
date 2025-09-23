@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  lib,
-  rustPlatform,
-  versionCheckHook,
+{ fetchFromGitHub
+, lib
+, rustPlatform
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  meson,
-  ninja,
-  pkg-config,
-  doctest,
-  glm,
-  libevdev,
-  libxml2,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, meson
+, ninja
+, pkg-config
+, doctest
+, glm
+, libevdev
+, libxml2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

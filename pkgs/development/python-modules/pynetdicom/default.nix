@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  pydicom,
-  pyfakefs,
-  pytestCheckHook,
-  sqlalchemy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, pydicom
+, pyfakefs
+, pytestCheckHook
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libX11,
-  libXtst,
-  xorgproto,
-  libXi,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libX11
+, libXtst
+, xorgproto
+, libXi
+,
 }:
 
 stdenv.mkDerivation {

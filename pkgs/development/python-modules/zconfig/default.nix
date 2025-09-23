@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  docutils,
-  fetchPypi,
-  manuel,
-  pygments,
-  pytestCheckHook,
-  setuptools,
-  zope-testrunner,
+{ lib
+, stdenv
+, buildPythonPackage
+, docutils
+, fetchPypi
+, manuel
+, pygments
+, pytestCheckHook
+, setuptools
+, zope-testrunner
+,
 }:
 
 buildPythonPackage rec {

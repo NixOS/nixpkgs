@@ -1,15 +1,13 @@
-{
-  lib,
-  stdenv,
-  pkg-config,
-  which,
-  buildPackages,
-
-  # apparmor deps
-  libapparmor,
-
-  # testing
-  perl,
+{ lib
+, stdenv
+, pkg-config
+, which
+, buildPackages
+, # apparmor deps
+  libapparmor
+, # testing
+  perl
+,
 }:
 stdenv.mkDerivation {
   pname = "apparmor-bin-utils";

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  buildFHSEnv,
-  writeScript,
-  makeDesktopItem,
+{ stdenv
+, lib
+, buildFHSEnv
+, writeScript
+, makeDesktopItem
+,
 }:
 
 # Dropbox client to bootstrap installation.
@@ -13,15 +13,13 @@ let
     {
       x86_64-linux = "217.4.4417";
       i686-linux = "206.3.6386";
-    }
-    .${stdenv.hostPlatform.system} or "";
+    }.${stdenv.hostPlatform.system} or "";
 
   arch =
     {
       x86_64-linux = "x86_64";
       i686-linux = "x86";
-    }
-    .${stdenv.hostPlatform.system};
+    }.${stdenv.hostPlatform.system};
 
   installer = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
 
@@ -56,40 +54,40 @@ buildFHSEnv {
 
   targetPkgs =
     pkgs:
-    with pkgs;
-    with xorg;
-    [
-      libICE
-      libSM
-      libX11
-      libXcomposite
-      libXdamage
-      libXext
-      libXfixes
-      libXrender
-      libXmu
-      libXxf86vm
-      libGL
-      libxcb
-      xkeyboardconfig
-      curl
-      dbus
-      firefox-bin
-      fontconfig
-      freetype
-      gcc
-      glib
-      gnutar
-      gtk3
-      libxml2
-      libxslt
-      procps
-      zlib
-      libgbm
-      libxshmfence
-      libpthreadstubs
-      libappindicator
-    ];
+      with pkgs;
+      with xorg;
+      [
+        libICE
+        libSM
+        libX11
+        libXcomposite
+        libXdamage
+        libXext
+        libXfixes
+        libXrender
+        libXmu
+        libXxf86vm
+        libGL
+        libxcb
+        xkeyboardconfig
+        curl
+        dbus
+        firefox-bin
+        fontconfig
+        freetype
+        gcc
+        glib
+        gnutar
+        gtk3
+        libxml2
+        libxslt
+        procps
+        zlib
+        libgbm
+        libxshmfence
+        libpthreadstubs
+        libappindicator
+      ];
 
   extraInstallCommands = ''
     mkdir -p "$out/share/applications"

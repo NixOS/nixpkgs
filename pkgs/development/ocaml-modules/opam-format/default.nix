@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  opam-core,
-  opam-file-format,
+{ lib
+, buildDunePackage
+, opam-core
+, opam-file-format
+,
 }:
 
 buildDunePackage {

@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  python3Packages,
-  libnotify,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nix-update-script
+, python3Packages
+, libnotify
+,
 }:
 
 python3Packages.buildPythonApplication rec {

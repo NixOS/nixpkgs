@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libusb1,
-  abseil-cpp,
-  flatbuffers,
-  fetchpatch,
-  xxd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libusb1
+, abseil-cpp
+, flatbuffers
+, fetchpatch
+, xxd
+,
 }:
 let
   # Tensorflow 2.16.1 requires Flatbuffers 23.5.26

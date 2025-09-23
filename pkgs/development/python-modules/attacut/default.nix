@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  setuptools,
-
-  pytestCheckHook,
-
-  docopt,
-  fire,
-  numpy,
-  python-crfsuite,
-  pyyaml,
-  six,
-  ssg,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, setuptools
+, pytestCheckHook
+, docopt
+, fire
+, numpy
+, python-crfsuite
+, pyyaml
+, six
+, ssg
+, torch
+,
 }:
 
 buildPythonPackage rec {

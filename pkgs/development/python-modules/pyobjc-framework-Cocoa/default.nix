@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  darwin,
-  fetchFromGitHub,
-  lib,
-  pyobjc-core,
-  setuptools,
+{ buildPythonPackage
+, darwin
+, fetchFromGitHub
+, lib
+, pyobjc-core
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

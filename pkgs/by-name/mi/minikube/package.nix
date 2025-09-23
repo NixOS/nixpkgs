@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  which,
-  libvirt,
-  withQemu ? false,
-  qemu,
-  makeWrapper,
-  OVMF,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, which
+, libvirt
+, withQemu ? false
+, qemu
+, makeWrapper
+, OVMF
+,
 }:
 
 buildGoModule rec {

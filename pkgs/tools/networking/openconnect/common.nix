@@ -1,26 +1,26 @@
-{
-  version,
-  src,
+{ version
+, src
+,
 }:
 
-{
-  lib,
-  stdenv,
-  pkg-config,
-  gnutls,
-  p11-kit,
-  openssl,
-  useOpenSSL ? false,
-  gmp,
-  libxml2,
-  stoken,
-  zlib,
-  pcsclite,
-  vpnc-scripts,
-  useDefaultExternalBrowser ?
-    stdenv.hostPlatform.isLinux && stdenv.buildPlatform == stdenv.hostPlatform, # xdg-utils doesn't cross-compile
-  xdg-utils,
-  autoreconfHook,
+{ lib
+, stdenv
+, pkg-config
+, gnutls
+, p11-kit
+, openssl
+, useOpenSSL ? false
+, gmp
+, libxml2
+, stoken
+, zlib
+, pcsclite
+, vpnc-scripts
+, useDefaultExternalBrowser ? stdenv.hostPlatform.isLinux && stdenv.buildPlatform == stdenv.hostPlatform
+, # xdg-utils doesn't cross-compile
+  xdg-utils
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation {

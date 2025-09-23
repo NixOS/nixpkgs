@@ -1,20 +1,20 @@
-{
-  lib,
-  black,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  flit-core,
-  libcst,
-  moreorless,
-  pygls,
-  pythonOlder,
-  tomlkit,
-  trailrunner,
-  ruff-api,
-  typing-extensions,
-  unittestCheckHook,
-  usort,
+{ lib
+, black
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, flit-core
+, libcst
+, moreorless
+, pygls
+, pythonOlder
+, tomlkit
+, trailrunner
+, ruff-api
+, typing-extensions
+, unittestCheckHook
+, usort
+,
 }:
 
 buildPythonPackage rec {

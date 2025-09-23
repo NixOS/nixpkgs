@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  vala,
-  pkg-config,
-  blueprint-compiler,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, vala
+, pkg-config
+, blueprint-compiler
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

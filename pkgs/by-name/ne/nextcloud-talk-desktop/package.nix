@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  autoPatchelfHook,
-  copyDesktopItems,
-  makeDesktopItem,
-  nss,
-  cairo,
-  xorg,
-  libxkbcommon,
-  alsa-lib,
-  at-spi2-core,
-  libgbm,
-  pango,
-  libdrm,
-  vivaldi-ffmpeg-codecs,
-  gtk3,
-  libGL,
-  libglvnd,
-  systemd,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, autoPatchelfHook
+, copyDesktopItems
+, makeDesktopItem
+, nss
+, cairo
+, xorg
+, libxkbcommon
+, alsa-lib
+, at-spi2-core
+, libgbm
+, pango
+, libdrm
+, vivaldi-ffmpeg-codecs
+, gtk3
+, libGL
+, libglvnd
+, systemd
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

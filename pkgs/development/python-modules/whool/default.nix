@@ -1,14 +1,14 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  git,
-  hatch-vcs,
-  lib,
-  manifestoo-core,
-  pytestCheckHook,
-  pythonOlder,
-  tomli,
-  wheel,
+{ buildPythonPackage
+, fetchFromGitHub
+, git
+, hatch-vcs
+, lib
+, manifestoo-core
+, pytestCheckHook
+, pythonOlder
+, tomli
+, wheel
+,
 }:
 
 buildPythonPackage rec {

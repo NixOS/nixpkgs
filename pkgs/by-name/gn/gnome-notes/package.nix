@@ -1,30 +1,30 @@
-{
-  stdenv,
-  lib,
-  meson,
-  ninja,
-  gettext,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  wrapGAppsHook3,
-  itstool,
-  desktop-file-utils,
-  python3,
-  glib,
-  gtk3,
-  evolution-data-server,
-  gnome-online-accounts,
-  json-glib,
-  libuuid,
-  curl,
-  libhandy,
-  webkitgtk_4_1,
-  gnome,
-  adwaita-icon-theme,
-  libxml2,
-  gsettings-desktop-schemas,
-  tinysparql,
+{ stdenv
+, lib
+, meson
+, ninja
+, gettext
+, fetchurl
+, fetchpatch
+, pkg-config
+, wrapGAppsHook3
+, itstool
+, desktop-file-utils
+, python3
+, glib
+, gtk3
+, evolution-data-server
+, gnome-online-accounts
+, json-glib
+, libuuid
+, curl
+, libhandy
+, webkitgtk_4_1
+, gnome
+, adwaita-icon-theme
+, libxml2
+, gsettings-desktop-schemas
+, tinysparql
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitea,
-  libgpiod,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitea
+, libgpiod
+,
 }:
 
 buildHomeAssistantComponent rec {

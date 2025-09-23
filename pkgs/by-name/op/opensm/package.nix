@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  libtool,
-  bison,
-  flex,
-  rdma-core,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, bison
+, flex
+, rdma-core
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, stdenv
+,
 }:
 
 buildGoModule (finalAttrs: {

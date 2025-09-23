@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  pkg-config,
-  meson,
-  ninja,
-  cairo,
-  pango,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  libxkbcommon,
-  scdoc,
+{ lib
+, stdenv
+, fetchFromGitea
+, pkg-config
+, meson
+, ninja
+, cairo
+, pango
+, wayland
+, wayland-protocols
+, wayland-scanner
+, libxkbcommon
+, scdoc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

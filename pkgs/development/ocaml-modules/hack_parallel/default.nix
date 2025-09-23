@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  core,
-  core_unix ? null,
-  pkg-config,
-  sqlite,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, core
+, core_unix ? null
+, pkg-config
+, sqlite
+,
 }:
 buildDunePackage rec {
   pname = "hack_parallel";

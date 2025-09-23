@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  fontconfig,
-  freetype,
-  libICE,
-  libSM,
-  libX11,
-  libXcursor,
-  libXfixes,
-  libXrandr,
-  libXrender,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, fontconfig
+, freetype
+, libICE
+, libSM
+, libX11
+, libXcursor
+, libXfixes
+, libXrandr
+, libXrender
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
     {
       x86_64-linux = "3.38c";
       i686-linux = "3.36";
-    }
-    .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   src =
     {
@@ -37,8 +36,7 @@ stdenv.mkDerivation rec {
         }_i386.tgz";
         hash = "sha256-u2HGOsv46BRlmqiusZD9iakLx5T530DqauNDY3YTiDY=";
       };
-    }
-    .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ autoPatchelfHook ];
 

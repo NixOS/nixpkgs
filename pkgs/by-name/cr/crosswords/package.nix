@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  desktop-file-utils,
-  fetchFromGitLab,
-  isocodes,
-  json-glib,
-  libadwaita,
-  libipuz,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  shared-mime-info,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, desktop-file-utils
+, fetchFromGitLab
+, isocodes
+, json-glib
+, libadwaita
+, libipuz
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, shared-mime-info
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation rec {

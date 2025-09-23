@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  callPackages,
-  runCommand,
-  cctools,
+{ lib
+, fetchurl
+, stdenv
+, callPackages
+, runCommand
+, cctools
+,
 }:
 
 let
@@ -22,10 +22,10 @@ let
 
   # Fetch a module from package-lock.json -> packages
   fetchModule =
-    {
-      module,
-      npmRoot ? null,
-      fetcherOpts,
+    { module
+    , npmRoot ? null
+    , fetcherOpts
+    ,
     }:
     (
       if module ? "resolved" && module.resolved != null then
@@ -77,63 +77,65 @@ let
 in
 lib.fix (self: {
   importNpmLock =
-    {
-      npmRoot ? null,
-      package ? importJSON (npmRoot + "/package.json"),
-      packageLock ? importJSON (npmRoot + "/package-lock.json"),
-      pname ? getName package,
-      version ? getVersion package,
-      # A map of additional fetcher options forwarded to the fetcher used to download the package.
+    { npmRoot ? null
+    , package ? importJSON (npmRoot + "/package.json")
+    , packageLock ? importJSON (npmRoot + "/package-lock.json")
+    , pname ? getName package
+    , version ? getVersion package
+    , # A map of additional fetcher options forwarded to the fetcher used to download the package.
       # Example: { "node_modules/axios" = { curlOptsList = [ "--verbose" ]; }; }
       # This will download the axios package with curl's verbose option.
-      fetcherOpts ? { },
-      # A map from node_module path to an alternative package to use instead of fetching the source in package-lock.json.
+      fetcherOpts ? { }
+    , # A map from node_module path to an alternative package to use instead of fetching the source in package-lock.json.
       # Example: { "node_modules/axios" = stdenv.mkDerivation { ... }; }
       # This is useful if you want to inject custom sources for a specific package.
-      packageSourceOverrides ? { },
+      packageSourceOverrides ? { }
+    ,
     }:
     let
       mapLockDependencies = mapAttrs (
         name: version:
-        (
-          # Substitute the constraint with the version of the dependency from the top-level of package-lock.
-          if
-            (
-              # if the version is `latest`
-              version == "latest"
-              ||
+          (
+            # Substitute the constraint with the version of the dependency from the top-level of package-lock.
+            if
+              (
+                # if the version is `latest`
+                version == "latest"
+                ||
                 # Or if it's a github reference
                 matchGitHubReference version != null
-            )
-          then
-            packageLock'.packages.${"node_modules/${name}"}.version
-          # But not a regular version constraint
-          else
-            version
-        )
+              )
+            then
+              packageLock'.packages.${"node_modules/${name}"}.version
+            # But not a regular version constraint
+            else
+              version
+          )
       );
 
       packageLock' = packageLock // {
-        packages = mapAttrs (
-          modulePath: module:
-          let
-            src =
-              packageSourceOverrides.${modulePath} or (fetchModule {
-                inherit module npmRoot;
-                fetcherOpts = fetcherOpts.${modulePath} or { };
-              });
-          in
-          cleanModule module
-          // lib.optionalAttrs (src != null) {
-            resolved = "file:${src}";
-          }
-          // lib.optionalAttrs (module ? dependencies) {
-            dependencies = mapLockDependencies module.dependencies;
-          }
-          // lib.optionalAttrs (module ? optionalDependencies) {
-            optionalDependencies = mapLockDependencies module.optionalDependencies;
-          }
-        ) packageLock.packages;
+        packages = mapAttrs
+          (
+            modulePath: module:
+              let
+                src =
+                  packageSourceOverrides.${modulePath} or (fetchModule {
+                    inherit module npmRoot;
+                    fetcherOpts = fetcherOpts.${modulePath} or { };
+                  });
+              in
+              cleanModule module
+                // lib.optionalAttrs (src != null) {
+                resolved = "file:${src}";
+              }
+                // lib.optionalAttrs (module ? dependencies) {
+                dependencies = mapLockDependencies module.dependencies;
+              }
+                // lib.optionalAttrs (module ? optionalDependencies) {
+                optionalDependencies = mapLockDependencies module.optionalDependencies;
+              }
+          )
+          packageLock.packages;
       };
 
       mapPackageDependencies = mapAttrs (
@@ -173,12 +175,12 @@ lib.fix (self: {
 
   # Build node modules from package.json & package-lock.json
   buildNodeModules =
-    {
-      npmRoot ? null,
-      package ? importJSON (npmRoot + "/package.json"),
-      packageLock ? importJSON (npmRoot + "/package-lock.json"),
-      nodejs,
-      derivationArgs ? { },
+    { npmRoot ? null
+    , package ? importJSON (npmRoot + "/package.json")
+    , packageLock ? importJSON (npmRoot + "/package-lock.json")
+    , nodejs
+    , derivationArgs ? { }
+    ,
     }:
     stdenv.mkDerivation (
       {

@@ -1,28 +1,28 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  docbook_xsl,
-  docbook_xsl_ns,
-  gettext,
-  libxslt,
-  glibcLocales,
-  docbook_xml_dtd_45,
-  docbook_sgml_dtd_41,
-  opensp,
-  bash,
-  fetchpatch,
-  perl,
-  buildPerlPackage,
-  ModuleBuild,
-  TextWrapI18N,
-  LocaleGettext,
-  SGMLSpm,
-  UnicodeLineBreak,
-  PodParser,
-  YAMLTiny,
-  SyntaxKeywordTry,
-  writeShellScriptBin,
+{ stdenv
+, lib
+, fetchurl
+, docbook_xsl
+, docbook_xsl_ns
+, gettext
+, libxslt
+, glibcLocales
+, docbook_xml_dtd_45
+, docbook_sgml_dtd_41
+, opensp
+, bash
+, fetchpatch
+, perl
+, buildPerlPackage
+, ModuleBuild
+, TextWrapI18N
+, LocaleGettext
+, SGMLSpm
+, UnicodeLineBreak
+, PodParser
+, YAMLTiny
+, SyntaxKeywordTry
+, writeShellScriptBin
+,
 }:
 
 buildPerlPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  bluetooth-data-tools,
-  bluetooth-sensor-state-data,
-  buildPythonPackage,
-  fetchFromGitHub,
-  home-assistant-bluetooth,
-  poetry-core,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  sensor-state-data,
+{ lib
+, bluetooth-data-tools
+, bluetooth-sensor-state-data
+, buildPythonPackage
+, fetchFromGitHub
+, home-assistant-bluetooth
+, poetry-core
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, sensor-state-data
+,
 }:
 
 buildPythonPackage rec {

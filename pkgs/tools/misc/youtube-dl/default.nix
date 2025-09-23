@@ -1,25 +1,25 @@
-{
-  lib,
-  fetchurl,
-  fetchpatch,
-  buildPythonPackage,
-  zip,
-  ffmpeg,
-  rtmpdump,
-  atomicparsley,
-  pycryptodome,
-  pandoc,
-  # Pandoc is required to build the package's man page. Release tarballs contain a
+{ lib
+, fetchurl
+, fetchpatch
+, buildPythonPackage
+, zip
+, ffmpeg
+, rtmpdump
+, atomicparsley
+, pycryptodome
+, pandoc
+, # Pandoc is required to build the package's man page. Release tarballs contain a
   # formatted man page already, though, it will still be installed. We keep the
   # manpage argument in place in case someone wants to use this derivation to
   # build a Git version of the tool that doesn't have the formatted man page
   # included.
-  generateManPage ? false,
-  ffmpegSupport ? true,
-  rtmpSupport ? true,
-  hlsEncryptedSupport ? true,
-  installShellFiles,
-  makeWrapper,
+  generateManPage ? false
+, ffmpegSupport ? true
+, rtmpSupport ? true
+, hlsEncryptedSupport ? true
+, installShellFiles
+, makeWrapper
+,
 }:
 
 buildPythonPackage rec {

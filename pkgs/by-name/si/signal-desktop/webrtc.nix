@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  buildPackages,
-  ninja,
-  gn,
-  python3,
-  pkg-config,
-  glib,
-  alsa-lib,
-  pulseaudio,
-  writeShellScriptBin,
-  gclient2nix,
-  rustc,
+{ stdenv
+, lib
+, buildPackages
+, ninja
+, gn
+, python3
+, pkg-config
+, glib
+, alsa-lib
+, pulseaudio
+, writeShellScriptBin
+, gclient2nix
+, rustc
+,
 }:
 
 let
@@ -27,8 +27,7 @@ let
           "i686" = "x86";
           "arm" = "arm";
           "aarch64" = "arm64";
-        }
-        .${name} or (throw "no chromium Rosetta Stone entry for cpu: ${name}")
+        }.${name} or (throw "no chromium Rosetta Stone entry for cpu: ${name}")
       );
   };
 in

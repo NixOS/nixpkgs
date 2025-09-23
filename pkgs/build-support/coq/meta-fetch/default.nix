@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+,
 }@args:
 
 let
@@ -34,15 +34,14 @@ let
   inherit (lib.strings) match split;
 
   default-fetcher =
-    {
-      domain ? "github.com",
-      owner ? "",
-      repo,
-      rev,
-      name ? "source",
-      sha256 ? null,
-      artifact ? null,
-      ...
+    { domain ? "github.com"
+    , owner ? ""
+    , repo
+    , rev
+    , name ? "source"
+    , sha256 ? null
+    , artifact ? null
+    , ...
     }@args:
     let
       kind =
@@ -95,17 +94,18 @@ let
           cond = (match "(www.)?mpi-sws.org" domain) != null;
           out = "https://www.mpi-sws.org/~${owner}/${repo}/download/${repo}-${rev}.${ext}";
         }
-      ] (throw "meta-fetch: no fetcher found for domain ${domain} on ${rev}");
+      ]
+        (throw "meta-fetch: no fetcher found for domain ${domain} on ${rev}");
       fetch = x: fetchfun (if args ? sha256 then (x // { inherit sha256; }) else x);
     in
     fetch { inherit url; };
 in
-{
-  fetcher ? default-fetcher,
-  location,
-  release ? { },
-  releaseRev ? (v: v),
-  releaseArtifact ? (v: null),
+{ fetcher ? default-fetcher
+, location
+, release ? { }
+, releaseRev ? (v: v)
+, releaseArtifact ? (v: null)
+,
 }:
 let
   isVersion = x: isString x && match "^/.*" x == null && release ? ${x};
@@ -192,4 +192,5 @@ switch arg [
       };
     };
   }
-] (throw "not a valid source description")
+]
+  (throw "not a valid source description")

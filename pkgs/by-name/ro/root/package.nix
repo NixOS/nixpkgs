@@ -1,53 +1,53 @@
-{
-  stdenv,
-  lib,
-  callPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
-  makeWrapper,
-  writeText,
-  apple-sdk,
-  cmake,
-  coreutils,
-  git,
-  davix,
-  fftw,
-  ftgl,
-  gl2ps,
-  glew,
-  gnugrep,
-  gnused,
-  gsl,
-  libGLU,
-  libGL,
-  libxcrypt,
-  libxml2,
-  llvm_18,
-  lsof,
-  lz4,
-  xorg,
-  xz,
-  man,
-  openssl,
-  pcre2,
-  nlohmann_json,
-  pkg-config,
-  procps,
-  python3,
-  which,
-  xxHash,
-  zlib,
-  zstd,
-  giflib,
-  libjpeg,
-  libtiff,
-  libpng,
-  patchRcPathCsh,
-  patchRcPathFish,
-  patchRcPathPosix,
-  tbb_2022,
-  xrootd,
+{ stdenv
+, lib
+, callPackage
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, makeWrapper
+, writeText
+, apple-sdk
+, cmake
+, coreutils
+, git
+, davix
+, fftw
+, ftgl
+, gl2ps
+, glew
+, gnugrep
+, gnused
+, gsl
+, libGLU
+, libGL
+, libxcrypt
+, libxml2
+, llvm_18
+, lsof
+, lz4
+, xorg
+, xz
+, man
+, openssl
+, pcre2
+, nlohmann_json
+, pkg-config
+, procps
+, python3
+, which
+, xxHash
+, zlib
+, zstd
+, giflib
+, libjpeg
+, libtiff
+, libpng
+, patchRcPathCsh
+, patchRcPathFish
+, patchRcPathPosix
+, tbb_2022
+, xrootd
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -154,11 +154,11 @@ stdenv.mkDerivation rec {
       --replace-fail "-F/System/Library/PrivateFrameworks " ""
   ''
   +
-    lib.optionalString
-      (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")
-      ''
-        MACOSX_DEPLOYMENT_TARGET=10.16
-      '';
+  lib.optionalString
+    (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")
+    ''
+      MACOSX_DEPLOYMENT_TARGET=10.16
+    '';
 
   cmakeFlags = [
     "-DCLAD_SOURCE_DIR=${clad_src}"
@@ -233,9 +233,10 @@ stdenv.mkDerivation rec {
 
   # workaround for
   # https://github.com/root-project/root/issues/14778
-  env.NIX_LDFLAGS = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin
-  ) "--version-script,${writeText "version.map" "ROOT { global: *; };"}";
+  env.NIX_LDFLAGS = lib.optionalString
+    (
+      !stdenv.hostPlatform.isDarwin
+    ) "--version-script,${writeText "version.map" "ROOT { global: *; };"}";
 
   # To use the debug information on the fly (without installation)
   # add the outPath of root.debug into NIX_DEBUG_INFO_DIRS (in PATH-like format)

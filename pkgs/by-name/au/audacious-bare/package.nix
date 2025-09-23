@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  audacious-plugins,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  qt6,
-  withPlugins ? false,
+{ lib
+, stdenv
+, audacious-plugins
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, qt6
+, withPlugins ? false
+,
 }:
 
 stdenv.mkDerivation rec {

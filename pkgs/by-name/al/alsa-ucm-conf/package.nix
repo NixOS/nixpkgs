@@ -1,10 +1,10 @@
-{
-  directoryListingUpdater,
-  fetchurl,
-  lib,
-  stdenvNoCC,
-  coreutils,
-  kmod,
+{ directoryListingUpdater
+, fetchurl
+, lib
+, stdenvNoCC
+, coreutils
+, kmod
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  buildPythonPackage,
-  pytestCheckHook,
-  setuptools,
-  matplotlib,
-  numpy,
-  packaging,
-  torch,
-  tqdm,
-  flask,
-  flask-compress,
-  parameterized,
-  scikit-learn,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, buildPythonPackage
+, pytestCheckHook
+, setuptools
+, matplotlib
+, numpy
+, packaging
+, torch
+, tqdm
+, flask
+, flask-compress
+, parameterized
+, scikit-learn
+,
 }:
 
 buildPythonPackage rec {

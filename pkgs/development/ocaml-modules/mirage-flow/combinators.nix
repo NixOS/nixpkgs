@@ -1,10 +1,10 @@
-{
-  buildDunePackage,
-  mirage-flow,
-  lwt,
-  logs,
-  cstruct,
-  mirage-clock,
+{ buildDunePackage
+, mirage-flow
+, lwt
+, logs
+, cstruct
+, mirage-clock
+,
 }:
 
 buildDunePackage {

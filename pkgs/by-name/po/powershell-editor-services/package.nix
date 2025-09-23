@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  fetchzip,
-  lib,
-  powershell,
-  runtimeShell,
+{ stdenvNoCC
+, fetchzip
+, lib
+, powershell
+, runtimeShell
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "powershell-editor-services";

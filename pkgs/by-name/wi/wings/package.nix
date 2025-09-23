@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  erlang,
-  cl,
-  libGL,
-  libGLU,
-  runtimeShell,
-  git,
-  eigen,
-  libigl,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, erlang
+, cl
+, libGL
+, libGLU
+, runtimeShell
+, git
+, eigen
+, libigl
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

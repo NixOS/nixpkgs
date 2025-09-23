@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  numpy,
-  setuptools,
-  wheel,
-  pytestCheckHook,
-  pyvista,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, numpy
+, setuptools
+, wheel
+, pytestCheckHook
+, pyvista
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

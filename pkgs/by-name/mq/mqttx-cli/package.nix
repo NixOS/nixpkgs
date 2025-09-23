@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  fetchYarnDeps,
-  lib,
-  mqttx-cli,
-  nodejs,
-  stdenv,
-  testers,
-  yarnConfigHook,
-  yarnInstallHook,
+{ fetchFromGitHub
+, fetchYarnDeps
+, lib
+, mqttx-cli
+, nodejs
+, stdenv
+, testers
+, yarnConfigHook
+, yarnInstallHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

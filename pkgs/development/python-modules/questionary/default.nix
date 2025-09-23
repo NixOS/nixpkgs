@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  prompt-toolkit,
-  pytestCheckHook,
-  pythonOlder,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, prompt-toolkit
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

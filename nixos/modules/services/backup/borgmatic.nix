@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.borgmatic;
@@ -18,42 +17,48 @@ let
     s:
     s
     // (lib.optionalAttrs (s ? postgresql_databases && s.postgresql_databases != [ ]) {
-      postgresql_databases = map (
-        d:
-        let
-          as_user = if d ? username && !(d ? password) then "${pkgs.sudo}/bin/sudo -u ${d.username} " else "";
-        in
-        {
-          pg_dump_command =
-            if d.name == "all" && (!(d ? format) || isNull d.format) then
-              "${as_user}${postgresql}/bin/pg_dumpall"
-            else
-              "${as_user}${postgresql}/bin/pg_dump";
-          pg_restore_command = "${as_user}${postgresql}/bin/pg_restore";
-          psql_command = "${as_user}${postgresql}/bin/psql";
-        }
-        // d
-      ) s.postgresql_databases;
+      postgresql_databases = map
+        (
+          d:
+          let
+            as_user = if d ? username && !(d ? password) then "${pkgs.sudo}/bin/sudo -u ${d.username} " else "";
+          in
+          {
+            pg_dump_command =
+              if d.name == "all" && (!(d ? format) || isNull d.format) then
+                "${as_user}${postgresql}/bin/pg_dumpall"
+              else
+                "${as_user}${postgresql}/bin/pg_dump";
+            pg_restore_command = "${as_user}${postgresql}/bin/pg_restore";
+            psql_command = "${as_user}${postgresql}/bin/psql";
+          }
+          // d
+        )
+        s.postgresql_databases;
     })
     // (lib.optionalAttrs (s ? mariadb_databases && s.mariadb_databases != [ ]) {
-      mariadb_databases = map (
-        d:
-        {
-          mariadb_dump_command = "${mysql}/bin/mariadb-dump";
-          mariadb_command = "${mysql}/bin/mariadb";
-        }
-        // d
-      ) s.mariadb_databases;
+      mariadb_databases = map
+        (
+          d:
+          {
+            mariadb_dump_command = "${mysql}/bin/mariadb-dump";
+            mariadb_command = "${mysql}/bin/mariadb";
+          }
+          // d
+        )
+        s.mariadb_databases;
     })
     // (lib.optionalAttrs (s ? mysql_databases && s.mysql_databases != [ ]) {
-      mysql_databases = map (
-        d:
-        {
-          mysql_dump_command = "${mysql}/bin/mysqldump";
-          mysql_command = "${mysql}/bin/mysql";
-        }
-        // d
-      ) s.mysql_databases;
+      mysql_databases = map
+        (
+          d:
+          {
+            mysql_dump_command = "${mysql}/bin/mysqldump";
+            mysql_command = "${mysql}/bin/mysql";
+          }
+          // d
+        )
+        s.mysql_databases;
     });
 
   repository =
@@ -156,12 +161,14 @@ in
         (lib.optionalAttrs (cfg.settings != null) {
           "borgmatic/config.yaml".source = cfgfile;
         })
-        // lib.mapAttrs' (
-          name: value:
-          lib.nameValuePair "borgmatic.d/${name}.yaml" {
-            source = settingsFormat.generate "${name}.yaml" (addRequiredBinaries value);
-          }
-        ) cfg.configurations;
+        // lib.mapAttrs'
+          (
+            name: value:
+              lib.nameValuePair "borgmatic.d/${name}.yaml" {
+                source = settingsFormat.generate "${name}.yaml" (addRequiredBinaries value);
+              }
+          )
+          cfg.configurations;
       borgmaticCheck =
         name: f:
         pkgs.runCommandCC "${name} validation" { } ''
@@ -174,11 +181,11 @@ in
       warnings =
         [ ]
         ++
-          lib.optional (cfg.settings != null && cfg.settings ? location)
-            "`services.borgmatic.settings.location` is deprecated, please move your options out of sections to the global scope"
+        lib.optional (cfg.settings != null && cfg.settings ? location)
+          "`services.borgmatic.settings.location` is deprecated, please move your options out of sections to the global scope"
         ++
-          lib.optional (lib.catAttrs "location" (lib.attrValues cfg.configurations) != [ ])
-            "`services.borgmatic.configurations.<name>.location` is deprecated, please move your options out of sections to the global scope";
+        lib.optional (lib.catAttrs "location" (lib.attrValues cfg.configurations) != [ ])
+          "`services.borgmatic.configurations.<name>.location` is deprecated, please move your options out of sections to the global scope";
 
       environment.systemPackages = [ pkgs.borgmatic ];
 

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  ffmpeg,
-  feh,
-  imagemagick_light,
-  lz4,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, ffmpeg
+, feh
+, imagemagick_light
+, lz4
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "resnap";

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  go,
-  installShellFiles,
-  makeWrapper,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, go
+, installShellFiles
+, makeWrapper
+,
 }:
 
 buildGoModule rec {

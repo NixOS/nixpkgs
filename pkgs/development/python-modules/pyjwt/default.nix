@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cryptography,
-  pytestCheckHook,
-  sphinxHook,
-  sphinx-rtd-theme,
-  zope-interface,
-  oauthlib,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cryptography
+, pytestCheckHook
+, sphinxHook
+, sphinx-rtd-theme
+, zope-interface
+, oauthlib
+,
 }:
 
 buildPythonPackage rec {

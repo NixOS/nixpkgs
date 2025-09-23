@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  gpgme,
-  libgpg-error,
-  pkg-config,
-  rustPlatform,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, gpgme
+, libgpg-error
+, pkg-config
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage rec {

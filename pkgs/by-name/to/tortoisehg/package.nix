@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  python3Packages,
-  mercurial,
-  qt5,
+{ lib
+, fetchurl
+, python3Packages
+, mercurial
+, qt5
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

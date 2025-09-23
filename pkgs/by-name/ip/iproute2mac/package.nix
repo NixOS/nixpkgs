@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  darwin,
-  makeWrapper,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, darwin
+, makeWrapper
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

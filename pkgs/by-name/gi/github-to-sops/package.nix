@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch2,
-  python3Packages,
-  sops,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, fetchpatch2
+, python3Packages
+, sops
+, versionCheckHook
+, nix-update-script
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "github-to-sops";

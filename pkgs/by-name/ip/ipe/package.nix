@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  makeDesktopItem,
-  fetchFromGitHub,
-  pkg-config,
-  copyDesktopItems,
-  cairo,
-  freetype,
-  ghostscriptX,
-  gsl,
-  libjpeg,
-  libpng,
-  libspiro,
-  lua5,
-  qt6Packages,
-  texliveSmall,
-  qhull,
-  zlib,
-  withTeXLive ? true,
-  withQVoronoi ? false,
-  buildPackages,
+{ lib
+, stdenv
+, makeDesktopItem
+, fetchFromGitHub
+, pkg-config
+, copyDesktopItems
+, cairo
+, freetype
+, ghostscriptX
+, gsl
+, libjpeg
+, libpng
+, libspiro
+, lua5
+, qt6Packages
+, texliveSmall
+, qhull
+, zlib
+, withTeXLive ? true
+, withQVoronoi ? false
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libndtypes,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libndtypes
+,
 }:
 
 stdenv.mkDerivation {

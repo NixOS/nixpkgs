@@ -1,26 +1,25 @@
-{
-  lib,
-  callPackage,
-  runCommand,
-  makeWrapper,
-  wrapGAppsHook3,
-  buildDartApplication,
-  cacert,
-  glib,
-  flutter,
-  pkg-config,
-  buildPackages,
+{ lib
+, callPackage
+, runCommand
+, makeWrapper
+, wrapGAppsHook3
+, buildDartApplication
+, cacert
+, glib
+, flutter
+, pkg-config
+, buildPackages
+,
 }:
 
 # absolutely no mac support for now
 
-{
-  pubGetScript ? null,
-  flutterBuildFlags ? [ ],
-  targetFlutterPlatform ? "linux",
-  extraWrapProgramArgs ? "",
-  flutterMode ? null,
-  ...
+{ pubGetScript ? null
+, flutterBuildFlags ? [ ]
+, targetFlutterPlatform ? "linux"
+, extraWrapProgramArgs ? ""
+, flutterMode ? null
+, ...
 }@args:
 
 let
@@ -127,104 +126,103 @@ let
         '';
       };
     in
-    {
-      inherit universal;
+      {
+        inherit universal;
 
-      linux = universal // {
-        outputs = universal.outputs or [ ] ++ [ "debug" ];
+        linux = universal // {
+          outputs = universal.outputs or [ ] ++ [ "debug" ];
 
-        nativeBuildInputs = (universal.nativeBuildInputs or [ ]) ++ [
-          wrapGAppsHook3
+          nativeBuildInputs = (universal.nativeBuildInputs or [ ]) ++ [
+            wrapGAppsHook3
 
-          # Flutter requires pkg-config for Linux desktop support, and many plugins
-          # attempt to use it.
-          #
-          # It is available to the `flutter` tool through its wrapper, but it must be
-          # added here as well so the setup hook adds plugin dependencies to the
-          # pkg-config search paths.
-          pkg-config
-        ];
+            # Flutter requires pkg-config for Linux desktop support, and many plugins
+            # attempt to use it.
+            #
+            # It is available to the `flutter` tool through its wrapper, but it must be
+            # added here as well so the setup hook adds plugin dependencies to the
+            # pkg-config search paths.
+            pkg-config
+          ];
 
-        buildInputs = (universal.buildInputs or [ ]) ++ [ glib ];
+          buildInputs = (universal.buildInputs or [ ]) ++ [ glib ];
 
-        dontDartBuild = true;
-        buildPhase =
-          universal.buildPhase or ''
-            runHook preBuild
+          dontDartBuild = true;
+          buildPhase =
+            universal.buildPhase or ''
+              runHook preBuild
 
-            mkdir -p build/flutter_assets/fonts
+              mkdir -p build/flutter_assets/fonts
 
-            flutter build linux -v --split-debug-info="$debug" $flutterBuildFlags
+              flutter build linux -v --split-debug-info="$debug" $flutterBuildFlags
 
-            runHook postBuild
+              runHook postBuild
+            '';
+
+          dontDartInstall = true;
+          installPhase =
+            universal.installPhase or ''
+              runHook preInstall
+
+              built=build/linux/*/$flutterMode/bundle
+
+              mkdir -p $out/bin
+              mkdir -p $out/app
+              mv $built $out/app/$pname
+
+              for f in $(find $out/app/$pname -iname "*.desktop" -type f); do
+                install -D $f $out/share/applications/$(basename $f)
+              done
+
+              for f in $(find $out/app/$pname -maxdepth 1 -type f); do
+                ln -s $f $out/bin/$(basename $f)
+              done
+
+              # make *.so executable
+              find $out/app/$pname -iname "*.so" -type f -exec chmod +x {} +
+
+              # remove stuff like /build/source/packages/ubuntu_desktop_installer/linux/flutter/ephemeral
+              for f in $(find $out/app/$pname -executable -type f); do
+                if patchelf --print-rpath "$f" | grep /build; then # this ignores static libs (e,g. libapp.so) also
+                  echo "strip RPath of $f"
+                  newrp=$(patchelf --print-rpath $f | sed -r "s|/build.*ephemeral:||g" | sed -r "s|/build.*profile:||g")
+                  patchelf --set-rpath "$newrp" "$f"
+                fi
+              done
+
+              runHook postInstall
+            '';
+
+          dontWrapGApps = true;
+          extraWrapProgramArgs = ''
+            ''${gappsWrapperArgs[@]} \
+            ${extraWrapProgramArgs}
           '';
+        };
 
-        dontDartInstall = true;
-        installPhase =
-          universal.installPhase or ''
-            runHook preInstall
+        web = universal // {
+          dontDartBuild = true;
+          buildPhase =
+            universal.buildPhase or ''
+              runHook preBuild
 
-            built=build/linux/*/$flutterMode/bundle
+              mkdir -p build/flutter_assets/fonts
 
-            mkdir -p $out/bin
-            mkdir -p $out/app
-            mv $built $out/app/$pname
+              flutter build web -v $flutterBuildFlags
 
-            for f in $(find $out/app/$pname -iname "*.desktop" -type f); do
-              install -D $f $out/share/applications/$(basename $f)
-            done
+              runHook postBuild
+            '';
 
-            for f in $(find $out/app/$pname -maxdepth 1 -type f); do
-              ln -s $f $out/bin/$(basename $f)
-            done
+          dontDartInstall = true;
+          installPhase =
+            universal.installPhase or ''
+              runHook preInstall
 
-            # make *.so executable
-            find $out/app/$pname -iname "*.so" -type f -exec chmod +x {} +
+              cp -r build/web "$out"
 
-            # remove stuff like /build/source/packages/ubuntu_desktop_installer/linux/flutter/ephemeral
-            for f in $(find $out/app/$pname -executable -type f); do
-              if patchelf --print-rpath "$f" | grep /build; then # this ignores static libs (e,g. libapp.so) also
-                echo "strip RPath of $f"
-                newrp=$(patchelf --print-rpath $f | sed -r "s|/build.*ephemeral:||g" | sed -r "s|/build.*profile:||g")
-                patchelf --set-rpath "$newrp" "$f"
-              fi
-            done
-
-            runHook postInstall
-          '';
-
-        dontWrapGApps = true;
-        extraWrapProgramArgs = ''
-          ''${gappsWrapperArgs[@]} \
-          ${extraWrapProgramArgs}
-        '';
-      };
-
-      web = universal // {
-        dontDartBuild = true;
-        buildPhase =
-          universal.buildPhase or ''
-            runHook preBuild
-
-            mkdir -p build/flutter_assets/fonts
-
-            flutter build web -v $flutterBuildFlags
-
-            runHook postBuild
-          '';
-
-        dontDartInstall = true;
-        installPhase =
-          universal.installPhase or ''
-            runHook preInstall
-
-            cp -r build/web "$out"
-
-            runHook postInstall
-          '';
-      };
-    }
-    .${targetFlutterPlatform} or (throw "Unsupported Flutter host platform: ${targetFlutterPlatform}");
+              runHook postInstall
+            '';
+        };
+      }.${targetFlutterPlatform} or (throw "Unsupported Flutter host platform: ${targetFlutterPlatform}");
 
   minimalFlutter = flutter.override {
     supportedTargetFlutterPlatforms = [
@@ -237,7 +235,7 @@ let
 in
 buildAppWith minimalFlutter (
   builderArgs
-  // {
+    // {
     passthru = builderArgs.passthru or { } // {
       multiShell = buildAppWith flutter builderArgs;
     };

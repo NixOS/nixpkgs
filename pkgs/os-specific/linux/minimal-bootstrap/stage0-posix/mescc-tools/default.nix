@@ -1,18 +1,18 @@
-{
-  lib,
-  derivationWithMeta,
-  hostPlatform,
-  kaem-unwrapped,
-  M1,
-  M2,
-  blood-elf-0,
-  hex2,
-  m2libc,
-  src,
-  version,
-  platforms,
-  m2libcArch,
-  baseAddress,
+{ lib
+, derivationWithMeta
+, hostPlatform
+, kaem-unwrapped
+, M1
+, M2
+, blood-elf-0
+, hex2
+, m2libc
+, src
+, version
+, platforms
+, m2libcArch
+, baseAddress
+,
 }:
 
 let

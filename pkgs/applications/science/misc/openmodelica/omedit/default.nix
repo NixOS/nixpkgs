@@ -1,16 +1,16 @@
-{
-  lib,
-  jre8,
-  qmake,
-  qtbase,
-  qttools,
-  qtwebkit,
-  qtxmlpatterns,
-  binutils,
-  wrapQtAppsHook,
-  openmodelica,
-  openscenegraph,
-  mkOpenModelicaDerivation,
+{ lib
+, jre8
+, qmake
+, qtbase
+, qttools
+, qtwebkit
+, qtxmlpatterns
+, binutils
+, wrapQtAppsHook
+, openmodelica
+, openscenegraph
+, mkOpenModelicaDerivation
+,
 }:
 with openmodelica;
 mkOpenModelicaDerivation {

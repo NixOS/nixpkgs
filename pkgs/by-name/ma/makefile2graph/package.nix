@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  bash,
-  gnumake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, bash
+, gnumake
+,
 }:
 
 stdenv.mkDerivation rec {

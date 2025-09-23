@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  testers,
-  nodejs,
-  node-gyp,
-  inter,
-  python3,
-  srcOnly,
-  removeReferencesTo,
-  pnpm_9,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, testers
+, nodejs
+, node-gyp
+, inter
+, python3
+, srcOnly
+, removeReferencesTo
+, pnpm_9
+,
 }:
 let
   pnpm = pnpm_9;

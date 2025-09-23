@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  go-md2man,
-  installShellFiles,
-  pkg-config,
-  gpgme,
-  lvm2,
-  btrfs-progs,
-  libapparmor,
-  libselinux,
-  libseccomp,
-  versionCheckHook,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, go-md2man
+, installShellFiles
+, pkg-config
+, gpgme
+, lvm2
+, btrfs-progs
+, libapparmor
+, libselinux
+, libseccomp
+, versionCheckHook
+,
 }:
 
 buildGoModule (finalAttrs: {

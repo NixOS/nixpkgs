@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  texinfo,
-  guile,
-  guile-commonmark,
-  guile-reader,
-  makeBinaryWrapper,
-  pkg-config,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, texinfo
+, guile
+, guile-commonmark
+, guile-reader
+, makeBinaryWrapper
+, pkg-config
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

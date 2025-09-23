@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -80,22 +79,22 @@ let
         )
       ]
       ++
-        lib.map
-          (
-            option:
-            lib.mkRemovedOptionModule [ option ] ''
-              The wstunnel module now uses RFC-42-style settings, please modify your config accordingly
-            ''
-          )
-          [
-            "extraArgs"
-            "websocketPingInterval"
-            "loggingLevel"
+      lib.map
+        (
+          option:
+          lib.mkRemovedOptionModule [ option ] ''
+            The wstunnel module now uses RFC-42-style settings, please modify your config accordingly
+          ''
+        )
+        [
+          "extraArgs"
+          "websocketPingInterval"
+          "loggingLevel"
 
-            "restrictTo"
-            "tlsCertificate"
-            "tlsKey"
-          ];
+          "restrictTo"
+          "tlsCertificate"
+          "tlsKey"
+        ];
 
       options = commonOptions // {
         listen = lib.mkOption {
@@ -209,28 +208,28 @@ let
         ../../misc/assertions.nix
       ]
       ++
-        lib.map
-          (
-            option:
-            lib.mkRemovedOptionModule [ option ] ''
-              The wstunnel module now uses RFC-42-style settings, please modify your config accordingly
-            ''
-          )
-          [
-            "extraArgs"
-            "websocketPingInterval"
-            "loggingLevel"
+      lib.map
+        (
+          option:
+          lib.mkRemovedOptionModule [ option ] ''
+            The wstunnel module now uses RFC-42-style settings, please modify your config accordingly
+          ''
+        )
+        [
+          "extraArgs"
+          "websocketPingInterval"
+          "loggingLevel"
 
-            "localToRemote"
-            "remoteToLocal"
-            "httpProxy"
-            "soMark"
-            "upgradePathPrefix"
-            "tlsSNI"
-            "tlsVerifyCertificate"
-            "upgradeCredentials"
-            "customHeaders"
-          ];
+          "localToRemote"
+          "remoteToLocal"
+          "httpProxy"
+          "soMark"
+          "upgradePathPrefix"
+          "tlsSNI"
+          "tlsVerifyCertificate"
+          "upgradeCredentials"
+          "customHeaders"
+        ];
 
       options = commonOptions // {
         connectTo = lib.mkOption {
@@ -247,9 +246,11 @@ let
 
             options = {
               http-headers = lib.mkOption {
-                type = lib.types.coercedTo (lib.types.attrsOf lib.types.str) (lib.mapAttrsToList (
-                  n: v: "${n}:${v}"
-                )) (lib.types.listOf lib.types.str);
+                type = lib.types.coercedTo (lib.types.attrsOf lib.types.str)
+                  (lib.mapAttrsToList (
+                    n: v: "${n}:${v}"
+                  ))
+                  (lib.types.listOf lib.types.str);
                 default = { };
                 example = {
                   "X-Some-Header" = "some-value";
@@ -446,52 +447,64 @@ in
       // (lib.mapAttrs' generateClientUnit (lib.filterAttrs (_: v: v.enable) cfg.clients));
 
     assertions =
-      (lib.mapAttrsToList (name: serverCfg: {
-        assertion =
-          serverCfg.listen.enableHTTPS
-          ->
+      (lib.mapAttrsToList
+        (name: serverCfg: {
+          assertion =
+            serverCfg.listen.enableHTTPS
+            ->
             (serverCfg.useACMEHost != null)
             || (
               (serverCfg.settings.tls-certificate or null) != null
               && (serverCfg.settings.tls-private-key or null) != null
             );
-        message = ''
-          If services.wstunnel.servers."${name}".listen.enableHTTPS is set to true, either services.wstunnel.servers."${name}".useACMEHost or both services.wstunnel.servers."${name}".settings.tls-private-key and services.wstunnel.servers."${name}".settings.tls-certificate need to be set.
-        '';
-      }) cfg.servers)
-      ++ (lib.foldlAttrs (
-        assertions: _: server:
-        assertions ++ server.assertions
-      ) [ ] cfg.servers)
-
-      ++ (lib.mapAttrsToList (
-        name: clientCfg:
-        let
-          isListAttrDefined = settings: attr: (settings.${attr} or [ ]) != [ ];
-        in
-        {
-          assertion =
-            isListAttrDefined clientCfg.settings "local-to-remote"
-            || isListAttrDefined clientCfg.settings "remote-to-local";
           message = ''
-            Either one of services.wstunnel.clients."${name}".settings.local-to-remote or services.wstunnel.clients."${name}".settings.remote-to-local must be set.
+            If services.wstunnel.servers."${name}".listen.enableHTTPS is set to true, either services.wstunnel.servers."${name}".useACMEHost or both services.wstunnel.servers."${name}".settings.tls-private-key and services.wstunnel.servers."${name}".settings.tls-certificate need to be set.
           '';
-        }
-      ) cfg.clients)
-      ++ (lib.foldlAttrs (
-        assertions: _: client:
-        assertions ++ client.assertions
-      ) [ ] cfg.clients);
+        })
+        cfg.servers)
+      ++ (lib.foldlAttrs
+        (
+          assertions: _: server:
+            assertions ++ server.assertions
+        ) [ ]
+        cfg.servers)
+
+      ++ (lib.mapAttrsToList
+        (
+          name: clientCfg:
+            let
+              isListAttrDefined = settings: attr: (settings.${attr} or [ ]) != [ ];
+            in
+            {
+              assertion =
+                isListAttrDefined clientCfg.settings "local-to-remote"
+                || isListAttrDefined clientCfg.settings "remote-to-local";
+              message = ''
+                Either one of services.wstunnel.clients."${name}".settings.local-to-remote or services.wstunnel.clients."${name}".settings.remote-to-local must be set.
+              '';
+            }
+        )
+        cfg.clients)
+      ++ (lib.foldlAttrs
+        (
+          assertions: _: client:
+            assertions ++ client.assertions
+        ) [ ]
+        cfg.clients);
 
     warnings =
-      (lib.foldlAttrs (
-        warnings: _: server:
-        warnings ++ server.warnings
-      ) [ ] cfg.servers)
-      ++ (lib.foldlAttrs (
-        warnings: _: client:
-        warnings ++ client.warnings
-      ) [ ] cfg.clients);
+      (lib.foldlAttrs
+        (
+          warnings: _: server:
+            warnings ++ server.warnings
+        ) [ ]
+        cfg.servers)
+      ++ (lib.foldlAttrs
+        (
+          warnings: _: client:
+            warnings ++ client.warnings
+        ) [ ]
+        cfg.clients);
   };
 
   meta.maintainers = with lib.maintainers; [

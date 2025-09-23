@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  pkg-config,
-  fetchFromGitHub,
-  xorg,
-  libdrm,
-  SDL2,
+{ stdenv
+, lib
+, pkg-config
+, fetchFromGitHub
+, xorg
+, libdrm
+, SDL2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

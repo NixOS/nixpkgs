@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

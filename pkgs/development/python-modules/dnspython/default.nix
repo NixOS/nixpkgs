@@ -1,16 +1,16 @@
-{
-  lib,
-  aioquic,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  h2,
-  httpcore,
-  httpx,
-  idna,
-  hatchling,
-  pytestCheckHook,
-  trio,
+{ lib
+, aioquic
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, h2
+, httpcore
+, httpx
+, idna
+, hatchling
+, pytestCheckHook
+, trio
+,
 }:
 
 buildPythonPackage rec {

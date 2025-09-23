@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  cached-property,
-  fetchFromGitHub,
-  loguru,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cached-property
+, fetchFromGitHub
+, loguru
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

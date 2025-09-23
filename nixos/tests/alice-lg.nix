@@ -1,7 +1,6 @@
 # This test does a basic functionality check for alice-lg
-{
-  pkgs,
-  ...
+{ pkgs
+, ...
 }:
 
 {

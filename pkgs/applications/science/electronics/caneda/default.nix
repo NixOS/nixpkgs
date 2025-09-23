@@ -1,12 +1,12 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  qtbase,
-  qttools,
-  qtsvg,
-  qwt6_1,
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, cmake
+, qtbase
+, qttools
+, qtsvg
+, qwt6_1
+,
 }:
 
 mkDerivation rec {

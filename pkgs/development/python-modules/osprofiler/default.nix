@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  netaddr,
-  oslo-concurrency,
-  oslo-config,
-  oslo-serialization,
-  oslo-utils,
-  prettytable,
-  requests,
-  setuptools,
-  webob,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, netaddr
+, oslo-concurrency
+, oslo-config
+, oslo-serialization
+, oslo-utils
+, prettytable
+, requests
+, setuptools
+, webob
+,
 }:
 
 buildPythonPackage rec {

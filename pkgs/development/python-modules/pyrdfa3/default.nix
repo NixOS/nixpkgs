@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  html5lib,
-  pythonOlder,
-  rdflib,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, html5lib
+, pythonOlder
+, rdflib
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

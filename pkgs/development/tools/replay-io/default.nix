@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  makeWrapper,
-  libcxx,
-  libX11,
-  libXt,
-  libXdamage,
-  glib,
-  gtk3,
-  dbus-glib,
-  openssl,
-  nodejs,
-  zlib,
-  fetchzip,
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, autoPatchelfHook
+, makeWrapper
+, libcxx
+, libX11
+, libXt
+, libXdamage
+, glib
+, gtk3
+, dbus-glib
+, openssl
+, nodejs
+, zlib
+, fetchzip
+,
 }:
 let
   metadata = lib.importJSON ./meta.json;

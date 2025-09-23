@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+,
 }:
 
 buildPythonPackage rec {

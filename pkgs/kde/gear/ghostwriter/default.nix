@@ -1,17 +1,17 @@
-{
-  lib,
-  mkKdeDerivation,
-  qtsvg,
-  qttools,
-  qtwebchannel,
-  qtwebengine,
-  qt5compat,
-  pkg-config,
-  hunspell,
-  kdoctools,
-  pandoc,
-  multimarkdown,
-  cmark,
+{ lib
+, mkKdeDerivation
+, qtsvg
+, qttools
+, qtwebchannel
+, qtwebengine
+, qt5compat
+, pkg-config
+, hunspell
+, kdoctools
+, pandoc
+, multimarkdown
+, cmark
+,
 }:
 mkKdeDerivation {
   pname = "ghostwriter";

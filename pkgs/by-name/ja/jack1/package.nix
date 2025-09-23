@@ -1,17 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-
-  # Optional Dependencies
-  alsa-lib ? null,
-  db ? null,
-  libuuid ? null,
-  libffado ? null,
-  celt_0_7 ? null,
-
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, # Optional Dependencies
+  alsa-lib ? null
+, db ? null
+, libuuid ? null
+, libffado ? null
+, celt_0_7 ? null
+, testers
+,
 }:
 
 let

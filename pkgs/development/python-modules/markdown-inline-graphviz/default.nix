@@ -1,10 +1,11 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  pkgs, # Only for pkgs.graphviz
-  lib,
-  setuptools,
-  markdown,
+{ buildPythonPackage
+, fetchFromGitHub
+, pkgs
+, # Only for pkgs.graphviz
+  lib
+, setuptools
+, markdown
+,
 }:
 
 buildPythonPackage rec {

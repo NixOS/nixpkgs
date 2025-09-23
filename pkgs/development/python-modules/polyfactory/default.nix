@@ -1,19 +1,19 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitHub,
-  hatchling,
-  hypothesis,
-  faker,
-  msgspec,
-  sqlalchemy,
-  aiosqlite,
-  typing-extensions,
-  pymongo,
-  pytest-asyncio,
-  pydantic,
-  pytestCheckHook,
-  email-validator,
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, hatchling
+, hypothesis
+, faker
+, msgspec
+, sqlalchemy
+, aiosqlite
+, typing-extensions
+, pymongo
+, pytest-asyncio
+, pydantic
+, pytestCheckHook
+, email-validator
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  autoPatchelfHook,
-  src,
+{ lib
+, stdenv
+, callPackage
+, autoPatchelfHook
+, src
+,
 }:
 
 (stdenv.mkDerivation {

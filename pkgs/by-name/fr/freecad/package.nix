@@ -1,38 +1,38 @@
-{
-  lib,
-  callPackage,
-  cmake,
-  coin3d,
-  doxygen,
-  eigen,
-  fetchFromGitHub,
-  fetchpatch,
-  fmt,
-  gfortran,
-  gts,
-  hdf5,
-  libGLU,
-  libredwg,
-  libspnav,
-  libXmu,
-  medfile,
-  ninja,
-  ode,
-  opencascade-occt,
-  pkg-config,
-  python3Packages,
-  spaceNavSupport ? stdenv.hostPlatform.isLinux,
-  stdenv,
-  swig,
-  vtk,
-  wrapGAppsHook3,
-  xercesc,
-  yaml-cpp,
-  zlib,
-  qt6,
-  nix-update-script,
-  gmsh,
-  which,
+{ lib
+, callPackage
+, cmake
+, coin3d
+, doxygen
+, eigen
+, fetchFromGitHub
+, fetchpatch
+, fmt
+, gfortran
+, gts
+, hdf5
+, libGLU
+, libredwg
+, libspnav
+, libXmu
+, medfile
+, ninja
+, ode
+, opencascade-occt
+, pkg-config
+, python3Packages
+, spaceNavSupport ? stdenv.hostPlatform.isLinux
+, stdenv
+, swig
+, vtk
+, wrapGAppsHook3
+, xercesc
+, yaml-cpp
+, zlib
+, qt6
+, nix-update-script
+, gmsh
+, which
+,
 }:
 let
   pythonDeps = with python3Packages; [

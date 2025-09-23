@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  gawk,
-  bash,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, gawk
+, bash
+,
 }:
 
 stdenv.mkDerivation rec {

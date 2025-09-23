@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  google-api-core,
-  grpcio,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, google-api-core
+, grpcio
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

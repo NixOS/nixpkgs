@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  cython,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  wheel,
+{ lib
+, buildPythonPackage
+, cryptography
+, cython
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, wheel
+,
 }:
 
 buildPythonPackage rec {

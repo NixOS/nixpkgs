@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  sybil,
-  twisted,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mock
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, sybil
+, twisted
+,
 }:
 
 buildPythonPackage rec {

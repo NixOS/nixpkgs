@@ -1,8 +1,8 @@
-{
-  fetchzip,
-  jre,
-  lib,
-  stdenvNoCC,
+{ fetchzip
+, jre
+, lib
+, stdenvNoCC
+,
 }:
 
 let

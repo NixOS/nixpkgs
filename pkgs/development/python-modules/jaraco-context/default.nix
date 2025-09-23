@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools-scm,
-  backports-tarfile,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools-scm
+, backports-tarfile
+,
 }:
 
 buildPythonPackage rec {

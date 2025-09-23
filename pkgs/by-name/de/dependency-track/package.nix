@@ -1,15 +1,15 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nodejs_20,
-  jre_headless,
-  protobuf_30,
-  cyclonedx-cli,
-  makeWrapper,
-  maven,
-  nix-update-script,
-  nixosTests,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nodejs_20
+, jre_headless
+, protobuf_30
+, cyclonedx-cli
+, makeWrapper
+, maven
+, nix-update-script
+, nixosTests
+,
 }:
 let
   version = "4.13.4";

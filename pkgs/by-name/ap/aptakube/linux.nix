@@ -1,13 +1,12 @@
-{
-  stdenvNoCC,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  webkitgtk_4_1,
-
-  pname,
-  version,
-  meta,
+{ stdenvNoCC
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, webkitgtk_4_1
+, pname
+, version
+, meta
+,
 }:
 stdenvNoCC.mkDerivation {
   inherit

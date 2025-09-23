@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  kcl,
-  lib,
-  pkg-config,
-  protobuf,
-  rustPlatform,
+{ fetchFromGitHub
+, kcl
+, lib
+, pkg-config
+, protobuf
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage rec {

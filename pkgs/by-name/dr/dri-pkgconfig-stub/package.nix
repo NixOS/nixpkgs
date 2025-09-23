@@ -1,7 +1,7 @@
-{
-  lib,
-  writeTextFile,
-  mesa,
+{ lib
+, writeTextFile
+, mesa
+,
 }:
 writeTextFile {
   name = "dri-pkgconfig-stub";

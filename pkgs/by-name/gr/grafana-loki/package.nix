@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  nix-update-script,
-  nixosTests,
-  systemd,
-  testers,
-  grafana-loki,
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, nix-update-script
+, nixosTests
+, systemd
+, testers
+, grafana-loki
+,
 }:
 
 buildGoModule rec {

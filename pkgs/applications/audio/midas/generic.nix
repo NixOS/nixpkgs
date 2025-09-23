@@ -1,19 +1,18 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  brand,
-  type,
-  version,
-  homepage,
-  url,
-  hash,
-  runCommand,
-  dpkg,
-  vmTools,
-  runtimeShell,
-  bubblewrap,
-  ...
+{ stdenv
+, fetchurl
+, lib
+, brand
+, type
+, version
+, homepage
+, url
+, hash
+, runCommand
+, dpkg
+, vmTools
+, runtimeShell
+, bubblewrap
+, ...
 }:
 let
   debian =
@@ -21,9 +20,11 @@ let
       debs = lib.flatten (import ./deps.nix { inherit fetchurl; });
     in
     runCommand "x32edit-debian" { nativeBuildInputs = [ dpkg ]; } (
-      lib.concatMapStringsSep "\n" (deb: ''
-        dpkg-deb -x ${deb} $out
-      '') debs
+      lib.concatMapStringsSep "\n"
+        (deb: ''
+          dpkg-deb -x ${deb} $out
+        '')
+        debs
     );
 in
 stdenv.mkDerivation rec {

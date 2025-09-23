@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  # dependencies
-  olefile,
-  # test dependencies
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # dependencies
+  olefile
+, # test dependencies
+  pytestCheckHook
+,
 }:
 let
   pname = "msg-parser";

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  installShellFiles,
-  nixosTests,
-  makeWrapper,
-  gawk,
-  glibc,
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildGoModule
+, installShellFiles
+, nixosTests
+, makeWrapper
+, gawk
+, glibc
+,
 }:
 
 buildGoModule rec {

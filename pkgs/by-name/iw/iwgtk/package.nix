@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  wrapGAppsHook4,
-  gtk4,
-  qrencode,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, wrapGAppsHook4
+, gtk4
+, qrencode
+,
 }:
 
 stdenv.mkDerivation rec {

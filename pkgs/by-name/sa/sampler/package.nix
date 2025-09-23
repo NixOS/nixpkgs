@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchpatch,
-  alsa-lib,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, alsa-lib
+, stdenv
+,
 }:
 
 buildGoModule rec {

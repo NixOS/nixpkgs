@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  berglas,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, berglas
+,
 }:
 
 let
@@ -19,18 +19,20 @@ let
     update = "Update";
   };
 
-  skipTestsCommand = builtins.foldl' (
-    acc: goFileName:
-    let
-      testName = builtins.getAttr goFileName skipTests;
-    in
-    ''
-      ${acc}
-      substituteInPlace pkg/berglas/${goFileName}_test.go \
-        --replace "TestClient_${testName}_storage" "SkipClient_${testName}_storage" \
-        --replace "TestClient_${testName}_secretManager" "SkipClient_${testName}_secretManager"
-    ''
-  ) "" (builtins.attrNames skipTests);
+  skipTestsCommand = builtins.foldl'
+    (
+      acc: goFileName:
+        let
+          testName = builtins.getAttr goFileName skipTests;
+        in
+        ''
+          ${acc}
+          substituteInPlace pkg/berglas/${goFileName}_test.go \
+            --replace "TestClient_${testName}_storage" "SkipClient_${testName}_storage" \
+            --replace "TestClient_${testName}_secretManager" "SkipClient_${testName}_secretManager"
+        ''
+    ) ""
+    (builtins.attrNames skipTests);
 in
 
 buildGoModule rec {

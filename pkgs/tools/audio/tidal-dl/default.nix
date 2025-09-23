@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchPypi,
-  aigpy,
+{ lib
+, buildPythonApplication
+, fetchPypi
+, aigpy
+,
 }:
 
 buildPythonApplication rec {

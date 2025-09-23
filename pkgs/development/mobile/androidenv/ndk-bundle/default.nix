@@ -1,34 +1,35 @@
-{
-  stdenv,
-  lib,
-  pkgs,
-  pkgsHostHost,
-  makeWrapper,
-  autoPatchelfHook,
-  deployAndroidPackage,
-  package,
-  os,
-  arch,
-  platform-tools,
-  meta,
+{ stdenv
+, lib
+, pkgs
+, pkgsHostHost
+, makeWrapper
+, autoPatchelfHook
+, deployAndroidPackage
+, package
+, os
+, arch
+, platform-tools
+, meta
+,
 }:
 
 let
   runtime_paths =
-    lib.makeBinPath (
-      with pkgsHostHost;
-      [
-        coreutils
-        file
-        findutils
-        gawk
-        gnugrep
-        gnused
-        jdk
-        python3
-        which
-      ]
-    )
+    lib.makeBinPath
+      (
+        with pkgsHostHost;
+        [
+          coreutils
+          file
+          findutils
+          gawk
+          gnugrep
+          gnused
+          jdk
+          python3
+          which
+        ]
+      )
     + ":${platform-tools}/platform-tools";
 in
 deployAndroidPackage rec {

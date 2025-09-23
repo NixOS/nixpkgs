@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hypothesis,
-  jsonpath-ng,
-  lupa,
-  hatchling,
-  pyprobables,
-  pytest-asyncio_0,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  redis,
-  redisTestHook,
-  sortedcontainers,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hypothesis
+, jsonpath-ng
+, lupa
+, hatchling
+, pyprobables
+, pytest-asyncio_0
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, redis
+, redisTestHook
+, sortedcontainers
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  google-auth,
-  requests-oauthlib,
-  click,
-  mock,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, google-auth
+, requests-oauthlib
+, click
+, mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

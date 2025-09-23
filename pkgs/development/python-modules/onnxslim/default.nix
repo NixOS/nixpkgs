@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  colorama,
-  onnx,
-  packaging,
-  sympy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  colorama
+, onnx
+, packaging
+, sympy
+,
 }:
 
 buildPythonPackage rec {

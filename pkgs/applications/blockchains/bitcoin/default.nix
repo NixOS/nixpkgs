@@ -1,31 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  installShellFiles,
-  autoSignDarwinBinariesHook,
-  wrapQtAppsHook ? null,
-  boost,
-  libevent,
-  zeromq,
-  zlib,
-  db48,
-  sqlite,
-  qrencode,
-  libsystemtap,
-  qtbase ? null,
-  qttools ? null,
-  python3,
-  versionCheckHook,
-  nixosTests,
-  withGui,
-  withWallet ? true,
-  enableTracing ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
-  gnupg,
-  # Signatures from the following GPG public keys checked during verification of the source code.
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, cmake
+, pkg-config
+, installShellFiles
+, autoSignDarwinBinariesHook
+, wrapQtAppsHook ? null
+, boost
+, libevent
+, zeromq
+, zlib
+, db48
+, sqlite
+, qrencode
+, libsystemtap
+, qtbase ? null
+, qttools ? null
+, python3
+, versionCheckHook
+, nixosTests
+, withGui
+, withWallet ? true
+, enableTracing ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic
+, gnupg
+, # Signatures from the following GPG public keys checked during verification of the source code.
   # The list can be found at https://github.com/bitcoin-core/guix.sigs/tree/main/builder-keys
   builderKeys ? [
     "152812300785C96444D3334D17565732E08E5E41" # achow101.gpg
@@ -33,7 +32,8 @@
     "71A3B16735405025D447E8F274810B012346C9A6" # laanwj.gpg
     "6B002C6EA3F91B1B0DF0C9BC8F617F1200A6D25C" # glozow.gpg
     "D1DBF2C4B96F2DEBF4C16654410108112E7EA81F" # hebasto.gpg
-  ],
+  ]
+,
 }:
 
 let
@@ -167,9 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_GUI" true)
   ];
 
-  NIX_LDFLAGS = lib.optionals (
-    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
-  ) "-levent_core";
+  NIX_LDFLAGS = lib.optionals
+    (
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
+    ) "-levent_core";
 
   nativeCheckInputs = [ python3 ];
 

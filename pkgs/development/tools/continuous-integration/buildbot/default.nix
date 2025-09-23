@@ -1,8 +1,8 @@
-{
-  lib,
-  newScope,
-  python3,
-  recurseIntoAttrs,
+{ lib
+, newScope
+, python3
+, recurseIntoAttrs
+,
 }:
 # Take packages from self first, then python.pkgs (and secondarily pkgs)
 lib.makeScope (self: newScope (self.python.pkgs // self)) (self: {

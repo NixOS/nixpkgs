@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  demes,
-  fetchPypi,
-  gsl,
-  newick,
-  numpy,
-  oldest-supported-numpy,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  scipy,
-  setuptools-scm,
-  tskit,
-  wheel,
+{ lib
+, buildPythonPackage
+, demes
+, fetchPypi
+, gsl
+, newick
+, numpy
+, oldest-supported-numpy
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, scipy
+, setuptools-scm
+, tskit
+, wheel
+,
 }:
 
 buildPythonPackage rec {

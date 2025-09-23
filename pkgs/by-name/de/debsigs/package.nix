@@ -1,8 +1,8 @@
-{
-  binutils,
-  lib,
-  perlPackages,
-  fetchFromGitLab,
+{ binutils
+, lib
+, perlPackages
+, fetchFromGitLab
+,
 }:
 
 perlPackages.buildPerlPackage rec {

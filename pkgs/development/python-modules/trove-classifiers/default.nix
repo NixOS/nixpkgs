@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  calver,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, calver
+, pytestCheckHook
+, setuptools
+,
 }:
 
 let

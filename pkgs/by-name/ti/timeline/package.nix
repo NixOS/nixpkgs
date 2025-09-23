@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  python3,
-  gettext,
-  makeDesktopItem,
-  copyDesktopItems,
-  wrapGAppsHook3,
+{ lib
+, fetchurl
+, python3
+, gettext
+, makeDesktopItem
+, copyDesktopItems
+, wrapGAppsHook3
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

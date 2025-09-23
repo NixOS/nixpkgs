@@ -2,65 +2,65 @@
 
 let
   dockerGen =
-    {
-      version,
-      cliRev,
-      cliHash,
-      mobyRev,
-      mobyHash,
-      runcRev,
-      runcHash,
-      containerdRev,
-      containerdHash,
-      tiniRev,
-      tiniHash,
-      buildxSupport ? true,
-      composeSupport ? true,
-      sbomSupport ? false,
-      initSupport ? false,
-      # package dependencies
-      stdenv,
-      fetchFromGitHub,
-      buildGoModule,
-      makeBinaryWrapper,
-      installShellFiles,
-      pkg-config,
-      glibc,
-      go-md2man,
-      go,
-      containerd,
-      runc,
-      tini,
-      libtool,
-      sqlite,
-      iproute2,
-      docker-buildx,
-      docker-compose,
-      docker-sbom,
-      docker-init,
-      iptables,
-      e2fsprogs,
-      xz,
-      util-linuxMinimal,
-      xfsprogs,
-      gitMinimal,
-      procps,
-      rootlesskit,
-      slirp4netns,
-      fuse-overlayfs,
-      nixosTests,
-      clientOnly ? !stdenv.hostPlatform.isLinux,
-      symlinkJoin,
-      withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-      systemd,
-      withBtrfs ? stdenv.hostPlatform.isLinux,
-      btrfs-progs,
-      withLvm ? stdenv.hostPlatform.isLinux,
-      lvm2,
-      withSeccomp ? stdenv.hostPlatform.isLinux,
-      libseccomp,
-      knownVulnerabilities ? [ ],
-      versionCheckHook,
+    { version
+    , cliRev
+    , cliHash
+    , mobyRev
+    , mobyHash
+    , runcRev
+    , runcHash
+    , containerdRev
+    , containerdHash
+    , tiniRev
+    , tiniHash
+    , buildxSupport ? true
+    , composeSupport ? true
+    , sbomSupport ? false
+    , initSupport ? false
+    , # package dependencies
+      stdenv
+    , fetchFromGitHub
+    , buildGoModule
+    , makeBinaryWrapper
+    , installShellFiles
+    , pkg-config
+    , glibc
+    , go-md2man
+    , go
+    , containerd
+    , runc
+    , tini
+    , libtool
+    , sqlite
+    , iproute2
+    , docker-buildx
+    , docker-compose
+    , docker-sbom
+    , docker-init
+    , iptables
+    , e2fsprogs
+    , xz
+    , util-linuxMinimal
+    , xfsprogs
+    , gitMinimal
+    , procps
+    , rootlesskit
+    , slirp4netns
+    , fuse-overlayfs
+    , nixosTests
+    , clientOnly ? !stdenv.hostPlatform.isLinux
+    , symlinkJoin
+    , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+    , systemd
+    , withBtrfs ? stdenv.hostPlatform.isLinux
+    , btrfs-progs
+    , withLvm ? stdenv.hostPlatform.isLinux
+    , lvm2
+    , withSeccomp ? stdenv.hostPlatform.isLinux
+    , libseccomp
+    , knownVulnerabilities ? [ ]
+    , versionCheckHook
+    ,
     }:
     let
       docker-meta = {

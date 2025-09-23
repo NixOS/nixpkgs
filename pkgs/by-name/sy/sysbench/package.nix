@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libmysqlclient,
-  libaio,
-  luajit,
-  # For testing:
-  testers,
-  sysbench,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libmysqlclient
+, libaio
+, luajit
+, # For testing:
+  testers
+, sysbench
+,
 }:
 
 stdenv.mkDerivation rec {

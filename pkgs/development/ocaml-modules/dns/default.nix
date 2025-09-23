@@ -1,19 +1,19 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  alcotest,
-  domain-name,
-  duration,
-  gmap,
-  ipaddr,
-  logs,
-  lru,
-  metrics,
-  ptime,
-  fmt,
-  base64,
-  ohex,
+{ lib
+, buildDunePackage
+, fetchurl
+, alcotest
+, domain-name
+, duration
+, gmap
+, ipaddr
+, logs
+, lru
+, metrics
+, ptime
+, fmt
+, base64
+, ohex
+,
 }:
 
 buildDunePackage rec {

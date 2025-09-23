@@ -1,15 +1,15 @@
-{
-  fetchurl,
-  lib,
-  mkDerivation,
-  pkg-config,
-  python3,
-  file,
-  bc,
-  qtbase,
-  qtsvg,
-  hunspell,
-  makeWrapper, # , mythes, boost
+{ fetchurl
+, lib
+, mkDerivation
+, pkg-config
+, python3
+, file
+, bc
+, qtbase
+, qtsvg
+, hunspell
+, makeWrapper
+, # , mythes, boost
 }:
 
 mkDerivation rec {

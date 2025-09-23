@@ -1,8 +1,8 @@
-{
-  fetchFromGitea,
-  lib,
-  nix-update-script,
-  rustPlatform,
+{ fetchFromGitea
+, lib
+, nix-update-script
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

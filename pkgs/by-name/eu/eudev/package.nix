@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  gperf,
-  kmod,
-  pkg-config,
-  util-linux,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gperf
+, kmod
+, pkg-config
+, util-linux
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

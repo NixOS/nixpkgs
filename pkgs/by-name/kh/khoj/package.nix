@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  postgresql,
-  postgresqlTestHook,
+{ lib
+, fetchFromGitHub
+, python3
+, postgresql
+, postgresqlTestHook
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

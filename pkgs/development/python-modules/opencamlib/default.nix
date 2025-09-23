@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  scikit-build-core,
-  cmake,
-  ninja,
-  stdenv,
-  llvmPackages,
-  boost,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, scikit-build-core
+, cmake
+, ninja
+, stdenv
+, llvmPackages
+, boost
+, python
+,
 }:
 
 buildPythonPackage rec {

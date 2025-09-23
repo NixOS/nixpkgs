@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDunePackage,
-  dune_3,
-  csexp,
-  stdune,
-  ocamlc-loc,
-  ordering,
-  xdg,
-  dyn,
+{ lib
+, buildDunePackage
+, dune_3
+, csexp
+, stdune
+, ocamlc-loc
+, ordering
+, xdg
+, dyn
+,
 }:
 
 buildDunePackage {

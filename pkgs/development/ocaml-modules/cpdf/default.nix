@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
-  camlpdf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocaml
+, findlib
+, camlpdf
+,
 }:
 
 if lib.versionOlder ocaml.version "4.10" then

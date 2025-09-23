@@ -1,8 +1,7 @@
 # A basic test with no webserver, no API, just checking DNS functionality
-{
-  lib,
-  pkgs,
-  ...
+{ lib
+, pkgs
+, ...
 }:
 
 rec {

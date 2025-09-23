@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonApplication,
-  fetchFromGitHub,
-  poetry-core,
-  fido2,
-  nitrokey,
-  pyside6,
-  usb-monitor,
-  qt6,
+{ lib
+, stdenv
+, buildPythonApplication
+, fetchFromGitHub
+, poetry-core
+, fido2
+, nitrokey
+, pyside6
+, usb-monitor
+, qt6
+,
 }:
 
 let

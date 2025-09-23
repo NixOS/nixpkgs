@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  rustc,
-  pkg-config,
-  openssl,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, rustc
+, pkg-config
+, openssl
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage rec {

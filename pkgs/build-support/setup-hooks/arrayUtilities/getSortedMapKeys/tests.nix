@@ -1,18 +1,18 @@
 # NOTE: Tests related to getSortedMapKeys go here.
-{
-  getSortedMapKeys,
-  lib,
-  testers,
+{ getSortedMapKeys
+, lib
+, testers
+,
 }:
 let
   inherit (lib.attrsets) recurseIntoAttrs;
   inherit (testers) shellcheck shfmt testEqualArrayOrMap;
 
   check =
-    {
-      name,
-      valuesMap,
-      expectedArray,
+    { name
+    , valuesMap
+    , expectedArray
+    ,
     }:
     (testEqualArrayOrMap {
       inherit name valuesMap expectedArray;

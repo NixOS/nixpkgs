@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix,
-  virt-viewer,
-  makeWrapper,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix
+, virt-viewer
+, makeWrapper
+,
 }:
 
 let

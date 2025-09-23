@@ -1,8 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ...
+{ lib
+, stdenv
+, fetchurl
+, ...
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -19,8 +18,7 @@ stdenv.mkDerivation rec {
         {
           x86_64-linux = "sha256-bZAC3PJxqcjuGM4RcNtzYtkg3FD3SrO5beDsPoKenzc=";
           aarch64-linux = "sha256-qnj4vhSWgrk8SIjzIH1/4waMxMsxMUvqdYZPaSaUJRk=";
-        }
-        .${system};
+        }.${system};
 
       url =
         let
@@ -28,8 +26,7 @@ stdenv.mkDerivation rec {
             {
               x86_64-linux = "amd64";
               aarch64-linux = "arm64";
-            }
-            .${system};
+            }.${system};
         in
         "https://dl.photoprism.app/tensorflow/${systemName}/libtensorflow-${systemName}-${version}.tar.gz";
     })

@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  llvmPackages,
-  _experimental-update-script-combinators,
-  unstableGitUpdater,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, llvmPackages
+, _experimental-update-script-combinators
+, unstableGitUpdater
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage {

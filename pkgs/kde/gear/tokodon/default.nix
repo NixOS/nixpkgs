@@ -1,11 +1,11 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qtmultimedia,
-  qtsvg,
-  qtwebsockets,
-  qtwebview,
-  sonnet,
+{ mkKdeDerivation
+, pkg-config
+, qtmultimedia
+, qtsvg
+, qtwebsockets
+, qtwebview
+, sonnet
+,
 }:
 mkKdeDerivation {
   pname = "tokodon";

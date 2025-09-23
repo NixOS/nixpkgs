@@ -1,25 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  glib,
-  libxml2,
-  meson,
-  ninja,
-  pkg-config,
-  gnome,
-  libsysprof-capture,
-  gobject-introspection,
-  vala,
-  libpsl,
-  brotli,
-  gnomeSupport ? true,
-  sqlite,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, glib
+, libxml2
+, meson
+, ninja
+, pkg-config
+, gnome
+, libsysprof-capture
+, gobject-introspection
+, vala
+, libpsl
+, brotli
+, gnomeSupport ? true
+, sqlite
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

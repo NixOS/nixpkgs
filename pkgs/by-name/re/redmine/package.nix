@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bundlerEnv,
-  ruby_3_3,
-  makeWrapper,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, bundlerEnv
+, ruby_3_3
+, makeWrapper
+, nixosTests
+,
 }:
 
 let

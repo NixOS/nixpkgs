@@ -1,35 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchPypi,
-  python,
-  numpy_1,
-  pythonAtLeast,
-  pythonOlder,
-  buildPythonPackage,
-  writeTextFile,
-
-  # build-system
-  cython,
-  gfortran,
-  meson-python,
-  mesonEmulatorHook,
-  pkg-config,
-  xcbuild,
-
-  # native dependencies
-  blas,
-  lapack,
-
-  # Reverse dependency
-  sage,
-
-  # tests
-  hypothesis,
-  pytest-xdist,
-  pytestCheckHook,
-  setuptools,
-  typing-extensions,
+{ lib
+, stdenv
+, fetchPypi
+, python
+, numpy_1
+, pythonAtLeast
+, pythonOlder
+, buildPythonPackage
+, writeTextFile
+, # build-system
+  cython
+, gfortran
+, meson-python
+, mesonEmulatorHook
+, pkg-config
+, xcbuild
+, # native dependencies
+  blas
+, lapack
+, # Reverse dependency
+  sage
+, # tests
+  hypothesis
+, pytest-xdist
+, pytestCheckHook
+, setuptools
+, typing-extensions
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

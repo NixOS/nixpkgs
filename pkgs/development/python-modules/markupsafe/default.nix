@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # tests
-  pytestCheckHook,
-
-  # reverse dependencies
-  jinja2,
-  mkdocs,
-  quart,
-  werkzeug,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools
+, # tests
+  pytestCheckHook
+, # reverse dependencies
+  jinja2
+, mkdocs
+, quart
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

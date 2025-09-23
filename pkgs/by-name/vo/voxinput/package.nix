@@ -1,18 +1,18 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  pkg-config,
-  libpulseaudio,
-  dotool,
-  libGL,
-  xorg,
-  libxkbcommon,
-  wayland,
-  lib,
-  stdenv,
-  nix-update-script,
-  testers,
+{ buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, pkg-config
+, libpulseaudio
+, dotool
+, libGL
+, xorg
+, libxkbcommon
+, wayland
+, lib
+, stdenv
+, nix-update-script
+, testers
+,
 }:
 
 buildGoModule (finalAttrs: {

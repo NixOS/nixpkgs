@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
-  pythonOlder,
-  python-dateutil,
-  setuptools,
-  tzdata,
-  hypothesis,
-  pytestCheckHook,
-  pytz,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, pythonOlder
+, python-dateutil
+, setuptools
+, tzdata
+, hypothesis
+, pytestCheckHook
+, pytz
+,
 }:
 
 buildPythonPackage rec {

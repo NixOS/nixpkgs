@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  packaging,
-  python-socketio,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, packaging
+, python-socketio
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

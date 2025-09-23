@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  libX11,
-  meson,
-  ninja,
-  pkg-config,
-  unstableGitUpdater,
-  vulkan-headers,
-  vulkan-loader,
-  wayland-scanner,
-  wayland,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, libX11
+, meson
+, ninja
+, pkg-config
+, unstableGitUpdater
+, vulkan-headers
+, vulkan-loader
+, wayland-scanner
+, wayland
+,
 }:
 
 stdenv.mkDerivation {

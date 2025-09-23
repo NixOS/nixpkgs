@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  cma,
-  linien-client,
-  linien-common,
-  matplotlib,
-  migen,
-  misoc,
-  pytest-plt,
-  pytestCheckHook,
+{ buildPythonPackage
+, cma
+, linien-client
+, linien-common
+, matplotlib
+, migen
+, misoc
+, pytest-plt
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

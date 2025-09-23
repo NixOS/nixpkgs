@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pydantic,
-  typing-extensions,
-  semver,
-  pendulum,
-  phonenumbers,
-  pycountry,
-  pymongo,
-  python-ulid,
-  pytz,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pydantic
+, typing-extensions
+, semver
+, pendulum
+, phonenumbers
+, pycountry
+, pymongo
+, python-ulid
+, pytz
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

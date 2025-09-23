@@ -1,15 +1,15 @@
-{
-  buildNpmPackage,
-  copyDesktopItems,
-  electron,
-  fetchFromGitHub,
-  lib,
-  makeDesktopItem,
-  nix-update-script,
-  npm-lockfile-fix,
-  prefetch-npm-deps,
-  rsync,
-  stdenv,
+{ buildNpmPackage
+, copyDesktopItems
+, electron
+, fetchFromGitHub
+, lib
+, makeDesktopItem
+, nix-update-script
+, npm-lockfile-fix
+, prefetch-npm-deps
+, rsync
+, stdenv
+,
 }:
 
 buildNpmPackage rec {

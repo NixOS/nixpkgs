@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  zig_0_13,
-  callPackage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, testers
+, zig_0_13
+, callPackage
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

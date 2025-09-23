@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumake,
-  gnugrep,
-  gnused,
-  gnutar,
-  gzip,
-  bootGawk,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, tinycc
+, gnumake
+, gnugrep
+, gnused
+, gnutar
+, gzip
+, bootGawk
+,
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
@@ -23,26 +23,26 @@ let
   };
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version meta;
+{
+  inherit pname version meta;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnused
-      gnugrep
-      gnutar
-      gzip
-      bootGawk
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnused
+    gnugrep
+    gnutar
+    gzip
+    bootGawk
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/awk --version
-        mkdir $out
-      '';
-  }
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/awk --version
+      mkdir $out
+    '';
+}
   ''
     # Unpack
     tar xzf ${src}

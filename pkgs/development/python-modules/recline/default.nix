@@ -1,11 +1,11 @@
-{
-  lib,
-  argcomplete,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pudb,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, argcomplete
+, buildPythonPackage
+, fetchFromGitHub
+, pudb
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  asdf,
-  astropy,
-  astropy-extension-helpers,
-  astropy-helpers,
-  beautifulsoup4,
-  buildPythonPackage,
-  drms,
-  fetchPypi,
-  glymur,
-  h5netcdf,
-  hypothesis,
-  lxml,
-  matplotlib,
-  numpy,
-  pandas,
-  parfive,
-  pytest-astropy,
-  pytestCheckHook,
-  pytest-mock,
-  python-dateutil,
-  pythonOlder,
-  scikit-image,
-  scipy,
-  setuptools-scm,
-  sqlalchemy,
-  tqdm,
-  zeep,
+{ lib
+, stdenv
+, asdf
+, astropy
+, astropy-extension-helpers
+, astropy-helpers
+, beautifulsoup4
+, buildPythonPackage
+, drms
+, fetchPypi
+, glymur
+, h5netcdf
+, hypothesis
+, lxml
+, matplotlib
+, numpy
+, pandas
+, parfive
+, pytest-astropy
+, pytestCheckHook
+, pytest-mock
+, python-dateutil
+, pythonOlder
+, scikit-image
+, scipy
+, setuptools-scm
+, sqlalchemy
+, tqdm
+, zeep
+,
 }:
 
 buildPythonPackage rec {

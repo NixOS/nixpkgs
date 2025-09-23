@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  gettext,
-  alsa-lib,
-  gtk3,
-  glib,
-  libnotify,
-  libX11,
-  pcre,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gettext
+, alsa-lib
+, gtk3
+, glib
+, libnotify
+, libX11
+, pcre
+,
 }:
 
 stdenv.mkDerivation rec {

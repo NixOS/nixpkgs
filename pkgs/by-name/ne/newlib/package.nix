@@ -1,14 +1,14 @@
-{
-  stdenvNoLibc,
-  fetchurl,
-  buildPackages,
-  lib,
-  fetchpatch,
-  texinfo,
-  # "newlib-nano" is what the official ARM embedded toolchain calls this build
+{ stdenvNoLibc
+, fetchurl
+, buildPackages
+, lib
+, fetchpatch
+, texinfo
+, # "newlib-nano" is what the official ARM embedded toolchain calls this build
   # configuration that prioritizes low space usage. We include it as a preset
   # for embedded projects striving for a similar configuration.
-  nanoizeNewlib ? false,
+  nanoizeNewlib ? false
+,
 }:
 
 stdenvNoLibc.mkDerivation (finalAttrs: {
@@ -46,17 +46,17 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     export CC=cc
   ''
   +
-    # newlib tries to disable itself when building for Linux *except*
-    # when native-compiling.  Unfortunately the check for "is cross
-    # compiling" was written when newlib was part of GCC and newlib
-    # was built along with GCC (therefore newlib was built to execute
-    # on the targetPlatform, not the hostPlatform).  Unfortunately
-    # when newlib was extracted from GCC, this "is cross compiling"
-    # logic was not fixed.  So we must disable it.
-    ''
-      substituteInPlace configure --replace 'noconfigdirs target-newlib target-libgloss' 'noconfigdirs'
-      substituteInPlace configure --replace 'cross_only="target-libgloss target-newlib' 'cross_only="'
-    '';
+  # newlib tries to disable itself when building for Linux *except*
+  # when native-compiling.  Unfortunately the check for "is cross
+  # compiling" was written when newlib was part of GCC and newlib
+  # was built along with GCC (therefore newlib was built to execute
+  # on the targetPlatform, not the hostPlatform).  Unfortunately
+  # when newlib was extracted from GCC, this "is cross compiling"
+  # logic was not fixed.  So we must disable it.
+  ''
+    substituteInPlace configure --replace 'noconfigdirs target-newlib target-libgloss' 'noconfigdirs'
+    substituteInPlace configure --replace 'cross_only="target-libgloss target-newlib' 'cross_only="'
+  '';
 
   configurePlatforms = [
     "build"

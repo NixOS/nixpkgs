@@ -1,32 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  acl,
-  attr,
-  autoreconfHook,
-  bzip2,
-  fetchpatch,
-  glibcLocalesUtf8,
-  lzo,
-  openssl,
-  pkg-config,
-  xz,
-  zlib,
-  zstd,
-  # Optional but increases closure only negligibly. Also, while libxml2 builds
+{ lib
+, stdenv
+, fetchFromGitHub
+, acl
+, attr
+, autoreconfHook
+, bzip2
+, fetchpatch
+, glibcLocalesUtf8
+, lzo
+, openssl
+, pkg-config
+, xz
+, zlib
+, zstd
+, # Optional but increases closure only negligibly. Also, while libxml2 builds
   # fine on windows, libarchive has trouble linking windows things it depends on
   # for some reason.
-  xarSupport ? stdenv.hostPlatform.isUnix,
-  libxml2,
-
-  # for passthru.tests
-  cmake,
-  nix,
-  samba,
-
-  # for passthru.lore
-  binlore,
+  xarSupport ? stdenv.hostPlatform.isUnix
+, libxml2
+, # for passthru.tests
+  cmake
+, nix
+, samba
+, # for passthru.lore
+  binlore
+,
 }:
 
 assert xarSupport -> libxml2 != null;

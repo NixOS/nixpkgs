@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  replaceVars,
-  openfortivpn,
-  autoreconfHook,
-  gettext,
-  pkg-config,
-  file,
-  glib,
-  gtk3,
-  gtk4,
-  networkmanager,
-  ppp,
-  libsecret,
-  withGnome ? true,
-  gnome,
-  libnma,
-  libnma-gtk4,
+{ stdenv
+, lib
+, fetchurl
+, replaceVars
+, openfortivpn
+, autoreconfHook
+, gettext
+, pkg-config
+, file
+, glib
+, gtk3
+, gtk4
+, networkmanager
+, ppp
+, libsecret
+, withGnome ? true
+, gnome
+, libnma
+, libnma-gtk4
+,
 }:
 
 stdenv.mkDerivation rec {

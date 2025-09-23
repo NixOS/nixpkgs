@@ -1,6 +1,6 @@
-{
-  lib,
-  rustPlatform,
+{ lib
+, rustPlatform
+,
 }:
 
 let

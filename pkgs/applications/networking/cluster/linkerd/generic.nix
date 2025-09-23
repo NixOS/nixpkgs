@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  installShellFiles,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, installShellFiles
+,
 }:
 
-{
-  channel,
-  version,
-  sha256,
-  vendorHash,
+{ channel
+, version
+, sha256
+, vendorHash
+,
 }:
 
 buildGoModule rec {

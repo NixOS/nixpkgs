@@ -1,13 +1,12 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  fetchpatch,
-  ocaml,
-
-  alcotest,
-  cstruct,
-  mirage-crypto,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, fetchpatch
+, ocaml
+, alcotest
+, cstruct
+, mirage-crypto
+,
 }:
 
 buildDunePackage rec {

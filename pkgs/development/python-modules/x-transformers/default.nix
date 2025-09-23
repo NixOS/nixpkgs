@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  einx,
-  einops,
-  loguru,
-  packaging,
-  torch,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  einx
+, einops
+, loguru
+, packaging
+, torch
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

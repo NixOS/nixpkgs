@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  fetchNpmDeps,
-  nodejs_20,
-  replaceVars,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, fetchNpmDeps
+, nodejs_20
+, replaceVars
+,
 }:
 
 let

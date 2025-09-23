@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  rustPlatform,
-  meson,
-  ninja,
-  pkg-config,
-  rustc,
-  cargo,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libadwaita,
-  gst_all_1,
+{ lib
+, stdenv
+, fetchFromGitLab
+, rustPlatform
+, meson
+, ninja
+, pkg-config
+, rustc
+, cargo
+, wrapGAppsHook4
+, desktop-file-utils
+, libadwaita
+, gst_all_1
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,9 +55,10 @@ stdenv.mkDerivation rec {
 
   # Workaround for the gettext-sys issue
   # https://github.com/Koka/gettext-rs/issues/114
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
-  ) "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
+    ) "-Wno-error=incompatible-function-pointer-types";
 
   meta = with lib; {
     description = "Learn Japanese hiragana and katakana characters";

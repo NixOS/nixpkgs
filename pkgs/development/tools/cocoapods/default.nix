@@ -1,8 +1,8 @@
-{
-  lib,
-  bundlerApp,
-  ruby,
-  beta ? false,
+{ lib
+, bundlerApp
+, ruby
+, beta ? false
+,
 }:
 
 bundlerApp {

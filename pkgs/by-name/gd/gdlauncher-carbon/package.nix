@@ -1,29 +1,28 @@
-{
-  lib,
-  stdenv,
-  appimageTools,
-  fetchurl,
-  graphicsmagick,
-  makeWrapper,
-  copyDesktopItems,
-  autoPatchelfHook,
-  xorg,
-  libpulseaudio,
-  libGL,
-  udev,
-  xdg-utils,
-  electron,
-  addDriverRunpath,
-  makeDesktopItem,
-
-  jdk8,
-  jdk17,
-  jdk21,
-  jdks ? [
+{ lib
+, stdenv
+, appimageTools
+, fetchurl
+, graphicsmagick
+, makeWrapper
+, copyDesktopItems
+, autoPatchelfHook
+, xorg
+, libpulseaudio
+, libGL
+, udev
+, xdg-utils
+, electron
+, addDriverRunpath
+, makeDesktopItem
+, jdk8
+, jdk17
+, jdk21
+, jdks ? [
     jdk8
     jdk17
     jdk21
-  ],
+  ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

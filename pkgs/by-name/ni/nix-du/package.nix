@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  nixVersions,
-  nlohmann_json,
-  boost,
-  graphviz,
-  pkg-config,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, nixVersions
+, nlohmann_json
+, boost
+, graphviz
+, pkg-config
+,
 }:
 
 rustPlatform.buildRustPackage rec {

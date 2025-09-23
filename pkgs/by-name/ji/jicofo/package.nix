@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  jre_headless,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, jre_headless
+, nixosTests
+,
 }:
 
 let

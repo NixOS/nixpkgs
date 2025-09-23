@@ -1,19 +1,19 @@
-{
-  lib,
-  nix-update-script,
-  buildPythonPackage,
-  crytic-compile,
-  fetchFromGitHub,
-  makeWrapper,
-  packaging,
-  prettytable,
-  pythonOlder,
-  setuptools-scm,
-  solc,
-  web3,
-  withSolc ? false,
-  testers,
-  slither-analyzer,
+{ lib
+, nix-update-script
+, buildPythonPackage
+, crytic-compile
+, fetchFromGitHub
+, makeWrapper
+, packaging
+, prettytable
+, pythonOlder
+, setuptools-scm
+, solc
+, web3
+, withSolc ? false
+, testers
+, slither-analyzer
+,
 }:
 
 buildPythonPackage rec {

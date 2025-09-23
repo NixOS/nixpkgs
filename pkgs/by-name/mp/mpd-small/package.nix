@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  mpd,
+{ lib
+, stdenv
+, mpd
+,
 }:
 
 mpd.override {

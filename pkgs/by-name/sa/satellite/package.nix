@@ -1,12 +1,12 @@
-{
-  lib,
-  python3,
-  fetchFromGitea,
-  gobject-introspection,
-  libadwaita,
-  modemmanager,
-  wrapGAppsHook4,
-  nix-update-script,
+{ lib
+, python3
+, fetchFromGitea
+, gobject-introspection
+, libadwaita
+, modemmanager
+, wrapGAppsHook4
+, nix-update-script
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

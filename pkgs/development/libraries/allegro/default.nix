@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  texinfo,
-  libXext,
-  xorgproto,
-  libX11,
-  libXpm,
-  libXt,
-  libXcursor,
-  alsa-lib,
-  cmake,
-  pkg-config,
-  zlib,
-  libpng,
-  libvorbis,
-  libXxf86dga,
-  libXxf86misc,
-  libXxf86vm,
-  openal,
-  libGLU,
-  libGL,
+{ lib
+, stdenv
+, fetchurl
+, texinfo
+, libXext
+, xorgproto
+, libX11
+, libXpm
+, libXt
+, libXcursor
+, alsa-lib
+, cmake
+, pkg-config
+, zlib
+, libpng
+, libvorbis
+, libXxf86dga
+, libXxf86misc
+, libXxf86vm
+, openal
+, libGLU
+, libGL
+,
 }:
 
 stdenv.mkDerivation rec {

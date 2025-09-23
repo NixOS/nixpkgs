@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  makeWrapper,
-  gawk,
-  gnused,
-  util-linux,
-  file,
-  wget,
-  python3,
-  qemu-utils,
-  e2fsprogs,
-  cdrkit,
-  gptfdisk,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, makeWrapper
+, gawk
+, gnused
+, util-linux
+, file
+, wget
+, python3
+, qemu-utils
+, e2fsprogs
+, cdrkit
+, gptfdisk
+,
 }:
 let
   # according to https://packages.debian.org/sid/cloud-image-utils + https://packages.debian.org/sid/admin/cloud-guest-utils

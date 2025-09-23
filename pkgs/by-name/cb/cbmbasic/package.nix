@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

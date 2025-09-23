@@ -1,12 +1,12 @@
-{
-  lib,
-  asyncpg,
-  buildPythonPackage,
-  fetchPypi,
-  llama-index-core,
-  pgvector,
-  hatchling,
-  psycopg2,
+{ lib
+, asyncpg
+, buildPythonPackage
+, fetchPypi
+, llama-index-core
+, pgvector
+, hatchling
+, psycopg2
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  bluetooth-sensor-state-data,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pycryptodomex,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
-  sensor-state-data,
+{ lib
+, bluetooth-sensor-state-data
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pycryptodomex
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+, sensor-state-data
+,
 }:
 
 buildPythonPackage rec {

@@ -1,37 +1,37 @@
-{
-  stdenv,
-  lib,
-  replaceVars,
-  pkg-config,
-  fetchurl,
-  python3Packages,
-  gettext,
-  itstool,
-  libtool,
-  texinfo,
-  systemdMinimal,
-  util-linux,
-  autoreconfHook,
-  glib,
-  dotconf,
-  libsndfile,
-  withLibao ? true,
-  libao,
-  withPulse ? false,
-  libpulseaudio,
-  withAlsa ? false,
-  alsa-lib,
-  withOss ? false,
-  withFlite ? true,
-  flite,
-  withEspeak ? true,
-  espeak,
-  sonic,
-  pcaudiolib,
-  mbrola,
-  withPico ? true,
-  svox,
-  libsOnly ? false,
+{ stdenv
+, lib
+, replaceVars
+, pkg-config
+, fetchurl
+, python3Packages
+, gettext
+, itstool
+, libtool
+, texinfo
+, systemdMinimal
+, util-linux
+, autoreconfHook
+, glib
+, dotconf
+, libsndfile
+, withLibao ? true
+, libao
+, withPulse ? false
+, libpulseaudio
+, withAlsa ? false
+, alsa-lib
+, withOss ? false
+, withFlite ? true
+, flite
+, withEspeak ? true
+, espeak
+, sonic
+, pcaudiolib
+, mbrola
+, withPico ? true
+, svox
+, libsOnly ? false
+,
 }:
 
 let

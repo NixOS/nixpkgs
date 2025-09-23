@@ -1,16 +1,16 @@
-{
-  lib,
-  attrs,
-  boltons,
-  buildPythonPackage,
-  face,
-  fetchPypi,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  tomli,
+{ lib
+, attrs
+, boltons
+, buildPythonPackage
+, face
+, fetchPypi
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, pyyaml
+, setuptools
+, tomli
+,
 }:
 
 buildPythonPackage rec {

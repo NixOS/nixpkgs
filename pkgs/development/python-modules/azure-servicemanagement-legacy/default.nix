@@ -1,10 +1,10 @@
-{
-  lib,
-  azure-common,
-  buildPythonPackage,
-  fetchPypi,
-  requests,
-  setuptools,
+{ lib
+, azure-common
+, buildPythonPackage
+, fetchPypi
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

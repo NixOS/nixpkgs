@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  replaceVars,
-  pkg-config,
-  libxslt,
-  ninja,
-  gnome,
-  gtk3,
-  gtk4,
-  glib,
-  gettext,
-  libxml2,
-  xkeyboard_config,
-  libxkbcommon,
-  isocodes,
-  meson,
-  wayland,
-  libseccomp,
-  systemd,
-  udev,
-  bubblewrap,
-  gobject-introspection,
-  gtk-doc,
-  docbook-xsl-nons,
-  gsettings-desktop-schemas,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+{ lib
+, stdenv
+, fetchurl
+, replaceVars
+, pkg-config
+, libxslt
+, ninja
+, gnome
+, gtk3
+, gtk4
+, glib
+, gettext
+, libxml2
+, xkeyboard_config
+, libxkbcommon
+, isocodes
+, meson
+, wayland
+, libseccomp
+, systemd
+, udev
+, bubblewrap
+, gobject-introspection
+, gtk-doc
+, docbook-xsl-nons
+, gsettings-desktop-schemas
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,29 +1,26 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  amaranth,
-  apollo-fpga,
-  libusb1,
-  luna-soc,
-  luna-usb,
-  prompt-toolkit,
-  pyfwup,
-  pygreat,
-  pyserial,
-  pyusb,
-  tabulate,
-  tomli,
-  tqdm,
-
-  # tests
-  pytestCheckHook,
-  udevCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  setuptools
+, # dependencies
+  amaranth
+, apollo-fpga
+, libusb1
+, luna-soc
+, luna-usb
+, prompt-toolkit
+, pyfwup
+, pygreat
+, pyserial
+, pyusb
+, tabulate
+, tomli
+, tqdm
+, # tests
+  pytestCheckHook
+, udevCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "cynthion";

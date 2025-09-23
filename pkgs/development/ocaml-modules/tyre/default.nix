@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  re,
-  result,
-  seq,
-  alcotest,
+{ lib
+, buildDunePackage
+, fetchurl
+, re
+, result
+, seq
+, alcotest
+,
 }:
 
 buildDunePackage rec {

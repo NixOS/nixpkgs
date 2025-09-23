@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchpatch,
-  cmake,
-  ninja,
-  useSwift ? true,
-  swift,
+{ lib
+, stdenv
+, callPackage
+, fetchpatch
+, cmake
+, ninja
+, useSwift ? true
+, swift
+,
 }:
 
 let

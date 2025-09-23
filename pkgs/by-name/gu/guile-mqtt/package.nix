@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  guile,
-  mosquitto,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, guile
+, mosquitto
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

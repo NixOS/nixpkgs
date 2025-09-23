@@ -1,7 +1,7 @@
-{
-  dhall-nixpkgs,
-  lib,
-  stdenv,
+{ dhall-nixpkgs
+, lib
+, stdenv
+,
 }:
 
 # This function calls `dhall-to-nixpkgs directory --fixed-output-derivations`
@@ -13,12 +13,12 @@
 # derivations (with the `buildDhallUrl` function), so no unrestricted network
 # access is necessary.
 lib.makePackageOverridable (
-  {
-    src,
-    # The file to import, relative to the root directory
-    file ? "package.dhall",
-    # Set to `true` to generate documentation for the package
-    document ? false,
+  { src
+  , # The file to import, relative to the root directory
+    file ? "package.dhall"
+  , # Set to `true` to generate documentation for the package
+    document ? false
+  ,
   }:
   stdenv.mkDerivation {
     name = "dhall-directory-package.nix";

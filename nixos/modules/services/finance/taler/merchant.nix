@@ -1,9 +1,8 @@
-{
-  lib,
-  config,
-  options,
-  pkgs,
-  ...
+{ lib
+, config
+, options
+, pkgs
+, ...
 }:
 let
   cfg = cfgTaler.merchant;

@@ -36,14 +36,13 @@ in
 
     # Output
     (
-      {
-        options,
-        ...
+      { options
+      , ...
       }:
       {
         options.result = mkOption {
-          default = lib.concatStringsSep "." (options.mergedName.type.getSubOptions options.mergedName.loc)
-          .nested.loc;
+          default = lib.concatStringsSep "."
+            (options.mergedName.type.getSubOptions options.mergedName.loc).nested.loc;
         };
       }
     )

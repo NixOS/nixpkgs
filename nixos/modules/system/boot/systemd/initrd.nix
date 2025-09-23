@@ -1,10 +1,9 @@
-{
-  lib,
-  options,
-  config,
-  utils,
-  pkgs,
-  ...
+{ lib
+, options
+, config
+, utils
+, pkgs
+, ...
 }:
 
 with lib;
@@ -128,9 +127,11 @@ let
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
 
-    contents = lib.filter (
-      { source, enable, ... }: (!lib.elem source cfg.suppressedStorePaths) && enable
-    ) cfg.storePaths;
+    contents = lib.filter
+      (
+        { source, enable, ... }: (!lib.elem source cfg.suppressedStorePaths) && enable
+      )
+      cfg.storePaths;
   };
 
 in
@@ -413,34 +414,34 @@ in
       }
     ]
     ++
-      map
-        (name: {
-          assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
-          message = ''
-            systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
-              convert it to analogous systemd units in 'boot.initrd.systemd'.
+    map
+      (name: {
+        assertion = lib.attrByPath name (throw "impossible") config.boot.initrd == "";
+        message = ''
+          systemd stage 1 does not support 'boot.initrd.${lib.concatStringsSep "." name}'. Please
+            convert it to analogous systemd units in 'boot.initrd.systemd'.
 
-                Definitions:
-            ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}")
-              (lib.attrByPath name (throw "impossible") options.boot.initrd).definitionsWithLocations
-            }
-          '';
-        })
+              Definitions:
+          ${lib.concatMapStringsSep "\n" ({ file, ... }: "    - ${file}")
+            (lib.attrByPath name (throw "impossible") options.boot.initrd).definitionsWithLocations
+          }
+        '';
+      })
+      [
+        [ "preFailCommands" ]
+        [ "preDeviceCommands" ]
+        [ "preLVMCommands" ]
+        [ "postDeviceCommands" ]
+        [ "postResumeCommands" ]
+        [ "postMountCommands" ]
+        [ "extraUdevRulesCommands" ]
+        [ "extraUtilsCommands" ]
+        [ "extraUtilsCommandsTest" ]
         [
-          [ "preFailCommands" ]
-          [ "preDeviceCommands" ]
-          [ "preLVMCommands" ]
-          [ "postDeviceCommands" ]
-          [ "postResumeCommands" ]
-          [ "postMountCommands" ]
-          [ "extraUdevRulesCommands" ]
-          [ "extraUtilsCommands" ]
-          [ "extraUtilsCommandsTest" ]
-          [
-            "network"
-            "postCommands"
-          ]
-        ];
+          "network"
+          "postCommands"
+        ]
+      ];
 
     system.build = { inherit initialRamdisk; };
 
@@ -576,22 +577,26 @@ in
         // mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit v)) cfg.targets
         // mapAttrs' (n: v: nameValuePair "${n}.timer" (timerToUnit v)) cfg.timers
         // listToAttrs (
-          map (
-            v:
-            let
-              n = escapeSystemdPath v.where;
-            in
-            nameValuePair "${n}.mount" (mountToUnit v)
-          ) cfg.mounts
+          map
+            (
+              v:
+              let
+                n = escapeSystemdPath v.where;
+              in
+              nameValuePair "${n}.mount" (mountToUnit v)
+            )
+            cfg.mounts
         )
         // listToAttrs (
-          map (
-            v:
-            let
-              n = escapeSystemdPath v.where;
-            in
-            nameValuePair "${n}.automount" (automountToUnit v)
-          ) cfg.automounts
+          map
+            (
+              v:
+              let
+                n = escapeSystemdPath v.where;
+              in
+              nameValuePair "${n}.automount" (automountToUnit v)
+            )
+            cfg.automounts
         );
 
       services.initrd-find-nixos-closure = {

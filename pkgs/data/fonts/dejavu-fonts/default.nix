@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  fontforge,
-  perl,
-  perlPackages,
+{ fetchFromGitHub
+, lib
+, stdenv
+, fontforge
+, perl
+, perlPackages
+,
 }:
 
 let

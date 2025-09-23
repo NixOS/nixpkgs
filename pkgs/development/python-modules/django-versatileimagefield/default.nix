@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  django,
-  pillow,
-  python-magic,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django
+, pillow
+, python-magic
+,
 }:
 
 buildPythonPackage rec {

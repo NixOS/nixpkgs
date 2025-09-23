@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  pytestCheckHook,
-  pythonOlder,
-  tinycss2,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, pytestCheckHook
+, pythonOlder
+, tinycss2
+,
 }:
 
 buildPythonPackage rec {

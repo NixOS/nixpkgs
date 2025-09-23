@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  pythonPackages,
-  mopidy,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, pythonPackages
+, mopidy
+, nix-update-script
+,
 }:
 
 pythonPackages.buildPythonApplication rec {

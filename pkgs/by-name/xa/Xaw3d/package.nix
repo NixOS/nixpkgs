@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bison,
-  flex,
-  pkg-config,
-  libXext,
-  libXmu,
-  libXpm,
-  libXp,
-  libXt,
-  xorgproto,
+{ lib
+, stdenv
+, fetchurl
+, bison
+, flex
+, pkg-config
+, libXext
+, libXmu
+, libXpm
+, libXp
+, libXt
+, xorgproto
+,
 }:
 
 stdenv.mkDerivation rec {

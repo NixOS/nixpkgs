@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,9 +26,9 @@ rustPlatform.buildRustPackage rec {
     "--skip cli_args::it_passes_arguments_through_to_cargo"
   ]
   ++
-    lib.optional (stdenv.hostPlatform.system != "x86_64-linux")
-      # assumes the target is x86_64-unknown-linux-gnu
-      "--skip simple_project::it_checks_okay_project_correctly";
+  lib.optional (stdenv.hostPlatform.system != "x86_64-linux")
+    # assumes the target is x86_64-unknown-linux-gnu
+    "--skip simple_project::it_checks_okay_project_correctly";
 
   meta = {
     description = "Cargo subcommand to check rust documentation for broken links";

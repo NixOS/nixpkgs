@@ -1,27 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  attrs,
-  click,
-  click-default-group,
-  networkx,
-  optree,
-  packaging,
-  pluggy,
-  rich,
-  sqlalchemy,
-  universal-pathlib,
-  pytestCheckHook,
-  nbmake,
-  pexpect,
-  pytest-xdist,
-  syrupy,
-  git,
-  tomli,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, attrs
+, click
+, click-default-group
+, networkx
+, optree
+, packaging
+, pluggy
+, rich
+, sqlalchemy
+, universal-pathlib
+, pytestCheckHook
+, nbmake
+, pexpect
+, pytest-xdist
+, syrupy
+, git
+, tomli
+,
 }:
 buildPythonPackage rec {
   pname = "pytask";

@@ -1,12 +1,11 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  fetchpatch,
-  tbb_2022,
-
-  useTBB ? true,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, fetchpatch
+, tbb_2022
+, useTBB ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

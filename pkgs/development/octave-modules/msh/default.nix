@@ -1,16 +1,16 @@
-{
-  buildOctavePackage,
-  lib,
-  fetchFromGitHub,
-  # Octave Dependencies
-  splines,
-  # Other Dependencies
-  gmsh,
-  gawk,
-  pkg-config,
-  dolfin,
-  autoconf,
-  automake,
+{ buildOctavePackage
+, lib
+, fetchFromGitHub
+, # Octave Dependencies
+  splines
+, # Other Dependencies
+  gmsh
+, gawk
+, pkg-config
+, dolfin
+, autoconf
+, automake
+,
 }:
 
 buildOctavePackage rec {

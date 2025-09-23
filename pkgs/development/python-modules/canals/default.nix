@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  mkdocs-material,
-  mkdocs-mermaid2-plugin,
-  mkdocstrings,
-  networkx,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, mkdocs-material
+, mkdocs-mermaid2-plugin
+, mkdocstrings
+, networkx
+, pytestCheckHook
+, pythonOlder
+, requests
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

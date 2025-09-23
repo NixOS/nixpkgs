@@ -1,12 +1,12 @@
-{
-  lib,
-  buildNpmPackage,
-  vips,
-  pkg-config,
-  prisma,
-  src,
-  version,
-  nixosTests,
+{ lib
+, buildNpmPackage
+, vips
+, pkg-config
+, prisma
+, src
+, version
+, nixosTests
+,
 }:
 
 buildNpmPackage {

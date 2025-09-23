@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  lzip,
-  lzlib,
-  texinfo,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, lzip
+, lzlib
+, texinfo
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pytestCheckHook,
-  rustPlatform,
-  stdenv,
-  py-bip39-bindings,
-  libiconv,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pytestCheckHook
+, rustPlatform
+, stdenv
+, py-bip39-bindings
+, libiconv
+,
 }:
 
 buildPythonPackage rec {

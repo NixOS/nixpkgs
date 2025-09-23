@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  menhir,
-  cmdliner,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, menhir
+, cmdliner
+,
 }:
 buildDunePackage rec {
   pname = "odds";

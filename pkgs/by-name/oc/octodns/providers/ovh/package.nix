@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  octodns,
-  ovh,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, octodns
+, ovh
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

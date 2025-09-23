@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  umu-launcher,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, umu-launcher
+,
 }:
 
 rustPlatform.buildRustPackage rec {

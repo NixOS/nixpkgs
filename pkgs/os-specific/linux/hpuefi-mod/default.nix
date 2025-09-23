@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchzip,
-  kernel,
-  kernelModuleMakeFlags,
-  lib,
+{ stdenv
+, fetchzip
+, kernel
+, kernelModuleMakeFlags
+, lib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hpuefi-mod";

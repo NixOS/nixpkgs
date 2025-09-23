@@ -1,8 +1,8 @@
-{
-  lib,
-  vimUtils,
-  fetchFromGitLab,
-  nix-update-script,
+{ lib
+, vimUtils
+, fetchFromGitLab
+, nix-update-script
+,
 }:
 let
   version = "0.1.1";

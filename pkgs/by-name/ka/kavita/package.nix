@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  buildDotnetModule,
-  buildNpmPackage,
-  dotnetCorePackages,
-  nixosTests,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, buildDotnetModule
+, buildNpmPackage
+, dotnetCorePackages
+, nixosTests
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

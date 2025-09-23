@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  jdk11,
-  maven,
-  jogl,
+{ lib
+, fetchFromGitHub
+, jdk11
+, maven
+, jogl
+,
 }:
 
 maven.buildMavenPackage rec {

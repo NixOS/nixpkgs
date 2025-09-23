@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  libical,
+{ mkKdeDerivation
+, qtdeclarative
+, libical
+,
 }:
 mkKdeDerivation {
   pname = "kcalendarcore";

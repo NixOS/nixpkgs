@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  gettext,
-  xxd,
-  glib,
-  libxml2,
-  ncurses,
-  popt,
-  libxslt,
-  screen,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gettext
+, xxd
+, glib
+, libxml2
+, ncurses
+, popt
+, libxslt
+, screen
+,
 }:
 
 stdenv.mkDerivation {

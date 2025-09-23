@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  nixosTests,
-  fetchpatch,
-  fetchurl,
-  autoreconfHook,
-  zlib,
-  pcre,
-  w3m,
-  man,
-  openssl,
-  brotli,
+{ lib
+, stdenv
+, nixosTests
+, fetchpatch
+, fetchurl
+, autoreconfHook
+, zlib
+, pcre
+, w3m
+, man
+, openssl
+, brotli
+,
 }:
 
 stdenv.mkDerivation rec {

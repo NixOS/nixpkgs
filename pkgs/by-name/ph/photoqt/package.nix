@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  extra-cmake-modules,
-  exiv2,
-  graphicsmagick,
-  libarchive,
-  libraw,
-  mpv,
-  pugixml,
-  qt6,
-  qt6Packages,
-  zxing-cpp,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, extra-cmake-modules
+, exiv2
+, graphicsmagick
+, libarchive
+, libraw
+, mpv
+, pugixml
+, qt6
+, qt6Packages
+, zxing-cpp
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  rust-jemalloc-sys,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, rust-jemalloc-sys
+,
 }:
 
 rustPlatform.buildRustPackage {

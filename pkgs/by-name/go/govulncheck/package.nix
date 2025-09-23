@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoLatestModule,
-  fetchFromGitHub,
-  replaceVars,
+{ lib
+, buildGoLatestModule
+, fetchFromGitHub
+, replaceVars
+,
 }:
 
 buildGoLatestModule rec {

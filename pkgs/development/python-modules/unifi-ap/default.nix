@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  paramiko,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, paramiko
+,
 }:
 
 buildPythonPackage rec {

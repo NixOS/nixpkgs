@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  autoreconfHook,
-  wrapGAppsHook3,
-  kdePackages,
-  libgpg-error,
-  libassuan,
-  libsForQt5,
-  qt6,
-  ncurses,
-  gtk2,
-  gcr,
-  withLibsecret ? true,
-  libsecret,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, pkg-config
+, autoreconfHook
+, wrapGAppsHook3
+, kdePackages
+, libgpg-error
+, libassuan
+, libsForQt5
+, qt6
+, ncurses
+, gtk2
+, gcr
+, withLibsecret ? true
+, libsecret
+,
 }:
 
 let

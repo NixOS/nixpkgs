@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  lib,
-  buildDotnetModule,
-  dotnetCorePackages,
+{ fetchFromGitHub
+, lib
+, buildDotnetModule
+, dotnetCorePackages
+,
 }:
 
 buildDotnetModule {

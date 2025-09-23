@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  zlib,
-  readline,
-  ncurses,
-
-  # for tests
-  python3Packages,
-  sqldiff,
-  sqlite-analyzer,
-  sqlite-rsync,
-  tinysparql,
-
-  # uses readline & ncurses for a better interactive experience if set to true
-  interactive ? false,
-
-  gitUpdater,
-  buildPackages,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, zlib
+, readline
+, ncurses
+, # for tests
+  python3Packages
+, sqldiff
+, sqlite-analyzer
+, sqlite-rsync
+, tinysparql
+, # uses readline & ncurses for a better interactive experience if set to true
+  interactive ? false
+, gitUpdater
+, buildPackages
+,
 }:
 
 let

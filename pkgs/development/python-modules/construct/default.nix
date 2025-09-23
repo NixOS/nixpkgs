@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  arrow,
-  buildPythonPackage,
-  cloudpickle,
-  cryptography,
-  fetchFromGitHub,
-  lz4,
-  numpy,
-  pytestCheckHook,
-  pythonOlder,
-  ruamel-yaml,
-  setuptools,
+{ lib
+, stdenv
+, arrow
+, buildPythonPackage
+, cloudpickle
+, cryptography
+, fetchFromGitHub
+, lz4
+, numpy
+, pytestCheckHook
+, pythonOlder
+, ruamel-yaml
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+,
 }:
 stdenv.mkDerivation {
   pname = "g203-led";

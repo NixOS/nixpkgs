@@ -1,25 +1,25 @@
-{
-  cmake,
-  lib,
-  stdenv,
-  protobuf,
-  python3,
-  src,
-  version,
-  enableMalloc,
-  noPackedStructs,
-  maxRequiredFields,
-  field32bit,
-  noErrmsg,
-  bufferOnly,
-  systemHeader,
-  without64bit,
-  encodeArraysUnpacked,
-  convertDoubleFloat,
-  validateUtf8,
-  littleEndian8bit,
-  c99StaticAssert,
-  noStaticAssert,
+{ cmake
+, lib
+, stdenv
+, protobuf
+, python3
+, src
+, version
+, enableMalloc
+, noPackedStructs
+, maxRequiredFields
+, field32bit
+, noErrmsg
+, bufferOnly
+, systemHeader
+, without64bit
+, encodeArraysUnpacked
+, convertDoubleFloat
+, validateUtf8
+, littleEndian8bit
+, c99StaticAssert
+, noStaticAssert
+,
 }:
 
 stdenv.mkDerivation ({

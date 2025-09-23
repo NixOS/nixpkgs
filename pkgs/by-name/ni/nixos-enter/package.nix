@@ -1,9 +1,9 @@
-{
-  lib,
-  replaceVarsWith,
-  runtimeShell,
-  installShellFiles,
-  util-linuxMinimal,
+{ lib
+, replaceVarsWith
+, runtimeShell
+, installShellFiles
+, util-linuxMinimal
+,
 }:
 replaceVarsWith {
   name = "nixos-enter";

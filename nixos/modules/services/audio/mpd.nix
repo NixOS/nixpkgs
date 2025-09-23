@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -16,9 +15,11 @@ let
     creds:
     let
       placeholders = (
-        lib.imap0 (
-          i: c: ''password "{{password-${toString i}}}@${lib.concatStringsSep "," c.permissions}"''
-        ) creds
+        lib.imap0
+          (
+            i: c: ''password "{{password-${toString i}}}@${lib.concatStringsSep "," c.permissions}"''
+          )
+          creds
       );
     in
     lib.concatStringsSep "\n" placeholders
@@ -264,10 +265,12 @@ in
       ''
       + lib.optionalString (cfg.credentials != [ ]) (
         lib.concatStringsSep "\n" (
-          lib.imap0 (
-            i: c:
-            ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf''
-          ) cfg.credentials
+          lib.imap0
+            (
+              i: c:
+                ''${pkgs.replace-secret}/bin/replace-secret '{{password-${toString i}}}' '${c.passwordFile}' /run/mpd/mpd.conf''
+            )
+            cfg.credentials
         )
       );
 

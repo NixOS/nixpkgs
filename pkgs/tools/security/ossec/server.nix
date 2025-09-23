@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  which,
-  pcre2,
-  zlib,
-  ncurses,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, pcre2
+, zlib
+, ncurses
+, openssl
+,
 }:
 let
   version = "unstable-2023-08-09";

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cbor2,
-  docopt,
-  fetchFromGitHub,
-  jsonconversion,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  six,
-  tabulate,
+{ lib
+, buildPythonPackage
+, cbor2
+, docopt
+, fetchFromGitHub
+, jsonconversion
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, six
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

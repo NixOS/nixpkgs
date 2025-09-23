@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  colcon,
-  setuptools,
-  argcomplete,
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, colcon
+, setuptools
+, argcomplete
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 buildPythonPackage rec {
   pname = "colcon-argcomplete";

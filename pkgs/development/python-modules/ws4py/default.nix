@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cherrypy,
-  fetchPypi,
-  gevent,
-  git,
-  mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  tornado,
+{ lib
+, buildPythonPackage
+, cherrypy
+, fetchPypi
+, gevent
+, git
+, mock
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, tornado
+,
 }:
 
 buildPythonPackage rec {

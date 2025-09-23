@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  icon-slicer,
-  xcursorgen,
+{ lib
+, stdenv
+, fetchFromGitHub
+, icon-slicer
+, xcursorgen
+,
 }:
 stdenv.mkDerivation rec {
   pname = "openzone-cursors";

@@ -1,15 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  autoPatchelfHook,
-
-  alsa-lib,
-  libxcrypt-legacy,
-  lttng-ust_2_12,
-  xorg,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, alsa-lib
+, libxcrypt-legacy
+, lttng-ust_2_12
+, xorg
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,15 +16,17 @@ stdenv.mkDerivation rec {
 
   src =
     if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        url = "https://archive.org/download/cov-analysis-linux-${version}.tar/cov-analysis-linux-${version}.tar.gz";
-        hash = "sha256-Jr9bMUo9GRp+dgoAPqKxaTqWYWh4djGArdG9ukUK+ZY=";
-      }
+      fetchurl
+        {
+          url = "https://archive.org/download/cov-analysis-linux-${version}.tar/cov-analysis-linux-${version}.tar.gz";
+          hash = "sha256-Jr9bMUo9GRp+dgoAPqKxaTqWYWh4djGArdG9ukUK+ZY=";
+        }
     else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://archive.org/download/cov-analysis-linux64-${version}.tar/cov-analysis-linux64-${version}.tar.gz";
-        hash = "sha256-CyNKILJXlDMOCXbZZF4r/knz0orRx32oSj+Kpq/nxXQ=";
-      }
+      fetchurl
+        {
+          url = "https://archive.org/download/cov-analysis-linux64-${version}.tar/cov-analysis-linux64-${version}.tar.gz";
+          hash = "sha256-CyNKILJXlDMOCXbZZF4r/knz0orRx32oSj+Kpq/nxXQ=";
+        }
     else
       throw "Unsupported platform '${stdenv.hostPlatform.system}'";
 

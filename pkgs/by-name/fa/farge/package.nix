@@ -1,19 +1,18 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  bc,
-  libnotify,
-  feh,
-  grim,
-  imagemagick,
-  slurp,
-  wl-clipboard,
-  xcolor,
-
-  waylandSupport ? true,
-  x11Support ? true,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeBinaryWrapper
+, bc
+, libnotify
+, feh
+, grim
+, imagemagick
+, slurp
+, wl-clipboard
+, xcolor
+, waylandSupport ? true
+, x11Support ? true
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

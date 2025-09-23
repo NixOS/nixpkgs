@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  scim2-filter-parser,
-  scim2-models,
-  werkzeug,
-  pytestCheckHook,
-  httpx,
-  time-machine,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, scim2-filter-parser
+, scim2-models
+, werkzeug
+, pytestCheckHook
+, httpx
+, time-machine
+,
 }:
 
 buildPythonPackage rec {

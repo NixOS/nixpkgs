@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  fetchPypi,
-  fetchpatch,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, fetchPypi
+, fetchpatch
+,
 }:
 
 let

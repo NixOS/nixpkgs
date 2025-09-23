@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  flit-core,
-  ninja,
+{ lib
+, buildPythonPackage
+, flit-core
+, ninja
+,
 }:
 
 buildPythonPackage {

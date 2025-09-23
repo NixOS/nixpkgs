@@ -182,13 +182,15 @@ import ../../make-test-python.nix (
         };
     };
 
-    nodes = builtins.mapAttrs (
-      _: val:
-      mkMerge [
-        val
-        baseGrafanaConf
-      ]
-    ) extraNodeConfs;
+    nodes = builtins.mapAttrs
+      (
+        _: val:
+          mkMerge [
+            val
+            baseGrafanaConf
+          ]
+      )
+      extraNodeConfs;
   in
   {
     name = "grafana-provision";

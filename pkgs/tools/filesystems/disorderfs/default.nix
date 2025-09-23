@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  fuse,
-  attr,
-  asciidoc,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, fuse
+, attr
+, asciidoc
+,
 }:
 
 stdenv.mkDerivation rec {

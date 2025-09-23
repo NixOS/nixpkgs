@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-  xarray,
-
-  # optional-dependencies
-  matplotlib,
-  pint,
-  pooch,
-  regex,
-  rich,
-  shapely,
-
-  # tests
-  dask,
-  pytestCheckHook,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, xarray
+, # optional-dependencies
+  matplotlib
+, pint
+, pooch
+, regex
+, rich
+, shapely
+, # tests
+  dask
+, pytestCheckHook
+, scipy
+,
 }:
 
 buildPythonPackage rec {

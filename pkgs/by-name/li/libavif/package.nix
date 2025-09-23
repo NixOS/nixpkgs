@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libaom,
-  cmake,
-  pkg-config,
-  zlib,
-  libpng,
-  libjpeg,
-  libwebp,
-  libxml2,
-  dav1d,
-  libyuv,
-  gdk-pixbuf,
-  makeWrapper,
-  gtest,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libaom
+, cmake
+, pkg-config
+, zlib
+, libpng
+, libjpeg
+, libwebp
+, libxml2
+, dav1d
+, libyuv
+, gdk-pixbuf
+, makeWrapper
+, gtest
+,
 }:
 
 let

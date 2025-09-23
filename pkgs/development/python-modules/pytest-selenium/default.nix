@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  pytest-base-url,
-  pytest-html,
-  pytest-mock,
-  pytest-variables,
-  pytest-xdist,
-  pytest,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  selenium,
-  tenacity,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, pytest-base-url
+, pytest-html
+, pytest-mock
+, pytest-variables
+, pytest-xdist
+, pytest
+, pytestCheckHook
+, pythonOlder
+, requests
+, selenium
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

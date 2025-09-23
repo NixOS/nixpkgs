@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pam,
-  six,
-  toml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pam
+, six
+, toml
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  newScope,
-  pidgin,
-  texliveBasic,
-  config,
+{ lib
+, newScope
+, pidgin
+, texliveBasic
+, config
+,
 }:
 
 lib.makeScope newScope (
@@ -54,7 +54,7 @@ lib.makeScope newScope (
 
     tdlib-purple = callPackage ./tdlib-purple { };
   }
-  // lib.optionalAttrs config.allowAliases {
+    // lib.optionalAttrs config.allowAliases {
     purple-matrix = throw "'pidginPackages.purple-matrix' has been unmaintained since April 2022, so it was removed.";
     pidgin-skypeweb = throw "'pidginPackages.pidgin-skypeweb' has been removed since Skype was shut down in May 2025.";
     purple-hangouts = throw "'pidginPackages.purple-hangouts' has been removed as Hangouts Classic is obsolete and migrated to Google Chat.";

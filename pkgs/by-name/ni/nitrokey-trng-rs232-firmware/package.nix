@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkgsCross,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkgsCross
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

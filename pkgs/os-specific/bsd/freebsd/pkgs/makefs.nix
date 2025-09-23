@@ -1,8 +1,8 @@
-{
-  mkDerivation,
-  libnetbsd,
-  compatIfNeeded,
-  libsbuf,
+{ mkDerivation
+, libnetbsd
+, compatIfNeeded
+, libsbuf
+,
 }:
 mkDerivation {
   path = "usr.sbin/makefs";

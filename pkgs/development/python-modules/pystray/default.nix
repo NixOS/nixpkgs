@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pillow,
-  xlib,
-  six,
-  xvfb-run,
-  setuptools,
-  gobject-introspection,
-  pygobject3,
-  gtk3,
-  libayatana-appindicator,
-  pytest,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pillow
+, xlib
+, six
+, xvfb-run
+, setuptools
+, gobject-introspection
+, pygobject3
+, gtk3
+, libayatana-appindicator
+, pytest
+,
 }:
 
 buildPythonPackage rec {

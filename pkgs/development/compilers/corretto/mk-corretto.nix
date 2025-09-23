@@ -1,14 +1,14 @@
-{
-  jdk,
-  version,
-  src,
-  lib,
-  stdenv,
-  gradle,
-  extraConfig ? [ ],
-  rsync,
-  runCommand,
-  testers,
+{ jdk
+, version
+, src
+, lib
+, stdenv
+, gradle
+, extraConfig ? [ ]
+, rsync
+, runCommand
+, testers
+,
 }:
 
 # Each Corretto version is based on a corresponding OpenJDK version. So

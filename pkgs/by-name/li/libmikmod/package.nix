@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  texinfo,
-  alsa-lib,
-  libpulseaudio,
+{ lib
+, stdenv
+, fetchurl
+, texinfo
+, alsa-lib
+, libpulseaudio
+,
 }:
 
 let

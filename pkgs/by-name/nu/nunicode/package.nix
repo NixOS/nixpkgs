@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromBitbucket,
-  cmake,
-  sqlite,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromBitbucket
+, cmake
+, sqlite
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

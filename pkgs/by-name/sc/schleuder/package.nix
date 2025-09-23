@@ -1,10 +1,10 @@
-{
-  lib,
-  bundlerApp,
-  ruby,
-  stdenv,
-  bundlerUpdateScript,
-  nixosTests,
+{ lib
+, bundlerApp
+, ruby
+, stdenv
+, bundlerUpdateScript
+, nixosTests
+,
 }:
 
 bundlerApp {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromSourcehut,
-  installShellFiles,
-  makeBinaryWrapper,
-  gv,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromSourcehut
+, installShellFiles
+, makeBinaryWrapper
+, gv
+,
 }:
 
 stdenv.mkDerivation rec {

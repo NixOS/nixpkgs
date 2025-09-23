@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  sqlalchemy,
-  setuptools-scm,
-  setuptools,
-  pytestCheckHook,
-  pytest-sugar,
-  pymysql,
-  psycopg2,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, sqlalchemy
+, setuptools-scm
+, setuptools
+, pytestCheckHook
+, pytest-sugar
+, pymysql
+, psycopg2
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cmake,
-  unzip,
-  kdePackages,
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, unzip
+, kdePackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

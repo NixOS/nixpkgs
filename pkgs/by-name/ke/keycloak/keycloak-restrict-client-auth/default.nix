@@ -1,7 +1,7 @@
-{
-  maven,
-  lib,
-  fetchFromGitHub,
+{ maven
+, lib
+, fetchFromGitHub
+,
 }:
 
 maven.buildMavenPackage rec {

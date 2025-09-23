@@ -1,27 +1,27 @@
-{
-  fetchurl,
-  fetchpatch,
-  lib,
-  config,
-  stdenv,
-  pkg-config,
-  libdaemon,
-  dbus,
-  libpcap,
-  expat,
-  gettext,
-  glib,
-  autoreconfHook,
-  libiconv,
-  libevent,
-  nixosTests,
-  gtk3Support ? false,
-  gtk3,
-  qt5,
-  qt5Support ? false,
-  withLibdnssdCompat ? false,
-  python ? null,
-  withPython ? false,
+{ fetchurl
+, fetchpatch
+, lib
+, config
+, stdenv
+, pkg-config
+, libdaemon
+, dbus
+, libpcap
+, expat
+, gettext
+, glib
+, autoreconfHook
+, libiconv
+, libevent
+, nixosTests
+, gtk3Support ? false
+, gtk3
+, qt5
+, qt5Support ? false
+, withLibdnssdCompat ? false
+, python ? null
+, withPython ? false
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  boost,
-  pkg-config,
-  cmake,
-  catch2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, boost
+, pkg-config
+, cmake
+, catch2
+,
 }:
 
 stdenv.mkDerivation rec {

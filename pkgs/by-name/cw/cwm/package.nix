@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libX11,
-  libXinerama,
-  libXrandr,
-  libXft,
-  bison,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+, libXinerama
+, libXrandr
+, libXft
+, bison
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

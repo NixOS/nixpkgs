@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  makeWrapper,
+{ lib
+, stdenvNoCC
+, fetchzip
+, makeWrapper
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "keka";

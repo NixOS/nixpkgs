@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  flock,
-  gitUpdater,
-  bashInteractive,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, flock
+, gitUpdater
+, bashInteractive
+, lib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

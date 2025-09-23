@@ -1,25 +1,25 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  async-timeout,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  hatchling,
-  http-ece,
-  myst-parser,
-  protobuf,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-socket,
-  pytestCheckHook,
-  pythonOlder,
-  requests-mock,
-  sphinx,
-  sphinx-autodoc-typehints,
-  sphinx-rtd-theme,
-  sphinxHook,
+{ lib
+, aiohttp
+, aioresponses
+, async-timeout
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, hatchling
+, http-ece
+, myst-parser
+, protobuf
+, pytest-asyncio
+, pytest-mock
+, pytest-socket
+, pytestCheckHook
+, pythonOlder
+, requests-mock
+, sphinx
+, sphinx-autodoc-typehints
+, sphinx-rtd-theme
+, sphinxHook
+,
 }:
 
 buildPythonPackage rec {

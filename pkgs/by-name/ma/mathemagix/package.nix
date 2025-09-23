@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchsvn,
-  readline,
-  ncurses,
-  bison,
-  libtool,
-  gmp,
-  mpfr,
+{ stdenv
+, lib
+, fetchsvn
+, readline
+, ncurses
+, bison
+, libtool
+, gmp
+, mpfr
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

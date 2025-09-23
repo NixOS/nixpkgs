@@ -1,10 +1,10 @@
 # nixpkgs-update: no auto update
-{
-  lib,
-  stdenv,
-  fetchgit,
-  nixosTests,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchgit
+, nixosTests
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

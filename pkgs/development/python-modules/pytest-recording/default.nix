@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  # install dependencies
-  pytest,
-  vcrpy,
-  # test dependencies
-  hatchling,
-  pytestCheckHook,
-  pytest-httpbin,
-  pytest-mock,
-  requests,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # install dependencies
+  pytest
+, vcrpy
+, # test dependencies
+  hatchling
+, pytestCheckHook
+, pytest-httpbin
+, pytest-mock
+, requests
+,
 }:
 
 buildPythonPackage rec {

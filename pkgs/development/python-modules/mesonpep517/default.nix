@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  meson,
-  ninja,
-  setuptools,
-  toml,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, meson
+, ninja
+, setuptools
+, toml
+, wheel
+,
 }:
 
 # TODO: offer meson as a Python package so we have dist-info folder.

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  doxygen,
-  fetchFromGitHub,
-  gettext,
-  gnutls,
-  libabigail,
-  nettle,
-  pkg-config,
+{ lib
+, stdenv
+, autoreconfHook
+, doxygen
+, fetchFromGitHub
+, gettext
+, gnutls
+, libabigail
+, nettle
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

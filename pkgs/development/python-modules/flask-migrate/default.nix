@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  alembic,
-  flask,
-  flask-script,
-  flask-sqlalchemy,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, alembic
+, flask
+, flask-script
+, flask-sqlalchemy
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

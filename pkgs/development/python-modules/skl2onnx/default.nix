@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  numpy,
-  scipy,
-  setuptools,
-  protobuf,
-  onnx,
-  scikit-learn,
-  onnxconverter-common,
-  onnxruntime,
-  pandas,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, numpy
+, scipy
+, setuptools
+, protobuf
+, onnx
+, scikit-learn
+, onnxconverter-common
+, onnxruntime
+, pandas
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

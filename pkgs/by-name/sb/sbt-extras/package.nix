@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  which,
-  curl,
-  makeWrapper,
-  jdk,
-  writeScript,
-  common-updater-scripts,
-  cacert,
-  git,
-  nix,
-  jq,
-  coreutils,
-  gnused,
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, curl
+, makeWrapper
+, jdk
+, writeScript
+, common-updater-scripts
+, cacert
+, git
+, nix
+, jq
+, coreutils
+, gnused
+,
 }:
 
 stdenv.mkDerivation rec {

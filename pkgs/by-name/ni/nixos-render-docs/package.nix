@@ -1,7 +1,7 @@
-{
-  lib,
-  python3,
-  runCommand,
+{ lib
+, python3
+, runCommand
+,
 }:
 
 let

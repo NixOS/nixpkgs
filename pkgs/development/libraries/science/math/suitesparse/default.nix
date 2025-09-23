@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gfortran,
-  blas,
-  lapack,
-  metis,
-  fixDarwinDylibNames,
-  gmp,
-  mpfr,
-  config,
-  enableCuda ? config.cudaSupport,
-  cudaPackages,
-  openmp ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gfortran
+, blas
+, lapack
+, metis
+, fixDarwinDylibNames
+, gmp
+, mpfr
+, config
+, enableCuda ? config.cudaSupport
+, cudaPackages
+, openmp ? null
+,
 }@inputs:
 
 let

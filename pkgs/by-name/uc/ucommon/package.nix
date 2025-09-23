@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gnutls,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gnutls
+,
 }:
 
 stdenv.mkDerivation rec {

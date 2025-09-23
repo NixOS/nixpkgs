@@ -1,15 +1,15 @@
-{
-  lib,
-  ocamlPackages,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  dune_3,
-  makeWrapper,
-  pandoc,
-  poppler-utils,
-  testers,
-  docfd,
+{ lib
+, ocamlPackages
+, stdenv
+, fetchFromGitHub
+, python3
+, dune_3
+, makeWrapper
+, pandoc
+, poppler-utils
+, testers
+, docfd
+,
 }:
 
 ocamlPackages.buildDunePackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  mkTclDerivation,
-  openssl,
+{ lib
+, fetchurl
+, mkTclDerivation
+, openssl
+,
 }:
 
 mkTclDerivation rec {

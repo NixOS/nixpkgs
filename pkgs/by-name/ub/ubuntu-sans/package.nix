@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gitUpdater,
-  rename,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gitUpdater
+, rename
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

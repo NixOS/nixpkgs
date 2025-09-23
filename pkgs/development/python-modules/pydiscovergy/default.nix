@@ -1,18 +1,18 @@
-{
-  lib,
-  authlib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  mashumaro,
-  orjson,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-httpx,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  respx,
+{ lib
+, authlib
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, mashumaro
+, orjson
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-httpx
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, respx
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  writeScript,
-  cdrtools,
-  dvdauthor,
-  ffmpeg,
-  imagemagick,
-  lame,
-  mjpegtools,
-  sox,
-  vorbis-tools,
-  runtimeShell,
+{ stdenv
+, lib
+, fetchurl
+, writeScript
+, cdrtools
+, dvdauthor
+, ffmpeg
+, imagemagick
+, lame
+, mjpegtools
+, sox
+, vorbis-tools
+, runtimeShell
+,
 }:
 
 let

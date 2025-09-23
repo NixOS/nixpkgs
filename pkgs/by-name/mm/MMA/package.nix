@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  python3,
-  alsa-utils,
-  timidity,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, python3
+, alsa-utils
+, timidity
+,
 }:
 
 stdenv.mkDerivation rec {

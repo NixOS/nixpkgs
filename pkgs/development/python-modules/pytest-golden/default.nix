@@ -1,14 +1,14 @@
-{
-  lib,
-  atomicwrites,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ruamel-yaml,
-  poetry-core,
-  pytest,
-  pytestCheckHook,
-  pythonOlder,
-  testfixtures,
+{ lib
+, atomicwrites
+, buildPythonPackage
+, fetchFromGitHub
+, ruamel-yaml
+, poetry-core
+, pytest
+, pytestCheckHook
+, pythonOlder
+, testfixtures
+,
 }:
 
 buildPythonPackage rec {

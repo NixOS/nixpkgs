@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildHomeAssistantComponent,
-  aiofiles,
-  casttube,
-  websocket-client,
-  wakeonlan,
+{ lib
+, fetchFromGitHub
+, buildHomeAssistantComponent
+, aiofiles
+, casttube
+, websocket-client
+, wakeonlan
+,
 }:
 
 buildHomeAssistantComponent rec {

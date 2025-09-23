@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  glib,
-  libgda6,
-  gsound,
+{ lib
+, stdenv
+, fetchzip
+, glib
+, libgda6
+, gsound
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

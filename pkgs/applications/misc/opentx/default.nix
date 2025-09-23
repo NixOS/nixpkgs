@@ -1,18 +1,18 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  cmake,
-  gcc-arm-embedded,
-  python3Packages,
-  qtbase,
-  qtmultimedia,
-  qttools,
-  SDL,
-  gtest,
-  dfu-util,
-  avrdude,
-  udevCheckHook,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, gcc-arm-embedded
+, python3Packages
+, qtbase
+, qtmultimedia
+, qttools
+, SDL
+, gtest
+, dfu-util
+, avrdude
+, udevCheckHook
+,
 }:
 
 mkDerivation rec {

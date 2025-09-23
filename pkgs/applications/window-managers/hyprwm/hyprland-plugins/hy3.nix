@@ -1,10 +1,10 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  hyprland,
-  mkHyprlandPlugin,
-  nix-update-script,
+{ lib
+, cmake
+, fetchFromGitHub
+, hyprland
+, mkHyprlandPlugin
+, nix-update-script
+,
 }:
 mkHyprlandPlugin (finalAttrs: {
   pluginName = "hy3";

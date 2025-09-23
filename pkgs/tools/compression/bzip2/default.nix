@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  enableStatic ? with stdenv.hostPlatform; isStatic || isCygwin,
-  enableShared ? true,
-  autoreconfHook,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, enableStatic ? with stdenv.hostPlatform; isStatic || isCygwin
+, enableShared ? true
+, autoreconfHook
+, testers
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

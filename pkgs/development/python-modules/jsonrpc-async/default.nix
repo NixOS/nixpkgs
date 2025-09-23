@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jsonrpc-base,
-  pytest-aiohttp,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, jsonrpc-base
+, pytest-aiohttp
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

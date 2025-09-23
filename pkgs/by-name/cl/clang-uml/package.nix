@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  cmake,
-  pkg-config,
-  installShellFiles,
-  libclang,
-  llvmPackages,
-  libllvm,
-  yaml-cpp,
-  elfutils,
-  libunwind,
-  versionCheckHook,
-  enableLibcxx ? false,
-  debug ? false,
+{ lib
+, fetchFromGitHub
+, stdenv
+, cmake
+, pkg-config
+, installShellFiles
+, libclang
+, llvmPackages
+, libllvm
+, yaml-cpp
+, elfutils
+, libunwind
+, versionCheckHook
+, enableLibcxx ? false
+, debug ? false
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "clang-uml";

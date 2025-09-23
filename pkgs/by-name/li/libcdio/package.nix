@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  autoreconfHook,
-  testers,
-  texinfo,
-  libcddb,
-  pkg-config,
-  ncurses,
-  help2man,
-  libiconv,
-  withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, autoreconfHook
+, testers
+, texinfo
+, libcddb
+, pkg-config
+, ncurses
+, help2man
+, libiconv
+, withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

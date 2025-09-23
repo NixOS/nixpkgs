@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoconf,
-  automake,
-  makeWrapper,
-  pkg-config,
-  unzip,
-  git,
-  perlPackages,
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, makeWrapper
+, pkg-config
+, unzip
+, git
+, perlPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

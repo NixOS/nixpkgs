@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  apple-sdk_12,
-  tzdata,
-  replaceVars,
-  iana-etc,
-  mailcap,
-  buildPackages,
-  pkgsBuildTarget,
-  targetPackages,
-  testers,
-  skopeo,
-  buildGo125Module,
+{ lib
+, stdenv
+, fetchurl
+, apple-sdk_12
+, tzdata
+, replaceVars
+, iana-etc
+, mailcap
+, buildPackages
+, pkgsBuildTarget
+, targetPackages
+, testers
+, skopeo
+, buildGo125Module
+,
 }:
 
 let

@@ -1,9 +1,8 @@
-{
-  lib,
-  pkgs,
-  config,
-  modulesPath,
-  ...
+{ lib
+, pkgs
+, config
+, modulesPath
+, ...
 }:
 let
   settingsFormat = pkgs.formats.toml { };

@@ -1,13 +1,13 @@
-{
-  lib,
-  makeDesktopItem,
-  copyDesktopItems,
-  wrapGAppsHook3,
-  glib,
-  adwaita-icon-theme,
-  mkCoqDerivation,
-  coq,
-  version ? null,
+{ lib
+, makeDesktopItem
+, copyDesktopItems
+, wrapGAppsHook3
+, glib
+, adwaita-icon-theme
+, mkCoqDerivation
+, coq
+, version ? null
+,
 }:
 
 mkCoqDerivation rec {

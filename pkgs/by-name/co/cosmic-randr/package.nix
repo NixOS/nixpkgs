@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  just,
-  pkg-config,
-  wayland,
-  nix-update-script,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, just
+, pkg-config
+, wayland
+, nix-update-script
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

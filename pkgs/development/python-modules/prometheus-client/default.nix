@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  twisted,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, twisted
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

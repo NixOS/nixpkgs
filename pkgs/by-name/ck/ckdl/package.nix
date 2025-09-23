@@ -1,10 +1,10 @@
-{
-  pkgs,
-  lib,
-  cmake,
-  ninja,
-  sphinx,
-  python3Packages,
+{ pkgs
+, lib
+, cmake
+, ninja
+, sphinx
+, python3Packages
+,
 }:
 
 pkgs.stdenv.mkDerivation {

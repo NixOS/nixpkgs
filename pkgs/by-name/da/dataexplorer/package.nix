@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ant,
-  # executable fails to start for jdk > 17
-  jdk17,
-  swt,
-  makeWrapper,
-  strip-nondeterminism,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, ant
+, # executable fails to start for jdk > 17
+  jdk17
+, swt
+, makeWrapper
+, strip-nondeterminism
+, udevCheckHook
+,
 }:
 let
   swt-jdk17 = swt.override { jdk = jdk17; };

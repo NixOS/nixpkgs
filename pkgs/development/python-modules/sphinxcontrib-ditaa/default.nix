@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  sphinx,
-  ditaa,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, sphinx
+, ditaa
+,
 }:
 
 buildPythonPackage rec {

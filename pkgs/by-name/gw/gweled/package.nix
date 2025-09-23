@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  desktop-file-utils,
-  clutter,
-  clutter-gtk,
-  gsound,
-  libgnome-games-support,
+{ lib
+, stdenv
+, fetchgit
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, desktop-file-utils
+, clutter
+, clutter-gtk
+, gsound
+, libgnome-games-support
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

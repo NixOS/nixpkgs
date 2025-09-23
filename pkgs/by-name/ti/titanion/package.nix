@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  unzip,
-  ldc,
-  libGL,
-  libGLU,
-  SDL,
-  SDL_mixer,
-  bulletml,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, unzip
+, ldc
+, libGL
+, libGLU
+, SDL
+, SDL_mixer
+, bulletml
+,
 }:
 
 let

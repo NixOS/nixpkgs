@@ -1,15 +1,15 @@
-{
-  lib,
-  babel,
-  buildPythonPackage,
-  django,
-  djangorestframework,
-  fetchFromGitHub,
-  gettext,
-  phonenumbers,
-  phonenumberslite,
-  python,
-  setuptools-scm,
+{ lib
+, babel
+, buildPythonPackage
+, django
+, djangorestframework
+, fetchFromGitHub
+, gettext
+, phonenumbers
+, phonenumberslite
+, python
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  gitUpdater,
-  cmake,
-  pkg-config,
-  ffmpeg,
-  libGLU,
-  alsa-lib,
-  libX11,
-  libXrandr,
-  sndio,
-  libsForQt5,
-  qt6Packages,
-  withQt6 ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, gitUpdater
+, cmake
+, pkg-config
+, ffmpeg
+, libGLU
+, alsa-lib
+, libX11
+, libXrandr
+, sndio
+, libsForQt5
+, qt6Packages
+, withQt6 ? false
+,
 }:
 
 let

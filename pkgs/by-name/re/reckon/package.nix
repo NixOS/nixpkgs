@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  bundlerEnv,
-  bundlerUpdateScript,
-  makeWrapper,
-  file,
-  testers,
-  reckon,
+{ stdenv
+, lib
+, bundlerEnv
+, bundlerUpdateScript
+, makeWrapper
+, file
+, testers
+, reckon
+,
 }:
 
 stdenv.mkDerivation rec {

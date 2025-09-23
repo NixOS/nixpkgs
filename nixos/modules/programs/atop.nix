@@ -1,10 +1,9 @@
 # Global configuration for atop.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -106,9 +105,11 @@ in
     {
       environment.etc = lib.mkIf (cfg.settings != { }) {
         atoprc.text = lib.concatStrings (
-          lib.mapAttrsToList (n: v: ''
-            ${n} ${builtins.toString v}
-          '') cfg.settings
+          lib.mapAttrsToList
+            (n: v: ''
+              ${n} ${builtins.toString v}
+            '')
+            cfg.settings
         );
       };
       environment.systemPackages = [

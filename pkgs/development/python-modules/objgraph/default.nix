@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  graphviz,
-  graphvizPkgs,
-  isPyPy,
-  python,
-  pythonOlder,
-  replaceVars,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, graphviz
+, graphvizPkgs
+, isPyPy
+, python
+, pythonOlder
+, replaceVars
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,23 +1,23 @@
-{
-  lib,
-  autograd,
-  autograd-gamma,
-  buildPythonPackage,
-  dill,
-  fetchFromGitHub,
-  flaky,
-  formulaic,
-  jinja2,
-  matplotlib,
-  numpy,
-  pandas,
-  psutil,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-learn,
-  scipy,
-  setuptools,
-  sybil,
+{ lib
+, autograd
+, autograd-gamma
+, buildPythonPackage
+, dill
+, fetchFromGitHub
+, flaky
+, formulaic
+, jinja2
+, matplotlib
+, numpy
+, pandas
+, psutil
+, pytestCheckHook
+, pythonOlder
+, scikit-learn
+, scipy
+, setuptools
+, sybil
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromSourcehut,
-  sqlite,
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, sqlite
+,
 }:
 
 buildGoModule rec {

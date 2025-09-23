@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  writeShellScriptBin,
-  cmake,
-  wrapQtAppsHook,
-  pkg-config,
-  qmake,
-  curl,
-  grantlee,
-  hidapi,
-  libgit2,
-  libssh2,
-  libusb1,
-  libxml2,
-  libxslt,
-  libzip,
-  zlib,
-  qtbase,
-  qtconnectivity,
-  qtlocation,
-  qtsvg,
-  qttools,
-  qtpositioning,
-  libXcomposite,
-  bluez,
-  writeScript,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, writeShellScriptBin
+, cmake
+, wrapQtAppsHook
+, pkg-config
+, qmake
+, curl
+, grantlee
+, hidapi
+, libgit2
+, libssh2
+, libusb1
+, libxml2
+, libxslt
+, libzip
+, zlib
+, qtbase
+, qtconnectivity
+, qtlocation
+, qtsvg
+, qttools
+, qtpositioning
+, libXcomposite
+, bluez
+, writeScript
+,
 }:
 
 let

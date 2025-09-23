@@ -1,5 +1,5 @@
-{
-  lib,
+{ lib
+,
 }:
 
 /*
@@ -10,12 +10,12 @@
   update.nix currently accepts the following type:
 
   type UpdateScript
-    // Simple path to script to execute script
-    = FilePath
-    // Path to execute plus arguments to pass it
-    | [ (FilePath | String) ]
-    // Advanced attribute set (experimental)
-    | {
+  // Simple path to script to execute script
+  = FilePath
+  // Path to execute plus arguments to pass it
+  | [ (FilePath | String) ]
+  // Advanced attribute set (experimental)
+  | {
       // Script to execute (same as basic update script above)
       command : (FilePath | [ (FilePath | String) ])
       // Features that the script supports
@@ -24,7 +24,7 @@
       supportedFeatures : ?[ ("commit" | "silent") ]
       // Override attribute path detected by update.nix
       attrPath : ?String
-    }
+  }
 */
 
 let
@@ -44,15 +44,15 @@ let
     Helper reducer function for building a command arguments where file paths are replaced with argv[x] reference.
   */
   processArg =
-    {
-      maxArgIndex,
-      args,
-      paths,
+    { maxArgIndex
+    , args
+    , paths
+    ,
     }:
     arg:
     if builtins.isPath arg then
       {
-        args = args ++ [ { __rawShell = "\"\$${builtins.toString maxArgIndex}\""; } ];
+        args = args ++ [{ __rawShell = "\"\$${builtins.toString maxArgIndex}\""; }];
         maxArgIndex = maxArgIndex + 1;
         paths = paths ++ [ arg ];
       }
@@ -67,20 +67,22 @@ let
   */
   extractPaths =
     maxArgIndex: command:
-    builtins.foldl' processArg {
-      inherit maxArgIndex;
-      args = [ ];
-      paths = [ ];
-    } command;
+    builtins.foldl' processArg
+      {
+        inherit maxArgIndex;
+        args = [ ];
+        paths = [ ];
+      }
+      command;
   /*
     processCommand : { maxArgIndex : Int, commands : [[ShellArg]], paths : [FilePath] } → [ (String|FilePath) ] → { maxArgIndex : Int, commands : [[ShellArg]], paths : [FilePath] }
     Helper reducer function for extracting file paths from individual commands.
   */
   processCommand =
-    {
-      maxArgIndex,
-      commands,
-      paths,
+    { maxArgIndex
+    , commands
+    , paths
+    ,
     }:
     command:
     let
@@ -97,11 +99,13 @@ let
   */
   extractCommands =
     maxArgIndex: commands:
-    builtins.foldl' processCommand {
-      inherit maxArgIndex;
-      commands = [ ];
-      paths = [ ];
-    } commands;
+    builtins.foldl' processCommand
+      {
+        inherit maxArgIndex;
+        commands = [ ];
+        paths = [ ];
+      }
+      commands;
 
   /*
     commandsToShellInvocation : [[ (String|FilePath) ]] → [ (String|FilePath) ]
@@ -157,34 +161,37 @@ rec {
       # Here we ensure that the standard output of the combined update script is well formed.
       validateFeatures =
         if hasCommitSupport then
-          # Exactly one update script declares only “commit” feature and all the rest declare only “silent” feature.
+        # Exactly one update script declares only “commit” feature and all the rest declare only “silent” feature.
           ({ supportedFeatures, ... }: supportedFeatures == [ "commit" ] || supportedFeatures == [ "silent" ])
         else if hasSilentSupport then
-          # All update scripts declare only “silent” feature.
+        # All update scripts declare only “silent” feature.
           ({ supportedFeatures, ... }: supportedFeatures == [ "silent" ])
         else
-          # No update script declares any supported feature to fail loudly on unknown features rather than silently discard them.
+        # No update script declares any supported feature to fail loudly on unknown features rather than silently discard them.
           ({ supportedFeatures, ... }: supportedFeatures == [ ]);
     in
 
     assert lib.assertMsg (lib.all validateFeatures scripts)
       "Combining update scripts with features enabled (other than “silent” scripts and an optional single script with “commit”) is currently unsupported.";
 
-    assert lib.assertMsg (
-      builtins.length (
-        lib.unique (
-          builtins.filter (attrPath: attrPath != null) (
-            builtins.map (
-              {
-                attrPath ? null,
-                ...
-              }:
-              attrPath
-            ) scripts
-          )
-        )
-      ) <= 1
-    ) "Combining update scripts with different attr paths is currently unsupported.";
+    assert lib.assertMsg
+      (
+        builtins.length
+          (
+            lib.unique (
+              builtins.filter (attrPath: attrPath != null) (
+                builtins.map
+                  (
+                    { attrPath ? null
+                    , ...
+                    }:
+                    attrPath
+                  )
+                  scripts
+              )
+            )
+          ) <= 1
+      ) "Combining update scripts with different attr paths is currently unsupported.";
 
     {
       command = commandsToShellInvocation (builtins.map ({ command, ... }: command) scripts);

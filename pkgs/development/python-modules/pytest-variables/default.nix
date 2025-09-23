@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  pytest,
-  hjson,
-  toml,
-  pytestCheckHook,
-  pyyaml,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, pytest
+, hjson
+, toml
+, pytestCheckHook
+, pyyaml
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

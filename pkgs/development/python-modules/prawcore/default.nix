@@ -1,17 +1,17 @@
-{
-  lib,
-  betamax,
-  betamax-matchers,
-  betamax-serializers,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  mock,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-toolbelt,
-  testfixtures,
+{ lib
+, betamax
+, betamax-matchers
+, betamax-serializers
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, mock
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-toolbelt
+, testfixtures
+,
 }:
 
 buildPythonPackage rec {

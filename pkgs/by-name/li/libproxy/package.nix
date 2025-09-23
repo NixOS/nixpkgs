@@ -1,25 +1,24 @@
-{
-  lib,
-  _experimental-update-script-combinators,
-  curl,
-  duktape,
-  fetchFromGitHub,
-  gi-docgen,
-  gitUpdater,
-  glib,
-  gobject-introspection,
-  gsettings-desktop-schemas,
-  makeHardcodeGsettingsPatch,
-  meson,
-  ninja,
-  pkg-config,
-  stdenv,
-  replaceVars,
-  vala,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+{ lib
+, _experimental-update-script-combinators
+, curl
+, duktape
+, fetchFromGitHub
+, gi-docgen
+, gitUpdater
+, glib
+, gobject-introspection
+, gsettings-desktop-schemas
+, makeHardcodeGsettingsPatch
+, meson
+, ninja
+, pkg-config
+, stdenv
+, replaceVars
+, vala
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

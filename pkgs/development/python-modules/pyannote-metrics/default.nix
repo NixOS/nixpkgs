@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  docopt,
-  fetchFromGitHub,
-  matplotlib,
-  numpy,
-  pandas,
-  pyannote-core,
-  pyannote-database,
-  pythonOlder,
-  scikit-learn,
-  scipy,
-  setuptools,
-  sympy,
-  tabulate,
-  versioneer,
+{ lib
+, buildPythonPackage
+, docopt
+, fetchFromGitHub
+, matplotlib
+, numpy
+, pandas
+, pyannote-core
+, pyannote-database
+, pythonOlder
+, scikit-learn
+, scipy
+, setuptools
+, sympy
+, tabulate
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

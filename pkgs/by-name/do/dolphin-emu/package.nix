@@ -1,55 +1,52 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-  pkg-config,
-  qt6,
-  wrapGAppsHook3,
-  # darwin-only
-  xcbuild,
-
-  # buildInputs
-  bzip2,
-  cubeb,
-  curl,
-  enet,
-  ffmpeg,
-  fmt_10,
-  gtest,
-  hidapi,
-  libXdmcp,
-  libpulseaudio,
-  libspng,
-  libusb1,
-  lz4,
-  lzo,
-  mbedtls_2,
-  miniupnpc,
-  minizip-ng,
-  openal,
-  pugixml,
-  SDL2,
-  sfml,
-  xxHash,
-  xz,
-  # linux-only
-  alsa-lib,
-  bluez,
-  libGL,
-  libXext,
-  libXrandr,
-  libevdev,
-  udev,
-  vulkan-loader,
-  # darwin-only
-  moltenvk,
-
-  # passthru
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  cmake
+, pkg-config
+, qt6
+, wrapGAppsHook3
+, # darwin-only
+  xcbuild
+, # buildInputs
+  bzip2
+, cubeb
+, curl
+, enet
+, ffmpeg
+, fmt_10
+, gtest
+, hidapi
+, libXdmcp
+, libpulseaudio
+, libspng
+, libusb1
+, lz4
+, lzo
+, mbedtls_2
+, miniupnpc
+, minizip-ng
+, openal
+, pugixml
+, SDL2
+, sfml
+, xxHash
+, xz
+, # linux-only
+  alsa-lib
+, bluez
+, libGL
+, libXext
+, libXrandr
+, libevdev
+, udev
+, vulkan-loader
+, # darwin-only
+  moltenvk
+, # passthru
+  testers
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

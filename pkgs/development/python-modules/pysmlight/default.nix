@@ -1,15 +1,15 @@
-{
-  aiohttp,
-  aiohttp-sse-client2,
-  aresponses,
-  awesomeversion,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  mashumaro,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
+{ aiohttp
+, aiohttp-sse-client2
+, aresponses
+, awesomeversion
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, mashumaro
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

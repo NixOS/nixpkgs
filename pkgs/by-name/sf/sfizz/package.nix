@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libjack2,
-  libsndfile,
-  xorg,
-  freetype,
-  libxkbcommon,
-  cairo,
-  glib,
-  zenity,
-  flac,
-  libogg,
-  libvorbis,
-  libopus,
-  cmake,
-  pango,
-  pkg-config,
-  catch2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libjack2
+, libsndfile
+, xorg
+, freetype
+, libxkbcommon
+, cairo
+, glib
+, zenity
+, flac
+, libogg
+, libvorbis
+, libopus
+, cmake
+, pango
+, pkg-config
+, catch2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

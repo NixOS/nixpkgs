@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  buildPackages,
-  fetchFromGitHub,
-  pkg-config,
-  glib,
-  libical,
+{ stdenv
+, lib
+, buildPackages
+, fetchFromGitHub
+, pkg-config
+, glib
+, libical
+,
 }:
 stdenv.mkDerivation rec {
   pname = "vzic";

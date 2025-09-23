@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  h11,
-  sansio-multipart,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, h11
+, sansio-multipart
+,
 }:
 
 buildPythonPackage rec {

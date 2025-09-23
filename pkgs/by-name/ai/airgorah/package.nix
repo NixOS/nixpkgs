@@ -1,16 +1,16 @@
-{
-  rustPlatform,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  glib,
-  pango,
-  gdk-pixbuf,
-  graphene,
-  gtk4,
-  copyDesktopItems,
-  makeDesktopItem,
-  wrapGAppsHook4,
+{ rustPlatform
+, lib
+, fetchFromGitHub
+, pkg-config
+, glib
+, pango
+, gdk-pixbuf
+, graphene
+, gtk4
+, copyDesktopItems
+, makeDesktopItem
+, wrapGAppsHook4
+,
 }:
 
 rustPlatform.buildRustPackage rec {

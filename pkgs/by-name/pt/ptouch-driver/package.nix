@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cups,
-  cups-filters,
-  foomatic-db-engine,
-  ghostscript,
-  libpng,
-  libxml2,
-  autoreconfHook,
-  perl,
-  patchPpdFilesHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cups
+, cups-filters
+, foomatic-db-engine
+, ghostscript
+, libpng
+, libxml2
+, autoreconfHook
+, perl
+, patchPpdFilesHook
+,
 }:
 
 stdenv.mkDerivation rec {

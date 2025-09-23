@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  stdenv,
-  testers,
-  nasm,
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, stdenv
+, testers
+, nasm
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

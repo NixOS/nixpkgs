@@ -1,12 +1,12 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nodejs,
-  faketty,
-  openssl,
-  prisma,
-  prisma-engines,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nodejs
+, faketty
+, openssl
+, prisma
+, prisma-engines
+,
 }:
 
 buildNpmPackage rec {

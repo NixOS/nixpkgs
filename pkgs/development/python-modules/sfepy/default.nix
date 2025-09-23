@@ -1,31 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  writableTmpDirAsHomeHook,
-
-  # build-system
-  cmake,
-  cython_0,
-  ninja,
-  oldest-supported-numpy,
-  setuptools,
-  scikit-build,
-
-  # dependencies
-  matplotlib,
-  meshio,
-  numpy,
-  pyparsing,
-  python,
-  pyvista,
-  scipy,
-  sympy,
-  tables,
-
-  # tests
-  pytest,
-  openssh,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, writableTmpDirAsHomeHook
+, # build-system
+  cmake
+, cython_0
+, ninja
+, oldest-supported-numpy
+, setuptools
+, scikit-build
+, # dependencies
+  matplotlib
+, meshio
+, numpy
+, pyparsing
+, python
+, pyvista
+, scipy
+, sympy
+, tables
+, # tests
+  pytest
+, openssh
+,
 }:
 
 buildPythonPackage rec {

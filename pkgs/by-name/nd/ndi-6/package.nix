@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  avahi,
-  obs-studio-plugins,
+{ lib
+, stdenv
+, fetchurl
+, avahi
+, obs-studio-plugins
+,
 }:
 
 let

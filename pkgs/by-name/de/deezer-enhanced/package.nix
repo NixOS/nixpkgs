@@ -1,29 +1,29 @@
 {
   ### Tools
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  makeWrapper,
-  autoPatchelfHook,
-  dpkg,
-  gnutar,
-
-  ### Libs
-  xorg,
-  libxkbcommon,
-  glib,
-  nss,
-  dbus,
-  at-spi2-atk,
-  cups,
-  gtk3,
-  pango,
-  cairo,
-  expat,
-  systemdLibs,
-  alsa-lib,
-  nwjs,
-  libGL,
+  lib
+, stdenvNoCC
+, fetchurl
+, makeWrapper
+, autoPatchelfHook
+, dpkg
+, gnutar
+, ### Libs
+  xorg
+, libxkbcommon
+, glib
+, nss
+, dbus
+, at-spi2-atk
+, cups
+, gtk3
+, pango
+, cairo
+, expat
+, systemdLibs
+, alsa-lib
+, nwjs
+, libGL
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

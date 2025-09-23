@@ -1,25 +1,25 @@
-{
-  lib,
-  fetchurl,
-  nix-update-script,
-  python3Packages,
-  gdk-pixbuf,
-  glib,
-  adwaita-icon-theme,
-  gobject-introspection,
-  gtk3,
-  wrapGAppsHook3,
-  webkitgtk_4_0,
-  libnotify,
-  keybinder3,
-  libappindicator,
-  intltool,
-  wmctrl,
-  xvfb-run,
-  librsvg,
-  libX11,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, fetchurl
+, nix-update-script
+, python3Packages
+, gdk-pixbuf
+, glib
+, adwaita-icon-theme
+, gobject-introspection
+, gtk3
+, wrapGAppsHook3
+, webkitgtk_4_0
+, libnotify
+, keybinder3
+, libappindicator
+, intltool
+, wmctrl
+, xvfb-run
+, librsvg
+, libX11
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 python3Packages.buildPythonApplication rec {

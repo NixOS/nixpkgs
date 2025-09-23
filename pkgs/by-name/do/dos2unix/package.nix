@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  gettext,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, gettext
+,
 }:
 
 stdenv.mkDerivation rec {

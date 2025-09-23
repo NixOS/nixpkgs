@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  llvmPackages,
-  elfutils,
-  bcc,
-  libbpf,
-  libbfd,
-  libopcodes,
-  glibc,
-  cereal,
-  asciidoctor,
-  cmake,
-  pkg-config,
-  flex,
-  bison,
-  util-linux,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, llvmPackages
+, elfutils
+, bcc
+, libbpf
+, libbfd
+, libopcodes
+, glibc
+, cereal
+, asciidoctor
+, cmake
+, pkg-config
+, flex
+, bison
+, util-linux
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

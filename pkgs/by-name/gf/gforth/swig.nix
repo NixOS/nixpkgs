@@ -1,7 +1,7 @@
-{
-  swig,
-  pcre,
-  fetchFromGitHub,
+{ swig
+, pcre
+, fetchFromGitHub
+,
 }:
 
 ## for updating to SWIG 4, see
@@ -16,4 +16,4 @@
   };
   configureFlags = old.configureFlags ++ [ "--enable-forth" ];
 })).override
-  { pcre2 = pcre; }
+{ pcre2 = pcre; }

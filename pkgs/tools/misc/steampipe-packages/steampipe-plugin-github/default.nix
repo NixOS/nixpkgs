@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  steampipe,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, nix-update-script
+, steampipe
+,
 }:
 
 buildGoModule rec {

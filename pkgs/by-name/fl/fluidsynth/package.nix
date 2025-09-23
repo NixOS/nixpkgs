@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  buildPackages,
-  pkg-config,
-  cmake,
-  alsa-lib,
-  glib,
-  libjack2,
-  libsndfile,
-  libpulseaudio,
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildPackages
+, pkg-config
+, cmake
+, alsa-lib
+, glib
+, libjack2
+, libsndfile
+, libpulseaudio
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

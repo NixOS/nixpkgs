@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  appdirs,
-  click,
-  flit-core,
-  pytestCheckHook,
-  freezegun,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, appdirs
+, click
+, flit-core
+, pytestCheckHook
+, freezegun
+,
 }:
 
 buildPythonPackage rec {

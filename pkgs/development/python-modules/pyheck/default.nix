@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cargo,
-  fetchFromGitHub,
-  libiconv,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  rustc,
-  rustPlatform,
-  stdenv,
+{ lib
+, buildPythonPackage
+, cargo
+, fetchFromGitHub
+, libiconv
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, rustc
+, rustPlatform
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

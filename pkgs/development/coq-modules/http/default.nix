@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  QuickChick,
-  async-test,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, QuickChick
+, async-test
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -20,7 +20,8 @@ mkCoqDerivation {
     in
     lib.switch coq.coq-version [
       (case (range "8.14" "8.19") "0.2.1")
-    ] null;
+    ]
+      null;
   release = {
     "0.2.1".sha256 = "sha256-CIcaXEojNdajXNoMBjGlQRc1sOJSKgUlditNxbNSPgk=";
   };

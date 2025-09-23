@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
   cfg = config.services.mpdscribble;
@@ -63,9 +62,10 @@ let
 
   replaceSecret =
     secretFile: placeholder: targetFile:
-    lib.optionalString (
-      secretFile != null
-    ) ''${pkgs.replace-secret}/bin/replace-secret '${placeholder}' '${secretFile}' '${targetFile}' '';
+    lib.optionalString
+      (
+        secretFile != null
+      ) ''${pkgs.replace-secret}/bin/replace-secret '${placeholder}' '${secretFile}' '${targetFile}' '';
 
   preStart = pkgs.writeShellScript "mpdscribble-pre-start" ''
     cp -f "${cfgTemplate}" "${cfgFile}"
@@ -130,9 +130,11 @@ in
     passwordFile = lib.mkOption {
       default =
         if localMpd then
-          (lib.findFirst (c: lib.any (x: x == "read") c.permissions) {
-            passwordFile = null;
-          } mpdCfg.credentials).passwordFile
+          (lib.findFirst (c: lib.any (x: x == "read") c.permissions)
+            {
+              passwordFile = null;
+            }
+            mpdCfg.credentials).passwordFile
         else
           null;
       defaultText = lib.literalMD ''

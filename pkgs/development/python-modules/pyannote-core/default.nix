@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  pandas,
-  pytestCheckHook,
-  scipy,
-  setuptools,
-  sortedcontainers,
-  typing-extensions,
-  versioneer,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, pandas
+, pytestCheckHook
+, scipy
+, setuptools
+, sortedcontainers
+, typing-extensions
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

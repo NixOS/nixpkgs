@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  equinox,
-  jax,
-  jaxtyping,
-  typing-extensions,
-
-  # tests
-  beartype,
-  pytest,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  equinox
+, jax
+, jaxtyping
+, typing-extensions
+, # tests
+  beartype
+, pytest
+, python
+,
 }:
 
 buildPythonPackage rec {

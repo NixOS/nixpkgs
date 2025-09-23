@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  libcdio,
-  libxml2,
-  popt,
-  libiconv,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, pkg-config
+, libcdio
+, libxml2
+, popt
+, libiconv
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  autoPatchelfHook,
-  buildFHSEnv,
-  fetchurl,
-  lib,
-  stdenv,
-  zlib,
+{ autoPatchelfHook
+, buildFHSEnv
+, fetchurl
+, lib
+, stdenv
+, zlib
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  fetchFromGitHub,
-  lib,
-  python3Packages,
-  gtk3,
-  gobject-introspection,
-  wrapGAppsHook3,
-  xorg,
-  gnugrep,
-  ghostscript,
-  libnotify,
+{ fetchFromGitHub
+, lib
+, python3Packages
+, gtk3
+, gobject-introspection
+, wrapGAppsHook3
+, xorg
+, gnugrep
+, ghostscript
+, libnotify
+,
 }:
 
 python3Packages.buildPythonApplication rec {

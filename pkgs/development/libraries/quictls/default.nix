@@ -1,16 +1,16 @@
-{
-  buildPackages,
-  cryptodev,
-  enableSSL2 ? false,
-  enableSSL3 ? false,
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  perl,
-  removeReferencesTo,
-  static ? stdenv.hostPlatform.isStatic,
-  stdenv,
-  withCryptodev ? false,
+{ buildPackages
+, cryptodev
+, enableSSL2 ? false
+, enableSSL3 ? false
+, fetchFromGitHub
+, lib
+, makeWrapper
+, perl
+, removeReferencesTo
+, static ? stdenv.hostPlatform.isStatic
+, stdenv
+, withCryptodev ? false
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -94,8 +94,7 @@ stdenv.mkDerivation rec {
           "./Configure linux-mips64"
         else
           throw "unsupported ABI for ${stdenv.hostPlatform.system}";
-    }
-    .${stdenv.hostPlatform.system} or (
+    }.${stdenv.hostPlatform.system} or (
       if stdenv.hostPlatform == stdenv.buildPlatform then
         "./config"
       else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64 then

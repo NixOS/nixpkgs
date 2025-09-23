@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  llvm_meta,
-  release_version,
-  monorepoSrc ? null,
-  src ? null,
-  runCommand,
-  cmake,
-  lndir,
-  ninja,
-  python3,
-  fixDarwinDylibNames,
-  version,
-  freebsd,
-  cxxabi ? if stdenv.hostPlatform.isFreeBSD then freebsd.libcxxrt else null,
-  libunwind,
-  enableShared ? stdenv.hostPlatform.hasSharedLibraries,
-  devExtraCmakeFlags ? [ ],
-  substitute,
-  fetchpatch,
+{ lib
+, stdenv
+, llvm_meta
+, release_version
+, monorepoSrc ? null
+, src ? null
+, runCommand
+, cmake
+, lndir
+, ninja
+, python3
+, fixDarwinDylibNames
+, version
+, freebsd
+, cxxabi ? if stdenv.hostPlatform.isFreeBSD then freebsd.libcxxrt else null
+, libunwind
+, enableShared ? stdenv.hostPlatform.hasSharedLibraries
+, devExtraCmakeFlags ? [ ]
+, substitute
+, fetchpatch
+,
 }:
 
 # external cxxabi is not supported on Darwin as the build will not link libcxx
@@ -68,10 +68,10 @@ let
     (lib.cmakeFeature "LIBCXX_HAS_MUSL_LIBC" "1")
   ]
   ++
-    lib.optionals (!useLLVM && stdenv.hostPlatform.libc == "glibc" && !stdenv.hostPlatform.isStatic)
-      [
-        (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "gcc_s")
-      ]
+  lib.optionals (!useLLVM && stdenv.hostPlatform.libc == "glibc" && !stdenv.hostPlatform.isStatic)
+    [
+      (lib.cmakeFeature "LIBCXX_ADDITIONAL_LIBRARIES" "gcc_s")
+    ]
   ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     # Name and documentation claim this is for libc++abi, but its man effect is adding `-lunwind`
     # to the libc++.so linker script. We want FreeBSD's so-called libgcc instead of libunwind.
@@ -112,25 +112,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "libcxx-src-${version}" { inherit (monorepoSrc) passthru; } (
-        ''
-          mkdir -p "$out/llvm"
-          cp -r ${monorepoSrc}/cmake "$out"
-          cp -r ${monorepoSrc}/libcxx "$out"
-          cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
-          cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
-          cp -r ${monorepoSrc}/third-party "$out"
-        ''
-        + (lib.optionalString (lib.versionAtLeast release_version "20") ''
-          cp -r ${monorepoSrc}/libc "$out"
-        '')
-        + ''
-          cp -r ${monorepoSrc}/runtimes "$out"
-        ''
-        + (lib.optionalString (cxxabi == null) ''
-          cp -r ${monorepoSrc}/libcxxabi "$out"
-        '')
-      )
+      runCommand "libcxx-src-${version}" { inherit (monorepoSrc) passthru; }
+        (
+          ''
+            mkdir -p "$out/llvm"
+            cp -r ${monorepoSrc}/cmake "$out"
+            cp -r ${monorepoSrc}/libcxx "$out"
+            cp -r ${monorepoSrc}/llvm/cmake "$out/llvm"
+            cp -r ${monorepoSrc}/llvm/utils "$out/llvm"
+            cp -r ${monorepoSrc}/third-party "$out"
+          ''
+          + (lib.optionalString (lib.versionAtLeast release_version "20") ''
+            cp -r ${monorepoSrc}/libc "$out"
+          '')
+          + ''
+            cp -r ${monorepoSrc}/runtimes "$out"
+          ''
+          + (lib.optionalString (cxxabi == null) ''
+            cp -r ${monorepoSrc}/libcxxabi "$out"
+          '')
+        )
     else
       src;
 

@@ -1,35 +1,32 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  addict,
-  distutils,
-  matplotlib,
-  numpy,
-  opencv4,
-  pyyaml,
-  rich,
-  termcolor,
-  yapf,
-
-  # tests
-  bitsandbytes,
-  coverage,
-  dvclive,
-  lion-pytorch,
-  lmdb,
-  mlflow,
-  parameterized,
-  pytestCheckHook,
-  transformers,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  setuptools
+, # dependencies
+  addict
+, distutils
+, matplotlib
+, numpy
+, opencv4
+, pyyaml
+, rich
+, termcolor
+, yapf
+, # tests
+  bitsandbytes
+, coverage
+, dvclive
+, lion-pytorch
+, lmdb
+, mlflow
+, parameterized
+, pytestCheckHook
+, transformers
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

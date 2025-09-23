@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenv,
-  libfido2,
-  openssl,
-  libcbor,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+, libfido2
+, openssl
+, libcbor
+,
 }:
 let
   darwin_arch = if stdenv.hostPlatform.system == "aarch64-darwin" then "arm64" else "amd64";

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  c-ares,
-  openssl ? null,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, c-ares
+, openssl ? null
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

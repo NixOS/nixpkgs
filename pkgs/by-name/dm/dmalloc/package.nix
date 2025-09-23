@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  testers,
-  dmalloc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, testers
+, dmalloc
+,
 }:
 
 stdenv.mkDerivation rec {

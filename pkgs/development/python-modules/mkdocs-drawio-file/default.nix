@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  beautifulsoup4,
-  jinja2,
-  lxml,
-  mkdocs,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, beautifulsoup4
+, jinja2
+, lxml
+, mkdocs
+, requests
+,
 }:
 
 buildPythonPackage rec {

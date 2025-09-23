@@ -1,19 +1,18 @@
-{
-  fetchgit,
-  fetchzip,
-  lib,
+{ fetchgit
+, fetchzip
+, lib
+,
 }:
 
 lib.makeOverridable (
-  {
-    owner,
-    repo,
-    rev,
-    domain ? "git.9front.org",
-    name ? "source",
-    leaveDotGit ? false,
-    deepClone ? false,
-    ... # For hash agility
+  { owner
+  , repo
+  , rev
+  , domain ? "git.9front.org"
+  , name ? "source"
+  , leaveDotGit ? false
+  , deepClone ? false
+  , ... # For hash agility
   }@args:
 
   let

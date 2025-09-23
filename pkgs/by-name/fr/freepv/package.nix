@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libjpeg,
-  libGLU,
-  libGL,
-  libglut,
-  zlib,
-  cmake,
-  libX11,
-  libxml2,
-  libpng,
-  libXxf86vm,
+{ lib
+, stdenv
+, fetchurl
+, libjpeg
+, libGLU
+, libGL
+, libglut
+, zlib
+, cmake
+, libX11
+, libxml2
+, libpng
+, libXxf86vm
+,
 }:
 
 stdenv.mkDerivation rec {

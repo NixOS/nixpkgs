@@ -1,10 +1,10 @@
-{
-  lib,
-  mkDerivation,
-  compatIfNeeded,
-  libdwarf,
-  zlib,
-  libspl,
+{ lib
+, mkDerivation
+, compatIfNeeded
+, libdwarf
+, zlib
+, libspl
+,
 }:
 
 mkDerivation {

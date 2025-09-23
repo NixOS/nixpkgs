@@ -11,11 +11,10 @@
 # The derivation for the SD image will be placed in
 # config.system.build.sdImage
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -219,106 +218,108 @@ in
     image.filePath = "sd-image/${config.image.fileName}";
     system.nixos.tags = [ "sd-card" ];
     system.build.image = config.system.build.sdImage;
-    system.build.sdImage = pkgs.callPackage (
-      {
-        stdenv,
-        dosfstools,
-        e2fsprogs,
-        mtools,
-        libfaketime,
-        util-linux,
-        zstd,
-      }:
-      stdenv.mkDerivation {
-        name = config.image.fileName;
+    system.build.sdImage = pkgs.callPackage
+      (
+        { stdenv
+        , dosfstools
+        , e2fsprogs
+        , mtools
+        , libfaketime
+        , util-linux
+        , zstd
+        ,
+        }:
+        stdenv.mkDerivation {
+          name = config.image.fileName;
 
-        nativeBuildInputs = [
-          dosfstools
-          e2fsprogs
-          libfaketime
-          mtools
-          util-linux
-        ]
-        ++ lib.optional config.sdImage.compressImage zstd;
+          nativeBuildInputs = [
+            dosfstools
+            e2fsprogs
+            libfaketime
+            mtools
+            util-linux
+          ]
+          ++ lib.optional config.sdImage.compressImage zstd;
 
-        inherit (config.sdImage) compressImage;
+          inherit (config.sdImage) compressImage;
 
-        buildCommand = ''
-          mkdir -p $out/nix-support $out/sd-image
-          export img=$out/sd-image/${config.image.baseName}.img
+          buildCommand = ''
+            mkdir -p $out/nix-support $out/sd-image
+            export img=$out/sd-image/${config.image.baseName}.img
 
-          echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
-          if test -n "$compressImage"; then
-            echo "file sd-image $img.zst" >> $out/nix-support/hydra-build-products
-          else
-            echo "file sd-image $img" >> $out/nix-support/hydra-build-products
-          fi
+            echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
+            if test -n "$compressImage"; then
+              echo "file sd-image $img.zst" >> $out/nix-support/hydra-build-products
+            else
+              echo "file sd-image $img" >> $out/nix-support/hydra-build-products
+            fi
 
-          root_fs=${rootfsImage}
-          ${lib.optionalString config.sdImage.compressImage ''
-            root_fs=./root-fs.img
-            echo "Decompressing rootfs image"
-            zstd -d --no-progress "${rootfsImage}" -o $root_fs
-          ''}
+            root_fs=${rootfsImage}
+            ${lib.optionalString config.sdImage.compressImage ''
+              root_fs=./root-fs.img
+              echo "Decompressing rootfs image"
+              zstd -d --no-progress "${rootfsImage}" -o $root_fs
+            ''}
 
-          # Gap in front of the first partition, in MiB
-          gap=${toString config.sdImage.firmwarePartitionOffset}
+            # Gap in front of the first partition, in MiB
+            gap=${toString config.sdImage.firmwarePartitionOffset}
 
-          # Create the image file sized to fit /boot/firmware and /, plus slack for the gap.
-          rootSizeBlocks=$(du -B 512 --apparent-size $root_fs | awk '{ print $1 }')
-          firmwareSizeBlocks=$((${toString config.sdImage.firmwareSize} * 1024 * 1024 / 512))
-          imageSize=$((rootSizeBlocks * 512 + firmwareSizeBlocks * 512 + gap * 1024 * 1024))
-          truncate -s $imageSize $img
+            # Create the image file sized to fit /boot/firmware and /, plus slack for the gap.
+            rootSizeBlocks=$(du -B 512 --apparent-size $root_fs | awk '{ print $1 }')
+            firmwareSizeBlocks=$((${toString config.sdImage.firmwareSize} * 1024 * 1024 / 512))
+            imageSize=$((rootSizeBlocks * 512 + firmwareSizeBlocks * 512 + gap * 1024 * 1024))
+            truncate -s $imageSize $img
 
-          # type=b is 'W95 FAT32', type=83 is 'Linux'.
-          # The "bootable" partition is where u-boot will look file for the bootloader
-          # information (dtbs, extlinux.conf file).
-          sfdisk --no-reread --no-tell-kernel $img <<EOF
-              label: dos
-              label-id: ${config.sdImage.firmwarePartitionID}
+            # type=b is 'W95 FAT32', type=83 is 'Linux'.
+            # The "bootable" partition is where u-boot will look file for the bootloader
+            # information (dtbs, extlinux.conf file).
+            sfdisk --no-reread --no-tell-kernel $img <<EOF
+                label: dos
+                label-id: ${config.sdImage.firmwarePartitionID}
 
-              start=''${gap}M, size=$firmwareSizeBlocks, type=b
-              start=$((gap + ${toString config.sdImage.firmwareSize}))M, type=83, bootable
-          EOF
+                start=''${gap}M, size=$firmwareSizeBlocks, type=b
+                start=$((gap + ${toString config.sdImage.firmwareSize}))M, type=83, bootable
+            EOF
 
-          # Copy the rootfs into the SD image
-          eval $(partx $img -o START,SECTORS --nr 2 --pairs)
-          dd conv=notrunc if=$root_fs of=$img seek=$START count=$SECTORS
+            # Copy the rootfs into the SD image
+            eval $(partx $img -o START,SECTORS --nr 2 --pairs)
+            dd conv=notrunc if=$root_fs of=$img seek=$START count=$SECTORS
 
-          # Create a FAT32 /boot/firmware partition of suitable size into firmware_part.img
-          eval $(partx $img -o START,SECTORS --nr 1 --pairs)
-          truncate -s $((SECTORS * 512)) firmware_part.img
+            # Create a FAT32 /boot/firmware partition of suitable size into firmware_part.img
+            eval $(partx $img -o START,SECTORS --nr 1 --pairs)
+            truncate -s $((SECTORS * 512)) firmware_part.img
 
-          mkfs.vfat --invariant -i ${config.sdImage.firmwarePartitionID} -n ${config.sdImage.firmwarePartitionName} firmware_part.img
+            mkfs.vfat --invariant -i ${config.sdImage.firmwarePartitionID} -n ${config.sdImage.firmwarePartitionName} firmware_part.img
 
-          # Populate the files intended for /boot/firmware
-          mkdir firmware
-          ${config.sdImage.populateFirmwareCommands}
+            # Populate the files intended for /boot/firmware
+            mkdir firmware
+            ${config.sdImage.populateFirmwareCommands}
 
-          find firmware -exec touch --date=2000-01-01 {} +
-          # Copy the populated /boot/firmware into the SD image
-          cd firmware
-          # Force a fixed order in mcopy for better determinism, and avoid file globbing
-          for d in $(find . -type d -mindepth 1 | sort); do
-            faketime "2000-01-01 00:00:00" mmd -i ../firmware_part.img "::/$d"
-          done
-          for f in $(find . -type f | sort); do
-            mcopy -pvm -i ../firmware_part.img "$f" "::/$f"
-          done
-          cd ..
+            find firmware -exec touch --date=2000-01-01 {} +
+            # Copy the populated /boot/firmware into the SD image
+            cd firmware
+            # Force a fixed order in mcopy for better determinism, and avoid file globbing
+            for d in $(find . -type d -mindepth 1 | sort); do
+              faketime "2000-01-01 00:00:00" mmd -i ../firmware_part.img "::/$d"
+            done
+            for f in $(find . -type f | sort); do
+              mcopy -pvm -i ../firmware_part.img "$f" "::/$f"
+            done
+            cd ..
 
-          # Verify the FAT partition before copying it.
-          fsck.vfat -vn firmware_part.img
-          dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
+            # Verify the FAT partition before copying it.
+            fsck.vfat -vn firmware_part.img
+            dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
 
-          ${config.sdImage.postBuildCommands}
+            ${config.sdImage.postBuildCommands}
 
-          if test -n "$compressImage"; then
-              zstd -T$NIX_BUILD_CORES --rm $img
-          fi
-        '';
-      }
-    ) { };
+            if test -n "$compressImage"; then
+                zstd -T$NIX_BUILD_CORES --rm $img
+            fi
+          '';
+        }
+      )
+      { };
 
     boot.postBootCommands =
       let

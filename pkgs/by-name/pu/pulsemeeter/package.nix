@@ -1,14 +1,14 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  libappindicator,
-  gobject-introspection,
-  wrapGAppsHook4,
-  callPackage,
-  bash,
-  pipewire,
-  gtk4,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, libappindicator
+, gobject-introspection
+, wrapGAppsHook4
+, callPackage
+, bash
+, pipewire
+, gtk4
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "pulsemeeter";

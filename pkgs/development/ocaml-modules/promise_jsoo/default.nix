@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  js_of_ocaml,
-  ppxlib,
-  js_of_ocaml-ppx,
-  gen_js_api,
-  ojs,
+{ lib
+, fetchurl
+, buildDunePackage
+, js_of_ocaml
+, ppxlib
+, js_of_ocaml-ppx
+, gen_js_api
+, ojs
+,
 }:
 
 buildDunePackage rec {

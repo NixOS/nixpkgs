@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitea,
-  buildNpmPackage,
-  writeText,
-  # https://codeberg.org/emersion/gamja/src/branch/master/doc/config-file.md
-  gamjaConfig ? null,
+{ lib
+, fetchFromGitea
+, buildNpmPackage
+, writeText
+, # https://codeberg.org/emersion/gamja/src/branch/master/doc/config-file.md
+  gamjaConfig ? null
+,
 }:
 buildNpmPackage rec {
   pname = "gamja";

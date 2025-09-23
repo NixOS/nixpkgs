@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenvNoCC,
-  pandoc,
-  vim,
-  neovim-unwrapped,
-  makeWrapper,
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, pandoc
+, vim
+, neovim-unwrapped
+, makeWrapper
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

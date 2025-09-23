@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  libiconv,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  testers,
+{ lib
+, fetchFromGitHub
+, libiconv
+, openssl
+, pkg-config
+, rustPlatform
+, stdenv
+, testers
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildLua,
-  fetchFromGitHub,
-  gitUpdater,
-  oscSupport ? false,
+{ lib
+, buildLua
+, fetchFromGitHub
+, gitUpdater
+, oscSupport ? false
+,
 }:
 
 buildLua rec {

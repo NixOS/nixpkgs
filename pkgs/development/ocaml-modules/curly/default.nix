@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  buildDunePackage,
-  fetchurl,
-  ocaml,
-  result,
-  alcotest,
-  cohttp-lwt-unix,
-  curl,
-  cacert,
+{ stdenv
+, lib
+, buildDunePackage
+, fetchurl
+, ocaml
+, result
+, alcotest
+, cohttp-lwt-unix
+, curl
+, cacert
+,
 }:
 
 buildDunePackage rec {

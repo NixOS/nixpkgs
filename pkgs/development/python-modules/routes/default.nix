@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  repoze-lru,
-  six,
-  soupsieve,
-  webob,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, repoze-lru
+, six
+, soupsieve
+, webob
+,
 }:
 
 buildPythonPackage rec {

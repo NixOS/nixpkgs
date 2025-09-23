@@ -1,20 +1,20 @@
-{
-  lib,
-  symlinkJoin,
-  aileron,
-  vegur,
-  f5_6,
-  tenderness,
-  medio,
-  ferrum,
-  seshat,
-  penna,
-  eunomia,
-  route159,
-  f1_8,
-  nacelle,
-  melete,
-  fa_1,
+{ lib
+, symlinkJoin
+, aileron
+, vegur
+, f5_6
+, tenderness
+, medio
+, ferrum
+, seshat
+, penna
+, eunomia
+, route159
+, f1_8
+, nacelle
+, melete
+, fa_1
+,
 }:
 
 symlinkJoin {

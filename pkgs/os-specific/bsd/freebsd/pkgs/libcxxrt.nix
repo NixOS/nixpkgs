@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  stdenv,
-  lib,
+{ mkDerivation
+, stdenv
+, lib
+,
 }:
 # this package is quite different from stock libcxxrt.
 # as of FreeBSD 14.0, it is vendored from APPROXIMATELY libcxxrt

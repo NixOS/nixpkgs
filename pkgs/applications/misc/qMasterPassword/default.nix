@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libX11,
-  libXtst,
-  cmake,
-  qtbase,
-  qttools,
-  qtwayland,
-  openssl,
-  libscrypt,
-  wrapQtAppsHook,
-  testers,
-  qMasterPassword,
-  x11Support ? true,
-  waylandSupport ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+, libXtst
+, cmake
+, qtbase
+, qttools
+, qtwayland
+, openssl
+, libscrypt
+, wrapQtAppsHook
+, testers
+, qMasterPassword
+, x11Support ? true
+, waylandSupport ? false
+,
 }:
 
 stdenv.mkDerivation rec {

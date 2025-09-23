@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  hatchling,
-  aiohttp,
-  attrs,
-  multidict,
-  colorlog,
-  pynacl,
-  pytest-cov-stub,
-  pytest-randomly,
-  pytest-asyncio,
-  mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, hatchling
+, aiohttp
+, attrs
+, multidict
+, colorlog
+, pynacl
+, pytest-cov-stub
+, pytest-randomly
+, pytest-asyncio
+, mock
+,
 }:
 buildPythonPackage rec {
   pname = "hikari";

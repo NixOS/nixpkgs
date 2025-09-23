@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  # This also disables building tests.
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, # This also disables building tests.
   # on static windows cross-compile they fail to build
-  doCheck ? with stdenv.hostPlatform; !(isWindows && isStatic),
+  doCheck ? with stdenv.hostPlatform; !(isWindows && isStatic)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

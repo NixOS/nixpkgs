@@ -1,59 +1,56 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # nativeBuildInputs
-  pyqtwebengine,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  aiohttp,
-  asyncssh,
-  atomicwrites,
-  bcrypt,
-  chardet,
-  cloudpickle,
-  cookiecutter,
-  diff-match-patch,
-  fzf,
-  intervaltree,
-  ipython-pygments-lexers,
-  jedi,
-  jellyfish,
-  keyring,
-  matplotlib,
-  nbconvert,
-  numpy,
-  numpydoc,
-  packaging,
-  pickleshare,
-  psutil,
-  pygithub,
-  pygments,
-  pylint-venv,
-  pyls-spyder,
-  pyopengl,
-  python-lsp-black,
-  python-lsp-server,
-  pyuca,
-  pyzmq,
-  qdarkstyle,
-  qstylizer,
-  qtawesome,
-  qtconsole,
-  qtpy,
-  rope,
-  rtree,
-  scipy,
-  spyder-kernels,
-  superqt,
-  textdistance,
-  three-merge,
-  watchdog,
-  yarl,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # nativeBuildInputs
+  pyqtwebengine
+, # build-system
+  setuptools
+, # dependencies
+  aiohttp
+, asyncssh
+, atomicwrites
+, bcrypt
+, chardet
+, cloudpickle
+, cookiecutter
+, diff-match-patch
+, fzf
+, intervaltree
+, ipython-pygments-lexers
+, jedi
+, jellyfish
+, keyring
+, matplotlib
+, nbconvert
+, numpy
+, numpydoc
+, packaging
+, pickleshare
+, psutil
+, pygithub
+, pygments
+, pylint-venv
+, pyls-spyder
+, pyopengl
+, python-lsp-black
+, python-lsp-server
+, pyuca
+, pyzmq
+, qdarkstyle
+, qstylizer
+, qtawesome
+, qtconsole
+, qtpy
+, rope
+, rtree
+, scipy
+, spyder-kernels
+, superqt
+, textdistance
+, three-merge
+, watchdog
+, yarl
+,
 }:
 
 buildPythonPackage rec {

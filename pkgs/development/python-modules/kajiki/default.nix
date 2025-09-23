@@ -1,11 +1,11 @@
-{
-  lib,
-  babel,
-  buildPythonPackage,
-  fetchFromGitHub,
-  linetable,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, babel
+, buildPythonPackage
+, fetchFromGitHub
+, linetable
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

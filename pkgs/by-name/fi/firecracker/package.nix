@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gcc,
-  libseccomp,
-  rust-bindgen,
-  rustPlatform,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gcc
+, libseccomp
+, rust-bindgen
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage rec {

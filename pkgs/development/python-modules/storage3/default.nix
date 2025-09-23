@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  python-dateutil,
-  httpx,
-  h2,
-  deprecation,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, python-dateutil
+, httpx
+, h2
+, deprecation
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  fetchFromGitHub,
-  withE2BE ? true,
+{ lib
+, python3
+, fetchPypi
+, fetchFromGitHub
+, withE2BE ? true
+,
 }:
 
 let

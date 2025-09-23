@@ -1,17 +1,17 @@
-{
-  aiofiles,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  lxml,
-  poetry-core,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  python-dateutil,
-  yarl,
+{ aiofiles
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, lxml
+, poetry-core
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, python-dateutil
+, yarl
+,
 }:
 
 buildPythonPackage rec {

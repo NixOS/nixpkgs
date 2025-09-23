@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  aiofiles,
-  aiohttp,
-
-  # tests
-  mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  hatchling
+, # dependencies
+  aiofiles
+, aiohttp
+, # tests
+  mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,19 +1,17 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  makeSetupHook,
-  runCommand,
-  tzdata,
-  zip,
-  zlib,
-
-  # Version specific stuff
-  release,
-  version,
-  src,
-  extraPatch ? "",
-  ...
+{ lib
+, stdenv
+, callPackage
+, makeSetupHook
+, runCommand
+, tzdata
+, zip
+, zlib
+, # Version specific stuff
+  release
+, version
+, src
+, extraPatch ? ""
+, ...
 }:
 
 let
@@ -120,16 +118,19 @@ let
       inherit release version;
       libPrefix = "tcl${release}";
       libdir = "lib/${libPrefix}";
-      tclPackageHook = callPackage (
-        { buildPackages }:
-        makeSetupHook {
-          name = "tcl-package-hook";
-          propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
-          meta = {
-            inherit (meta) maintainers platforms;
-          };
-        } ./tcl-package-hook.sh
-      ) { };
+      tclPackageHook = callPackage
+        (
+          { buildPackages }:
+          makeSetupHook
+            {
+              name = "tcl-package-hook";
+              propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
+              meta = {
+                inherit (meta) maintainers platforms;
+              };
+            } ./tcl-package-hook.sh
+        )
+        { };
       # verify that Tcl's clock library can access tzdata
       tests.tzdata = runCommand "${pname}-test-tzdata" { } ''
         ${baseInterp}/bin/tclsh <(echo "set t [clock scan {2004-10-30 05:00:00} \

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  asciidoctor,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, asciidoctor
+, installShellFiles
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

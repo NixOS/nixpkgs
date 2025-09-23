@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  isPyPy,
-  six,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, six
+,
 }:
 
 buildPythonPackage rec {

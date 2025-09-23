@@ -1,7 +1,7 @@
-{
-  qtModule,
-  qtbase,
-  qtdeclarative,
+{ qtModule
+, qtbase
+, qtdeclarative
+,
 }:
 
 qtModule {

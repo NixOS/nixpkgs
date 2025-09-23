@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  paho-mqtt,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, paho-mqtt
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  antora,
-  buildNpmPackage,
-  fetchFromGitLab,
-  lib,
-  nix-update-script,
+{ antora
+, buildNpmPackage
+, fetchFromGitLab
+, lib
+, nix-update-script
+,
 }:
 buildNpmPackage rec {
   pname = "antora-lunr-extension";

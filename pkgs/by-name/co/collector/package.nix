@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  appstream-glib,
-  desktop-file-utils,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  gtk4,
-  python3,
-  gettext,
-  cmake,
-  gobject-introspection,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream-glib
+, desktop-file-utils
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, gtk4
+, python3
+, gettext
+, cmake
+, gobject-introspection
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

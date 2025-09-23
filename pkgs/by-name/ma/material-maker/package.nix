@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  godot3-headless,
-  godot3-export-templates,
-  libglvnd,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, godot3-headless
+, godot3-export-templates
+, libglvnd
+, libX11
+, libXcursor
+, libXext
+, libXfixes
+, libXi
+, libXinerama
+, libXrandr
+, libXrender
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

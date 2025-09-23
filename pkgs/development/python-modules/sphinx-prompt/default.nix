@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-  poetry-dynamic-versioning,
-
-  # dependencies
-  docutils,
-  pygments,
-  sphinx,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, poetry-dynamic-versioning
+, # dependencies
+  docutils
+, pygments
+, sphinx
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,28 +1,28 @@
-{
-  lib,
-  libiconv,
-  python3,
-  fetchFromGitHub,
-  gitUpdater,
-  makeWrapper,
-  rustPlatform,
-  stdenvNoCC,
-  e2fsprogs,
-  erofs-utils,
-  jefferson,
-  lz4,
-  lziprecover,
-  lzop,
-  p7zip,
-  partclone,
-  sasquatch,
-  sasquatch-v4be,
-  simg2img,
-  ubi_reader,
-  unar,
-  upx,
-  zstd,
-  versionCheckHook,
+{ lib
+, libiconv
+, python3
+, fetchFromGitHub
+, gitUpdater
+, makeWrapper
+, rustPlatform
+, stdenvNoCC
+, e2fsprogs
+, erofs-utils
+, jefferson
+, lz4
+, lziprecover
+, lzop
+, p7zip
+, partclone
+, sasquatch
+, sasquatch-v4be
+, simg2img
+, ubi_reader
+, unar
+, upx
+, zstd
+, versionCheckHook
+,
 }:
 
 let

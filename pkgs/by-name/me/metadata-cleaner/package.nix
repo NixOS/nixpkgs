@@ -1,21 +1,21 @@
-{
-  lib,
-  python3,
-  fetchFromGitLab,
-  appstream,
-  desktop-file-utils,
-  glib,
-  gobject-introspection,
-  gtk4,
-  itstool,
-  libadwaita,
-  librsvg,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  poppler_gi,
-  wrapGAppsHook4,
+{ lib
+, python3
+, fetchFromGitLab
+, appstream
+, desktop-file-utils
+, glib
+, gobject-introspection
+, gtk4
+, itstool
+, libadwaita
+, librsvg
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, poppler_gi
+, wrapGAppsHook4
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

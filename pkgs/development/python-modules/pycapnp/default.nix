@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  replaceVars,
-  fetchFromGitHub,
-  fetchpatch2,
-  setuptools,
-  wheel,
-  capnproto,
-  cython,
-  pkgconfig,
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, replaceVars
+, fetchFromGitHub
+, fetchpatch2
+, setuptools
+, wheel
+, capnproto
+, cython
+, pkgconfig
+, pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

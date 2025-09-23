@@ -1,10 +1,11 @@
 # Tests that `nugetDeps` in buildDotnetModule can handle various types.
 
-{
-  lib,
-  dotnet-sdk,
-  buildPackages, # buildDotnetModule
-  runCommand,
+{ lib
+, dotnet-sdk
+, buildPackages
+, # buildDotnetModule
+  runCommand
+,
 }:
 
 let
@@ -36,10 +37,10 @@ mapAttrs
       inherit nugetDeps;
     }
   )
-  {
-    "null" = null;
-    "nix-file" = ./nuget-deps.nix;
-    "json-file" = ./nuget-deps.json;
-    "derivation" = emptyDirectory;
-    "list" = [ emptyDirectory ];
-  }
+{
+  "null" = null;
+  "nix-file" = ./nuget-deps.nix;
+  "json-file" = ./nuget-deps.json;
+  "derivation" = emptyDirectory;
+  "list" = [ emptyDirectory ];
+}

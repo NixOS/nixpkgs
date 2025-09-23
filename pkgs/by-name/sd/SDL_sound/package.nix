@@ -1,13 +1,13 @@
-{
-  lib,
-  SDL,
-  fetchurl,
-  flac,
-  libmikmod,
-  libvorbis,
-  stdenv,
-  # Boolean flags
-  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+{ lib
+, SDL
+, fetchurl
+, flac
+, libmikmod
+, libvorbis
+, stdenv
+, # Boolean flags
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

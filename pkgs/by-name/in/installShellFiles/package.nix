@@ -1,11 +1,12 @@
-{
-  lib,
-  callPackage,
-  makeSetupHook,
+{ lib
+, callPackage
+, makeSetupHook
+,
 }:
 
 # See the header comment in ./setup-hook.sh for example usage.
-makeSetupHook {
+makeSetupHook
+{
   name = "install-shell-files";
   passthru = {
     tests = lib.packagesFromDirectoryRecursive {

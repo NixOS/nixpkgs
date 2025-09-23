@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  matplotlib,
-  numpy,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  scipy,
-  seaborn,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, matplotlib
+, numpy
+, pytestCheckHook
+, pythonOlder
+, requests
+, scipy
+, seaborn
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

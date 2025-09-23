@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.minecraft-server;
@@ -15,10 +14,12 @@ let
 
   whitelistFile = pkgs.writeText "whitelist.json" (
     builtins.toJSON (
-      lib.mapAttrsToList (n: v: {
-        name = n;
-        uuid = v;
-      }) cfg.whitelist
+      lib.mapAttrsToList
+        (n: v: {
+          name = n;
+          uuid = v;
+        })
+        cfg.whitelist
     )
   );
 

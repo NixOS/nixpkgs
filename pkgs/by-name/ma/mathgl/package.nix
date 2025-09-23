@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  zlib,
-  libpng,
-  libGL,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, zlib
+, libpng
+, libGL
+,
 }:
 stdenv.mkDerivation rec {
   pname = "mathgl";

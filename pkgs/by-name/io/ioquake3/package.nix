@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  which,
-  copyDesktopItems,
-  makeBinaryWrapper,
-  SDL2,
-  libGL,
-  openal,
-  curl,
-  speex,
-  opusfile,
-  libogg,
-  libvorbis,
-  libjpeg,
-  makeDesktopItem,
-  freetype,
-  mumble,
-  unstableGitUpdater,
-  bc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, which
+, copyDesktopItems
+, makeBinaryWrapper
+, SDL2
+, libGL
+, openal
+, curl
+, speex
+, opusfile
+, libogg
+, libvorbis
+, libjpeg
+, makeDesktopItem
+, freetype
+, mumble
+, unstableGitUpdater
+, bc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

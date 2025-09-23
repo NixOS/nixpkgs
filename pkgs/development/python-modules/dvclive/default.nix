@@ -1,42 +1,39 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  dvc,
-  dvc-render,
-  dvc-studio-client,
-  funcy,
-  gto,
-  psutil,
-  pynvml,
-  ruamel-yaml,
-  scmrepo,
-
-  # optional-dependencies
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  dvc
+, dvc-render
+, dvc-studio-client
+, funcy
+, gto
+, psutil
+, pynvml
+, ruamel-yaml
+, scmrepo
+, # optional-dependencies
   # all
-  jsonargparse,
-  lightgbm,
-  lightning,
-  matplotlib,
-  mmcv,
-  numpy,
-  optuna,
-  pandas,
-  pillow,
-  scikit-learn,
-  tensorflow,
-  torch,
-  transformers,
-  xgboost,
-  # huggingface
-  datasets,
-  # fastai
-  fastai,
+  jsonargparse
+, lightgbm
+, lightning
+, matplotlib
+, mmcv
+, numpy
+, optuna
+, pandas
+, pillow
+, scikit-learn
+, tensorflow
+, torch
+, transformers
+, xgboost
+, # huggingface
+  datasets
+, # fastai
+  fastai
+,
 }:
 
 buildPythonPackage rec {

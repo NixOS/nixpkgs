@@ -1,46 +1,43 @@
-{
-  lib,
-  mkDerivationWith,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # nativeBuildInputs
-  wrapQtAppsHook,
-
-  # dependencies
-  app-model,
-  appdirs,
-  cachey,
-  certifi,
-  dask,
-  docstring-parser,
-  imageio,
-  jsonschema,
-  magicgui,
-  napari-console,
-  napari-npe2,
-  napari-svg,
-  numpydoc,
-  pandas,
-  pillow,
-  pint,
-  psutil,
-  pydantic,
-  pyopengl,
-  pyyaml,
-  scikit-image,
-  scipy,
-  superqt,
-  tifffile,
-  toolz,
-  tqdm,
-  typing-extensions,
-  vispy,
-  wrapt,
+{ lib
+, mkDerivationWith
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # nativeBuildInputs
+  wrapQtAppsHook
+, # dependencies
+  app-model
+, appdirs
+, cachey
+, certifi
+, dask
+, docstring-parser
+, imageio
+, jsonschema
+, magicgui
+, napari-console
+, napari-npe2
+, napari-svg
+, numpydoc
+, pandas
+, pillow
+, pint
+, psutil
+, pydantic
+, pyopengl
+, pyyaml
+, scikit-image
+, scipy
+, superqt
+, tifffile
+, toolz
+, tqdm
+, typing-extensions
+, vispy
+, wrapt
+,
 }:
 
 mkDerivationWith buildPythonPackage rec {

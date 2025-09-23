@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  coercer,
+{ lib
+, fetchFromGitHub
+, python3
+, coercer
+,
 }:
 
 python3.pkgs.buildPythonApplication {

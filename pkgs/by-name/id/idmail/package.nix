@@ -1,15 +1,15 @@
-{
-  binaryen,
-  cargo-leptos,
-  fetchFromGitHub,
-  lib,
-  rustc,
-  makeWrapper,
-  nix-update-script,
-  nodePackages,
-  rustPlatform,
-  tailwindcss_3,
-  wasm-bindgen-cli_0_2_100,
+{ binaryen
+, cargo-leptos
+, fetchFromGitHub
+, lib
+, rustc
+, makeWrapper
+, nix-update-script
+, nodePackages
+, rustPlatform
+, tailwindcss_3
+, wasm-bindgen-cli_0_2_100
+,
 }:
 let
   tailwindcss = tailwindcss_3.overrideAttrs (_prev: {

@@ -1,11 +1,12 @@
-{
-  lib,
-  bash,
-  patchcil,
-  makeSetupHook,
+{ lib
+, bash
+, patchcil
+, makeSetupHook
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "auto-patchcil-hook";
   substitutions = {
     shell = lib.getExe bash;

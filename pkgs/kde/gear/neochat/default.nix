@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtlocation,
-  qtspeech,
-  qtwebview,
+{ mkKdeDerivation
+, qtlocation
+, qtspeech
+, qtwebview
+,
 }:
 mkKdeDerivation {
   pname = "neochat";

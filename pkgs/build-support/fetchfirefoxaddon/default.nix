@@ -1,22 +1,22 @@
-{
-  stdenv,
-  fetchurl,
-  jq,
-  strip-nondeterminism,
-  unzip,
-  writeScript,
-  zip,
+{ stdenv
+, fetchurl
+, jq
+, strip-nondeterminism
+, unzip
+, writeScript
+, zip
+,
 }:
 
-{
-  name,
-  url ? null,
-  sha1 ? "",
-  sha256 ? "",
-  sha512 ? "",
-  fixedExtid ? null,
-  hash ? "",
-  src ? "",
+{ name
+, url ? null
+, sha1 ? ""
+, sha256 ? ""
+, sha512 ? ""
+, fixedExtid ? null
+, hash ? ""
+, src ? ""
+,
 }:
 
 let

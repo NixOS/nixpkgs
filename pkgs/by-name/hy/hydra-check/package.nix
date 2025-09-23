@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  stdenv,
-  installShellFiles,
-  versionCheckHook,
-  testers,
-  curl,
-  cacert,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, stdenv
+, installShellFiles
+, versionCheckHook
+, testers
+, curl
+, cacert
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: rec {

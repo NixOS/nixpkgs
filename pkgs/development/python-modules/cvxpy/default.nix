@@ -1,26 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  numpy,
-  pybind11,
-  setuptools,
-
-  # dependencies
-  clarabel,
-  cvxopt,
-  osqp,
-  scipy,
-  scs,
-
-  # tests
-  hypothesis,
-  pytestCheckHook,
-
-  useOpenmp ? (!stdenv.hostPlatform.isDarwin),
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  numpy
+, pybind11
+, setuptools
+, # dependencies
+  clarabel
+, cvxopt
+, osqp
+, scipy
+, scs
+, # tests
+  hypothesis
+, pytestCheckHook
+, useOpenmp ? (!stdenv.hostPlatform.isDarwin)
+,
 }:
 
 buildPythonPackage rec {

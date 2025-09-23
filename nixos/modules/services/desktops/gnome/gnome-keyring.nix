@@ -1,10 +1,9 @@
 # GNOME Keyring daemon.
 
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.gnome.gnome-keyring;

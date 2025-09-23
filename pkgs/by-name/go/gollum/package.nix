@@ -1,10 +1,10 @@
-{
-  lib,
-  bundlerApp,
-  bundlerUpdateScript,
-  ruby,
-  makeWrapper,
-  nixosTests,
+{ lib
+, bundlerApp
+, bundlerUpdateScript
+, ruby
+, makeWrapper
+, nixosTests
+,
 }:
 
 bundlerApp {

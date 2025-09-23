@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  nix-update-script,
-  testers,
-  validatePkgConfig,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, nix-update-script
+, testers
+, validatePkgConfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

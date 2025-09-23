@@ -1,21 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  hwloc,
-  llvmPackages,
-  libxml2, # required for statically linked llvm
-  spirv-llvm-translator,
-  spirv-tools,
-  lttng-ust,
-  opencl-headers,
-  ocl-icd,
-  python3,
-  runCommand,
-  makeWrapper,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, hwloc
+, llvmPackages
+, libxml2
+, # required for statically linked llvm
+  spirv-llvm-translator
+, spirv-tools
+, lttng-ust
+, opencl-headers
+, ocl-icd
+, python3
+, runCommand
+, makeWrapper
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

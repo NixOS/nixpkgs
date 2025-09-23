@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  bash,
-  buildPackages,
-  coreutils,
-  nixosTests,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, bash
+, buildPackages
+, coreutils
+, nixosTests
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

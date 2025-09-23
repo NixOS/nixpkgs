@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  python3,
-  gobject-introspection,
-  gsettings-desktop-schemas,
-  gettext,
-  gtk3,
-  glib,
-  common-licenses,
+{ stdenv
+, lib
+, fetchFromGitHub
+, wrapGAppsHook3
+, python3
+, gobject-introspection
+, gsettings-desktop-schemas
+, gettext
+, gtk3
+, glib
+, common-licenses
+,
 }:
 
 stdenv.mkDerivation rec {

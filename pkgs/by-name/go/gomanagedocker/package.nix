@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
-  xorg,
-  pkg-config,
-  gpgme,
-  btrfs-progs,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+, xorg
+, pkg-config
+, gpgme
+, btrfs-progs
+,
 }:
 let
   version = "1.5";

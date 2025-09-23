@@ -1,12 +1,12 @@
-{
-  lib,
-  python313,
-  fetchFromGitLab,
-  fetchPypi,
-  callPackage,
-  stdenv,
-  makeWrapper,
-  nixosTests,
+{ lib
+, python313
+, fetchFromGitLab
+, fetchPypi
+, callPackage
+, stdenv
+, makeWrapper
+, nixosTests
+,
 }:
 
 let

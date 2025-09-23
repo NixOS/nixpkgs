@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cmake,
-  fetchFromGitHub,
-  future,
-  numpy,
-  pytest-lazy-fixture,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-build,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cmake
+, fetchFromGitHub
+, future
+, numpy
+, pytest-lazy-fixture
+, pytestCheckHook
+, pythonOlder
+, scikit-build
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

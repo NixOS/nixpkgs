@@ -1,15 +1,15 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  froide,
-  gdal,
-  geos,
-  nixosTests,
-  fetchpatch,
-  froide-govplan,
-  gettext,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, makeBinaryWrapper
+, froide
+, gdal
+, geos
+, nixosTests
+, fetchpatch
+, froide-govplan
+, gettext
+,
 }:
 let
   python = python3Packages.python.override {

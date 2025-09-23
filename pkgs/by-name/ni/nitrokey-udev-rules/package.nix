@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  python3,
-  udevCheckHook,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, python3
+, udevCheckHook
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

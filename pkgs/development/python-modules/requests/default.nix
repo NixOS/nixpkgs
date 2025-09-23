@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  certifi,
-  chardet,
-  charset-normalizer,
-  fetchFromGitHub,
-  idna,
-  pysocks,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  urllib3,
+{ lib
+, stdenv
+, buildPythonPackage
+, certifi
+, chardet
+, charset-normalizer
+, fetchFromGitHub
+, idna
+, pysocks
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  alsa-lib,
-  audiofile,
-  libjack2,
-  liblo,
-  liboil,
-  libsamplerate,
-  libsndfile,
-  lilv,
-  lv2,
-  ncurses,
-  readline,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, alsa-lib
+, audiofile
+, libjack2
+, liblo
+, liboil
+, libsamplerate
+, libsndfile
+, lilv
+, lv2
+, ncurses
+, readline
+,
 }:
 
 # TODO: fix python. See configure log.

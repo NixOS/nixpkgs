@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  dbus,
-  gnupg,
-  coreutils,
-  nixosTests,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, python3
+, dbus
+, gnupg
+, coreutils
+, nixosTests
+, nix-update-script
+,
 }:
 
 python3.pkgs.buildPythonApplication {

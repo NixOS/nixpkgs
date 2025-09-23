@@ -1,23 +1,22 @@
-{
-  stdenv,
-  lib,
-  mkXfceDerivation,
-  python3,
-  wayland-scanner,
-  glib,
-  gtk3,
-  libdisplay-info,
-  libwnck,
-  libX11,
-  libXrandr,
-  wayland,
-  wayland-protocols,
-  wlr-protocols,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
-  gobject-introspection,
+{ stdenv
+, lib
+, mkXfceDerivation
+, python3
+, wayland-scanner
+, glib
+, gtk3
+, libdisplay-info
+, libwnck
+, libX11
+, libXrandr
+, wayland
+, wayland-protocols
+, wlr-protocols
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
+,
 }:
 
 mkXfceDerivation {

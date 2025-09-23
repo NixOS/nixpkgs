@@ -1,23 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-
-  attrs,
-  boto3,
-  cachetools,
-  color-operations,
-  hatchling,
-  httpx,
-  morecantile,
-  numexpr,
-  numpy,
-  pydantic,
-  pystac,
-  rasterio,
-  rioxarray,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, attrs
+, boto3
+, cachetools
+, color-operations
+, hatchling
+, httpx
+, morecantile
+, numexpr
+, numpy
+, pydantic
+, pystac
+, rasterio
+, rioxarray
+,
 }:
 
 buildPythonPackage rec {

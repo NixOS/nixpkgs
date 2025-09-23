@@ -1,9 +1,8 @@
-{
-  config,
-  pkgs,
-  lib,
-  utils,
-  ...
+{ config
+, pkgs
+, lib
+, utils
+, ...
 }:
 
 let
@@ -12,9 +11,11 @@ let
   # Generate atalkd.conf only if configFile isn't manually specified
   atalkdConfFile = pkgs.writeText "atalkd.conf" (
     lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (
-        iface: ifaceCfg: iface + (if ifaceCfg.config != null then " ${ifaceCfg.config}" else "")
-      ) cfg.interfaces
+      lib.mapAttrsToList
+        (
+          iface: ifaceCfg: iface + (if ifaceCfg.config != null then " ${ifaceCfg.config}" else "")
+        )
+        cfg.interfaces
     )
   );
 in

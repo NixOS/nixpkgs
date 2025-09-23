@@ -1,9 +1,8 @@
-{
-  config,
-  pkgs,
-  lib,
-  utils,
-  ...
+{ config
+, pkgs
+, lib
+, utils
+, ...
 }:
 let
   inherit (lib)
@@ -103,9 +102,10 @@ in
           (utils.escapeSystemdExecArgs cfg.extraOptions)
         ];
         DynamicUser = true;
-        LoadCredential = lib.optional (
-          cfg.basicAuthPasswordFile != null
-        ) "basic_auth_password:${cfg.basicAuthPasswordFile}";
+        LoadCredential = lib.optional
+          (
+            cfg.basicAuthPasswordFile != null
+          ) "basic_auth_password:${cfg.basicAuthPasswordFile}";
         RestartSec = 1;
         Restart = "on-failure";
         RuntimeDirectory = "victorialogs";

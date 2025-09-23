@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  fetchpatch,
-  lib,
-  stdenv,
-  boost,
-  zlib,
-  cmake,
-  maeparser,
+{ fetchFromGitHub
+, fetchpatch
+, lib
+, stdenv
+, boost
+, zlib
+, cmake
+, maeparser
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

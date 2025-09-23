@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  setuptools,
-  fetchFromGitHub,
-  bleach,
-  mt-940,
-  requests,
-  sepaxml,
-  pytestCheckHook,
-  pytest-mock,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, setuptools
+, fetchFromGitHub
+, bleach
+, mt-940
+, requests
+, sepaxml
+, pytestCheckHook
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

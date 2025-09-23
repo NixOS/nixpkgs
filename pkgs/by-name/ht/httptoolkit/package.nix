@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  electron_37,
-  httptoolkit-server,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, electron_37
+, httptoolkit-server
+,
 }:
 
 let

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchsvn,
-  # jdk8 is needed for building, but the game runs on newer jres as well
-  jdk8,
-  jre,
-  ant,
-  stripJavaArchivesHook,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  nixosTests,
+{ lib
+, stdenv
+, fetchsvn
+, # jdk8 is needed for building, but the game runs on newer jres as well
+  jdk8
+, jre
+, ant
+, stripJavaArchivesHook
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, nixosTests
+,
 }:
 
 let

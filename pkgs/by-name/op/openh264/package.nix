@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  gtest,
-  meson,
-  nasm,
-  ninja,
-  pkg-config,
-  stdenv,
-  windows,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, gtest
+, meson
+, nasm
+, ninja
+, pkg-config
+, stdenv
+, windows
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,13 +61,15 @@ stdenv.mkDerivation (finalAttrs: {
     # See meson.build
     platforms =
       lib.platforms.windows
-      ++ lib.intersectLists (
-        lib.platforms.x86
-        ++ lib.platforms.arm
-        ++ lib.platforms.aarch64
-        ++ lib.platforms.loongarch64
-        ++ lib.platforms.riscv64
-        ++ lib.platforms.power
-      ) lib.platforms.unix;
+      ++ lib.intersectLists
+        (
+          lib.platforms.x86
+          ++ lib.platforms.arm
+          ++ lib.platforms.aarch64
+          ++ lib.platforms.loongarch64
+          ++ lib.platforms.riscv64
+          ++ lib.platforms.power
+        )
+        lib.platforms.unix;
   };
 })

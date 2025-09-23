@@ -1,33 +1,33 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  aiohttp,
-  fastapi,
-  httpx,
-  markdown2,
-  nh3,
-  numpy,
-  prompt-toolkit,
-  pydantic,
-  requests,
-  rich,
-  shortuuid,
-  tiktoken,
-  uvicorn,
-  anthropic,
-  openai,
-  ray,
-  wandb,
-  einops,
-  gradio,
-  accelerate,
-  peft,
-  sentencepiece,
-  torch,
-  transformers,
-  protobuf,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, aiohttp
+, fastapi
+, httpx
+, markdown2
+, nh3
+, numpy
+, prompt-toolkit
+, pydantic
+, requests
+, rich
+, shortuuid
+, tiktoken
+, uvicorn
+, anthropic
+, openai
+, ray
+, wandb
+, einops
+, gradio
+, accelerate
+, peft
+, sentencepiece
+, torch
+, transformers
+, protobuf
+,
 }:
 let
   version = "0.2.36";

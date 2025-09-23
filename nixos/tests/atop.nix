@@ -1,7 +1,6 @@
-{
-  pkgs,
-  runTest,
-  ...
+{ pkgs
+, runTest
+, ...
 }:
 
 let

@@ -1,20 +1,18 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-
-  pnpm_9,
-  nodejs,
-  cargo-tauri_1,
-  pkg-config,
-  wrapGAppsHook3,
-  makeBinaryWrapper,
-
-  openssl,
-  libsoup_2_4,
-  webkitgtk_4_0,
-  gst_all_1,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pnpm_9
+, nodejs
+, cargo-tauri_1
+, pkg-config
+, wrapGAppsHook3
+, makeBinaryWrapper
+, openssl
+, libsoup_2_4
+, webkitgtk_4_0
+, gst_all_1
+,
 }:
 
 rustPlatform.buildRustPackage rec {

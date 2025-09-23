@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  jinja2,
-  mlx,
-  numpy,
-  protobuf,
-  pyyaml,
-  transformers,
-
-  # tests
-  lm-eval,
-  sentencepiece,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  jinja2
+, mlx
+, numpy
+, protobuf
+, pyyaml
+, transformers
+, # tests
+  lm-eval
+, sentencepiece
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

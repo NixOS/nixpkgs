@@ -1,17 +1,16 @@
-{
-  lib,
-  callPackage,
-  stdenv,
-  stdenvAdapters,
-  recurseIntoAttrs,
-  gccVersions ? { },
-  patchesFn ? lib.id,
-  buildPackages,
-  targetPackages,
-  binutilsNoLibc,
-  binutils,
-  generateSplicesForMkScope,
-  ...
+{ lib
+, callPackage
+, stdenv
+, stdenvAdapters
+, recurseIntoAttrs
+, gccVersions ? { }
+, patchesFn ? lib.id
+, buildPackages
+, targetPackages
+, binutilsNoLibc
+, binutils
+, generateSplicesForMkScope
+, ...
 }@packageSetArgs:
 let
   versions = {
@@ -20,12 +19,12 @@ let
   // gccVersions;
 
   mkPackage =
-    {
-      name ? null,
-      officialRelease ? null,
-      gitRelease ? null,
-      monorepoSrc ? null,
-      version ? null,
+    { name ? null
+    , officialRelease ? null
+    , gitRelease ? null
+    , monorepoSrc ? null
+    , version ? null
+    ,
     }@args:
     let
       inherit

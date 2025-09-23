@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  glib,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  cairo,
-  exo,
-  gtk3,
-  libexif,
-  libxfce4ui,
-  libxfce4util,
-  xfconf,
-  gnome,
-  libheif,
-  libjxl,
-  librsvg,
-  webp-pixbuf-loader,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, glib
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, cairo
+, exo
+, gtk3
+, libexif
+, libxfce4ui
+, libxfce4util
+, xfconf
+, gnome
+, libheif
+, libjxl
+, librsvg
+, webp-pixbuf-loader
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

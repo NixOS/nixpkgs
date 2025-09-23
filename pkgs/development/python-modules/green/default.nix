@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  colorama,
-  coverage,
-  unidecode,
-  lxml,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, colorama
+, coverage
+, unidecode
+, lxml
+,
 }:
 
 buildPythonPackage rec {

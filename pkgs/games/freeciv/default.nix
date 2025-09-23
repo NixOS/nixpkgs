@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  lua5_3,
-  pkg-config,
-  python3,
-  zlib,
-  bzip2,
-  curl,
-  xz,
-  gettext,
-  libiconv,
-  icu,
-  SDL2,
-  SDL2_mixer,
-  SDL2_image,
-  SDL2_ttf,
-  SDL2_gfx,
-  freetype,
-  fluidsynth,
-  sdl2Client ? false,
-  gtkClient ? true,
-  gtk3,
-  wrapGAppsHook3,
-  qtClient ? false,
-  qt5,
-  server ? true,
-  readline,
-  enableSqlite ? true,
-  sqlite,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, lua5_3
+, pkg-config
+, python3
+, zlib
+, bzip2
+, curl
+, xz
+, gettext
+, libiconv
+, icu
+, SDL2
+, SDL2_mixer
+, SDL2_image
+, SDL2_ttf
+, SDL2_gfx
+, freetype
+, fluidsynth
+, sdl2Client ? false
+, gtkClient ? true
+, gtk3
+, wrapGAppsHook3
+, qtClient ? false
+, qt5
+, server ? true
+, readline
+, enableSqlite ? true
+, sqlite
+,
 }:
 
 stdenv.mkDerivation rec {

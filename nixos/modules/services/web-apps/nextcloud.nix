@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.nextcloud;
@@ -117,9 +116,10 @@ let
     [ ]
     ++ (lib.optional (cfg.config.dbpassFile != null) "dbpass:${cfg.config.dbpassFile}")
     ++ (lib.optional (cfg.config.objectstore.s3.enable) "s3_secret:${cfg.config.objectstore.s3.secretFile}")
-    ++ (lib.optional (
-      cfg.config.objectstore.s3.sseCKeyFile != null
-    ) "s3_sse_c_key:${cfg.config.objectstore.s3.sseCKeyFile}")
+    ++ (lib.optional
+      (
+        cfg.config.objectstore.s3.sseCKeyFile != null
+      ) "s3_sse_c_key:${cfg.config.objectstore.s3.sseCKeyFile}")
     ++ (lib.optional (cfg.secretFile != null) "secret_file:${cfg.secretFile}");
 
   requiresRuntimeSystemdCredentials = (lib.length runtimeSystemdCredentials) != 0;
@@ -1194,10 +1194,12 @@ in
                       ${installFlags}
                 '';
               occSetTrustedDomainsCmd = lib.concatStringsSep "\n" (
-                lib.imap0 (i: v: ''
-                  ${lib.getExe occ} config:system:set trusted_domains \
-                    ${toString i} --value="${toString v}"
-                '') (lib.unique ([ cfg.hostName ] ++ cfg.settings.trusted_domains))
+                lib.imap0
+                  (i: v: ''
+                    ${lib.getExe occ} config:system:set trusted_domains \
+                      ${toString i} --value="${toString v}"
+                  '')
+                  (lib.unique ([ cfg.hostName ] ++ cfg.settings.trusted_domains))
               );
 
             in
@@ -1364,10 +1366,11 @@ in
               PATH = "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin";
             };
             settings =
-              lib.mapAttrs (name: lib.mkDefault) {
-                "listen.owner" = config.services.nginx.user;
-                "listen.group" = config.services.nginx.group;
-              }
+              lib.mapAttrs (name: lib.mkDefault)
+                {
+                  "listen.owner" = config.services.nginx.user;
+                  "listen.group" = config.services.nginx.group;
+                }
               // cfg.poolSettings;
             extraConfig = cfg.poolConfig;
           };

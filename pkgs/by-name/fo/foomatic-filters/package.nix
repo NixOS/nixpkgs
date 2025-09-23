@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  pkg-config,
-  perl,
-  cups,
-  dbus,
-  enscript,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, pkg-config
+, perl
+, cups
+, dbus
+, enscript
+,
 }:
 
 stdenv.mkDerivation rec {

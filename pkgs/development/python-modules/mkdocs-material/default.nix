@@ -1,29 +1,29 @@
-{
-  lib,
-  babel,
-  backrefs,
-  buildPythonPackage,
-  cairosvg,
-  colorama,
-  fetchFromGitHub,
-  hatch-nodejs-version,
-  hatch-requirements-txt,
-  hatchling,
-  jinja2,
-  markdown,
-  mkdocs,
-  mkdocs-git-revision-date-localized-plugin,
-  mkdocs-material-extensions,
-  mkdocs-minify-plugin,
-  mkdocs-redirects,
-  mkdocs-rss-plugin,
-  paginate,
-  pillow,
-  pygments,
-  pymdown-extensions,
-  regex,
-  requests,
-  trove-classifiers,
+{ lib
+, babel
+, backrefs
+, buildPythonPackage
+, cairosvg
+, colorama
+, fetchFromGitHub
+, hatch-nodejs-version
+, hatch-requirements-txt
+, hatchling
+, jinja2
+, markdown
+, mkdocs
+, mkdocs-git-revision-date-localized-plugin
+, mkdocs-material-extensions
+, mkdocs-minify-plugin
+, mkdocs-redirects
+, mkdocs-rss-plugin
+, paginate
+, pillow
+, pygments
+, pymdown-extensions
+, regex
+, requests
+, trove-classifiers
+,
 }:
 
 buildPythonPackage rec {

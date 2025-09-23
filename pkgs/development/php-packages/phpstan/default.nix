@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  lib,
-  php,
-  versionCheckHook,
+{ fetchFromGitHub
+, lib
+, php
+, versionCheckHook
+,
 }:
 
 php.buildComposerProject2 (finalAttrs: {

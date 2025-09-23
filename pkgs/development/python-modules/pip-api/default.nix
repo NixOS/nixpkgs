@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pip,
-  pretend,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  virtualenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pip
+, pretend
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, virtualenv
+,
 }:
 
 buildPythonPackage rec {

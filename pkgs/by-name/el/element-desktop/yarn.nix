@@ -1,11 +1,11 @@
-{
-  stdenvNoCC,
-  yarn,
-  cacert,
-  git,
-  version,
-  src,
-  hash,
+{ stdenvNoCC
+, yarn
+, cacert
+, git
+, version
+, src
+, hash
+,
 }:
 stdenvNoCC.mkDerivation {
   pname = "element-desktop-yarn-deps";

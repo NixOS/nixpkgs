@@ -1,15 +1,15 @@
-{
-  lib,
-  jdk,
-  maven,
-  fetchFromGitHub,
-  fetchpatch,
-  makeDesktopItem,
-  copyDesktopItems,
-  imagemagick,
-  wrapGAppsHook3,
-  gtk3,
-  udevCheckHook,
+{ lib
+, jdk
+, maven
+, fetchFromGitHub
+, fetchpatch
+, makeDesktopItem
+, copyDesktopItems
+, imagemagick
+, wrapGAppsHook3
+, gtk3
+, udevCheckHook
+,
 }:
 
 let

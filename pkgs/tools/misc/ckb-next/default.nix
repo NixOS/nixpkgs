@@ -1,24 +1,24 @@
-{
-  lib,
-  wrapQtAppsHook,
-  fetchFromGitHub,
-  replaceVars,
-  udev,
-  stdenv,
-  pkg-config,
-  qtbase,
-  cmake,
-  zlib,
-  kmod,
-  libXdmcp,
-  qttools,
-  qtx11extras,
-  libdbusmenu,
-  gnused,
-  withPulseaudio ? stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  quazip,
-  udevCheckHook,
+{ lib
+, wrapQtAppsHook
+, fetchFromGitHub
+, replaceVars
+, udev
+, stdenv
+, pkg-config
+, qtbase
+, cmake
+, zlib
+, kmod
+, libXdmcp
+, qttools
+, qtx11extras
+, libdbusmenu
+, gnused
+, withPulseaudio ? stdenv.hostPlatform.isLinux
+, libpulseaudio
+, quazip
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

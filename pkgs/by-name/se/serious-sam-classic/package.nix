@@ -1,17 +1,17 @@
-{
-  bison,
-  cmake,
-  fetchFromGitHub,
-  flex,
-  imagemagick,
-  lib,
-  libogg,
-  libvorbis,
-  makeWrapper,
-  nasm,
-  SDL2,
-  stdenv,
-  zlib,
+{ bison
+, cmake
+, fetchFromGitHub
+, flex
+, imagemagick
+, lib
+, libogg
+, libvorbis
+, makeWrapper
+, nasm
+, SDL2
+, stdenv
+, zlib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "serious-sam-classic";

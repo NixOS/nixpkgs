@@ -77,14 +77,14 @@
       (
         cudaCapability:
         # Supplies default values.
-        {
-          archName,
-          isJetson ? false,
-          isArchitectureSpecific ? (lib.hasSuffix "a" cudaCapability),
-          isFamilySpecific ? (lib.hasSuffix "f" cudaCapability),
-          minCudaMajorMinorVersion,
-          maxCudaMajorMinorVersion ? null,
-          dontDefaultAfterCudaMajorMinorVersion ? null,
+        { archName
+        , isJetson ? false
+        , isArchitectureSpecific ? (lib.hasSuffix "a" cudaCapability)
+        , isFamilySpecific ? (lib.hasSuffix "f" cudaCapability)
+        , minCudaMajorMinorVersion
+        , maxCudaMajorMinorVersion ? null
+        , dontDefaultAfterCudaMajorMinorVersion ? null
+        ,
         }:
         {
           inherit

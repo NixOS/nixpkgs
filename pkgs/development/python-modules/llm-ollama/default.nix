@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  llm,
-
-  # dependencies
-  click,
-  ollama,
-  pydantic,
-
-  # tests
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-mock,
-  writableTmpDirAsHomeHook,
-  llm-ollama,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, llm
+, # dependencies
+  click
+, ollama
+, pydantic
+, # tests
+  pytestCheckHook
+, pytest-asyncio
+, pytest-mock
+, writableTmpDirAsHomeHook
+, llm-ollama
+,
 }:
 
 buildPythonPackage rec {

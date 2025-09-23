@@ -1,12 +1,12 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  libkrb5,
-  zlib,
-  openssl,
-  callPackage,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, libkrb5
+, zlib
+, openssl
+, callPackage
+,
 }:
 
 let

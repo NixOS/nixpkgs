@@ -1,26 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  # Runtime script dependencies
-  coreutils,
-  getent,
-  gnugrep,
-  gnused,
-  gnutar,
-  util-linux,
-
-  # Native build inputs
-  cmake,
-  findutils,
-  gettext,
-  mandoc,
-  makeWrapper,
-  perlPackages,
-
-  # Build inputs
-  boost,
+{ lib
+, stdenv
+, fetchurl
+, # Runtime script dependencies
+  coreutils
+, getent
+, gnugrep
+, gnused
+, gnutar
+, util-linux
+, # Native build inputs
+  cmake
+, findutils
+, gettext
+, mandoc
+, makeWrapper
+, perlPackages
+, # Build inputs
+  boost
+,
 }:
 
 let

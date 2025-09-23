@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
-  jre,
-  libGL,
-  libpulseaudio,
-  libXxf86vm,
+{ stdenv
+, lib
+, fetchurl
+, copyDesktopItems
+, makeDesktopItem
+, makeWrapper
+, jre
+, libGL
+, libpulseaudio
+, libXxf86vm
+,
 }:
 let
   version = "4.17.6";

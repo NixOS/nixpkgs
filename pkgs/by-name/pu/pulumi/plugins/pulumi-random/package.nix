@@ -1,6 +1,6 @@
-{
-  lib,
-  mkPulumiPackage,
+{ lib
+, mkPulumiPackage
+,
 }:
 mkPulumiPackage rec {
   owner = "pulumi";

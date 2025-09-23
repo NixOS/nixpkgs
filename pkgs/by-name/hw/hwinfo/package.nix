@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  flex,
-  libuuid,
-  libx86emu,
-  perl,
-  kmod,
-  systemdMinimal,
-  testers,
-  binutils,
-  writeText,
-  runCommand,
-  validatePkgConfig,
-  gitUpdater,
-  buildPackages,
-  perlPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, flex
+, libuuid
+, libx86emu
+, perl
+, kmod
+, systemdMinimal
+, testers
+, binutils
+, writeText
+, runCommand
+, validatePkgConfig
+, gitUpdater
+, buildPackages
+, perlPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

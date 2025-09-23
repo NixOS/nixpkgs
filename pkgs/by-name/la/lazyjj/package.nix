@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  jujutsu,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, jujutsu
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lazyjj";

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  six,
-  setuptools,
-  setuptools-scm,
-  xorg,
-  mock,
-  pytestCheckHook,
-  util-linux,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, six
+, setuptools
+, setuptools-scm
+, xorg
+, mock
+, pytestCheckHook
+, util-linux
+,
 }:
 
 buildPythonPackage rec {

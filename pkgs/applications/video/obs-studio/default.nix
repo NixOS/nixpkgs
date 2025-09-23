@@ -1,66 +1,66 @@
-{
-  config,
-  uthash,
-  lib,
-  stdenv,
-  ninja,
-  nv-codec-headers-12,
-  fetchFromGitHub,
-  addDriverRunpath,
-  autoAddDriverRunpath,
-  cudaSupport ? config.cudaSupport,
-  cmake,
-  fdk_aac,
-  ffmpeg,
-  jansson,
-  libjack2,
-  libxkbcommon,
-  libpthreadstubs,
-  libXdmcp,
-  qtbase,
-  qtsvg,
-  speex,
-  libv4l,
-  x264,
-  curl,
-  wayland,
-  xorg,
-  pkg-config,
-  libvlc,
-  libGL,
-  mbedtls,
-  wrapGAppsHook3,
-  scriptingSupport ? true,
-  luajit,
-  swig,
-  python3,
-  alsaSupport ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  browserSupport ? true,
-  cef-binary,
-  pciutils,
-  pipewireSupport ? stdenv.hostPlatform.isLinux,
-  withFdk ? true,
-  pipewire,
-  libdrm,
-  librist,
-  cjson,
-  libva,
-  srt,
-  qtwayland,
-  wrapQtAppsHook,
-  nlohmann_json,
-  websocketpp,
-  asio,
-  decklinkSupport ? false,
-  blackmagic-desktop-video,
-  libdatachannel,
-  libvpl,
-  qrcodegencpp,
-  nix-update-script,
-  extra-cmake-modules,
+{ config
+, uthash
+, lib
+, stdenv
+, ninja
+, nv-codec-headers-12
+, fetchFromGitHub
+, addDriverRunpath
+, autoAddDriverRunpath
+, cudaSupport ? config.cudaSupport
+, cmake
+, fdk_aac
+, ffmpeg
+, jansson
+, libjack2
+, libxkbcommon
+, libpthreadstubs
+, libXdmcp
+, qtbase
+, qtsvg
+, speex
+, libv4l
+, x264
+, curl
+, wayland
+, xorg
+, pkg-config
+, libvlc
+, libGL
+, mbedtls
+, wrapGAppsHook3
+, scriptingSupport ? true
+, luajit
+, swig
+, python3
+, alsaSupport ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
+, libpulseaudio
+, browserSupport ? true
+, cef-binary
+, pciutils
+, pipewireSupport ? stdenv.hostPlatform.isLinux
+, withFdk ? true
+, pipewire
+, libdrm
+, librist
+, cjson
+, libva
+, srt
+, qtwayland
+, wrapQtAppsHook
+, nlohmann_json
+, websocketpp
+, asio
+, decklinkSupport ? false
+, blackmagic-desktop-video
+, libdatachannel
+, libvpl
+, qrcodegencpp
+, nix-update-script
+, extra-cmake-modules
+,
 }:
 
 let
@@ -76,8 +76,7 @@ let
       {
         aarch64-linux = "sha256-kdO7c9oUfv0HK8wTmvYzw9S6EapnSGEQNCGN9D1JSL0=";
         x86_64-linux = "sha256-3qgIhen6l/kxttyw0z78nmwox62riVhlmFSGPkUot7g=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   });
 in
 stdenv.mkDerivation (finalAttrs: {

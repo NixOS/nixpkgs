@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch2,
-  gitUpdater,
-  stdenv,
-  cmake,
+{ lib
+, fetchFromGitHub
+, fetchpatch2
+, gitUpdater
+, stdenv
+, cmake
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

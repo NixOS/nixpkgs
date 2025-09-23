@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  meson,
-  pkg-config,
-  ninja,
-  wayland,
-  obs-studio,
-  libX11,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, meson
+, pkg-config
+, ninja
+, wayland
+, obs-studio
+, libX11
+,
 }:
 
 stdenv.mkDerivation {

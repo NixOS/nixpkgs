@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  spglib,
-  numpy,
-  scipy,
-  h5py,
-  pymatgen,
-  phonopy,
-  matplotlib,
-  seekpath,
-  castepxbin,
-  colormath,
-  importlib-resources,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, spglib
+, numpy
+, scipy
+, h5py
+, pymatgen
+, phonopy
+, matplotlib
+, seekpath
+, castepxbin
+, colormath
+, importlib-resources
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

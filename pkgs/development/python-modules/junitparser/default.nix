@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  glibcLocales,
-  lxml,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, glibcLocales
+, lxml
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

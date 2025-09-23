@@ -1,10 +1,10 @@
-{
-  lib,
-  symlinkJoin,
-  brasero-unwrapped,
-  cdrtools,
-  libdvdcss,
-  makeWrapper,
+{ lib
+, symlinkJoin
+, brasero-unwrapped
+, cdrtools
+, libdvdcss
+, makeWrapper
+,
 }:
 
 let

@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  curl,
-  expat,
-  jansson,
-  libpng,
-  libjpeg,
-  libGLU,
-  libGL,
-  libX11,
-  libsndfile,
-  libXxf86vm,
-  pcre,
-  pkg-config,
-  SDL2,
-  vim,
-  speex,
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, expat
+, jansson
+, libpng
+, libjpeg
+, libGLU
+, libGL
+, libX11
+, libsndfile
+, libXxf86vm
+, pcre
+, pkg-config
+, SDL2
+, vim
+, speex
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  useMpi ? false,
-  mpi,
+{ lib
+, stdenv
+, fetchFromGitHub
+, useMpi ? false
+, mpi
+,
 }:
 
 stdenv.mkDerivation rec {

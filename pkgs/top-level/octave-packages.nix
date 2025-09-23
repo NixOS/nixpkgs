@@ -11,13 +11,13 @@
 # Like python-packages.nix, packages from top-level.nix are not in the scope
 # of the `callPackage` used for packages here. So, when we do need packages
 # from outside, we can `inherit` them from `pkgs`.
-{
-  pkgs,
-  lib,
-  stdenv,
-  fetchurl,
-  newScope,
-  octave,
+{ pkgs
+, lib
+, stdenv
+, fetchurl
+, newScope
+, octave
+,
 }:
 
 let

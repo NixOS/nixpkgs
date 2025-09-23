@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  libpq,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libpq
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensmtpd-table-postgres";

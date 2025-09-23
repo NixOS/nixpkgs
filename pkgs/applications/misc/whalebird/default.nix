@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeWrapper,
-  electron_37,
-  yarn-berry,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, electron_37
+, yarn-berry
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

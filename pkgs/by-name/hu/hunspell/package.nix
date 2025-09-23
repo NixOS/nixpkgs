@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  callPackage,
-  fetchFromGitHub,
-  hunspellDicts,
-  ncurses,
-  nix-update-script,
-  readline,
-  testers,
-  validatePkgConfig,
+{ lib
+, stdenv
+, autoreconfHook
+, callPackage
+, fetchFromGitHub
+, hunspellDicts
+, ncurses
+, nix-update-script
+, readline
+, testers
+, validatePkgConfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

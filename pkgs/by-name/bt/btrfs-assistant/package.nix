@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  btrfs-progs,
-  cmake,
-  coreutils,
-  git,
-  pkg-config,
-  qt6,
-  snapper,
-  util-linux,
-  enableSnapper ? true,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, btrfs-progs
+, cmake
+, coreutils
+, git
+, pkg-config
+, qt6
+, snapper
+, util-linux
+, enableSnapper ? true
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

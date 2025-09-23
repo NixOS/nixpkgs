@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  audit,
-  pkg-config,
-  libcap,
-  gperf,
-  meson,
-  ninja,
-  python3,
-  getent,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, audit
+, pkg-config
+, libcap
+, gperf
+, meson
+, ninja
+, python3
+, getent
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

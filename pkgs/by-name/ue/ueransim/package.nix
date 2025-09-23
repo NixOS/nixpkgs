@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  pkg-config,
-  fetchFromGitHub,
-  lksctp-tools,
-  iproute2,
-  unstableGitUpdater,
-  makeWrapper,
+{ lib
+, stdenv
+, cmake
+, pkg-config
+, fetchFromGitHub
+, lksctp-tools
+, iproute2
+, unstableGitUpdater
+, makeWrapper
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ueransim";

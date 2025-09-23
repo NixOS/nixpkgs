@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  darwin,
-  makeWrapper,
-  shared-mime-info,
-  boost,
-  wxGTK32,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, darwin
+, makeWrapper
+, shared-mime-info
+, boost
+, wxGTK32
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

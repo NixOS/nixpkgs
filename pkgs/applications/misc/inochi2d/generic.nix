@@ -1,24 +1,21 @@
-{
-  lib,
-  buildDubPackage,
-  fetchFromGitHub,
-  writeShellScriptBin,
-
-  cmake,
-  gettext,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
-
-  dbus,
-  freetype,
-  SDL2,
-  zenity,
-  luajit_2_1,
-  libGL,
-  libX11,
-
-  builderArgs,
+{ lib
+, buildDubPackage
+, fetchFromGitHub
+, writeShellScriptBin
+, cmake
+, gettext
+, copyDesktopItems
+, makeDesktopItem
+, makeWrapper
+, dbus
+, freetype
+, SDL2
+, zenity
+, luajit_2_1
+, libGL
+, libX11
+, builderArgs
+,
 }:
 
 let
@@ -40,7 +37,7 @@ let
 in
 buildDubPackage (
   builderArgs
-  // {
+    // {
     nativeBuildInputs = [
       cmake # used for building `i2d-imgui`
       gettext # used when generating translations

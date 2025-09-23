@@ -1,8 +1,8 @@
-{
-  lib,
-  platforms,
-  appimageTools,
-  fetchurl,
+{ lib
+, platforms
+, appimageTools
+, fetchurl
+,
 }:
 let
   pname = "nosql-booster";

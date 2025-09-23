@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  gccStdenv,
-  autoreconfHook,
-  autoconf-archive,
-  pkg-config,
-  fetchurl,
-  fetchFromGitHub,
-  openal,
-  enet,
-  SDL2,
-  curl,
-  gettext,
-  libiconv,
+{ lib
+, stdenv
+, gccStdenv
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, fetchurl
+, fetchFromGitHub
+, openal
+, enet
+, SDL2
+, curl
+, gettext
+, libiconv
+,
 }:
 
 let

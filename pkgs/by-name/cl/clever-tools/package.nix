@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nodejs_20,
-  installShellFiles,
-  makeWrapper,
-  stdenv,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nodejs_20
+, installShellFiles
+, makeWrapper
+, stdenv
+,
 }:
 
 buildNpmPackage rec {

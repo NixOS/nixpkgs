@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  cstruct,
-  fmt,
-  lwt,
+{ lib
+, buildDunePackage
+, fetchurl
+, cstruct
+, fmt
+, lwt
+,
 }:
 
 buildDunePackage rec {

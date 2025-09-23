@@ -1,9 +1,9 @@
-{
-  lua,
-  hello,
-  wrapLua,
-  lib,
-  pkgs,
+{ lua
+, hello
+, wrapLua
+, lib
+, pkgs
+,
 }:
 let
   runTest =

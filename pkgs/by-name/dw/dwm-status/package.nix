@@ -1,21 +1,21 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  dbus,
-  gdk-pixbuf,
-  libnotify,
-  makeWrapper,
-  pkg-config,
-  libX11,
-  enableAlsaUtils ? true,
-  alsa-utils,
-  coreutils,
-  enableNetwork ? true,
-  dnsutils,
-  iproute2,
-  wirelesstools,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, dbus
+, gdk-pixbuf
+, libnotify
+, makeWrapper
+, pkg-config
+, libX11
+, enableAlsaUtils ? true
+, alsa-utils
+, coreutils
+, enableNetwork ? true
+, dnsutils
+, iproute2
+, wirelesstools
+, nix-update-script
+,
 }:
 
 let

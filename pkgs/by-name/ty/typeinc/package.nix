@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  nix-update-script,
-  installShellFiles,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, nix-update-script
+, installShellFiles
+, versionCheckHook
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "typeinc";

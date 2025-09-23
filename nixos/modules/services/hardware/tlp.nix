@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.tlp;
@@ -10,11 +9,14 @@ let
   # TODO: Use this for having proper parameters in the future
   mkTlpConfig =
     tlpConfig:
-    lib.generators.toKeyValue {
-      mkKeyValue = lib.generators.mkKeyValueDefault {
-        mkValueString = val: if lib.isList val then "\"" + (toString val) + "\"" else toString val;
-      } "=";
-    } tlpConfig;
+    lib.generators.toKeyValue
+      {
+        mkKeyValue = lib.generators.mkKeyValueDefault
+          {
+            mkValueString = val: if lib.isList val then "\"" + (toString val) + "\"" else toString val;
+          } "=";
+      }
+      tlpConfig;
 in
 {
   ###### interface

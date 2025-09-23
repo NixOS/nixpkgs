@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  construct,
-  paho-mqtt,
-  pyserial-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, construct
+, paho-mqtt
+, pyserial-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

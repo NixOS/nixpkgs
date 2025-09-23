@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  libsecret,
+{ lib
+, buildDotnetModule
+, dotnetCorePackages
+, fetchFromGitHub
+, libsecret
+,
 }:
 buildDotnetModule rec {
   pname = "msgraph-cli";

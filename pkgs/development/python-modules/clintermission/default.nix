@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  prompt-toolkit,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, prompt-toolkit
+,
 }:
 
 buildPythonPackage rec {

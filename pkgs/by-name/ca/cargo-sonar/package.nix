@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, versionCheckHook
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-sonar";

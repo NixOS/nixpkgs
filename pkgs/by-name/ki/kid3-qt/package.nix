@@ -1,5 +1,5 @@
-{
-  kid3,
+{ kid3
+,
 }:
 
 kid3.override {

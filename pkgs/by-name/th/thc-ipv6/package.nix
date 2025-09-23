@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libpcap,
-  openssl,
-  libnetfilter_queue,
-  libnfnetlink,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpcap
+, openssl
+, libnetfilter_queue
+, libnfnetlink
+,
 }:
 stdenv.mkDerivation rec {
   pname = "thc-ipv6";

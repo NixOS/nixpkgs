@@ -1,17 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-
-  callPackage,
-
-  # for passthru.tests
-  imagemagick,
-  libheif,
-  imlib2Full,
-  gst_all_1,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, callPackage
+, # for passthru.tests
+  imagemagick
+, libheif
+, imlib2Full
+, gst_all_1
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

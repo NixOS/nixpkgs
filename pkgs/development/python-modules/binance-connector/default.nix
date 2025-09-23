@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pycryptodome,
-  pythonOlder,
-  requests,
-  setuptools,
-  websocket-client,
-  # dependencies for tests
-  pytest-cov-stub,
-  sure,
-  responses,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pycryptodome
+, pythonOlder
+, requests
+, setuptools
+, websocket-client
+, # dependencies for tests
+  pytest-cov-stub
+, sure
+, responses
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

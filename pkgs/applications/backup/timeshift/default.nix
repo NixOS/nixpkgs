@@ -1,15 +1,15 @@
-{
-  callPackage,
-  btrfs-progs,
-  coreutils,
-  cron,
-  debianutils,
-  grubPackage,
-  mount,
-  psmisc,
-  rsync,
-  timeshift-unwrapped,
-  umount,
+{ callPackage
+, btrfs-progs
+, coreutils
+, cron
+, debianutils
+, grubPackage
+, mount
+, psmisc
+, rsync
+, timeshift-unwrapped
+, umount
+,
 }:
 let
   timeshift-wrapper = callPackage ./wrapper.nix { };

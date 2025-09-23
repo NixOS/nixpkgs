@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  clang,
-  ffmpeg-headless,
-  openssl,
-  alsa-lib,
-  opencv,
-  makeWrapper,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, clang
+, ffmpeg-headless
+, openssl
+, alsa-lib
+, opencv
+, makeWrapper
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tplay";

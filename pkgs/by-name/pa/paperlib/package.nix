@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  appimageTools,
-  undmg,
-  _7zz,
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, undmg
+, _7zz
+,
 }:
 let
   pname = "paperlib";
@@ -24,8 +24,7 @@ let
           url = "https://github.com/Future-Scholars/paperlib/releases/download/release-electron-${version}/Paperlib_${version}.AppImage";
           hash = "sha256-uBYhiUL4YWwnLLPvXMoXjlQqlqFep/OpwwnmPx7s5dY=";
         };
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   passthru = {
     inherit pname version src;
@@ -46,7 +45,8 @@ let
   };
 in
 if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+  stdenv.mkDerivation
+  {
     inherit
       pname
       version

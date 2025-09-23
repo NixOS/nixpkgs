@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  setuptools,
-  numpy,
-  psutil,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  trio,
-  untangle,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, setuptools
+, numpy
+, psutil
+, pytest-xdist
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, trio
+, untangle
+,
 }:
 
 buildPythonPackage rec {

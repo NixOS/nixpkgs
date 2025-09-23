@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  httpx,
-  xmltodict,
-  aiohttp,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, httpx
+, xmltodict
+, aiohttp
+,
 }:
 
 buildPythonPackage rec {

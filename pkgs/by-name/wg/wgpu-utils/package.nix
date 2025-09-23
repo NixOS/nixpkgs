@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  makeWrapper,
-  vulkan-loader,
-  freetype,
-  fontconfig,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, cmake
+, makeWrapper
+, vulkan-loader
+, freetype
+, fontconfig
+,
 }:
 
 rustPlatform.buildRustPackage rec {

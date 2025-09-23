@@ -1,9 +1,8 @@
-{
-  lib,
-  pkgs,
-  config,
-  options,
-  ...
+{ lib
+, pkgs
+, config
+, options
+, ...
 }:
 let
   cfg = config.programs.benchexec;
@@ -53,30 +52,36 @@ in
 
   config = lib.mkIf cfg.enable {
     assertions =
-      (map (user: {
-        assertion = config.users.users ? ${user};
-        message = ''
-          The user '${user}' intends to use BenchExec (via `${opt.users}`), but is not configured via `${options.users.users}`.
-        '';
-      }) (builtins.filter builtins.isString cfg.users))
-      ++ (map (id: {
-        assertion = config.users.mutableUsers;
-        message = ''
-          The user with UID '${id}' intends to use BenchExec (via `${opt.users}`), but mutable users are disabled via `${options.users.mutableUsers}`.
-        '';
-      }) (builtins.filter builtins.isInt cfg.users));
+      (map
+        (user: {
+          assertion = config.users.users ? ${user};
+          message = ''
+            The user '${user}' intends to use BenchExec (via `${opt.users}`), but is not configured via `${options.users.users}`.
+          '';
+        })
+        (builtins.filter builtins.isString cfg.users))
+      ++ (map
+        (id: {
+          assertion = config.users.mutableUsers;
+          message = ''
+            The user with UID '${id}' intends to use BenchExec (via `${opt.users}`), but mutable users are disabled via `${options.users.mutableUsers}`.
+          '';
+        })
+        (builtins.filter builtins.isInt cfg.users));
 
     environment.systemPackages = [ cfg.package ];
 
     # See <https://github.com/sosy-lab/benchexec/blob/3.18/doc/INSTALL.md#setting-up-cgroups>.
     systemd.services = builtins.listToAttrs (
-      map (user: {
-        name = "user@${builtins.toString (uid user)}";
-        value = {
-          serviceConfig.Delegate = "yes";
-          overrideStrategy = "asDropin";
-        };
-      }) (builtins.filter filterUsers cfg.users)
+      map
+        (user: {
+          name = "user@${builtins.toString (uid user)}";
+          value = {
+            serviceConfig.Delegate = "yes";
+            overrideStrategy = "asDropin";
+          };
+        })
+        (builtins.filter filterUsers cfg.users)
     );
 
     # See <https://github.com/sosy-lab/benchexec/blob/3.18/doc/INSTALL.md#requirements>.

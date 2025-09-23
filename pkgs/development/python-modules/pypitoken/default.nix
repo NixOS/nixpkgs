@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  jsonschema,
-  pymacaroons,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  typing-extensions,
-  uv-dynamic-versioning,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, jsonschema
+, pymacaroons
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+, uv-dynamic-versioning
+,
 }:
 
 buildPythonPackage rec {

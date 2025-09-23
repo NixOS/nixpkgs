@@ -1,12 +1,12 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage {

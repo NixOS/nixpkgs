@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  coreutils,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, coreutils
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libICE,
-  libXext,
-  libXi,
-  libXrandr,
-  libXxf86vm,
-  libGLX,
-  libGLU,
-  cmake,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, libICE
+, libXext
+, libXi
+, libXrandr
+, libXxf86vm
+, libGLX
+, libGLU
+, cmake
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

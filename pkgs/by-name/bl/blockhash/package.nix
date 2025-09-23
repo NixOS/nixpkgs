@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  pkg-config,
-  imagemagick,
-  wafHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, pkg-config
+, imagemagick
+, wafHook
+,
 }:
 
 stdenv.mkDerivation rec {

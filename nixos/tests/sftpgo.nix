@@ -243,13 +243,16 @@ in
             # Created shared folder directories
             "d ${statePath}/${sharedFolderName} 2770 ${sftpgoUser} ${sharedFolderName}   -"
           ]
-          ++ lib.mapAttrsToList (
-            name: user:
-            # Create private user directories
-            ''
-              d ${statePath}/users/${user.name} 0700 ${sftpgoUser} ${sftpgoGroup} -
-              d ${statePath}/users/${user.name}/private 0700 ${sftpgoUser} ${sftpgoGroup} -
-            '') (normalUsers nodes.server);
+          ++ lib.mapAttrsToList
+            (
+              name: user:
+                # Create private user directories
+                ''
+                  d ${statePath}/users/${user.name} 0700 ${sftpgoUser} ${sftpgoGroup} -
+                  d ${statePath}/users/${user.name}/private 0700 ${sftpgoUser} ${sftpgoGroup} -
+                ''
+            )
+            (normalUsers nodes.server);
 
         users.users =
           let
@@ -338,9 +341,10 @@ in
       accessSharedFoldersSubtest =
         {
           # The username to run as
-          username,
-          # Whether the tests are expected to succeed or not
-          shouldSucceed ? true,
+          username
+        , # Whether the tests are expected to succeed or not
+          shouldSucceed ? true
+        ,
         }:
         ''
           with subtest("Test whether ${username} can access shared folders"):

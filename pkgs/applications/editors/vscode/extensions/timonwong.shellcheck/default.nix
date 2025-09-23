@@ -1,9 +1,9 @@
-{
-  jq,
-  lib,
-  moreutils,
-  shellcheck,
-  vscode-utils,
+{ jq
+, lib
+, moreutils
+, shellcheck
+, vscode-utils
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  makeWrapper,
-  mpv,
-  pulseaudio,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, makeWrapper
+, mpv
+, pulseaudio
+,
 }:
 
 python3Packages.buildPythonApplication rec {

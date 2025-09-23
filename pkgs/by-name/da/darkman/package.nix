@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitLab,
-  buildGoModule,
-  scdoc,
-  nix-update-script,
+{ lib
+, fetchFromGitLab
+, buildGoModule
+, scdoc
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

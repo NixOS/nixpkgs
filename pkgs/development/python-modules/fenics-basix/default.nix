@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  scikit-build-core,
-  nanobind,
-  cmake,
-  ninja,
-  pkg-config,
-  blas,
-  lapack,
-  numpy,
-  sympy,
-  scipy,
-  matplotlib,
-  fenics-ufl,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, scikit-build-core
+, nanobind
+, cmake
+, ninja
+, pkg-config
+, blas
+, lapack
+, numpy
+, sympy
+, scipy
+, matplotlib
+, fenics-ufl
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

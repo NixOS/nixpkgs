@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  meson,
-  fetchFromGitHub,
-  pkg-config,
-  xorg,
-  libGL,
-  cairo,
-  glslang,
-  python3,
-  doxygen,
-  vulkan-loader,
-  vulkan-headers,
-  sphinx,
-  sphinxygen,
-  ninja,
+{ stdenv
+, lib
+, meson
+, fetchFromGitHub
+, pkg-config
+, xorg
+, libGL
+, cairo
+, glslang
+, python3
+, doxygen
+, vulkan-loader
+, vulkan-headers
+, sphinx
+, sphinxygen
+, ninja
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

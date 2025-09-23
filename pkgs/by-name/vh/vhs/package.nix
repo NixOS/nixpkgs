@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  installShellFiles,
-  fetchFromGitHub,
-  ffmpeg,
-  ttyd,
-  chromium,
-  makeWrapper,
+{ lib
+, stdenv
+, buildGoModule
+, installShellFiles
+, fetchFromGitHub
+, ffmpeg
+, ttyd
+, chromium
+, makeWrapper
+,
 }:
 
 buildGoModule rec {

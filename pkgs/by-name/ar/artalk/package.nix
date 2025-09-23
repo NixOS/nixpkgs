@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nodejs,
-  pnpm_9,
-  installShellFiles,
-  versionCheckHook,
-  stdenv,
-  nixosTests,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nodejs
+, pnpm_9
+, installShellFiles
+, versionCheckHook
+, stdenv
+, nixosTests
+,
 }:
 
 let

@@ -7,11 +7,10 @@ let
 
   mkUcarpHost =
     addr:
-    {
-      config,
-      pkgs,
-      lib,
-      ...
+    { config
+    , pkgs
+    , lib
+    , ...
     }:
     {
       networking.interfaces.eth1.ipv4.addresses = lib.mkForce [

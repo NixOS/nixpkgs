@@ -5,75 +5,71 @@
 # script that sets up the right environment variables so that the
 # compiler and the linker just "work".
 
-{
-  name ? "",
-  lib,
-  stdenvNoCC,
-  runtimeShell,
-  cc ? null,
-  libc ? null,
-  bintools,
-  coreutils ? null,
-  apple-sdk ? null,
-  nativeTools,
-  noLibc ? false,
-  nativeLibc,
-  nativePrefix ? "",
-  propagateDoc ? cc != null && cc ? man,
-  extraTools ? [ ],
-  extraPackages ? [ ],
-  extraBuildCommands ? "",
-  nixSupport ? { },
-  isGNU ? false,
-  isClang ? cc.isClang or false,
-  isZig ? cc.isZig or false,
-  isArocc ? cc.isArocc or false,
-  isCcache ? cc.isCcache or false,
-  gnugrep ? null,
-  expand-response-params,
-  libcxx ? null,
+{ name ? ""
+, lib
+, stdenvNoCC
+, runtimeShell
+, cc ? null
+, libc ? null
+, bintools
+, coreutils ? null
+, apple-sdk ? null
+, nativeTools
+, noLibc ? false
+, nativeLibc
+, nativePrefix ? ""
+, propagateDoc ? cc != null && cc ? man
+, extraTools ? [ ]
+, extraPackages ? [ ]
+, extraBuildCommands ? ""
+, nixSupport ? { }
+, isGNU ? false
+, isClang ? cc.isClang or false
+, isZig ? cc.isZig or false
+, isArocc ? cc.isArocc or false
+, isCcache ? cc.isCcache or false
+, gnugrep ? null
+, expand-response-params
+, libcxx ? null
+, # Whether or not to add `-B` and `-L` to `nix-support/cc-{c,ld}flags`
+  useCcForLibs ? # Always add these flags for Clang, because in order to compile (most
+  # software) it needs libraries that are shipped and compiled with gcc.
+  if isClang then
+    true
 
-  # Whether or not to add `-B` and `-L` to `nix-support/cc-{c,ld}flags`
-  useCcForLibs ?
+  # Never add these flags for a build!=host cross-compiler or a host!=target
+  # ("cross-built-native") compiler; currently nixpkgs has a special build
+  # path for these (`crossStageStatic`).  Hopefully at some point that build
+  # path will be merged with this one and this conditional will be removed.
+  else if (with stdenvNoCC; buildPlatform != hostPlatform || hostPlatform != targetPlatform) then
+    false
 
-    # Always add these flags for Clang, because in order to compile (most
-    # software) it needs libraries that are shipped and compiled with gcc.
-    if isClang then
-      true
+  # Never add these flags when wrapping the bootstrapFiles' compiler; it has a
+  # /usr/-like layout with everything smashed into a single outpath, so it has
+  # no trouble finding its own libraries.
+  else if (cc.passthru.isFromBootstrapFiles or false) then
+    false
 
-    # Never add these flags for a build!=host cross-compiler or a host!=target
-    # ("cross-built-native") compiler; currently nixpkgs has a special build
-    # path for these (`crossStageStatic`).  Hopefully at some point that build
-    # path will be merged with this one and this conditional will be removed.
-    else if (with stdenvNoCC; buildPlatform != hostPlatform || hostPlatform != targetPlatform) then
-      false
+  # Add these flags when wrapping `xgcc` (the first compiler that nixpkgs builds)
+  else if (cc.passthru.isXgcc or false) then
+    true
 
-    # Never add these flags when wrapping the bootstrapFiles' compiler; it has a
-    # /usr/-like layout with everything smashed into a single outpath, so it has
-    # no trouble finding its own libraries.
-    else if (cc.passthru.isFromBootstrapFiles or false) then
-      false
+  # Add these flags when wrapping `stdenv.cc`
+  else if (cc.stdenv.cc.cc.passthru.isXgcc or false) then
+    true
 
-    # Add these flags when wrapping `xgcc` (the first compiler that nixpkgs builds)
-    else if (cc.passthru.isXgcc or false) then
-      true
-
-    # Add these flags when wrapping `stdenv.cc`
-    else if (cc.stdenv.cc.cc.passthru.isXgcc or false) then
-      true
-
-    # Do not add these flags in any other situation.  This is `false` mainly to
-    # prevent these flags from being added when wrapping *old* versions of gcc
-    # (e.g. `gcc6Stdenv`), since they will cause the old gcc to get `-B` and
-    # `-L` flags pointing at the new gcc's libstdc++ headers.  Example failure:
-    # https://hydra.nixos.org/build/213125495
-    else
-      false,
-
-  # the derivation at which the `-B` and `-L` flags added by `useCcForLibs` will point
-  gccForLibs ? if useCcForLibs then cc else null,
-  fortify-headers ? null,
-  includeFortifyHeaders ? null,
+  # Do not add these flags in any other situation.  This is `false` mainly to
+  # prevent these flags from being added when wrapping *old* versions of gcc
+  # (e.g. `gcc6Stdenv`), since they will cause the old gcc to get `-B` and
+  # `-L` flags pointing at the new gcc's libstdc++ headers.  Example failure:
+  # https://hydra.nixos.org/build/213125495
+  else
+    false
+, # the derivation at which the `-B` and `-L` flags added by `useCcForLibs` will point
+  gccForLibs ? if useCcForLibs then cc else null
+, fortify-headers ? null
+, includeFortifyHeaders ? null
+,
 }:
 
 assert nativeTools -> !propagateDoc && nativePrefix != "";
@@ -208,8 +204,7 @@ let
         "la64v1.0" = versionAtLeast ccVersion "14.0";
         "la64v1.1" = versionAtLeast ccVersion "14.0";
         la664 = versionAtLeast ccVersion "14.0";
-      }
-      .${arch} or true
+      }.${arch} or true
     else if isClang then
       {
         #Generic
@@ -240,8 +235,7 @@ let
         "la64v1.0" = versionAtLeast ccVersion "19.1";
         "la64v1.1" = versionAtLeast ccVersion "19.1";
         la664 = versionAtLeast ccVersion "19.1";
-      }
-      .${arch} or true
+      }.${arch} or true
     else
       false;
 
@@ -252,8 +246,7 @@ let
       {
         generic = true;
         intel = true;
-      }
-      .${tune} or (isGccArchSupported tune)
+      }.${tune} or (isGccArchSupported tune)
     # on arm64, the -mtune= values are specific processors
     else if targetPlatform.isAarch64 then
       (
@@ -262,21 +255,19 @@ let
             cortex-a53 = true;
             cortex-a72 = true;
             "cortex-a72.cortex-a53" = true;
-          }
-          .${tune} or false
+          }.${tune} or false
         else if isClang then
           {
             cortex-a53 = versionAtLeast ccVersion "3.9"; # llvm dfc5d1
-          }
-          .${tune} or false
+          }.${tune} or false
         else
           false
       )
     else if targetPlatform.isPower then
-      # powerpc does not support -march
+    # powerpc does not support -march
       true
     else if targetPlatform.isMips then
-      # for mips -mtune= takes the same values as -march
+    # for mips -mtune= takes the same values as -march
       isGccArchSupported tune
     else
       false;
@@ -295,8 +286,7 @@ let
           {
             # clang does not tune for big.LITTLE chips
             "cortex-a72.cortex-a53" = "cortex-a72";
-          }
-          .${tune} or tune
+          }.${tune} or tune
         else
           tune;
     in
@@ -315,35 +305,38 @@ let
     # Always add -march based on cpu in triple. Sometimes there is a
     # discrepancy (x86_64 vs. x86-64), so we provide an "arch" arg in
     # that case.
-    optional (
-      targetPlatform ? gcc.arch
-      && !(targetPlatform.isDarwin && targetPlatform.isAarch64)
-      && isGccArchSupported targetPlatform.gcc.arch
-    ) "-march=${targetPlatform.gcc.arch}"
+    optional
+      (
+        targetPlatform ? gcc.arch
+        && !(targetPlatform.isDarwin && targetPlatform.isAarch64)
+        && isGccArchSupported targetPlatform.gcc.arch
+      ) "-march=${targetPlatform.gcc.arch}"
     ++
-      # TODO: aarch64-darwin has mcpu incompatible with gcc
-      optional (
+    # TODO: aarch64-darwin has mcpu incompatible with gcc
+    optional
+      (
         targetPlatform ? gcc.cpu && !(targetPlatform.isDarwin && targetPlatform.isAarch64)
       ) "-mcpu=${targetPlatform.gcc.cpu}"
     ++
-      # -mfloat-abi only matters on arm32 but we set it here
-      # unconditionally just in case. If the abi specifically sets hard
-      # vs. soft floats we use it here.
-      optional (targetPlatform ? gcc.float-abi) "-mfloat-abi=${targetPlatform.gcc.float-abi}"
+    # -mfloat-abi only matters on arm32 but we set it here
+    # unconditionally just in case. If the abi specifically sets hard
+    # vs. soft floats we use it here.
+    optional (targetPlatform ? gcc.float-abi) "-mfloat-abi=${targetPlatform.gcc.float-abi}"
     ++ optional (targetPlatform ? gcc.fpu) "-mfpu=${targetPlatform.gcc.fpu}"
     ++ optional (targetPlatform ? gcc.mode) "-mmode=${targetPlatform.gcc.mode}"
     ++ optional (targetPlatform ? gcc.thumb) "-m${thumb}"
     ++ optional (tune != null) "-mtune=${tune}"
     ++
-      optional (targetPlatform ? gcc.strict-align)
-        "-m${optionalString (!targetPlatform.gcc.strict-align) "no-"}strict-align"
-    ++ optional (
-      targetPlatform ? gcc.cmodel
-      &&
+    optional (targetPlatform ? gcc.strict-align)
+      "-m${optionalString (!targetPlatform.gcc.strict-align) "no-"}strict-align"
+    ++ optional
+      (
+        targetPlatform ? gcc.cmodel
+        &&
         # TODO: clang on powerpcspe also needs a condition: https://github.com/llvm/llvm-project/issues/71356
         # https://releases.llvm.org/18.1.6/tools/clang/docs/ReleaseNotes.html#loongarch-support
         ((targetPlatform.isLoongArch64 && isClang) -> versionAtLeast ccVersion "18.1")
-    ) "-mcmodel=${targetPlatform.gcc.cmodel}";
+      ) "-mcmodel=${targetPlatform.gcc.cmodel}";
 
   defaultHardeningFlags = bintools.defaultHardeningFlags or [ ];
 
@@ -644,33 +637,35 @@ stdenvNoCC.mkDerivation {
     # https://clang.llvm.org/docs/Toolchain.html for all the axes one might
     # break `useLLVM` into.)
     +
-      optionalString
-        (
-          isClang
-          && targetPlatform.isLinux
-          && !(targetPlatform.useAndroidPrebuilt or false)
-          && !(targetPlatform.useLLVM or false)
-          && gccForLibs != null
-        )
-        (
-          ''
-            echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
+    optionalString
+      (
+        isClang
+        && targetPlatform.isLinux
+        && !(targetPlatform.useAndroidPrebuilt or false)
+        && !(targetPlatform.useLLVM or false)
+        && gccForLibs != null
+      )
+      (
+        ''
+          echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
 
-            # Pull in 'cc.out' target to get 'libstdc++fs.a'. It should be in
-            # 'cc.lib'. But it's a gcc package bug.
-            # TODO(trofi): remove once gcc is fixed to move libraries to .lib output.
-            echo "-L${gccForLibs}/${
-              optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}"
-            }/lib" >> $out/nix-support/cc-ldflags
-          ''
-          # this ensures that when clang passes -lgcc_s to lld (as it does
-          # when building e.g. firefox), lld is able to find libgcc_s.so
-          + optionals (!isArocc) (
-            concatMapStrings (libgcc: ''
+          # Pull in 'cc.out' target to get 'libstdc++fs.a'. It should be in
+          # 'cc.lib'. But it's a gcc package bug.
+          # TODO(trofi): remove once gcc is fixed to move libraries to .lib output.
+          echo "-L${gccForLibs}/${
+            optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}"
+          }/lib" >> $out/nix-support/cc-ldflags
+        ''
+        # this ensures that when clang passes -lgcc_s to lld (as it does
+        # when building e.g. firefox), lld is able to find libgcc_s.so
+        + optionals (!isArocc) (
+          concatMapStrings
+            (libgcc: ''
               echo "-L${libgcc}/lib" >> $out/nix-support/cc-ldflags
-            '') (toList (gccForLibs.libgcc or [ ]))
-          )
+            '')
+            (toList (gccForLibs.libgcc or [ ]))
         )
+      )
 
     ##
     ## General libc support
@@ -729,12 +724,12 @@ stdenvNoCC.mkDerivation {
     # We have a libc++ directly, we have one via "smuggled" GCC, or we have one
     # bundled with the C compiler because it is GCC
     +
-      optionalString
-        (libcxx != null || (useGccForLibs && gccForLibs.langCC or false) || (isGNU && cc.langCC or false))
-        ''
-          touch "$out/nix-support/libcxx-cxxflags"
-          touch "$out/nix-support/libcxx-ldflags"
-        ''
+    optionalString
+      (libcxx != null || (useGccForLibs && gccForLibs.langCC or false) || (isGNU && cc.langCC or false))
+      ''
+        touch "$out/nix-support/libcxx-cxxflags"
+        touch "$out/nix-support/libcxx-ldflags"
+      ''
     # Adding -isystem flags should be done only for clang; gcc
     # already knows how to find its own libstdc++, and adding
     # additional -isystem flags will confuse gfortran (see
@@ -801,16 +796,16 @@ stdenvNoCC.mkDerivation {
     # the flag there. See discussion in NixOS/nixpkgs#191152.
     #
     +
-      optionalString
-        (
-          (cc.isClang or false)
-          && !(cc.isROCm or false)
-          && !targetPlatform.isDarwin
-          && !targetPlatform.isAndroid
-        )
-        ''
-          echo " -nostdlibinc" >> $out/nix-support/cc-cflags
-        ''
+    optionalString
+      (
+        (cc.isClang or false)
+        && !(cc.isROCm or false)
+        && !targetPlatform.isDarwin
+        && !targetPlatform.isAndroid
+      )
+      ''
+        echo " -nostdlibinc" >> $out/nix-support/cc-cflags
+      ''
 
     ##
     ## Man page and info support

@@ -1,18 +1,17 @@
-{
-  fetchFromGitHub,
-  gperf,
-  openssl,
-  readline,
-  zlib,
-  cmake,
-  lib,
-  stdenv,
-  writeShellApplication,
-  common-updater-scripts,
-  jq,
-  buildPackages,
-
-  tde2eOnly ? false,
+{ fetchFromGitHub
+, gperf
+, openssl
+, readline
+, zlib
+, cmake
+, lib
+, stdenv
+, writeShellApplication
+, common-updater-scripts
+, jq
+, buildPackages
+, tde2eOnly ? false
+,
 }:
 
 let

@@ -1,48 +1,48 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeWrapper,
-  nixosTests,
-  buildPerlPackage,
-  coreutils,
-  curl,
-  git,
-  gnumake,
-  highlight,
-  libgit2,
-  libxcrypt,
-  man,
-  openssl,
-  pkg-config,
-  sqlite,
-  xapian,
-  AnyURIEscape,
-  DBDSQLite,
-  DBI,
-  EmailAddressXS,
-  EmailMIME,
-  IOSocketSSL,
-  # FIXME: to be packaged
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, nixosTests
+, buildPerlPackage
+, coreutils
+, curl
+, git
+, gnumake
+, highlight
+, libgit2
+, libxcrypt
+, man
+, openssl
+, pkg-config
+, sqlite
+, xapian
+, AnyURIEscape
+, DBDSQLite
+, DBI
+, EmailAddressXS
+, EmailMIME
+, IOSocketSSL
+, # FIXME: to be packaged
   #, IOSocketSocks
-  IPCRun,
-  Inline,
-  InlineC,
-  LinuxInotify2,
-  MailIMAPClient,
-  # FIXME: to be packaged
+  IPCRun
+, Inline
+, InlineC
+, LinuxInotify2
+, MailIMAPClient
+, # FIXME: to be packaged
   #, NetNetrc
   # FIXME: to be packaged
   #, NetNNTP
-  ParseRecDescent,
-  Plack,
-  PlackMiddlewareReverseProxy,
-  PlackTestExternalServer,
-  Xapian,
-  TestSimple13,
-  TimeDate,
-  URI,
-  XMLTreePP,
+  ParseRecDescent
+, Plack
+, PlackMiddlewareReverseProxy
+, PlackTestExternalServer
+, Xapian
+, TestSimple13
+, TimeDate
+, URI
+, XMLTreePP
+,
 }:
 
 let

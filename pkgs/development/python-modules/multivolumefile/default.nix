@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitea,
-  setuptools,
-  setuptools-scm,
-  hypothesis,
-  pytest-timeout,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitea
+, setuptools
+, setuptools-scm
+, hypothesis
+, pytest-timeout
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

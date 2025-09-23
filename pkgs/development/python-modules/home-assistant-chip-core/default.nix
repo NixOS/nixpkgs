@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  aenum,
-  home-assistant-chip-wheels,
-  coloredlogs,
-  construct,
-  cryptography,
-  dacite,
-  deprecation,
-  ecdsa,
-  ipdb,
-  mobly,
-  pygobject3,
-  pyyaml,
-  rich,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, aenum
+, home-assistant-chip-wheels
+, coloredlogs
+, construct
+, cryptography
+, dacite
+, deprecation
+, ecdsa
+, ipdb
+, mobly
+, pygobject3
+, pyyaml
+, rich
+,
 }:
 
 buildPythonPackage rec {

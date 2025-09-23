@@ -1,16 +1,14 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  installShellFiles,
-
-  waylandSupport ? true,
-  x11Support ? true,
-
-  wl-clipboard,
-  wtype,
-  xdotool,
-  xsel,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, installShellFiles
+, waylandSupport ? true
+, x11Support ? true
+, wl-clipboard
+, wtype
+, xdotool
+, xsel
+,
 }:
 
 python3Packages.buildPythonApplication rec {

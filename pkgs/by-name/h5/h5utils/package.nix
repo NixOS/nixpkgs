@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  hdf5,
-  libpng,
-  libjpeg,
-  hdf4 ? null,
-  libmatheval ? null,
+{ stdenv
+, fetchurl
+, lib
+, hdf5
+, libpng
+, libjpeg
+, hdf4 ? null
+, libmatheval ? null
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

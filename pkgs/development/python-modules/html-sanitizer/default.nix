@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  lxml,
-  lxml-html-clean,
-  beautifulsoup4,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  lxml
+, lxml-html-clean
+, beautifulsoup4
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

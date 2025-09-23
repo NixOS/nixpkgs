@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  nim,
+{ lib
+, stdenv
+, nim
+,
 }:
 
 stdenv.mkDerivation {

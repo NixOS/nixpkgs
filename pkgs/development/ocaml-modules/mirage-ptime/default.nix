@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  ptime,
-  version ? "5.1.0",
+{ lib
+, buildDunePackage
+, fetchurl
+, ptime
+, version ? "5.1.0"
+,
 }:
 
 buildDunePackage {

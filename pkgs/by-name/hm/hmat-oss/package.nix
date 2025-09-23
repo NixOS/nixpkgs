@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  blas,
-  lapack,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, blas
+, lapack
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

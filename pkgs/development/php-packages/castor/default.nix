@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  php,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, php
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 php.buildComposerProject2 (finalAttrs: {

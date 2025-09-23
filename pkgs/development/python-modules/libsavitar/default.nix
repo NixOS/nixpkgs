@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  python,
-  pythonOlder,
-  fetchFromGitHub,
-  cmake,
-  sip4,
+{ lib
+, buildPythonPackage
+, python
+, pythonOlder
+, fetchFromGitHub
+, cmake
+, sip4
+,
 }:
 
 buildPythonPackage rec {

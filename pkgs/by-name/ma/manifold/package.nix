@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  clipper2,
-  gtest,
-  glm,
-  tbb_2022,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, clipper2
+, gtest
+, glm
+, tbb_2022
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

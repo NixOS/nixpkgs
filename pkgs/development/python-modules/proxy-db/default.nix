@@ -1,15 +1,15 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-mock,
-  six,
-  sqlalchemy,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, six
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

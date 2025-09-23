@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  fonttools,
-  defcon,
-  fontmath,
-  booleanoperations,
-
-  # tests
-  python,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  fonttools
+, defcon
+, fontmath
+, booleanoperations
+, # tests
+  python
+,
 }:
 
 buildPythonPackage rec {

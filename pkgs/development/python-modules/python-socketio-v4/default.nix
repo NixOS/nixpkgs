@@ -1,14 +1,14 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  python-engineio-v3,
-  requests,
-  setuptools,
-  six,
-  websocket-client,
-  websockets,
+{ aiohttp
+, buildPythonPackage
+, fetchPypi
+, lib
+, python-engineio-v3
+, requests
+, setuptools
+, six
+, websocket-client
+, websockets
+,
 }:
 
 buildPythonPackage rec {

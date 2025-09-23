@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  libxcrypt,
-  nixosTests,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, libxcrypt
+, nixosTests
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

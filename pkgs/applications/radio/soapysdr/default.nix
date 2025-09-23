@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  makeWrapper,
-  libusb-compat-0_1,
-  ncurses,
-  usePython ? false,
-  python ? null,
-  swig,
-  extraPackages ? [ ],
-  buildPackages,
-  testers,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, makeWrapper
+, libusb-compat-0_1
+, ncurses
+, usePython ? false
+, python ? null
+, swig
+, extraPackages ? [ ]
+, buildPackages
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

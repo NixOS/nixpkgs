@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchfossil,
-  docutils,
-  pkg-config,
-  freetype,
-  pango,
-  testers,
+{ lib
+, stdenv
+, fetchfossil
+, docutils
+, pkg-config
+, freetype
+, pango
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,22 +1,22 @@
-{
-  asciidoctor,
-  fetchFromRadicle,
-  gitMinimal,
-  installShellFiles,
-  jq,
-  lib,
-  makeBinaryWrapper,
-  man-db,
-  nixos,
-  nixosTests,
-  openssh,
-  radicle-node,
-  runCommand,
-  rustPlatform,
-  stdenv,
-  testers,
-  xdg-utils,
-  versionCheckHook,
+{ asciidoctor
+, fetchFromRadicle
+, gitMinimal
+, installShellFiles
+, jq
+, lib
+, makeBinaryWrapper
+, man-db
+, nixos
+, nixosTests
+, openssh
+, radicle-node
+, runCommand
+, rustPlatform
+, stdenv
+, testers
+, xdg-utils
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

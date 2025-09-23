@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  boost183,
-  cmake,
-  libuuid,
-  python3,
-  ruby,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, boost183
+, cmake
+, libuuid
+, python3
+, ruby
+,
 }:
 
 stdenv.mkDerivation rec {

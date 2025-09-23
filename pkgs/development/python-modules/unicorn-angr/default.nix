@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  distutils,
-  setuptools,
-  unicorn-angr,
+{ lib
+, stdenv
+, buildPythonPackage
+, distutils
+, setuptools
+, unicorn-angr
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  python3,
-  addDriverRunpath,
-  libX11,
-  libXext,
-  xorgproto,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, python3
+, addDriverRunpath
+, libX11
+, libXext
+, xorgproto
+,
 }:
 
 stdenv.mkDerivation rec {

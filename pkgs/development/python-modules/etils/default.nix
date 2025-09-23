@@ -1,37 +1,35 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  flit-core,
-
-  # tests
-  chex,
-  jaxlib,
-  pytest-subtests,
-  pytest-xdist,
-  pytestCheckHook,
-  yapf,
-
-  # optional
-  jupyter,
-  mediapy,
-  numpy,
-  packaging,
-  protobuf,
-  fsspec,
-  importlib-resources,
-  typing-extensions,
-  zipp,
-  absl-py,
-  simple-parsing,
-  einops,
-  gcsfs,
-  s3fs,
-  tqdm,
-  dm-tree,
-  jax,
-  tensorflow,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, flit-core
+, # tests
+  chex
+, jaxlib
+, pytest-subtests
+, pytest-xdist
+, pytestCheckHook
+, yapf
+, # optional
+  jupyter
+, mediapy
+, numpy
+, packaging
+, protobuf
+, fsspec
+, importlib-resources
+, typing-extensions
+, zipp
+, absl-py
+, simple-parsing
+, einops
+, gcsfs
+, s3fs
+, tqdm
+, dm-tree
+, jax
+, tensorflow
+,
 }:
 
 buildPythonPackage rec {

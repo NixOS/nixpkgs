@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python-magic,
-  pythonOlder,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python-magic
+, pythonOlder
+, requests
+,
 }:
 
 buildPythonPackage rec {

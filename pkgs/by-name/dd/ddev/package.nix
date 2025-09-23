@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildGoModule rec {

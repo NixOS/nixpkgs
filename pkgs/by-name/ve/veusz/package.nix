@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  qt6,
+{ lib
+, python3Packages
+, fetchPypi
+, qt6
+,
 }:
 
 python3Packages.buildPythonApplication rec {

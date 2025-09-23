@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  makeWrapper,
-  # TODO: for jre 17+, we'll need a workaround:
+{ lib
+, stdenvNoCC
+, fetchurl
+, makeWrapper
+, # TODO: for jre 17+, we'll need a workaround:
   # https://gitlab.com/hdos/issues/-/issues/2004
-  openjdk11,
-  makeDesktopItem,
-  copyDesktopItems,
-  libGL,
+  openjdk11
+, makeDesktopItem
+, copyDesktopItems
+, libGL
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hdos";

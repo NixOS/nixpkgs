@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  robotframework,
-  paramiko,
-  scp,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, robotframework
+, paramiko
+, scp
+,
 }:
 
 buildPythonPackage rec {

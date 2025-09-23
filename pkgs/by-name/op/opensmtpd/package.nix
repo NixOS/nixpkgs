@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  autoconf-archive,
-  pkgconf,
-  libtool,
-  bison,
-  libevent,
-  zlib,
-  libressl,
-  db,
-  pam,
-  libxcrypt,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, autoconf-archive
+, pkgconf
+, libtool
+, bison
+, libevent
+, zlib
+, libressl
+, db
+, pam
+, libxcrypt
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,16 +1,15 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pytestCheckHook,
-  setuptools,
-
-  # dependencies
-  attrs,
-  babel,
-  fluent-syntax,
-  pytz,
-  typing-extensions,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytestCheckHook
+, setuptools
+, # dependencies
+  attrs
+, babel
+, fluent-syntax
+, pytz
+, typing-extensions
+,
 }:
 
 let

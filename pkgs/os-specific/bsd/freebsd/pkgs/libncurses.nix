@@ -1,9 +1,8 @@
-{
-  lib,
-  versionData,
-  mkDerivation,
-  libncurses-tinfo,
-  ...
+{ lib
+, versionData
+, mkDerivation
+, libncurses-tinfo
+, ...
 }:
 mkDerivation {
   path = "lib/ncurses/ncurses";

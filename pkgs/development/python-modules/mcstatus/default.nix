@@ -1,16 +1,16 @@
-{
-  lib,
-  asyncio-dgram,
-  buildPythonPackage,
-  dnspython,
-  fetchFromGitHub,
-  hatchling,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-rerunfailures,
-  pytestCheckHook,
-  typing-extensions,
-  uv-dynamic-versioning,
+{ lib
+, asyncio-dgram
+, buildPythonPackage
+, dnspython
+, fetchFromGitHub
+, hatchling
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-rerunfailures
+, pytestCheckHook
+, typing-extensions
+, uv-dynamic-versioning
+,
 }:
 
 buildPythonPackage rec {

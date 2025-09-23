@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.datadog-agent;
@@ -37,10 +36,12 @@ let
   # and because JSON is a valid subset of YAML.
   makeCheckConfigs =
     entries:
-    lib.mapAttrs' (name: conf: {
-      name = "datadog-agent/conf.d/${name}.d/conf.yaml";
-      value.source = pkgs.writeText "${name}-check-conf.yaml" (builtins.toJSON conf);
-    }) entries;
+    lib.mapAttrs'
+      (name: conf: {
+        name = "datadog-agent/conf.d/${name}.d/conf.yaml";
+        value.source = pkgs.writeText "${name}-check-conf.yaml" (builtins.toJSON conf);
+      })
+      entries;
 
   defaultChecks = {
     disk = cfg.diskCheck;
@@ -243,7 +244,7 @@ in
       type = lib.types.attrs;
       default = {
         init_config = { };
-        instances = [ { use_mount = "false"; } ];
+        instances = [{ use_mount = "false"; }];
       };
     };
 
@@ -287,22 +288,24 @@ in
       let
         makeService =
           attrs:
-          lib.recursiveUpdate {
-            path = [
-              datadogPkg
-              pkgs.sysstat
-              pkgs.procps
-              pkgs.iproute2
-            ];
-            wantedBy = [ "multi-user.target" ];
-            serviceConfig = {
-              User = "datadog";
-              Group = "datadog";
-              Restart = "always";
-              RestartSec = 2;
-            };
-            restartTriggers = [ datadogPkg ] ++ map (x: x.source) (lib.attrValues etcfiles);
-          } attrs;
+          lib.recursiveUpdate
+            {
+              path = [
+                datadogPkg
+                pkgs.sysstat
+                pkgs.procps
+                pkgs.iproute2
+              ];
+              wantedBy = [ "multi-user.target" ];
+              serviceConfig = {
+                User = "datadog";
+                Group = "datadog";
+                Restart = "always";
+                RestartSec = 2;
+              };
+              restartTriggers = [ datadogPkg ] ++ map (x: x.source) (lib.attrValues etcfiles);
+            }
+            attrs;
       in
       {
         datadog-agent = makeService {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  installShellFiles,
-  patsh,
-  coreutils,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, installShellFiles
+, patsh
+, coreutils
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

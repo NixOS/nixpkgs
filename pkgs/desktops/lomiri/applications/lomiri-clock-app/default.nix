@@ -1,28 +1,28 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  nixosTests,
-  cmake,
-  geonames,
-  gettext,
-  libusermetrics,
-  lomiri-content-hub,
-  lomiri-sounds,
-  lomiri-ui-toolkit,
-  makeWrapper,
-  mesa,
-  pkg-config,
-  qtbase,
-  qtdeclarative,
-  qtmultimedia,
-  qtpositioning,
-  qtsystems,
-  runtimeShell,
-  u1db-qt,
-  wrapQtAppsHook,
-  xvfb-run,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, nixosTests
+, cmake
+, geonames
+, gettext
+, libusermetrics
+, lomiri-content-hub
+, lomiri-sounds
+, lomiri-ui-toolkit
+, makeWrapper
+, mesa
+, pkg-config
+, qtbase
+, qtdeclarative
+, qtmultimedia
+, qtpositioning
+, qtsystems
+, runtimeShell
+, u1db-qt
+, wrapQtAppsHook
+, xvfb-run
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

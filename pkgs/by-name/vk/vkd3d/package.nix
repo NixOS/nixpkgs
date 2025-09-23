@@ -1,16 +1,16 @@
-{
-  lib,
-  autoreconfHook,
-  bison,
-  fetchFromGitLab,
-  flex,
-  perlPackages,
-  pkg-config,
-  spirv-headers,
-  stdenv,
-  vulkan-headers,
-  vulkan-loader,
-  wine,
+{ lib
+, autoreconfHook
+, bison
+, fetchFromGitLab
+, flex
+, perlPackages
+, pkg-config
+, spirv-headers
+, stdenv
+, vulkan-headers
+, vulkan-loader
+, wine
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

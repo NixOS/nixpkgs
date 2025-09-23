@@ -1,34 +1,29 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  exceptiongroup,
-  idna,
-  sniffio,
-  typing-extensions,
-
-  # optionals
-  trio,
-
-  # tests
-  blockbuster,
-  hypothesis,
-  psutil,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
-  trustme,
-  uvloop,
-
-  # smoke tests
-  starlette,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools-scm
+, # dependencies
+  exceptiongroup
+, idna
+, sniffio
+, typing-extensions
+, # optionals
+  trio
+, # tests
+  blockbuster
+, hypothesis
+, psutil
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, trustme
+, uvloop
+, # smoke tests
+  starlette
+,
 }:
 
 buildPythonPackage rec {

@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  zlib,
-  libgcc,
-  fontconfig,
-  libX11,
-  lttng-ust,
-  icu,
-  libICE,
-  libSM,
-  libXcursor,
-  openssl,
-  imagemagick,
-  makeWrapper,
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, zlib
+, libgcc
+, fontconfig
+, libX11
+, lttng-ust
+, icu
+, libICE
+, libSM
+, libXcursor
+, openssl
+, imagemagick
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

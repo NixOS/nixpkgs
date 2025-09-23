@@ -1,8 +1,8 @@
-{
-  lib,
-  awscli,
-  fetchFromGitHub,
-  python3,
+{ lib
+, awscli
+, fetchFromGitHub
+, python3
+,
 }:
 
 let

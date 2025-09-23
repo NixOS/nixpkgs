@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  makeWrapper,
-  fftw,
-  lapack,
-  openblas,
-  runCommandLocal,
-  raspa,
-  raspa-data,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, makeWrapper
+, fftw
+, lapack
+, openblas
+, runCommandLocal
+, raspa
+, raspa-data
+,
 }:
 stdenv.mkDerivation rec {
   pname = "raspa";

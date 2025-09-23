@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  lib,
-  flutter332,
-  quickemu,
+{ fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, lib
+, flutter332
+, quickemu
+,
 }:
 flutter332.buildFlutterApplication rec {
   pname = "quickgui";

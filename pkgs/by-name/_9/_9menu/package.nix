@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  meson,
-  ninja,
-  libX11,
-  libXext,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, meson
+, ninja
+, libX11
+, libXext
+,
 }:
 
 stdenv.mkDerivation {

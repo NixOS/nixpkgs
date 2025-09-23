@@ -1,25 +1,25 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  bpftools,
-  lib,
-  nspr,
-  libpcap,
-  clang,
-  fd,
-  go-bindata,
-  glibc,
-  gnutls,
-  bashInteractive,
-  postgresql,
-  mariadb,
-  openssl,
-  bash,
-  zsh,
-  nix-update-script,
-  llvmPackages,
-  withNonBTF ? false,
-  kernel ? null,
+{ buildGoModule
+, fetchFromGitHub
+, bpftools
+, lib
+, nspr
+, libpcap
+, clang
+, fd
+, go-bindata
+, glibc
+, gnutls
+, bashInteractive
+, postgresql
+, mariadb
+, openssl
+, bash
+, zsh
+, nix-update-script
+, llvmPackages
+, withNonBTF ? false
+, kernel ? null
+,
 }:
 
 buildGoModule rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mock,
-  parameterized,
-  pip,
-  pyelftools,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mock
+, parameterized
+, pip
+, pyelftools
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

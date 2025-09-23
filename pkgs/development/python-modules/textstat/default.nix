@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cmudict,
-  setuptools,
-  pyphen,
-  pytestCheckHook,
-  pytest,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cmudict
+, setuptools
+, pyphen
+, pytestCheckHook
+, pytest
+,
 }:
 buildPythonPackage rec {
   version = "0.7.8";

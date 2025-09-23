@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  jax,
-  jaxlib,
-  tensorflow-probability,
-
-  # tests
-  inference-gym,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  poetry-core
+, # dependencies
+  jax
+, jaxlib
+, tensorflow-probability
+, # tests
+  inference-gym
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

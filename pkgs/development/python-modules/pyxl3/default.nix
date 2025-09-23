@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  isPy27,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, isPy27
+,
 }:
 
 buildPythonPackage {

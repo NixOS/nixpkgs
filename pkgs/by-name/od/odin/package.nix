@@ -1,10 +1,10 @@
-{
-  lib,
-  llvmPackages,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  which,
-  nix-update-script,
+{ lib
+, llvmPackages
+, fetchFromGitHub
+, makeBinaryWrapper
+, which
+, nix-update-script
+,
 }:
 
 let

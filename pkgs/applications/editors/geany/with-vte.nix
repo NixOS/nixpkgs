@@ -1,8 +1,8 @@
-{
-  symlinkJoin,
-  makeWrapper,
-  geany,
-  vte,
+{ symlinkJoin
+, makeWrapper
+, geany
+, vte
+,
 }:
 
 symlinkJoin {

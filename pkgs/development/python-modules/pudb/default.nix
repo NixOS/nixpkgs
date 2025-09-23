@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  hatchling,
-  fetchPypi,
-  jedi,
-  packaging,
-  pygments,
-  urwid,
-  urwid-readline,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, hatchling
+, fetchPypi
+, jedi
+, packaging
+, pygments
+, urwid
+, urwid-readline
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

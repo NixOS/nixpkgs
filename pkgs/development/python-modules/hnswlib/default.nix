@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  hnswlib,
-  numpy,
-  pybind11,
-  setuptools,
-  unittestCheckHook,
+{ buildPythonPackage
+, hnswlib
+, numpy
+, pybind11
+, setuptools
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage {

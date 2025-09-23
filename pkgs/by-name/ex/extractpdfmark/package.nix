@@ -1,12 +1,12 @@
-{
-  autoreconfHook,
-  fetchFromGitHub,
-  ghostscript,
-  lib,
-  pkg-config,
-  poppler,
-  stdenv,
-  texlive,
+{ autoreconfHook
+, fetchFromGitHub
+, ghostscript
+, lib
+, pkg-config
+, poppler
+, stdenv
+, texlive
+,
 }:
 
 stdenv.mkDerivation rec {

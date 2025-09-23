@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  openssl,
-  zlib,
-  libuv,
-  # External poll is required for e.g. mosquitto, but discouraged by the maintainer.
-  withExternalPoll ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openssl
+, zlib
+, libuv
+, # External poll is required for e.g. mosquitto, but discouraged by the maintainer.
+  withExternalPoll ? false
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  glib,
-  inih,
-  lua,
-  bash-completion,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, glib
+, inih
+, lua
+, bash-completion
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

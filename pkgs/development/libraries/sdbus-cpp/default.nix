@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  expat,
-  pkg-config,
-  systemdLibs,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, expat
+, pkg-config
+, systemdLibs
+,
 }:
 let
   generic =
-    {
-      version,
-      rev ? "v${version}",
-      hash,
+    { version
+    , rev ? "v${version}"
+    , hash
+    ,
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "sdbus-cpp";

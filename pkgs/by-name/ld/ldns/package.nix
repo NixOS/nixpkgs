@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  perl,
-  which,
-  dns-root-data,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, perl
+, which
+, dns-root-data
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

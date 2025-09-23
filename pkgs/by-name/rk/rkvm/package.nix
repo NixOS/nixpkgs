@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  libevdev,
-  openssl,
-  makeWrapper,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, libevdev
+, openssl
+, makeWrapper
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage rec {

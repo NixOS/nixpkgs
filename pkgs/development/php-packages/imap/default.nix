@@ -1,14 +1,14 @@
-{
-  buildPecl,
-  fetchFromGitHub,
-  fetchpatch,
-  lib,
-  libkrb5,
-  openssl,
-  pam,
-  pcre2,
-  pkg-config,
-  uwimap,
+{ buildPecl
+, fetchFromGitHub
+, fetchpatch
+, lib
+, libkrb5
+, openssl
+, pam
+, pcre2
+, pkg-config
+, uwimap
+,
 }:
 
 let

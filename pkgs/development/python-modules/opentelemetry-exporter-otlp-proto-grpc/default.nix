@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  pythonOlder,
-  deprecated,
-  googleapis-common-protos,
-  grpcio,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-exporter-otlp-proto-common,
-  opentelemetry-proto,
-  opentelemetry-test-utils,
-  pytestCheckHook,
+{ buildPythonPackage
+, pythonOlder
+, deprecated
+, googleapis-common-protos
+, grpcio
+, hatchling
+, opentelemetry-api
+, opentelemetry-exporter-otlp-proto-common
+, opentelemetry-proto
+, opentelemetry-test-utils
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

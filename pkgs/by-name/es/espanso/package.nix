@@ -1,29 +1,29 @@
-{
-  lib,
-  coreutils,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  extra-cmake-modules,
-  dbus,
-  libX11,
-  libxcb,
-  libXi,
-  libXtst,
-  libnotify,
-  libxkbcommon,
-  libpng,
-  openssl,
-  xclip,
-  xdotool,
-  setxkbmap,
-  wl-clipboard,
-  wxGTK32,
-  makeWrapper,
-  stdenv,
-  waylandSupport ? false,
-  x11Support ? stdenv.hostPlatform.isLinux,
-  testers,
+{ lib
+, coreutils
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, extra-cmake-modules
+, dbus
+, libX11
+, libxcb
+, libXi
+, libXtst
+, libnotify
+, libxkbcommon
+, libpng
+, openssl
+, xclip
+, xdotool
+, setxkbmap
+, wl-clipboard
+, wxGTK32
+, makeWrapper
+, stdenv
+, waylandSupport ? false
+, x11Support ? stdenv.hostPlatform.isLinux
+, testers
+,
 }:
 # espanso does not support building with both X11 and Wayland support at the same time
 assert stdenv.hostPlatform.isLinux -> x11Support != waylandSupport;

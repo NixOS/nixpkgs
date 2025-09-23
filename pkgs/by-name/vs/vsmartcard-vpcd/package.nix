@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libtool,
-  autoreconfHook,
-  pcsclite,
-  qrencode,
-  python3,
-  help2man,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libtool
+, autoreconfHook
+, pcsclite
+, qrencode
+, python3
+, help2man
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

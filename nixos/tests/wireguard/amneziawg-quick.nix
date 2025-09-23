@@ -1,8 +1,7 @@
-{
-  lib,
-  kernelPackages ? null,
-  nftables ? false,
-  ...
+{ lib
+, kernelPackages ? null
+, nftables ? false
+, ...
 }:
 let
   wg-snakeoil-keys = import ./snakeoil-keys.nix;

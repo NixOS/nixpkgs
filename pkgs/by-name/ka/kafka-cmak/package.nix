@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  jdk,
-  gawk,
-  makeBinaryWrapper,
+{ lib
+, stdenvNoCC
+, fetchzip
+, jdk
+, gawk
+, makeBinaryWrapper
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

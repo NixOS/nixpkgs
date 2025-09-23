@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildDotnetModule,
-  buildGoModule,
-  dotnetCorePackages,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildDotnetModule
+, buildGoModule
+, dotnetCorePackages
+, versionCheckHook
+,
 }:
 let
   version = "4.0.7030";

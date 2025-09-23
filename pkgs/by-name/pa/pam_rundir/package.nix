@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pam,
+{ stdenv
+, lib
+, fetchurl
+, pam
+,
 }:
 stdenv.mkDerivation rec {
   pname = "pam_rundir";

@@ -1,20 +1,18 @@
-{
-  lib,
-  stdenv,
-  mkMesonLibrary,
+{ lib
+, stdenv
+, mkMesonLibrary
+, boost
+, brotli
+, libarchive
+, libblake3
+, libcpuid
+, libsodium
+, nlohmann_json
+, openssl
+, # Configuration Options
 
-  boost,
-  brotli,
-  libarchive,
-  libblake3,
-  libcpuid,
-  libsodium,
-  nlohmann_json,
-  openssl,
-
-  # Configuration Options
-
-  version,
+  version
+,
 }:
 
 mkMesonLibrary (finalAttrs: {

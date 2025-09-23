@@ -1,39 +1,36 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  audioread,
-  decorator,
-  joblib,
-  lazy-loader,
-  matplotlib,
-  msgpack,
-  numba,
-  numpy,
-  pooch,
-  scikit-learn,
-  scipy,
-  soundfile,
-  soxr,
-  standard-aifc,
-  standard-sunau,
-  typing-extensions,
-
-  # tests
-  ffmpeg-headless,
-  packaging,
-  pytest-cov-stub,
-  pytest-mpl,
-  pytestCheckHook,
-  resampy,
-  samplerate,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  audioread
+, decorator
+, joblib
+, lazy-loader
+, matplotlib
+, msgpack
+, numba
+, numpy
+, pooch
+, scikit-learn
+, scipy
+, soundfile
+, soxr
+, standard-aifc
+, standard-sunau
+, typing-extensions
+, # tests
+  ffmpeg-headless
+, packaging
+, pytest-cov-stub
+, pytest-mpl
+, pytestCheckHook
+, resampy
+, samplerate
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

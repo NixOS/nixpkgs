@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  autoreconfHook,
-  pkg-config,
-  pandoc,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, autoreconfHook
+, pkg-config
+, pandoc
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation rec {

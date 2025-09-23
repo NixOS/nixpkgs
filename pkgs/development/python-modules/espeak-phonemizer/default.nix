@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  espeak-ng,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, espeak-ng
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

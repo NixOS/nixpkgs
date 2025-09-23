@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bison,
-  flex,
-  perl,
-  curl,
-  libpng,
-  giflib,
-  alsa-lib,
-  readline,
-  libGLU,
-  libGL,
-  pkg-config,
-  gtk3,
-  glew,
-  SDL,
-  SDL_image,
-  dos2unix,
-  runtimeShell,
-  xa,
-  file,
-  wrapGAppsHook3,
-  xdg-utils,
-  libevdev,
-  pulseaudio,
+{ lib
+, stdenv
+, fetchurl
+, bison
+, flex
+, perl
+, curl
+, libpng
+, giflib
+, alsa-lib
+, readline
+, libGLU
+, libGL
+, pkg-config
+, gtk3
+, glew
+, SDL
+, SDL_image
+, dos2unix
+, runtimeShell
+, xa
+, file
+, wrapGAppsHook3
+, xdg-utils
+, libevdev
+, pulseaudio
+,
 }:
 
 stdenv.mkDerivation rec {

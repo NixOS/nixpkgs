@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  curl,
-  pkg-config,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, pkg-config
+, wrapGAppsHook3
+,
 }:
 stdenv.mkDerivation rec {
   pname = "sgdboop";

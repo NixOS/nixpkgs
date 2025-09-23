@@ -5,39 +5,36 @@ let
   versions = builtins.fromJSON (builtins.readFile ./bin/versions.json);
 in
 
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchurl,
-
-  jdk,
-  zlib,
-  python3,
-  lldb,
-  dotnetCorePackages,
-  maven,
-  openssl,
-  expat,
-  libxcrypt,
-  libxcrypt-legacy,
-  fontconfig,
-  libxml2,
-  runCommand,
-  musl,
-  R,
-  libgcc,
-  lttng-ust_2_12,
-  xz,
-  xorg,
-  libGL,
-
-  libICE,
-  libSM,
-  libX11,
-
-  vmopts ? null,
-  forceWayland ? false,
+{ lib
+, stdenv
+, callPackage
+, fetchurl
+, jdk
+, zlib
+, python3
+, lldb
+, dotnetCorePackages
+, maven
+, openssl
+, expat
+, libxcrypt
+, libxcrypt-legacy
+, fontconfig
+, libxml2
+, runCommand
+, musl
+, R
+, libgcc
+, lttng-ust_2_12
+, xz
+, xorg
+, libGL
+, libICE
+, libSM
+, libX11
+, vmopts ? null
+, forceWayland ? false
+,
 }:
 
 let
@@ -72,13 +69,13 @@ let
   };
 
   mkJetBrainsProduct =
-    {
-      pname,
-      fromSource ? false,
-      extraWrapperArgs ? [ ],
-      extraLdPath ? [ ],
-      extraBuildInputs ? [ ],
-      extraTests ? { },
+    { pname
+    , fromSource ? false
+    , extraWrapperArgs ? [ ]
+    , extraLdPath ? [ ]
+    , extraBuildInputs ? [ ]
+    , extraTests ? { }
+    ,
     }:
     mkJetBrainsProductCore {
       inherit

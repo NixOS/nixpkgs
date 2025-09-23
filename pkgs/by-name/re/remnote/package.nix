@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  writeScript,
+{ lib
+, fetchurl
+, appimageTools
+, writeScript
+,
 }:
 let
   pname = "remnote";

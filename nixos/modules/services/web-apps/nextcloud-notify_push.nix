@@ -1,9 +1,8 @@
-{
-  config,
-  options,
-  lib,
-  pkgs,
-  ...
+{ config
+, options
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -69,7 +68,7 @@ in
     (
       opt:
       options.services.nextcloud.config.${opt}
-      // {
+        // {
         default = config.services.nextcloud.config.${opt};
         defaultText = lib.literalExpression "config.services.nextcloud.config.${opt}";
       }

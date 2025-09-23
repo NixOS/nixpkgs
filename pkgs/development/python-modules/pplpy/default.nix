@@ -1,18 +1,17 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  gmp,
-  mpfr,
-  libmpc,
-  ppl,
-  cython,
-  cysignals,
-  gmpy2,
-  sphinx,
-
-  # Reverse dependency
-  sage,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, gmp
+, mpfr
+, libmpc
+, ppl
+, cython
+, cysignals
+, gmpy2
+, sphinx
+, # Reverse dependency
+  sage
+,
 }:
 
 buildPythonPackage rec {

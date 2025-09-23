@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildGoModule rec {

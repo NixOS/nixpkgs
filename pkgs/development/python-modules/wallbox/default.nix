@@ -1,10 +1,10 @@
-{
-  lib,
-  aenum,
-  buildPythonPackage,
-  fetchFromGitHub,
-  requests,
-  setuptools,
+{ lib
+, aenum
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

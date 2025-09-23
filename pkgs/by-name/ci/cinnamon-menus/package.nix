@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  glib,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  lib,
-  stdenv,
-  wrapGAppsHook3,
+{ fetchFromGitHub
+, glib
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, lib
+, stdenv
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

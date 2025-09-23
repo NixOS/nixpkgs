@@ -1,36 +1,36 @@
-{
-  stdenv,
-  buildFHSEnv,
-  fetchurl,
-  lib,
-  zlib,
-  gdbm,
-  libxslt,
-  libxml2,
-  libuuid,
-  readline,
-  readline70,
-  xz,
-  cups,
-  libaio,
-  vulkan-loader,
-  alsa-lib,
-  libpulseaudio,
-  libxcrypt-legacy,
-  libGL,
-  numactl,
-  xorg,
-  kmod,
-  python3,
-  autoPatchelfHook,
-  makeWrapper,
-  symlinkJoin,
-  enableInstaller ? false,
-  bzip2,
-  sqlite,
-  enableMacOSGuests ? false,
-  fetchFromGitHub,
-  unzip,
+{ stdenv
+, buildFHSEnv
+, fetchurl
+, lib
+, zlib
+, gdbm
+, libxslt
+, libxml2
+, libuuid
+, readline
+, readline70
+, xz
+, cups
+, libaio
+, vulkan-loader
+, alsa-lib
+, libpulseaudio
+, libxcrypt-legacy
+, libGL
+, numactl
+, xorg
+, kmod
+, python3
+, autoPatchelfHook
+, makeWrapper
+, symlinkJoin
+, enableInstaller ? false
+, bzip2
+, sqlite
+, enableMacOSGuests ? false
+, fetchFromGitHub
+, unzip
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

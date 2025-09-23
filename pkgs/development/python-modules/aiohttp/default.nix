@@ -1,50 +1,45 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  isPy310,
-  isPyPy,
-
-  # build-system
-  cython,
-  pkgconfig,
-  setuptools,
-
-  # native dependencies
-  llhttp,
-
-  # dependencies
-  aiohappyeyeballs,
-  aiosignal,
-  async-timeout,
-  attrs,
-  frozenlist,
-  multidict,
-  propcache,
-  yarl,
-
-  # optional dependencies
-  aiodns,
-  brotli,
-  brotlicffi,
-
-  # tests
-  blockbuster,
-  freezegun,
-  gunicorn,
-  isa-l,
-  isal,
-  proxy-py,
-  pytest-codspeed,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
-  re-assert,
-  trustme,
-  zlib-ng,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, isPy310
+, isPyPy
+, # build-system
+  cython
+, pkgconfig
+, setuptools
+, # native dependencies
+  llhttp
+, # dependencies
+  aiohappyeyeballs
+, aiosignal
+, async-timeout
+, attrs
+, frozenlist
+, multidict
+, propcache
+, yarl
+, # optional dependencies
+  aiodns
+, brotli
+, brotlicffi
+, # tests
+  blockbuster
+, freezegun
+, gunicorn
+, isa-l
+, isal
+, proxy-py
+, pytest-codspeed
+, pytest-cov-stub
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, re-assert
+, trustme
+, zlib-ng
+,
 }:
 
 buildPythonPackage rec {

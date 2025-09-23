@@ -1,43 +1,39 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  numpy,
-  packaging,
-  pandas,
-  pydantic,
-  typeguard,
-  typing-extensions,
-  typing-inspect,
-
-  # optional-dependencies
-  black,
-  dask,
-  fastapi,
-  geopandas,
-  hypothesis,
-  ibis-framework,
-  pandas-stubs,
-  polars,
-  pyyaml,
-  scipy,
-  shapely,
-
-  # tests
-  duckdb,
-  joblib,
-  pyarrow,
-  pyarrow-hotfix,
-  pytestCheckHook,
-  pytest-asyncio,
-  pythonAtLeast,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  numpy
+, packaging
+, pandas
+, pydantic
+, typeguard
+, typing-extensions
+, typing-inspect
+, # optional-dependencies
+  black
+, dask
+, fastapi
+, geopandas
+, hypothesis
+, ibis-framework
+, pandas-stubs
+, polars
+, pyyaml
+, scipy
+, shapely
+, # tests
+  duckdb
+, joblib
+, pyarrow
+, pyarrow-hotfix
+, pytestCheckHook
+, pytest-asyncio
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

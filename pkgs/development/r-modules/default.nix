@@ -9,10 +9,10 @@ let
   cranPackagesGenerated = importJSON ./cran-packages.json;
 in
 
-{
-  R,
-  pkgs,
-  overrides,
+{ R
+, pkgs
+, overrides
+,
 }:
 
 let
@@ -33,27 +33,27 @@ let
   # some packages, e.g. cncaGUI, require X running while installation,
   # so that we use xvfb-run if requireX is true.
   mkDerive =
-    {
-      mkHomepage,
-      mkUrls,
-      hydraPlatforms ? null,
+    { mkHomepage
+    , mkUrls
+    , hydraPlatforms ? null
+    ,
     }:
     args:
     let
       hydraPlatforms' = hydraPlatforms;
     in
     lib.makeOverridable (
-      {
-        name,
-        version,
-        sha256,
-        depends ? [ ],
-        doCheck ? true,
-        requireX ? false,
-        broken ? false,
-        platforms ? R.meta.platforms,
-        hydraPlatforms ? if hydraPlatforms' != null then hydraPlatforms' else platforms,
-        maintainers ? [ ],
+      { name
+      , version
+      , sha256
+      , depends ? [ ]
+      , doCheck ? true
+      , requireX ? false
+      , broken ? false
+      , platforms ? R.meta.platforms
+      , hydraPlatforms ? if hydraPlatforms' != null then hydraPlatforms' else platforms
+      , maintainers ? [ ]
+      ,
       }:
       buildRPackage {
         name = "${name}-${version}";
@@ -79,10 +79,10 @@ let
     mkHomepage =
       { name, biocVersion }: "https://bioconductor.org/packages/${biocVersion}/bioc/html/${name}.html";
     mkUrls =
-      {
-        name,
-        version,
-        biocVersion,
+      { name
+      , version
+      , biocVersion
+      ,
       }:
       [
         "mirror://bioc/${biocVersion}/bioc/src/contrib/${name}_${version}.tar.gz"
@@ -95,10 +95,10 @@ let
       { name, biocVersion }:
       "https://www.bioconductor.org/packages/${biocVersion}/data/annotation/html/${name}.html";
     mkUrls =
-      {
-        name,
-        version,
-        biocVersion,
+      { name
+      , version
+      , biocVersion
+      ,
       }:
       [
         "mirror://bioc/${biocVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz"
@@ -110,10 +110,10 @@ let
       { name, biocVersion }:
       "https://www.bioconductor.org/packages/${biocVersion}/data/experiment/html/${name}.html";
     mkUrls =
-      {
-        name,
-        version,
-        biocVersion,
+      { name
+      , version
+      , biocVersion
+      ,
       }:
       [
         "mirror://bioc/${biocVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz"
@@ -146,12 +146,14 @@ let
   # }
   overrideNativeBuildInputs =
     overrides: old:
-    lib.mapAttrs (
-      name: value:
-      (builtins.getAttr name old).overrideAttrs (attrs: {
-        nativeBuildInputs = attrs.nativeBuildInputs ++ value;
-      })
-    ) overrides;
+    lib.mapAttrs
+      (
+        name: value:
+        (builtins.getAttr name old).overrideAttrs (attrs: {
+          nativeBuildInputs = attrs.nativeBuildInputs ++ value;
+        })
+      )
+      overrides;
 
   # Overrides package definitions with buildInputs.
   # For example,
@@ -169,12 +171,14 @@ let
   # }
   overrideBuildInputs =
     overrides: old:
-    lib.mapAttrs (
-      name: value:
-      (builtins.getAttr name old).overrideAttrs (attrs: {
-        buildInputs = attrs.buildInputs ++ value;
-      })
-    ) overrides;
+    lib.mapAttrs
+      (
+        name: value:
+        (builtins.getAttr name old).overrideAttrs (attrs: {
+          buildInputs = attrs.buildInputs ++ value;
+        })
+      )
+      overrides;
 
   # Overrides package definitions with maintainers.
   # For example,
@@ -192,12 +196,14 @@ let
   # }
   overrideMaintainers =
     overrides: old:
-    lib.mapAttrs (
-      name: value:
-      (builtins.getAttr name old).override {
-        maintainers = value;
-      }
-    ) overrides;
+    lib.mapAttrs
+      (
+        name: value:
+        (builtins.getAttr name old).override {
+          maintainers = value;
+        }
+      )
+      overrides;
 
   # Overrides package definitions with new R dependencies.
   # For example,
@@ -216,13 +222,15 @@ let
   # }
   overrideRDepends =
     overrides: old:
-    lib.mapAttrs (
-      name: value:
-      (builtins.getAttr name old).overrideAttrs (attrs: {
-        nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ value;
-        propagatedNativeBuildInputs = (attrs.propagatedNativeBuildInputs or [ ]) ++ value;
-      })
-    ) overrides;
+    lib.mapAttrs
+      (
+        name: value:
+        (builtins.getAttr name old).overrideAttrs (attrs: {
+          nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ value;
+          propagatedNativeBuildInputs = (attrs.propagatedNativeBuildInputs or [ ]) ++ value;
+        })
+      )
+      overrides;
 
   # Overrides package definition requiring X running to install.
   # For example,
@@ -241,12 +249,14 @@ let
   overrideRequireX =
     packageNames: old:
     let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).override {
-          requireX = true;
-        };
-      }) packageNames;
+      nameValuePairs = map
+        (name: {
+          inherit name;
+          value = (builtins.getAttr name old).override {
+            requireX = true;
+          };
+        })
+        packageNames;
     in
     builtins.listToAttrs nameValuePairs;
 
@@ -271,15 +281,17 @@ let
   overrideRequireHome =
     packageNames: old:
     let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).overrideAttrs (oldAttrs: {
-          preInstall = ''
-            ${oldAttrs.preInstall or ""}
-            export HOME=$(mktemp -d)
-          '';
-        });
-      }) packageNames;
+      nameValuePairs = map
+        (name: {
+          inherit name;
+          value = (builtins.getAttr name old).overrideAttrs (oldAttrs: {
+            preInstall = ''
+              ${oldAttrs.preInstall or ""}
+              export HOME=$(mktemp -d)
+            '';
+          });
+        })
+        packageNames;
     in
     builtins.listToAttrs nameValuePairs;
 
@@ -300,12 +312,14 @@ let
   overrideSkipCheck =
     packageNames: old:
     let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).override {
-          doCheck = false;
-        };
-      }) packageNames;
+      nameValuePairs = map
+        (name: {
+          inherit name;
+          value = (builtins.getAttr name old).override {
+            doCheck = false;
+          };
+        })
+        packageNames;
     in
     builtins.listToAttrs nameValuePairs;
 
@@ -326,12 +340,14 @@ let
   overrideBroken =
     packageNames: old:
     let
-      nameValuePairs = map (name: {
-        inherit name;
-        value = (builtins.getAttr name old).override {
-          broken = true;
-        };
-      }) packageNames;
+      nameValuePairs = map
+        (name: {
+          inherit name;
+          value = (builtins.getAttr name old).override {
+            broken = true;
+          };
+        })
+        packageNames;
     in
     builtins.listToAttrs nameValuePairs;
 
@@ -371,12 +387,14 @@ let
   # and passing this new object to the provided derive function
   mkPackageSet =
     derive: packagesJSON:
-    lib.mapAttrs (
-      k: v:
-      derive packagesJSON.extraArgs (
-        v // { depends = lib.map (name: builtins.getAttr name self) v.depends; }
+    lib.mapAttrs
+      (
+        k: v:
+        derive packagesJSON.extraArgs (
+          v // { depends = lib.map (name: builtins.getAttr name self) v.depends; }
+        )
       )
-    ) packagesJSON.packages;
+      packagesJSON.packages;
 
   # tweaks for the individual packages and "in self" follow
 
@@ -1760,7 +1778,7 @@ let
         # Avoid incompatible pointer type error
         NIX_CFLAGS_COMPILE =
           attrs.env.NIX_CFLAGS_COMPILE
-          + " -Wno-implicit-function-declaration -Wno-incompatible-pointer-types";
+            + " -Wno-implicit-function-declaration -Wno-incompatible-pointer-types";
       };
     });
 
@@ -2490,7 +2508,7 @@ let
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE =
           attrs.env.NIX_CFLAGS_COMPILE
-          + lib.optionalString stdenv.hostPlatform.isDarwin " -Wno-error=missing-template-arg-list-after-template-kw";
+            + lib.optionalString stdenv.hostPlatform.isDarwin " -Wno-error=missing-template-arg-list-after-template-kw";
       };
     });
 
@@ -2528,7 +2546,7 @@ let
       env = (attrs.env or { }) // {
         NIX_CFLAGS_COMPILE =
           (attrs.env.NIX_CFLAGS_COMPILE or "")
-          + lib.optionalString stdenv.hostPlatform.isDarwin " -D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
+            + lib.optionalString stdenv.hostPlatform.isDarwin " -D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
       };
     });
 

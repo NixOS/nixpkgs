@@ -1,9 +1,9 @@
-{
-  lib,
-  buildKodiBinaryAddon,
-  fetchFromGitHub,
-  libretro,
-  snes9x,
+{ lib
+, buildKodiBinaryAddon
+, fetchFromGitHub
+, libretro
+, snes9x
+,
 }:
 
 buildKodiBinaryAddon rec {

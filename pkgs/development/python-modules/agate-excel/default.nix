@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  agate,
-  openpyxl,
-  xlrd,
-  olefile,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, agate
+, openpyxl
+, xlrd
+, olefile
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

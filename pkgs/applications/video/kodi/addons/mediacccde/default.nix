@@ -1,11 +1,11 @@
-{
-  lib,
-  rel,
-  buildKodiAddon,
-  fetchzip,
-  addonUpdateScript,
-  requests,
-  routing,
+{ lib
+, rel
+, buildKodiAddon
+, fetchzip
+, addonUpdateScript
+, requests
+, routing
+,
 }:
 
 buildKodiAddon rec {

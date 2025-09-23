@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libzip,
-  boost,
-  wt,
-  libconfig,
-  pkg-config,
-  libarchive,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libzip
+, boost
+, wt
+, libconfig
+, pkg-config
+, libarchive
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

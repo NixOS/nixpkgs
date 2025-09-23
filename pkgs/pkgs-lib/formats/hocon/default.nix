@@ -1,6 +1,6 @@
-{
-  lib,
-  pkgs,
+{ lib
+, pkgs
+,
 }:
 let
   inherit (pkgs) buildPackages callPackage;
@@ -32,10 +32,10 @@ let
 in
 {
   format =
-    {
-      generator ? hocon-generator,
-      validator ? hocon-validator,
-      doCheck ? true,
+    { generator ? hocon-generator
+    , validator ? hocon-validator
+    , doCheck ? true
+    ,
     }:
     let
       hoconLib = {
@@ -134,11 +134,11 @@ in
         name: value:
         callPackage
           (
-            {
-              stdenvNoCC,
-              hocon-generator,
-              hocon-validator,
-              writeText,
+            { stdenvNoCC
+            , hocon-generator
+            , hocon-validator
+            , writeText
+            ,
             }:
             stdenvNoCC.mkDerivation rec {
               inherit name;

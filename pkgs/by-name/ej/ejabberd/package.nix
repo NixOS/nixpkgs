@@ -1,41 +1,41 @@
-{
-  stdenv,
-  makeWrapper,
-  lib,
-  libpng,
-  libjpeg,
-  libwebp,
-  openssl,
-  expat,
-  libyaml,
-  bash,
-  gnused,
-  gnugrep,
-  coreutils,
-  util-linux,
-  procps,
-  gd,
-  autoreconfHook,
-  gawk,
-  fetchFromGitHub,
-  fetchgit,
-  fetchpatch2,
-  beamPackages,
-  nixosTests,
-  withMysql ? false,
-  withPgsql ? false,
-  withSqlite ? false,
-  sqlite,
-  withPam ? false,
-  pam,
-  withZlib ? true,
-  zlib,
-  withSip ? false,
-  withLua ? false,
-  withTools ? false,
-  withRedis ? false,
-  withImagemagick ? false,
-  imagemagick,
+{ stdenv
+, makeWrapper
+, lib
+, libpng
+, libjpeg
+, libwebp
+, openssl
+, expat
+, libyaml
+, bash
+, gnused
+, gnugrep
+, coreutils
+, util-linux
+, procps
+, gd
+, autoreconfHook
+, gawk
+, fetchFromGitHub
+, fetchgit
+, fetchpatch2
+, beamPackages
+, nixosTests
+, withMysql ? false
+, withPgsql ? false
+, withSqlite ? false
+, sqlite
+, withPam ? false
+, pam
+, withZlib ? true
+, zlib
+, withSip ? false
+, withLua ? false
+, withTools ? false
+, withRedis ? false
+, withImagemagick ? false
+, imagemagick
+,
 }:
 
 let

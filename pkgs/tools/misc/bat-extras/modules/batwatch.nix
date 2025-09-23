@@ -1,11 +1,10 @@
-{
-  lib,
-  buildBatExtrasPkg,
-  less,
-  coreutils,
-  entr,
-
-  withEntr ? true,
+{ lib
+, buildBatExtrasPkg
+, less
+, coreutils
+, entr
+, withEntr ? true
+,
 }:
 buildBatExtrasPkg {
   name = "batwatch";

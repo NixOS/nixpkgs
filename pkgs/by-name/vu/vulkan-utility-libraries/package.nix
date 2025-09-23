@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  vulkan-headers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, vulkan-headers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

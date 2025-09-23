@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  unittestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, unittestCheckHook
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "mdutils";

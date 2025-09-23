@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  zlib,
-  libjpeg,
-  SDL2,
-  libvorbis,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, zlib
+, libjpeg
+, SDL2
+, libvorbis
+, xorg
+,
 }:
 stdenv.mkDerivation {
   pname = "darkplaces";

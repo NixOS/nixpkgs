@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cctools,
-  fixDarwinDylibNames,
-  autoSignDarwinBinariesHook,
-  replaceVars,
-  buildPackages,
-  binutils,
+{ lib
+, stdenv
+, fetchurl
+, cctools
+, fixDarwinDylibNames
+, autoSignDarwinBinariesHook
+, replaceVars
+, buildPackages
+, binutils
+,
 }:
 
 stdenv.mkDerivation rec {

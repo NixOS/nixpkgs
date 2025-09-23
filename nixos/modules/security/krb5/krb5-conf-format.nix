@@ -32,8 +32,8 @@ let
     submodule
     ;
 in
-{
-  enableKdcACLEntries ? false,
+{ enableKdcACLEntries ? false
+,
 }:
 rec {
   sectionType =
@@ -163,11 +163,10 @@ rec {
       indent = str: concatMapStringsSep "\n" (line: "  " + line) (splitString "\n" str);
 
       formatToplevel =
-        args@{
-          include ? [ ],
-          includedir ? [ ],
-          module ? [ ],
-          ...
+        args@{ include ? [ ]
+        , includedir ? [ ]
+        , module ? [ ]
+        , ...
         }:
         let
           sections = removeAttrs args [
@@ -214,7 +213,7 @@ rec {
         "${name} = ${v}";
     in
     name: value:
-    pkgs.writeText name ''
-      ${formatToplevel value}
-    '';
+      pkgs.writeText name ''
+        ${formatToplevel value}
+      '';
 }

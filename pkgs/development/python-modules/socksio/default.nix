@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchpatch,
-  fetchPypi,
-  flit-core,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchpatch
+, fetchPypi
+, flit-core
+, pytestCheckHook
+,
 }:
 
 let

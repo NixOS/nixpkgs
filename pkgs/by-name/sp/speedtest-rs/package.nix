@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  openssl,
-  pkg-config,
-  stdenv,
-  nix-update-script,
-  testers,
-  speedtest-rs,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, openssl
+, pkg-config
+, stdenv
+, nix-update-script
+, testers
+, speedtest-rs
+,
 }:
 
 rustPlatform.buildRustPackage rec {

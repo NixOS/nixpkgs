@@ -1,15 +1,15 @@
-{
-  octave,
-  runCommand,
+{ octave
+, runCommand
+,
 }:
 package:
 
 runCommand "${package.name}-pkg-test"
-  {
-    nativeBuildInputs = [
-      (octave.withPackages (os: [ package ]))
-    ];
-  }
+{
+  nativeBuildInputs = [
+    (octave.withPackages (os: [ package ]))
+  ];
+}
   ''
     { octave-cli --eval 'pkg test ${package.pname}' || touch FAILED_ERRCODE; } \
       |& tee >( grep --quiet '^Failure Summary:$' && touch FAILED_OUTPUT || : ; cat >/dev/null )

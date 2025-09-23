@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  faraday,
-  core_unix ? null,
-  async,
+{ buildDunePackage
+, faraday
+, core_unix ? null
+, async
+,
 }:
 
 buildDunePackage {

@@ -27,18 +27,18 @@
 # Warning all binaries prior to the use of blood-elf will not be readable by
 # Objdump, you may need to use ndism or gdb to view the assembly in the binary.
 
-{
-  lib,
-  derivationWithMeta,
-  hostPlatform,
-  hex0,
-  m2libc,
-  src,
-  version,
-  platforms,
-  stage0Arch,
-  m2libcArch,
-  baseAddress,
+{ lib
+, derivationWithMeta
+, hostPlatform
+, hex0
+, m2libc
+, src
+, version
+, platforms
+, stage0Arch
+, m2libcArch
+, baseAddress
+,
 }:
 rec {
   out = placeholder "out";

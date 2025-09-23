@@ -1,22 +1,22 @@
-{
-  mkDerivation,
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  libuuid,
-  pkg-config,
-  libjpeg,
-  zlib,
-  libewf-legacy,
-  enableNtfs ? !stdenv.hostPlatform.isDarwin,
-  ntfs3g ? null,
-  enableExtFs ? !stdenv.hostPlatform.isDarwin,
-  e2fsprogs ? null,
-  enableQt ? false,
-  qtbase ? null,
-  qttools ? null,
-  qwt ? null,
+{ mkDerivation
+, lib
+, stdenv
+, fetchurl
+, ncurses
+, libuuid
+, pkg-config
+, libjpeg
+, zlib
+, libewf-legacy
+, enableNtfs ? !stdenv.hostPlatform.isDarwin
+, ntfs3g ? null
+, enableExtFs ? !stdenv.hostPlatform.isDarwin
+, e2fsprogs ? null
+, enableQt ? false
+, qtbase ? null
+, qttools ? null
+, qwt ? null
+,
 }:
 
 assert enableNtfs -> ntfs3g != null;

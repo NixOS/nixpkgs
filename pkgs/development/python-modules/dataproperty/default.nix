@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  loguru,
-  mbstrdecoder,
-  pytestCheckHook,
-  pythonOlder,
-  tcolorpy,
-  termcolor,
-  typepy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, loguru
+, mbstrdecoder
+, pytestCheckHook
+, pythonOlder
+, tcolorpy
+, termcolor
+, typepy
+,
 }:
 
 buildPythonPackage rec {

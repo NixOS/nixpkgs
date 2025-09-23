@@ -1,17 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  pkg-config,
-  autoreconfHook,
-  gtk2,
-  alsa-lib,
-  SDL,
-  jack2,
-  audiofile,
-  goocanvas, # graphical envelope editing
-  libxml2,
-  libsndfile,
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, autoreconfHook
+, gtk2
+, alsa-lib
+, SDL
+, jack2
+, audiofile
+, goocanvas
+, # graphical envelope editing
+  libxml2
+, libsndfile
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

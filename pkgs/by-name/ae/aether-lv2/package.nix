@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  lv2,
-  libX11,
-  libGL,
-  libGLU,
-  libgbm,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, lv2
+, libX11
+, libGL
+, libGLU
+, libgbm
+, cmake
+,
 }:
 
 stdenv.mkDerivation rec {

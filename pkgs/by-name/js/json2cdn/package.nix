@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gradle_8,
-  jre_headless,
-  makeBinaryWrapper,
-  tests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gradle_8
+, jre_headless
+, makeBinaryWrapper
+, tests
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "json2cdn";

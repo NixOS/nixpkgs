@@ -98,10 +98,10 @@ in
       generations
   */
   formatCapabilities =
-    {
-      cudaCapabilityToInfo,
-      cudaCapabilities,
-      cudaForwardCompat,
+    { cudaCapabilityToInfo
+    , cudaCapabilities
+    , cudaForwardCompat
+    ,
     }:
     let
       /**

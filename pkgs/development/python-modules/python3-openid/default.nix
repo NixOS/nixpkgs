@@ -1,9 +1,9 @@
-{
-  lib,
-  isPy3k,
-  buildPythonPackage,
-  fetchPypi,
-  defusedxml,
+{ lib
+, isPy3k
+, buildPythonPackage
+, fetchPypi
+, defusedxml
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchzip,
-  buildDotnetModule,
-  dotnetCorePackages,
-  luajitPackages,
-  sqlite,
-  libarchive,
-  curl,
-  love,
-  xdg-utils,
+{ lib
+, fetchFromGitHub
+, fetchzip
+, buildDotnetModule
+, dotnetCorePackages
+, luajitPackages
+, sqlite
+, libarchive
+, curl
+, love
+, xdg-utils
+,
 }:
 let
   lua_cpath =

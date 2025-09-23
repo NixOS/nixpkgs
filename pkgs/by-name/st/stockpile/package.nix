@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wrapGAppsHook4,
-  blueprint-compiler,
-  desktop-file-utils,
-  appstream-glib,
-  libadwaita,
+{ lib
+, stdenv
+, fetchFromGitea
+, meson
+, ninja
+, pkg-config
+, vala
+, wrapGAppsHook4
+, blueprint-compiler
+, desktop-file-utils
+, appstream-glib
+, libadwaita
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

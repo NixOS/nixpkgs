@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  docopt,
-  fetchFromGitHub,
-  flit-core,
-  hypothesis,
-  inform,
-  nestedtext,
-  pytestCheckHook,
-  pythonOlder,
-  quantiphy,
-  voluptuous,
+{ lib
+, buildPythonPackage
+, docopt
+, fetchFromGitHub
+, flit-core
+, hypothesis
+, inform
+, nestedtext
+, pytestCheckHook
+, pythonOlder
+, quantiphy
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,9 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, utils
+, ...
 }:
 #
 # TODO: zfs tunables
@@ -21,15 +20,19 @@ let
 
   selectModulePackage = package: config.boot.kernelPackages.${package.kernelModuleAttribute};
   clevisDatasets = lib.attrNames (
-    lib.filterAttrs (
-      device: _:
-      lib.any (
-        e:
-        e.fsType == "zfs"
-        && (utils.fsNeededForBoot e)
-        && (e.device == device || lib.hasPrefix "${device}/" e.device)
-      ) config.system.build.fileSystems
-    ) config.boot.initrd.clevis.devices
+    lib.filterAttrs
+      (
+        device: _:
+          lib.any
+            (
+              e:
+              e.fsType == "zfs"
+              && (utils.fsNeededForBoot e)
+              && (e.device == device || lib.hasPrefix "${device}/" e.device)
+            )
+            config.system.build.fileSystems
+      )
+      config.boot.initrd.clevis.devices
   );
 
   inInitrd = config.boot.initrd.supportedFilesystems.zfs or false;
@@ -80,10 +83,10 @@ let
   # latter case it makes one last attempt at importing, allowing the system to
   # (eventually) boot even with a degraded pool.
   importLib =
-    {
-      zpoolCmd,
-      awkCmd,
-      pool,
+    { zpoolCmd
+    , awkCmd
+    , pool
+    ,
     }:
     let
       devNodes =
@@ -153,11 +156,11 @@ let
       };
 
   createImportService =
-    {
-      pool,
-      systemd,
-      force,
-      prefix ? "",
+    { pool
+    , systemd
+    , force
+    , prefix ? ""
+    ,
     }:
     lib.nameValuePair "zfs-import-${pool}" {
       description = "Import ZFS pool \"${pool}\"";
@@ -255,24 +258,27 @@ let
         '';
     };
 
-  zedConf = lib.generators.toKeyValue {
-    mkKeyValue = lib.generators.mkKeyValueDefault {
-      mkValueString =
-        v:
-        if lib.isInt v then
-          toString v
-        else if lib.isString v then
-          "\"${v}\""
-        else if true == v then
-          "1"
-        else if false == v then
-          "0"
-        else if lib.isList v then
-          "\"" + (lib.concatStringsSep " " v) + "\""
-        else
-          lib.err "this value is" (toString v);
-    } "=";
-  } cfgZED.settings;
+  zedConf = lib.generators.toKeyValue
+    {
+      mkKeyValue = lib.generators.mkKeyValueDefault
+        {
+          mkValueString =
+            v:
+            if lib.isInt v then
+              toString v
+            else if lib.isString v then
+              "\"${v}\""
+            else if true == v then
+              "1"
+            else if false == v then
+              "0"
+            else if lib.isList v then
+              "\"" + (lib.concatStringsSep " " v) + "\""
+            else
+              lib.err "this value is" (toString v);
+        } "=";
+    }
+    cfgZED.settings;
 in
 
 {
@@ -596,10 +602,12 @@ in
     };
 
     services.zfs.expandOnBoot = lib.mkOption {
-      type = lib.types.either (lib.types.enum [
-        "disabled"
-        "all"
-      ]) (lib.types.listOf lib.types.str);
+      type = lib.types.either
+        (lib.types.enum [
+          "disabled"
+          "all"
+        ])
+        (lib.types.listOf lib.types.str);
       default = "disabled";
       example = [
         "tank"
@@ -741,39 +749,41 @@ in
                 pool = null;
               })
             ]
-            ++ (map (pool: ''
-              echo -n "importing root ZFS pool \"${pool}\"..."
-              # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
-              if ! poolImported "${pool}"; then
-                for _ in $(seq 1 60); do
-                  poolReady "${pool}" > /dev/null && msg="$(poolImport "${pool}" 2>&1)" && break
-                  sleep 1
-                  echo -n .
-                done
-                echo
-                if [[ -n "$msg" ]]; then
-                  echo "$msg";
+            ++ (map
+              (pool: ''
+                echo -n "importing root ZFS pool \"${pool}\"..."
+                # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
+                if ! poolImported "${pool}"; then
+                  for _ in $(seq 1 60); do
+                    poolReady "${pool}" > /dev/null && msg="$(poolImport "${pool}" 2>&1)" && break
+                    sleep 1
+                    echo -n .
+                  done
+                  echo
+                  if [[ -n "$msg" ]]; then
+                    echo "$msg";
+                  fi
+                  poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
                 fi
-                poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
-              fi
 
-              ${lib.optionalString config.boot.initrd.clevis.enable (
-                lib.concatMapStringsSep "\n" (
-                  elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem}"
-                ) (lib.filter (p: (lib.elemAt (lib.splitString "/" p) 0) == pool) clevisDatasets)
-              )}
+                ${lib.optionalString config.boot.initrd.clevis.enable (
+                  lib.concatMapStringsSep "\n" (
+                    elem: "clevis decrypt < /etc/clevis/${elem}.jwe | zfs load-key ${elem}"
+                  ) (lib.filter (p: (lib.elemAt (lib.splitString "/" p) 0) == pool) clevisDatasets)
+                )}
 
-              ${
-                if lib.isBool cfgZfs.requestEncryptionCredentials then
-                  lib.optionalString cfgZfs.requestEncryptionCredentials ''
-                    zfs load-key -a
-                  ''
-                else
-                  lib.concatMapStrings (fs: ''
-                    zfs load-key -- ${lib.escapeShellArg fs}
-                  '') (lib.filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials)
-              }
-            '') rootPools)
+                ${
+                  if lib.isBool cfgZfs.requestEncryptionCredentials then
+                    lib.optionalString cfgZfs.requestEncryptionCredentials ''
+                      zfs load-key -a
+                    ''
+                  else
+                    lib.concatMapStrings (fs: ''
+                      zfs load-key -- ${lib.escapeShellArg fs}
+                    '') (lib.filter (x: datasetToPool x == pool) cfgZfs.requestEncryptionCredentials)
+                }
+              '')
+              rootPools)
           )
         );
 
@@ -781,15 +791,17 @@ in
         systemd = lib.mkIf config.boot.initrd.systemd.enable {
           packages = [ cfgZfs.package ];
           services = lib.listToAttrs (
-            map (
-              pool:
-              createImportService {
-                inherit pool;
-                systemd = config.boot.initrd.systemd.package;
-                force = cfgZfs.forceImportRoot;
-                prefix = "/sysroot";
-              }
-            ) rootPools
+            map
+              (
+                pool:
+                createImportService {
+                  inherit pool;
+                  systemd = config.boot.initrd.systemd.package;
+                  force = cfgZfs.forceImportRoot;
+                  prefix = "/sysroot";
+                }
+              )
+              rootPools
           );
           targets.zfs-import.wantedBy = [ "zfs.target" ];
           targets.zfs.wantedBy = [ "initrd.target" ];
@@ -1001,18 +1013,20 @@ in
           numSnapshots = name: builtins.getAttr name cfgSnapshots;
         in
         builtins.listToAttrs (
-          map (snapName: {
-            name = "zfs-snapshot-${snapName}";
-            value = {
-              description = "ZFS auto-snapshotting every ${descr snapName}";
-              after = [ "zfs-import.target" ];
-              serviceConfig = {
-                Type = "oneshot";
-                ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} ${snapName} ${toString (numSnapshots snapName)}";
+          map
+            (snapName: {
+              name = "zfs-snapshot-${snapName}";
+              value = {
+                description = "ZFS auto-snapshotting every ${descr snapName}";
+                after = [ "zfs-import.target" ];
+                serviceConfig = {
+                  Type = "oneshot";
+                  ExecStart = "${zfsAutoSnap} ${cfgSnapFlags} ${snapName} ${toString (numSnapshots snapName)}";
+                };
+                restartIfChanged = false;
               };
-              restartIfChanged = false;
-            };
-          }) snapshotNames
+            })
+            snapshotNames
         );
 
       systemd.timers =
@@ -1020,16 +1034,18 @@ in
           timer = name: if name == "frequent" then "*:0,15,30,45" else name;
         in
         builtins.listToAttrs (
-          map (snapName: {
-            name = "zfs-snapshot-${snapName}";
-            value = {
-              wantedBy = [ "timers.target" ];
-              timerConfig = {
-                OnCalendar = timer snapName;
-                Persistent = lib.mkDefault "yes";
+          map
+            (snapName: {
+              name = "zfs-snapshot-${snapName}";
+              value = {
+                wantedBy = [ "timers.target" ];
+                timerConfig = {
+                  OnCalendar = timer snapName;
+                  Persistent = lib.mkDefault "yes";
+                };
               };
-            };
-          }) snapshotNames
+            })
+            snapshotNames
         );
     })
 

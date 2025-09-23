@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  hashcat,
-  ocl-icd,
-  tesseract,
-  testers,
-  opencl-clhpp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, hashcat
+, ocl-icd
+, tesseract
+, testers
+, opencl-clhpp
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

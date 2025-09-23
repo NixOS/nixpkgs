@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jre_headless,
-  gawk,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jre_headless
+, gawk
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

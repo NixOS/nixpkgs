@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  appstream,
-  cmake,
-  createrepo_c,
-  doxygen,
-  gettext,
-  help2man,
-  pkg-config,
-  python3Packages,
-  cppunit,
-  fmt,
-  json_c,
-  libmodulemd,
-  librepo,
-  util-linux,
-  libsolv,
-  libxml2,
-  libyaml,
-  pcre2,
-  rpm,
-  sdbus-cpp_2,
-  sphinx,
-  sqlite,
-  systemd,
-  versionCheckHook,
-  toml11,
-  zchunk,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream
+, cmake
+, createrepo_c
+, doxygen
+, gettext
+, help2man
+, pkg-config
+, python3Packages
+, cppunit
+, fmt
+, json_c
+, libmodulemd
+, librepo
+, util-linux
+, libsolv
+, libxml2
+, libyaml
+, pcre2
+, rpm
+, sdbus-cpp_2
+, sphinx
+, sqlite
+, systemd
+, versionCheckHook
+, toml11
+, zchunk
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

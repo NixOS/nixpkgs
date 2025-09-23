@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  python3Packages,
-  perl,
-  ffmpeg,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, python3Packages
+, perl
+, ffmpeg
+,
 }:
 
 let

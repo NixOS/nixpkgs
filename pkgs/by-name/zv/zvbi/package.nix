@@ -1,13 +1,13 @@
-{
-  autoreconfHook,
-  fetchFromGitHub,
-  gitUpdater,
-  lib,
-  libiconv,
-  libintl,
-  stdenv,
-  testers,
-  validatePkgConfig,
+{ autoreconfHook
+, fetchFromGitHub
+, gitUpdater
+, lib
+, libiconv
+, libintl
+, stdenv
+, testers
+, validatePkgConfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

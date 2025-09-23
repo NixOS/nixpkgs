@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  orjson,
-  pandas,
-  poetry-core,
-  polars,
-  pytest-mock,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  pyyaml,
-  requests,
-  tqdm,
-  typer,
-  websocket-client,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, orjson
+, pandas
+, poetry-core
+, polars
+, pytest-mock
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pyyaml
+, requests
+, tqdm
+, typer
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

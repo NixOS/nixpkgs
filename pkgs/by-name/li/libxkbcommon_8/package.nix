@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  bison,
-  doxygen,
-  xkeyboard_config,
-  libxcb,
-  libxml2,
-  python3,
-  libX11,
-  # To enable the "interactive-wayland" subcommand of xkbcli. This is the
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, bison
+, doxygen
+, xkeyboard_config
+, libxcb
+, libxml2
+, python3
+, libX11
+, # To enable the "interactive-wayland" subcommand of xkbcli. This is the
   # wayland equivalent of `xev` on X11.
-  xorg,
-  withWaylandTools ? stdenv.hostPlatform.isLinux,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  testers,
+  xorg
+, withWaylandTools ? stdenv.hostPlatform.isLinux
+, wayland
+, wayland-protocols
+, wayland-scanner
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  attr,
-  ebook_tools,
-  exiv2,
-  ffmpeg,
-  kconfig,
-  kdegraphics-mobipocket,
-  libappimage,
+{ mkKdeDerivation
+, pkg-config
+, attr
+, ebook_tools
+, exiv2
+, ffmpeg
+, kconfig
+, kdegraphics-mobipocket
+, libappimage
+,
 }:
 mkKdeDerivation {
   pname = "kfilemetadata";

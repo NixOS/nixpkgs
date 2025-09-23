@@ -1,9 +1,9 @@
 { python3 }:
 
-{
-  version,
-  src,
-  meta,
+{ version
+, src
+, meta
+,
 }:
 
 python3.pkgs.buildPythonApplication {

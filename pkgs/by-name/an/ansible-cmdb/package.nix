@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  replaceVars,
-  python3Packages,
-  testers,
-  ansible-cmdb,
+{ lib
+, fetchFromGitHub
+, replaceVars
+, python3Packages
+, testers
+, ansible-cmdb
+,
 }:
 let
   inherit (python3Packages)

@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bison,
-  cmake,
-  pkg-config,
-  boost,
-  icu,
-  libedit,
-  libevent,
-  lz4,
-  ncurses,
-  openssl,
-  protobuf,
-  re2,
-  readline,
-  zlib,
-  zstd,
-  libfido2,
-  numactl,
-  cctools,
-  developer_cmds,
-  libtirpc,
-  rpcsvc-proto,
-  curl,
-  DarwinTools,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, bison
+, cmake
+, pkg-config
+, boost
+, icu
+, libedit
+, libevent
+, lz4
+, ncurses
+, openssl
+, protobuf
+, re2
+, readline
+, zlib
+, zstd
+, libfido2
+, numactl
+, cctools
+, developer_cmds
+, libtirpc
+, rpcsvc-proto
+, curl
+, DarwinTools
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

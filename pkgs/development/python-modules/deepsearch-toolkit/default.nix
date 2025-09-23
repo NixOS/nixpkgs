@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  certifi,
-  docling-core,
-  platformdirs,
-  pluggy,
-  pydantic,
-  pydantic-settings,
-  python-dateutil,
-  python-dotenv,
-  requests,
-  six,
-  tabulate,
-  tqdm,
-  typer,
-  urllib3,
-  anyio,
-  fastapi,
-  uvicorn,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, certifi
+, docling-core
+, platformdirs
+, pluggy
+, pydantic
+, pydantic-settings
+, python-dateutil
+, python-dotenv
+, requests
+, six
+, tabulate
+, tqdm
+, typer
+, urllib3
+, anyio
+, fastapi
+, uvicorn
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

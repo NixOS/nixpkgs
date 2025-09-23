@@ -1,11 +1,11 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  pkg-config,
-  qmake,
-  qtbase,
-  libjack2,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, pkg-config
+, qmake
+, qtbase
+, libjack2
+,
 }:
 mkDerivation rec {
   pname = "jack_autoconnect";

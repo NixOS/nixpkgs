@@ -24,12 +24,14 @@ in
       All options to be rendered, without any visibility filtering applied.
     '';
   };
-  config.docs = lib.zipAttrsWith (
-    name: values:
-    if length values > 1 then
-      traceListSeq values abort "Multiple options with the same name: ${name}"
-    else
-      assert length values == 1;
-      head values
-  ) (map (opt: { ${opt.name} = opt; }) (lib.optionAttrSetToDocList options));
+  config.docs = lib.zipAttrsWith
+    (
+      name: values:
+        if length values > 1 then
+          traceListSeq values abort "Multiple options with the same name: ${name}"
+        else
+          assert length values == 1;
+          head values
+    )
+    (map (opt: { ${opt.name} = opt; }) (lib.optionAttrSetToDocList options));
 }

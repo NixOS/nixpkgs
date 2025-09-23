@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchhg,
-  pkg-config,
-  meson,
-  ninja,
-  gtk3,
-  json_c,
-  libpulseaudio,
-  wayland,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchhg
+, pkg-config
+, meson
+, ninja
+, gtk3
+, json_c
+, libpulseaudio
+, wayland
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation {

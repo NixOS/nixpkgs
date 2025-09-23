@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  libidn,
-  lua,
-  miniupnpc,
-  expat,
-  zlib,
-  fetchurl,
-  fetchpatch,
-  python312,
-  openssl,
-  # pin Boost 1.86 due to use of boost/asio/io_service.hpp
-  boost186,
-  scons,
+{ stdenv
+, lib
+, libidn
+, lua
+, miniupnpc
+, expat
+, zlib
+, fetchurl
+, fetchpatch
+, python312
+, openssl
+, # pin Boost 1.86 due to use of boost/asio/io_service.hpp
+  boost186
+, scons
+,
 }:
 
 stdenv.mkDerivation rec {

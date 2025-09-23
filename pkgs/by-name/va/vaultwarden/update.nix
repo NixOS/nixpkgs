@@ -1,15 +1,15 @@
-{
-  writeShellApplication,
-  lib,
-  nix,
-  nix-prefetch-git,
-  nix-update,
-  curl,
-  git,
-  gnugrep,
-  gnused,
-  jq,
-  yq,
+{ writeShellApplication
+, lib
+, nix
+, nix-prefetch-git
+, nix-update
+, curl
+, git
+, gnugrep
+, gnused
+, jq
+, yq
+,
 }:
 
 lib.getExe (writeShellApplication {

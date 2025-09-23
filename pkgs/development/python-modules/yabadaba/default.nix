@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  cdcs,
-  datamodeldict,
-  ipython,
-  lxml,
-  numpy,
-  pandas,
-  pillow,
-  pymongo,
-  tqdm,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  cdcs
+, datamodeldict
+, ipython
+, lxml
+, numpy
+, pandas
+, pillow
+, pymongo
+, tqdm
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  blas,
-  cmake,
-  doxygen,
-  example-robot-data,
-  fetchFromGitHub,
-  ipopt,
-  lapack,
-  lib,
-  pinocchio,
-  pkg-config,
-  pythonSupport ? false,
-  python3Packages,
-  stdenv,
+{ blas
+, cmake
+, doxygen
+, example-robot-data
+, fetchFromGitHub
+, ipopt
+, lapack
+, lib
+, pinocchio
+, pkg-config
+, pythonSupport ? false
+, python3Packages
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

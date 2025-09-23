@@ -1,58 +1,62 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  buildPackages,
-  curl,
-  openssl,
-  zlib-ng,
-  expat,
-  perlPackages,
-  python3,
-  gettext,
-  gnugrep,
-  gnused,
-  gawk,
-  coreutils, # needed at runtime by git-filter-branch etc
-  openssh,
-  pcre2,
-  bash,
-  asciidoc,
-  texinfo,
-  xmlto,
-  docbook2x,
-  docbook_xsl,
-  docbook_xml_dtd_45,
-  libxslt,
-  tcl,
-  tk,
-  makeWrapper,
-  libiconv,
-  libiconvReal,
-  svnSupport ? false,
-  subversionClient,
-  perlLibs,
-  smtpPerlLibs,
-  perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform,
-  nlsSupport ? true,
-  osxkeychainSupport ? stdenv.hostPlatform.isDarwin,
-  guiSupport ? false,
-  # Disable the manual since libxslt doesn't seem to parse the files correctly.
-  withManual ? !stdenv.hostPlatform.useLLVM,
-  pythonSupport ? true,
-  withpcre2 ? true,
-  sendEmailSupport ? perlSupport,
-  nixosTests,
-  withLibsecret ? false,
-  pkg-config,
-  glib,
-  libsecret,
-  gzip, # needed at runtime by gitweb.cgi
-  withSsh ? false,
-  sysctl,
-  deterministic-host-uname, # trick Makefile into targeting the host platform when cross-compiling
-  doInstallCheck ? !stdenv.hostPlatform.isDarwin, # extremely slow on darwin
-  tests,
+{ fetchurl
+, lib
+, stdenv
+, buildPackages
+, curl
+, openssl
+, zlib-ng
+, expat
+, perlPackages
+, python3
+, gettext
+, gnugrep
+, gnused
+, gawk
+, coreutils
+, # needed at runtime by git-filter-branch etc
+  openssh
+, pcre2
+, bash
+, asciidoc
+, texinfo
+, xmlto
+, docbook2x
+, docbook_xsl
+, docbook_xml_dtd_45
+, libxslt
+, tcl
+, tk
+, makeWrapper
+, libiconv
+, libiconvReal
+, svnSupport ? false
+, subversionClient
+, perlLibs
+, smtpPerlLibs
+, perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform
+, nlsSupport ? true
+, osxkeychainSupport ? stdenv.hostPlatform.isDarwin
+, guiSupport ? false
+, # Disable the manual since libxslt doesn't seem to parse the files correctly.
+  withManual ? !stdenv.hostPlatform.useLLVM
+, pythonSupport ? true
+, withpcre2 ? true
+, sendEmailSupport ? perlSupport
+, nixosTests
+, withLibsecret ? false
+, pkg-config
+, glib
+, libsecret
+, gzip
+, # needed at runtime by gitweb.cgi
+  withSsh ? false
+, sysctl
+, deterministic-host-uname
+, # trick Makefile into targeting the host platform when cross-compiling
+  doInstallCheck ? !stdenv.hostPlatform.isDarwin
+, # extremely slow on darwin
+  tests
+,
 }:
 
 assert osxkeychainSupport -> stdenv.hostPlatform.isDarwin;
@@ -76,9 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname =
     "git"
     + lib.optionalString svnSupport "-with-svn"
-    + lib.optionalString (
-      !svnSupport && !guiSupport && !sendEmailSupport && !withManual && !pythonSupport && !withpcre2
-    ) "-minimal";
+    + lib.optionalString
+      (
+        !svnSupport && !guiSupport && !sendEmailSupport && !withManual && !pythonSupport && !withpcre2
+      ) "-minimal";
   inherit version;
 
   src = fetchurl {
@@ -438,9 +443,11 @@ stdenv.mkDerivation (finalAttrs: {
     "PERL_PATH=${buildPackages.perl}/bin/perl"
   ];
 
-  nativeInstallCheckInputs = lib.optional (
-    stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD
-  ) sysctl;
+  nativeInstallCheckInputs = lib.optional
+    (
+      stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD
+    )
+    sysctl;
 
   preInstallCheck = ''
     # Some tests break with high concurrency
@@ -508,12 +515,12 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t7527-builtin-fsmonitor
   ''
   +
-    lib.optionalString (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.system == "x86_64-linux")
-      ''
-        # https://github.com/NixOS/nixpkgs/pull/394957
-        # > t2082-parallel-checkout-attributes.sh            (Wstat: 256 (exited 1) Tests: 5 Failed: 1)
-        disable_test t2082-parallel-checkout-attributes
-      ''
+  lib.optionalString (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.system == "x86_64-linux")
+    ''
+      # https://github.com/NixOS/nixpkgs/pull/394957
+      # > t2082-parallel-checkout-attributes.sh            (Wstat: 256 (exited 1) Tests: 5 Failed: 1)
+      disable_test t2082-parallel-checkout-attributes
+    ''
   + lib.optionalString stdenv.hostPlatform.isMusl ''
     # Test fails (as of 2.17.0, musl 1.1.19)
     disable_test t3900-i18n-commit

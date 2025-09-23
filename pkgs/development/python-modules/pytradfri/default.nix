@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  aiocoap,
-  dtlssocket,
-  pydantic,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, aiocoap
+, dtlssocket
+, pydantic
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

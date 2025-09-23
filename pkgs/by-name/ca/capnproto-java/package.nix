@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  capnproto,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, capnproto
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

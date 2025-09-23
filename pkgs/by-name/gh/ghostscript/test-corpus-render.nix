@@ -1,7 +1,7 @@
-{
-  stdenv,
-  fetchgit,
-  ghostscript,
+{ stdenv
+, fetchgit
+, ghostscript
+,
 }:
 
 stdenv.mkDerivation {

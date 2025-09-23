@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  cmdliner,
-  fetchurl,
-  findlib,
-  ocaml,
-  ocamlbuild,
-  topkg,
+{ lib
+, stdenv
+, cmdliner
+, fetchurl
+, findlib
+, ocaml
+, ocamlbuild
+, topkg
+,
 }:
 
 if lib.versionOlder ocaml.version "4.14.0" then

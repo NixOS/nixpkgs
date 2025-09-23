@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  glib,
-  jre,
-  makeWrapper,
-  wrapGAppsHook3,
-  makeDesktopItem,
-  copyDesktopItems,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchzip
+, glib
+, jre
+, makeWrapper
+, wrapGAppsHook3
+, makeDesktopItem
+, copyDesktopItems
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  libuchardet,
-  dos2unix,
-  file,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, libuchardet
+, dos2unix
+, file
+,
 }:
 
 stdenv.mkDerivation {

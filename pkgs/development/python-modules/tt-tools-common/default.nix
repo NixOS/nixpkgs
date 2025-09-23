@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchpatch,
-  fetchFromGitHub,
-  setuptools,
-  distro,
-  elasticsearch,
-  psutil,
-  pyyaml,
-  rich,
-  textual,
-  requests,
-  tqdm,
-  pydantic,
+{ lib
+, buildPythonPackage
+, fetchpatch
+, fetchFromGitHub
+, setuptools
+, distro
+, elasticsearch
+, psutil
+, pyyaml
+, rich
+, textual
+, requests
+, tqdm
+, pydantic
+,
 }:
 buildPythonPackage rec {
   pname = "tt-tools-common";

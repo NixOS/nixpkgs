@@ -1,72 +1,73 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  glib,
-  systemd,
-  fmt,
-  buildPackages,
-  # Inputs
-  curl,
-  libcdio,
-  libcdio-paranoia,
-  libmms,
-  libnfs,
-  liburing,
-  samba,
-  # Archive support
-  bzip2,
-  zziplib,
-  # Codecs
-  audiofile,
-  faad2,
-  ffmpeg,
-  flac,
-  fluidsynth,
-  game-music-emu,
-  libmad,
-  libmikmod,
-  mpg123,
-  libopus,
-  libvorbis,
-  lame,
-  # Filters
-  libsamplerate,
-  soxr,
-  # Outputs
-  alsa-lib,
-  libao,
-  libjack2,
-  libpulseaudio,
-  libshout,
-  pipewire,
-  # Misc
-  icu,
-  sqlite,
-  avahi,
-  dbus,
-  pcre2,
-  libgcrypt,
-  expat,
-  nlohmann_json,
-  zlib,
-  libupnp,
-  # Client support
-  libmpdclient,
-  # Tag support
-  libid3tag,
-  nixosTests,
-  # For documentation
-  doxygen,
-  python3Packages, # for sphinx-build
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, glib
+, systemd
+, fmt
+, buildPackages
+, # Inputs
+  curl
+, libcdio
+, libcdio-paranoia
+, libmms
+, libnfs
+, liburing
+, samba
+, # Archive support
+  bzip2
+, zziplib
+, # Codecs
+  audiofile
+, faad2
+, ffmpeg
+, flac
+, fluidsynth
+, game-music-emu
+, libmad
+, libmikmod
+, mpg123
+, libopus
+, libvorbis
+, lame
+, # Filters
+  libsamplerate
+, soxr
+, # Outputs
+  alsa-lib
+, libao
+, libjack2
+, libpulseaudio
+, libshout
+, pipewire
+, # Misc
+  icu
+, sqlite
+, avahi
+, dbus
+, pcre2
+, libgcrypt
+, expat
+, nlohmann_json
+, zlib
+, libupnp
+, # Client support
+  libmpdclient
+, # Tag support
+  libid3tag
+, nixosTests
+, # For documentation
+  doxygen
+, python3Packages
+, # for sphinx-build
   # For tests
-  gtest,
-  zip,
-  # Features list
-  features ? null,
+  gtest
+, zip
+, # Features list
+  features ? null
+,
 }:
 
 let

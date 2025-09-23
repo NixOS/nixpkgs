@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wheel,
-
-  psycopg,
-  aiosqlite,
-  asyncmy,
-
-  # test
-  pytest-asyncio,
-  pytest-cov-stub,
-
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wheel
+, psycopg
+, aiosqlite
+, asyncmy
+, # test
+  pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

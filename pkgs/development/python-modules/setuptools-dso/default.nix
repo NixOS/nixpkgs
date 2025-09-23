@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  nose2,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nose2
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch2,
-  stdenv,
-  autoreconfHook,
-  pkg-config,
-  ncurses,
-  libcap,
-  libnl,
-  sensorsSupport ? stdenv.hostPlatform.isLinux,
-  lm_sensors,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+{ lib
+, fetchFromGitHub
+, fetchpatch2
+, stdenv
+, autoreconfHook
+, pkg-config
+, ncurses
+, libcap
+, libnl
+, sensorsSupport ? stdenv.hostPlatform.isLinux
+, lm_sensors
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+,
 }:
 
 assert systemdSupport -> stdenv.hostPlatform.isLinux;

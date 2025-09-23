@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  dbus,
-  installShellFiles,
-  pkg-config,
+{ lib
+, rustPlatform
+, fetchCrate
+, dbus
+, installShellFiles
+, pkg-config
+,
 }:
 
 rustPlatform.buildRustPackage rec {

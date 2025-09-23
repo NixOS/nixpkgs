@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  portaudio,
-  boost,
-  ganv,
-  gtkmm2,
-  libjack2,
-  lilv,
-  pkg-config,
-  python3,
-  raul,
-  sord,
-  sratom,
-  suil,
-  meson,
-  ninja,
+{ lib
+, stdenv
+, fetchFromGitLab
+, portaudio
+, boost
+, ganv
+, gtkmm2
+, libjack2
+, lilv
+, pkg-config
+, python3
+, raul
+, sord
+, sratom
+, suil
+, meson
+, ninja
+,
 }:
 
 stdenv.mkDerivation {

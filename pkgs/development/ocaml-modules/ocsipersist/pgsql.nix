@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  ocsipersist,
-  lwt_log,
-  pgocaml,
-  xml-light,
+{ buildDunePackage
+, ocsipersist
+, lwt_log
+, pgocaml
+, xml-light
+,
 }:
 
 buildDunePackage {

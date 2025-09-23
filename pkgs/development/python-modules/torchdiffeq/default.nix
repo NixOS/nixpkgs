@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # dependencies
-  torch,
-  scipy,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # dependencies
+  torch
+, scipy
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

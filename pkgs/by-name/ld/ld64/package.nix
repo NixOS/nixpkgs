@@ -1,17 +1,17 @@
-{
-  lib,
-  cctools,
-  cmake,
-  darwin,
-  fetchFromGitHub,
-  libtapi,
-  llvm,
-  meson,
-  ninja,
-  openssl,
-  pkg-config,
-  stdenv,
-  xar,
+{ lib
+, cctools
+, cmake
+, darwin
+, fetchFromGitHub
+, libtapi
+, llvm
+, meson
+, ninja
+, openssl
+, pkg-config
+, stdenv
+, xar
+,
 }:
 
 let

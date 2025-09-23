@@ -1,13 +1,13 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  fetchPypi,
-  filelock,
-  pytest,
-  mypy,
-  setuptools,
-  setuptools-scm,
+{ lib
+, attrs
+, buildPythonPackage
+, fetchPypi
+, filelock
+, pytest
+, mypy
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

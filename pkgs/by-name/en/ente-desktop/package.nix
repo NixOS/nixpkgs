@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  electron_37,
-  yarnConfigHook,
-  copyDesktopItems,
-  vips,
-  ffmpeg,
-  makeWrapper,
-  autoPatchelfHook,
-  makeDesktopItem,
-  imagemagick,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchYarnDeps
+, nodejs
+, electron_37
+, yarnConfigHook
+, copyDesktopItems
+, vips
+, ffmpeg
+, makeWrapper
+, autoPatchelfHook
+, makeDesktopItem
+, imagemagick
+,
 }:
 let
   electron = electron_37;

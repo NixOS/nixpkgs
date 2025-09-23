@@ -1,24 +1,22 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  installShellFiles,
-  jre,
-
-  libX11,
-  libXext,
-  libXcursor,
-  libXrandr,
-  libXxf86vm,
-  libpulseaudio,
-  libGL,
-  glfw,
-  openal,
-  udev,
-
-  textToSpeechSupport ? stdenv.hostPlatform.isLinux,
-  flite,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, installShellFiles
+, jre
+, libX11
+, libXext
+, libXcursor
+, libXrandr
+, libXxf86vm
+, libpulseaudio
+, libGL
+, glfw
+, openal
+, udev
+, textToSpeechSupport ? stdenv.hostPlatform.isLinux
+, flite
+,
 }:
 
 let

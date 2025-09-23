@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  gitUpdater,
-  resvg,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, gitUpdater
+, resvg
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  nix-update-script,
-  stdenv,
-  testers,
+{ lib
+, cmake
+, fetchFromGitHub
+, nix-update-script
+, stdenv
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

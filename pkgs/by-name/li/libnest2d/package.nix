@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  clipper,
-  nlopt,
-  boost,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, clipper
+, nlopt
+, boost
+,
 }:
 
 stdenv.mkDerivation {

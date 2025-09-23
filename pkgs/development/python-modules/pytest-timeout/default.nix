@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytest,
-  pytestCheckHook,
-  pexpect,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytest
+, pytestCheckHook
+, pexpect
+,
 }:
 
 buildPythonPackage rec {

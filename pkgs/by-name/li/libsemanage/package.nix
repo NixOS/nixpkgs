@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  bison,
-  flex,
-  libsepol,
-  libselinux,
-  bzip2,
-  audit,
-  enablePython ? true,
-  swig ? null,
-  python3 ? null,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, bison
+, flex
+, libsepol
+, libselinux
+, bzip2
+, audit
+, enablePython ? true
+, swig ? null
+, python3 ? null
+,
 }:
 
 stdenv.mkDerivation rec {

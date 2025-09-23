@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  coreutils,
-  jq,
-  findutils,
-  nix,
-  bash,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, jq
+, findutils
+, nix
+, bash
+,
 }:
 
 stdenv.mkDerivation rec {

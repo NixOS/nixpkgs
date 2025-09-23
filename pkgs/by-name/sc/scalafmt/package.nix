@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  jre,
-  coursier,
-  makeWrapper,
-  setJavaClassPath,
+{ lib
+, stdenv
+, jre
+, coursier
+, makeWrapper
+, setJavaClassPath
+,
 }:
 
 let

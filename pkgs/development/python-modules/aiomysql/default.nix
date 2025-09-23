@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pymysql,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pymysql
+, pythonOlder
+, setuptools
+, setuptools-scm
+, wheel
+,
 }:
 
 buildPythonPackage rec {

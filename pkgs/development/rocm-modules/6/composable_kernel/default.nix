@@ -1,7 +1,7 @@
-{
-  lib,
-  clr,
-  composable_kernel_base,
+{ lib
+, clr
+, composable_kernel_base
+,
 }:
 
 let
@@ -161,11 +161,11 @@ let
     };
   };
   tensorOpBuilder =
-    {
-      part,
-      targets,
-      extraCmakeFlags ? [ ],
-      requiredSystemFeatures ? [ ],
+    { part
+    , targets
+    , extraCmakeFlags ? [ ]
+    , requiredSystemFeatures ? [ ]
+    ,
     }:
     composable_kernel_base.overrideAttrs (old: {
       inherit requiredSystemFeatures;
@@ -210,9 +210,11 @@ let
         broken = false;
       };
     });
-  composable_kernel_parts = builtins.mapAttrs (
-    part: targets: tensorOpBuilder (targets // { inherit part; })
-  ) parts;
+  composable_kernel_parts = builtins.mapAttrs
+    (
+      part: targets: tensorOpBuilder (targets // { inherit part; })
+    )
+    parts;
 in
 
 composable_kernel_base.overrideAttrs (

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  makeWrapper,
-  iperf3,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, makeWrapper
+, iperf3
+,
 }:
 
 rustPlatform.buildRustPackage rec {

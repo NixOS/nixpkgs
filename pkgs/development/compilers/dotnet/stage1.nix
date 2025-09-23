@@ -1,13 +1,12 @@
-{
-  stdenv,
-  lib,
-  callPackage,
-
-  releaseManifestFile,
-  tarballHash,
-  depsFile,
-  bootstrapSdk,
-  fallbackTargetPackages,
+{ stdenv
+, lib
+, callPackage
+, releaseManifestFile
+, tarballHash
+, depsFile
+, bootstrapSdk
+, fallbackTargetPackages
+,
 }@args:
 
 let
@@ -33,9 +32,10 @@ let
       });
 
 in
-mkPackages {
-  inherit vmr fallbackTargetPackages;
-}
-// {
+mkPackages
+  {
+    inherit vmr fallbackTargetPackages;
+  }
+  // {
   stage0 = lib.dontRecurseIntoAttrs stage0;
 }

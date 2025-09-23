@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  acme,
-  ldc,
-  patchelf,
-  SDL,
+{ stdenv
+, lib
+, fetchFromGitHub
+, acme
+, ldc
+, patchelf
+, SDL
+,
 }:
 stdenv.mkDerivation {
   pname = "cheesecutter";

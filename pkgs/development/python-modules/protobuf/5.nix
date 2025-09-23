@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  setuptools,
-  protobuf,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, setuptools
+, protobuf
+,
 }:
 
 buildPythonPackage rec {

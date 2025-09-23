@@ -1,10 +1,9 @@
-{
-  config,
-  pkgs,
-  lib,
-  options,
-  utils,
-  ...
+{ config
+, pkgs
+, lib
+, options
+, utils
+, ...
 }:
 
 let
@@ -150,16 +149,16 @@ let
     // (mapAttrs
       (
         name: params:
-        import (./. + "/exporters/${params.name}.nix") {
-          inherit
-            config
-            lib
-            pkgs
-            options
-            utils
-            ;
-          type = params.type;
-        }
+          import (./. + "/exporters/${params.name}.nix") {
+            inherit
+              config
+              lib
+              pkgs
+              options
+              utils
+              ;
+            type = params.type;
+          }
       )
       {
         exportarr-bazarr = {
@@ -262,11 +261,11 @@ let
   );
 
   mkSubModule =
-    {
-      name,
-      port,
-      extraOpts,
-      imports,
+    { name
+    , port
+    , extraOpts
+    , imports
+    ,
     }:
     {
       ${name} = mkOption {
@@ -274,9 +273,10 @@ let
           {
             inherit imports;
             options = (
-              mkExporterOpts {
-                inherit name port;
-              }
+              mkExporterOpts
+                {
+                  inherit name port;
+                }
               // extraOpts
             );
           }
@@ -295,23 +295,25 @@ let
 
   mkSubModules = (
     foldl' (a: b: a // b) { } (
-      mapAttrsToList (
-        name: opts:
-        mkSubModule {
-          inherit name;
-          inherit (opts) port;
-          extraOpts = opts.extraOpts or { };
-          imports = opts.imports or [ ];
-        }
-      ) exporterOpts
+      mapAttrsToList
+        (
+          name: opts:
+            mkSubModule {
+              inherit name;
+              inherit (opts) port;
+              extraOpts = opts.extraOpts or { };
+              imports = opts.imports or [ ];
+            }
+        )
+        exporterOpts
     )
   );
 
   mkExporterConf =
-    {
-      name,
-      conf,
-      serviceOpts,
+    { name
+    , conf
+    , serviceOpts
+    ,
     }:
     let
       enableDynamicUser = serviceOpts.serviceConfig.DynamicUser or true;
@@ -579,14 +581,16 @@ in
         };
       })
     ]
-    ++ (mapAttrsToList (
-      name: conf:
-      mkExporterConf {
-        inherit name;
-        inherit (conf) serviceOpts;
-        conf = cfg.${name};
-      }
-    ) exporterOpts)
+    ++ (mapAttrsToList
+      (
+        name: conf:
+          mkExporterConf {
+            inherit name;
+            inherit (conf) serviceOpts;
+            conf = cfg.${name};
+          }
+      )
+      exporterOpts)
   );
 
   meta = {

@@ -1,15 +1,15 @@
-{
-  lib,
-  copyDesktopItems,
-  fetchurl,
-  ffmpeg,
-  gitUpdater,
-  jre,
-  libarchive,
-  makeDesktopItem,
-  openjfx,
-  stdenvNoCC,
-  wrapGAppsHook3,
+{ lib
+, copyDesktopItems
+, fetchurl
+, ffmpeg
+, gitUpdater
+, jre
+, libarchive
+, makeDesktopItem
+, openjfx
+, stdenvNoCC
+, wrapGAppsHook3
+,
 }:
 let
   pname = "maptool";
@@ -46,11 +46,13 @@ let
   appClasspath = "share/${pname}";
 
   classpath =
-    lib.concatMap (mod: [
-      "${openjfx}/modules_src/javafx.${mod}/module-info.java"
-      "${openjfx}/modules/javafx.${mod}"
-      "${openjfx}/modules_libs/javafx.${mod}"
-    ]) javafxModules
+    lib.concatMap
+      (mod: [
+        "${openjfx}/modules_src/javafx.${mod}/module-info.java"
+        "${openjfx}/modules/javafx.${mod}"
+        "${openjfx}/modules_libs/javafx.${mod}"
+      ])
+      javafxModules
     ++ [ "$out/${appClasspath}/*" ];
 
   jvmArgs = [

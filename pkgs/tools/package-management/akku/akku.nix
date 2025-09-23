@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  pkg-config,
-  git,
-  guile,
-  curl,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, git
+, guile
+, curl
+,
 }:
 stdenv.mkDerivation rec {
   pname = "akku";

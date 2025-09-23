@@ -1,12 +1,12 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  ppxlib,
-  alcotest,
-  mdx,
-  ppx_deriving,
-  yaml,
+{ lib
+, buildDunePackage
+, fetchurl
+, ppxlib
+, alcotest
+, mdx
+, ppx_deriving
+, yaml
+,
 }:
 
 let

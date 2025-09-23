@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  buildNpmPackage,
-  electron_37,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, buildNpmPackage
+, electron_37
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, stdenv
+,
 }:
 let
   pname = "vrcx";

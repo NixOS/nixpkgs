@@ -1,8 +1,8 @@
-{
-  qtModule,
-  python3,
-  qtbase,
-  qtsvg,
+{ qtModule
+, python3
+, qtbase
+, qtsvg
+,
 }:
 
 qtModule {

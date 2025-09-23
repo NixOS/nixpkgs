@@ -1,10 +1,10 @@
-{
-  delve,
-  autoPatchelfHook,
-  stdenv,
-  lib,
-  glibc,
-  gcc-unwrapped,
+{ delve
+, autoPatchelfHook
+, stdenv
+, lib
+, glibc
+, gcc-unwrapped
+,
 }:
 # This is a list of plugins that need special treatment. For example, the go plugin (id is 9568) comes with delve, a
 # debugger, but that needs various linking fixes. The changes here replace it with the system one.

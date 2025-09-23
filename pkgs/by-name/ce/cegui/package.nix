@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ogre,
-  freetype,
-  boost,
-  expat,
-  libiconv,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ogre
+, freetype
+, boost
+, expat
+, libiconv
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

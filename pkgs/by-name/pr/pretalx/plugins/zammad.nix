@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  zammad-py,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, zammad-py
+,
 }:
 
 buildPythonPackage rec {

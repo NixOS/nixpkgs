@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchurl,
-  pkg-config,
-  makeWrapper,
-  openssl,
-  mpv,
-  ffmpeg_6,
-  nodejs,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, fetchurl
+, pkg-config
+, makeWrapper
+, openssl
+, mpv
+, ffmpeg_6
+, nodejs
+,
 }:
 
 let

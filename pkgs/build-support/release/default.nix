@@ -120,10 +120,10 @@ rec {
     );
 
   aggregate =
-    {
-      name,
-      constituents,
-      meta ? { },
+    { name
+    , constituents
+    , meta ? { }
+    ,
     }:
     pkgs.runCommand name
       {
@@ -162,13 +162,12 @@ rec {
       };
   */
   channel =
-    {
-      name,
-      src,
-      constituents ? [ ],
-      meta ? { },
-      isNixOS ? true,
-      ...
+    { name
+    , src
+    , constituents ? [ ]
+    , meta ? { }
+    , isNixOS ? true
+    , ...
     }@args:
     stdenv.mkDerivation (
       {

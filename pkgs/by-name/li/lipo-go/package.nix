@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
-  lipo-go,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+, lipo-go
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "lipo-go";

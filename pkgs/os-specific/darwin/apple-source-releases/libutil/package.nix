@@ -1,7 +1,7 @@
-{
-  apple-sdk_14,
-  copyfile,
-  mkAppleDerivation,
+{ apple-sdk_14
+, copyfile
+, mkAppleDerivation
+,
 }:
 
 mkAppleDerivation {

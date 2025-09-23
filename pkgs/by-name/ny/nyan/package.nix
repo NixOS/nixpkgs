@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  clang,
-  cmake,
-  flex,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, clang
+, cmake
+, flex
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

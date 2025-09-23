@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jupyter-core,
-  notebook,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jupyter-core
+, notebook
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

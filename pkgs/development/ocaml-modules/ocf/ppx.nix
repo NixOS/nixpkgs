@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  ocf,
-  ppxlib,
+{ buildDunePackage
+, ocf
+, ppxlib
+,
 }:
 
 buildDunePackage {

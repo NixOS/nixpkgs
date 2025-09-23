@@ -1,11 +1,11 @@
-{
-  stdenv,
-  pname,
-  meta,
-  fetchurl,
-  undmg,
-  updateScript,
-  lib,
+{ stdenv
+, pname
+, meta
+, fetchurl
+, undmg
+, updateScript
+, lib
+,
 }:
 
 stdenv.mkDerivation {

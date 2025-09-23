@@ -1,23 +1,23 @@
-{
-  lib,
-  boto3,
-  botocore,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jinja2,
-  loguru,
-  mdformat,
-  packaging,
-  prompt-toolkit,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  questionary,
-  requests-mock,
-  requests,
-  ruff,
-  setuptools,
-  versionCheckHook,
+{ lib
+, boto3
+, botocore
+, buildPythonPackage
+, fetchFromGitHub
+, jinja2
+, loguru
+, mdformat
+, packaging
+, prompt-toolkit
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, questionary
+, requests-mock
+, requests
+, ruff
+, setuptools
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

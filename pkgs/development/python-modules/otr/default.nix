@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cryptography,
-  gmpy2,
-  python3-application,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cryptography
+, gmpy2
+, python3-application
+,
 }:
 
 buildPythonPackage rec {

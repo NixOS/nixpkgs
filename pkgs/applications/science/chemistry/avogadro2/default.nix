@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  eigen,
-  avogadrolibs,
-  molequeue,
-  hdf5,
-  openbabel,
-  qttools,
-  wrapQtAppsHook,
-  mesa,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, eigen
+, avogadrolibs
+, molequeue
+, hdf5
+, openbabel
+, qttools
+, wrapQtAppsHook
+, mesa
+,
 }:
 
 let

@@ -1,36 +1,36 @@
-{
-  lib,
-  stdenv,
-  bison,
-  buildPackages,
-  cairo,
-  check,
-  fetchFromGitHub,
-  flex,
-  git,
-  glib,
-  librsvg,
-  libstartup_notification,
-  libxcb,
-  libxkbcommon,
-  meson,
-  ninja,
-  pandoc,
-  pango,
-  pkg-config,
-  versionCheckHook,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  which,
-  xcb-imdkit,
-  xcbutil,
-  xcb-util-cursor,
-  xcbutilkeysyms,
-  xcbutilwm,
-  xcbutilxrm,
-  waylandSupport ? true,
-  x11Support ? true,
+{ lib
+, stdenv
+, bison
+, buildPackages
+, cairo
+, check
+, fetchFromGitHub
+, flex
+, git
+, glib
+, librsvg
+, libstartup_notification
+, libxcb
+, libxkbcommon
+, meson
+, ninja
+, pandoc
+, pango
+, pkg-config
+, versionCheckHook
+, wayland
+, wayland-protocols
+, wayland-scanner
+, which
+, xcb-imdkit
+, xcbutil
+, xcb-util-cursor
+, xcbutilkeysyms
+, xcbutilwm
+, xcbutilxrm
+, waylandSupport ? true
+, x11Support ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

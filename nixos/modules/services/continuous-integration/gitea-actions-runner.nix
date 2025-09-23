@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -210,9 +209,10 @@ in
               "multi-user.target"
             ];
             environment =
-              optionalAttrs (instance.token != null) {
-                TOKEN = "${instance.token}";
-              }
+              optionalAttrs (instance.token != null)
+                {
+                  TOKEN = "${instance.token}";
+                }
               // optionalAttrs (wantsPodman) {
                 DOCKER_HOST = "unix:///run/podman/podman.sock";
               }

@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  fetchurl,
-  autoPatchelfHook,
-  dbus,
-  directx-shader-compiler,
-  fontconfig,
-  freetype,
-  glib,
-  libdrm,
-  libGLU,
-  libglvnd,
-  libICE,
-  libkrb5,
-  libSM,
-  libX11,
-  libxcb,
-  libXi,
-  libxkbcommon,
-  libxml2_13,
-  ncurses,
-  wayland,
-  xcbutil,
-  zlib,
+{ lib
+, stdenv
+, makeWrapper
+, fetchurl
+, autoPatchelfHook
+, dbus
+, directx-shader-compiler
+, fontconfig
+, freetype
+, glib
+, libdrm
+, libGLU
+, libglvnd
+, libICE
+, libkrb5
+, libSM
+, libX11
+, libxcb
+, libXi
+, libxkbcommon
+, libxml2_13
+, ncurses
+, wayland
+, xcbutil
+, zlib
+,
 }:
 
 let

@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchurl,
-  perlPackages,
-  makeBinaryWrapper,
-  gnupg,
-  re2c,
-  gcc,
-  gnumake,
-  libxcrypt,
-  openssl,
-  coreutils,
-  poppler-utils,
-  tesseract,
-  iana-etc,
+{ lib
+, fetchurl
+, perlPackages
+, makeBinaryWrapper
+, gnupg
+, re2c
+, gcc
+, gnumake
+, libxcrypt
+, openssl
+, coreutils
+, poppler-utils
+, tesseract
+, iana-etc
+,
 }:
 
 perlPackages.buildPerlPackage rec {

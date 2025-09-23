@@ -1,17 +1,17 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  pytest-aiohttp,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools-scm,
-  setuptools,
-  websockets,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, pytest-aiohttp
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools-scm
+, setuptools
+, websockets
+,
 }:
 
 buildPythonPackage rec {

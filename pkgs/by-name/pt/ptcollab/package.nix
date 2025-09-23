@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  libsForQt5,
-  libvorbis,
-  pkg-config,
-  rtmidi,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nix-update-script
+, libsForQt5
+, libvorbis
+, pkg-config
+, rtmidi
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

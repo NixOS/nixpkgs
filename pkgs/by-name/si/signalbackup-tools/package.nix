@@ -1,14 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  cmake,
-  pkg-config,
-
-  dbus,
-  openssl,
-  sqlite,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, dbus
+, openssl
+, sqlite
+,
 }:
 
 stdenv.mkDerivation rec {

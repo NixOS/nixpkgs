@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  boost,
-  gettext,
-  libime,
-  fcitx5,
-  fcitx5-qt,
-  fcitx5-lua,
-  qtwebengine,
-  opencc,
-  curl,
-  fmt,
-  qtbase,
-  luaSupport ? true,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, boost
+, gettext
+, libime
+, fcitx5
+, fcitx5-qt
+, fcitx5-lua
+, qtwebengine
+, opencc
+, curl
+, fmt
+, qtbase
+, luaSupport ? true
+,
 }:
 
 let

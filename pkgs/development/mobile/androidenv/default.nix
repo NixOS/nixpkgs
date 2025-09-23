@@ -1,7 +1,7 @@
-{
-  lib,
-  pkgs ? import <nixpkgs> { },
-  licenseAccepted ? pkgs.callPackage ./license.nix { },
+{ lib
+, pkgs ? import <nixpkgs> { }
+, licenseAccepted ? pkgs.callPackage ./license.nix { }
+,
 }:
 
 lib.recurseIntoAttrs rec {

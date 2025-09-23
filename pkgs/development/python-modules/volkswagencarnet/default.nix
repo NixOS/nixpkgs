@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  aiohttp,
-  beautifulsoup4,
-  lxml,
-  pyjwt,
-  freezegun,
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, aiohttp
+, beautifulsoup4
+, lxml
+, pyjwt
+, freezegun
+, pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  authlib,
-  buildPythonPackage,
-  deprecated,
-  fetchFromGitHub,
-  poetry-core,
-  requests,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, authlib
+, buildPythonPackage
+, deprecated
+, fetchFromGitHub
+, poetry-core
+, requests
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

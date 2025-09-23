@@ -1,10 +1,10 @@
-{
-  buildDunePackage,
-  dns,
-  cstruct,
-  ipaddr,
-  lwt,
-  tcpip,
+{ buildDunePackage
+, dns
+, cstruct
+, ipaddr
+, lwt
+, tcpip
+,
 }:
 
 buildDunePackage {

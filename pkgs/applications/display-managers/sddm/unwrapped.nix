@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  qttools,
-  libxcb,
-  libXau,
-  pam,
-  qtbase,
-  qtdeclarative,
-  qtquickcontrols2 ? null,
-  systemd,
-  xkeyboardconfig,
-  nixosTests,
-  docutils,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qttools
+, libxcb
+, libXau
+, pam
+, qtbase
+, qtdeclarative
+, qtquickcontrols2 ? null
+, systemd
+, xkeyboardconfig
+, nixosTests
+, docutils
+,
 }:
 let
   isQt6 = lib.versions.major qtbase.version == "6";

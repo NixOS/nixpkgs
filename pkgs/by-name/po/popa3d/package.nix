@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  libxcrypt,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, libxcrypt
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

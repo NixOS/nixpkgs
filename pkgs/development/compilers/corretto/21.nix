@@ -1,13 +1,13 @@
-{
-  corretto21,
-  fetchFromGitHub,
-  gradle_7,
-  jdk21,
-  lib,
-  stdenv,
-  rsync,
-  runCommand,
-  testers,
+{ corretto21
+, fetchFromGitHub
+, gradle_7
+, jdk21
+, lib
+, stdenv
+, rsync
+, runCommand
+, testers
+,
 }:
 
 let

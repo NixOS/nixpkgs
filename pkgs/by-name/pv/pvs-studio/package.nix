@@ -1,15 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-
-  installShellFiles,
-  makeWrapper,
-  perl,
-  strace,
-
-  testers,
-  pvs-studio,
+{ lib
+, stdenv
+, fetchzip
+, installShellFiles
+, makeWrapper
+, perl
+, strace
+, testers
+, pvs-studio
+,
 }:
 
 # nixpkgs-update: no auto update

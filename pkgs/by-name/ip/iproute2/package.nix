@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  buildPackages,
-  bison,
-  flex,
-  pkg-config,
-  db,
-  iptables,
-  elfutils,
-  libmnl,
-  libbpf,
-  python3,
-  gitUpdater,
-  pkgsStatic,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, buildPackages
+, bison
+, flex
+, pkg-config
+, db
+, iptables
+, elfutils
+, libmnl
+, libbpf
+, python3
+, gitUpdater
+, pkgsStatic
+,
 }:
 
 stdenv.mkDerivation rec {

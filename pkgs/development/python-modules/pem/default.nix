@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  certifi,
-  cryptography,
-  fetchFromGitHub,
-  hatch-fancy-pypi-readme,
-  hatch-vcs,
-  hatchling,
-  pretend,
-  pyopenssl,
-  pytestCheckHook,
-  pythonOlder,
-  twisted,
+{ lib
+, buildPythonPackage
+, certifi
+, cryptography
+, fetchFromGitHub
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
+, pretend
+, pyopenssl
+, pytestCheckHook
+, pythonOlder
+, twisted
+,
 }:
 
 buildPythonPackage rec {

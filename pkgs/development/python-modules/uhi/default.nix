@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  hatchling,
-  hatch-vcs,
-  fastjsonschema,
-  numpy,
-  pytestCheckHook,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, hatchling
+, hatch-vcs
+, fastjsonschema
+, numpy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

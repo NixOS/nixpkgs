@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  curl,
-  libargon2,
-  libevent,
-  libsearpc,
-  libuuid,
-  pkg-config,
-  python3,
-  sqlite,
-  vala,
-  libwebsockets,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, curl
+, libargon2
+, libevent
+, libsearpc
+, libuuid
+, pkg-config
+, python3
+, sqlite
+, vala
+, libwebsockets
+,
 }:
 
 stdenv.mkDerivation rec {

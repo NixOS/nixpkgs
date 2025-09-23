@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # native
-  flit-core,
-
-  # propagates
-  typing-extensions,
-
-  # tests
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # native
+  flit-core
+, # propagates
+  typing-extensions
+, # tests
+  unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

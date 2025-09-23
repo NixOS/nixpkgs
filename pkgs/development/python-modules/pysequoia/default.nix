@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  rustPlatform,
-  cargo,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, rustPlatform
+, cargo
+,
 }:
 
 buildPythonPackage rec {

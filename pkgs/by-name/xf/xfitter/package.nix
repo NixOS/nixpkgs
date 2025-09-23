@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  apfel,
-  apfelgrid,
-  applgrid,
-  blas,
-  ceres-solver,
-  cmake,
-  gfortran,
-  gsl,
-  lapack,
-  lhapdf,
-  libtirpc,
-  libyaml,
-  yaml-cpp,
-  pkg-config,
-  qcdnum,
-  root,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitLab
+, apfel
+, apfelgrid
+, applgrid
+, blas
+, ceres-solver
+, cmake
+, gfortran
+, gsl
+, lapack
+, lhapdf
+, libtirpc
+, libyaml
+, yaml-cpp
+, pkg-config
+, qcdnum
+, root
+, zlib
+,
 }:
 
 stdenv.mkDerivation {
@@ -60,9 +60,10 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.libc == "glibc"
-  ) "-I${libtirpc.dev}/include/tirpc";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.hostPlatform.libc == "glibc"
+    ) "-I${libtirpc.dev}/include/tirpc";
   NIX_LDFLAGS = lib.optional (stdenv.hostPlatform.libc == "glibc") "-ltirpc";
 
   hardeningDisable = [ "format" ];

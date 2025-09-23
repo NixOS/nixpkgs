@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  utf8cpp,
-  zlib,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, utf8cpp
+, zlib
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

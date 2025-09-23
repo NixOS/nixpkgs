@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fixtures,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-mock,
-  rich,
-  setuptools,
-  urllib3,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fixtures
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, rich
+, setuptools
+, urllib3
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

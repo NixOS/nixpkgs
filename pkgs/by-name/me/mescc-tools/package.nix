@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  m2libc,
-  which,
+{ lib
+, stdenv
+, fetchurl
+, m2libc
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

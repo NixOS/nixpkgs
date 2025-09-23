@@ -1,30 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-  setuptools,
-
-  # dependencies
-  jsonref,
-  jsonschema,
-  latex2mathml,
-  pandas,
-  pillow,
-  pydantic,
-  pyyaml,
-  semchunk,
-  tabulate,
-  transformers,
-  typer,
-  typing-extensions,
-
-  # tests
-  jsondiff,
-  pytestCheckHook,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, setuptools
+, # dependencies
+  jsonref
+, jsonschema
+, latex2mathml
+, pandas
+, pillow
+, pydantic
+, pyyaml
+, semchunk
+, tabulate
+, transformers
+, typer
+, typing-extensions
+, # tests
+  jsondiff
+, pytestCheckHook
+, requests
+,
 }:
 
 buildPythonPackage rec {

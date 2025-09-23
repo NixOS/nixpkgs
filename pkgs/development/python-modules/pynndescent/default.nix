@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  joblib,
-  llvmlite,
-  numba,
-  scikit-learn,
-  scipy,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  joblib
+, llvmlite
+, numba
+, scikit-learn
+, scipy
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  dnspython,
-  fetchPypi,
-  impacket,
-  ldap3,
-  pycryptodome,
-  setuptools,
+{ lib
+, buildPythonPackage
+, dnspython
+, fetchPypi
+, impacket
+, ldap3
+, pycryptodome
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

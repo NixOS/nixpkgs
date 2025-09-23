@@ -1,12 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  ptyprocess,
-
-  # Reverse dependency
-  sage,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, ptyprocess
+, # Reverse dependency
+  sage
+,
 }:
 
 buildPythonPackage (rec {

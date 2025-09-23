@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  texinfo,
-  perl,
-  python3,
-  makeWrapper,
-  autoreconfHook,
-  rlwrap ? null,
-  tk ? null,
-  gnuplot ? null,
-  lisp-compiler,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, texinfo
+, perl
+, python3
+, makeWrapper
+, autoreconfHook
+, rlwrap ? null
+, tk ? null
+, gnuplot ? null
+, lisp-compiler
+,
 }:
 
 let

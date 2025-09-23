@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  kernel,
-  installShellFiles,
-  pkg-config,
-  luajit,
-  ncurses,
-  perl,
-  jsoncpp,
-  openssl,
-  curl,
-  jq,
-  gcc,
-  elfutils,
-  tbb,
-  protobuf,
-  grpc,
-  yaml-cpp,
-  nlohmann_json,
-  re2,
-  zstd,
-  uthash,
-  clang,
-  libbpf,
-  bpftools,
-  fetchurl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, kernel
+, installShellFiles
+, pkg-config
+, luajit
+, ncurses
+, perl
+, jsoncpp
+, openssl
+, curl
+, jq
+, gcc
+, elfutils
+, tbb
+, protobuf
+, grpc
+, yaml-cpp
+, nlohmann_json
+, re2
+, zstd
+, uthash
+, clang
+, libbpf
+, bpftools
+, fetchurl
+,
 }:
 
 let

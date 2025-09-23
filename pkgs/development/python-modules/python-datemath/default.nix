@@ -1,13 +1,13 @@
-{
-  lib,
-  arrow,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  setuptools,
+{ lib
+, arrow
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, pytestCheckHook
+, pythonOlder
+, pytz
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  bluepy,
-  buildPythonPackage,
-  fetchPypi,
+{ lib
+, bluepy
+, buildPythonPackage
+, fetchPypi
+,
 }:
 
 buildPythonPackage rec {

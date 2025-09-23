@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
-  poetry-core,
-  propcache,
-  pytest-asyncio,
-  pytest-codspeed,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pyyaml,
-  setuptools,
-  voluptuous,
+{ lib
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, poetry-core
+, propcache
+, pytest-asyncio
+, pytest-codspeed
+, pytest-cov-stub
+, pytestCheckHook
+, pyyaml
+, setuptools
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

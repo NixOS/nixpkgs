@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  ncurses,
-  procps,
-  pytest-rerunfailures,
-  pytestCheckHook,
-  tmux,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, ncurses
+, procps
+, pytest-rerunfailures
+, pytestCheckHook
+, tmux
+,
 }:
 
 buildPythonPackage rec {

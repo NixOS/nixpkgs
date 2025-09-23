@@ -1,54 +1,49 @@
-{
-  stdenv,
-  config,
-  lib,
-  fetchFromGitLab,
-  fetchgit,
-
-  cmake,
-  ninja,
-  extra-cmake-modules,
-  flex,
-  bison,
-  wrapGAppsHook3,
-
-  exiftool,
-  opencv,
-  libtiff,
-  libpng,
-  libjpeg,
-  libheif,
-  libjxl,
-  boost,
-  lcms2,
-  expat,
-  exiv2,
-  libxml2,
-  libxslt,
-  jasper,
-  eigen,
-  lensfun,
-  liblqr1,
-  libgphoto2,
-  libusb1,
-  imagemagick,
-  x265,
-  libGLX,
-  libGLU,
-  cudaPackages,
-  enableCuda ? config.cudaSupport,
-
-  kdePackages,
-
-  # For `digitaglinktree`
-  perl,
-  sqlite,
-
-  runtimeShell,
-  # For panorama and focus stacking
-  enblend-enfuse,
-  hugin,
-  gnumake,
+{ stdenv
+, config
+, lib
+, fetchFromGitLab
+, fetchgit
+, cmake
+, ninja
+, extra-cmake-modules
+, flex
+, bison
+, wrapGAppsHook3
+, exiftool
+, opencv
+, libtiff
+, libpng
+, libjpeg
+, libheif
+, libjxl
+, boost
+, lcms2
+, expat
+, exiv2
+, libxml2
+, libxslt
+, jasper
+, eigen
+, lensfun
+, liblqr1
+, libgphoto2
+, libusb1
+, imagemagick
+, x265
+, libGLX
+, libGLU
+, cudaPackages
+, enableCuda ? config.cudaSupport
+, kdePackages
+, # For `digitaglinktree`
+  perl
+, sqlite
+, runtimeShell
+, # For panorama and focus stacking
+  enblend-enfuse
+, hugin
+, gnumake
+,
 }:
 
 let

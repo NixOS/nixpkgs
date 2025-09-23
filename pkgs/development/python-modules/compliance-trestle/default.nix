@@ -1,29 +1,29 @@
-{
-  attrs,
-  buildPythonPackage,
-  cmarkgfm,
-  cryptography,
-  defusedxml,
-  datamodel-code-generator,
-  email-validator,
-  fetchFromGitHub,
-  furl,
-  ilcli,
-  importlib-resources,
-  jinja2,
-  lib,
-  mypy,
-  openpyxl,
-  orjson,
-  paramiko,
-  pytestCheckHook,
-  pydantic,
-  python-dotenv,
-  python-frontmatter,
-  requests,
-  ruamel-yaml,
-  setuptools,
-  setuptools-scm,
+{ attrs
+, buildPythonPackage
+, cmarkgfm
+, cryptography
+, defusedxml
+, datamodel-code-generator
+, email-validator
+, fetchFromGitHub
+, furl
+, ilcli
+, importlib-resources
+, jinja2
+, lib
+, mypy
+, openpyxl
+, orjson
+, paramiko
+, pytestCheckHook
+, pydantic
+, python-dotenv
+, python-frontmatter
+, requests
+, ruamel-yaml
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

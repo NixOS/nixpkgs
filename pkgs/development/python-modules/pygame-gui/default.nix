@@ -1,14 +1,14 @@
-{
-  lib,
-  pkgs,
-  stdenv,
-  buildPythonPackage,
-  nix-update-script,
-  fetchFromGitHub,
-  setuptools,
-  pygame-ce,
-  python-i18n,
-  pytestCheckHook,
+{ lib
+, pkgs
+, stdenv
+, buildPythonPackage
+, nix-update-script
+, fetchFromGitHub
+, setuptools
+, pygame-ce
+, python-i18n
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

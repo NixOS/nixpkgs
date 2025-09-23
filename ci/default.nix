@@ -1,19 +1,19 @@
 let
   pinned = (builtins.fromJSON (builtins.readFile ./pinned.json)).pins;
 in
-{
-  system ? builtins.currentSystem,
-
-  nixpkgs ? null,
-  nixPath ? "nixVersions.latest",
+{ system ? builtins.currentSystem
+, nixpkgs ? null
+, nixPath ? "nixVersions.latest"
+,
 }:
 let
   nixpkgs' =
     if nixpkgs == null then
-      fetchTarball {
-        inherit (pinned.nixpkgs) url;
-        sha256 = pinned.nixpkgs.hash;
-      }
+      fetchTarball
+        {
+          inherit (pinned.nixpkgs) url;
+          sha256 = pinned.nixpkgs.hash;
+        }
     else
       nixpkgs;
 

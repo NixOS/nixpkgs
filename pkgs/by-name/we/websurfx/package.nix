@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  openssl,
-  pkg-config,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, openssl
+, pkg-config
+,
 }:
 let
   version = "1.24.22";

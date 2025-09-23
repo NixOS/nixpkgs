@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  libusb1,
-  pcsclite,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, libusb1
+, pcsclite
+,
 }:
 
 let

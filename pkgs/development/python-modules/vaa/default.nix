@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  pytestCheckHook,
-  cerberus,
-  django,
-  djangorestframework,
-  marshmallow,
-  pyschemes,
-  wtforms,
-  email-validator,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, pytestCheckHook
+, cerberus
+, django
+, djangorestframework
+, marshmallow
+, pyschemes
+, wtforms
+, email-validator
+,
 }:
 
 buildPythonPackage rec {

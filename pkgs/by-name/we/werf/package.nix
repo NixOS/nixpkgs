@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  btrfs-progs,
-  writableTmpDirAsHomeHook,
-  installShellFiles,
-  versionCheckHook,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, btrfs-progs
+, writableTmpDirAsHomeHook
+, installShellFiles
+, versionCheckHook
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "werf";

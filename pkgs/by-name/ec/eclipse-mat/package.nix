@@ -1,22 +1,22 @@
-{
-  fetchurl,
-  fontconfig,
-  freetype,
-  glib,
-  gsettings-desktop-schemas,
-  gtk3,
-  jdk17,
-  lib,
-  libX11,
-  libXrender,
-  libXtst,
-  makeDesktopItem,
-  makeWrapper,
-  shared-mime-info,
-  stdenv,
-  unzip,
-  webkitgtk_4_1,
-  zlib,
+{ fetchurl
+, fontconfig
+, freetype
+, glib
+, gsettings-desktop-schemas
+, gtk3
+, jdk17
+, lib
+, libX11
+, libXrender
+, libXtst
+, makeDesktopItem
+, makeWrapper
+, shared-mime-info
+, stdenv
+, unzip
+, webkitgtk_4_1
+, zlib
+,
 }:
 
 let

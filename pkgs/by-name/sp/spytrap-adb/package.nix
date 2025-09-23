@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  android-tools,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, android-tools
+,
 }:
 
 rustPlatform.buildRustPackage rec {

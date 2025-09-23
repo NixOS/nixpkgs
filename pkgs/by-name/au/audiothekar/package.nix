@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  audiothekar,
-  testers,
+{ lib
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, audiothekar
+, testers
+,
 }:
 
 buildDotnetModule rec {

@@ -1,5 +1,5 @@
-{
-  heimdall,
+{ heimdall
+,
 }:
 
 heimdall.override {

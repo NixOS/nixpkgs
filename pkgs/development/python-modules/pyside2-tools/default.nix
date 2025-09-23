@@ -1,13 +1,13 @@
-{
-  wrapPython,
-  python,
-  lib,
-  stdenv,
-  cmake,
-  qt5,
-  distutils,
-  shiboken2,
-  pyside2,
+{ wrapPython
+, python
+, lib
+, stdenv
+, cmake
+, qt5
+, distutils
+, shiboken2
+, pyside2
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jre,
-  makeBinaryWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, jre
+, makeBinaryWrapper
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 let

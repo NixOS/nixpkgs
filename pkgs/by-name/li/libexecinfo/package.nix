@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  enableStatic ? true,
-  enableShared ? !stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, enableStatic ? true
+, enableShared ? !stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation rec {

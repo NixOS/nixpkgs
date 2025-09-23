@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  msgpack,
-  pytestCheckHook,
-  requests,
-  retry,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, msgpack
+, pytestCheckHook
+, requests
+, retry
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

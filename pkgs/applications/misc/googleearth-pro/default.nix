@@ -1,35 +1,31 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  fetchurl,
-  freetype,
-  glib,
-  libGL,
-  libGLU,
-  libSM,
-
-  libXcomposite,
-  libXi,
-  libXrender,
-  libX11,
-
-  libxcb,
-  sqlite,
-  zlib,
-  fontconfig,
-  dpkg,
-  libproxy,
-  libxml2_13,
-  gst_all_1,
-  dbus,
-  makeWrapper,
-
-  cups,
-  alsa-lib,
-
-  xkeyboardconfig,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, mkDerivation
+, fetchurl
+, freetype
+, glib
+, libGL
+, libGLU
+, libSM
+, libXcomposite
+, libXi
+, libXrender
+, libX11
+, libxcb
+, sqlite
+, zlib
+, fontconfig
+, dpkg
+, libproxy
+, libxml2_13
+, gst_all_1
+, dbus
+, makeWrapper
+, cups
+, alsa-lib
+, xkeyboardconfig
+, autoPatchelfHook
+,
 }:
 let
   arch =

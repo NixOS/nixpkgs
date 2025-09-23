@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  starlette,
-  fastapi,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, starlette
+, fastapi
+,
 }:
 
 buildPythonPackage rec {

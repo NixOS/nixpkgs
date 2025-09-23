@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  i3ipc,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, i3ipc
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  isPy3k,
-  fetchFromGitHub,
-  setuptools,
-  appdirs,
-  consonance,
-  protobuf,
-  python-axolotl,
-  six,
-  pyasyncore,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, isPy3k
+, fetchFromGitHub
+, setuptools
+, appdirs
+, consonance
+, protobuf
+, python-axolotl
+, six
+, pyasyncore
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

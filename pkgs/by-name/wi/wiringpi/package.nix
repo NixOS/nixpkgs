@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  symlinkJoin,
-  fetchFromGitHub,
-  libxcrypt,
+{ lib
+, stdenv
+, symlinkJoin
+, fetchFromGitHub
+, libxcrypt
+,
 }:
 
 let
@@ -15,10 +15,11 @@ let
     hash = "sha256-NBHmRA+6Os6/IpW8behbgpVjtN8QF9gkffXU2ZVC8ts=";
   };
   mkSubProject =
-    {
-      subprj, # The only mandatory argument
-      buildInputs ? [ ],
-      src ? srcAll,
+    { subprj
+    , # The only mandatory argument
+      buildInputs ? [ ]
+    , src ? srcAll
+    ,
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "wiringpi-${subprj}";

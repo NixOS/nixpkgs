@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  python3,
-  cairo,
-  libjpeg,
-  ntk,
-  libjack2,
-  libsndfile,
-  ladspaH,
-  liblo,
-  libsigcxx,
-  lrdf,
-  wafHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, python3
+, cairo
+, libjpeg
+, ntk
+, libjack2
+, libsndfile
+, ladspaH
+, liblo
+, libsigcxx
+, lrdf
+, wafHook
+,
 }:
 
 stdenv.mkDerivation {

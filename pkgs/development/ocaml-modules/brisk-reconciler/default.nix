@@ -1,10 +1,10 @@
-{
-  buildDunePackage,
-  fetchFromGitHub,
-  lib,
-  reason,
-  ppxlib,
-  ocaml,
+{ buildDunePackage
+, fetchFromGitHub
+, lib
+, reason
+, ppxlib
+, ocaml
+,
 }:
 
 let

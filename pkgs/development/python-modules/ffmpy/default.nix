@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  uv-build,
-  pytestCheckHook,
-  go,
-  ffmpeg-headless,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, uv-build
+, pytestCheckHook
+, go
+, ffmpeg-headless
+,
 }:
 
 buildPythonPackage rec {

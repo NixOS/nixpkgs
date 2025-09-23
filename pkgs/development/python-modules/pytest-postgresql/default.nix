@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pytest-cov-stub,
-  setuptools,
-  mirakuru,
-  port-for,
-  psycopg,
-  pytest,
-  postgresql,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pytest-cov-stub
+, setuptools
+, mirakuru
+, port-for
+, psycopg
+, pytest
+, postgresql
+,
 }:
 
 buildPythonPackage rec {

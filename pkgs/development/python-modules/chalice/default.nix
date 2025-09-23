@@ -1,24 +1,24 @@
-{
-  lib,
-  attrs,
-  botocore,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  hypothesis,
-  inquirer,
-  jmespath,
-  mypy-extensions,
-  pip,
-  pytestCheckHook,
-  pyyaml,
-  requests,
-  setuptools,
-  six,
-  typing-extensions,
-  watchdog,
-  websocket-client,
-  wheel,
+{ lib
+, attrs
+, botocore
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, hypothesis
+, inquirer
+, jmespath
+, mypy-extensions
+, pip
+, pytestCheckHook
+, pyyaml
+, requests
+, setuptools
+, six
+, typing-extensions
+, watchdog
+, websocket-client
+, wheel
+,
 }:
 
 buildPythonPackage rec {

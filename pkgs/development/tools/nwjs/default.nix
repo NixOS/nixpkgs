@@ -1,40 +1,40 @@
-{
-  alsa-lib,
-  at-spi2-core,
-  atk,
-  autoPatchelfHook,
-  buildEnv,
-  buildPackages,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  fetchurl,
-  ffmpeg,
-  fontconfig,
-  freetype,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  lib,
-  libcap,
-  libdrm,
-  libGL,
-  libnotify,
-  libuuid,
-  libxcb,
-  libxkbcommon,
-  makeWrapper,
-  libgbm,
-  nspr,
-  nss,
-  pango,
-  sdk ? false,
-  sqlite,
-  stdenv,
-  systemd,
-  udev,
-  xorg,
+{ alsa-lib
+, at-spi2-core
+, atk
+, autoPatchelfHook
+, buildEnv
+, buildPackages
+, cairo
+, cups
+, dbus
+, expat
+, fetchurl
+, ffmpeg
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gtk3
+, lib
+, libcap
+, libdrm
+, libGL
+, libnotify
+, libuuid
+, libxcb
+, libxkbcommon
+, makeWrapper
+, libgbm
+, nspr
+, nss
+, pango
+, sdk ? false
+, sqlite
+, stdenv
+, systemd
+, udev
+, xorg
+,
 }:
 
 let
@@ -111,8 +111,7 @@ stdenv.mkDerivation {
           "sdk-x64" = "sha256-jWw5kXYGxu7oen8fK2Q58QPhiBRC6H2ibGXkeUFW2pI=";
           "ia32" = "sha256-oODdSKNlOPSLD9vAqRwYcAgH6mumyOB5Fp6G9ifSgok=";
           "x64" = "sha256-WhHV+xj2ngEz+i1ipBhwZD9b0EF/hdi8gMBZw5qYRGA=";
-        }
-        ."${flavor + bits}";
+        }."${flavor + bits}";
     };
 
   nativeBuildInputs = [

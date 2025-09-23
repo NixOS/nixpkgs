@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  nbformat,
-  nbclient,
-  ipykernel,
-  pandas,
-  pytestCheckHook,
-  setuptools,
-  traitlets,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, nbformat
+, nbclient
+, ipykernel
+, pandas
+, pytestCheckHook
+, setuptools
+, traitlets
+,
 }:
 
 buildPythonPackage rec {

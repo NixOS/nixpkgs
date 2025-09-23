@@ -1,23 +1,23 @@
-{
-  lib,
-  config,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  xxd,
-  perl,
-  installShellFiles,
-  enableAvx2 ? stdenv.hostPlatform.avx2Support,
-  enableSse4_1 ? stdenv.hostPlatform.sse4_1Support,
-  enableMpi ? false,
-  mpi,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages,
-  llvmPackages,
-  zlib,
-  bzip2,
-  pkgsStatic,
-  runCommand,
+{ lib
+, config
+, stdenv
+, fetchFromGitHub
+, cmake
+, xxd
+, perl
+, installShellFiles
+, enableAvx2 ? stdenv.hostPlatform.avx2Support
+, enableSse4_1 ? stdenv.hostPlatform.sse4_1Support
+, enableMpi ? false
+, mpi
+, cudaSupport ? config.cudaSupport
+, cudaPackages
+, llvmPackages
+, zlib
+, bzip2
+, pkgsStatic
+, runCommand
+,
 }:
 let
   # require static library, libzstd.a

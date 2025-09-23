@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  pydantic,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, pydantic
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

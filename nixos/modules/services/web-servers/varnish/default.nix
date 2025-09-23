@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -44,17 +43,19 @@ let
   #                                # user, group and mode set permissions for
   #                                #   a Unix domain socket.
   commandLineAddresses =
-    (concatMapStringsSep " " (
-      a:
-      "-a "
-      + optionalString (!isNull a.name) "${a.name}="
-      + a.address
-      + optionalString (!isNull a.port) ":${toString a.port}"
-      + optionalString (!isNull a.proto) ",${a.proto}"
-      + optionalString (!isNull a.user) ",user=${a.user}"
-      + optionalString (!isNull a.group) ",group=${a.group}"
-      + optionalString (!isNull a.mode) ",mode=${a.mode}"
-    ) cfg.listen)
+    (concatMapStringsSep " "
+      (
+        a:
+        "-a "
+        + optionalString (!isNull a.name) "${a.name}="
+        + a.address
+        + optionalString (!isNull a.port) ":${toString a.port}"
+        + optionalString (!isNull a.proto) ",${a.proto}"
+        + optionalString (!isNull a.user) ",user=${a.user}"
+        + optionalString (!isNull a.group) ",group=${a.group}"
+        + optionalString (!isNull a.mode) ",mode=${a.mode}"
+      )
+      cfg.listen)
     + lib.optionalString (!isNull cfg.http_address) " -a ${cfg.http_address}";
   addressSubmodule = types.submodule {
     options = {
@@ -111,21 +112,21 @@ let
     m:
     (
       if ((hasPrefix "@" m.address) || (hasPrefix "/" m.address)) then
-        # this is a unix socket
+      # this is a unix socket
         (m.port != null)
       else
       # this is not a path-based unix socket
-      if !(hasPrefix "/" m.address) && (m.group != null) || (m.user != null) || (m.mode != null) then
-        false
-      else
-        true
+        if !(hasPrefix "/" m.address) && (m.group != null) || (m.user != null) || (m.mode != null) then
+          false
+        else
+          true
     )
   );
   commandLine =
     "-f ${pkgs.writeText "default.vcl" cfg.config}"
     +
-      lib.optionalString (cfg.extraModules != [ ])
-        " -p vmod_path='${
+    lib.optionalString (cfg.extraModules != [ ])
+      " -p vmod_path='${
            lib.makeSearchPathOutput "lib" "lib/varnish/vmods" ([ cfg.package ] ++ cfg.extraModules)
          }' -r vmod_path";
 in
@@ -223,16 +224,18 @@ in
       '')
     ];
 
-    assertions = concatMap (m: [
-      {
-        assertion = (hasPrefix "/" m.address) || (hasPrefix "@" m.address) -> m.port == null;
-        message = "Listen ports must not be specified with UNIX sockets: ${builtins.toJSON m}";
-      }
-      {
-        assertion = !(hasPrefix "/" m.address) -> m.user == null && m.group == null && m.mode == null;
-        message = "Abstract UNIX sockets or IP sockets can not be used with user, group, and mode settings: ${builtins.toJSON m}";
-      }
-    ]) cfg.listen;
+    assertions = concatMap
+      (m: [
+        {
+          assertion = (hasPrefix "/" m.address) || (hasPrefix "@" m.address) -> m.port == null;
+          message = "Listen ports must not be specified with UNIX sockets: ${builtins.toJSON m}";
+        }
+        {
+          assertion = !(hasPrefix "/" m.address) -> m.user == null && m.group == null && m.mode == null;
+          message = "Abstract UNIX sockets or IP sockets can not be used with user, group, and mode settings: ${builtins.toJSON m}";
+        }
+      ])
+      cfg.listen;
 
     warnings =
       lib.optional (!isNull cfg.http_address)

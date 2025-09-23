@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchzip,
-  buildGo124Module,
-  nixosTests,
-  nix-update-script,
+{ lib
+, fetchzip
+, buildGo124Module
+, nixosTests
+, nix-update-script
+,
 }:
 
 buildGo124Module (finalAttrs: {

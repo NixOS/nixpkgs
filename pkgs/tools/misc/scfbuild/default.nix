@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  python,
-  pyyaml,
-  fonttools,
-  fontforge,
-  setuptools,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, python
+, pyyaml
+, fonttools
+, fontforge
+, setuptools
+,
 }:
 
 buildPythonApplication {

@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchzip,
-  nixosTests,
+{ stdenvNoCC
+, lib
+, fetchzip
+, nixosTests
+,
 }:
 
 let

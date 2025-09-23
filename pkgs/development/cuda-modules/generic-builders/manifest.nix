@@ -1,32 +1,33 @@
 {
   # General callPackage-supplied arguments
-  autoAddDriverRunpath,
-  autoAddCudaCompatRunpath,
-  autoPatchelfHook,
-  backendStdenv,
-  callPackage,
-  _cuda,
-  fetchurl,
-  lib,
-  markForCudatoolkitRootHook,
-  flags,
-  stdenv,
-  # Builder-specific arguments
+  autoAddDriverRunpath
+, autoAddCudaCompatRunpath
+, autoPatchelfHook
+, backendStdenv
+, callPackage
+, _cuda
+, fetchurl
+, lib
+, markForCudatoolkitRootHook
+, flags
+, stdenv
+, # Builder-specific arguments
   # Short package name (e.g., "cuda_cccl")
   # pname : String
-  pname,
-  # Common name (e.g., "cutensor" or "cudnn") -- used in the URL.
+  pname
+, # Common name (e.g., "cutensor" or "cudnn") -- used in the URL.
   # Also known as the Redistributable Name.
   # redistName : String,
-  redistName,
-  # If libPath is non-null, it must be a subdirectory of `lib`.
+  redistName
+, # If libPath is non-null, it must be a subdirectory of `lib`.
   # The contents of `libPath` will be moved to the root of `lib`.
-  libPath ? null,
-  # See ./modules/generic/manifests/redistrib/release.nix
-  redistribRelease,
-  # See ./modules/generic/manifests/feature/release.nix
-  featureRelease,
-  cudaMajorMinorVersion,
+  libPath ? null
+, # See ./modules/generic/manifests/redistrib/release.nix
+  redistribRelease
+, # See ./modules/generic/manifests/feature/release.nix
+  featureRelease
+, cudaMajorMinorVersion
+,
 }:
 let
   inherit (lib)
@@ -84,7 +85,9 @@ in
           redistSystem
           "outputs"
           output
-        ] false featureRelease;
+        ]
+          false
+          featureRelease;
       # Order is important here so we use a list.
       possibleOutputs = [
         "bin"
@@ -159,13 +162,15 @@ in
 
   # src :: Optional Derivation
   # If redistSystem doesn't exist in redistribRelease, return null.
-  src = trivial.mapNullable (
-    { relative_path, sha256, ... }:
-    fetchurl {
-      url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
-      inherit sha256;
-    }
-  ) (redistribRelease.${redistSystem} or null);
+  src = trivial.mapNullable
+    (
+      { relative_path, sha256, ... }:
+      fetchurl {
+        url = "https://developer.download.nvidia.com/compute/${redistName}/redist/${relative_path}";
+        inherit sha256;
+      }
+    )
+    (redistribRelease.${redistSystem} or null);
 
   postPatch =
     # Pkg-config's setup hook expects configuration files in $out/share/pkgconfig
@@ -338,7 +343,7 @@ in
       lists.optionals isBadPlatform finalAttrs.meta.platforms;
     license =
       if redistName == "cuda" then
-        # Add the package-specific license.
+      # Add the package-specific license.
         let
           licensePath =
             if redistribRelease.license_path != null then

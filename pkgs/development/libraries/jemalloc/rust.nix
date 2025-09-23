@@ -1,10 +1,9 @@
-{
-  lib,
-  stdenv,
-  jemalloc,
-  writeText,
-
-  unprefixed ? false,
+{ lib
+, stdenv
+, jemalloc
+, writeText
+, unprefixed ? false
+,
 }:
 
 let

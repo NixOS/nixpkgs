@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  buildPackages,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  makeWrapper,
-  python310,
+{ lib
+, stdenv
+, buildGoModule
+, buildPackages
+, fetchFromGitHub
+, installShellFiles
+, testers
+, makeWrapper
+, python310
+,
 }:
 
 buildGoModule (finalAttrs: {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  webkitgtk_4_1,
-  libsoup_3,
-  glib,
-  gtk3,
-  cairo,
-  dbus,
-  gdk-pixbuf,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, webkitgtk_4_1
+, libsoup_3
+, glib
+, gtk3
+, cairo
+, dbus
+, gdk-pixbuf
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

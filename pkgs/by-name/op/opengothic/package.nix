@@ -1,19 +1,19 @@
-{
-  alsa-lib,
-  cmake,
-  fetchFromGitHub,
-  glslang,
-  lib,
-  libX11,
-  libXcursor,
-  libglvnd,
-  makeWrapper,
-  ninja,
-  nix-update-script,
-  stdenv,
-  vulkan-headers,
-  vulkan-loader,
-  vulkan-validation-layers,
+{ alsa-lib
+, cmake
+, fetchFromGitHub
+, glslang
+, lib
+, libX11
+, libXcursor
+, libglvnd
+, makeWrapper
+, ninja
+, nix-update-script
+, stdenv
+, vulkan-headers
+, vulkan-loader
+, vulkan-validation-layers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opengothic";

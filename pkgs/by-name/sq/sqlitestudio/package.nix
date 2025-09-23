@@ -1,16 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  libsForQt5,
-  readline,
-  tcl,
-  python3,
-  copyDesktopItems,
-  makeDesktopItem,
-
-  sqlitestudio-plugins,
-  includeOfficialPlugins ? lib.meta.availableOn stdenv.hostPlatform sqlitestudio-plugins,
+{ stdenv
+, lib
+, fetchFromGitHub
+, libsForQt5
+, readline
+, tcl
+, python3
+, copyDesktopItems
+, makeDesktopItem
+, sqlitestudio-plugins
+, includeOfficialPlugins ? lib.meta.availableOn stdenv.hostPlatform sqlitestudio-plugins
+,
 }:
 stdenv.mkDerivation rec {
   pname = "sqlitestudio";

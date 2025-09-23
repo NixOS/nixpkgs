@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  cmake,
-  ninja,
-  gfortran,
-  blas,
-  lapack,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, cmake
+, ninja
+, gfortran
+, blas
+, lapack
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

@@ -1,11 +1,11 @@
-{
-  lib,
-  llvmPackages,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  help2man,
-  irods,
+{ lib
+, llvmPackages
+, fetchFromGitHub
+, cmake
+, ninja
+, help2man
+, irods
+,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {

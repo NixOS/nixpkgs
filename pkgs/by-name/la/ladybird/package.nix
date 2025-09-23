@@ -1,35 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unicode-emoji,
-  unicode-character-database,
-  unicode-idna,
-  publicsuffix-list,
-  cmake,
-  ninja,
-  pkg-config,
-  curl,
-  libavif,
-  angle, # libEGL
-  libjxl,
-  libpulseaudio,
-  libwebp,
-  libxcrypt,
-  openssl,
-  python3,
-  qt6Packages,
-  woff2,
-  fast-float,
-  ffmpeg,
-  fontconfig,
-  simdutf,
-  skia,
-  nixosTests,
-  unstableGitUpdater,
-  apple-sdk_14,
-  libtommath,
-  sdl3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unicode-emoji
+, unicode-character-database
+, unicode-idna
+, publicsuffix-list
+, cmake
+, ninja
+, pkg-config
+, curl
+, libavif
+, angle
+, # libEGL
+  libjxl
+, libpulseaudio
+, libwebp
+, libxcrypt
+, openssl
+, python3
+, qt6Packages
+, woff2
+, fast-float
+, ffmpeg
+, fontconfig
+, simdutf
+, skia
+, nixosTests
+, unstableGitUpdater
+, apple-sdk_14
+, libtommath
+, sdl3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

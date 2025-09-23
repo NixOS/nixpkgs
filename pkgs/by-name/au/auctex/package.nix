@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  emacs,
-  texliveBasic,
-  ghostscript,
+{ lib
+, stdenv
+, fetchurl
+, emacs
+, texliveBasic
+, ghostscript
+,
 }:
 
 let

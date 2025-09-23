@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  curl,
-  libevent,
-  libiconv,
-  openssl,
-  pcre,
-  pcre2,
-  zlib,
-  buildPackages,
-  odbcSupport ? true,
-  unixODBC,
-  snmpSupport ? stdenv.buildPlatform == stdenv.hostPlatform,
-  net-snmp,
-  sshSupport ? true,
-  libssh2,
-  sqliteSupport ? false,
-  sqlite,
-  mysqlSupport ? false,
-  libmysqlclient,
-  postgresqlSupport ? false,
-  libpq,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, curl
+, libevent
+, libiconv
+, openssl
+, pcre
+, pcre2
+, zlib
+, buildPackages
+, odbcSupport ? true
+, unixODBC
+, snmpSupport ? stdenv.buildPlatform == stdenv.hostPlatform
+, net-snmp
+, sshSupport ? true
+, libssh2
+, sqliteSupport ? false
+, sqlite
+, mysqlSupport ? false
+, libmysqlclient
+, postgresqlSupport ? false
+, libpq
+,
 }:
 
 # ensure exactly one database type is selected

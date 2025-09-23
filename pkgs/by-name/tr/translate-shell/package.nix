@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  curl,
-  fribidi,
-  rlwrap,
-  gawk,
-  groff,
-  ncurses,
-  hexdump,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, curl
+, fribidi
+, rlwrap
+, gawk
+, groff
+, ncurses
+, hexdump
+,
 }:
 
 stdenv.mkDerivation rec {

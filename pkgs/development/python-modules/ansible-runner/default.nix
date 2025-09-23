@@ -1,33 +1,30 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  packaging,
-  pexpect,
-  python-daemon,
-  pyyaml,
-  pythonOlder,
-  importlib-metadata,
-
-  # tests
-  addBinToPathHook,
-  ansible-core,
-  glibcLocales,
-  mock,
-  openssh,
-  pytest-mock,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  packaging
+, pexpect
+, python-daemon
+, pyyaml
+, pythonOlder
+, importlib-metadata
+, # tests
+  addBinToPathHook
+, ansible-core
+, glibcLocales
+, mock
+, openssh
+, pytest-mock
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

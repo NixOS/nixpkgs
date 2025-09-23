@@ -1,10 +1,11 @@
-{
-  callPackage,
-  makeSetupHook,
-  stdenv,
+{ callPackage
+, makeSetupHook
+, stdenv
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "postgresql-test-hook";
   passthru.tests = {
     simple = callPackage ./test.nix { };

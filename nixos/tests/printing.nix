@@ -1,8 +1,9 @@
 # Test printing via CUPS.
-{
-  pkgs,
-  socket ? true, # whether to use socket activation
-  listenTcp ? true, # whether to open port 631 on client
+{ pkgs
+, socket ? true
+, # whether to use socket activation
+  listenTcp ? true
+, # whether to open port 631 on client
   ...
 }:
 

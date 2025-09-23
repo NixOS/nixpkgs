@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  distutils,
-  fsspec,
-  graphviz,
-  torch,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, distutils
+, fsspec
+, graphviz
+, torch
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

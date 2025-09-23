@@ -1,21 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  cmake,
-  makeWrapper,
-  pkg-config,
-
-  bash,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  SDL2_mixer,
-  libmpeg2,
-  libvorbis,
-  libzip,
-  libX11,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, pkg-config
+, bash
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, SDL2_mixer
+, libmpeg2
+, libvorbis
+, libzip
+, libX11
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

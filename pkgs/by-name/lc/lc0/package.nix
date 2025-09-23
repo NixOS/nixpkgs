@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  zlib,
-  gtest,
-  eigen,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, python3
+, zlib
+, gtest
+, eigen
+,
 }:
 
 stdenv.mkDerivation rec {

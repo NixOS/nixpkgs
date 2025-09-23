@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
-  zlib,
-  boost186,
-  openssl,
-  python311,
-  libiconv,
-  ncurses,
-  boost-build,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, zlib
+, boost186
+, openssl
+, python311
+, libiconv
+, ncurses
+, boost-build
+,
 }:
 
 let

@@ -1,5 +1,5 @@
-{
-  libcef,
+{ libcef
+,
 }:
 
 libcef.overrideAttrs (oldAttrs: {

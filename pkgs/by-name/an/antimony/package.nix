@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libpng,
-  python3,
-  libGLU,
-  libGL,
-  libsForQt5,
-  ncurses,
-  cmake,
-  flex,
-  lemon,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpng
+, python3
+, libGLU
+, libGL
+, libsForQt5
+, ncurses
+, cmake
+, flex
+, lemon
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 let

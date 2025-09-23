@@ -1,125 +1,125 @@
-{
-  lib,
-  stdenv,
-  # nixpkgs functions
-  buildGoModule,
-  callPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
-  replaceVars,
-  # Language dependencies
-  fetchYarnDeps,
-  mkYarnModules,
-  python3,
-  # Misc dependencies
-  charm-freeze,
-  code-minimap,
-  dailies,
-  dasht,
-  deno,
-  direnv,
-  fzf,
-  gawk,
-  gperf,
-  helm-ls,
-  himalaya,
-  htop,
-  jq,
-  khard,
-  languagetool,
-  libgit2,
-  llvmPackages,
-  neovim-unwrapped,
-  nim1,
-  nodejs,
-  openscad,
-  openssh,
-  ranger,
-  ripgrep,
-  sqlite,
-  sshfs,
-  stylish-haskell,
-  tabnine,
-  tmux,
-  typescript,
-  typescript-language-server,
-  vim,
-  which,
-  xdg-utils,
-  xdotool,
-  xkb-switch,
-  xorg,
-  xxd,
-  ycmd,
-  zathura,
-  zenity,
-  zoxide,
-  zsh,
-  # codeium-nvim dependencies
-  codeium,
-  # command-t dependencies
-  getconf,
-  # cornelis dependencies
-  cornelis,
-  # cpsm dependencies
-  boost,
-  cmake,
-  icu,
-  ncurses,
-  # devdocs-nvim dependencies
-  pandoc,
-  # nvim-tinygit
-  gitMinimal,
-  # Preview-nvim dependencies
-  md-tui,
-  # sved dependencies
-  glib,
-  gobject-introspection,
-  wrapGAppsHook3,
-  writeText,
-  curl,
-  # vim-agda dependencies
-  agda,
-  # vim-go dependencies
-  asmfmt,
-  delve,
-  errcheck,
-  go-motion,
-  go-tools,
-  gocode-gomod,
-  godef,
-  gogetdoc,
-  golangci-lint,
-  golint,
-  gomodifytags,
-  gopls,
-  gotags,
-  gotools,
-  iferr,
-  impl,
-  reftools,
-  revive,
-  # hurl dependencies
-  hurl,
-  # must be lua51Packages
-  aider-chat,
-  # typst-preview dependencies
-  tinymist,
-  websocat,
-  # lazydocker.nvim dependencies
-  lazydocker,
-  # lazyjj.nvim dependencies
-  lazyjj,
-  # luau-lsp-nvim dependencies
-  luau-lsp,
-  # uv.nvim dependencies
-  uv,
-  # nvim-vstsl dependencies
-  vtsls,
-  # search-and-replace.nvim dependencies
-  fd,
-  sad,
+{ lib
+, stdenv
+, # nixpkgs functions
+  buildGoModule
+, callPackage
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, replaceVars
+, # Language dependencies
+  fetchYarnDeps
+, mkYarnModules
+, python3
+, # Misc dependencies
+  charm-freeze
+, code-minimap
+, dailies
+, dasht
+, deno
+, direnv
+, fzf
+, gawk
+, gperf
+, helm-ls
+, himalaya
+, htop
+, jq
+, khard
+, languagetool
+, libgit2
+, llvmPackages
+, neovim-unwrapped
+, nim1
+, nodejs
+, openscad
+, openssh
+, ranger
+, ripgrep
+, sqlite
+, sshfs
+, stylish-haskell
+, tabnine
+, tmux
+, typescript
+, typescript-language-server
+, vim
+, which
+, xdg-utils
+, xdotool
+, xkb-switch
+, xorg
+, xxd
+, ycmd
+, zathura
+, zenity
+, zoxide
+, zsh
+, # codeium-nvim dependencies
+  codeium
+, # command-t dependencies
+  getconf
+, # cornelis dependencies
+  cornelis
+, # cpsm dependencies
+  boost
+, cmake
+, icu
+, ncurses
+, # devdocs-nvim dependencies
+  pandoc
+, # nvim-tinygit
+  gitMinimal
+, # Preview-nvim dependencies
+  md-tui
+, # sved dependencies
+  glib
+, gobject-introspection
+, wrapGAppsHook3
+, writeText
+, curl
+, # vim-agda dependencies
+  agda
+, # vim-go dependencies
+  asmfmt
+, delve
+, errcheck
+, go-motion
+, go-tools
+, gocode-gomod
+, godef
+, gogetdoc
+, golangci-lint
+, golint
+, gomodifytags
+, gopls
+, gotags
+, gotools
+, iferr
+, impl
+, reftools
+, revive
+, # hurl dependencies
+  hurl
+, # must be lua51Packages
+  aider-chat
+, # typst-preview dependencies
+  tinymist
+, websocat
+, # lazydocker.nvim dependencies
+  lazydocker
+, # lazyjj.nvim dependencies
+  lazyjj
+, # luau-lsp-nvim dependencies
+  luau-lsp
+, # uv.nvim dependencies
+  uv
+, # nvim-vstsl dependencies
+  vtsls
+, # search-and-replace.nvim dependencies
+  fd
+, sad
+,
 }:
 self: super:
 let
@@ -699,8 +699,7 @@ assertNoAdditions {
                 aarch64-linux = "linux_arm";
                 x86_64-darwin = "macos_x64";
                 aarch64-darwin = "macos_arm";
-              }
-              .${system} or throwSystem;
+              }.${system} or throwSystem;
 
             hash = codeiumHashes.${system} or throwSystem;
           in
@@ -2330,8 +2329,7 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
-  NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs {
-  };
+  NotebookNavigator-nvim = super.NotebookNavigator-nvim.overrideAttrs { };
 
   nterm-nvim = super.nterm-nvim.overrideAttrs {
     dependencies = [ self.aniseed ];
@@ -3101,8 +3099,7 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
-  scretch-nvim = super.scretch-nvim.overrideAttrs {
-  };
+  scretch-nvim = super.scretch-nvim.overrideAttrs { };
 
   searchbox-nvim = super.searchbox-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
@@ -3949,8 +3946,7 @@ assertNoAdditions {
     dependencies = [ self.vim-repeat ];
   };
 
-  vim-tabby = super.vim-tabby.overrideAttrs {
-  };
+  vim-tabby = super.vim-tabby.overrideAttrs { };
 
   vim-textobj-entire = super.vim-textobj-entire.overrideAttrs (old: {
     dependencies = [ self.vim-textobj-user ];

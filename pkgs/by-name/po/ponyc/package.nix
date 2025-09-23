@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  apple-sdk_13,
-  cmake,
-  coreutils,
-  darwinMinVersionHook,
-  libxml2,
-  lto ? true,
-  makeWrapper,
-  openssl,
-  pcre2,
-  pony-corral,
-  python3,
-  # Not really used for anything real, just at build time.
-  git,
-  replaceVars,
-  which,
-  z3,
-  cctools,
-  procps,
+{ lib
+, stdenv
+, fetchFromGitHub
+, apple-sdk_13
+, cmake
+, coreutils
+, darwinMinVersionHook
+, libxml2
+, lto ? true
+, makeWrapper
+, openssl
+, pcre2
+, pony-corral
+, python3
+, # Not really used for anything real, just at build time.
+  git
+, replaceVars
+, which
+, z3
+, cctools
+, procps
+,
 }:
 
 stdenv.mkDerivation (rec {

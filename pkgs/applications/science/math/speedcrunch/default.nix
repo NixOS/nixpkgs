@@ -1,11 +1,11 @@
-{
-  stdenv,
-  mkDerivation,
-  lib,
-  fetchFromBitbucket,
-  cmake,
-  qtbase,
-  qttools,
+{ stdenv
+, mkDerivation
+, lib
+, fetchFromBitbucket
+, cmake
+, qtbase
+, qttools
+,
 }:
 
 mkDerivation rec {

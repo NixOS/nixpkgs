@@ -1,13 +1,13 @@
-{
-  fetchurl,
-  fetchpatch,
-  lib,
-  stdenv,
-  autoconf,
-  libpcap,
-  ncurses,
-  pkg-config,
-  glib,
+{ fetchurl
+, fetchpatch
+, lib
+, stdenv
+, autoconf
+, libpcap
+, ncurses
+, pkg-config
+, glib
+,
 }:
 
 stdenv.mkDerivation rec {

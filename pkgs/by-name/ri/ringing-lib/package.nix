@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  autoreconfHook,
-  pkg-config,
-  readline,
-  xercesc,
-  unstableGitUpdater,
+{ stdenv
+, fetchFromGitHub
+, lib
+, autoreconfHook
+, pkg-config
+, readline
+, xercesc
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

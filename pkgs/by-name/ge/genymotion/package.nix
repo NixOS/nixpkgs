@@ -1,28 +1,28 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeWrapper,
-  which,
-  zlib,
-  libGL,
-  glib,
-  xorg,
-  libxkbcommon,
-  xdg-utils,
-  libXrender,
-  fontconfig,
-  freetype,
-  systemd,
-  libpulseaudio,
-  cairo,
-  gdk-pixbuf,
-  gtk3,
-  pixman,
-  # For glewinfo
-  libXmu,
-  libXi,
-  libXext,
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, which
+, zlib
+, libGL
+, glib
+, xorg
+, libxkbcommon
+, xdg-utils
+, libXrender
+, fontconfig
+, freetype
+, systemd
+, libpulseaudio
+, cairo
+, gdk-pixbuf
+, gtk3
+, pixman
+, # For glewinfo
+  libXmu
+, libXi
+, libXext
+,
 }:
 
 let

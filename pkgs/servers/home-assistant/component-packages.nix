@@ -250,13 +250,13 @@
       ];
     "androidtv" =
       ps:
-      with ps;
-      [
-        adb-shell
-        androidtv
-      ]
-      ++ adb-shell.optional-dependencies.async
-      ++ androidtv.optional-dependencies.async;
+        with ps;
+        [
+          adb-shell
+          androidtv
+        ]
+        ++ adb-shell.optional-dependencies.async
+        ++ androidtv.optional-dependencies.async;
     "androidtv_remote" =
       ps: with ps; [
         androidtvremote2
@@ -513,12 +513,12 @@
       ];
     "azure_data_explorer" =
       ps:
-      with ps;
-      [
-        azure-kusto-data
-        azure-kusto-ingest
-      ]
-      ++ azure-kusto-data.optional-dependencies.aio;
+        with ps;
+        [
+          azure-kusto-data
+          azure-kusto-ingest
+        ]
+        ++ azure-kusto-data.optional-dependencies.aio;
     "azure_devops" =
       ps: with ps; [
         aioazuredevops
@@ -721,11 +721,11 @@
       ];
     "bmw_connected_drive" =
       ps:
-      with ps;
-      [
-        bimmer-connected
-      ]
-      ++ bimmer-connected.optional-dependencies.china;
+        with ps;
+        [
+          bimmer-connected
+        ]
+        ++ bimmer-connected.optional-dependencies.china;
     "bond" =
       ps: with ps; [
         bond-async
@@ -1409,11 +1409,11 @@
       ];
     "eddystone_temperature" =
       ps:
-      with ps;
-      [
-        beacontools
-      ]
-      ++ beacontools.optional-dependencies.scan;
+        with ps;
+        [
+          beacontools
+        ]
+        ++ beacontools.optional-dependencies.scan;
     "edimax" =
       ps: with ps; [
         pyedimax
@@ -1896,24 +1896,24 @@
       ];
     "fritz" =
       ps:
-      with ps;
-      [
-        fritzconnection
-        ifaddr
-        xmltodict
-      ]
-      ++ fritzconnection.optional-dependencies.qr;
+        with ps;
+        [
+          fritzconnection
+          ifaddr
+          xmltodict
+        ]
+        ++ fritzconnection.optional-dependencies.qr;
     "fritzbox" =
       ps: with ps; [
         pyfritzhome
       ];
     "fritzbox_callmonitor" =
       ps:
-      with ps;
-      [
-        fritzconnection
-      ]
-      ++ fritzconnection.optional-dependencies.qr;
+        with ps;
+        [
+          fritzconnection
+        ]
+        ++ fritzconnection.optional-dependencies.qr;
     "fronius" =
       ps: with ps; [
         pyfronius
@@ -2886,11 +2886,11 @@
       ];
     "jewish_calendar" =
       ps:
-      with ps;
-      [
-        hdate
-      ]
-      ++ hdate.optional-dependencies.astral;
+        with ps;
+        [
+          hdate
+        ]
+        ++ hdate.optional-dependencies.astral;
     "joaoapps_join" =
       ps: with ps; [
         python-join-api
@@ -3519,11 +3519,11 @@
       ];
     "media_extractor" =
       ps:
-      with ps;
-      [
-        yt-dlp
-      ]
-      ++ yt-dlp.optional-dependencies.default;
+        with ps;
+        [
+          yt-dlp
+        ]
+        ++ yt-dlp.optional-dependencies.default;
     "media_player" =
       ps: with ps; [
       ];
@@ -4095,11 +4095,11 @@
       ];
     "nws" =
       ps:
-      with ps;
-      [
-        pynws
-      ]
-      ++ pynws.optional-dependencies.retry;
+        with ps;
+        [
+          pynws
+        ]
+        ++ pynws.optional-dependencies.retry;
     "nx584" =
       ps: with ps; [
         pynx584
@@ -5142,18 +5142,18 @@
       ];
     "samsungtv" =
       ps:
-      with ps;
-      [
-        async-upnp-client
-        getmac
-        ifaddr
-        samsungctl
-        samsungtvws
-        wakeonlan
-      ]
-      ++ samsungctl.optional-dependencies.websocket
-      ++ samsungtvws.optional-dependencies.async
-      ++ samsungtvws.optional-dependencies.encrypted;
+        with ps;
+        [
+          async-upnp-client
+          getmac
+          ifaddr
+          samsungctl
+          samsungtvws
+          wakeonlan
+        ]
+        ++ samsungctl.optional-dependencies.websocket
+        ++ samsungtvws.optional-dependencies.async
+        ++ samsungtvws.optional-dependencies.encrypted;
     "sanix" =
       ps: with ps; [
         sanix
@@ -5439,11 +5439,11 @@
       ];
     "skybeacon" =
       ps:
-      with ps;
-      [
-        pygatt
-      ]
-      ++ pygatt.optional-dependencies.GATTTOOL;
+        with ps;
+        [
+          pygatt
+        ]
+        ++ pygatt.optional-dependencies.GATTTOOL;
     "skybell" =
       ps: with ps; [
         aioskybell
@@ -5921,18 +5921,18 @@
       ];
     "telegram" =
       ps:
-      with ps;
-      [
-        python-telegram-bot
-      ]
-      ++ python-telegram-bot.optional-dependencies.socks;
+        with ps;
+        [
+          python-telegram-bot
+        ]
+        ++ python-telegram-bot.optional-dependencies.socks;
     "telegram_bot" =
       ps:
-      with ps;
-      [
-        python-telegram-bot
-      ]
-      ++ python-telegram-bot.optional-dependencies.socks;
+        with ps;
+        [
+          python-telegram-bot
+        ]
+        ++ python-telegram-bot.optional-dependencies.socks;
     "tellduslive" =
       ps: with ps; [
         tellduslive
@@ -6190,16 +6190,16 @@
       ];
     "tplink" =
       ps:
-      with ps;
-      [
-        av
-        ha-ffmpeg
-        ifaddr
-        numpy
-        python-kasa
-        pyturbojpeg
-      ]
-      ++ python-kasa.optional-dependencies.speedups;
+        with ps;
+        [
+          av
+          ha-ffmpeg
+          ifaddr
+          numpy
+          python-kasa
+          pyturbojpeg
+        ]
+        ++ python-kasa.optional-dependencies.speedups;
     "tplink_lte" =
       ps: with ps; [
       ]; # missing inputs: tp-connected
@@ -6228,11 +6228,11 @@
       ];
     "tradfri" =
       ps:
-      with ps;
-      [
-        pytradfri
-      ]
-      ++ pytradfri.optional-dependencies.async;
+        with ps;
+        [
+          pytradfri
+        ]
+        ++ pytradfri.optional-dependencies.async;
     "trafikverket_camera" =
       ps: with ps; [
         pytrafikverket

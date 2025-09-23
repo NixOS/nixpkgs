@@ -95,17 +95,17 @@ let
         canExecute =
           platform:
           final.isAndroid == platform.isAndroid
-          && parse.isCompatible final.parsed.cpu platform.parsed.cpu
-          && final.parsed.kernel == platform.parsed.kernel
-          && (
+            && parse.isCompatible final.parsed.cpu platform.parsed.cpu
+            && final.parsed.kernel == platform.parsed.kernel
+            && (
             # Only perform this check when cpus have the same type;
             # assume compatible cpu have all the instructions included
             final.parsed.cpu == platform.parsed.cpu
-            ->
+              ->
               # if both have gcc.arch defined, check whether final can execute the given platform
               (
                 (final ? gcc.arch && platform ? gcc.arch)
-                -> architectures.canExecute final.gcc.arch platform.gcc.arch
+                  -> architectures.canExecute final.gcc.arch platform.gcc.arch
               )
               # if platform has gcc.arch defined but final doesn't, don't assume it can be executed
               || (platform ? gcc.arch -> !(final ? gcc.arch))
@@ -179,15 +179,16 @@ let
           else
             null;
         extensions =
-          optionalAttrs final.hasSharedLibraries {
-            sharedLibrary =
-              if final.isDarwin then
-                ".dylib"
-              else if final.isWindows then
-                ".dll"
-              else
-                ".so";
-          }
+          optionalAttrs final.hasSharedLibraries
+            {
+              sharedLibrary =
+                if final.isDarwin then
+                  ".dylib"
+                else if final.isWindows then
+                  ".dll"
+                else
+                  ".so";
+            }
           // {
             staticLibrary = if final.isWindows then ".lib" else ".a";
             library = if final.isStatic then final.extensions.staticLibrary else final.extensions.sharedLibrary;
@@ -211,8 +212,7 @@ let
               wasi = "Wasi";
               redox = "Redox";
               genode = "Genode";
-            }
-            .${final.parsed.kernel.name} or null;
+            }.${final.parsed.kernel.name} or null;
 
           # uname -m
           processor =
@@ -241,17 +241,17 @@ let
           with final;
           (
             isAndroid
-            || isGnu
-            || isMusl # Linux (allows multiple libcs)
-            || isDarwin
-            || isSunOS
-            || isOpenBSD
-            || isFreeBSD
-            || isNetBSD # BSDs
-            || isCygwin
-            || isMinGW
-            || isWindows # Windows
-            || isWasm # WASM
+              || isGnu
+              || isMusl # Linux (allows multiple libcs)
+              || isDarwin
+              || isSunOS
+              || isOpenBSD
+              || isFreeBSD
+              || isNetBSD # BSDs
+              || isCygwin
+              || isMinGW
+              || isWindows # Windows
+              || isWasm # WASM
           )
           && !isStatic;
 
@@ -265,13 +265,11 @@ let
 
         # Just a guess, based on `system`
         inherit
-          (
-            {
-              linux-kernel = args.linux-kernel or { };
-              gcc = args.gcc or { };
-            }
-            // platforms.select final
-          )
+          ({
+            linux-kernel = args.linux-kernel or { };
+            gcc = args.gcc or { };
+          }
+          // platforms.select final)
           linux-kernel
           gcc
           ;
@@ -379,8 +377,8 @@ let
               wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
             in
             # Note: we guarantee that the return value is either `null` or a path
-            # to an emulator program. That is, if an emulator requires additional
-            # arguments, a wrapper should be used.
+              # to an emulator program. That is, if an emulator requires additional
+              # arguments, a wrapper should be used.
             if pkgs.stdenv.hostPlatform.canExecute final then
               lib.getExe (pkgs.writeShellScriptBin "exec" ''exec "$@"'')
             else if final.isWindows then
@@ -466,10 +464,9 @@ let
               let
                 inherit (final.parsed) vendor;
               in
-              rust.platform.vendor or {
-                "w64" = "pc";
-              }
-              .${vendor.name} or vendor.name;
+                rust.platform.vendor or {
+                  "w64" = "pc";
+                }.${vendor.name} or vendor.name;
           };
 
           # The name of the rust target, even if it is custom. Adjustments are
@@ -485,21 +482,20 @@ let
                   "armv5tel" = "armv5te";
                   "riscv32" = "riscv32gc";
                   "riscv64" = "riscv64gc";
-                }
-                .${cpu.name} or cpu.name;
+                }.${cpu.name} or cpu.name;
               vendor_ = final.rust.platform.vendor;
             in
             # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
-            args.rust.rustcTarget or args.rustc.config or (
-              # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
-              # We cannot know which subversion does the user want, and
-              # currently use WASI 0.1 as default for compatibility. Custom
-              # users can set `rust.rustcTarget` to override it.
-              if final.isWasi then
-                "${cpu_}-wasip1"
-              else
-                "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}"
-            );
+              args.rust.rustcTarget or args.rustc.config or (
+                # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
+                # We cannot know which subversion does the user want, and
+                # currently use WASI 0.1 as default for compatibility. Custom
+                # users can set `rust.rustcTarget` to override it.
+                if final.isWasi then
+                  "${cpu_}-wasip1"
+                else
+                  "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}"
+              );
 
           # The name of the rust target if it is standard, or the json file
           # containing the custom target spec.
@@ -556,8 +552,7 @@ let
               "s390x" = "s390x";
               "x86_64" = "amd64";
               "wasm32" = "wasm";
-            }
-            .${final.parsed.cpu.name} or null;
+            }.${final.parsed.cpu.name} or null;
           GOOS = if final.isWasi then "wasip1" else final.parsed.kernel.name;
 
           # See https://go.dev/wiki/GoArm
@@ -611,9 +606,10 @@ let
       };
     in
     assert final.useAndroidPrebuilt -> final.isAndroid;
-    assert foldl (pass: { assertion, message }: if assertion final then pass else throw message) true (
-      final.parsed.abi.assertions or [ ]
-    );
+    assert foldl (pass: { assertion, message }: if assertion final then pass else throw message) true
+      (
+        final.parsed.abi.assertions or [ ]
+      );
     final;
 
 in

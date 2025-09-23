@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitea,
-  six,
-  sphinxHook,
-  sphinx-rtd-theme,
+{ lib
+, buildPythonApplication
+, fetchFromGitea
+, six
+, sphinxHook
+, sphinx-rtd-theme
+,
 }:
 
 buildPythonApplication rec {

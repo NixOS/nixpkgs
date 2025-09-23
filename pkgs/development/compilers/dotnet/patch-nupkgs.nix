@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  zlib,
-  curl,
-  icu,
-  libunwind,
-  libuuid,
-  openssl,
-  lttng-ust_2_12,
-  patchelf,
-  writeShellScriptBin,
+{ stdenv
+, lib
+, zlib
+, curl
+, icu
+, libunwind
+, libuuid
+, openssl
+, lttng-ust_2_12
+, patchelf
+, writeShellScriptBin
+,
 }:
 
 let
@@ -80,7 +80,7 @@ writeShellScriptBin "patch-nupkgs" (
       touch "$x"/.nix-patched
     done
   ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
     for x in microsoft.dotnet.ilcompiler/*; do
       # .nupkg.metadata is written last, so we know the packages is complete
       [[ -d "$x" ]] && [[ -f "$x"/.nupkg.metadata ]] \

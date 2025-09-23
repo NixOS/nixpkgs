@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  bluetooth-data-tools,
-  httpx,
-  pytest-asyncio,
-  pytest-httpx,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, bluetooth-data-tools
+, httpx
+, pytest-asyncio
+, pytest-httpx
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

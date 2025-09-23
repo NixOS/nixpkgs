@@ -1,19 +1,20 @@
 {
   # The pkgs used for dependencies for the testing itself
   # Don't test properties of pkgs.lib, but rather the lib in the parent directory
-  system ? builtins.currentSystem,
-  pkgs ? import ../.. { inherit system; } // {
+  system ? builtins.currentSystem
+, pkgs ? import ../.. { inherit system; } // {
     lib = throw "pkgs.lib accessed, but the lib tests should use nixpkgs' lib path directly!";
-  },
-  # For testing someone may edit impure.nix to return cross pkgs, use `pkgsBuildBuild` directly so everything here works.
-  pkgsBB ? pkgs.pkgsBuildBuild,
-  nix ? pkgs-nixVersions.stable,
-  nixVersions ? [
+  }
+, # For testing someone may edit impure.nix to return cross pkgs, use `pkgsBuildBuild` directly so everything here works.
+  pkgsBB ? pkgs.pkgsBuildBuild
+, nix ? pkgs-nixVersions.stable
+, nixVersions ? [
     pkgs-nixVersions.nix_2_28
     nix
     pkgs-nixVersions.latest
-  ],
-  pkgs-nixVersions ? import ./nix-for-tests.nix { pkgs = pkgsBB; },
+  ]
+, pkgs-nixVersions ? import ./nix-for-tests.nix { pkgs = pkgsBB; }
+,
 }:
 
 let

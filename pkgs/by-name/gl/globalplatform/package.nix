@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pcsclite,
-  pkg-config,
-  cmake,
-  zlib,
-  pandoc,
-  doxygen,
-  graphviz,
-  openssl,
-  cmocka,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pcsclite
+, pkg-config
+, cmake
+, zlib
+, pandoc
+, doxygen
+, graphviz
+, openssl
+, cmocka
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

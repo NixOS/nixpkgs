@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  automake,
-  libusb1,
+{ lib
+, stdenv
+, fetchurl
+, automake
+, libusb1
+,
 }:
 let
   # This package should be updated together with libphidget22extra

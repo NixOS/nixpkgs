@@ -1,16 +1,16 @@
-{
-  stdenv,
-  pkgs,
-  lib,
-  writeScript,
-  python3,
-  common-updater-scripts,
+{ stdenv
+, pkgs
+, lib
+, writeScript
+, python3
+, common-updater-scripts
+,
 }:
-{
-  packageName,
-  attrPath ? packageName,
-  versionPolicy ? "tagged",
-  freeze ? false,
+{ packageName
+, attrPath ? packageName
+, versionPolicy ? "tagged"
+, freeze ? false
+,
 }:
 
 let

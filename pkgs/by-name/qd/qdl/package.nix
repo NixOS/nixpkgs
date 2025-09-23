@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libxml2,
-  systemd,
-  libusb1,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libxml2
+, systemd
+, libusb1
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,17 +1,17 @@
-{
-  stdenv,
-  makeBinaryWrapper,
-  removeReferencesTo,
-  srcOnly,
-  python3,
-  pnpm_9,
-  fetchFromGitHub,
-  nodejs,
-  vips,
-  pkg-config,
-  nixosTests,
-  lib,
-  nix-update-script,
+{ stdenv
+, makeBinaryWrapper
+, removeReferencesTo
+, srcOnly
+, python3
+, pnpm_9
+, fetchFromGitHub
+, nodejs
+, vips
+, pkg-config
+, nixosTests
+, lib
+, nix-update-script
+,
 }:
 
 let

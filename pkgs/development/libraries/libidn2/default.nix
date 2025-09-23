@@ -1,12 +1,12 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  libiconv,
-  libunistring,
-  help2man,
-  texinfo,
-  buildPackages,
+{ fetchurl
+, lib
+, stdenv
+, libiconv
+, libunistring
+, help2man
+, texinfo
+, buildPackages
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

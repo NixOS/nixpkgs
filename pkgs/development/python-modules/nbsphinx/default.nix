@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchpatch,
-  fetchPypi,
-  setuptools,
-  docutils,
-  jinja2,
-  nbconvert,
-  nbformat,
-  sphinx,
-  traitlets,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchpatch
+, fetchPypi
+, setuptools
+, docutils
+, jinja2
+, nbconvert
+, nbformat
+, sphinx
+, traitlets
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

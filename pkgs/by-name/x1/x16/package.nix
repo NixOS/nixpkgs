@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  SDL2,
-  callPackage,
-  zlib,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, SDL2
+, callPackage
+, zlib
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

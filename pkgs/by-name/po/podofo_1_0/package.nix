@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  fontconfig,
-  freetype,
-  libjpeg,
-  libpng,
-  libtiff,
-  libxml2,
-  openssl,
-  pkg-config,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, fontconfig
+, freetype
+, libjpeg
+, libpng
+, libtiff
+, libxml2
+, openssl
+, pkg-config
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,43 +1,41 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  netcat,
-
-  # Optional packages
-  systemd ? null,
-  ejabberd ? null,
-  mariadb ? null,
-  libpq ? null,
-  subversion ? null,
-  mongodb ? null,
-  mongodb-tools ? null,
-  influxdb ? null,
-  supervisor ? null,
-  docker ? null,
-  nginx ? null,
-  s6-rc ? null,
-  xinetd ? null,
-
-  # Configuration flags
-  enableApacheWebApplication ? false,
-  enableAxis2WebService ? false,
-  enableEjabberdDump ? false,
-  enableMySQLDatabase ? false,
-  enablePostgreSQLDatabase ? false,
-  enableSubversionRepository ? false,
-  enableTomcatWebApplication ? false,
-  enableMongoDatabase ? false,
-  enableInfluxDatabase ? false,
-  enableSupervisordProgram ? false,
-  enableDockerContainer ? false,
-  enableNginxWebApplication ? false,
-  enableXinetdService ? false,
-  enableS6RCService ? false,
-  enableLegacy ? false,
-  catalinaBaseDir ? "/var/tomcat",
-  jobTemplate ? "systemd",
-  getopt,
+{ lib
+, stdenv
+, fetchurl
+, netcat
+, # Optional packages
+  systemd ? null
+, ejabberd ? null
+, mariadb ? null
+, libpq ? null
+, subversion ? null
+, mongodb ? null
+, mongodb-tools ? null
+, influxdb ? null
+, supervisor ? null
+, docker ? null
+, nginx ? null
+, s6-rc ? null
+, xinetd ? null
+, # Configuration flags
+  enableApacheWebApplication ? false
+, enableAxis2WebService ? false
+, enableEjabberdDump ? false
+, enableMySQLDatabase ? false
+, enablePostgreSQLDatabase ? false
+, enableSubversionRepository ? false
+, enableTomcatWebApplication ? false
+, enableMongoDatabase ? false
+, enableInfluxDatabase ? false
+, enableSupervisordProgram ? false
+, enableDockerContainer ? false
+, enableNginxWebApplication ? false
+, enableXinetdService ? false
+, enableS6RCService ? false
+, enableLegacy ? false
+, catalinaBaseDir ? "/var/tomcat"
+, jobTemplate ? "systemd"
+, getopt
+,
 }:
 
 assert enableMySQLDatabase -> mariadb != null;

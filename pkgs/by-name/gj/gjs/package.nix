@@ -1,31 +1,31 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  pkg-config,
-  gnome,
-  gtk3,
-  gtk4,
-  atk,
-  gobject-introspection,
-  spidermonkey_128,
-  pango,
-  cairo,
-  readline,
-  libsysprof-capture,
-  glib,
-  libxml2,
-  dbus,
-  gdk-pixbuf,
-  harfbuzz,
-  makeWrapper,
-  which,
-  xvfb-run,
-  nixosTests,
-  installTests ? true,
+{ fetchurl
+, lib
+, stdenv
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, gnome
+, gtk3
+, gtk4
+, atk
+, gobject-introspection
+, spidermonkey_128
+, pango
+, cairo
+, readline
+, libsysprof-capture
+, glib
+, libxml2
+, dbus
+, gdk-pixbuf
+, harfbuzz
+, makeWrapper
+, which
+, xvfb-run
+, nixosTests
+, installTests ? true
+,
 }:
 
 let

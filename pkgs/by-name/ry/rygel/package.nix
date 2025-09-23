@@ -1,39 +1,39 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  docbook-xsl-nons,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  gettext,
-  libxml2,
-  libxslt,
-  gobject-introspection,
-  wrapGAppsHook3,
-  wrapGAppsNoGuiHook,
-  python3,
-  gdk-pixbuf,
-  glib,
-  gssdp_1_6,
-  gupnp_1_6,
-  gupnp-av,
-  gupnp-dlna,
-  gst_all_1,
-  libgee,
-  libsoup_3,
-  libX11,
-  withGtk ? true,
-  gtk3,
-  libmediaart,
-  pipewire,
-  sqlite,
-  systemd,
-  tinysparql,
-  shared-mime-info,
-  gnome,
-  rygel,
+{ stdenv
+, lib
+, fetchurl
+, docbook-xsl-nons
+, meson
+, ninja
+, pkg-config
+, vala
+, gettext
+, libxml2
+, libxslt
+, gobject-introspection
+, wrapGAppsHook3
+, wrapGAppsNoGuiHook
+, python3
+, gdk-pixbuf
+, glib
+, gssdp_1_6
+, gupnp_1_6
+, gupnp-av
+, gupnp-dlna
+, gst_all_1
+, libgee
+, libsoup_3
+, libX11
+, withGtk ? true
+, gtk3
+, libmediaart
+, pipewire
+, sqlite
+, systemd
+, tinysparql
+, shared-mime-info
+, gnome
+, rygel
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

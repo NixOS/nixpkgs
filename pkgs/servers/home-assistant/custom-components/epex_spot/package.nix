@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildHomeAssistantComponent,
-  beautifulsoup4,
+{ lib
+, fetchFromGitHub
+, buildHomeAssistantComponent
+, beautifulsoup4
+,
 }:
 
 buildHomeAssistantComponent rec {

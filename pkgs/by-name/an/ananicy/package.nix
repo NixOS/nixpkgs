@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  python3,
-  fetchFromGitHub,
-  makeWrapper,
-  schedtool,
-  sysctl,
-  util-linux,
-  fetchpatch,
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+, makeWrapper
+, schedtool
+, sysctl
+, util-linux
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation {

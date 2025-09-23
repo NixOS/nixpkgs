@@ -1,12 +1,12 @@
-{
-  lib,
-  aiofiles,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  protobuf,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiofiles
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, protobuf
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

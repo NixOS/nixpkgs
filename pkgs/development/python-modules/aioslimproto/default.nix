@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pillow,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiohttp
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, pillow
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  bleak,
-  bleak-retry-connector,
-  bluetooth-data-tools,
-  bluetooth-sensor-state-data,
-  buildPythonPackage,
-  fetchFromGitHub,
-  miauth,
-  pythonOlder,
-  setuptools,
-  wheel,
+{ lib
+, bleak
+, bleak-retry-connector
+, bluetooth-data-tools
+, bluetooth-sensor-state-data
+, buildPythonPackage
+, fetchFromGitHub
+, miauth
+, pythonOlder
+, setuptools
+, wheel
+,
 }:
 
 buildPythonPackage rec {

@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  llvmPackages,
-  cmake,
-  pkg-config,
-  gfortran,
-  blas,
-  lapack,
-  mpi,
-  mpiCheckPhaseHook,
-  metis,
-  parmetis,
-  withExamples ? false,
-  fortranSupport ? true,
-  enableOpenMP ? true,
-  # Todo: ask for permission of unfree parmetis
-  withParmetis ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, llvmPackages
+, cmake
+, pkg-config
+, gfortran
+, blas
+, lapack
+, mpi
+, mpiCheckPhaseHook
+, metis
+, parmetis
+, withExamples ? false
+, fortranSupport ? true
+, enableOpenMP ? true
+, # Todo: ask for permission of unfree parmetis
+  withParmetis ? false
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

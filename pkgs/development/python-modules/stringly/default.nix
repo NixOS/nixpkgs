@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

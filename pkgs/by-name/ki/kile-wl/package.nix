@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitLab,
-  unstableGitUpdater,
-  rustPlatform,
+{ lib
+, fetchFromGitLab
+, unstableGitUpdater
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage {

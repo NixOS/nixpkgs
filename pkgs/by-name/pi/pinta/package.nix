@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  glibcLocales,
-  gtk4,
-  intltool,
-  libadwaita,
-  wrapGAppsHook4,
+{ lib
+, buildDotnetModule
+, dotnetCorePackages
+, fetchFromGitHub
+, glibcLocales
+, gtk4
+, intltool
+, libadwaita
+, wrapGAppsHook4
+,
 }:
 
 buildDotnetModule rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  callPackage,
-  pkg-config,
-  pcre2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, callPackage
+, pkg-config
+, pcre2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

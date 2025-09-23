@@ -1,36 +1,44 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  threadingSupport ? true, # multi-threading
-  openglSupport ? false,
-  libglut,
-  libGL,
-  libGLU, # OpenGL (required for vwebp)
-  pngSupport ? true,
-  libpng, # PNG image format
-  jpegSupport ? true,
-  libjpeg, # JPEG image format
-  tiffSupport ? true,
-  libtiff, # TIFF image format
-  gifSupport ? true,
-  giflib, # GIF image format
-  swap16bitcspSupport ? false, # Byte swap for 16bit color spaces
-  libwebpmuxSupport ? true, # Build libwebpmux
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, threadingSupport ? true
+, # multi-threading
+  openglSupport ? false
+, libglut
+, libGL
+, libGLU
+, # OpenGL (required for vwebp)
+  pngSupport ? true
+, libpng
+, # PNG image format
+  jpegSupport ? true
+, libjpeg
+, # JPEG image format
+  tiffSupport ? true
+, libtiff
+, # TIFF image format
+  gifSupport ? true
+, giflib
+, # GIF image format
+  swap16bitcspSupport ? false
+, # Byte swap for 16bit color spaces
+  libwebpmuxSupport ? true
+, # Build libwebpmux
 
   # for passthru.tests
-  gd,
-  graphicsmagick,
-  haskellPackages,
-  imagemagick,
-  imlib2,
-  libjxl,
-  opencv,
-  python3,
-  vips,
-  testers,
-  libwebp,
+  gd
+, graphicsmagick
+, haskellPackages
+, imagemagick
+, imlib2
+, libjxl
+, opencv
+, python3
+, vips
+, testers
+, libwebp
+,
 }:
 
 stdenv.mkDerivation rec {

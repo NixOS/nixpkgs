@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pyyaml,
-  jinja2,
-  mock,
-  fetchpatch2,
-  pytestCheckHook,
-  distutils,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pyyaml
+, jinja2
+, mock
+, fetchpatch2
+, pytestCheckHook
+, distutils
+,
 }:
 
 buildPythonPackage rec {

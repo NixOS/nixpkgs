@@ -1,44 +1,45 @@
-{
-  deployAndroidPackage,
-  lib,
-  stdenv,
-  package,
-  os,
-  arch,
-  autoPatchelfHook,
-  makeWrapper,
-  pkgs,
-  pkgsi686Linux,
-  postInstall,
-  meta,
+{ deployAndroidPackage
+, lib
+, stdenv
+, package
+, os
+, arch
+, autoPatchelfHook
+, makeWrapper
+, pkgs
+, pkgsi686Linux
+, postInstall
+, meta
+,
 }:
 
 deployAndroidPackage {
   inherit package os arch;
   nativeBuildInputs = [ makeWrapper ] ++ lib.optionals (os == "linux") [ autoPatchelfHook ];
   buildInputs =
-    lib.optionals (os == "linux") (
-      with pkgs;
-      [
-        glibc
-        libcxx
-        libGL
-        libpulseaudio
-        libtiff
-        libuuid
-        zlib
-        libbsd
-        ncurses5
-        libdrm
-        stdenv.cc.cc
-        expat
-        freetype
-        nss
-        nspr
-        alsa-lib
-        waylandpp.lib
-      ]
-    )
+    lib.optionals (os == "linux")
+      (
+        with pkgs;
+        [
+          glibc
+          libcxx
+          libGL
+          libpulseaudio
+          libtiff
+          libuuid
+          zlib
+          libbsd
+          ncurses5
+          libdrm
+          stdenv.cc.cc
+          expat
+          freetype
+          nss
+          nspr
+          alsa-lib
+          waylandpp.lib
+        ]
+      )
     ++ (with pkgs.xorg; [
       libX11
       libXext

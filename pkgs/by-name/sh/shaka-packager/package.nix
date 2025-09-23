@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  testers,
-  cmake,
-  ninja,
-  python3,
-  nix-update-script,
-  abseil-cpp_202401,
-  curl,
-  gtest,
-  nlohmann_json,
-  libpng,
-  libxml2,
-  libwebm,
-  mbedtls,
-  mimalloc,
-  protobuf_29,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, testers
+, cmake
+, ninja
+, python3
+, nix-update-script
+, abseil-cpp_202401
+, curl
+, gtest
+, nlohmann_json
+, libpng
+, libxml2
+, libwebm
+, mbedtls
+, mimalloc
+, protobuf_29
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

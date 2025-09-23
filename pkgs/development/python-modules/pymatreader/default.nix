@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  hatchling,
-  h5py,
-  numpy,
-  scipy,
-  xmltodict,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, hatchling
+, h5py
+, numpy
+, scipy
+, xmltodict
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

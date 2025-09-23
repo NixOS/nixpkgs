@@ -1,7 +1,7 @@
-{
-  pname,
-  fetchurl,
-  lib,
+{ pname
+, fetchurl
+, lib
+,
 }:
 rec {
   version = "4.3.6";

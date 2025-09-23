@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  yt-dlp,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, yt-dlp
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  acl,
-  attr,
-  autoreconfHook,
-  libiconv,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitea
+, acl
+, attr
+, autoreconfHook
+, libiconv
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

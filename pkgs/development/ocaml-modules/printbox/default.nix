@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  ocaml,
-  mdx,
-  gitUpdater,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ocaml
+, mdx
+, gitUpdater
+,
 }:
 
 buildDunePackage rec {

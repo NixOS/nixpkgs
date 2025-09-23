@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  openssl,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, openssl
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,34 +1,30 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-
-  # buildInputs
-  openssl,
-
-  # nativeBuildInputs
-  pkg-config,
-  protobuf,
-
-  # dependencies
-  deprecation,
-  overrides,
-  packaging,
-  pyarrow,
-  pydantic,
-  tqdm,
-
-  # tests
-  aiohttp,
-  pandas,
-  polars,
-  pylance,
-  pytest-asyncio,
-  pytestCheckHook,
-  duckdb,
-  nix-update-script,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, # buildInputs
+  openssl
+, # nativeBuildInputs
+  pkg-config
+, protobuf
+, # dependencies
+  deprecation
+, overrides
+, packaging
+, pyarrow
+, pydantic
+, tqdm
+, # tests
+  aiohttp
+, pandas
+, polars
+, pylance
+, pytest-asyncio
+, pytestCheckHook
+, duckdb
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-  hatch-fancy-pypi-readme,
-
-  # dependencies
-  smbus2,
-
-  # checks
-  mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, hatch-fancy-pypi-readme
+, # dependencies
+  smbus2
+, # checks
+  mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

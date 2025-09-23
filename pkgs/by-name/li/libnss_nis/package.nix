@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  libxcrypt,
-  libnsl,
-  libtirpc,
-  pkg-config,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, libxcrypt
+, libnsl
+, libtirpc
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

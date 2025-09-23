@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libogg,
-  libvorbis,
-  libdvdread,
+{ lib
+, stdenv
+, fetchurl
+, libogg
+, libvorbis
+, libdvdread
+,
 }:
 
 stdenv.mkDerivation rec {

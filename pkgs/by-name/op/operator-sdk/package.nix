@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  go,
-  fetchFromGitHub,
-  makeWrapper,
+{ lib
+, buildGoModule
+, go
+, fetchFromGitHub
+, makeWrapper
+,
 }:
 
 buildGoModule rec {

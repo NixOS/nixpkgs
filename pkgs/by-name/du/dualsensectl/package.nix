@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  meson,
-  ninja,
-  pkg-config,
-  dbus,
-  hidapi,
-  udev,
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, meson
+, ninja
+, pkg-config
+, dbus
+, hidapi
+, udev
+, testers
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

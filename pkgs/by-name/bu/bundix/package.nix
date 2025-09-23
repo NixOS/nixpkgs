@@ -1,11 +1,11 @@
-{
-  buildRubyGem,
-  fetchFromGitHub,
-  makeWrapper,
-  lib,
-  bundler,
-  nix,
-  nix-prefetch-git,
+{ buildRubyGem
+, fetchFromGitHub
+, makeWrapper
+, lib
+, bundler
+, nix
+, nix-prefetch-git
+,
 }:
 
 buildRubyGem rec {

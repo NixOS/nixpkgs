@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoreconfHook,
-  aalib,
-  ncurses,
-  xorg,
-  libmikmod,
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, aalib
+, ncurses
+, xorg
+, libmikmod
+,
 }:
 
 stdenv.mkDerivation rec {

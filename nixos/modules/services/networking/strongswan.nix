@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -25,20 +24,22 @@ let
   ipsecSecrets = secrets: concatMapStrings (f: "include ${f}\n") secrets;
 
   ipsecConf =
-    {
-      setup,
-      connections,
-      ca,
+    { setup
+    , connections
+    , ca
+    ,
     }:
     let
       # https://wiki.strongswan.org/projects/strongswan/wiki/IpsecConf
       makeSections =
         type: sections:
         concatStringsSep "\n\n" (
-          mapAttrsToList (
-            sec: attrs:
-            "${type} ${sec}\n" + (concatStringsSep "\n" (mapAttrsToList (k: v: "  ${k}=${v}") attrs))
-          ) sections
+          mapAttrsToList
+            (
+              sec: attrs:
+              "${type} ${sec}\n" + (concatStringsSep "\n" (mapAttrsToList (k: v: "  ${k}=${v}") attrs))
+            )
+            sections
         );
       setupConf = makeSections "config" { inherit setup; };
       connectionsConf = makeSections "conn" connections;
@@ -52,13 +53,13 @@ let
     '';
 
   strongswanConf =
-    {
-      setup,
-      connections,
-      ca,
-      secretsFile,
-      managePlugins,
-      enabledPlugins,
+    { setup
+    , connections
+    , ca
+    , secretsFile
+    , managePlugins
+    , enabledPlugins
+    ,
     }:
     toFile "strongswan.conf" ''
       charon {

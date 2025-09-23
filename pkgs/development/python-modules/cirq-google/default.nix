@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  setuptools,
-  cirq-core,
-  google-api-core,
-  protobuf,
-  freezegun,
-  pytestCheckHook,
-  typedunits,
+{ buildPythonPackage
+, setuptools
+, cirq-core
+, google-api-core
+, protobuf
+, freezegun
+, pytestCheckHook
+, typedunits
+,
 }:
 
 buildPythonPackage rec {

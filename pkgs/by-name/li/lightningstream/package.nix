@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, versionCheckHook
+, nix-update-script
+,
 }:
 let
   version = "0.4.3";

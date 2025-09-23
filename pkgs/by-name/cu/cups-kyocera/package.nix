@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  cups,
-  fetchzip,
-  patchPpdFilesHook,
+{ lib
+, stdenv
+, cups
+, fetchzip
+, patchPpdFilesHook
+,
 }:
 
 let

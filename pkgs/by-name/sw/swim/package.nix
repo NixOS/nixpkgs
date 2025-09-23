@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  pkg-config,
-  openssl,
-  spade,
-  git,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, pkg-config
+, openssl
+, spade
+, git
+,
 }:
 
 rustPlatform.buildRustPackage rec {

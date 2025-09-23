@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  libtool,
-  gettext,
-  pkg-config,
-  vala,
-  gnome-common,
-  gobject-introspection,
-  libgee,
-  json-glib,
-  skkDictionaries,
-  libxkbcommon,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, libtool
+, gettext
+, pkg-config
+, vala
+, gnome-common
+, gobject-introspection
+, libgee
+, json-glib
+, skkDictionaries
+, libxkbcommon
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,7 +1,7 @@
-{
-  lib,
-  newScope,
-  lxqt,
+{ lib
+, newScope
+, lxqt
+,
 }:
 
 let

@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  flet-client-flutter,
-
-  # build-system
-  poetry-core,
-
-  flet,
-  flet-desktop,
-  flet-web,
-  qrcode,
-  toml,
-  watchdog,
+{ lib
+, buildPythonPackage
+, flet-client-flutter
+, # build-system
+  poetry-core
+, flet
+, flet-desktop
+, flet-web
+, qrcode
+, toml
+, watchdog
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  html-table-parser-python3,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, html-table-parser-python3
+, requests
+,
 }:
 
 buildPythonPackage rec {

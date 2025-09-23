@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  libcdio,
-  libcdio-paranoia,
+{ mkKdeDerivation
+, libcdio
+, libcdio-paranoia
+,
 }:
 mkKdeDerivation {
   pname = "audex";

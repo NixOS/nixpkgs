@@ -1,13 +1,13 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  mathcomp,
-  mathcomp-finmap,
-  mathcomp-algebra-tactics,
-  fourcolor,
-  stdlib,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, mathcomp
+, mathcomp-finmap
+, mathcomp-algebra-tactics
+, fourcolor
+, stdlib
+, version ? null
+,
 }:
 
 mkCoqDerivation {

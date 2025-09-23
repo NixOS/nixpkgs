@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  notmuch,
-  openssl,
-  pkg-config,
-  sqlite,
-  xapian,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, notmuch
+, openssl
+, pkg-config
+, sqlite
+, xapian
+, zlib
+,
 }:
 stdenv.mkDerivation rec {
   version = "7";

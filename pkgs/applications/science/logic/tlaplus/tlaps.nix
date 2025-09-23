@@ -1,13 +1,13 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  ocaml,
-  isabelle,
-  cvc3,
-  perl,
-  wget,
-  which,
+{ fetchurl
+, lib
+, stdenv
+, ocaml
+, isabelle
+, cvc3
+, perl
+, wget
+, which
+,
 }:
 
 stdenv.mkDerivation rec {

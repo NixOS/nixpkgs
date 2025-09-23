@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  gtk3,
-  libXtst,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, gtk3
+, libXtst
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

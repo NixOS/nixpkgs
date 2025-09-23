@@ -1,10 +1,10 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  pkg-config,
-  ghostscript,
-  cairo,
+{ fetchurl
+, lib
+, stdenv
+, pkg-config
+, ghostscript
+, cairo
+,
 }:
 
 stdenv.mkDerivation rec {

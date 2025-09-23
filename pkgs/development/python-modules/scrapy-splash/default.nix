@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hypothesis,
-  pytest-twisted,
-  pytestCheckHook,
-  scrapy,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hypothesis
+, pytest-twisted
+, pytestCheckHook
+, scrapy
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

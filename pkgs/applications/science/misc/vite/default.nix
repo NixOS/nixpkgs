@@ -1,16 +1,16 @@
-{
-  stdenv,
-  fetchFromGitLab,
-  lib,
-  cmake,
-  qtbase,
-  qttools,
-  qtcharts,
-  libGLU,
-  libGL,
-  glm,
-  glew,
-  wrapQtAppsHook,
+{ stdenv
+, fetchFromGitLab
+, lib
+, cmake
+, qtbase
+, qttools
+, qtcharts
+, libGLU
+, libGL
+, glm
+, glew
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

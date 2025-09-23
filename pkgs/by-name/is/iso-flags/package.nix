@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  perl,
-  inkscape,
-  librsvg,
-  targets ? [ "all" ],
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, perl
+, inkscape
+, librsvg
+, targets ? [ "all" ]
+,
 }:
 
 stdenvNoCC.mkDerivation {

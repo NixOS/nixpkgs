@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  pytestCheckHook,
-  jinja2,
-  multidict,
-  poetry-core,
-  pydantic,
-  pyyaml,
-  wtforms,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, pytestCheckHook
+, jinja2
+, multidict
+, poetry-core
+, pydantic
+, pyyaml
+, wtforms
+,
 }:
 
 buildPythonPackage rec {

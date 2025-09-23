@@ -1,70 +1,63 @@
-{
-  config,
-  callPackages,
-  stdenv,
-  lib,
-  addDriverRunpath,
-  fetchFromGitHub,
-  protobuf,
-  protoc-gen-go,
-  protoc-gen-go-grpc,
-  grpc,
-  openssl,
-  llama-cpp,
-  # needed for audio-to-text
-  ffmpeg,
-  cmake,
-  pkg-config,
-  buildGoModule,
-  makeWrapper,
-  ncurses,
-  which,
-  opencv,
-  curl,
-
-  enable_upx ? true,
-  upx,
-
-  # apply feature parameter names according to
+{ config
+, callPackages
+, stdenv
+, lib
+, addDriverRunpath
+, fetchFromGitHub
+, protobuf
+, protoc-gen-go
+, protoc-gen-go-grpc
+, grpc
+, openssl
+, llama-cpp
+, # needed for audio-to-text
+  ffmpeg
+, cmake
+, pkg-config
+, buildGoModule
+, makeWrapper
+, ncurses
+, which
+, opencv
+, curl
+, enable_upx ? true
+, upx
+, # apply feature parameter names according to
   # https://github.com/NixOS/rfcs/pull/169
 
   # CPU extensions
-  enable_avx ? stdenv.hostPlatform.isx86_64,
-  enable_avx2 ? stdenv.hostPlatform.isx86_64,
-  enable_avx512 ? stdenv.hostPlatform.avx512Support,
-  enable_f16c ? stdenv.hostPlatform.isx86_64,
-  enable_fma ? stdenv.hostPlatform.isx86_64,
-
-  with_openblas ? false,
-  openblas,
-
-  with_cublas ? config.cudaSupport,
-  cudaPackages,
-
-  with_clblas ? false,
-  clblast,
-  ocl-icd,
-  opencl-headers,
-
-  with_vulkan ? false,
-
-  with_tts ? true,
-  onnxruntime,
-  sonic,
-  spdlog,
-  fmt,
-  espeak-ng,
-  piper-tts,
+  enable_avx ? stdenv.hostPlatform.isx86_64
+, enable_avx2 ? stdenv.hostPlatform.isx86_64
+, enable_avx512 ? stdenv.hostPlatform.avx512Support
+, enable_f16c ? stdenv.hostPlatform.isx86_64
+, enable_fma ? stdenv.hostPlatform.isx86_64
+, with_openblas ? false
+, openblas
+, with_cublas ? config.cudaSupport
+, cudaPackages
+, with_clblas ? false
+, clblast
+, ocl-icd
+, opencl-headers
+, with_vulkan ? false
+, with_tts ? true
+, onnxruntime
+, sonic
+, spdlog
+, fmt
+, espeak-ng
+, piper-tts
+,
 }:
 let
   BUILD_TYPE =
     assert
-      (lib.count lib.id [
-        with_openblas
-        with_cublas
-        with_clblas
-        with_vulkan
-      ]) <= 1;
+    (lib.count lib.id [
+      with_openblas
+      with_cublas
+      with_clblas
+      with_vulkan
+    ]) <= 1;
     if with_openblas then
       "openblas"
     else if with_cublas then
@@ -328,8 +321,8 @@ let
 
   effectiveStdenv =
     if with_cublas then
-      # It's necessary to consistently use backendStdenv when building with CUDA support,
-      # otherwise we get libstdc++ errors downstream.
+    # It's necessary to consistently use backendStdenv when building with CUDA support,
+    # otherwise we get libstdc++ errors downstream.
       cudaPackages.backendStdenv
     else
       stdenv;

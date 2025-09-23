@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  makeBinaryWrapper,
-  gitMinimal,
-  mercurial,
-  nix,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, makeBinaryWrapper
+, gitMinimal
+, mercurial
+, nix
+,
 }:
 
 rustPlatform.buildRustPackage rec {

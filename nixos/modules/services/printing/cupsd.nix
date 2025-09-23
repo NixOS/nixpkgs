@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -411,9 +410,11 @@ in
         ""
         "/run/cups/cups.sock"
       ]
-      ++ map (
-        x: replaceStrings [ "localhost" ] [ "127.0.0.1" ] (removePrefix "*:" x)
-      ) cfg.listenAddresses;
+      ++ map
+        (
+          x: replaceStrings [ "localhost" ] [ "127.0.0.1" ] (removePrefix "*:" x)
+        )
+        cfg.listenAddresses;
     };
 
     systemd.services.cups = {

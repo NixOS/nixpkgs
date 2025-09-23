@@ -1,7 +1,6 @@
-{
-  callPackage,
-  enableJavaFX ? false,
-  ...
+{ callPackage
+, enableJavaFX ? false
+, ...
 }@args:
 
 let
@@ -51,5 +50,5 @@ callPackage ./common.nix (
       };
     };
   }
-  // builtins.removeAttrs args [ "callPackage" ]
+    // builtins.removeAttrs args [ "callPackage" ]
 )

@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  exo,
-  gtk3,
-  libcanberra,
-  libpulseaudio,
-  libnotify,
-  libxfce4ui,
-  libxfce4util,
-  libxfce4windowing,
-  meson,
-  ninja,
-  pkg-config,
-  xfce4-panel,
-  xfconf,
-  keybinder3,
-  glib,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, exo
+, gtk3
+, libcanberra
+, libpulseaudio
+, libnotify
+, libxfce4ui
+, libxfce4util
+, libxfce4windowing
+, meson
+, ninja
+, pkg-config
+, xfce4-panel
+, xfconf
+, keybinder3
+, glib
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

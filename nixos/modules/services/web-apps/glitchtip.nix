@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -10,15 +9,17 @@ let
   pkg = cfg.package;
   inherit (pkg.passthru) python;
 
-  environment = lib.mapAttrs (
-    _: value:
-    if value == true then
-      "True"
-    else if value == false then
-      "False"
-    else
-      toString value
-  ) cfg.settings;
+  environment = lib.mapAttrs
+    (
+      _: value:
+        if value == true then
+          "True"
+        else if value == false then
+          "False"
+        else
+          toString value
+    )
+    cfg.settings;
 in
 
 {

@@ -1,14 +1,14 @@
-{
-  aiohttp,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  multidict,
-  pytest-aiohttp,
-  pytestCheckHook,
-  setuptools,
-  yarl,
+{ aiohttp
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, multidict
+, pytest-aiohttp
+, pytestCheckHook
+, setuptools
+, yarl
+,
 }:
 
 buildPythonPackage rec {

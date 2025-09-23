@@ -1,24 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  lz4,
-  numpy,
-  ruamel-yaml,
-  typing-extensions,
-  zstandard,
-
-  # nativeCheckInputs
-  pytestCheckHook,
-
-  # checkInputs
-  declinate,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  lz4
+, numpy
+, ruamel-yaml
+, typing-extensions
+, zstandard
+, # nativeCheckInputs
+  pytestCheckHook
+, # checkInputs
+  declinate
+,
 }:
 
 buildPythonPackage rec {

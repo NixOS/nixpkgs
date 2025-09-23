@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchurl,
-  python3Packages,
-  readline,
-  ncurses,
-  canto-daemon,
+{ lib
+, fetchFromGitHub
+, fetchurl
+, python3Packages
+, readline
+, ncurses
+, canto-daemon
+,
 }:
 
 python3Packages.buildPythonApplication rec {

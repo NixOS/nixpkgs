@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitLab,
-  installShellFiles,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, fetchFromGitLab
+, installShellFiles
+, nix-update-script
+,
 }:
 
 buildNpmPackage (finalAttrs: {

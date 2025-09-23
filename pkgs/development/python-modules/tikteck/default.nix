@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  bluepy,
-  pycryptodome,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, bluepy
+, pycryptodome
+,
 }:
 
 buildPythonPackage rec {

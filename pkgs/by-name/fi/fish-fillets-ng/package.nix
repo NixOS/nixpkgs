@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
-  SDL,
-  lua5_1,
-  pkg-config,
-  SDL_mixer,
-  SDL_image,
-  SDL_ttf,
+{ lib
+, stdenv
+, fetchurl
+, makeDesktopItem
+, copyDesktopItems
+, SDL
+, lua5_1
+, pkg-config
+, SDL_mixer
+, SDL_image
+, SDL_ttf
+,
 }:
 
 stdenv.mkDerivation rec {

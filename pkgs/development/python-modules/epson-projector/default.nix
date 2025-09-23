@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  aiohttp,
-  async-timeout,
-  pyserial-asyncio,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, aiohttp
+, async-timeout
+, pyserial-asyncio
+,
 }:
 
 buildPythonPackage rec {

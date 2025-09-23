@@ -1,22 +1,22 @@
-{
-  autoPatchelfHook,
-  copyDesktopItems,
-  dbus,
-  fetchurl,
-  fontconfig,
-  freetype,
-  lib,
-  libGLU,
-  libxkbcommon,
-  makeDesktopItem,
-  stdenv,
-  unzip,
-  wayland,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilrenderutil,
-  xcbutilwm,
-  libxml2,
+{ autoPatchelfHook
+, copyDesktopItems
+, dbus
+, fetchurl
+, fontconfig
+, freetype
+, lib
+, libGLU
+, libxkbcommon
+, makeDesktopItem
+, stdenv
+, unzip
+, wayland
+, xcbutilimage
+, xcbutilkeysyms
+, xcbutilrenderutil
+, xcbutilwm
+, libxml2
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "binaryninja-free";

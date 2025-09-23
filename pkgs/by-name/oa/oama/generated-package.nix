@@ -1,36 +1,36 @@
 # This file has been autogenerate with cabal2nix.
 # Update via ./update.sh
-{
-  mkDerivation,
-  aeson,
-  base,
-  base64-bytestring,
-  bytestring,
-  containers,
-  cryptohash-sha256,
-  directory,
-  fetchgit,
-  hsyslog,
-  http-conduit,
-  http-types,
-  lib,
-  mtl,
-  network,
-  network-uri,
-  optparse-applicative,
-  pretty-simple,
-  process,
-  random,
-  streaming-commons,
-  string-qq,
-  strings,
-  text,
-  time,
-  twain,
-  unix,
-  utf8-string,
-  warp,
-  yaml,
+{ mkDerivation
+, aeson
+, base
+, base64-bytestring
+, bytestring
+, containers
+, cryptohash-sha256
+, directory
+, fetchgit
+, hsyslog
+, http-conduit
+, http-types
+, lib
+, mtl
+, network
+, network-uri
+, optparse-applicative
+, pretty-simple
+, process
+, random
+, streaming-commons
+, string-qq
+, strings
+, text
+, time
+, twain
+, unix
+, utf8-string
+, warp
+, yaml
+,
 }:
 mkDerivation {
   pname = "oama";

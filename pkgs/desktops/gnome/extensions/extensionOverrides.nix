@@ -1,33 +1,33 @@
-{
-  lib,
-  fetchFromGitLab,
-  cpio,
-  ddcutil,
-  easyeffects,
-  gjs,
-  glib,
-  gnome-menus,
-  nautilus,
-  gobject-introspection,
-  hddtemp,
-  libgtop,
-  libhandy,
-  liquidctl,
-  lm_sensors,
-  netcat-gnu,
-  nvme-cli,
-  procps,
-  smartmontools,
-  replaceVars,
-  stdenvNoCC,
-  touchegg,
-  util-linux,
-  vte,
-  wrapGAppsHook3,
-  xdg-utils,
-  gtk4,
-  desktop-file-utils,
-  xdg-user-dirs,
+{ lib
+, fetchFromGitLab
+, cpio
+, ddcutil
+, easyeffects
+, gjs
+, glib
+, gnome-menus
+, nautilus
+, gobject-introspection
+, hddtemp
+, libgtop
+, libhandy
+, liquidctl
+, lm_sensors
+, netcat-gnu
+, nvme-cli
+, procps
+, smartmontools
+, replaceVars
+, stdenvNoCC
+, touchegg
+, util-linux
+, vte
+, wrapGAppsHook3
+, xdg-utils
+, gtk4
+, desktop-file-utils
+, xdg-user-dirs
+,
 }:
 let
   # Helper method to reduce redundancy
@@ -41,11 +41,11 @@ let
     );
 in
 # A set of overrides for automatically packaged extensions that require some small fixes.
-# The input must be an attribute set with the extensions' UUIDs as keys and the extension
-# derivations as values. Output is the same, but with patches applied.
-#
-# Note that all source patches refer to the built extension as published on extensions.gnome.org, and not
-# the upstream repository's sources.
+  # The input must be an attribute set with the extensions' UUIDs as keys and the extension
+  # derivations as values. Output is the same, but with patches applied.
+  #
+  # Note that all source patches refer to the built extension as published on extensions.gnome.org, and not
+  # the upstream repository's sources.
 super:
 lib.trivial.pipe super [
   (patchExtension "apps-menu@gnome-shell-extensions.gcampax.github.com" (old: {

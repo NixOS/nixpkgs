@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -33,9 +32,10 @@ let
           name = section.route;
           params = builtins.removeAttrs section [ "route" ];
         in
-        genINI {
-          "${name}" = params;
-        }
+        genINI
+          {
+            "${name}" = params;
+          }
         + "\n"
       ))
     )
@@ -165,12 +165,13 @@ in
           freeformType =
             with lib.types;
             attrsOf (
-              nullOr (oneOf [
-                bool
-                int
-                float
-                str
-              ])
+              nullOr
+                (oneOf [
+                  bool
+                  int
+                  float
+                  str
+                ])
               // {
                 description = "INI atom (null, bool, int, float or string)";
               }

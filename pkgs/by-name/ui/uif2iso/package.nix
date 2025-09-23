@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

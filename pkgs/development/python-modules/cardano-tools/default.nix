@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  # Python deps
-  requests,
-  pexpect,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, # Python deps
+  requests
+, pexpect
+,
 }:
 
 buildPythonPackage rec {

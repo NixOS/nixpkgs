@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  aiohttp,
-  python-mimeparse,
-  gunicorn,
-  mako,
-  pytestCheckHook,
-  webtest-aiohttp,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, aiohttp
+, python-mimeparse
+, gunicorn
+, mako
+, pytestCheckHook
+, webtest-aiohttp
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  midea-local,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, midea-local
+,
 }:
 
 buildHomeAssistantComponent rec {

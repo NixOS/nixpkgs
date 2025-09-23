@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  ffmpeg,
-  mediainfo,
-  mpv,
-  python3Packages,
-  qt5,
+{ lib
+, fetchFromGitHub
+, ffmpeg
+, mediainfo
+, mpv
+, python3Packages
+, qt5
+,
 }:
 let
   version = "6.0.5.3";

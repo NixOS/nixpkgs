@@ -1,16 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools,
-  sphinx,
-  cairosvg,
-  inkscape,
-  librsvg,
-  fetchPypi,
-
-  withCairosvg ? false,
-  withInkscape ? false,
-  withLibrsvg ? true,
+{ lib
+, buildPythonPackage
+, setuptools
+, sphinx
+, cairosvg
+, inkscape
+, librsvg
+, fetchPypi
+, withCairosvg ? false
+, withInkscape ? false
+, withLibrsvg ? true
+,
 }:
 
 assert (withCairosvg || withInkscape || withLibrsvg);

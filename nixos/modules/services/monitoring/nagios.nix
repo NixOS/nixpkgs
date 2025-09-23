@@ -1,9 +1,8 @@
 # Nagios system/network monitoring daemon.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.nagios;
@@ -14,10 +13,11 @@ let
 
   nagiosObjectDefs = cfg.objectDefs;
 
-  nagiosObjectDefsDir = pkgs.runCommand "nagios-objects" {
-    inherit nagiosObjectDefs;
-    preferLocalBuild = true;
-  } "mkdir -p $out; ln -s $nagiosObjectDefs $out/";
+  nagiosObjectDefsDir = pkgs.runCommand "nagios-objects"
+    {
+      inherit nagiosObjectDefs;
+      preferLocalBuild = true;
+    } "mkdir -p $out; ln -s $nagiosObjectDefs $out/";
 
   nagiosCfgFile =
     let

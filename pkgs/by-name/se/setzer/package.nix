@@ -1,22 +1,22 @@
-{
-  appstream,
-  appstream-glib,
-  desktop-file-utils,
-  fetchFromGitHub,
-  gettext,
-  gobject-introspection,
-  gtk4,
-  gtksourceview5,
-  lib,
-  libadwaita,
-  libportal,
-  librsvg,
-  meson,
-  ninja,
-  poppler_gi,
-  python3Packages,
-  webkitgtk_6_0,
-  wrapGAppsHook4,
+{ appstream
+, appstream-glib
+, desktop-file-utils
+, fetchFromGitHub
+, gettext
+, gobject-introspection
+, gtk4
+, gtksourceview5
+, lib
+, libadwaita
+, libportal
+, librsvg
+, meson
+, ninja
+, poppler_gi
+, python3Packages
+, webkitgtk_6_0
+, wrapGAppsHook4
+,
 }:
 
 python3Packages.buildPythonApplication rec {

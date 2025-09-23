@@ -1,17 +1,17 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  commoncode,
-  fetchPypi,
-  packaging,
-  pytestCheckHook,
-  pythonOlder,
-  saneyaml,
-  semantic-version,
-  semver,
-  setuptools,
-  setuptools-scm,
+{ lib
+, attrs
+, buildPythonPackage
+, commoncode
+, fetchPypi
+, packaging
+, pytestCheckHook
+, pythonOlder
+, saneyaml
+, semantic-version
+, semver
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

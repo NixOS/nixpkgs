@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  python,
-  fetchPypi,
+{ lib
+, stdenv
+, buildPythonPackage
+, python
+, fetchPypi
+,
 }:
 
 let

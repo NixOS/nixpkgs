@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  dpkg,
-  fetchurl,
-  nixosTests,
-  systemd,
-  autoPatchelfHook,
+{ lib
+, stdenvNoCC
+, dpkg
+, fetchurl
+, nixosTests
+, systemd
+, autoPatchelfHook
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

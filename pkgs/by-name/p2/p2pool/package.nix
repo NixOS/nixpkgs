@@ -1,17 +1,17 @@
-{
-  stdenv,
-  cmake,
-  curl,
-  fetchFromGitHub,
-  gss,
-  hwloc,
-  lib,
-  libsodium,
-  libuv,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  zeromq,
+{ stdenv
+, cmake
+, curl
+, fetchFromGitHub
+, gss
+, hwloc
+, lib
+, libsodium
+, libuv
+, nix-update-script
+, openssl
+, pkg-config
+, zeromq
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

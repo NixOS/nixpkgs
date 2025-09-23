@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  uthash,
-  meson,
-  ninja,
-  pkg-config,
-  check,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, uthash
+, meson
+, ninja
+, pkg-config
+, check
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

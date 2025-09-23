@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pycryptodome,
-  uvloop,
-  setuptools,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pycryptodome
+, uvloop
+, setuptools
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

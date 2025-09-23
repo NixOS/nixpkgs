@@ -10,19 +10,19 @@
 # See the documentation at doc/languages-frameworks/coq.section.md.        #
 ############################################################################
 
-{
-  lib,
-  ncurses,
-  graphviz,
-  lua,
-  fetchzip,
-  mkCoqDerivation,
-  withDoc ? false,
-  single ? false,
-  coq,
-  hierarchy-builder,
-  stdlib,
-  version ? null,
+{ lib
+, ncurses
+, graphviz
+, lua
+, fetchzip
+, mkCoqDerivation
+, withDoc ? false
+, single ? false
+, coq
+, hierarchy-builder
+, stdlib
+, version ? null
+,
 }@args:
 
 let
@@ -54,7 +54,8 @@ let
       (case (range "8.7" "8.9") "1.8.0")
       (case (range "8.6" "8.9") "1.7.0")
       (case (range "8.5" "8.7") "1.6.4")
-    ] null;
+    ]
+      null;
   release = {
     "2.4.0".sha256 = "sha256-A1XgLLwZRvKS8QyceCkSQa7ue6TYyf5fMft5gSx9NOs=";
     "2.3.0".sha256 = "sha256-wa6OBig8rhAT4iwupSylyCAMhO69rADa0MQIX5zzL+Q=";

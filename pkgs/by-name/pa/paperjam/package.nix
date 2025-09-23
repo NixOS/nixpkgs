@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  qpdf,
-  libiconv,
-  libpaper,
-  asciidoc,
+{ lib
+, stdenv
+, fetchurl
+, qpdf
+, libiconv
+, libpaper
+, asciidoc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

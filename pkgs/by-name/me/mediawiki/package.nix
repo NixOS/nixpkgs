@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  imagemagick,
-  nixosTests,
+{ lib
+, stdenvNoCC
+, fetchurl
+, imagemagick
+, nixosTests
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

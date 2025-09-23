@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  openssl,
-  libiconv,
-  testers,
-  sqlx-cli,
-  nix-update-script,
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, openssl
+, libiconv
+, testers
+, sqlx-cli
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

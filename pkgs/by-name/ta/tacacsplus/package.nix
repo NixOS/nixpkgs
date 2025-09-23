@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  flex,
-  bison,
-  perl,
-  libnsl,
-  # --with-libwrap=yes is currently broken, TODO unbreak
-  withLibWrap ? false,
-  tcp_wrappers,
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, perl
+, libnsl
+, # --with-libwrap=yes is currently broken, TODO unbreak
+  withLibWrap ? false
+, tcp_wrappers
+,
 }:
 
 stdenv.mkDerivation rec {

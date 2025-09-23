@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
+{ stdenv
+, lib
+, fetchurl
+,
 }:
 let
   mkCmdPackDerivation =
-    {
-      pname,
-      postInstall ? "",
-      description,
+    { pname
+    , postInstall ? ""
+    , description
+    ,
     }:
     stdenv.mkDerivation {
       inherit pname postInstall;

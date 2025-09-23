@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  gettext,
-  python3,
-  python3Packages,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, gettext
+, python3
+, python3Packages
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

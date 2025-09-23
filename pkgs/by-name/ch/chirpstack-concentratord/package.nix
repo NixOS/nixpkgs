@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  protobuf,
-  libloragw-2g4,
-  libloragw-sx1301,
-  libloragw-sx1302,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, protobuf
+, libloragw-2g4
+, libloragw-sx1301
+, libloragw-sx1302
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "chirpstack-concentratord";

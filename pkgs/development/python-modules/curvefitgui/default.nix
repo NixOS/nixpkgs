@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # depedencies
-  numpy,
-  scipy,
-  pyqt5,
-  matplotlib,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # depedencies
+  numpy
+, scipy
+, pyqt5
+, matplotlib
+,
 }:
 
 buildPythonPackage {

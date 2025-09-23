@@ -1,18 +1,18 @@
-{
-  lib,
-  brotli,
-  buildPythonPackage,
-  cython,
-  execnet,
-  fetchFromGitHub,
-  jinja2,
-  pytestCheckHook,
-  pytest-rerunfailures,
-  pythonOlder,
-  pyzmq,
-  redis,
-  setuptools,
-  sqlalchemy,
+{ lib
+, brotli
+, buildPythonPackage
+, cython
+, execnet
+, fetchFromGitHub
+, jinja2
+, pytestCheckHook
+, pytest-rerunfailures
+, pythonOlder
+, pyzmq
+, redis
+, setuptools
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

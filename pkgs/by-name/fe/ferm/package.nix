@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  perl,
-  iptables,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, perl
+, iptables
+, nixosTests
+,
 }:
 
 let

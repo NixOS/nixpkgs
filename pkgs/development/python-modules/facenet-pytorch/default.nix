@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  pillow,
-  torchvision,
-  lib,
+{ buildPythonPackage
+, fetchPypi
+, pillow
+, torchvision
+, lib
+,
 }:
 
 buildPythonPackage rec {

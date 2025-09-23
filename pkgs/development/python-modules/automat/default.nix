@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatch-vcs,
-  pytest-benchmark,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatch-vcs
+, pytest-benchmark
+, pytestCheckHook
+, setuptools
+,
 }:
 
 let

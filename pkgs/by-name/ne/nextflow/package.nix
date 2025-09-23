@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  openjdk,
-  gradle_8,
-  wget,
-  which,
-  gnused,
-  gawk,
-  coreutils,
-  bash,
-  testers,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, openjdk
+, gradle_8
+, wget
+, which
+, gnused
+, gawk
+, coreutils
+, bash
+, testers
+, nixosTests
+,
 }:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."

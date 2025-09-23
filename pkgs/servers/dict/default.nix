@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  which,
-  bison,
-  flex,
-  libmaa,
-  zlib,
-  libtool,
+{ lib
+, stdenv
+, fetchurl
+, which
+, bison
+, flex
+, libmaa
+, zlib
+, libtool
+,
 }:
 
 stdenv.mkDerivation rec {

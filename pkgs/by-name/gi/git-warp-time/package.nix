@@ -1,18 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  # nativeBuildInputs
-  zstd,
-  pkg-config,
-  jq,
-  cargo,
-  rustc,
-  rustPlatform,
-
-  # buildInputs
-  libgit2,
+{ lib
+, stdenv
+, fetchurl
+, # nativeBuildInputs
+  zstd
+, pkg-config
+, jq
+, cargo
+, rustc
+, rustPlatform
+, # buildInputs
+  libgit2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

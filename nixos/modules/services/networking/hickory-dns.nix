@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.hickory-dns;
@@ -96,13 +95,15 @@ in
       configFile = mkOption {
         type = types.path;
         default = toml.generate "hickory-dns.toml" (
-          lib.mapAttrs (
-            _: v:
-            if builtins.isList v then
-              map (v: if builtins.isAttrs v then lib.filterAttrs (_: v: v != null) v else v) v
-            else
-              v
-          ) (lib.filterAttrsRecursive (_: v: v != null) cfg.settings)
+          lib.mapAttrs
+            (
+              _: v:
+                if builtins.isList v then
+                  map (v: if builtins.isAttrs v then lib.filterAttrs (_: v: v != null) v else v) v
+                else
+                  v
+            )
+            (lib.filterAttrsRecursive (_: v: v != null) cfg.settings)
         );
         defaultText = lib.literalExpression ''
           let toml = pkgs.formats.toml { }; in toml.generate "hickory-dns.toml" cfg.settings

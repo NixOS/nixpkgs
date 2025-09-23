@@ -1,17 +1,16 @@
-{
-  stdenv,
-  copyDesktopItems,
-  autoPatchelfHook,
-  wrapGAppsHook4,
-  makeDesktopItem,
-  libusb1,
-  webkitgtk_4_1,
-  libsoup_3,
-  pname,
-  version,
-  src,
-  meta,
-  ...
+{ stdenv
+, copyDesktopItems
+, autoPatchelfHook
+, wrapGAppsHook4
+, makeDesktopItem
+, libusb1
+, webkitgtk_4_1
+, libsoup_3
+, pname
+, version
+, src
+, meta
+, ...
 }:
 stdenv.mkDerivation {
   inherit

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  qt6,
-  libvlc,
-  libvlcpp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qt6
+, libvlc
+, libvlcpp
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

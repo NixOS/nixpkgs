@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  udev,
-  zstd,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, udev
+, zstd
+, stdenv
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "argon";

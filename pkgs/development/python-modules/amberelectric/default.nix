@@ -1,15 +1,15 @@
-{
-  lib,
-  aenum,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pydantic,
-  pytest-mock,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  urllib3,
+{ lib
+, aenum
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pydantic
+, pytest-mock
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

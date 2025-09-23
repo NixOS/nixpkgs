@@ -1,9 +1,9 @@
-{
-  autoAddDriverRunpath,
-  cmake,
-  cudaPackages,
-  lib,
-  saxpy,
+{ autoAddDriverRunpath
+, cmake
+, cudaPackages
+, lib
+, saxpy
+,
 }:
 let
   inherit (cudaPackages)

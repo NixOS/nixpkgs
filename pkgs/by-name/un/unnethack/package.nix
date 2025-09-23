@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  util-linux,
-  ncurses,
-  flex,
-  bison,
-  lua5_4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, util-linux
+, ncurses
+, flex
+, bison
+, lua5_4
+,
 }:
 
 stdenv.mkDerivation {

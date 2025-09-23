@@ -1,16 +1,13 @@
-{
-  lib,
-  mkMesonLibrary,
+{ lib
+, mkMesonLibrary
+, openssl
+, nix-util
+, nix-store
+, nix-expr
+, # Configuration Options
 
-  openssl,
-
-  nix-util,
-  nix-store,
-  nix-expr,
-
-  # Configuration Options
-
-  version,
+  version
+,
 }:
 
 mkMesonLibrary (finalAttrs: {

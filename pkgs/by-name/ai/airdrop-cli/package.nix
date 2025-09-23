@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  swift,
-  swiftPackages,
-  swiftpm,
+{ lib
+, fetchFromGitHub
+, swift
+, swiftPackages
+, swiftpm
+,
 }:
 
 # Doesn't build without using the same stdenv (and Clang) to build swift

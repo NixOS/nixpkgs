@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gettext,
-  meson,
-  ninja,
-  pkg-config,
-  glib,
-  gtk3,
-  libnotify,
-  librsvg,
-  libwnck,
-  libxklavier,
-  garcon,
-  libxfce4ui,
-  libxfce4util,
-  xfce4-panel,
-  xfconf,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gettext
+, meson
+, ninja
+, pkg-config
+, glib
+, gtk3
+, libnotify
+, librsvg
+, libwnck
+, libxklavier
+, garcon
+, libxfce4ui
+, libxfce4util
+, xfce4-panel
+, xfconf
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

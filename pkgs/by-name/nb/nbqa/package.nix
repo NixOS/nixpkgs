@@ -1,15 +1,12 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-
-  # optional-dependencies
-  ruff,
-
-  # tests
-  versionCheckHook,
-
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, # optional-dependencies
+  ruff
+, # tests
+  versionCheckHook
+, nix-update-script
+,
 }:
 
 let

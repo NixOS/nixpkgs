@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  playwright-driver,
-  playwright-test,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, playwright-driver
+, playwright-test
+,
 }:
 
 buildNpmPackage rec {

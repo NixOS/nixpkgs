@@ -1,36 +1,36 @@
-{
-  stdenv,
-  lib,
-  crystal,
-  pcre2,
-  shards,
-  git,
-  pkg-config,
-  which,
-  linkFarm,
-  fetchgit,
-  fetchFromGitHub,
-  installShellFiles,
-  removeReferencesTo,
+{ stdenv
+, lib
+, crystal
+, pcre2
+, shards
+, git
+, pkg-config
+, which
+, linkFarm
+, fetchgit
+, fetchFromGitHub
+, installShellFiles
+, removeReferencesTo
+,
 }:
 
 {
   # Some projects do not include a lock file, so you can pass one
-  lockFile ? null,
-  # Generate shards.nix with `nix-shell -p crystal2nix --run crystal2nix` in the projects root
-  shardsFile ? null,
-  # We support different builders. To make things more straight forward, make it
+  lockFile ? null
+, # Generate shards.nix with `nix-shell -p crystal2nix --run crystal2nix` in the projects root
+  shardsFile ? null
+, # We support different builders. To make things more straight forward, make it
   # user selectable instead of trying to autodetect
-  format ? "make",
-  installManPages ? true,
-  # Specify binaries to build in the form { foo.src = "src/foo.cr"; }
+  format ? "make"
+, installManPages ? true
+, # Specify binaries to build in the form { foo.src = "src/foo.cr"; }
   # The default `crystal build` options can be overridden with { foo.options = [ "--optionname" ]; }
-  crystalBinaries ? { },
-  enableParallelBuilding ? true,
-  # Copy all shards dependencies instead of symlinking and add write permissions
+  crystalBinaries ? { }
+, enableParallelBuilding ? true
+, # Copy all shards dependencies instead of symlinking and add write permissions
   # to make environment more local-like
-  copyShardDeps ? false,
-  ...
+  copyShardDeps ? false
+, ...
 }@args:
 
 assert (
@@ -50,10 +50,12 @@ let
   ];
 
   crystalLib = linkFarm "crystal-lib" (
-    lib.mapAttrsToList (name: value: {
-      inherit name;
-      path = if (builtins.hasAttr "url" value) then fetchgit value else fetchFromGitHub value;
-    }) (import shardsFile)
+    lib.mapAttrsToList
+      (name: value: {
+        inherit name;
+        path = if (builtins.hasAttr "url" value) then fetchgit value else fetchFromGitHub value;
+      })
+      (import shardsFile)
   );
 
   # We no longer use --no-debug in accordance with upstream's recommendation
@@ -87,7 +89,7 @@ let
 in
 stdenv.mkDerivation (
   mkDerivationArgs
-  // {
+    // {
 
     configurePhase =
       args.configurePhase or (lib.concatStringsSep "\n" (
@@ -139,8 +141,8 @@ stdenv.mkDerivation (
         ++ lib.optional (format == "make") "make \${buildTargets:-build} $makeFlags"
         ++ lib.optionals (format == "crystal") (lib.mapAttrsToList mkCrystalBuildArgs crystalBinaries)
         ++
-          lib.optional (format == "shards")
-            "shards build --local --production ${lib.concatStringsSep " " (args.options or defaultOptions)}"
+        lib.optional (format == "shards")
+          "shards build --local --production ${lib.concatStringsSep " " (args.options or defaultOptions)}"
         ++ [ "runHook postBuild" ]
       ));
 
@@ -151,14 +153,16 @@ stdenv.mkDerivation (
         ]
         ++ lib.optional (format == "make") "make \${installTargets:-install} $installFlags"
         ++ lib.optionals (format == "crystal") (
-          map (bin: ''
-            install -Dm555 ${
-              lib.escapeShellArgs [
-                bin
-                "${placeholder "out"}/bin/${bin}"
-              ]
-            }
-          '') (lib.attrNames crystalBinaries)
+          map
+            (bin: ''
+              install -Dm555 ${
+                lib.escapeShellArgs [
+                  bin
+                  "${placeholder "out"}/bin/${bin}"
+                ]
+              }
+            '')
+            (lib.attrNames crystalBinaries)
         )
         ++ lib.optional (format == "shards") "install -Dm555 bin/* -t $out/bin"
         ++ [

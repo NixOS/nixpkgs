@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  setuptools,
-  gviz-api,
-  protobuf,
-  werkzeug,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools
+, gviz-api
+, protobuf
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

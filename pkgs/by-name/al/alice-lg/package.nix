@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  fetchYarnDeps,
-  stdenv,
-  nix-update-script,
-  yarn,
-  nodejs,
-  nixosTests,
-  fixup-yarn-lock,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, fetchYarnDeps
+, stdenv
+, nix-update-script
+, yarn
+, nodejs
+, nixosTests
+, fixup-yarn-lock
+,
 }:
 
 buildGoModule rec {

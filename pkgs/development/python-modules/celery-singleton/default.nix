@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchpatch,
-  fetchFromGitHub,
-  poetry-core,
-  celery,
-  redis,
-  pytestCheckHook,
-  pytest-celery,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchpatch
+, fetchFromGitHub
+, poetry-core
+, celery
+, redis
+, pytestCheckHook
+, pytest-celery
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

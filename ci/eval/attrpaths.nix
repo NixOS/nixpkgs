@@ -14,10 +14,10 @@
 #
 #   nix-instantiate --eval --strict --json ci/eval/attrpaths.nix -A names
 #
-{
-  lib ? import (path + "/lib"),
-  trace ? false,
-  path ? ./../..,
+{ lib ? import (path + "/lib")
+, trace ? false
+, path ? ./../..
+,
 }:
 let
 
@@ -35,9 +35,10 @@ let
           lib.pipe value [
             (lib.mapAttrsToList (
               name: value:
-              lib.addErrorContext "while evaluating package set attribute path '${
+                lib.addErrorContext "while evaluating package set attribute path '${
                 lib.showAttrPath (path ++ [ name ])
-              }'" (justAttrNames (path ++ [ name ]) value)
+              }'"
+                  (justAttrNames (path ++ [ name ]) value)
             ))
             lib.concatLists
           ];

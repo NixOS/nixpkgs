@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  removeReferencesTo,
-  alsaSupport ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  dbusSupport ? !stdenv.hostPlatform.isDarwin,
-  dbus,
-  pipewireSupport ? !stdenv.hostPlatform.isDarwin,
-  pipewire,
-  pulseSupport ? !stdenv.hostPlatform.isDarwin,
-  libpulseaudio,
-  nix-update-script,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, removeReferencesTo
+, alsaSupport ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, dbusSupport ? !stdenv.hostPlatform.isDarwin
+, dbus
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin
+, pipewire
+, pulseSupport ? !stdenv.hostPlatform.isDarwin
+, libpulseaudio
+, nix-update-script
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

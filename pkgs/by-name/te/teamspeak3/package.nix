@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  makeDesktopItem,
-  glib,
-  qt5,
-  libsForQt5,
-  perl,
-  libcxx,
-  autoPatchelfHook,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, makeDesktopItem
+, glib
+, qt5
+, libsForQt5
+, perl
+, libcxx
+, autoPatchelfHook
+, copyDesktopItems
+,
 }:
 
 let

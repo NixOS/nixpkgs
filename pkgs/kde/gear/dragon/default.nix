@@ -1,11 +1,11 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qtmultimedia,
-  kconfigwidgets,
-  kparts,
-  kxmlgui,
-  ffmpeg,
+{ mkKdeDerivation
+, pkg-config
+, qtmultimedia
+, kconfigwidgets
+, kparts
+, kxmlgui
+, ffmpeg
+,
 }:
 mkKdeDerivation {
   pname = "dragon";

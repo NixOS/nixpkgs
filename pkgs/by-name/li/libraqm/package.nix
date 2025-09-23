@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  meson,
-  ninja,
-  freetype,
-  harfbuzz,
-  fribidi,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, meson
+, ninja
+, freetype
+, harfbuzz
+, fribidi
+,
 }:
 
 stdenv.mkDerivation rec {

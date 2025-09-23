@@ -1,9 +1,8 @@
 # Module for VirtualBox guests.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.virtualisation.virtualbox.guest;

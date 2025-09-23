@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  gettext,
-  versionCheckHook,
-  buildPackages,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, gettext
+, versionCheckHook
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  base58,
-  coincurve,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, base58
+, coincurve
+,
 }:
 
 buildPythonPackage rec {

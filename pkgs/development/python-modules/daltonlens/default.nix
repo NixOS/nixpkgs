@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  numpy,
-  pillow,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, numpy
+, pillow
+, pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "daltonlens";

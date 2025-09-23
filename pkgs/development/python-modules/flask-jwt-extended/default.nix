@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cryptography,
-  flask,
-  pyjwt,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
-  werkzeug,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cryptography
+, flask
+, pyjwt
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

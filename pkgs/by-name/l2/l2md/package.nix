@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  libgit2,
+{ lib
+, stdenv
+, fetchzip
+, libgit2
+,
 }:
 
 stdenv.mkDerivation {

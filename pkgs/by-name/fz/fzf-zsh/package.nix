@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fzf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fzf
+,
 }:
 
 stdenv.mkDerivation {

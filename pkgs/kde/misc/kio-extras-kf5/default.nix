@@ -1,18 +1,18 @@
-{
-  stdenv,
-  fetchurl,
-  kio-extras,
-  cmake,
-  libsForQt5,
-  samba,
-  libssh,
-  libmtp,
-  libimobiledevice,
-  gperf,
-  libtirpc,
-  openexr,
-  taglib,
-  libappimage,
+{ stdenv
+, fetchurl
+, kio-extras
+, cmake
+, libsForQt5
+, samba
+, libssh
+, libmtp
+, libimobiledevice
+, gperf
+, libtirpc
+, openexr
+, taglib
+, libappimage
+,
 }:
 # kio-extras-kf5 is kind of part of Gear, but also not released all the time,
 # so handle it separately.

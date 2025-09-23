@@ -1,11 +1,11 @@
-{
-  lib,
-  allpairspy,
-  buildPythonPackage,
-  fetchPypi,
-  pyparsing,
-  robotframework,
-  setuptools,
+{ lib
+, allpairspy
+, buildPythonPackage
+, fetchPypi
+, pyparsing
+, robotframework
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

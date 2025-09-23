@@ -1,17 +1,15 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pythonAtLeast,
-  pythonOlder,
-
-  # runtime
-  six,
-
-  # tests
-  freezegun,
-  pytest-mock,
-  pytestCheckHook,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pythonAtLeast
+, pythonOlder
+, # runtime
+  six
+, # tests
+  freezegun
+, pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

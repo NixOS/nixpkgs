@@ -1,30 +1,28 @@
-{
-  extraLibs ? [ ],
-  firefoxRuntime ? firefox-unwrapped,
-
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  rustPlatform,
-
-  cups,
-  ffmpeg,
-  firefox-unwrapped,
-  libcanberra-gtk3,
-  libglvnd,
-  libnotify,
-  libpulseaudio,
-  libva,
-  libgbm,
-  nixosTests,
-  openssl,
-  pciutils,
-  pipewire,
-  pkg-config,
-  stdenv,
-  udev,
-  xorg,
+{ extraLibs ? [ ]
+, firefoxRuntime ? firefox-unwrapped
+, lib
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, rustPlatform
+, cups
+, ffmpeg
+, firefox-unwrapped
+, libcanberra-gtk3
+, libglvnd
+, libnotify
+, libpulseaudio
+, libva
+, libgbm
+, nixosTests
+, openssl
+, pciutils
+, pipewire
+, pkg-config
+, stdenv
+, udev
+, xorg
+,
 }:
 
 rustPlatform.buildRustPackage rec {

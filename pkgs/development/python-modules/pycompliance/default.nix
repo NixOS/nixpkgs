@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  lib,
-  unittestCheckHook,
+{ buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, lib
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -617,8 +617,7 @@ in
                 {
                   "dbus" = "dbus";
                   "broker" = "dbus-broker";
-                }
-                .${config.services.dbus.implementation};
+                }.${config.services.dbus.implementation};
             in
             {
               # We want to make sure that stc catches this as a reload,
@@ -670,8 +669,7 @@ in
         {
           "dbus" = "dbus.service";
           "broker" = "dbus-broker.service";
-        }
-        .${nodes.machine.services.dbus.implementation};
+        }.${nodes.machine.services.dbus.implementation};
     in
     # python
     ''

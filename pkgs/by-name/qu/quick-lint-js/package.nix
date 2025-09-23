@@ -1,12 +1,12 @@
-{
-  buildPackages,
-  cmake,
-  fetchFromGitHub,
-  lib,
-  ninja,
-  stdenv,
-  testers,
-  quick-lint-js,
+{ buildPackages
+, cmake
+, fetchFromGitHub
+, lib
+, ninja
+, stdenv
+, testers
+, quick-lint-js
+,
 }:
 
 let

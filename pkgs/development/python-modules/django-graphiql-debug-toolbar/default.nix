@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  django,
-  django-debug-toolbar,
-  graphene-django,
-
-  # tests
-  pytest-django,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  poetry-core
+, # dependencies
+  django
+, django-debug-toolbar
+, graphene-django
+, # tests
+  pytest-django
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fish,
-  runtimeShell,
-  replaceVars,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fish
+, runtimeShell
+, replaceVars
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

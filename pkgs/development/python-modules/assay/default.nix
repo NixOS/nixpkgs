@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage {

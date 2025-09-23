@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  fetchFromGitHub,
-  haxe,
-  neko,
-  jdk,
-  mono,
+{ stdenv
+, lib
+, fetchzip
+, fetchFromGitHub
+, haxe
+, neko
+, jdk
+, mono
+,
 }:
 
 let
@@ -21,10 +21,10 @@ let
   '';
 
   installLibHaxe =
-    {
-      libname,
-      version,
-      files ? "*",
+    { libname
+    , version
+    , files ? "*"
+    ,
     }:
     ''
       mkdir -p "$out/lib/haxe/${withCommas libname}/${withCommas version}"
@@ -33,12 +33,11 @@ let
     '';
 
   buildHaxeLib =
-    {
-      libname,
-      version,
-      sha256,
-      meta,
-      ...
+    { libname
+    , version
+    , sha256
+    , meta
+    , ...
     }@attrs:
     stdenv.mkDerivation (
       attrs

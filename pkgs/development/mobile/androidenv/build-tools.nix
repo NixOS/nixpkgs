@@ -1,16 +1,16 @@
-{
-  deployAndroidPackage,
-  lib,
-  stdenv,
-  package,
-  os,
-  arch,
-  autoPatchelfHook,
-  makeWrapper,
-  pkgs,
-  pkgsi686Linux,
-  postInstall,
-  meta,
+{ deployAndroidPackage
+, lib
+, stdenv
+, package
+, os
+, arch
+, autoPatchelfHook
+, makeWrapper
+, pkgs
+, pkgsi686Linux
+, postInstall
+, meta
+,
 }:
 
 deployAndroidPackage {

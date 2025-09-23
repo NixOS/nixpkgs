@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  click,
-  cython,
-  distutils,
-  fetchFromGitHub,
-  gcc,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, click
+, cython
+, distutils
+, fetchFromGitHub
+, gcc
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

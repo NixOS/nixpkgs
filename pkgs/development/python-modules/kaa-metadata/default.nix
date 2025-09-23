@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  kaa-base,
-  isPyPy,
-  isPy3k,
-  python,
-  pkgs,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, kaa-base
+, isPyPy
+, isPy3k
+, python
+, pkgs
+,
 }:
 
 buildPythonPackage rec {

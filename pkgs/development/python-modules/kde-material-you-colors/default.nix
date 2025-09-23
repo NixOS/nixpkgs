@@ -1,13 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-
-  dbus-python,
-  numpy,
-  pillow,
-  materialyoucolor,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, dbus-python
+, numpy
+, pillow
+, materialyoucolor
+,
 }:
 
 buildPythonPackage rec {

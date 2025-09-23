@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  versionCheckHook,
-  protobuf,
-  protoc-gen-go,
-  protoc-gen-go-grpc,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, versionCheckHook
+, protobuf
+, protoc-gen-go
+, protoc-gen-go-grpc
+, nix-update-script
+,
 }:
 buildGoModule rec {
   pname = "cunicu";

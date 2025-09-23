@@ -1,7 +1,7 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitHub,
+{ lib
+, buildNimPackage
+, fetchFromGitHub
+,
 }:
 buildNimPackage (
   final: prev: rec {

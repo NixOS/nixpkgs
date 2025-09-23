@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenv,
-  apple-sdk,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+, apple-sdk
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

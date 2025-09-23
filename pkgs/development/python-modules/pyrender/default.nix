@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  fetchpatch,
-  setuptools,
-  freetype-py,
-  imageio,
-  networkx,
-  numpy,
-  pillow,
-  pyglet,
-  pyopengl,
-  scipy,
-  six,
-  trimesh,
-  pytestCheckHook,
-  mesa,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, fetchpatch
+, setuptools
+, freetype-py
+, imageio
+, networkx
+, numpy
+, pillow
+, pyglet
+, pyopengl
+, scipy
+, six
+, trimesh
+, pytestCheckHook
+, mesa
+,
 }:
 
 buildPythonPackage rec {

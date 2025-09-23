@@ -1,39 +1,38 @@
-{
-  lib,
-  config,
-  stdenv,
-  makeScopeWithSplicing',
-  generateSplicesForMkScope,
-  aws-sdk-cpp,
-  boehmgc,
-  callPackage,
-  fetchgit,
-  fetchFromGitHub,
-  fetchFromGitea,
-  fetchpatch2,
-  fetchpatch,
-  rustPlatform,
-  editline,
-  ncurses,
-  clangStdenv,
-  nixpkgs-review,
-  nix-direnv,
-  nix-fast-build,
-  haskell,
-  nix-serve-ng,
-  colmena,
-
-  storeDir ? "/nix/store",
-  stateDir ? "/nix/var",
-  confDir ? "/etc",
+{ lib
+, config
+, stdenv
+, makeScopeWithSplicing'
+, generateSplicesForMkScope
+, aws-sdk-cpp
+, boehmgc
+, callPackage
+, fetchgit
+, fetchFromGitHub
+, fetchFromGitea
+, fetchpatch2
+, fetchpatch
+, rustPlatform
+, editline
+, ncurses
+, clangStdenv
+, nixpkgs-review
+, nix-direnv
+, nix-fast-build
+, haskell
+, nix-serve-ng
+, colmena
+, storeDir ? "/nix/store"
+, stateDir ? "/nix/var"
+, confDir ? "/etc"
+,
 }:
 let
   makeLixScope =
-    {
-      attrName,
-      lix-args,
-      # Starting with 2.93, `nix-eval-jobs` lives in the `lix` repository.
-      nix-eval-jobs-args ? { inherit (lix-args) version src; },
+    { attrName
+    , lix-args
+    , # Starting with 2.93, `nix-eval-jobs` lives in the `lix` repository.
+      nix-eval-jobs-args ? { inherit (lix-args) version src; }
+    ,
     }:
     let
       # GCC 13.2 is known to miscompile Lix coroutines (introduced in 2.92).
@@ -60,12 +59,13 @@ let
             in
             # Since Lix 2.91 does not use boost coroutines, it does not need boehmgc patches either.
             if lib.versionOlder lix-args.version "2.91" then
-              boehmgc-nix_2_3.overrideAttrs (drv: {
-                patches = (drv.patches or [ ]) ++ [
-                  # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
-                  ../nix/patches/boehmgc-coroutine-sp-fallback.patch
-                ];
-              })
+              boehmgc-nix_2_3.overrideAttrs
+                (drv: {
+                  patches = (drv.patches or [ ]) ++ [
+                    # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
+                    ../nix/patches/boehmgc-coroutine-sp-fallback.patch
+                  ];
+                })
             else
               boehmgc-nix_2_3;
 
@@ -247,18 +247,19 @@ lib.makeExtensible (
           lib.warnOnInstantiate "'lixVersions.${version}' has been renamed to 'lixPackageSets.${version}.lix'"
             self.${version}.lix;
       in
-      lib.dontRecurseIntoAttrs {
-        # NOTE: Do not add new versions of Lix here.
-        stable = mkAlias "stable";
-        latest = mkAlias "latest";
-      }
+      lib.dontRecurseIntoAttrs
+        {
+          # NOTE: Do not add new versions of Lix here.
+          stable = mkAlias "stable";
+          latest = mkAlias "latest";
+        }
       // lib.optionalAttrs config.allowAliases {
         # Legacy removed versions. We keep their aliases until the lixPackageSets one is dropped.
         lix_2_90 = mkAlias "lix_2_90";
         lix_2_91 = mkAlias "lix_2_91";
       };
   }
-  // lib.optionalAttrs config.allowAliases {
+    // lib.optionalAttrs config.allowAliases {
     # Removed versions.
     # When removing a version, add an alias with a date attached to it so we can clean it up after a while.
     lix_2_90 = throw (removedMessage "2.90"); # added in 2025-09-11

@@ -1,20 +1,19 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-
-  bzip2,
-  libGL,
-  libX11,
-  libXcursor,
-  libxkbcommon,
-  libXi,
-  moltenvk,
-  sdl3,
-  wayland,
-  zstd,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, bzip2
+, libGL
+, libX11
+, libXcursor
+, libxkbcommon
+, libXi
+, moltenvk
+, sdl3
+, wayland
+, zstd
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

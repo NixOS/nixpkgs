@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  intltool,
-  pkg-config,
-  gtk3,
-  vte,
-  wrapGAppsHook3,
-  libxslt,
-  docbook_xml_dtd_412,
-  docbook_xsl,
-  libxml2,
-  findXMLCatalogs,
-  nixosTests,
-  pcre2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, intltool
+, pkg-config
+, gtk3
+, vte
+, wrapGAppsHook3
+, libxslt
+, docbook_xml_dtd_412
+, docbook_xsl
+, libxml2
+, findXMLCatalogs
+, nixosTests
+, pcre2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

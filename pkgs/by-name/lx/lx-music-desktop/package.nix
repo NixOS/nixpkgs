@@ -1,15 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-
-  fetchFromGitHub,
-  replaceVars,
-
-  makeWrapper,
-
-  electron_36,
-  commandLineArgs ? "",
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, replaceVars
+, makeWrapper
+, electron_36
+, commandLineArgs ? ""
+,
 }:
 
 let

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  docbook_xsl,
-  ffmpeg-full,
-  glib,
-  gtk3,
-  intltool,
-  libxslt,
-  pkg-config,
-  sox,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, docbook_xsl
+, ffmpeg-full
+, glib
+, gtk3
+, intltool
+, libxslt
+, pkg-config
+, sox
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perlPackages,
-  wrapGAppsHook3,
-  imagemagick,
-  gdk-pixbuf,
-  librsvg,
-  hicolor-icon-theme,
-  procps,
-  libwnck,
-  libappindicator-gtk3,
-  xdg-utils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perlPackages
+, wrapGAppsHook3
+, imagemagick
+, gdk-pixbuf
+, librsvg
+, hicolor-icon-theme
+, procps
+, libwnck
+, libappindicator-gtk3
+, xdg-utils
+,
 }:
 
 let

@@ -39,15 +39,16 @@ self: super:
   happy = dontCheck super.happy;
 
   # add arm specific library
-  wiringPi = overrideCabal (
-    {
-      librarySystemDepends ? [ ],
-      ...
-    }:
-    {
-      librarySystemDepends = librarySystemDepends ++ [ pkgs.wiringpi ];
-    }
-  ) super.wiringPi;
+  wiringPi = overrideCabal
+    (
+      { librarySystemDepends ? [ ]
+      , ...
+      }:
+      {
+        librarySystemDepends = librarySystemDepends ++ [ pkgs.wiringpi ];
+      }
+    )
+    super.wiringPi;
 
 }
 // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
@@ -123,7 +124,7 @@ self: super:
   # https://github.com/haskell-crypto/cryptonite/issues/367
   cryptonite = dontCheck super.cryptonite;
 }
-// lib.optionalAttrs (with pkgs.stdenv.hostPlatform; isAarch && isAndroid) {
+  // lib.optionalAttrs (with pkgs.stdenv.hostPlatform; isAarch && isAndroid) {
   # android is not currently allowed as 'supported-platforms' by hackage2nix
   android-activity = unmarkBroken super.android-activity;
 }

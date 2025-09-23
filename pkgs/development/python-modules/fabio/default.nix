@@ -1,17 +1,17 @@
-{
-  buildPythonPackage,
-  ninja,
-  fetchPypi,
-  meson,
-  lib,
-  cython,
-  meson-python,
-  numpy,
-  lxml,
-  h5py,
-  hdf5plugin,
-  pillow,
-  tomli,
+{ buildPythonPackage
+, ninja
+, fetchPypi
+, meson
+, lib
+, cython
+, meson-python
+, numpy
+, lxml
+, h5py
+, hdf5plugin
+, pillow
+, tomli
+,
 }:
 
 buildPythonPackage rec {

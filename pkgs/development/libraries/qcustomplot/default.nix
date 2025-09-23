@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchurl,
-  fixDarwinDylibNames,
-  qtbase,
-  qmake,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchurl
+, fixDarwinDylibNames
+, qtbase
+, qmake
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

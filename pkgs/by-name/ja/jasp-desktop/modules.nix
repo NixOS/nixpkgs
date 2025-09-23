@@ -1,8 +1,8 @@
-{
-  rPackages,
-  fetchFromGitHub,
-  jasp-src,
-  jasp-version,
+{ rPackages
+, fetchFromGitHub
+, jasp-src
+, jasp-version
+,
 }:
 
 with rPackages;
@@ -173,11 +173,11 @@ let
   };
 
   buildJaspModule =
-    {
-      pname,
-      version,
-      hash,
-      deps,
+    { pname
+    , version
+    , hash
+    , deps
+    ,
     }:
     buildRPackage' {
       inherit pname version;

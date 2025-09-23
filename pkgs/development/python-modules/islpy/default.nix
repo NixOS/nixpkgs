@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  nanobind,
-  ninja,
-  pcpp,
-  scikit-build-core,
-  typing-extensions,
-
-  # buildInputs
-  imath,
-  isl,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cmake
+, nanobind
+, ninja
+, pcpp
+, scikit-build-core
+, typing-extensions
+, # buildInputs
+  imath
+, isl
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

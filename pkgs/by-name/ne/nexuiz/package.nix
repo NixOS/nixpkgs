@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  # required for both
-  unzip,
-  zlib,
-  curl,
-  libjpeg,
-  libpng,
-  libvorbis,
-  libtheora,
-  libogg,
-  libmodplug,
-  # glx
-  libX11,
-  libGLU,
-  libGL,
-  libXpm,
-  libXext,
-  libXxf86vm,
-  libXxf86dga,
-  alsa-lib,
-  # sdl
-  SDL,
-  # icon
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, # required for both
+  unzip
+, zlib
+, curl
+, libjpeg
+, libpng
+, libvorbis
+, libtheora
+, libogg
+, libmodplug
+, # glx
+  libX11
+, libGLU
+, libGL
+, libXpm
+, libXext
+, libXxf86vm
+, libXxf86dga
+, alsa-lib
+, # sdl
+  SDL
+, # icon
+  copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 let

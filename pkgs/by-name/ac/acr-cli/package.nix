@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  nix-update-script,
-  acr-cli,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, nix-update-script
+, acr-cli
+,
 }:
 buildGoModule rec {
   pname = "acr-cli";

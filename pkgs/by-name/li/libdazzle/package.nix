@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ninja,
-  meson,
-  mesonEmulatorHook,
-  pkg-config,
-  vala,
-  gobject-introspection,
-  libxml2,
-  gtk-doc,
-  docbook_xsl,
-  docbook_xml_dtd_43,
-  dbus,
-  xvfb-run,
-  glib,
-  gtk3,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, ninja
+, meson
+, mesonEmulatorHook
+, pkg-config
+, vala
+, gobject-introspection
+, libxml2
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_43
+, dbus
+, xvfb-run
+, glib
+, gtk3
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

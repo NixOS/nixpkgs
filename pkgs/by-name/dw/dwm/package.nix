@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  libX11,
-  libXinerama,
-  libXft,
-  writeText,
-  pkg-config,
-  # customization
-  config,
-  conf ? config.dwm.conf or null,
-  patches ? config.dwm.patches or [ ],
-  extraLibs ? config.dwm.extraLibs or [ ],
-  # update script dependencies
-  gitUpdater,
+{ lib
+, stdenv
+, fetchzip
+, libX11
+, libXinerama
+, libXft
+, writeText
+, pkg-config
+, # customization
+  config
+, conf ? config.dwm.conf or null
+, patches ? config.dwm.patches or [ ]
+, extraLibs ? config.dwm.extraLibs or [ ]
+, # update script dependencies
+  gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,5 +1,5 @@
-{
-  nixpkgs ? import ../.. { },
+{ nixpkgs ? import ../.. { }
+,
 }:
 with nixpkgs;
 let

@@ -1,12 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libedit,
-  zlib,
-  ncurses,
-  expect,
-
+{ lib
+, stdenv
+, fetchFromGitHub
+, libedit
+, zlib
+, ncurses
+, expect
+,
 }:
 
 stdenv.mkDerivation rec {

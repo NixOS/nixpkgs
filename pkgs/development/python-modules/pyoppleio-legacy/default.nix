@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  crc16,
-  fetchFromGitHub,
-  setuptools,
+{ lib
+, buildPythonPackage
+, crc16
+, fetchFromGitHub
+, setuptools
+,
 }:
 
 buildPythonPackage {

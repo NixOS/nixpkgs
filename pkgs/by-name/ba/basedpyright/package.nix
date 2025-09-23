@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  runCommand,
-  buildNpmPackage,
-  docify,
-  testers,
-  writeText,
-  jq,
-  basedpyright,
-  pkg-config,
-  libsecret,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, runCommand
+, buildNpmPackage
+, docify
+, testers
+, writeText
+, jq
+, basedpyright
+, pkg-config
+, libsecret
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 buildNpmPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nixVersions,
-  nixosTests,
-  boost,
-  pkg-config,
-  stdenv,
-  installShellFiles,
-  nix-update-script,
-  crates ? [ "attic-client" ],
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nixVersions
+, nixosTests
+, boost
+, pkg-config
+, stdenv
+, installShellFiles
+, nix-update-script
+, crates ? [ "attic-client" ]
+,
 }:
 
 let

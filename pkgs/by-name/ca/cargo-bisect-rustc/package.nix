@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  runCommand,
-  patchelf,
-  zlib,
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, runCommand
+, patchelf
+, zlib
+,
 }:
 
 rustPlatform.buildRustPackage rec {

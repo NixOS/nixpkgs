@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fuse,
-  macfuse-stubs,
-  pkg-config,
-  which,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fuse
+, macfuse-stubs
+, pkg-config
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

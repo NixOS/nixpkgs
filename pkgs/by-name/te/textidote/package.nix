@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ant,
-  jdk11,
-  makeWrapper,
-  stripJavaArchivesHook,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ant
+, jdk11
+, makeWrapper
+, stripJavaArchivesHook
+, testers
+,
 }:
 
 let

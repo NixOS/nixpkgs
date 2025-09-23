@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonRelaxDepsHook,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  fonttools,
-  fontfeatures,
-  ufolib2,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonRelaxDepsHook
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, fonttools
+, fontfeatures
+, ufolib2
+,
 }:
 
 buildPythonPackage rec {

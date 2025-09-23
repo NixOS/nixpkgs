@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  gfortran,
-  cairo,
-  freetype,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gfortran
+, cairo
+, freetype
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

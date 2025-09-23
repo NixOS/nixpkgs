@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -399,10 +398,12 @@ in
 
       script =
         (concatStrings (
-          mapAttrsToList (name: env: ''
-            export ${toVarName "${name}_control"}=$(cat ${env.control.login.passwordFile})
-            export ${toVarName "${name}_call"}=$(cat ${env.call.login.passwordFile})
-          '') cfg.xmppEnvironments
+          mapAttrsToList
+            (name: env: ''
+              export ${toVarName "${name}_control"}=$(cat ${env.control.login.passwordFile})
+              export ${toVarName "${name}_call"}=$(cat ${env.call.login.passwordFile})
+            '')
+            cfg.xmppEnvironments
         ))
         + ''
           ${pkgs.jdk11_headless}/bin/java -Djava.util.logging.config.file=${./logging.properties-journal} -Dconfig.file=${configFile} -jar ${pkgs.jibri}/opt/jitsi/jibri/jibri.jar --config /var/lib/jibri/jibri.json

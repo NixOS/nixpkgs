@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wheel,
-  # dependencies
-  django,
-  apscheduler,
-  # tests
-  pytestCheckHook,
-  pytest-django,
-  pytz,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wheel
+, # dependencies
+  django
+, apscheduler
+, # tests
+  pytestCheckHook
+, pytest-django
+, pytz
+,
 }:
 
 buildPythonPackage rec {

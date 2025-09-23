@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kernel,
-  kmod,
-  gnugrep,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, kmod
+, gnugrep
+,
 }:
 
 stdenv.mkDerivation {

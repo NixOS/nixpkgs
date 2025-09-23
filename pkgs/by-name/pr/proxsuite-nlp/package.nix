@@ -1,19 +1,19 @@
-{
-  cmake,
-  doxygen,
-  eigenrand,
-  example-robot-data,
-  fetchFromGitHub,
-  fmt,
-  fontconfig,
-  graphviz,
-  lib,
-  stdenv,
-  pinocchio,
-  pkg-config,
-  proxsuite,
-  python3Packages,
-  pythonSupport ? false,
+{ cmake
+, doxygen
+, eigenrand
+, example-robot-data
+, fetchFromGitHub
+, fmt
+, fontconfig
+, graphviz
+, lib
+, stdenv
+, pinocchio
+, pkg-config
+, proxsuite
+, python3Packages
+, pythonSupport ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

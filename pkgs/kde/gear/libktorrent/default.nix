@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  doxygen,
-  qt5compat,
-  boost,
-  gmp,
-  libgcrypt,
+{ mkKdeDerivation
+, doxygen
+, qt5compat
+, boost
+, gmp
+, libgcrypt
+,
 }:
 mkKdeDerivation {
   pname = "libktorrent";

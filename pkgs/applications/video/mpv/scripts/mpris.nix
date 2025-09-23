@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  pkg-config,
-  glib,
-  mpv-unwrapped,
-  ffmpeg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, pkg-config
+, glib
+, mpv-unwrapped
+, ffmpeg
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  nixosTests,
-  openssh,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, nixosTests
+, openssh
+,
 }:
 buildGoModule rec {
   pname = "zrepl";

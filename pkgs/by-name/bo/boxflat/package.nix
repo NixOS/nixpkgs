@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  gtk4,
-  libadwaita,
-  python3Packages,
-  gobject-introspection,
-  wrapGAppsHook4,
-  copyDesktopItems,
-  makeDesktopItem,
-  nix-update-script,
-  udevCheckHook,
+{ lib
+, fetchFromGitHub
+, gtk4
+, libadwaita
+, python3Packages
+, gobject-introspection
+, wrapGAppsHook4
+, copyDesktopItems
+, makeDesktopItem
+, nix-update-script
+, udevCheckHook
+,
 }:
 
 python3Packages.buildPythonPackage rec {

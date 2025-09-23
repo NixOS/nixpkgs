@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  apple-sdk_15,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, apple-sdk_15
+, versionCheckHook
+,
 }:
 
 let
@@ -14,8 +14,7 @@ let
     {
       "aarch64-darwin" = "arm64";
       "x86_64-darwin" = "x86";
-    }
-    .${system} or (throw "Unsupported system: ${system}");
+    }.${system} or (throw "Unsupported system: ${system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";

@@ -1,35 +1,35 @@
-{
-  apple-sdk_13,
-  stdenv,
-  cmake,
-  lsb-release,
-  ninja,
-  lib,
-  fetchFromGitHub,
-  fetchurl,
-  copyDesktopItems,
-  makeDesktopItem,
-  python3,
-  glew,
-  boost,
-  SDL2,
-  SDL2_net,
-  pkg-config,
-  libpulseaudio,
-  libpng,
-  imagemagick,
-  zenity,
-  makeWrapper,
-  darwin,
-  libicns,
-  libzip,
-  nlohmann_json,
-  tinyxml-2,
-  spdlog,
-  writeTextFile,
-  fixDarwinDylibNames,
-  applyPatches,
-  shipwright,
+{ apple-sdk_13
+, stdenv
+, cmake
+, lsb-release
+, ninja
+, lib
+, fetchFromGitHub
+, fetchurl
+, copyDesktopItems
+, makeDesktopItem
+, python3
+, glew
+, boost
+, SDL2
+, SDL2_net
+, pkg-config
+, libpulseaudio
+, libpng
+, imagemagick
+, zenity
+, makeWrapper
+, darwin
+, libicns
+, libzip
+, nlohmann_json
+, tinyxml-2
+, spdlog
+, writeTextFile
+, fixDarwinDylibNames
+, applyPatches
+, shipwright
+,
 }:
 
 let

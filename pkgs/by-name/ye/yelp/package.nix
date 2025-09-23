@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  gettext,
-  itstool,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  bzip2,
-  glib,
-  gtk3,
-  libhandy,
-  libxml2,
-  libxslt,
-  sqlite,
-  webkitgtk_4_1,
-  xz,
-  yelp-xsl,
-  gnome,
+{ stdenv
+, lib
+, fetchurl
+, gettext
+, itstool
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, bzip2
+, glib
+, gtk3
+, libhandy
+, libxml2
+, libxslt
+, sqlite
+, webkitgtk_4_1
+, xz
+, yelp-xsl
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

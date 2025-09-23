@@ -1,18 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  cython,
-  numpy,
-  scipy,
-  scikit-learn,
-  joblib,
-  six,
-
-  # test
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, cython
+, numpy
+, scipy
+, scikit-learn
+, joblib
+, six
+, # test
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

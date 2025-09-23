@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bison,
-  flex,
-  buildsystem,
+{ lib
+, stdenv
+, fetchurl
+, bison
+, flex
+, buildsystem
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

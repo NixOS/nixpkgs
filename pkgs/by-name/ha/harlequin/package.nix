@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  nix-update-script,
-  glibcLocales,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
-  withPostgresAdapter ? true,
-  withBigQueryAdapter ? true,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, nix-update-script
+, glibcLocales
+, versionCheckHook
+, writableTmpDirAsHomeHook
+, withPostgresAdapter ? true
+, withBigQueryAdapter ? true
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  callPackage,
-  cmake,
-  pkg-config,
-  glib,
-  libao,
-  intltool,
-  libmirage,
-  coreutils,
+{ stdenv
+, callPackage
+, cmake
+, pkg-config
+, glib
+, libao
+, intltool
+, libmirage
+, coreutils
+,
 }:
 
 let

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  wrapQtAppsHook,
-  cmake,
-  bzip2,
-  qtbase,
-  qttools,
-  libnova,
-  proj,
-  libpng,
-  openjpeg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapQtAppsHook
+, cmake
+, bzip2
+, qtbase
+, qttools
+, libnova
+, proj
+, libpng
+, openjpeg
+,
 }:
 
 stdenv.mkDerivation {

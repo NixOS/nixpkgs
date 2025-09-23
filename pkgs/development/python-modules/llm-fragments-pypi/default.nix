@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  llm,
-  llm-fragments-pypi,
-  httpx,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, llm
+, llm-fragments-pypi
+, httpx
+,
 }:
 
 buildPythonPackage rec {

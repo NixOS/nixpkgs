@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  karmor,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, karmor
+,
 }:
 
 buildGoModule rec {

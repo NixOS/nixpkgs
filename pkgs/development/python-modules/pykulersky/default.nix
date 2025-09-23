@@ -1,13 +1,13 @@
-{
-  lib,
-  bleak,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, bleak
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

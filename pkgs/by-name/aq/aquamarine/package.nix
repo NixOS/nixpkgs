@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  hwdata,
-  hyprutils,
-  hyprwayland-scanner,
-  libdisplay-info,
-  libdrm,
-  libffi,
-  libGL,
-  libinput,
-  libgbm,
-  nix-update-script,
-  pixman,
-  pkg-config,
-  seatd,
-  udev,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, hwdata
+, hyprutils
+, hyprwayland-scanner
+, libdisplay-info
+, libdrm
+, libffi
+, libGL
+, libinput
+, libgbm
+, nix-update-script
+, pixman
+, pkg-config
+, seatd
+, udev
+, wayland
+, wayland-protocols
+, wayland-scanner
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aquamarine";

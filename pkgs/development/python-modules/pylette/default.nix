@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  scikit-learn,
-  typer,
-  requests,
-  pillow,
-  numpy,
-  pytestCheckHook,
-  opencv-python,
-  requests-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, scikit-learn
+, typer
+, requests
+, pillow
+, numpy
+, pytestCheckHook
+, opencv-python
+, requests-mock
+,
 }:
 buildPythonPackage rec {
   pname = "pylette";

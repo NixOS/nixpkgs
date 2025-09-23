@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  stdenv,
-  alsa-lib,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, stdenv
+, alsa-lib
+,
 }:
 
 rustPlatform.buildRustPackage rec {

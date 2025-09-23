@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  pkg-config,
-  xorg,
-  boost,
-  gtest,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, pkg-config
+, xorg
+, boost
+, gtest
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  markuppy,
-  odfpy,
-  openpyxl,
-  pandas,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
-  pyyaml,
-  setuptools-scm,
-  tabulate,
-  unicodecsv,
-  xlrd,
-  xlwt,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, markuppy
+, odfpy
+, openpyxl
+, pandas
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+, pyyaml
+, setuptools-scm
+, tabulate
+, unicodecsv
+, xlrd
+, xlwt
+,
 }:
 
 buildPythonPackage rec {

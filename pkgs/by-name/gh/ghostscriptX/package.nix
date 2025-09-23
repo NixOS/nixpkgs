@@ -1,5 +1,5 @@
-{
-  ghostscript,
+{ ghostscript
+,
 }:
 
 ghostscript.override {

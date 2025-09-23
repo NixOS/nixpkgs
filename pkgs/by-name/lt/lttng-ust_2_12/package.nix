@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  liburcu,
-  numactl,
-  python3,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, liburcu
+, numactl
+, python3
+,
 }:
 
 # NOTE:

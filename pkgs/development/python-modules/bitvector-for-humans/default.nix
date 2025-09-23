@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  poetry-core,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, poetry-core
+, pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "bitvector-for-humans";

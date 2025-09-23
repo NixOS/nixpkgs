@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gtk3,
-  meson,
-  ninja,
-  json_c,
-  pkg-config,
-  gtk-layer-shell,
-  libpulseaudio,
-  libmpdclient,
-  libxkbcommon,
-  alsa-lib,
-  makeWrapper,
-  docutils,
-  wayland-scanner,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gtk3
+, meson
+, ninja
+, json_c
+, pkg-config
+, gtk-layer-shell
+, libpulseaudio
+, libmpdclient
+, libxkbcommon
+, alsa-lib
+, makeWrapper
+, docutils
+, wayland-scanner
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

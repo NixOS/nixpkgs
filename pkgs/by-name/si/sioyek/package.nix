@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  installShellFiles,
-  fetchFromGitHub,
-  freetype,
-  unstableGitUpdater,
-  gumbo,
-  harfbuzz,
-  jbig2dec,
-  mujs,
-  mupdf,
-  openjpeg,
-  qt6,
+{ lib
+, stdenv
+, installShellFiles
+, fetchFromGitHub
+, freetype
+, unstableGitUpdater
+, gumbo
+, harfbuzz
+, jbig2dec
+, mujs
+, mupdf
+, openjpeg
+, qt6
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";

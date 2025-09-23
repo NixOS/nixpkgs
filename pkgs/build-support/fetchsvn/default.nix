@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  buildPackages,
-  cacert,
-  subversion,
-  glibcLocales,
-  sshSupport ? true,
-  openssh ? null,
+{ lib
+, stdenvNoCC
+, buildPackages
+, cacert
+, subversion
+, glibcLocales
+, sshSupport ? true
+, openssh ? null
+,
 }:
 
 let
@@ -40,15 +40,15 @@ let
     "${repoName}-r${toString rev}";
 in
 
-{
-  url,
-  rev ? "HEAD",
-  name ? repoToName url rev,
-  sha256 ? "",
-  hash ? "",
-  ignoreExternals ? false,
-  ignoreKeywords ? false,
-  preferLocalBuild ? true,
+{ url
+, rev ? "HEAD"
+, name ? repoToName url rev
+, sha256 ? ""
+, hash ? ""
+, ignoreExternals ? false
+, ignoreKeywords ? false
+, preferLocalBuild ? true
+,
 }:
 
 assert sshSupport -> openssh != null;

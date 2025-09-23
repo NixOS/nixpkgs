@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  llama-index-core,
-  nebula3-python,
-  hatchling,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, llama-index-core
+, nebula3-python
+, hatchling
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

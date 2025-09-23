@@ -1,10 +1,10 @@
-{
-  buildPecl,
-  lib,
-  php,
-  pkg-config,
-  openssl,
-  libevent,
+{ buildPecl
+, lib
+, php
+, pkg-config
+, openssl
+, libevent
+,
 }:
 buildPecl {
   pname = "event";

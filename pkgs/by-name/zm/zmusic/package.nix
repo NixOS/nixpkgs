@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  cmake,
-  fluidsynth,
-  libsndfile,
-  mpg123,
-  ninja,
-  pkg-config,
-  soundfont-fluid,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, cmake
+, fluidsynth
+, libsndfile
+, mpg123
+, ninja
+, pkg-config
+, soundfont-fluid
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

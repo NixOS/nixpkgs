@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitea,
-  pkg-config,
-  udevCheckHook,
-  xz,
+{ lib
+, rustPlatform
+, fetchFromGitea
+, pkg-config
+, udevCheckHook
+, xz
+,
 }:
 
 rustPlatform.buildRustPackage rec {

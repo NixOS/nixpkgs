@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  libvirt,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, libvirt
+,
 }:
 
 buildGoModule rec {

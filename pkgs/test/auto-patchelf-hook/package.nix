@@ -2,19 +2,19 @@
 # which uses the hook. We took the derivation from tonelib-jam, which sounds
 # like a good candidate with a small closure, and trimmed it down.
 
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
-  freetype,
-  curl,
-  # This test checks that the behavior of autoPatchelfHook is correct whether
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, dpkg
+, freetype
+, curl
+, # This test checks that the behavior of autoPatchelfHook is correct whether
   # __structuredAttrs
   # (https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-structuredAttrs)
   # is set or not. Hence __structuredAttrs is provided as a parameter.
-  __structuredAttrs,
+  __structuredAttrs
+,
 }:
 
 let
@@ -86,16 +86,18 @@ stdenv.mkDerivation {
       echo "[auto-patchelf-hook-test]: Check that the runpath contains the expected runtime deps"
     ''
     + lib.strings.concatStringsSep "\n" (
-      lib.lists.imap0 (
-        i: path:
-        let
-          iAsStr = builtins.toString i;
-        in
-        ''
-          echo "[auto-patchelf-hook-test]: Check that entry ${iAsStr} is ${path}"
-          test "''${paths[${iAsStr}]}" = "$path"
-        ''
-      ) allDeps
+      lib.lists.imap0
+        (
+          i: path:
+            let
+              iAsStr = builtins.toString i;
+            in
+            ''
+              echo "[auto-patchelf-hook-test]: Check that entry ${iAsStr} is ${path}"
+              test "''${paths[${iAsStr}]}" = "$path"
+            ''
+        )
+        allDeps
     );
 
   doInstallCheck = true;

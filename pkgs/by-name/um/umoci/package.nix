@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  go-md2man,
-  installShellFiles,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, go-md2man
+, installShellFiles
+,
 }:
 
 buildGoModule rec {

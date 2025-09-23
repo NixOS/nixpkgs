@@ -1,8 +1,8 @@
-{
-  elasticmq-server,
-  python3Packages,
-  runCommand,
-  writeText,
+{ elasticmq-server
+, python3Packages
+, runCommand
+, writeText
+,
 }:
 
 runCommand "${elasticmq-server.name}-tests"

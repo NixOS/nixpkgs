@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  basemap-data,
-  cython,
-  geos,
-  numpy,
-  matplotlib,
-  pillow,
-  pyproj,
-  pyshp,
-  python,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, basemap-data
+, cython
+, geos
+, numpy
+, matplotlib
+, pillow
+, pyproj
+, pyshp
+, python
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

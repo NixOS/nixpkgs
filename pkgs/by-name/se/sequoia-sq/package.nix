@@ -1,15 +1,15 @@
-{
-  fetchFromGitLab,
-  lib,
-  nettle,
-  nix-update-script,
-  rustPlatform,
-  pkg-config,
-  capnproto,
-  installShellFiles,
-  openssl,
-  cacert,
-  sqlite,
+{ fetchFromGitLab
+, lib
+, nettle
+, nix-update-script
+, rustPlatform
+, pkg-config
+, capnproto
+, installShellFiles
+, openssl
+, cacert
+, sqlite
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

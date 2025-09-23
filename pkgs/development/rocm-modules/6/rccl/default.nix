@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  rocm-smi,
-  rocm-core,
-  clr,
-  mscclpp,
-  perl,
-  hipify,
-  python3,
-  gtest,
-  chrpath,
-  rocprofiler,
-  rocprofiler-register,
-  autoPatchelfHook,
-  buildTests ? false,
-  gpuTargets ? (clr.localGpuTargets or [ ]),
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, rocm-smi
+, rocm-core
+, clr
+, mscclpp
+, perl
+, hipify
+, python3
+, gtest
+, chrpath
+, rocprofiler
+, rocprofiler-register
+, autoPatchelfHook
+, buildTests ? false
+, gpuTargets ? (clr.localGpuTargets or [ ])
+,
 }:
 
 let
@@ -30,9 +30,9 @@ let
   );
 in
 # Note: we can't properly test or make use of multi-node collective ops
-# https://github.com/NixOS/nixpkgs/issues/366242 tracks kernel support
-# kfd_peerdirect support which is on out-of-tree amdkfd in ROCm/ROCK-Kernel-Driver
-# infiniband ib_peer_mem support isn't in the mainline kernel but is carried by some distros
+  # https://github.com/NixOS/nixpkgs/issues/366242 tracks kernel support
+  # kfd_peerdirect support which is on out-of-tree amdkfd in ROCm/ROCK-Kernel-Driver
+  # infiniband ib_peer_mem support isn't in the mainline kernel but is carried by some distros
 stdenv.mkDerivation (finalAttrs: {
   pname = "rccl${clr.gpuArchSuffix}";
   version = "6.3.3";

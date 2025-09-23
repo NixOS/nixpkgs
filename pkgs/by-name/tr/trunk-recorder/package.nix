@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  git,
-  makeWrapper,
-  pkg-config,
-  boost,
-  curl,
-  gmp,
-  gnuradio,
-  gnuradioPackages,
-  hackrf,
-  mpir,
-  openssl,
-  spdlog,
-  uhd,
-  volk,
-  fdk-aac-encoder,
-  sox,
-  hackrfSupport ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, git
+, makeWrapper
+, pkg-config
+, boost
+, curl
+, gmp
+, gnuradio
+, gnuradioPackages
+, hackrf
+, mpir
+, openssl
+, spdlog
+, uhd
+, volk
+, fdk-aac-encoder
+, sox
+, hackrfSupport ? true
+,
 }:
 stdenv.mkDerivation rec {
   pname = "trunk-recorder";

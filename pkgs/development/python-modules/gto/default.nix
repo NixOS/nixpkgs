@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  cacert,
-  entrypoints,
-  fetchFromGitHub,
-  freezegun,
-  funcy,
-  gitMinimal,
-  pydantic,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-test-utils,
-  pytestCheckHook,
-  pythonOlder,
-  rich,
-  ruamel-yaml,
-  scmrepo,
-  semver,
-  setuptools-scm,
-  setuptools,
-  tabulate,
-  typer,
+{ lib
+, buildPythonPackage
+, cacert
+, entrypoints
+, fetchFromGitHub
+, freezegun
+, funcy
+, gitMinimal
+, pydantic
+, pytest-cov-stub
+, pytest-mock
+, pytest-test-utils
+, pytestCheckHook
+, pythonOlder
+, rich
+, ruamel-yaml
+, scmrepo
+, semver
+, setuptools-scm
+, setuptools
+, tabulate
+, typer
+,
 }:
 
 buildPythonPackage rec {

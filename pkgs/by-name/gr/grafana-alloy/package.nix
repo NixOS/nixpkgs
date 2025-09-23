@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  buildGoModule,
-  systemd,
-  yarn,
-  fixup-yarn-lock,
-  nodejs,
-  grafana-alloy,
-  nixosTests,
-  nix-update-script,
-  installShellFiles,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, buildGoModule
+, systemd
+, yarn
+, fixup-yarn-lock
+, nodejs
+, grafana-alloy
+, nixosTests
+, nix-update-script
+, installShellFiles
+, testers
+,
 }:
 
 buildGoModule rec {

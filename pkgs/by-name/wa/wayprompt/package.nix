@@ -1,17 +1,17 @@
-{
-  callPackage,
-  lib,
-  zig_0_13,
-  stdenv,
-  fetchFromSourcehut,
-  fcft,
-  libxkbcommon,
-  pixman,
-  pkg-config,
-  scdoc,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
+{ callPackage
+, lib
+, zig_0_13
+, stdenv
+, fetchFromSourcehut
+, fcft
+, libxkbcommon
+, pixman
+, pkg-config
+, scdoc
+, wayland
+, wayland-protocols
+, wayland-scanner
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,14 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   format = pkgs.formats.json { };
   commonOptions =
-    {
-      pkgName,
-      flavour ? pkgName,
+    { pkgName
+    , flavour ? pkgName
+    ,
     }:
     lib.mkOption {
       default = { };
@@ -88,10 +87,10 @@ let
     };
 
   createAgentInstance =
-    {
-      instance,
-      name,
-      flavour,
+    { instance
+    , name
+    , flavour
+    ,
     }:
     let
       configFile = format.generate "${name}.json" instance.settings;
@@ -134,12 +133,14 @@ in
           cfg = config.services.${flavour};
         in
         lib.mkIf (cfg.instances != { }) {
-          systemd.services = lib.mapAttrs' (
-            name: instance:
-            lib.nameValuePair "${flavour}-${name}" (createAgentInstance {
-              inherit name instance flavour;
-            })
-          ) cfg.instances;
+          systemd.services = lib.mapAttrs'
+            (
+              name: instance:
+                lib.nameValuePair "${flavour}-${name}" (createAgentInstance {
+                  inherit name instance flavour;
+                })
+            )
+            cfg.instances;
         }
       )
       [

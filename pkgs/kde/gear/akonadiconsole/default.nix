@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  xapian,
+{ mkKdeDerivation
+, xapian
+,
 }:
 mkKdeDerivation {
   pname = "akonadiconsole";

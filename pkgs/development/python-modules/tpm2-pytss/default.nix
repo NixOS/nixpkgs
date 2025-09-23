@@ -1,22 +1,24 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  pythonOlder,
-  asn1crypto,
-  cffi,
-  cryptography,
-  pkgconfig, # see nativeBuildInputs
-  pkg-config, # see nativeBuildInputs
-  pytestCheckHook,
-  pyyaml,
-  setuptools-scm,
-  tpm2-tss,
-  tpm2-tools,
-  swtpm,
+{ lib
+, stdenv
+, replaceVars
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, pythonOlder
+, asn1crypto
+, cffi
+, cryptography
+, pkgconfig
+, # see nativeBuildInputs
+  pkg-config
+, # see nativeBuildInputs
+  pytestCheckHook
+, pyyaml
+, setuptools-scm
+, tpm2-tss
+, tpm2-tools
+, swtpm
+,
 }:
 
 let

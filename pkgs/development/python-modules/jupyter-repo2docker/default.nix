@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  chardet,
-  docker,
-  entrypoints,
-  escapism,
-  fetchFromGitHub,
-  iso8601,
-  jinja2,
-  pkgs-docker,
-  python-json-logger,
-  pythonOlder,
-  requests,
-  ruamel-yaml,
-  semver,
-  setuptools,
-  toml,
-  traitlets,
+{ lib
+, buildPythonPackage
+, chardet
+, docker
+, entrypoints
+, escapism
+, fetchFromGitHub
+, iso8601
+, jinja2
+, pkgs-docker
+, python-json-logger
+, pythonOlder
+, requests
+, ruamel-yaml
+, semver
+, setuptools
+, toml
+, traitlets
+,
 }:
 
 buildPythonPackage rec {

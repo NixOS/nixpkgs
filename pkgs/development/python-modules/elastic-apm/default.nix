@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  aiohttp,
-  blinker,
-  buildPythonPackage,
-  certifi,
-  ecs-logging,
-  fetchFromGitHub,
-  fetchpatch,
-  httpx,
-  jinja2,
-  jsonschema,
-  logbook,
-  mock,
-  pytest-asyncio,
-  pytest-bdd,
-  pytest-localserver,
-  pytest-mock,
-  pytest-random-order,
-  pytestCheckHook,
-  sanic,
-  sanic-testing,
-  setuptools,
-  starlette,
-  structlog,
-  tornado,
-  urllib3,
-  webob,
-  wrapt,
+{ lib
+, stdenv
+, aiohttp
+, blinker
+, buildPythonPackage
+, certifi
+, ecs-logging
+, fetchFromGitHub
+, fetchpatch
+, httpx
+, jinja2
+, jsonschema
+, logbook
+, mock
+, pytest-asyncio
+, pytest-bdd
+, pytest-localserver
+, pytest-mock
+, pytest-random-order
+, pytestCheckHook
+, sanic
+, sanic-testing
+, setuptools
+, starlette
+, structlog
+, tornado
+, urllib3
+, webob
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

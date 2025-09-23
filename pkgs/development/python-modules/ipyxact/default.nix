@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pyyaml,
-  six,
-  lxml,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pyyaml
+, six
+, lxml
+,
 }:
 
 buildPythonPackage rec {

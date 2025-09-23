@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  elfutils,
-  vendorCertFile ? null,
-  defaultLoader ? null,
+{ stdenv
+, fetchFromGitHub
+, lib
+, elfutils
+, vendorCertFile ? null
+, defaultLoader ? null
+,
 }:
 
 let
@@ -16,8 +16,7 @@ let
     {
       x86_64-linux = "x64";
       aarch64-linux = "aa64";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 in
 stdenv.mkDerivation rec {
   pname = "shim";

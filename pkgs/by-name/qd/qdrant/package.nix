@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  protobuf,
-  pkg-config,
-  openssl,
-  rust-jemalloc-sys,
-  nix-update-script,
-  rust-jemalloc-sys-unprefixed,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, protobuf
+, pkg-config
+, openssl
+, rust-jemalloc-sys
+, nix-update-script
+, rust-jemalloc-sys-unprefixed
+,
 }:
 
 rustPlatform.buildRustPackage rec {

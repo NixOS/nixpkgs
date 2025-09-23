@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ocamlPackages,
-  copyDesktopItems,
-  makeDesktopItem,
-  wrapGAppsHook3,
-  gsettings-desktop-schemas,
-  enableX11 ? !stdenv.hostPlatform.isDarwin,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocamlPackages
+, copyDesktopItems
+, makeDesktopItem
+, wrapGAppsHook3
+, gsettings-desktop-schemas
+, enableX11 ? !stdenv.hostPlatform.isDarwin
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

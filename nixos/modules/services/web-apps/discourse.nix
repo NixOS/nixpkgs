@@ -1,10 +1,9 @@
-{
-  config,
-  options,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, options
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -694,7 +693,7 @@ in
 
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;
-      ensureUsers = [ { name = "discourse"; } ];
+      ensureUsers = [{ name = "discourse"; }];
     };
 
     # The postgresql module doesn't currently support concepts like
@@ -759,21 +758,21 @@ in
             mkKeyValue = lib.flip lib.generators.mkKeyValueDefault " = " {
               mkValueString =
                 v:
-                with builtins;
-                if isInt v then
-                  toString v
-                else if isString v then
-                  ''"${v}"''
-                else if true == v then
-                  "true"
-                else if false == v then
-                  "false"
-                else if null == v then
-                  ""
-                else if isFloat v then
-                  lib.strings.floatToString v
-                else
-                  throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty { }) v}";
+                  with builtins;
+                  if isInt v then
+                    toString v
+                  else if isString v then
+                    ''"${v}"''
+                  else if true == v then
+                    "true"
+                  else if false == v then
+                    "false"
+                  else if null == v then
+                    ""
+                  else if isFloat v then
+                    lib.strings.floatToString v
+                  else
+                    throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty { }) v}";
             };
           };
 
@@ -893,8 +892,8 @@ in
         locations =
           let
             proxy =
-              {
-                extraConfig ? "",
+              { extraConfig ? ""
+              ,
               }:
               {
                 proxyPass = "http://discourse";

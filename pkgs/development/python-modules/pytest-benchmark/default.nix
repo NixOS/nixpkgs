@@ -1,20 +1,20 @@
-{
-  lib,
-  aspectlib,
-  buildPythonPackage,
-  elasticsearch,
-  fetchFromGitHub,
-  freezegun,
-  gitMinimal,
-  mercurial,
-  nbmake,
-  py-cpuinfo,
-  pygal,
-  pytest,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  setuptools,
+{ lib
+, aspectlib
+, buildPythonPackage
+, elasticsearch
+, fetchFromGitHub
+, freezegun
+, gitMinimal
+, mercurial
+, nbmake
+, py-cpuinfo
+, pygal
+, pytest
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

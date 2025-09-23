@@ -1,8 +1,8 @@
-{
-  lib,
-  telegram-desktop,
-  fetchFromGitHub,
-  withWebkit ? true,
+{ lib
+, telegram-desktop
+, fetchFromGitHub
+, withWebkit ? true
+,
 }:
 
 telegram-desktop.override {

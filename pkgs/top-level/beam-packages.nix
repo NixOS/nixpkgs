@@ -1,12 +1,12 @@
-{
-  lib,
-  beam,
-  callPackage,
-  wxGTK32,
-  stdenv,
-  wxSupport ? true,
-  systemd,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+{ lib
+, beam
+, callPackage
+, wxGTK32
+, stdenv
+, wxSupport ? true
+, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+,
 }:
 
 let

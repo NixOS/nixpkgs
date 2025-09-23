@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libX11,
-  libXinerama,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+, libXinerama
+,
 }:
 
 stdenv.mkDerivation {

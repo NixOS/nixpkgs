@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  pkg-config,
-  fetchFromGitHub,
-  libbsd,
+{ lib
+, stdenv
+, pkg-config
+, fetchFromGitHub
+, libbsd
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  msbuild,
-  mono,
-  makeWrapper,
+{ lib
+, fetchFromGitHub
+, stdenv
+, msbuild
+, mono
+, makeWrapper
+,
 }:
 
 let

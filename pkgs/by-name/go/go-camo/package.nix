@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGo125Module,
-  fetchFromGitHub,
-  installShellFiles,
-  nixosTests,
-  scdoc,
+{ lib
+, buildGo125Module
+, fetchFromGitHub
+, installShellFiles
+, nixosTests
+, scdoc
+,
 }:
 
 buildGo125Module rec {

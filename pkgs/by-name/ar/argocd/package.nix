@@ -1,14 +1,14 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  stdenv,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, stdenv
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
+,
 }:
 
 buildGoModule rec {

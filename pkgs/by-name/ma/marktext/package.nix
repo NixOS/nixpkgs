@@ -1,24 +1,24 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  fetchYarnDeps,
-  yarn,
-  fixup-yarn-lock,
-  nodejs,
-  electron,
-  python3,
-  xorg,
-  fontconfig,
-  nodePackages,
-  ripgrep,
-  pkg-config,
-  libsecret,
-  yarnBuildHook,
-  makeShellWrapper,
-  unstableGitUpdater,
-  xcbuild,
-  libtool,
+{ stdenv
+, fetchFromGitHub
+, lib
+, fetchYarnDeps
+, yarn
+, fixup-yarn-lock
+, nodejs
+, electron
+, python3
+, xorg
+, fontconfig
+, nodePackages
+, ripgrep
+, pkg-config
+, libsecret
+, yarnBuildHook
+, makeShellWrapper
+, unstableGitUpdater
+, xcbuild
+, libtool
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

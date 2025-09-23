@@ -1,18 +1,18 @@
-{
-  lib,
-  anyio,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hishel,
-  httpx,
-  poetry-core,
-  pydantic,
-  pyjwt,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, anyio
+, buildPythonPackage
+, fetchFromGitHub
+, hishel
+, httpx
+, poetry-core
+, pydantic
+, pyjwt
+, pytest-cov-stub
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

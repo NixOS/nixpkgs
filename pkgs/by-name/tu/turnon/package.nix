@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  rustPlatform,
-  cairo,
-  pango,
-  pkg-config,
-  libadwaita,
-  blueprint-compiler,
-  wrapGAppsHook4,
-  gsettings-desktop-schemas,
-  just,
+{ lib
+, stdenv
+, fetchFromGitea
+, rustPlatform
+, cairo
+, pango
+, pkg-config
+, libadwaita
+, blueprint-compiler
+, wrapGAppsHook4
+, gsettings-desktop-schemas
+, just
+,
 }:
 
 let

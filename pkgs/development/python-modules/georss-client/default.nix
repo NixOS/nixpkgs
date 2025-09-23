@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  dateparser,
-  fetchFromGitHub,
-  haversine,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, dateparser
+, fetchFromGitHub
+, haversine
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  setuptools,
-  regex,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, setuptools
+, regex
+,
 }:
 
 buildPythonPackage rec {

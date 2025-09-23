@@ -1,15 +1,15 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  libunwind,
-  libraw1394,
-  libjpeg,
-  libiec61883,
-  libdv,
-  libavc1394,
-  pkg-config,
-  autoreconfHook,
+{ fetchFromGitHub
+, lib
+, stdenv
+, libunwind
+, libraw1394
+, libjpeg
+, libiec61883
+, libdv
+, libavc1394
+, pkg-config
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation {

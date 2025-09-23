@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cacert,
-  meson,
-  ninja,
-  pkg-config,
-  freetype,
-  libgit2,
-  libkqueue,
-  libuchardet,
-  libzip,
-  lua5_4,
-  luajit,
-  mbedtls_2,
-  pcre2,
-  sdl3,
-  xz,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cacert
+, meson
+, ninja
+, pkg-config
+, freetype
+, libgit2
+, libkqueue
+, libuchardet
+, libzip
+, lua5_4
+, luajit
+, mbedtls_2
+, pcre2
+, sdl3
+, xz
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

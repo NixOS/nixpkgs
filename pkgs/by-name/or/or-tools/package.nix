@@ -1,25 +1,25 @@
-{
-  abseil-cpp_202407,
-  bzip2,
-  cbc,
-  cmake,
-  eigen,
-  ensureNewerSourcesForZipFilesHook,
-  fetchFromGitHub,
-  fetchpatch,
-  gtest,
-  gbenchmark,
-  glpk,
-  highs,
-  lib,
-  pkg-config,
-  protobuf_29,
-  python3,
-  re2,
-  stdenv,
-  swig,
-  unzip,
-  zlib,
+{ abseil-cpp_202407
+, bzip2
+, cbc
+, cmake
+, eigen
+, ensureNewerSourcesForZipFilesHook
+, fetchFromGitHub
+, fetchpatch
+, gtest
+, gbenchmark
+, glpk
+, highs
+, lib
+, pkg-config
+, protobuf_29
+, python3
+, re2
+, stdenv
+, swig
+, unzip
+, zlib
+,
 }:
 
 let

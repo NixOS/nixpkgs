@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromRepoOrCz,
-  gnu-efi,
-  fetchpatch,
-  libuuid,
-  makeWrapper,
-  mtools,
-  nasm,
-  nixosTests,
-  perl,
-  python3,
+{ lib
+, stdenv
+, fetchFromRepoOrCz
+, gnu-efi
+, fetchpatch
+, libuuid
+, makeWrapper
+, mtools
+, nasm
+, nixosTests
+, perl
+, python3
+,
 }:
 
 stdenv.mkDerivation {

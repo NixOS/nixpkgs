@@ -1,12 +1,12 @@
-{
-  autoPatchelfHook,
-  copyDesktopItems,
-  fetchurl,
-  gtk3,
-  lib,
-  makeDesktopItem,
-  qt6,
-  stdenv,
+{ autoPatchelfHook
+, copyDesktopItems
+, fetchurl
+, gtk3
+, lib
+, makeDesktopItem
+, qt6
+, stdenv
+,
 }:
 
 let

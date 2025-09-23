@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libtool,
-  ncurses,
-  enableShared ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic,
-  unicodeSupport ? true,
-  withLibrary ? true,
+{ lib
+, stdenv
+, fetchurl
+, libtool
+, ncurses
+, enableShared ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic
+, unicodeSupport ? true
+, withLibrary ? true
+,
 }:
 
 assert unicodeSupport -> ncurses.unicodeSupport;

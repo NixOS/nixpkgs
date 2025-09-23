@@ -1,13 +1,13 @@
-{
-  stdenv,
-  apple-sdk_15,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pkg-config,
-  pythonOlder,
-  pytestCheckHook,
-  rustPlatform,
+{ stdenv
+, apple-sdk_15
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, pkg-config
+, pythonOlder
+, pytestCheckHook
+, rustPlatform
+,
 }:
 buildPythonPackage rec {
   pname = "pyoxigraph";

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cryptography,
-  charset-normalizer,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  ocrmypdf,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cryptography
+, charset-normalizer
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, ocrmypdf
+,
 }:
 
 buildPythonPackage rec {

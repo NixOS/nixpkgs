@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -26,14 +25,16 @@ let
   # Applied to both repoNNN-* and pgNNN-* options in global and stanza sections.
   flattenWithIndex =
     attrs: prefix:
-    lib.concatMapAttrs (
-      name:
-      let
-        index = lib.lists.findFirstIndex (n: n == name) null (lib.attrNames attrs);
-        index1 = index + 1;
-      in
-      lib.mapAttrs' (option: lib.nameValuePair "${prefix}${toString index1}-${option}")
-    ) attrs;
+    lib.concatMapAttrs
+      (
+        name:
+        let
+          index = lib.lists.findFirstIndex (n: n == name) null (lib.attrNames attrs);
+          index1 = index + 1;
+        in
+        lib.mapAttrs' (option: lib.nameValuePair "${prefix}${toString index1}-${option}")
+      )
+      attrs;
 
   # Remove nulls, turn attrsets into lists and bools into y/n
   normalize =
@@ -55,22 +56,30 @@ let
   fullConfig = {
     global = normalize (cfg.settings // flattenWithIndex cfg.repos "repo");
   }
-  // lib.mapAttrs' (
-    cmd: settings: lib.nameValuePair "global:${cmd}" (normalize settings)
-  ) cfg.commands
-  // lib.mapAttrs (
-    _: cfg': normalize (cfg'.settings // flattenWithIndex cfg'.instances "pg")
-  ) cfg.stanzas;
+  // lib.mapAttrs'
+    (
+      cmd: settings: lib.nameValuePair "global:${cmd}" (normalize settings)
+    )
+    cfg.commands
+  // lib.mapAttrs
+    (
+      _: cfg': normalize (cfg'.settings // flattenWithIndex cfg'.instances "pg")
+    )
+    cfg.stanzas;
 
   namedJobs = lib.listToAttrs (
     lib.flatten (
-      lib.mapAttrsToList (
-        stanza:
-        { jobs, ... }:
-        lib.mapAttrsToList (
-          job: attrs: lib.nameValuePair "pgbackrest-${stanza}-${job}" (attrs // { inherit stanza job; })
-        ) jobs
-      ) cfg.stanzas
+      lib.mapAttrsToList
+        (
+          stanza:
+          { jobs, ... }:
+          lib.mapAttrsToList
+            (
+              job: attrs: lib.nameValuePair "pgbackrest-${stanza}-${job}" (attrs // { inherit stanza job; })
+            )
+            jobs
+        )
+        cfg.stanzas
     )
   );
 
@@ -405,48 +414,50 @@ in
         };
         users.groups.pgbackrest = { };
 
-        systemd.services = lib.mapAttrs (
-          _:
-          {
-            stanza,
-            job,
-            type,
-            ...
-          }:
-          {
-            description = "pgBackRest job ${job} for stanza ${stanza}";
+        systemd.services = lib.mapAttrs
+          (
+            _:
+            { stanza
+            , job
+            , type
+            , ...
+            }:
+            {
+              description = "pgBackRest job ${job} for stanza ${stanza}";
 
-            serviceConfig = {
-              User = "pgbackrest";
-              Group = "pgbackrest";
-              Type = "oneshot";
-              # stanza-create is idempotent, so safe to always run
-              ExecStartPre = "${lib.getExe pkgs.pgbackrest} --stanza='${stanza}' stanza-create";
-              ExecStart = "${lib.getExe pkgs.pgbackrest} --stanza='${stanza}' backup --type='${type}'";
-            };
-          }
-        ) namedJobs;
+              serviceConfig = {
+                User = "pgbackrest";
+                Group = "pgbackrest";
+                Type = "oneshot";
+                # stanza-create is idempotent, so safe to always run
+                ExecStartPre = "${lib.getExe pkgs.pgbackrest} --stanza='${stanza}' stanza-create";
+                ExecStart = "${lib.getExe pkgs.pgbackrest} --stanza='${stanza}' backup --type='${type}'";
+              };
+            }
+          )
+          namedJobs;
 
-        systemd.timers = lib.mapAttrs (
-          name:
-          {
-            stanza,
-            job,
-            schedule,
-            ...
-          }:
-          {
-            description = "pgBackRest job ${job} for stanza ${stanza}";
-            wantedBy = [ "timers.target" ];
-            after = [ "network-online.target" ];
-            wants = [ "network-online.target" ];
-            timerConfig = {
-              OnCalendar = schedule;
-              Persistent = true;
-              Unit = "${name}.service";
-            };
-          }
-        ) namedJobs;
+        systemd.timers = lib.mapAttrs
+          (
+            name:
+            { stanza
+            , job
+            , schedule
+            , ...
+            }:
+            {
+              description = "pgBackRest job ${job} for stanza ${stanza}";
+              wantedBy = [ "timers.target" ];
+              after = [ "network-online.target" ];
+              wants = [ "network-online.target" ];
+              timerConfig = {
+                OnCalendar = schedule;
+                Persistent = true;
+                Unit = "${name}.service";
+              };
+            }
+          )
+          namedJobs;
       }
 
       # The default stanza is set up for the local postgresql instance.

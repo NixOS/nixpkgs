@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mecab,
-  swig,
-  setuptools-scm,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mecab
+, swig
+, setuptools-scm
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

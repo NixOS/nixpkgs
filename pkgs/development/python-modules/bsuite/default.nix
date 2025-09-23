@@ -1,31 +1,31 @@
-{
-  lib,
-  absl-py,
-  buildPythonPackage,
-  distrax,
-  dm-env,
-  dm-haiku,
-  dm-sonnet,
-  dm-tree,
-  fetchpatch,
-  fetchPypi,
-  frozendict,
-  gym,
-  matplotlib,
-  mizani,
-  optax,
-  pandas,
-  patsy,
-  plotnine,
-  pytestCheckHook,
-  pythonOlder,
-  rlax,
-  scikit-image,
-  scipy,
-  setuptools,
-  statsmodels,
-  tensorflow-probability,
-  termcolor,
+{ lib
+, absl-py
+, buildPythonPackage
+, distrax
+, dm-env
+, dm-haiku
+, dm-sonnet
+, dm-tree
+, fetchpatch
+, fetchPypi
+, frozendict
+, gym
+, matplotlib
+, mizani
+, optax
+, pandas
+, patsy
+, plotnine
+, pytestCheckHook
+, pythonOlder
+, rlax
+, scikit-image
+, scipy
+, setuptools
+, statsmodels
+, tensorflow-probability
+, termcolor
+,
 }:
 
 let

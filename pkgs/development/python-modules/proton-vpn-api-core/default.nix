@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cryptography,
-  setuptools,
-  jinja2,
-  proton-core,
-  pynacl,
-  aiohttp,
-  pyopenssl,
-  pytest-asyncio,
-  requests,
-  sentry-sdk,
-  pyxdg,
-  distro,
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cryptography
+, setuptools
+, jinja2
+, proton-core
+, pynacl
+, aiohttp
+, pyopenssl
+, pytest-asyncio
+, requests
+, sentry-sdk
+, pyxdg
+, distro
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

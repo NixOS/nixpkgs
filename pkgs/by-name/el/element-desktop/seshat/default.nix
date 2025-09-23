@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  sqlcipher,
-  nodejs,
-  python3,
-  yarn,
-  fixup-yarn-lock,
-  fetchYarnDeps,
-  removeReferencesTo,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, sqlcipher
+, nodejs
+, python3
+, yarn
+, fixup-yarn-lock
+, fetchYarnDeps
+, removeReferencesTo
+,
 }:
 
 let

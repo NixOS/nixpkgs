@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  pkg-config,
-  udev,
-  avrdude,
-  makeBinaryWrapper,
-  nix-update-script,
-  testers,
-  ravedude,
+{ lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, udev
+, avrdude
+, makeBinaryWrapper
+, nix-update-script
+, testers
+, ravedude
+,
 }:
 
 rustPlatform.buildRustPackage rec {

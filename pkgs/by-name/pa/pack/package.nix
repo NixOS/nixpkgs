@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildGoModule (finalAttrs: {

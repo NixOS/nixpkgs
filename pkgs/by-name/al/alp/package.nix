@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  runCommand,
-  alp,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, runCommand
+, alp
+,
 }:
 
 buildGoModule rec {

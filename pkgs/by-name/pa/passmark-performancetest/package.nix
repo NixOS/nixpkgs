@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  curl,
-  unzip,
-  ncurses5,
-  dmidecode,
-  coreutils,
-  util-linux,
-  autoPatchelfHook,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, curl
+, unzip
+, ncurses5
+, dmidecode
+, coreutils
+, util-linux
+, autoPatchelfHook
+, makeWrapper
+,
 }:
 let
   sources = {

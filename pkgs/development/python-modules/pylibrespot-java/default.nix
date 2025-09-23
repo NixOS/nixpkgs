@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  aiohttp,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, aiohttp
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

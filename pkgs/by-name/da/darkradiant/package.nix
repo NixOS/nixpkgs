@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  zlib,
-  libjpeg,
-  wxGTK32,
-  libxml2,
-  libsigcxx,
-  libpng,
-  openal,
-  libvorbis,
-  eigen,
-  ftgl,
-  freetype,
-  glew,
-  libX11,
-  glib,
-  python3,
-  asciidoctor,
-  libgit2,
-  wrapGAppsHook3,
-  installShellFiles,
-  buildPlugins ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, zlib
+, libjpeg
+, wxGTK32
+, libxml2
+, libsigcxx
+, libpng
+, openal
+, libvorbis
+, eigen
+, ftgl
+, freetype
+, glew
+, libX11
+, glib
+, python3
+, asciidoctor
+, libgit2
+, wrapGAppsHook3
+, installShellFiles
+, buildPlugins ? true
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "darkradiant";

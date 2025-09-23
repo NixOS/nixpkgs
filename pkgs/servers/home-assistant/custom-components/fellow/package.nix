@@ -1,10 +1,10 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  requests,
-  pydantic,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, unstableGitUpdater
+, requests
+, pydantic
+,
 }:
 
 buildHomeAssistantComponent {

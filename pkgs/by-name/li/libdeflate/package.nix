@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fixDarwinDylibNames,
-  pkgsStatic,
-  cmake,
-  zlib,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fixDarwinDylibNames
+, pkgsStatic
+, cmake
+, zlib
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

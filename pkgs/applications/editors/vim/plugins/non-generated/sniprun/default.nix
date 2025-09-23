@@ -1,21 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-
-  # sniprun-bin
-  rustPlatform,
-  makeWrapper,
-  bashInteractive,
-  coreutils,
-  curl,
-  gnugrep,
-  gnused,
-  procps,
-
-  # sniprun
-  vimUtils,
-  replaceVars,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, # sniprun-bin
+  rustPlatform
+, makeWrapper
+, bashInteractive
+, coreutils
+, curl
+, gnugrep
+, gnused
+, procps
+, # sniprun
+  vimUtils
+, replaceVars
+, nix-update-script
+,
 }:
 let
   version = "1.3.18";

@@ -1,69 +1,68 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  noto-fonts-color-emoji,
-  dpkg,
-  libarchive,
-  asar,
-  rsync,
-  python3,
-  buildPackages,
-  nixosTests,
-  gtk3,
-  atk,
-  at-spi2-atk,
-  cairo,
-  pango,
-  pipewire,
-  gdk-pixbuf,
-  glib,
-  freetype,
-  fontconfig,
-  dbus,
-  libX11,
-  xorg,
-  libXi,
-  libXcursor,
-  libXdamage,
-  libXrandr,
-  libXcomposite,
-  libXext,
-  libXfixes,
-  libXrender,
-  libXtst,
-  libXScrnSaver,
-  nss,
-  nspr,
-  alsa-lib,
-  cups,
-  expat,
-  libuuid,
-  at-spi2-core,
-  libappindicator-gtk3,
-  libgbm,
-  libwebp,
-  # Runtime dependencies:
-  systemdLibs,
-  libnotify,
-  libdbusmenu,
-  libpulseaudio,
-  xdg-utils,
-  wayland,
-
-  # command line arguments which are always set e.g "--password-store=kwallet6"
-  commandLineArgs,
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, noto-fonts-color-emoji
+, dpkg
+, libarchive
+, asar
+, rsync
+, python3
+, buildPackages
+, nixosTests
+, gtk3
+, atk
+, at-spi2-atk
+, cairo
+, pango
+, pipewire
+, gdk-pixbuf
+, glib
+, freetype
+, fontconfig
+, dbus
+, libX11
+, xorg
+, libXi
+, libXcursor
+, libXdamage
+, libXrandr
+, libXcomposite
+, libXext
+, libXfixes
+, libXrender
+, libXtst
+, libXScrnSaver
+, nss
+, nspr
+, alsa-lib
+, cups
+, expat
+, libuuid
+, at-spi2-core
+, libappindicator-gtk3
+, libgbm
+, libwebp
+, # Runtime dependencies:
+  systemdLibs
+, libnotify
+, libdbusmenu
+, libpulseaudio
+, xdg-utils
+, wayland
+, # command line arguments which are always set e.g "--password-store=kwallet6"
+  commandLineArgs
+,
 }:
 
-{
-  pname,
-  libdir,
-  bindir,
-  extractPkg,
-  version,
-  hash,
-  url,
+{ pname
+, libdir
+, bindir
+, extractPkg
+, version
+, hash
+, url
+,
 }:
 
 let

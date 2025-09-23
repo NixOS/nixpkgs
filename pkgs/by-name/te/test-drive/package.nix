@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gfortran,
-  buildType ? "meson",
-  meson,
-  ninja,
-  cmake,
-  mesonEmulatorHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gfortran
+, buildType ? "meson"
+, meson
+, ninja
+, cmake
+, mesonEmulatorHook
+,
 }:
 
 assert (

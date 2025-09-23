@@ -1,26 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # native dependencies
-  zlib,
-
-  # dependencies
-  altgraph,
-  macholib,
-  packaging,
-  pyinstaller-hooks-contrib,
-
-  # tests
-  binutils,
-  glibc,
-  pyinstaller,
-  testers,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # native dependencies
+  zlib
+, # dependencies
+  altgraph
+, macholib
+, packaging
+, pyinstaller-hooks-contrib
+, # tests
+  binutils
+, glibc
+, pyinstaller
+, testers
+,
 }:
 
 buildPythonPackage rec {

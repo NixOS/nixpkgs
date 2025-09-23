@@ -1,31 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  makeBinaryWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-
-  jre,
-
-  # deps
-  alsa-lib,
-  libjack2,
-  libpulseaudio,
-  pipewire,
-  libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrandr,
-  libXxf86vm,
-
-  # runtime (path)
-  xrandr,
-
-  # native
-  unzip,
+{ lib
+, stdenv
+, fetchurl
+, makeBinaryWrapper
+, makeDesktopItem
+, copyDesktopItems
+, jre
+, # deps
+  alsa-lib
+, libjack2
+, libpulseaudio
+, pipewire
+, libGL
+, libX11
+, libXcursor
+, libXext
+, libXrandr
+, libXxf86vm
+, # runtime (path)
+  xrandr
+, # native
+  unzip
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocelot-desktop";

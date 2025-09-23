@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  pytestCheckHook,
-  six,
-  unidecode,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, pytestCheckHook
+, six
+, unidecode
+,
 }:
 
 buildPythonPackage rec {

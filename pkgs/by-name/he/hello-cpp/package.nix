@@ -1,8 +1,8 @@
-{
-  cmake,
-  lib,
-  ninja,
-  stdenv,
+{ cmake
+, lib
+, ninja
+, stdenv
+,
 }:
 
 stdenv.mkDerivation {

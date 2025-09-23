@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  appimageTools,
-  imagemagick,
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, imagemagick
+,
 }:
 
 let

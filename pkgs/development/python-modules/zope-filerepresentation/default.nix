@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  zope-schema,
-  zope-interface,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, zope-schema
+, zope-interface
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

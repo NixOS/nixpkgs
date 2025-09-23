@@ -1,9 +1,9 @@
-{
-  lib,
-  gcc13Stdenv,
-  fetchFromGitHub,
-  testers,
-  uasm,
+{ lib
+, gcc13Stdenv
+, fetchFromGitHub
+, testers
+, uasm
+,
 }:
 
 let

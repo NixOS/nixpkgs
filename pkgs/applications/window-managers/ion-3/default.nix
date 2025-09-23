@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  lua,
-  gettext,
-  groff,
-  libICE,
-  libSM,
-  libX11,
-  libXext,
+{ lib
+, stdenv
+, fetchurl
+, lua
+, gettext
+, groff
+, libICE
+, libSM
+, libX11
+, libXext
+,
 }:
 
 stdenv.mkDerivation rec {

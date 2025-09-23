@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  flit-core,
-  numpy,
-  scipy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, flit-core
+, numpy
+, scipy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

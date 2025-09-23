@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  cmake,
-  ninja,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, cmake
+, ninja
+,
 }:
 
 stdenv.mkDerivation {

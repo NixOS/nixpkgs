@@ -1,9 +1,9 @@
 # NOTE: Tests related to isDeclaredArray go here.
-{
-  isDeclaredArray,
-  lib,
-  runCommand,
-  testers,
+{ isDeclaredArray
+, lib
+, runCommand
+, testers
+,
 }:
 let
   inherit (lib.attrsets) recurseIntoAttrs;
@@ -35,11 +35,11 @@ let
         else
           builtins.throw "Invalid scope: ${scope}";
     in
-    {
-      name,
-      scope,
-      intro,
-      values,
+    { name
+    , scope
+    , intro
+    , values
+    ,
     }:
     runCommand name commonArgs ''
       set -eu

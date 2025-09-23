@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  alsa-lib,
-  autoPatchelfHook,
-  copyDesktopItems,
-  dbus-glib,
-  # ffmpeg 7 not supported yet, results in MP4 playback being unavailable
+{ stdenv
+, lib
+, fetchzip
+, alsa-lib
+, autoPatchelfHook
+, copyDesktopItems
+, dbus-glib
+, # ffmpeg 7 not supported yet, results in MP4 playback being unavailable
   # https://repo.palemoon.org/MoonchildProductions/UXP/issues/2523
-  ffmpeg_6,
-  gtk2-x11,
-  withGTK3 ? true,
-  gtk3,
-  libglvnd,
-  libXt,
-  libpulseaudio,
-  makeDesktopItem,
-  wrapGAppsHook3,
-  writeScript,
-  testers,
+  ffmpeg_6
+, gtk2-x11
+, withGTK3 ? true
+, gtk3
+, libglvnd
+, libXt
+, libpulseaudio
+, makeDesktopItem
+, wrapGAppsHook3
+, writeScript
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

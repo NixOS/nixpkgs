@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  ocaml,
-  alcotest,
-  cstruct,
-  sexplib,
+{ lib
+, buildDunePackage
+, ocaml
+, alcotest
+, cstruct
+, sexplib
+,
 }:
 
 if lib.versionOlder (cstruct.version or "1") "3" then

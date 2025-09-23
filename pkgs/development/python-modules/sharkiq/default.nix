@@ -1,11 +1,11 @@
-{
-  lib,
-  aiohttp,
-  auth0-python,
-  buildPythonPackage,
-  fetchFromGitHub,
-  requests,
-  setuptools,
+{ lib
+, aiohttp
+, auth0-python
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

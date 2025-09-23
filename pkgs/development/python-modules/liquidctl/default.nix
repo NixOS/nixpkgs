@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  installShellFiles,
-  setuptools,
-  setuptools-scm,
-  wheel,
-  docopt,
-  hidapi,
-  pyusb,
-  smbus-cffi,
-  i2c-tools,
-  pytestCheckHook,
-  colorlog,
-  crcmod,
-  pillow,
-  udevCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, installShellFiles
+, setuptools
+, setuptools-scm
+, wheel
+, docopt
+, hidapi
+, pyusb
+, smbus-cffi
+, i2c-tools
+, pytestCheckHook
+, colorlog
+, crcmod
+, pillow
+, udevCheckHook
+,
 }:
 
 buildPythonPackage rec {

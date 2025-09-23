@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  flex,
-  ncurses,
-  readline,
-  texinfo,
+{ lib
+, stdenv
+, fetchurl
+, flex
+, ncurses
+, readline
+, texinfo
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

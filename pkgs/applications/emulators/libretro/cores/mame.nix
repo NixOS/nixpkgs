@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkLibretroCore,
-  python3,
-  alsa-lib,
-  libGLU,
-  libGL,
+{ lib
+, fetchFromGitHub
+, mkLibretroCore
+, python3
+, alsa-lib
+, libGLU
+, libGL
+,
 }:
 mkLibretroCore {
   core = "mame";

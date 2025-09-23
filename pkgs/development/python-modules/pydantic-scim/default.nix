@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pydantic,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pydantic
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

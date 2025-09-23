@@ -1,29 +1,24 @@
-{
-  lib,
-  stdenv,
-  config,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  numpy,
-  scikit-learn,
-  torch,
-  tqdm,
-
-  # optional-dependencies
-  faiss,
-  tensorboard,
-
-  # tests
-  pytestCheckHook,
-  torchvision,
-  writableTmpDirAsHomeHook,
-
-  cudaSupport ? config.cudaSupport,
+{ lib
+, stdenv
+, config
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  numpy
+, scikit-learn
+, torch
+, tqdm
+, # optional-dependencies
+  faiss
+, tensorboard
+, # tests
+  pytestCheckHook
+, torchvision
+, writableTmpDirAsHomeHook
+, cudaSupport ? config.cudaSupport
+,
 }:
 
 buildPythonPackage rec {

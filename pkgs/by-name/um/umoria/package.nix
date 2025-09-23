@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  cmake,
-  ncurses6,
-  runtimeShell,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, cmake
+, ncurses6
+, runtimeShell
+,
 }:
 
 let

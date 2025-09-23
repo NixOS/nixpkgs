@@ -1,12 +1,12 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  mathcomp-boot,
-  mathcomp-fingroup,
-  mathcomp-algebra,
-  stdlib,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, mathcomp-boot
+, mathcomp-fingroup
+, mathcomp-algebra
+, stdlib
+, version ? null
+,
 }:
 
 mkCoqDerivation {

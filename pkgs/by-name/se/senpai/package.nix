@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromSourcehut,
-  installShellFiles,
-  scdoc,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, installShellFiles
+, scdoc
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

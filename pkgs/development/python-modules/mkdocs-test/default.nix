@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  beautifulsoup4,
-  markdown,
-  mkdocs,
-  pandas,
-  pyyaml,
-  rich,
-  super-collections,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, beautifulsoup4
+, markdown
+, mkdocs
+, pandas
+, pyyaml
+, rich
+, super-collections
+,
 }:
 
 buildPythonPackage rec {

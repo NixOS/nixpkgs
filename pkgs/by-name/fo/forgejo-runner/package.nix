@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  fetchFromGitea,
-  nixosTests,
-  versionCheckHook,
-  nix-update-script,
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitea
+, nixosTests
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 let

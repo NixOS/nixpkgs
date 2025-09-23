@@ -1,12 +1,12 @@
-{
-  useNixpkgsEngine ? false,
-  callPackage,
-  fetchzip,
-  fetchFromGitHub,
-  dart,
-  lib,
-  stdenv,
-  runCommand,
+{ useNixpkgsEngine ? false
+, callPackage
+, fetchzip
+, fetchFromGitHub
+, dart
+, lib
+, stdenv
+, runCommand
+,
 }:
 let
   mkCustomFlutter = args: callPackage ./flutter.nix args;
@@ -18,20 +18,20 @@ let
     in
     if (builtins.pathExists dir) then map (f: dir + ("/" + f)) files else [ ];
   mkFlutter =
-    {
-      version,
-      engineVersion,
-      engineSwiftShaderHash,
-      engineSwiftShaderRev,
-      engineHashes,
-      enginePatches,
-      dartVersion,
-      flutterHash,
-      dartHash,
-      patches,
-      pubspecLock,
-      artifactHashes,
-      channel,
+    { version
+    , engineVersion
+    , engineSwiftShaderHash
+    , engineSwiftShaderRev
+    , engineHashes
+    , enginePatches
+    , dartVersion
+    , flutterHash
+    , dartHash
+    , patches
+    , pubspecLock
+    , artifactHashes
+    , channel
+    ,
     }:
     let
       args = {
@@ -81,7 +81,7 @@ let
           in
           (
             if lib.versionAtLeast version "3.32" then
-              # # Could not determine engine revision
+            # # Could not determine engine revision
               (runCommand source.name { } ''
                 cp -r ${source} $out
                 chmod +w $out/bin
@@ -105,24 +105,26 @@ let
       }
     );
 
-  flutterVersions = lib.mapAttrs' (
-    version: _:
-    let
-      versionDir = ./versions + "/${version}";
-      data = lib.importJSON (versionDir + "/data.json");
-    in
-    lib.nameValuePair "v${version}" (
-      wrapFlutter (
-        mkFlutter (
-          {
-            patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
-            enginePatches = (getPatches ./engine/patches) ++ (getPatches (versionDir + "/engine/patches"));
-          }
-          // data
+  flutterVersions = lib.mapAttrs'
+    (
+      version: _:
+        let
+          versionDir = ./versions + "/${version}";
+          data = lib.importJSON (versionDir + "/data.json");
+        in
+        lib.nameValuePair "v${version}" (
+          wrapFlutter (
+            mkFlutter (
+              {
+                patches = (getPatches ./patches) ++ (getPatches (versionDir + "/patches"));
+                enginePatches = (getPatches ./engine/patches) ++ (getPatches (versionDir + "/engine/patches"));
+              }
+              // data
+            )
+          )
         )
-      )
     )
-  ) (builtins.readDir ./versions);
+    (builtins.readDir ./versions);
 
   stableFlutterVersions = lib.attrsets.filterAttrs (_: v: v.channel == "stable") flutterVersions;
   betaFlutterVersions = lib.attrsets.filterAttrs (_: v: v.channel == "beta") flutterVersions;
@@ -134,6 +136,6 @@ flutterVersions
 // lib.optionalAttrs (betaFlutterVersions != { }) {
   beta = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames betaFlutterVersions))};
 }
-// lib.optionalAttrs (stableFlutterVersions != { }) {
+  // lib.optionalAttrs (stableFlutterVersions != { }) {
   stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames stableFlutterVersions))};
 }

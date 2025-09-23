@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  php,
-  openssl,
-  hiredis,
-  libck,
-  zstd,
-  lz4,
-  autoPatchelfHook,
-  writeShellScript,
-  curl,
-  common-updater-scripts,
+{ stdenv
+, lib
+, fetchurl
+, php
+, openssl
+, hiredis
+, libck
+, zstd
+, lz4
+, autoPatchelfHook
+, writeShellScript
+, curl
+, common-updater-scripts
+,
 }:
 
 let
@@ -151,17 +151,19 @@ stdenv.mkDerivation (finalAttrs: {
           lib.collect (attrs: attrs ? name)
             # create an attr containing
             (
-              lib.mapAttrsRecursive (
-                path: _value:
-                lib.nameValuePair (builtins.replaceStrings [ "." ] [ "_" ] (lib.concatStringsSep "_" path)) (
-                  finalAttrs.finalPackage.overrideAttrs (attrs: {
-                    src = makeSource {
-                      system = builtins.head path;
-                      phpMajor = builtins.head (builtins.tail (builtins.tail path));
-                    };
-                  })
+              lib.mapAttrsRecursive
+                (
+                  path: _value:
+                    lib.nameValuePair (builtins.replaceStrings [ "." ] [ "_" ] (lib.concatStringsSep "_" path)) (
+                      finalAttrs.finalPackage.overrideAttrs (attrs: {
+                        src = makeSource {
+                          system = builtins.head path;
+                          phpMajor = builtins.head (builtins.tail (builtins.tail path));
+                        };
+                      })
+                    )
                 )
-              ) (lib.filterAttrsRecursive (name: _value: name != "platform") hashes)
+                (lib.filterAttrsRecursive (name: _value: name != "platform") hashes)
             )
         );
   };

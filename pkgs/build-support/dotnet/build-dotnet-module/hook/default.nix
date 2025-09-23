@@ -1,12 +1,13 @@
-{
-  lib,
-  which,
-  coreutils,
-  makeSetupHook,
-  # Passed from ../default.nix
-  dotnet-runtime,
+{ lib
+, which
+, coreutils
+, makeSetupHook
+, # Passed from ../default.nix
+  dotnet-runtime
+,
 }:
-makeSetupHook {
+makeSetupHook
+{
   name = "dotnet-hook";
   substitutions = {
     dotnetRuntime = dotnet-runtime;

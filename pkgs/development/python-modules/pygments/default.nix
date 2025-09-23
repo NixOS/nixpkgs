@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  hatchling,
-
-  # tests
-  pytestCheckHook,
-  wcag-contrast-ratio,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  hatchling
+, # tests
+  pytestCheckHook
+, wcag-contrast-ratio
+, pythonOlder
+,
 }:
 
 let

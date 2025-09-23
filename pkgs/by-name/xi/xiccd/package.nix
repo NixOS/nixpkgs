@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libXrandr,
-  glib,
-  colord,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libXrandr
+, glib
+, colord
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

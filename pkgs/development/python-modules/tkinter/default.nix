@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  replaceVars,
-  setuptools,
-  python,
-  pythonOlder,
-  tcl,
-  tclPackages,
-  tk,
-  tkinter,
-  xvfb-run,
+{ lib
+, buildPythonPackage
+, replaceVars
+, setuptools
+, python
+, pythonOlder
+, tcl
+, tclPackages
+, tk
+, tkinter
+, xvfb-run
+,
 }:
 
 buildPythonPackage {

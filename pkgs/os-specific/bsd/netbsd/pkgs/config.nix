@@ -1,14 +1,14 @@
-{
-  mkDerivation,
-  bsdSetupHook,
-  netbsdSetupHook,
-  makeMinimal,
-  install,
-  mandoc,
-  byacc,
-  flex,
-  compatIfNeeded,
-  cksum,
+{ mkDerivation
+, bsdSetupHook
+, netbsdSetupHook
+, makeMinimal
+, install
+, mandoc
+, byacc
+, flex
+, compatIfNeeded
+, cksum
+,
 }:
 mkDerivation {
   path = "usr.bin/config";

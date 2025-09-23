@@ -1,22 +1,22 @@
-{
-  lib,
-  black,
-  buildPythonPackage,
-  cachecontrol,
-  fetchFromGitHub,
-  importlib-resources,
-  mistune,
-  mypy,
-  mypy-extensions,
-  pytestCheckHook,
-  pythonOlder,
-  rdflib,
-  requests,
-  ruamel-yaml,
-  setuptools-scm,
-  types-dataclasses,
-  types-requests,
-  types-setuptools,
+{ lib
+, black
+, buildPythonPackage
+, cachecontrol
+, fetchFromGitHub
+, importlib-resources
+, mistune
+, mypy
+, mypy-extensions
+, pytestCheckHook
+, pythonOlder
+, rdflib
+, requests
+, ruamel-yaml
+, setuptools-scm
+, types-dataclasses
+, types-requests
+, types-setuptools
+,
 }:
 
 buildPythonPackage rec {

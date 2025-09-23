@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  asciidoctor,
-  autoreconfHook,
-  pkg-config,
-  boost186,
-  libctemplate,
-  libmaxminddb,
-  libpcap,
-  libtins,
-  openssl,
-  protobuf,
-  xz,
-  zlib,
-  catch2,
-  cbor-diag,
-  cddl,
-  diffutils,
-  file,
-  mktemp,
-  netcat,
-  tcpdump,
-  wireshark-cli,
+{ lib
+, stdenv
+, fetchFromGitHub
+, asciidoctor
+, autoreconfHook
+, pkg-config
+, boost186
+, libctemplate
+, libmaxminddb
+, libpcap
+, libtins
+, openssl
+, protobuf
+, xz
+, zlib
+, catch2
+, cbor-diag
+, cddl
+, diffutils
+, file
+, mktemp
+, netcat
+, tcpdump
+, wireshark-cli
+,
 }:
 
 stdenv.mkDerivation rec {

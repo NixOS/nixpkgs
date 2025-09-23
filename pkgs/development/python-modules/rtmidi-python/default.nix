@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  cython_0,
-  alsa-lib,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, cython_0
+, alsa-lib
+,
 }:
 
 buildPythonPackage rec {

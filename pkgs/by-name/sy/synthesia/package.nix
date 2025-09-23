@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  stdenvNoCC,
-  runtimeShell,
-  copyDesktopItems,
-  makeDesktopItem,
-  wineWowPackages,
+{ lib
+, fetchurl
+, stdenvNoCC
+, runtimeShell
+, copyDesktopItems
+, makeDesktopItem
+, wineWowPackages
+,
 }:
 
 let

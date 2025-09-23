@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  sassc,
-  meson,
-  ninja,
-  glib,
-  gnome-shell,
-  gnome-themes-extra,
-  gtk-engine-murrine,
-  inkscape,
-  cinnamon,
-  makeFontsConf,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, sassc
+, meson
+, ninja
+, glib
+, gnome-shell
+, gnome-themes-extra
+, gtk-engine-murrine
+, inkscape
+, cinnamon
+, makeFontsConf
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

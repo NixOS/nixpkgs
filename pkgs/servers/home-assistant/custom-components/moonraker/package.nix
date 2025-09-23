@@ -1,13 +1,12 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-homeassistant-custom-component,
-
-  # dependency
-  moonraker-api,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-homeassistant-custom-component
+, # dependency
+  moonraker-api
+,
 }:
 
 buildHomeAssistantComponent rec {

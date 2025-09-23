@@ -1,9 +1,8 @@
-{
-  config,
-  options,
-  lib,
-  pkgs,
-  ...
+{ config
+, options
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -43,10 +42,11 @@ let
 
   realGrub =
     if cfg.zfsSupport then
-      grubPkgs.grub2.override {
-        zfsSupport = true;
-        zfs = cfg.zfsPackage;
-      }
+      grubPkgs.grub2.override
+        {
+          zfsSupport = true;
+          zfs = cfg.zfsPackage;
+        }
     else
       grubPkgs.grub2;
 
@@ -846,18 +846,20 @@ in
       environment.systemPackages = mkIf (grub != null) [ grub ];
 
       boot.loader.grub.extraPrepareConfig = concatStrings (
-        mapAttrsToList (
-          fileName: sourcePath:
-          flip concatMapStrings cfg.mirroredBoots (
-            args:
-            let
-              efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
-            in
-            ''
-              ${pkgs.coreutils}/bin/install -Dp ${escapeShellArg sourcePath} ${escapeShellArg efiSysMountPoint}/${escapeShellArg fileName}
-            ''
+        mapAttrsToList
+          (
+            fileName: sourcePath:
+              flip concatMapStrings cfg.mirroredBoots (
+                args:
+                let
+                  efiSysMountPoint = if args.efiSysMountPoint == null then args.path else args.efiSysMountPoint;
+                in
+                ''
+                  ${pkgs.coreutils}/bin/install -Dp ${escapeShellArg sourcePath} ${escapeShellArg efiSysMountPoint}/${escapeShellArg fileName}
+                ''
+              )
           )
-        ) config.boot.loader.grub.extraFiles
+          config.boot.loader.grub.extraFiles
       );
 
       assertions = [
@@ -865,12 +867,12 @@ in
           assertion = cfg.mirroredBoots != [ ];
           message =
             "You must set the option ‘boot.loader.grub.devices’ or "
-            + "'boot.loader.grub.mirroredBoots' to make the system bootable.";
+              + "'boot.loader.grub.mirroredBoots' to make the system bootable.";
         }
         {
           assertion =
             cfg.efiSupport
-            || all (c: c < 2) (mapAttrsToList (n: c: if n == "nodev" then 0 else c) bootDeviceCounters);
+              || all (c: c < 2) (mapAttrsToList (n: c: if n == "nodev" then 0 else c) bootDeviceCounters);
           message = "You cannot have duplicated devices in mirroredBoots";
         }
         {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pybluez,
-  pytestCheckHook,
-  pythonOlder,
-  pyusb,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pybluez
+, pytestCheckHook
+, pythonOlder
+, pyusb
+,
 }:
 
 buildPythonPackage rec {

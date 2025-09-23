@@ -1,7 +1,7 @@
-{
-  stdenvNoCC,
-  fetchzip,
-  lib,
+{ stdenvNoCC
+, fetchzip
+, lib
+,
 }:
 
 let
@@ -29,14 +29,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "2.0.0";
 
   sourceRoot = ".";
-  srcs = map (
-    color:
-    (fetchzip {
-      url = "https://github.com/ful1e5/Google_Cursor/releases/download/v${finalAttrs.version}/GoogleDot-${color.name}.tar.gz";
-      name = "GoogleDot-${color.name}";
-      hash = color.hash;
-    })
-  ) colors;
+  srcs = map
+    (
+      color:
+      (fetchzip {
+        url = "https://github.com/ful1e5/Google_Cursor/releases/download/v${finalAttrs.version}/GoogleDot-${color.name}.tar.gz";
+        name = "GoogleDot-${color.name}";
+        hash = color.hash;
+      })
+    )
+    colors;
 
   postInstall = ''
     mkdir -p $out/share/icons

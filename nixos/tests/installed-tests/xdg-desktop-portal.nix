@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  makeInstalledTest,
-  ...
+{ lib
+, pkgs
+, makeInstalledTest
+, ...
 }:
 
 makeInstalledTest {

@@ -1,24 +1,24 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  pkg-config,
-  stdenv,
-  openssl,
-  withALSA ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  alsa-plugins,
-  withPortAudio ? false,
-  portaudio,
-  withPulseAudio ? false,
-  libpulseaudio,
-  withRodio ? true,
-  withAvahi ? false,
-  withMDNS ? true,
-  withDNS-SD ? false,
-  avahi-compat,
-  tlsBackend ? "native-tls", # "native-tls" "rustls-tls-native-roots" "rustls-tls-webpki-roots"
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, pkg-config
+, stdenv
+, openssl
+, withALSA ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, alsa-plugins
+, withPortAudio ? false
+, portaudio
+, withPulseAudio ? false
+, libpulseaudio
+, withRodio ? true
+, withAvahi ? false
+, withMDNS ? true
+, withDNS-SD ? false
+, avahi-compat
+, tlsBackend ? "native-tls"
+, # "native-tls" "rustls-tls-native-roots" "rustls-tls-webpki-roots"
 }:
 
 rustPlatform.buildRustPackage rec {

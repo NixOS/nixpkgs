@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pylatexenc,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pylatexenc
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

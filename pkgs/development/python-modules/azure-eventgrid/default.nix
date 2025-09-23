@@ -1,12 +1,12 @@
-{
-  lib,
-  azure-common,
-  azure-core,
-  buildPythonPackage,
-  fetchPypi,
-  isodate,
-  pythonOlder,
-  setuptools,
+{ lib
+, azure-common
+, azure-core
+, buildPythonPackage
+, fetchPypi
+, isodate
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

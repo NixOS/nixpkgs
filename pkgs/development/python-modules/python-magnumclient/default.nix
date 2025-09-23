@@ -1,30 +1,30 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  decorator,
-  fetchFromGitHub,
-  fixtures,
-  keystoneauth1,
-  openstacksdk,
-  openstackdocstheme,
-  osc-lib,
-  oslo-i18n,
-  oslo-log,
-  oslo-serialization,
-  oslo-utils,
-  oslotest,
-  osprofiler,
-  pbr,
-  prettytable,
-  python-openstackclient,
-  requests-mock,
-  requests,
-  setuptools,
-  sphinxHook,
-  stestr,
-  stevedore,
-  testtools,
+{ lib
+, buildPythonPackage
+, cryptography
+, decorator
+, fetchFromGitHub
+, fixtures
+, keystoneauth1
+, openstacksdk
+, openstackdocstheme
+, osc-lib
+, oslo-i18n
+, oslo-log
+, oslo-serialization
+, oslo-utils
+, oslotest
+, osprofiler
+, pbr
+, prettytable
+, python-openstackclient
+, requests-mock
+, requests
+, setuptools
+, sphinxHook
+, stestr
+, stevedore
+, testtools
+,
 }:
 
 buildPythonPackage rec {

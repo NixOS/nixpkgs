@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  absl-py,
-  jax,
-  jaxlib,
-  numpy,
-  toolz,
-  typing-extensions,
-
-  # tests
-  cloudpickle,
-  dm-tree,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit-core
+, # dependencies
+  absl-py
+, jax
+, jaxlib
+, numpy
+, toolz
+, typing-extensions
+, # tests
+  cloudpickle
+, dm-tree
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

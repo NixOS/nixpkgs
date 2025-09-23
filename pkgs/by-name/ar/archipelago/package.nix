@@ -1,9 +1,9 @@
-{
-  lib,
-  appimageTools,
-  fetchurl,
-  nix-update-script,
-  extraPackages ? [ ],
+{ lib
+, appimageTools
+, fetchurl
+, nix-update-script
+, extraPackages ? [ ]
+,
 }:
 let
   pname = "archipelago";

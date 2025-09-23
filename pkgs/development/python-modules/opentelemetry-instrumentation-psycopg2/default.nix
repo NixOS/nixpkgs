@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  pythonOlder,
-  pytestCheckHook,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-instrumentation-dbapi,
-  opentelemetry-test-utils,
-  psycopg2,
+{ buildPythonPackage
+, pythonOlder
+, pytestCheckHook
+, hatchling
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-instrumentation-dbapi
+, opentelemetry-test-utils
+, psycopg2
+,
 }:
 
 buildPythonPackage {

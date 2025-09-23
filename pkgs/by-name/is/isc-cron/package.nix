@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  replaceVars,
-  vim,
-  sendmailPath ? "/usr/sbin/sendmail",
+{ lib
+, fetchurl
+, stdenv
+, replaceVars
+, vim
+, sendmailPath ? "/usr/sbin/sendmail"
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

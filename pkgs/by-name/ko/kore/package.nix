@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  openssl,
-  curl,
-  libpq,
-  yajl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, openssl
+, curl
+, libpq
+, yajl
+,
 }:
 
 stdenv.mkDerivation rec {

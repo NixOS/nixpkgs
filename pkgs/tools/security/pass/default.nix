@@ -1,38 +1,36 @@
-{
-  stdenv,
-  lib,
-  pkgs,
-  fetchurl,
-  bash,
-  buildEnv,
-  coreutils,
-  findutils,
-  gnugrep,
-  gnused,
-  getopt,
-  git,
-  tree,
-  gnupg,
-  openssl,
-  which,
-  openssh,
-  procps,
-  qrencode,
-  makeWrapper,
-  pass,
-
-  xclip ? null,
-  xdotool ? null,
-  dmenu ? null,
-  x11Support ? !stdenv.hostPlatform.isDarwin,
-  dmenuSupport ? (x11Support || waylandSupport),
-  waylandSupport ? false,
-  wl-clipboard ? null,
-  ydotool ? null,
-  dmenu-wayland ? null,
-
-  # For backwards-compatibility
-  tombPluginSupport ? false,
+{ stdenv
+, lib
+, pkgs
+, fetchurl
+, bash
+, buildEnv
+, coreutils
+, findutils
+, gnugrep
+, gnused
+, getopt
+, git
+, tree
+, gnupg
+, openssl
+, which
+, openssh
+, procps
+, qrencode
+, makeWrapper
+, pass
+, xclip ? null
+, xdotool ? null
+, dmenu ? null
+, x11Support ? !stdenv.hostPlatform.isDarwin
+, dmenuSupport ? (x11Support || waylandSupport)
+, waylandSupport ? false
+, wl-clipboard ? null
+, ydotool ? null
+, dmenu-wayland ? null
+, # For backwards-compatibility
+  tombPluginSupport ? false
+,
 }:
 
 assert x11Support -> xclip != null;

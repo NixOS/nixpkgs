@@ -1,37 +1,37 @@
-{
-  version,
-  tag,
-  sourceSha256,
+{ version
+, tag
+, sourceSha256
+,
 }:
 
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  castxml,
-  swig,
-  expat,
-  eigen,
-  fftw,
-  gdcm,
-  hdf5-cpp,
-  libjpeg,
-  libminc,
-  libtiff,
-  libpng,
-  libX11,
-  libuuid,
-  patchelf,
-  python ? null,
-  numpy ? null,
-  xz,
-  vtk,
-  which,
-  zlib,
-  enablePython ? false,
-  enableRtk ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, castxml
+, swig
+, expat
+, eigen
+, fftw
+, gdcm
+, hdf5-cpp
+, libjpeg
+, libminc
+, libtiff
+, libpng
+, libX11
+, libuuid
+, patchelf
+, python ? null
+, numpy ? null
+, xz
+, vtk
+, which
+, zlib
+, enablePython ? false
+, enableRtk ? true
+,
 }:
 
 let

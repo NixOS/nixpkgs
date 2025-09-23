@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pytestCheckHook
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  buildDunePackage,
-  mirage-crypto,
-  ohex,
-  ounit2,
-  randomconv,
-  dune-configurator,
-  digestif,
-  duration,
-  logs,
+{ buildDunePackage
+, mirage-crypto
+, ohex
+, ounit2
+, randomconv
+, dune-configurator
+, digestif
+, duration
+, logs
+,
 }:
 
 buildDunePackage {

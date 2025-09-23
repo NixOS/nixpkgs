@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gobject-introspection,
-  wrapGAppsHook3,
-  python3,
-  ibus,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gobject-introspection
+, wrapGAppsHook3
+, python3
+, ibus
+,
 }:
 
 let

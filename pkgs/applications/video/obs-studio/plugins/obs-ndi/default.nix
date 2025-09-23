@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  obs-studio,
-  cmake,
-  qtbase,
-  ndi,
-  curl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, obs-studio
+, cmake
+, qtbase
+, ndi
+, curl
+,
 }:
 
 stdenv.mkDerivation rec {

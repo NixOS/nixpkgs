@@ -4,10 +4,11 @@ self:
 let
   inherit (self) callPackage;
 in
-lib.packagesFromDirectoryRecursive {
-  inherit callPackage;
-  directory = ./manual-packages;
-}
+lib.packagesFromDirectoryRecursive
+  {
+    inherit callPackage;
+    directory = ./manual-packages;
+  }
 // {
   inherit (pkgs) emacspeak;
 
@@ -60,8 +61,8 @@ lib.packagesFromDirectoryRecursive {
   rectMark = self.rect-mark;
   sunriseCommander = self.sunrise-commander;
 }
-### Aliases
-// lib.optionalAttrs pkgs.config.allowAliases {
+  ### Aliases
+  // lib.optionalAttrs pkgs.config.allowAliases {
   agda-input = throw "emacsPackages.agda-input is contained in emacsPackages.agda2-mode, please use that instead."; # Added 2024-07-17
   ess-R-object-popup = throw "emacsPackages.ess-R-object-popup was deleted, since the upstream repo looks abandoned."; # Added 2024-07-15
   ghc-mod = throw "emacsPackages.ghc-mod was deleted because it is deprecated, use haskell-language-server instead."; # Added 2024-07-17

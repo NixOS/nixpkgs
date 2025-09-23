@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  aiohttp,
-  audioop-lts,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ffmpeg,
-  libopus,
-  pynacl,
-  setuptools,
-  withVoice ? true,
+{ lib
+, stdenv
+, aiohttp
+, audioop-lts
+, buildPythonPackage
+, fetchFromGitHub
+, ffmpeg
+, libopus
+, pynacl
+, setuptools
+, withVoice ? true
+,
 }:
 
 let

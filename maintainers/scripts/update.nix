@@ -5,18 +5,18 @@
 
   See https://nixos.org/manual/nixpkgs/unstable/#var-passthru-updateScript
 */
-{
-  package ? null,
-  maintainer ? null,
-  predicate ? null,
-  get-script ? pkg: pkg.updateScript or null,
-  path ? null,
-  max-workers ? null,
-  include-overlays ? false,
-  keep-going ? null,
-  commit ? null,
-  skip-prompt ? null,
-  order ? null,
+{ package ? null
+, maintainer ? null
+, predicate ? null
+, get-script ? pkg: pkg.updateScript or null
+, path ? null
+, max-workers ? null
+, include-overlays ? false
+, keep-going ? null
+, commit ? null
+, skip-prompt ? null
+, order ? null
+,
 }:
 
 let
@@ -84,20 +84,22 @@ let
             evaluatedPathContent = result.value;
           in
           if lib.isDerivation evaluatedPathContent then
-            lib.optional (cond path evaluatedPathContent) {
-              attrPath = lib.concatStringsSep "." path;
-              package = evaluatedPathContent;
-            }
+            lib.optional (cond path evaluatedPathContent)
+              {
+                attrPath = lib.concatStringsSep "." path;
+                package = evaluatedPathContent;
+              }
           else if lib.isAttrs evaluatedPathContent then
-            # If user explicitly points to an attrSet or it is marked for recursion, we recur.
+          # If user explicitly points to an attrSet or it is marked for recursion, we recur.
             if
               path == rootPath
               || evaluatedPathContent.recurseForDerivations or false
               || evaluatedPathContent.recurseForRelease or false
             then
-              dedupResults (
-                lib.mapAttrsToList (name: elem: packagesWithPathInner (path ++ [ name ]) elem) evaluatedPathContent
-              )
+              dedupResults
+                (
+                  lib.mapAttrsToList (name: elem: packagesWithPathInner (path ++ [ name ]) elem) evaluatedPathContent
+                )
             else
               [ ]
           else

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  autoconf,
-  automake,
-  libtool,
-  pkg-config,
-  which,
-  libavif,
-  libjxl,
-  librsvg,
-  libxslt,
-  libxml2,
-  docbook_xml_dtd_412,
-  docbook_xsl,
-  glib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, autoconf
+, automake
+, libtool
+, pkg-config
+, which
+, libavif
+, libjxl
+, librsvg
+, libxslt
+, libxml2
+, docbook_xml_dtd_412
+, docbook_xsl
+, glib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

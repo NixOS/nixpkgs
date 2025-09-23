@@ -1,55 +1,55 @@
-{
-  lib,
-  stdenv,
-  # deps
-  alsa-lib,
-  dbus,
-  fetchFromGitHub,
-  ffmpeg,
-  flac,
-  freetype,
-  gamemode,
-  gitUpdater,
-  libdrm,
-  libGL,
-  libGLU,
-  libpulseaudio,
-  libv4l,
-  libX11,
-  libXdmcp,
-  libXext,
-  libxkbcommon,
-  libxml2,
-  libXxf86vm,
-  makeBinaryWrapper,
-  mbedtls_2,
-  libgbm,
-  nixosTests,
-  nvidia_cg_toolkit,
-  pipewire,
-  pkg-config,
-  python3,
-  qt6,
-  SDL2,
-  spirv-tools,
-  udev,
-  vulkan-loader,
-  wayland,
-  wayland-scanner,
-  zlib,
-  # wrapper deps
-  libretro,
-  libretro-core-info,
-  retroarch-assets,
-  retroarch-bare,
-  retroarch-joypad-autoconfig,
-  runCommand,
-  symlinkJoin,
-  # params
-  enableNvidiaCgToolkit ? false,
-  withGamemode ? stdenv.hostPlatform.isLinux,
-  withVulkan ? stdenv.hostPlatform.isLinux,
-  withWayland ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, # deps
+  alsa-lib
+, dbus
+, fetchFromGitHub
+, ffmpeg
+, flac
+, freetype
+, gamemode
+, gitUpdater
+, libdrm
+, libGL
+, libGLU
+, libpulseaudio
+, libv4l
+, libX11
+, libXdmcp
+, libXext
+, libxkbcommon
+, libxml2
+, libXxf86vm
+, makeBinaryWrapper
+, mbedtls_2
+, libgbm
+, nixosTests
+, nvidia_cg_toolkit
+, pipewire
+, pkg-config
+, python3
+, qt6
+, SDL2
+, spirv-tools
+, udev
+, vulkan-loader
+, wayland
+, wayland-scanner
+, zlib
+, # wrapper deps
+  libretro
+, libretro-core-info
+, retroarch-assets
+, retroarch-bare
+, retroarch-joypad-autoconfig
+, runCommand
+, symlinkJoin
+, # params
+  enableNvidiaCgToolkit ? false
+, withGamemode ? stdenv.hostPlatform.isLinux
+, withVulkan ? stdenv.hostPlatform.isLinux
+, withWayland ? stdenv.hostPlatform.isLinux
+,
 }:
 
 let
@@ -148,9 +148,9 @@ stdenv.mkDerivation rec {
       rev-prefix = "v";
     };
     wrapper =
-      {
-        cores ? [ ],
-        settings ? { },
+      { cores ? [ ]
+      , settings ? { }
+      ,
       }:
       import ./wrapper.nix {
         inherit

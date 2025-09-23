@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  buildLuarocksPackage,
-  cmake,
-  fetchFromGitHub,
-  libuv,
-  lua,
-  luaOlder,
-  nix-update-script,
-  runCommand,
+{ stdenv
+, lib
+, buildLuarocksPackage
+, cmake
+, fetchFromGitHub
+, libuv
+, lua
+, luaOlder
+, nix-update-script
+, runCommand
+,
 }:
 
 buildLuarocksPackage rec {

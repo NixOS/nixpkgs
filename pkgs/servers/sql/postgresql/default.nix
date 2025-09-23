@@ -19,15 +19,17 @@ let
 
   mkAttributes =
     jitSupport:
-    self.lib.mapAttrs' (
-      version: path:
-      let
-        attrName = if jitSupport then "${version}_jit" else version;
-        postgresql = import path { inherit self; };
-        attrValue = if jitSupport then postgresql.withJIT else postgresql.withoutJIT;
-      in
-      self.lib.nameValuePair attrName attrValue
-    ) versions;
+    self.lib.mapAttrs'
+      (
+        version: path:
+        let
+          attrName = if jitSupport then "${version}_jit" else version;
+          postgresql = import path { inherit self; };
+          attrValue = if jitSupport then postgresql.withJIT else postgresql.withoutJIT;
+        in
+        self.lib.nameValuePair attrName attrValue
+      )
+      versions;
 
   libpq = self.callPackage ./libpq.nix { };
 

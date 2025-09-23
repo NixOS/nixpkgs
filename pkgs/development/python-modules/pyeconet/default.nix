@@ -1,11 +1,11 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  paho-mqtt,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, paho-mqtt
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

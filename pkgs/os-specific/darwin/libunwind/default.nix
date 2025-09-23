@@ -1,7 +1,7 @@
-{
-  lib,
-  apple-sdk,
-  stdenvNoCC,
+{ lib
+, apple-sdk
+, stdenvNoCC
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

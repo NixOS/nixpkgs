@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, versionCheckHook
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rojo";

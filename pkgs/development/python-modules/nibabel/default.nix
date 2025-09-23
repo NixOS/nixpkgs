@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch2,
-  pythonOlder,
-  hatchling,
-  hatch-vcs,
-  numpy,
-  packaging,
-  importlib-resources,
-  typing-extensions,
-  pydicom,
-  pillow,
-  h5py,
-  scipy,
-  git,
-  pytest-doctestplus,
-  pytest-httpserver,
-  pytest-xdist,
-  pytest7CheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch2
+, pythonOlder
+, hatchling
+, hatch-vcs
+, numpy
+, packaging
+, importlib-resources
+, typing-extensions
+, pydicom
+, pillow
+, h5py
+, scipy
+, git
+, pytest-doctestplus
+, pytest-httpserver
+, pytest-xdist
+, pytest7CheckHook
+,
 }:
 
 buildPythonPackage rec {

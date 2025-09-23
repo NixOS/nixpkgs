@@ -1,18 +1,18 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  cmake,
-  pkg-config,
-  pcsclite,
-  curl,
-  libmbim,
-  libqmi,
-  withDrivers ? true,
-  withLibeuicc ? true,
-  withMbim ? true,
-  withQmi ? true,
-  nix-update-script,
+{ stdenv
+, fetchFromGitHub
+, lib
+, cmake
+, pkg-config
+, pcsclite
+, curl
+, libmbim
+, libqmi
+, withDrivers ? true
+, withLibeuicc ? true
+, withMbim ? true
+, withQmi ? true
+, nix-update-script
+,
 }:
 
 let

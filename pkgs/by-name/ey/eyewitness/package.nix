@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  xvfb-run,
-  firefox-esr,
-  geckodriver,
-  makeWrapper,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, xvfb-run
+, firefox-esr
+, geckodriver
+, makeWrapper
+,
 }:
 
 python3Packages.buildPythonApplication rec {

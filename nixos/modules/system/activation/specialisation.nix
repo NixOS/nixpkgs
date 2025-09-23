@@ -1,10 +1,9 @@
-{
-  config,
-  lib,
-  pkgs,
-  extendModules,
-  noUserModules,
-  ...
+{ config
+, lib
+, pkgs
+, extendModules
+, noUserModules
+, ...
 }:
 
 let
@@ -24,9 +23,11 @@ let
   # you can provide an easy way to boot the same configuration
   # as you use, but with another kernel
   # !!! fix this
-  children = mapAttrs (
-    childName: childConfig: childConfig.configuration.system.build.toplevel
-  ) config.specialisation;
+  children = mapAttrs
+    (
+      childName: childConfig: childConfig.configuration.system.build.toplevel
+    )
+    config.specialisation;
 
 in
 {
@@ -86,13 +87,15 @@ in
   };
 
   config = {
-    assertions = mapAttrsToList (name: _: {
-      assertion = !hasInfix "/" name;
-      message = ''
-        Specialisation names must not contain forward slashes.
-        Invalid specialisation name: ${name}
-      '';
-    }) config.specialisation;
+    assertions = mapAttrsToList
+      (name: _: {
+        assertion = !hasInfix "/" name;
+        message = ''
+          Specialisation names must not contain forward slashes.
+          Invalid specialisation name: ${name}
+        '';
+      })
+      config.specialisation;
 
     system.systemBuilderCommands = ''
       mkdir $out/specialisation

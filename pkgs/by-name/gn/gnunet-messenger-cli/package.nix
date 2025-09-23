@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  meson,
-  ninja,
-  pkg-config,
-  gnunet,
-  libsodium,
-  libgcrypt,
-  libgnunetchat,
-  ncurses,
+{ lib
+, stdenv
+, fetchgit
+, meson
+, ninja
+, pkg-config
+, gnunet
+, libsodium
+, libgcrypt
+, libgnunetchat
+, ncurses
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

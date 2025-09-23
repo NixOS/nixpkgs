@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  makeWrapper,
-  python3,
-  openssh,
-  rsync,
-  findutils,
-  which,
+{ lib
+, fetchFromGitHub
+, stdenv
+, makeWrapper
+, python3
+, openssh
+, rsync
+, findutils
+, which
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,41 +1,38 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  acres,
-  attrs,
-  importlib-resources,
-  jinja2,
-  looseversion,
-  matplotlib,
-  nibabel,
-  nilearn,
-  nipype,
-  nitransforms,
-  numpy,
-  packaging,
-  pandas,
-  pybids,
-  pyyaml,
-  scikit-image,
-  scipy,
-  seaborn,
-  svgutils,
-  templateflow,
-  traits,
-  transforms3d,
-
-  # tests
-  pytest-cov-stub,
-  pytest-env,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  acres
+, attrs
+, importlib-resources
+, jinja2
+, looseversion
+, matplotlib
+, nibabel
+, nilearn
+, nipype
+, nitransforms
+, numpy
+, packaging
+, pandas
+, pybids
+, pyyaml
+, scikit-image
+, scipy
+, seaborn
+, svgutils
+, templateflow
+, traits
+, transforms3d
+, # tests
+  pytest-cov-stub
+, pytest-env
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

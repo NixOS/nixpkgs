@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchPypi,
-  bitcoin-utils-fork-minimal,
-  buildPythonPackage,
-  base58,
-  pycryptodome,
-  requests,
-  setuptools,
-  pythonOlder,
+{ lib
+, fetchPypi
+, bitcoin-utils-fork-minimal
+, buildPythonPackage
+, base58
+, pycryptodome
+, requests
+, setuptools
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

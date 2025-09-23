@@ -1,6 +1,6 @@
-{
-  callPackage,
-  fetchpatch2,
+{ callPackage
+, fetchpatch2
+,
 }:
 let
   mkVtk = initArgs: callPackage (import ./generic.nix initArgs) { };

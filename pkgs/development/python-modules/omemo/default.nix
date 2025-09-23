@@ -1,21 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  setuptools,
-
-  typing-extensions,
-  xeddsa,
-
-  pytestCheckHook,
-  oldmemo,
-  twomemo,
-  pytest-asyncio,
-  pytest-cov-stub,
-
-  # passthru
-  omemo,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, typing-extensions
+, xeddsa
+, pytestCheckHook
+, oldmemo
+, twomemo
+, pytest-asyncio
+, pytest-cov-stub
+, # passthru
+  omemo
+,
 }:
 buildPythonPackage rec {
   pname = "omemo";

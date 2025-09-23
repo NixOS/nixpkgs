@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  python-lsp-server,
-  isort,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, python-lsp-server
+, isort
+,
 }:
 
 buildPythonPackage rec {

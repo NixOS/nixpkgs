@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchFromGitHub,
-  pciutils,
-  fwupd-efi,
-  ipxe,
-  refind,
-  syslinux,
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, pciutils
+, fwupd-efi
+, ipxe
+, refind
+, syslinux
+,
 }:
 
 assert lib.assertMsg stdenv.hostPlatform.isEfi "gnu-efi may only be built for EFI platforms";

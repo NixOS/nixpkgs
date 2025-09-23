@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  fftw,
-  catch2_3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, fftw
+, catch2_3
+,
 }:
 
 stdenv.mkDerivation rec {

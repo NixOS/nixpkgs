@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

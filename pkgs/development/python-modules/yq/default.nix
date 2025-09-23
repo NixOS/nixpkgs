@@ -1,16 +1,16 @@
-{
-  lib,
-  argcomplete,
-  buildPythonPackage,
-  fetchPypi,
-  jq,
-  pytestCheckHook,
-  pyyaml,
-  setuptools,
-  setuptools-scm,
-  replaceVars,
-  tomlkit,
-  xmltodict,
+{ lib
+, argcomplete
+, buildPythonPackage
+, fetchPypi
+, jq
+, pytestCheckHook
+, pyyaml
+, setuptools
+, setuptools-scm
+, replaceVars
+, tomlkit
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

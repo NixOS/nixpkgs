@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fig2dev,
-  texliveSmall,
-  ghostscript,
-  colm,
-  build-manual ? false,
+{ lib
+, stdenv
+, fetchurl
+, fig2dev
+, texliveSmall
+, ghostscript
+, colm
+, build-manual ? false
+,
 }:
 
 let
   generic =
-    {
-      version,
-      sha256,
-      broken ? false,
-      license,
+    { version
+    , sha256
+    , broken ? false
+    , license
+    ,
     }:
     stdenv.mkDerivation rec {
       pname = "ragel";

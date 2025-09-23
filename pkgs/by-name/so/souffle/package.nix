@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bash-completion,
-  perl,
-  ncurses,
-  zlib,
-  sqlite,
-  libffi,
-  mcpp,
-  cmake,
-  bison,
-  flex,
-  doxygen,
-  graphviz,
-  makeWrapper,
-  python3,
-  callPackage,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bash-completion
+, perl
+, ncurses
+, zlib
+, sqlite
+, libffi
+, mcpp
+, cmake
+, bison
+, flex
+, doxygen
+, graphviz
+, makeWrapper
+, python3
+, callPackage
+, fetchpatch
+,
 }:
 
 let

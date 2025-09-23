@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  ipcalc,
-  iproute2,
-  util-linux,
-  coreutils,
-  ethtool,
-  gnugrep,
-  gnused,
-  nvme-cli,
-  udevCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, ipcalc
+, iproute2
+, util-linux
+, coreutils
+, ethtool
+, gnugrep
+, gnused
+, nvme-cli
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

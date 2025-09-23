@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  intel-gmmlib,
-  intel-graphics-compiler,
-  level-zero,
-  libva,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, intel-gmmlib
+, intel-graphics-compiler
+, level-zero
+, libva
+, gitUpdater
+,
 }:
 
 let

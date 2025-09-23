@@ -1,48 +1,45 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  appdirs,
-  asgiref,
-  click,
-  htmltools,
-  libsass,
-  linkify-it-py,
-  markdown-it-py,
-  mdit-py-plugins,
-  narwhals,
-  orjson,
-  packaging,
-  prompt-toolkit,
-  python-multipart,
-  questionary,
-  starlette,
-  typing-extensions,
-  uvicorn,
-  watchfiles,
-  websockets,
-
-  # tests
-  anthropic,
-  cacert,
-  google-generativeai,
-  langchain-core,
-  ollama,
-  openai,
-  pandas,
-  polars,
-  pytest-asyncio,
-  pytest-playwright,
-  pytest-rerunfailures,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  appdirs
+, asgiref
+, click
+, htmltools
+, libsass
+, linkify-it-py
+, markdown-it-py
+, mdit-py-plugins
+, narwhals
+, orjson
+, packaging
+, prompt-toolkit
+, python-multipart
+, questionary
+, starlette
+, typing-extensions
+, uvicorn
+, watchfiles
+, websockets
+, # tests
+  anthropic
+, cacert
+, google-generativeai
+, langchain-core
+, ollama
+, openai
+, pandas
+, polars
+, pytest-asyncio
+, pytest-playwright
+, pytest-rerunfailures
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

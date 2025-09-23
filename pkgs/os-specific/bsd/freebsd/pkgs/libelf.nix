@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  m4,
-  include,
-  libcMinimal,
-  libgcc,
-  compatIfNeeded,
-  csu,
+{ lib
+, stdenv
+, mkDerivation
+, m4
+, include
+, libcMinimal
+, libgcc
+, compatIfNeeded
+, csu
+,
 }:
 
 mkDerivation {

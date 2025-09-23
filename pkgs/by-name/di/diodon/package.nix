@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  desktop-file-utils,
-  glib,
-  gobject-introspection,
-  gtk3,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wrapGAppsHook3,
-  xvfb-run,
-  libayatana-appindicator,
-  libpeas,
-  libXtst,
-  zeitgeist,
+{ lib
+, stdenv
+, fetchFromGitHub
+, desktop-file-utils
+, glib
+, gobject-introspection
+, gtk3
+, meson
+, ninja
+, pkg-config
+, vala
+, wrapGAppsHook3
+, xvfb-run
+, libayatana-appindicator
+, libpeas
+, libXtst
+, zeitgeist
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

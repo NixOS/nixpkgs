@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  pytestCheckHook,
-  pytest-cov-stub,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  hidapi,
-  SDL2,
-  libGL,
-  glew,
-  withExamples ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, hidapi
+, SDL2
+, libGL
+, glew
+, withExamples ? true
+,
 }:
 
 let

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  hidapi,
-  udev,
-  pkg-config,
-  nix-update-script,
-  versionCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, hidapi
+, udev
+, pkg-config
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  attr,
-  judy,
-  keyutils,
-  libaio,
-  libapparmor,
-  libbsd,
-  libcap,
-  libgcrypt,
-  lksctp-tools,
-  zlib,
-  libglvnd,
-  libgbm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, attr
+, judy
+, keyutils
+, libaio
+, libapparmor
+, libbsd
+, libcap
+, libgcrypt
+, lksctp-tools
+, zlib
+, libglvnd
+, libgbm
+,
 }:
 
 stdenv.mkDerivation rec {

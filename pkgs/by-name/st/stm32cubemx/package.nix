@@ -1,13 +1,13 @@
-{
-  fdupes,
-  buildFHSEnv,
-  fetchzip,
-  icoutils,
-  imagemagick,
-  jdk21,
-  lib,
-  makeDesktopItem,
-  stdenvNoCC,
+{ fdupes
+, buildFHSEnv
+, fetchzip
+, icoutils
+, imagemagick
+, jdk21
+, lib
+, makeDesktopItem
+, stdenvNoCC
+,
 }:
 
 let

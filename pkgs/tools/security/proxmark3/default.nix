@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  gcc-arm-embedded,
-  readline,
-  bzip2,
-  openssl,
-  jansson,
-  gd,
-  whereami,
-  lua,
-  lz4,
-  udevCheckHook,
-  withGui ? true,
-  wrapQtAppsHook,
-  qtbase,
-  withPython ? true,
-  python3,
-  withBlueshark ? false,
-  bluez5,
-  withGeneric ? false,
-  withSmall ? false,
-  withoutFunctions ? [ ],
-  hardwarePlatform ? if withGeneric then "PM3GENERIC" else "PM3RDV4",
-  hardwarePlatformExtras ? lib.optionalString withBlueshark "BTADDON",
-  standalone ? "LF_SAMYRUN",
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, gcc-arm-embedded
+, readline
+, bzip2
+, openssl
+, jansson
+, gd
+, whereami
+, lua
+, lz4
+, udevCheckHook
+, withGui ? true
+, wrapQtAppsHook
+, qtbase
+, withPython ? true
+, python3
+, withBlueshark ? false
+, bluez5
+, withGeneric ? false
+, withSmall ? false
+, withoutFunctions ? [ ]
+, hardwarePlatform ? if withGeneric then "PM3GENERIC" else "PM3RDV4"
+, hardwarePlatformExtras ? lib.optionalString withBlueshark "BTADDON"
+, standalone ? "LF_SAMYRUN"
+,
 }:
 assert withBlueshark -> stdenv.hostPlatform.isLinux;
 stdenv.mkDerivation (finalAttrs: {

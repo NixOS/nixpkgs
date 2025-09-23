@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  libmicrohttpd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, libmicrohttpd
+,
 }:
 let
   build =
-    {
-      pname,
-      subdir,
-      buildInputs ? [ ],
-      description,
+    { pname
+    , subdir
+    , buildInputs ? [ ]
+    , description
+    ,
     }:
     stdenv.mkDerivation rec {
       inherit pname;

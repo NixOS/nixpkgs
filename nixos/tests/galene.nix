@@ -33,7 +33,7 @@ in
                   password = galeneTestGroupAdminPassword;
                 }
               ];
-              other = [ { } ];
+              other = [{ }];
             };
 
             systemPackages = with pkgs; [
@@ -116,7 +116,7 @@ in
                   password = galeneTestGroupAdminPassword;
                 }
               ];
-              other = [ { } ];
+              other = [{ }];
             };
 
             systemPackages = with pkgs; [
@@ -238,7 +238,7 @@ in
                     password = galeneTestGroupBotPassword;
                   }
                 ];
-                other = [ { } ];
+                other = [{ }];
               };
 
               ${galeneStreamFeedImage}.source =

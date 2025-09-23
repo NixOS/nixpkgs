@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumake,
-  gnugrep,
-  gnused,
-  gawk,
-  gnutar,
-  xz,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, tinycc
+, gnumake
+, gnugrep
+, gnused
+, gawk
+, gnutar
+, xz
+,
 }:
 let
   pname = "findutils";
@@ -22,34 +22,34 @@ let
   };
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnused
-      gnugrep
-      gawk
-      gnutar
-      xz
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnused
+    gnugrep
+    gawk
+    gnutar
+    xz
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/find --version
-        mkdir $out
-      '';
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/find --version
+      mkdir $out
+    '';
 
-    meta = with lib; {
-      description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
-      homepage = "https://www.gnu.org/software/findutils";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "GNU Find Utilities, the basic directory searching utilities of the GNU operating system";
+    homepage = "https://www.gnu.org/software/findutils";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     cp ${src} findutils.tar.xz

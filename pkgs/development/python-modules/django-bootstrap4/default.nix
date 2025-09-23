@@ -1,20 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # non-propagates
-  django,
-
-  # dependencies
-  beautifulsoup4,
-
-  # tests
-  pytest-django,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # non-propagates
+  django
+, # dependencies
+  beautifulsoup4
+, # tests
+  pytest-django
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

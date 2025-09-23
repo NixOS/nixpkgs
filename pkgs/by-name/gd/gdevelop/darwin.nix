@@ -1,12 +1,11 @@
-{
-  stdenvNoCC,
-  fetchurl,
-  unzip,
-
-  pname,
-  version,
-  meta,
-  passthru,
+{ stdenvNoCC
+, fetchurl
+, unzip
+, pname
+, version
+, meta
+, passthru
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit

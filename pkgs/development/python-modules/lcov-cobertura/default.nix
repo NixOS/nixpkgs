@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  distutils,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, setuptools-scm
+, distutils
+,
 }:
 
 buildPythonPackage rec {

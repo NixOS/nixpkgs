@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  beancount,
-  beancount-plugin-utils,
+{ lib
+, python3
+, fetchFromGitHub
+, beancount
+, beancount-plugin-utils
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

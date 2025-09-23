@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  dpkg,
-  autoPatchelfHook,
-  alsa-lib,
-  at-spi2-core,
-  libtool,
-  libxkbcommon,
-  nspr,
-  libgbm,
-  libtiff,
-  udev,
-  gtk3,
-  xorg,
-  cups,
-  pango,
-  runCommandLocal,
-  curl,
-  libsForQt5,
-  coreutils,
-  cacert,
-  libjpeg,
-  libxml2,
+{ lib
+, stdenv
+, dpkg
+, autoPatchelfHook
+, alsa-lib
+, at-spi2-core
+, libtool
+, libxkbcommon
+, nspr
+, libgbm
+, libtiff
+, udev
+, gtk3
+, xorg
+, cups
+, pango
+, runCommandLocal
+, curl
+, libsForQt5
+, coreutils
+, cacert
+, libjpeg
+, libxml2
+,
 }:
 let
   pkgVersion = "11.1.0.11723";

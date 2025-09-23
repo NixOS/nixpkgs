@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  writeText,
-  setuptools,
-  ipywidgets,
-  six,
-  docopt,
-  tqdm,
-  jupyter,
-  psutil,
-  pyyaml,
-  ansible-runner,
-  ansible,
-  python,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, writeText
+, setuptools
+, ipywidgets
+, six
+, docopt
+, tqdm
+, jupyter
+, psutil
+, pyyaml
+, ansible-runner
+, ansible
+, python
+,
 }:
 
 let

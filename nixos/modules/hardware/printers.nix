@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.hardware.printers;
@@ -149,9 +148,10 @@ in
         ))
         # Note: if cupsd is "stateless" the service can't be stopped,
         # otherwise the configuration will be wiped on the next start.
-        (lib.optionalString (
-          with config.services.printing; startWhenNeeded && !stateless
-        ) "systemctl stop cups.service")
+        (lib.optionalString
+          (
+            with config.services.printing; startWhenNeeded && !stateless
+          ) "systemctl stop cups.service")
       ];
     };
   };

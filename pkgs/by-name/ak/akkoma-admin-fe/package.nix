@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  fetchYarnDeps,
-  writableTmpDirAsHomeHook,
-  fixup-yarn-lock,
-  yarn,
-  nodejs,
-  git,
-  python3,
-  pkg-config,
-  libsass,
-  nix-update-script,
-  xcbuild,
+{ lib
+, stdenv
+, fetchFromGitea
+, fetchYarnDeps
+, writableTmpDirAsHomeHook
+, fixup-yarn-lock
+, yarn
+, nodejs
+, git
+, python3
+, pkg-config
+, libsass
+, nix-update-script
+, xcbuild
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

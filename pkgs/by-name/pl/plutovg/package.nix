@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  testers,
-  fontFaceCache ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, testers
+, fontFaceCache ? true
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "plutovg";

@@ -1,14 +1,14 @@
-{
-  stdenvNoCC,
-  lib,
-  buildPackages,
-  fetchurl,
-  perl,
-  elf-header,
-  bison,
-  flex,
-  rsync,
-  writeTextFile,
+{ stdenvNoCC
+, lib
+, buildPackages
+, fetchurl
+, perl
+, elf-header
+, bison
+, flex
+, rsync
+, writeTextFile
+,
 }:
 
 let
@@ -38,10 +38,10 @@ let
   };
 
   makeLinuxHeaders =
-    {
-      src,
-      version,
-      patches ? [ ],
+    { src
+    , version
+    , patches ? [ ]
+    ,
     }:
     stdenvNoCC.mkDerivation {
       inherit src;

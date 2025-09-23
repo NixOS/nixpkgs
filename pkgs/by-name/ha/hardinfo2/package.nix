@@ -1,52 +1,47 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  cmake,
-  glslang,
-  pkg-config,
-  libsForQt5,
-  makeWrapper,
-  wrapGAppsHook4,
-
-  cups,
-  gtk3,
-  json-glib,
-  lerc,
-  libdatrie,
-  libdecor,
-  libepoxy,
-  libnghttp2,
-  libpsl,
-  libselinux,
-  libsepol,
-  libsoup_3,
-  libsysprof-capture,
-  libthai,
-  libxkbcommon,
-  libXdmcp,
-  libXtst,
-  pcre2,
-  sqlite,
-  util-linux,
-  vulkan-headers,
-  wayland,
-
-  # runtime
-  dmidecode,
-  gawk,
-  iperf,
-  mesa-demos,
-  sysbench,
-  udisks,
-  vulkan-tools,
-  xdg-utils,
-  xrandr,
-
-  nix-update-script,
-
-  printingSupport ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, glslang
+, pkg-config
+, libsForQt5
+, makeWrapper
+, wrapGAppsHook4
+, cups
+, gtk3
+, json-glib
+, lerc
+, libdatrie
+, libdecor
+, libepoxy
+, libnghttp2
+, libpsl
+, libselinux
+, libsepol
+, libsoup_3
+, libsysprof-capture
+, libthai
+, libxkbcommon
+, libXdmcp
+, libXtst
+, pcre2
+, sqlite
+, util-linux
+, vulkan-headers
+, wayland
+, # runtime
+  dmidecode
+, gawk
+, iperf
+, mesa-demos
+, sysbench
+, udisks
+, vulkan-tools
+, xdg-utils
+, xrandr
+, nix-update-script
+, printingSupport ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

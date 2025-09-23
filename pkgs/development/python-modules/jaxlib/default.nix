@@ -1,53 +1,48 @@
-{
-  lib,
-  pkgs,
-  stdenv,
-
-  # Build-time dependencies:
-  addDriverRunpath,
-  autoAddDriverRunpath,
-  bazel_7,
-  binutils,
-  buildBazelPackage,
-  buildPythonPackage,
-  cctools,
-  curl,
-  cython,
-  fetchFromGitHub,
-  git,
-  jsoncpp,
-  nsync,
-  openssl,
-  pybind11,
-  setuptools,
-  symlinkJoin,
-  wheel,
-  build,
-  which,
-
-  # Python dependencies:
-  absl-py,
-  flatbuffers,
-  ml-dtypes,
-  numpy,
-  scipy,
-  six,
-
-  # Runtime dependencies:
-  double-conversion,
-  giflib,
-  libjpeg_turbo,
-  python,
-  snappy-cpp,
-  zlib,
-
-  config,
-  # CUDA flags:
-  cudaSupport ? config.cudaSupport,
-  cudaPackages,
-
-  # MKL:
-  mklSupport ? true,
+{ lib
+, pkgs
+, stdenv
+, # Build-time dependencies:
+  addDriverRunpath
+, autoAddDriverRunpath
+, bazel_7
+, binutils
+, buildBazelPackage
+, buildPythonPackage
+, cctools
+, curl
+, cython
+, fetchFromGitHub
+, git
+, jsoncpp
+, nsync
+, openssl
+, pybind11
+, setuptools
+, symlinkJoin
+, wheel
+, build
+, which
+, # Python dependencies:
+  absl-py
+, flatbuffers
+, ml-dtypes
+, numpy
+, scipy
+, six
+, # Runtime dependencies:
+  double-conversion
+, giflib
+, libjpeg_turbo
+, python
+, snappy-cpp
+, zlib
+, config
+, # CUDA flags:
+  cudaSupport ? config.cudaSupport
+, cudaPackages
+, # MKL:
+  mklSupport ? true
+,
 }@inputs:
 
 let
@@ -296,28 +291,28 @@ let
       ''
       +
 
-        # Construct .jax_configure.bazelrc. See https://github.com/google/jax/blob/b9824d7de3cb30f1df738cc42e486db3e9d915ff/build/build.py#L259-L345
-        # for more info. We assume
-        # * `cpu = None`
-        # * `enable_nccl = True`
-        # * `target_cpu_features = "release"`
-        # * `rocm_amdgpu_targets = None`
-        # * `enable_rocm = False`
-        # * `build_gpu_plugin = False`
-        # * `use_clang = False` (Should we use `effectiveStdenv.cc.isClang` instead?)
-        #
-        # Note: We should try just running https://github.com/google/jax/blob/ceb198582b62b9e6f6bdf20ab74839b0cf1db16e/build/build.py#L259-L266
-        # instead of duplicating the logic here. Perhaps we can leverage the
-        # `--configure_only` flag (https://github.com/google/jax/blob/ceb198582b62b9e6f6bdf20ab74839b0cf1db16e/build/build.py#L544-L548)?
-        ''
-          cat <<CFG > ./.jax_configure.bazelrc
-          build --strategy=Genrule=standalone
-          build --repo_env PYTHON_BIN_PATH="${python}/bin/python"
-          build --action_env=PYENV_ROOT
-          build --python_path="${python}/bin/python"
-          build --distinct_host_configuration=false
-          build --define PROTOBUF_INCLUDE_PATH="${pkgs.protobuf}/include"
-        ''
+      # Construct .jax_configure.bazelrc. See https://github.com/google/jax/blob/b9824d7de3cb30f1df738cc42e486db3e9d915ff/build/build.py#L259-L345
+      # for more info. We assume
+      # * `cpu = None`
+      # * `enable_nccl = True`
+      # * `target_cpu_features = "release"`
+      # * `rocm_amdgpu_targets = None`
+      # * `enable_rocm = False`
+      # * `build_gpu_plugin = False`
+      # * `use_clang = False` (Should we use `effectiveStdenv.cc.isClang` instead?)
+      #
+      # Note: We should try just running https://github.com/google/jax/blob/ceb198582b62b9e6f6bdf20ab74839b0cf1db16e/build/build.py#L259-L266
+      # instead of duplicating the logic here. Perhaps we can leverage the
+      # `--configure_only` flag (https://github.com/google/jax/blob/ceb198582b62b9e6f6bdf20ab74839b0cf1db16e/build/build.py#L544-L548)?
+      ''
+        cat <<CFG > ./.jax_configure.bazelrc
+        build --strategy=Genrule=standalone
+        build --repo_env PYTHON_BIN_PATH="${python}/bin/python"
+        build --action_env=PYENV_ROOT
+        build --python_path="${python}/bin/python"
+        build --distinct_host_configuration=false
+        build --define PROTOBUF_INCLUDE_PATH="${pkgs.protobuf}/include"
+      ''
       + lib.optionalString cudaSupport ''
         build --config=cuda
         build --action_env CUDA_TOOLKIT_PATH="${cuda_build_deps_joined}"
@@ -328,14 +323,14 @@ let
         build:cuda --action_env TF_CUDA_COMPUTE_CAPABILITIES="${builtins.concatStringsSep "," flags.realArches}"
       ''
       +
-        # Note that upstream conditions this on `wheel_cpu == "x86_64"`. We just
-        # rely on `effectiveStdenv.hostPlatform.avxSupport` instead. So far so
-        # good. See https://github.com/google/jax/blob/b9824d7de3cb30f1df738cc42e486db3e9d915ff/build/build.py#L322
-        # for upstream's version.
-        lib.optionalString (effectiveStdenv.hostPlatform.avxSupport && effectiveStdenv.hostPlatform.isUnix)
-          ''
-            build --config=avx_posix
-          ''
+      # Note that upstream conditions this on `wheel_cpu == "x86_64"`. We just
+      # rely on `effectiveStdenv.hostPlatform.avxSupport` instead. So far so
+      # good. See https://github.com/google/jax/blob/b9824d7de3cb30f1df738cc42e486db3e9d915ff/build/build.py#L322
+      # for upstream's version.
+      lib.optionalString (effectiveStdenv.hostPlatform.avxSupport && effectiveStdenv.hostPlatform.isUnix)
+        ''
+          build --config=avx_posix
+        ''
       + lib.optionalString mklSupport ''
         build --config=mkl_open_source_only
       ''

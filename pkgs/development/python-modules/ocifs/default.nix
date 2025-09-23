@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  fsspec,
-  oci,
-  pythonOlder,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, fsspec
+, oci
+, pythonOlder
+, requests
+,
 }:
 
 buildPythonPackage rec {

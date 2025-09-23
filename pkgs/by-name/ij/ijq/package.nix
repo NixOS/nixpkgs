@@ -1,12 +1,12 @@
-{
-  buildGoModule,
-  fetchFromGitea,
-  lib,
-  jq,
-  installShellFiles,
-  makeBinaryWrapper,
-  scdoc,
-  nix-update-script,
+{ buildGoModule
+, fetchFromGitea
+, lib
+, jq
+, installShellFiles
+, makeBinaryWrapper
+, scdoc
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

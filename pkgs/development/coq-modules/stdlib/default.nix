@@ -1,8 +1,8 @@
-{
-  coq,
-  mkCoqDerivation,
-  lib,
-  version ? null,
+{ coq
+, mkCoqDerivation
+, lib
+, version ? null
+,
 }:
 
 let
@@ -22,7 +22,8 @@ let
       lib.switch coq.coq-version [
         (case (isLe "9.1") "9.0.0")
         # the < 9.0 above is artificial as stdlib was included in Coq before
-      ] null;
+      ]
+        null;
     releaseRev = v: "V${v}";
 
     release."9.0.0".sha256 = "sha256-2l7ak5Q/NbiNvUzIVXOniEneDXouBMNSSVFbD1Pf8cQ=";
@@ -46,7 +47,8 @@ let
 in
 # this is just a wrapper for rocqPackages.stdlib for Rocq >= 9.0
 if coq.rocqPackages ? stdlib then
-  coq.rocqPackages.stdlib.override {
+  coq.rocqPackages.stdlib.override
+  {
     inherit version;
     inherit (coq.rocqPackages) rocq-core;
   }

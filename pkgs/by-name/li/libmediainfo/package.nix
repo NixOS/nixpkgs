@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  libzen,
-  zlib,
-
-  # Whether to enable resolving URLs via libcurl
-  curlSupport ? true,
-  curl,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, libzen
+, zlib
+, # Whether to enable resolving URLs via libcurl
+  curlSupport ? true
+, curl
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -4,20 +4,20 @@
 # This can be useful for deploying packages with NixOps, and to share
 # binary dependencies between projects.
 
-{
-  lib,
-  stdenv,
-  defaultCrateOverrides,
-  fetchCrate,
-  pkgsBuildBuild,
-  rustc,
-  cargo,
-  jq,
-  libiconv,
-  # Controls codegen parallelization for all crates.
+{ lib
+, stdenv
+, defaultCrateOverrides
+, fetchCrate
+, pkgsBuildBuild
+, rustc
+, cargo
+, jq
+, libiconv
+, # Controls codegen parallelization for all crates.
   # May be overridden on a per-crate level.
   # See <https://doc.rust-lang.org/rustc/codegen-options/index.html#codegen-units>
-  defaultCodegenUnits ? 1,
+  defaultCodegenUnits ? 1
+,
 }:
 
 let
@@ -27,37 +27,41 @@ let
   # See docs for crateRenames below.
   mkRustcDepArgs =
     dependencies: crateRenames:
-    lib.concatMapStringsSep " " (
-      dep:
-      let
-        normalizeName = lib.replaceStrings [ "-" ] [ "_" ];
-        extern = normalizeName dep.libName;
-        # Find a choice that matches in name and optionally version.
-        findMatchOrUseExtern =
-          choices:
-          lib.findFirst (choice: (!(choice ? version) || choice.version == dep.version or "")) {
-            rename = extern;
-          } choices;
-        name =
-          if lib.hasAttr dep.crateName crateRenames then
-            let
-              choices = crateRenames.${dep.crateName};
-            in
-            normalizeName (if builtins.isList choices then (findMatchOrUseExtern choices).rename else choices)
-          else
-            extern;
-        opts = lib.optionalString (dep.stdlib or false) "noprelude:";
-        filename =
-          if lib.any (x: x == "lib" || x == "rlib") dep.crateType then
-            "${dep.metadata}.rlib"
-          # Adjust lib filename for crates of type proc-macro. Proc macros are compiled/run on the build platform architecture.
-          else if (lib.attrByPath [ "procMacro" ] false dep) then
-            "${dep.metadata}${stdenv.buildPlatform.extensions.library}"
-          else
-            "${dep.metadata}${stdenv.hostPlatform.extensions.library}";
-      in
-      " --extern ${opts}${name}=${dep.lib}/lib/lib${extern}-${filename}"
-    ) dependencies;
+    lib.concatMapStringsSep " "
+      (
+        dep:
+        let
+          normalizeName = lib.replaceStrings [ "-" ] [ "_" ];
+          extern = normalizeName dep.libName;
+          # Find a choice that matches in name and optionally version.
+          findMatchOrUseExtern =
+            choices:
+            lib.findFirst (choice: (!(choice ? version) || choice.version == dep.version or ""))
+              {
+                rename = extern;
+              }
+              choices;
+          name =
+            if lib.hasAttr dep.crateName crateRenames then
+              let
+                choices = crateRenames.${dep.crateName};
+              in
+              normalizeName (if builtins.isList choices then (findMatchOrUseExtern choices).rename else choices)
+            else
+              extern;
+          opts = lib.optionalString (dep.stdlib or false) "noprelude:";
+          filename =
+            if lib.any (x: x == "lib" || x == "rlib") dep.crateType then
+              "${dep.metadata}.rlib"
+            # Adjust lib filename for crates of type proc-macro. Proc macros are compiled/run on the build platform architecture.
+            else if (lib.attrByPath [ "procMacro" ] false dep) then
+              "${dep.metadata}${stdenv.buildPlatform.extensions.library}"
+            else
+              "${dep.metadata}${stdenv.hostPlatform.extensions.library}";
+        in
+        " --extern ${opts}${name}=${dep.lib}/lib/lib${extern}-${filename}"
+      )
+      dependencies;
 
   # Create feature arguments for rustc.
   mkRustcFeatureArgs = lib.concatMapStringsSep " " (f: ''--cfg feature=\"${f}\"'');
@@ -86,43 +90,42 @@ let
   installCrate = import ./install-crate.nix { inherit stdenv; };
 in
 
-/*
-  The overridable pkgs.buildRustCrate function.
+  /*
+    The overridable pkgs.buildRustCrate function.
   *
   * Any unrecognized parameters will be passed as to
   * the underlying stdenv.mkDerivation.
-*/
+  */
 crate_:
 lib.makeOverridable
   (
     # The rust compiler to use.
     #
     # Default: pkgs.rustc
-    {
-      rust ? rustc,
-      # The cargo package to use for getting some metadata.
+    { rust ? rustc
+    , # The cargo package to use for getting some metadata.
       #
       # Default: pkgs.cargo
-      cargo ? cargo,
-      # Whether to build a release version (`true`) or a debug
+      cargo ? cargo
+    , # Whether to build a release version (`true`) or a debug
       # version (`false`). Debug versions are faster to build
       # but might be much slower at runtime.
-      release,
-      # Whether to print rustc invocations etc.
+      release
+    , # Whether to print rustc invocations etc.
       #
       # Example: false
       # Default: true
-      verbose,
-      # A list of rust/cargo features to enable while building the crate.
+      verbose
+    , # A list of rust/cargo features to enable while building the crate.
       # Example: [ "std" "async" ]
-      features,
-      # Additional native build inputs for building this crate.
-      nativeBuildInputs,
-      # Additional build inputs for building this crate.
+      features
+    , # Additional native build inputs for building this crate.
+      nativeBuildInputs
+    , # Additional build inputs for building this crate.
       #
       # Example: [ pkgs.openssl ]
-      buildInputs,
-      # Allows to override the parameters to buildRustCrate
+      buildInputs
+    , # Allows to override the parameters to buildRustCrate
       # for any rust dependency in the transitive build tree.
       #
       # Default: pkgs.defaultCrateOverrides
@@ -132,14 +135,14 @@ lib.makeOverridable
       # pkgs.defaultCrateOverrides // {
       #   hello = attrs: { buildInputs = [ openssl ]; };
       # }
-      crateOverrides,
-      # Rust library dependencies, i.e. other libraries that were built
+      crateOverrides
+    , # Rust library dependencies, i.e. other libraries that were built
       # with buildRustCrate.
-      dependencies,
-      # Rust build dependencies, i.e. other libraries that were built
+      dependencies
+    , # Rust build dependencies, i.e. other libraries that were built
       # with buildRustCrate and are used by a build script.
-      buildDependencies,
-      # Specify the "extern" name of a library if it differs from the library target.
+      buildDependencies
+    , # Specify the "extern" name of a library if it differs from the library target.
       # See above for an extended explanation.
       #
       # Default: no renames.
@@ -185,43 +188,44 @@ lib.makeOverridable
       #
       # Including multiple versions of a crate is very popular during
       # ecosystem transitions, e.g. from futures 0.1 to futures 0.3.
-      crateRenames,
-      # A list of extra options to pass to rustc.
+      crateRenames
+    , # A list of extra options to pass to rustc.
       #
       # Example: [ "-Z debuginfo=2" ]
       # Default: []
-      extraRustcOpts,
-      # A list of extra options to pass to rustc when building a build.rs.
+      extraRustcOpts
+    , # A list of extra options to pass to rustc when building a build.rs.
       #
       # Example: [ "-Z debuginfo=2" ]
       # Default: []
-      extraRustcOptsForBuildRs,
-      # Whether to enable building tests.
+      extraRustcOptsForBuildRs
+    , # Whether to enable building tests.
       # Use true to enable.
       # Default: false
-      buildTests,
-      # Passed to stdenv.mkDerivation.
-      preUnpack,
-      # Passed to stdenv.mkDerivation.
-      postUnpack,
-      # Passed to stdenv.mkDerivation.
-      prePatch,
-      # Passed to stdenv.mkDerivation.
-      patches,
-      # Passed to stdenv.mkDerivation.
-      postPatch,
-      # Passed to stdenv.mkDerivation.
-      preConfigure,
-      # Passed to stdenv.mkDerivation.
-      postConfigure,
-      # Passed to stdenv.mkDerivation.
-      preBuild,
-      # Passed to stdenv.mkDerivation.
-      postBuild,
-      # Passed to stdenv.mkDerivation.
-      preInstall,
-      # Passed to stdenv.mkDerivation.
-      postInstall,
+      buildTests
+    , # Passed to stdenv.mkDerivation.
+      preUnpack
+    , # Passed to stdenv.mkDerivation.
+      postUnpack
+    , # Passed to stdenv.mkDerivation.
+      prePatch
+    , # Passed to stdenv.mkDerivation.
+      patches
+    , # Passed to stdenv.mkDerivation.
+      postPatch
+    , # Passed to stdenv.mkDerivation.
+      preConfigure
+    , # Passed to stdenv.mkDerivation.
+      postConfigure
+    , # Passed to stdenv.mkDerivation.
+      preBuild
+    , # Passed to stdenv.mkDerivation.
+      postBuild
+    , # Passed to stdenv.mkDerivation.
+      preInstall
+    , # Passed to stdenv.mkDerivation.
+      postInstall
+    ,
     }:
 
     let
@@ -462,33 +466,33 @@ lib.makeOverridable
           ];
         };
       }
-      // extraDerivationAttrs
+        // extraDerivationAttrs
     )
   )
-  {
-    rust = crate_.rust or rustc;
-    cargo = crate_.cargo or cargo;
-    release = crate_.release or true;
-    verbose = crate_.verbose or true;
-    extraRustcOpts = [ ];
-    extraRustcOptsForBuildRs = [ ];
-    features = [ ];
-    nativeBuildInputs = [ ];
-    buildInputs = [ ];
-    crateOverrides = defaultCrateOverrides;
-    preUnpack = crate_.preUnpack or "";
-    postUnpack = crate_.postUnpack or "";
-    prePatch = crate_.prePatch or "";
-    patches = crate_.patches or [ ];
-    postPatch = crate_.postPatch or "";
-    preConfigure = crate_.preConfigure or "";
-    postConfigure = crate_.postConfigure or "";
-    preBuild = crate_.preBuild or "";
-    postBuild = crate_.postBuild or "";
-    preInstall = crate_.preInstall or "";
-    postInstall = crate_.postInstall or "";
-    dependencies = crate_.dependencies or [ ];
-    buildDependencies = crate_.buildDependencies or [ ];
-    crateRenames = crate_.crateRenames or { };
-    buildTests = crate_.buildTests or false;
-  }
+{
+  rust = crate_.rust or rustc;
+  cargo = crate_.cargo or cargo;
+  release = crate_.release or true;
+  verbose = crate_.verbose or true;
+  extraRustcOpts = [ ];
+  extraRustcOptsForBuildRs = [ ];
+  features = [ ];
+  nativeBuildInputs = [ ];
+  buildInputs = [ ];
+  crateOverrides = defaultCrateOverrides;
+  preUnpack = crate_.preUnpack or "";
+  postUnpack = crate_.postUnpack or "";
+  prePatch = crate_.prePatch or "";
+  patches = crate_.patches or [ ];
+  postPatch = crate_.postPatch or "";
+  preConfigure = crate_.preConfigure or "";
+  postConfigure = crate_.postConfigure or "";
+  preBuild = crate_.preBuild or "";
+  postBuild = crate_.postBuild or "";
+  preInstall = crate_.preInstall or "";
+  postInstall = crate_.postInstall or "";
+  dependencies = crate_.dependencies or [ ];
+  buildDependencies = crate_.buildDependencies or [ ];
+  crateRenames = crate_.crateRenames or { };
+  buildTests = crate_.buildTests or false;
+}

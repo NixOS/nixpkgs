@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -272,111 +271,115 @@ in
         ;
     in
     mkIf (cfg.servers != { }) {
-      assertions = mapAttrsToList (server: options: {
-        assertion = options.useTransformers -> options.initialPrompt == null;
-        message = "wyoming-faster-whisper/${server}: Transformer models (`useTransformers`) do not currently support an `initialPrompt`.";
-      }) cfg.servers;
+      assertions = mapAttrsToList
+        (server: options: {
+          assertion = options.useTransformers -> options.initialPrompt == null;
+          message = "wyoming-faster-whisper/${server}: Transformer models (`useTransformers`) do not currently support an `initialPrompt`.";
+        })
+        cfg.servers;
 
-      systemd.services = mapAttrs' (
-        server: options:
-        let
-          finalPackage = cfg.package.overridePythonAttrs (oldAttrs: {
-            dependencies =
-              oldAttrs.dependencies
-              # for transformer model support
-              ++ optionals options.useTransformers oldAttrs.optional-dependencies.transformers;
-          });
-        in
-        nameValuePair "wyoming-faster-whisper-${server}" {
-          inherit (options) enable;
-          description = "Wyoming faster-whisper server instance ${server}";
-          wants = [
-            "network-online.target"
-          ];
-          after = [
-            "network-online.target"
-          ];
-          wantedBy = [
-            "multi-user.target"
-          ];
-          # https://github.com/rhasspy/wyoming-faster-whisper/issues/27
-          # https://github.com/NixOS/nixpkgs/issues/429974
-          environment."HF_HOME" = "/tmp";
-          serviceConfig = {
-            DynamicUser = true;
-            User = "wyoming-faster-whisper";
-            StateDirectory = [ "wyoming/faster-whisper" ];
-            # https://github.com/home-assistant/addons/blob/master/whisper/rootfs/etc/s6-overlay/s6-rc.d/whisper/run
-            ExecStart = escapeSystemdExecArgs (
-              [
-                (lib.getExe finalPackage)
-                "--data-dir"
-                "/var/lib/wyoming/faster-whisper"
-                "--uri"
-                options.uri
-                "--device"
-                options.device
-                "--model"
-                options.model
-                "--language"
-                options.language
-                "--beam-size"
-                options.beamSize
-              ]
-              ++ lib.optionals options.useTransformers [
-                "--use-transformers"
-              ]
-              ++ lib.optionals (options.initialPrompt != null) [
-                "--initial-prompt"
-                options.initialPrompt
-              ]
-              ++ options.extraArgs
-            );
-            CapabilityBoundingSet = "";
-            DeviceAllow =
-              if
-                builtins.elem options.device [
-                  "cuda"
-                  "auto"
-                ]
-              then
-                [
-                  # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
-                  "char-nvidia-uvm"
-                  "char-nvidia-frontend"
-                  "char-nvidia-caps"
-                  "char-nvidiactl"
-                ]
-              else
-                "";
-            DevicePolicy = "closed";
-            LockPersonality = true;
-            MemoryDenyWriteExecute = true;
-            PrivateUsers = true;
-            ProtectHome = true;
-            ProtectHostname = true;
-            ProtectKernelLogs = true;
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            ProtectControlGroups = true;
-            ProtectProc = "invisible";
-            # "all" is required because faster-whisper accesses /proc/cpuinfo to determine cpu capabilities
-            ProcSubset = "all";
-            RestrictAddressFamilies = [
-              "AF_INET"
-              "AF_INET6"
-              "AF_UNIX"
-            ];
-            RestrictNamespaces = true;
-            RestrictRealtime = true;
-            SystemCallArchitectures = "native";
-            SystemCallFilter = [
-              "@system-service"
-              "~@privileged"
-            ];
-            UMask = "0077";
-          };
-        }
-      ) cfg.servers;
+      systemd.services = mapAttrs'
+        (
+          server: options:
+            let
+              finalPackage = cfg.package.overridePythonAttrs (oldAttrs: {
+                dependencies =
+                  oldAttrs.dependencies
+                  # for transformer model support
+                  ++ optionals options.useTransformers oldAttrs.optional-dependencies.transformers;
+              });
+            in
+            nameValuePair "wyoming-faster-whisper-${server}" {
+              inherit (options) enable;
+              description = "Wyoming faster-whisper server instance ${server}";
+              wants = [
+                "network-online.target"
+              ];
+              after = [
+                "network-online.target"
+              ];
+              wantedBy = [
+                "multi-user.target"
+              ];
+              # https://github.com/rhasspy/wyoming-faster-whisper/issues/27
+              # https://github.com/NixOS/nixpkgs/issues/429974
+              environment."HF_HOME" = "/tmp";
+              serviceConfig = {
+                DynamicUser = true;
+                User = "wyoming-faster-whisper";
+                StateDirectory = [ "wyoming/faster-whisper" ];
+                # https://github.com/home-assistant/addons/blob/master/whisper/rootfs/etc/s6-overlay/s6-rc.d/whisper/run
+                ExecStart = escapeSystemdExecArgs (
+                  [
+                    (lib.getExe finalPackage)
+                    "--data-dir"
+                    "/var/lib/wyoming/faster-whisper"
+                    "--uri"
+                    options.uri
+                    "--device"
+                    options.device
+                    "--model"
+                    options.model
+                    "--language"
+                    options.language
+                    "--beam-size"
+                    options.beamSize
+                  ]
+                  ++ lib.optionals options.useTransformers [
+                    "--use-transformers"
+                  ]
+                  ++ lib.optionals (options.initialPrompt != null) [
+                    "--initial-prompt"
+                    options.initialPrompt
+                  ]
+                  ++ options.extraArgs
+                );
+                CapabilityBoundingSet = "";
+                DeviceAllow =
+                  if
+                    builtins.elem options.device [
+                      "cuda"
+                      "auto"
+                    ]
+                  then
+                    [
+                      # https://docs.nvidia.com/dgx/pdf/dgx-os-5-user-guide.pdf
+                      "char-nvidia-uvm"
+                      "char-nvidia-frontend"
+                      "char-nvidia-caps"
+                      "char-nvidiactl"
+                    ]
+                  else
+                    "";
+                DevicePolicy = "closed";
+                LockPersonality = true;
+                MemoryDenyWriteExecute = true;
+                PrivateUsers = true;
+                ProtectHome = true;
+                ProtectHostname = true;
+                ProtectKernelLogs = true;
+                ProtectKernelModules = true;
+                ProtectKernelTunables = true;
+                ProtectControlGroups = true;
+                ProtectProc = "invisible";
+                # "all" is required because faster-whisper accesses /proc/cpuinfo to determine cpu capabilities
+                ProcSubset = "all";
+                RestrictAddressFamilies = [
+                  "AF_INET"
+                  "AF_INET6"
+                  "AF_UNIX"
+                ];
+                RestrictNamespaces = true;
+                RestrictRealtime = true;
+                SystemCallArchitectures = "native";
+                SystemCallFilter = [
+                  "@system-service"
+                  "~@privileged"
+                ];
+                UMask = "0077";
+              };
+            }
+        )
+        cfg.servers;
     };
 }

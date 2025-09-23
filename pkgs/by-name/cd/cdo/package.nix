@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  curl,
-  hdf5,
-  netcdf,
-  eccodes,
-  python3,
-  # build, install and link to a CDI library [default=no]
-  enable_cdi_lib ? false,
-  # build a completely statically linked CDO binary
-  enable_all_static ? stdenv.hostPlatform.isStatic,
-  # Use CXX as default compiler [default=no]
-  enable_cxx ? false,
+{ lib
+, stdenv
+, fetchurl
+, curl
+, hdf5
+, netcdf
+, eccodes
+, python3
+, # build, install and link to a CDI library [default=no]
+  enable_cdi_lib ? false
+, # build a completely statically linked CDO binary
+  enable_all_static ? stdenv.hostPlatform.isStatic
+, # Use CXX as default compiler [default=no]
+  enable_cxx ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoLibc,
-  makeScopeWithSplicing',
-  generateSplicesForMkScope,
-  buildPackages,
+{ lib
+, stdenvNoLibc
+, makeScopeWithSplicing'
+, generateSplicesForMkScope
+, buildPackages
+,
 }:
 
 let
@@ -15,10 +15,11 @@ makeScopeWithSplicing' {
   inherit otherSplices;
   f = (
     self:
-    lib.packagesFromDirectoryRecursive {
-      callPackage = self.callPackage;
-      directory = ./pkgs;
-    }
+    lib.packagesFromDirectoryRecursive
+      {
+        callPackage = self.callPackage;
+        directory = ./pkgs;
+      }
     // {
       version = "7.5";
 

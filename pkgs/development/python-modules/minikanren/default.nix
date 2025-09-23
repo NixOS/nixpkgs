@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  toolz,
-  cons,
-  multipledispatch,
-  etuples,
-  logical-unification,
-  py,
-  pytestCheckHook,
-  pytest-html,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, toolz
+, cons
+, multipledispatch
+, etuples
+, logical-unification
+, py
+, pytestCheckHook
+, pytest-html
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,49 +1,48 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  cmake,
-  copyDesktopItems,
-  curl,
-  perl,
-  pkg-config,
-  protobuf,
-  fontconfig,
-  freetype,
-  libgit2,
-  openssl,
-  sqlite,
-  zlib,
-  zstd,
-  alsa-lib,
-  libxkbcommon,
-  wayland,
-  libglvnd,
-  xorg,
-  stdenv,
-  makeFontsConf,
-  vulkan-loader,
-  envsubst,
-  nix-update-script,
-  cargo-about,
-  versionCheckHook,
-  buildFHSEnv,
-  cargo-bundle,
-  git,
-  apple-sdk_15,
-  darwinMinVersionHook,
-  makeBinaryWrapper,
-  nodejs,
-  libGL,
-  libX11,
-  libXext,
-  livekit-libwebrtc,
-  testers,
-  writableTmpDirAsHomeHook,
-
-  withGLES ? false,
-  buildRemoteServer ? true,
-  zed-editor,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, copyDesktopItems
+, curl
+, perl
+, pkg-config
+, protobuf
+, fontconfig
+, freetype
+, libgit2
+, openssl
+, sqlite
+, zlib
+, zstd
+, alsa-lib
+, libxkbcommon
+, wayland
+, libglvnd
+, xorg
+, stdenv
+, makeFontsConf
+, vulkan-loader
+, envsubst
+, nix-update-script
+, cargo-about
+, versionCheckHook
+, buildFHSEnv
+, cargo-bundle
+, git
+, apple-sdk_15
+, darwinMinVersionHook
+, makeBinaryWrapper
+, nodejs
+, libGL
+, libX11
+, libXext
+, livekit-libwebrtc
+, testers
+, writableTmpDirAsHomeHook
+, withGLES ? false
+, buildRemoteServer ? true
+, zed-editor
+,
 }:
 
 assert withGLES -> stdenv.hostPlatform.isLinux;
@@ -58,9 +57,9 @@ let
   # buildFHSEnv allows for users to use the existing Zed
   # extension tooling without significant pain.
   fhs =
-    {
-      zed-editor,
-      additionalPkgs ? pkgs: [ ],
+    { zed-editor
+    , additionalPkgs ? pkgs: [ ]
+    ,
     }:
     buildFHSEnv {
       # also determines the name of the wrapped command

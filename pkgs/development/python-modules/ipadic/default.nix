@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  mecab,
-  setuptools-scm,
-  cython,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, mecab
+, setuptools-scm
+, cython
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libXmu,
-  libXt,
-  libX11,
-  libXext,
-  libXxf86vm,
-  libjack2,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, libXmu
+, libXt
+, libX11
+, libXext
+, libXxf86vm
+, libjack2
+, makeWrapper
+,
 }:
 
 let
@@ -27,15 +27,17 @@ stdenv.mkDerivation rec {
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://web.archive.org/web/20230130224632/https://www.baudline.com/baudline_${version}_linux_x86_64.tar.gz";
-        hash = "sha256-RG8QPSXHo2qfOEn6eWWTh0ilg44tI1KyjXFm+SYnKKM=";
-      }
+      fetchurl
+        {
+          url = "https://web.archive.org/web/20230130224632/https://www.baudline.com/baudline_${version}_linux_x86_64.tar.gz";
+          hash = "sha256-RG8QPSXHo2qfOEn6eWWTh0ilg44tI1KyjXFm+SYnKKM=";
+        }
     else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        url = "https://web.archive.org/web/20230130224632/https://www.baudline.com/baudline_${version}_linux_i686.tar.gz";
-        hash = "sha256-2A13FyUl4NNWzRConw6gGjBaHxCXYlwtgxbz0ARgI28=";
-      }
+      fetchurl
+        {
+          url = "https://web.archive.org/web/20230130224632/https://www.baudline.com/baudline_${version}_linux_i686.tar.gz";
+          hash = "sha256-2A13FyUl4NNWzRConw6gGjBaHxCXYlwtgxbz0ARgI28=";
+        }
     else
       throw "baudline isn't supported (yet?) on ${stdenv.hostPlatform.system}";
 

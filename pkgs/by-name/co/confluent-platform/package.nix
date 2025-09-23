@@ -1,11 +1,11 @@
-{
-  bash,
-  fetchurl,
-  gnused,
-  jre,
-  lib,
-  makeBinaryWrapper,
-  stdenv,
+{ bash
+, fetchurl
+, gnused
+, jre
+, lib
+, makeBinaryWrapper
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

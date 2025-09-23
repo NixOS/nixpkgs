@@ -1,21 +1,21 @@
-{
-  lib,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  alsa-lib,
-  fetchFromGitHub,
-  glibmm,
-  gtk3,
-  libGL,
-  libGLU,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  sqlite,
-  stdenv,
-  wrapGAppsHook3,
+{ lib
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, alsa-lib
+, fetchFromGitHub
+, glibmm
+, gtk3
+, libGL
+, libGLU
+, meson
+, ninja
+, pkg-config
+, python3
+, sqlite
+, stdenv
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

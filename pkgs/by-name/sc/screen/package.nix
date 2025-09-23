@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  ncurses,
-  libxcrypt,
-  pam ? null,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, ncurses
+, libxcrypt
+, pam ? null
+,
 }:
 
 stdenv.mkDerivation rec {

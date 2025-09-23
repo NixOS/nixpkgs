@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   # Load default values from package. See https://github.com/bitvora/haven/blob/master/.env.example
@@ -85,9 +84,11 @@ in
       description = "haven";
       wants = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = lib.attrsets.mapAttrs (
-        name: value: if builtins.isBool value then if value then "true" else "false" else toString value
-      ) mergedSettings;
+      environment = lib.attrsets.mapAttrs
+        (
+          name: value: if builtins.isBool value then if value then "true" else "false" else toString value
+        )
+        mergedSettings;
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/haven";

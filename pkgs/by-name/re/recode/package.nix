@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python3Packages,
-  flex,
-  texinfo,
-  libiconv,
-  libintl,
+{ lib
+, stdenv
+, fetchurl
+, python3Packages
+, flex
+, texinfo
+, libiconv
+, libintl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

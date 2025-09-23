@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  ninja,
-  obs-studio,
-  libuiohook,
-  qtbase,
-  xorg,
-  libxkbcommon,
-  libxkbfile,
-  SDL2,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ninja
+, obs-studio
+, libuiohook
+, qtbase
+, xorg
+, libxkbcommon
+, libxkbfile
+, SDL2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchPypi,
-  magika,
-  numpy,
-  onnxruntime,
-  hatchling,
-  python-dotenv,
-  pythonOlder,
-  stdenv,
-  tabulate,
-  testers,
-  tqdm,
+{ lib
+, buildPythonPackage
+, click
+, fetchPypi
+, magika
+, numpy
+, onnxruntime
+, hatchling
+, python-dotenv
+, pythonOlder
+, stdenv
+, tabulate
+, testers
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook4,
-  libadwaita,
-  vte-gtk4,
-  openssl,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook4
+, libadwaita
+, vte-gtk4
+, openssl
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

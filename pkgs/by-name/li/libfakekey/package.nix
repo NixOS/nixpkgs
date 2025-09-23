@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  automake,
-  autoconf,
-  libtool,
-  libX11,
-  libXi,
-  libXtst,
-  pkg-config,
-  xorgproto,
+{ lib
+, stdenv
+, fetchgit
+, automake
+, autoconf
+, libtool
+, libX11
+, libXi
+, libXtst
+, pkg-config
+, xorgproto
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  stdenv,
-  lib,
+{ buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, stdenv
+, lib
+,
 }:
 buildPythonPackage rec {
   pname = "essentials";

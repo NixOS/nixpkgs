@@ -1,32 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  aenum,
-  cachetools,
-  gitpython,
-  klayout,
-  loguru,
-  numpy,
-  pydantic,
-  pydantic-settings,
-  rectangle-packer,
-  requests,
-  ruamel-yaml,
-  ruamel-yaml-string,
-  scipy,
-  tomli,
-  toolz,
-  typer,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  aenum
+, cachetools
+, gitpython
+, klayout
+, loguru
+, numpy
+, pydantic
+, pydantic-settings
+, rectangle-packer
+, requests
+, ruamel-yaml
+, ruamel-yaml-string
+, scipy
+, tomli
+, toolz
+, typer
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

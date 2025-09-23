@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  swi-prolog,
-  tcsh,
-  perl,
-  patchelf,
-  curl,
+{ lib
+, stdenv
+, fetchurl
+, swi-prolog
+, tcsh
+, perl
+, patchelf
+, curl
+,
 }:
 
 stdenv.mkDerivation rec {

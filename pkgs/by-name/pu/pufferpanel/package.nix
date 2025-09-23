@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  buildNpmPackage,
-  makeWrapper,
-  go-swag,
-  nixosTests,
-  testers,
-  pufferpanel,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, buildNpmPackage
+, makeWrapper
+, go-swag
+, nixosTests
+, testers
+, pufferpanel
+,
 }:
 
 buildGoModule rec {

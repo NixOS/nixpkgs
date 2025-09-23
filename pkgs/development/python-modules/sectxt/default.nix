@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pythonOlder,
-  requests,
-  python-dateutil,
-  langcodes,
-  pgpy-dtc,
-  validators,
-  requests-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pythonOlder
+, requests
+, python-dateutil
+, langcodes
+, pgpy-dtc
+, validators
+, requests-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

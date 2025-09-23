@@ -1,10 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  nipap,
-
-  # build deps
-  setuptools,
+{ lib
+, buildPythonPackage
+, nipap
+, # build deps
+  setuptools
+,
 }:
 
 buildPythonPackage rec {

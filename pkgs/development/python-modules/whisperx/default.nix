@@ -1,28 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  ctranslate2,
-  faster-whisper,
-  nltk,
-  pandas,
-  pyannote-audio,
-  torch,
-  torchaudio,
-  transformers,
-
-  # native packages
-  ffmpeg,
-  ctranslate2-cpp, # alias for `pkgs.ctranslate2`, required due to colliding with the `ctranslate2` Python module.
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  ctranslate2
+, faster-whisper
+, nltk
+, pandas
+, pyannote-audio
+, torch
+, torchaudio
+, transformers
+, # native packages
+  ffmpeg
+, ctranslate2-cpp
+, # alias for `pkgs.ctranslate2`, required due to colliding with the `ctranslate2` Python module.
 
   # enable GPU support
-  cudaSupport ? torch.cudaSupport,
+  cudaSupport ? torch.cudaSupport
+,
 }:
 
 let
@@ -79,9 +77,10 @@ buildPythonPackage rec {
   # Import check fails due on `aarch64-linux` ONLY in the sandbox due to onnxruntime
   # not finding its default logger, which then promptly segfaults.
   # Simply run the import check on every other platform instead.
-  pythonImportsCheck = lib.optionals (
-    !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux)
-  ) [ "whisperx" ];
+  pythonImportsCheck = lib.optionals
+    (
+      !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux)
+    ) [ "whisperx" ];
 
   # No tests in repository
   doCheck = false;

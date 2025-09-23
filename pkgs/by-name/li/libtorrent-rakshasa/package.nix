@@ -1,16 +1,16 @@
 # Note: this is rakshasa's version of libtorrent, used mainly by rtorrent.
 # *Do not* mistake it by libtorrent-rasterbar, used by Deluge, qbitttorent etc.
-{
-  autoreconfHook,
-  cppunit,
-  curl,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  stdenv,
-  zlib,
+{ autoreconfHook
+, cppunit
+, curl
+, fetchFromGitHub
+, lib
+, nix-update-script
+, openssl
+, pkg-config
+, stdenv
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

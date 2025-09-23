@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkLibretroCore,
-  which,
+{ lib
+, fetchFromGitHub
+, mkLibretroCore
+, which
+,
 }:
 mkLibretroCore {
   core = "hatari";

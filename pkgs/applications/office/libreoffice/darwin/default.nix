@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  undmg,
-  writeScript,
+{ stdenvNoCC
+, lib
+, fetchurl
+, undmg
+, writeScript
+,
 }:
 
 let
@@ -33,8 +33,7 @@ stdenvNoCC.mkDerivation {
   src = fetchurl {
     inherit
       (dist.${stdenvNoCC.hostPlatform.system}
-        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")
-      )
+        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}"))
       url
       sha256
       ;

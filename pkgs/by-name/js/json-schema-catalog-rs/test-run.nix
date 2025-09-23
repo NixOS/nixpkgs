@@ -1,6 +1,6 @@
-{
-  json-schema-catalog-rs,
-  runCommand,
+{ json-schema-catalog-rs
+, runCommand
+,
 }:
 let
 
@@ -14,32 +14,32 @@ let
 
 in
 runCommand "json-schema-catalog-rs-test-run"
-  {
-    nativeBuildInputs = [
-      json-schema-catalog-rs
-    ];
-    inherit sample;
-    expectedOutput = ''
-      {
-        "groups": [
-          {
-            "baseLocation": "/nix/store",
-            "name": "Example Schema",
-            "schemas": [
-              {
-                "id": "https://example.com/example-2.9.json",
-                "location": "${baseNameOf sample}"
-              }
-            ]
-          }
-        ],
-        "name": "Catalog"
-      }
-    '';
-    passAsFile = [
-      "expectedOutput"
-    ];
-  }
+{
+  nativeBuildInputs = [
+    json-schema-catalog-rs
+  ];
+  inherit sample;
+  expectedOutput = ''
+    {
+      "groups": [
+        {
+          "baseLocation": "/nix/store",
+          "name": "Example Schema",
+          "schemas": [
+            {
+              "id": "https://example.com/example-2.9.json",
+              "location": "${baseNameOf sample}"
+            }
+          ]
+        }
+      ],
+      "name": "Catalog"
+    }
+  '';
+  passAsFile = [
+    "expectedOutput"
+  ];
+}
   ''
     set -u
 

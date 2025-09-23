@@ -1,12 +1,13 @@
-{
-  makeSetupHook,
-  installShellFiles,
-  makeWrapper,
-  nodejs,
-  jq,
+{ makeSetupHook
+, installShellFiles
+, makeWrapper
+, nodejs
+, jq
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "nodejs-install-executables";
   propagatedBuildInputs = [
     installShellFiles

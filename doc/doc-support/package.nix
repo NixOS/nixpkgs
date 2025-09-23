@@ -1,21 +1,21 @@
 # This file describes the Nixpkgs manual, which happens to use module docs infra originally
 # developed for NixOS. To build this derivation, run `nix-build -A nixpkgs-manual`.
 #
-{
-  lib,
-  stdenvNoCC,
-  callPackage,
-  devmode,
-  mkShellNoCC,
-  documentation-highlighter,
-  nixos-render-docs,
-  nixos-render-docs-redirects,
-  writeShellScriptBin,
-  nixpkgs ? { },
-  markdown-code-runner,
-  roboto,
-  treefmt,
-  nixosOptionsDoc,
+{ lib
+, stdenvNoCC
+, callPackage
+, devmode
+, mkShellNoCC
+, documentation-highlighter
+, nixos-render-docs
+, nixos-render-docs-redirects
+, writeShellScriptBin
+, nixpkgs ? { }
+, markdown-code-runner
+, roboto
+, treefmt
+, nixosOptionsDoc
+,
 }:
 stdenvNoCC.mkDerivation (
   finalAttrs:

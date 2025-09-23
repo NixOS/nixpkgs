@@ -1,16 +1,16 @@
-{
-  lib,
-  buildDunePackage,
-  ocaml,
-  cstruct,
-  sexplib,
-  ppxlib,
-  ocaml-migrate-parsetree-2,
-  ounit,
-  cppo,
-  ppx_sexp_conv,
-  cstruct-unix,
-  cstruct-sexp,
+{ lib
+, buildDunePackage
+, ocaml
+, cstruct
+, sexplib
+, ppxlib
+, ocaml-migrate-parsetree-2
+, ounit
+, cppo
+, ppx_sexp_conv
+, cstruct-unix
+, cstruct-sexp
+,
 }:
 
 if lib.versionOlder (cstruct.version or "1") "3" then

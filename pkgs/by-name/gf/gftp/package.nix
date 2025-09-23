@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  gettext,
-  gtk2,
-  ncurses,
-  openssl,
-  pkg-config,
-  readline,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, gettext
+, gtk2
+, ncurses
+, openssl
+, pkg-config
+, readline
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

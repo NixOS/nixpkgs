@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ilbc,
-  mediastreamer,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, ilbc
+, mediastreamer
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,7 +1,7 @@
-{
-  fetchurl,
-  lib,
-  virtualboxVersion,
+{ fetchurl
+, lib
+, virtualboxVersion
+,
 }:
 fetchurl {
   url = "http://download.virtualbox.org/virtualbox/${virtualboxVersion}/VBoxGuestAdditions_${virtualboxVersion}.iso";

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildRubyGem,
-  bundlerEnv,
-  ruby,
-  poppler-utils,
+{ lib
+, buildRubyGem
+, bundlerEnv
+, ruby
+, poppler-utils
+,
 }:
 let
   deps = bundlerEnv rec {

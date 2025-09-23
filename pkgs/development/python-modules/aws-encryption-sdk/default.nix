@@ -1,16 +1,16 @@
-{
-  lib,
-  attrs,
-  boto3,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  mock,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  wrapt,
+{ lib
+, attrs
+, boto3
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, mock
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  versionCheckHook,
-  go-task,
-  gotestsum,
-  getent,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, versionCheckHook
+, go-task
+, gotestsum
+, getent
+,
 }:
 
 buildGoModule (finalAttrs: {

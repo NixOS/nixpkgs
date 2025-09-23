@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  libxml2,
-  fprintd,
-  libfprint-tod,
-  python3Packages,
-  libpam-wrapper,
-  gusb,
-  gobject-introspection,
+{ lib
+, fetchFromGitLab
+, fetchpatch
+, libxml2
+, fprintd
+, libfprint-tod
+, python3Packages
+, libpam-wrapper
+, gusb
+, gobject-introspection
+,
 }:
 
 (fprintd.override { libfprint = libfprint-tod; }).overrideAttrs (

@@ -1,14 +1,14 @@
-{
-  symlinkJoin,
-  lib,
-  rofi-unwrapped,
-  makeWrapper,
-  wrapGAppsHook3,
-  gdk-pixbuf,
-  hicolor-icon-theme,
-  theme ? null,
-  plugins ? [ ],
-  symlink-dmenu ? false,
+{ symlinkJoin
+, lib
+, rofi-unwrapped
+, makeWrapper
+, wrapGAppsHook3
+, gdk-pixbuf
+, hicolor-icon-theme
+, theme ? null
+, plugins ? [ ]
+, symlink-dmenu ? false
+,
 }:
 
 symlinkJoin {

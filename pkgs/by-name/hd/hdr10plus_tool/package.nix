@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  fontconfig,
-  writableTmpDirAsHomeHook,
-  writeShellApplication,
-  hdr10plus,
-  nixVersions,
-  nix-update,
-  tomlq,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, fontconfig
+, writableTmpDirAsHomeHook
+, writeShellApplication
+, hdr10plus
+, nixVersions
+, nix-update
+, tomlq
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,33 +1,33 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  bson,
-  boto3,
-  botocore,
-  cattrs,
-  fetchFromGitHub,
-  itsdangerous,
-  platformdirs,
-  poetry-core,
-  psutil,
-  pymongo,
-  pytestCheckHook,
-  pytest-rerunfailures,
-  pytest-xdist,
-  pythonOlder,
-  pyyaml,
-  redis,
-  requests,
-  requests-mock,
-  responses,
-  rich,
-  tenacity,
-  time-machine,
-  timeout-decorator,
-  ujson,
-  urllib3,
-  url-normalize,
+{ lib
+, attrs
+, buildPythonPackage
+, bson
+, boto3
+, botocore
+, cattrs
+, fetchFromGitHub
+, itsdangerous
+, platformdirs
+, poetry-core
+, psutil
+, pymongo
+, pytestCheckHook
+, pytest-rerunfailures
+, pytest-xdist
+, pythonOlder
+, pyyaml
+, redis
+, requests
+, requests-mock
+, responses
+, rich
+, tenacity
+, time-machine
+, timeout-decorator
+, ujson
+, urllib3
+, url-normalize
+,
 }:
 
 buildPythonPackage rec {

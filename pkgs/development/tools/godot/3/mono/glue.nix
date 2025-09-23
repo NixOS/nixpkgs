@@ -1,8 +1,8 @@
-{
-  godot3,
-  mono,
-  scons,
-  python311Packages,
+{ godot3
+, mono
+, scons
+, python311Packages
+,
 }:
 
 (godot3.override {

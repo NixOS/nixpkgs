@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  runCommand,
+{ lib
+, fetchurl
+, stdenv
+, runCommand
+,
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -15,8 +15,7 @@ let
       armv7l-linux = "linux-armv7";
       x86_64-darwin = "macos-x64";
       x86_64-linux = "linux-x64";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   hash =
     {
@@ -25,8 +24,7 @@ let
       armv7l-linux = "sha256-cE59ka+6bh9jCImv0NfbNrRjTmKFEswUHVBKW+riiGA=";
       x86_64-darwin = "sha256-bL2tdL53bAh/+l6aBXUSxUiY+f6IKNM2IhLf4y/JM6M=";
       x86_64-linux = "sha256-fST3+hkdIZO3jNX1pCpgk+FECVIZCFKfQtgLEf3h8dQ=";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tailwindcss_3";

@@ -1,18 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  graphviz,
-
-  # build-system
-  pdm-backend,
-
-  # tests
-  pytest-cov-stub,
-  pytestCheckHook,
-  pyyaml,
-  test2ref,
-  fontconfig,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, graphviz
+, # build-system
+  pdm-backend
+, # tests
+  pytest-cov-stub
+, pytestCheckHook
+, pyyaml
+, test2ref
+, fontconfig
+,
 }:
 
 buildPythonPackage rec {

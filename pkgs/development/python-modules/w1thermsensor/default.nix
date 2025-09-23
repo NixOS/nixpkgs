@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  aiofiles,
-  click,
-  tomli,
-  pytest-mock,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, aiofiles
+, click
+, tomli
+, pytest-mock
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

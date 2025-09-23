@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-
-  # runtime
-  click,
-  peewee,
-
-  # tests
-  psycopg2,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  poetry-core
+, # runtime
+  click
+, peewee
+, # tests
+  psycopg2
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  autoreconfHook,
-  buildPythonPackage,
-  gpgme,
-  lib,
-  setuptools,
-  swig,
+{ autoreconfHook
+, buildPythonPackage
+, gpgme
+, lib
+, setuptools
+, swig
+,
 }:
 
 buildPythonPackage {

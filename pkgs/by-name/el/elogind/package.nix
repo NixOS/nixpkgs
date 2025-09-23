@@ -1,38 +1,37 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchurl,
-  fetchpatch,
-  meson,
-  ninja,
-  m4,
-  gperf,
-  getent,
-  acl,
-  audit,
-  dbus,
-  libcap,
-  libselinux,
-  pam,
-  gettext,
-  pkg-config,
-  udev,
-  eudev,
-  util-linux,
-  libxslt,
-  python3Packages,
-  docbook5,
-  docbook_xsl,
-  docbook_xsl_ns,
-  docbook_xml_dtd_42,
-  docbook_xml_dtd_45,
-  udevCheckHook,
-
-  # Defaulting to false because usually the rationale for using elogind is to
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, m4
+, gperf
+, getent
+, acl
+, audit
+, dbus
+, libcap
+, libselinux
+, pam
+, gettext
+, pkg-config
+, udev
+, eudev
+, util-linux
+, libxslt
+, python3Packages
+, docbook5
+, docbook_xsl
+, docbook_xsl_ns
+, docbook_xml_dtd_42
+, docbook_xml_dtd_45
+, udevCheckHook
+, # Defaulting to false because usually the rationale for using elogind is to
   # use it in situation where a systemd dependency does not work (especially
   # when building with musl, which elogind explicitly supports).
-  enableSystemd ? false,
+  enableSystemd ? false
+,
 }:
 
 stdenv.mkDerivation rec {

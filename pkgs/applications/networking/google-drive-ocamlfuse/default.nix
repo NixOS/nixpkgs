@@ -1,14 +1,14 @@
-{
-  lib,
-  ocaml,
-  buildDunePackage,
-  fetchFromGitHub,
-  extlib,
-  ocamlfuse,
-  gapi-ocaml,
-  ocaml_sqlite3,
-  tiny_httpd,
-  ounit2,
+{ lib
+, ocaml
+, buildDunePackage
+, fetchFromGitHub
+, extlib
+, ocamlfuse
+, gapi-ocaml
+, ocaml_sqlite3
+, tiny_httpd
+, ounit2
+,
 }:
 
 buildDunePackage rec {

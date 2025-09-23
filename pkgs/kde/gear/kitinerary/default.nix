@@ -1,11 +1,11 @@
-{
-  mkKdeDerivation,
-  qtsvg,
-  qtdeclarative,
-  shared-mime-info,
-  poppler,
-  libphonenumber,
-  protobuf,
+{ mkKdeDerivation
+, qtsvg
+, qtdeclarative
+, shared-mime-info
+, poppler
+, libphonenumber
+, protobuf
+,
 }:
 mkKdeDerivation {
   pname = "kitinerary";

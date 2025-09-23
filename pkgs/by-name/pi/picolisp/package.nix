@@ -1,14 +1,14 @@
-{
-  clang,
-  fetchurl,
-  lib,
-  libffi,
-  llvm,
-  makeWrapper,
-  openssl,
-  pkg-config,
-  readline,
-  stdenv,
+{ clang
+, fetchurl
+, lib
+, libffi
+, llvm
+, makeWrapper
+, openssl
+, pkg-config
+, readline
+, stdenv
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,11 +1,11 @@
-{
-  fetchzip,
-  lib,
-  stdenv,
-  jdk,
-  runtimeShell,
-  glib,
-  wrapGAppsHook3,
+{ fetchzip
+, lib
+, stdenv
+, jdk
+, runtimeShell
+, glib
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

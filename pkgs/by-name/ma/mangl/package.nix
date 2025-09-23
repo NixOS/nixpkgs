@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  glfw,
-  freetype,
-  pkg-config,
-  bzip2,
-  zlib,
+{ stdenv
+, fetchFromGitHub
+, lib
+, glfw
+, freetype
+, pkg-config
+, bzip2
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

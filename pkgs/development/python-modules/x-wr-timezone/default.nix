@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  click,
-  icalendar,
-  tzdata,
-  pytestCheckHook,
-  restructuredtext-lint,
-  pygments,
-  pytz,
-  pytest-click,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, click
+, icalendar
+, tzdata
+, pytestCheckHook
+, restructuredtext-lint
+, pygments
+, pytz
+, pytest-click
+,
 }:
 
 buildPythonPackage rec {

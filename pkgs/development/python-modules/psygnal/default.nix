@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  mypy-extensions,
-  numpy,
-  pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  toolz,
-  typing-extensions,
-  wrapt,
-  attrs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, mypy-extensions
+, numpy
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, toolz
+, typing-extensions
+, wrapt
+, attrs
+,
 }:
 
 buildPythonPackage rec {

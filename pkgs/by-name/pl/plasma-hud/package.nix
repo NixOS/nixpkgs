@@ -1,10 +1,10 @@
-{
-  wrapGAppsHook3,
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  rofi,
-  gobject-introspection,
+{ wrapGAppsHook3
+, lib
+, python3Packages
+, fetchFromGitHub
+, rofi
+, gobject-introspection
+,
 }:
 
 python3Packages.buildPythonApplication rec {

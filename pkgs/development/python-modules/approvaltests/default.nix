@@ -1,20 +1,20 @@
-{
-  lib,
-  allpairspy,
-  approval-utilities,
-  beautifulsoup4,
-  buildPythonPackage,
-  empty-files,
-  fetchFromGitHub,
-  mock,
-  numpy,
-  pyperclip,
-  pytest,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
-  testfixtures,
-  typing-extensions,
+{ lib
+, allpairspy
+, approval-utilities
+, beautifulsoup4
+, buildPythonPackage
+, empty-files
+, fetchFromGitHub
+, mock
+, numpy
+, pyperclip
+, pytest
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+, testfixtures
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

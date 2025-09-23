@@ -1,12 +1,12 @@
-{
-  lib,
-  sdl2-compat,
-  SDL2_mixer,
-  SDL2_image,
-  SDL2_ttf,
-  directoryListingUpdater,
-  fetchurl,
-  stdenv,
+{ lib
+, sdl2-compat
+, SDL2_mixer
+, SDL2_image
+, SDL2_ttf
+, directoryListingUpdater
+, fetchurl
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  coreutils,
-  curl,
-  findutils,
-  gawk,
-  gnugrep,
-  gnused,
-  mktemp,
-  netcat,
-  unixtools,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeBinaryWrapper
+, coreutils
+, curl
+, findutils
+, gawk
+, gnugrep
+, gnused
+, mktemp
+, netcat
+, unixtools
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

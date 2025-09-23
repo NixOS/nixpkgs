@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  itstool,
-  wrapGAppsHook4,
-  glib,
-  accountsservice,
-  dbus,
-  flatpak,
-  malcontent,
-  gtk4,
-  libadwaita,
-  appstream,
-  desktop-file-utils,
-  polkit,
-  glib-testing,
+{ lib
+, stdenv
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, itstool
+, wrapGAppsHook4
+, glib
+, accountsservice
+, dbus
+, flatpak
+, malcontent
+, gtk4
+, libadwaita
+, appstream
+, desktop-file-utils
+, polkit
+, glib-testing
+,
 }:
 
 stdenv.mkDerivation {

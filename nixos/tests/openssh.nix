@@ -99,7 +99,7 @@ in
         enable = true;
         startWhenNeeded = true;
         ports = [ 2222 ];
-        listenAddresses = [ { addr = "0.0.0.0"; } ];
+        listenAddresses = [{ addr = "0.0.0.0"; }];
       };
       users.users.root.openssh.authorizedKeys.keys = [
         snakeOilPublicKey

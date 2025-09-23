@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pcsclite,
-  pkg-config,
-  pytestCheckHook,
-  setuptools,
-  stdenv,
-  swig,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pcsclite
+, pkg-config
+, pytestCheckHook
+, setuptools
+, stdenv
+, swig
+,
 }:
 
 buildPythonPackage rec {

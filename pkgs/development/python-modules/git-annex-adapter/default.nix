@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  cacert,
-  fetchFromGitHub,
-  fetchpatch,
-  git-annex,
-  gitMinimal,
-  pygit2,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  replaceVars,
-  util-linux,
+{ lib
+, buildPythonPackage
+, cacert
+, fetchFromGitHub
+, fetchpatch
+, git-annex
+, gitMinimal
+, pygit2
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, replaceVars
+, util-linux
+,
 }:
 
 buildPythonPackage rec {

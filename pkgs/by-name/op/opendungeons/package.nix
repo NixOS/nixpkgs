@@ -1,22 +1,19 @@
-{
-  lib,
-  stdenv,
-  ogre_13,
-  cegui,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-  pkg-config,
-
-  # buildInputs
-  boost183,
-  ois,
-  openal,
-  sfml_2,
-
-  # passthru
-  unstableGitUpdater,
+{ lib
+, stdenv
+, ogre_13
+, cegui
+, fetchFromGitHub
+, # nativeBuildInputs
+  cmake
+, pkg-config
+, # buildInputs
+  boost183
+, ois
+, openal
+, sfml_2
+, # passthru
+  unstableGitUpdater
+,
 }:
 
 let

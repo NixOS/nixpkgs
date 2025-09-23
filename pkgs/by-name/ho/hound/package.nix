@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  mercurial,
-  git,
-  openssh,
-  nixosTests,
-  fetchpatch,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, mercurial
+, git
+, openssh
+, nixosTests
+, fetchpatch
+,
 }:
 
 buildGoModule rec {

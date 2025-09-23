@@ -1,20 +1,20 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  coloredlogs,
-  fetchFromGitHub,
-  jsonschema,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-rerunfailures,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  voluptuous,
-  zigpy,
+{ lib
+, async-timeout
+, buildPythonPackage
+, coloredlogs
+, fetchFromGitHub
+, jsonschema
+, pytest-asyncio
+, pytest-mock
+, pytest-rerunfailures
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, voluptuous
+, zigpy
+,
 }:
 
 buildPythonPackage rec {

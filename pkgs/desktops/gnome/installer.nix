@@ -1,7 +1,7 @@
-{
-  isoBaseName ? "nixos-graphical-gnome",
-  system ? builtins.currentSystem,
-  extraModules ? [ ],
+{ isoBaseName ? "nixos-graphical-gnome"
+, system ? builtins.currentSystem
+, extraModules ? [ ]
+,
 }:
 
 let

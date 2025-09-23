@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  libcMinimal,
-  include,
-  libgcc,
-  csu,
-  extraSrc ? [ ],
+{ lib
+, stdenv
+, mkDerivation
+, libcMinimal
+, include
+, libgcc
+, csu
+, extraSrc ? [ ]
+,
 }:
 
 mkDerivation {

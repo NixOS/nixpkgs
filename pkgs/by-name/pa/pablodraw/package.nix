@@ -1,14 +1,14 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  wrapGAppsHook3,
-  copyDesktopItems,
-  gtk3,
-  libnotify,
-  makeDesktopItem,
-  stdenv,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, wrapGAppsHook3
+, copyDesktopItems
+, gtk3
+, libnotify
+, makeDesktopItem
+, stdenv
+,
 }:
 
 buildDotnetModule rec {

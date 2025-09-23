@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  beziers,
-  glyphslib,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, beziers
+, glyphslib
+, numpy
+,
 }:
 
 buildPythonPackage rec {

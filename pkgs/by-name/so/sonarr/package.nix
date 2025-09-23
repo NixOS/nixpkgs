@@ -1,24 +1,25 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  sqlite,
-  withFFmpeg ? true, # replace bundled ffprobe binary with symlink to ffmpeg package.
-  servarr-ffmpeg,
-  fetchYarnDeps,
-  yarn,
-  fixup-yarn-lock,
-  nodejs,
-  nixosTests,
-  # update script
-  writers,
-  python3Packages,
-  nix,
-  prefetch-yarn-deps,
-  fetchpatch,
-  applyPatches,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, sqlite
+, withFFmpeg ? true
+, # replace bundled ffprobe binary with symlink to ffmpeg package.
+  servarr-ffmpeg
+, fetchYarnDeps
+, yarn
+, fixup-yarn-lock
+, nodejs
+, nixosTests
+, # update script
+  writers
+, python3Packages
+, nix
+, prefetch-yarn-deps
+, fetchpatch
+, applyPatches
+,
 }:
 let
   version = "4.0.15.2941";
@@ -177,18 +178,19 @@ buildDotnetModule {
       inherit (nixosTests) sonarr;
     };
 
-    updateScript = writers.writePython3 "sonarr-updater" {
-      libraries = with python3Packages; [ requests ];
-      makeWrapperArgs = [
-        "--prefix"
-        "PATH"
-        ":"
-        (lib.makeBinPath [
-          nix
-          prefetch-yarn-deps
-        ])
-      ];
-    } ./update.py;
+    updateScript = writers.writePython3 "sonarr-updater"
+      {
+        libraries = with python3Packages; [ requests ];
+        makeWrapperArgs = [
+          "--prefix"
+          "PATH"
+          ":"
+          (lib.makeBinPath [
+            nix
+            prefetch-yarn-deps
+          ])
+        ];
+      } ./update.py;
   };
 
   meta = {

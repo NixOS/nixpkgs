@@ -1,7 +1,7 @@
-{
-  lib,
-  pkgsBuildHost,
-  resholve,
+{ lib
+, pkgsBuildHost
+, resholve
+,
 }:
 
 let

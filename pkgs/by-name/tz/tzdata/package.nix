@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPackages,
-  postgresql,
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, postgresql
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

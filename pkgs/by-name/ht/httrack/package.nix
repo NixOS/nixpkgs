@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  zlib,
-  openssl,
-  libiconv,
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, openssl
+, libiconv
+,
 }:
 
 stdenv.mkDerivation rec {

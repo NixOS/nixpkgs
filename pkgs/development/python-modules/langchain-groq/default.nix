@@ -1,21 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  langchain-core,
-  groq,
-
-  # tests
-  langchain-tests,
-  pytestCheckHook,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pdm-backend
+, # dependencies
+  langchain-core
+, groq
+, # tests
+  langchain-tests
+, pytestCheckHook
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  callPackage,
-  cargo,
-  cmake,
-  fetchFromGitHub,
-  lib,
-  llvmPackages_19,
-  makeRustPlatform,
-  makeWrapper,
-  nodejs,
-  python3,
-  rustc,
-  stdenv,
-  unzip,
+{ callPackage
+, cargo
+, cmake
+, fetchFromGitHub
+, lib
+, llvmPackages_19
+, makeRustPlatform
+, makeWrapper
+, nodejs
+, python3
+, rustc
+, stdenv
+, unzip
+,
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let

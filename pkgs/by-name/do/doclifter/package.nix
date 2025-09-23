@@ -1,10 +1,10 @@
-{
-  fetchurl,
-  lib,
-  libxml2,
-  makeWrapper,
-  python3,
-  stdenv,
+{ fetchurl
+, lib
+, libxml2
+, makeWrapper
+, python3
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

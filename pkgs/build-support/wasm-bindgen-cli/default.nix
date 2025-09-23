@@ -1,19 +1,19 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  nix-update-script,
-  nodejs_latest,
-  pkg-config,
-  openssl,
-  stdenv,
-  curl,
+{ lib
+, rustPlatform
+, fetchCrate
+, nix-update-script
+, nodejs_latest
+, pkg-config
+, openssl
+, stdenv
+, curl
+,
 }:
 
-{
-  version ? src.version,
-  src,
-  cargoDeps,
+{ version ? src.version
+, src
+, cargoDeps
+,
 }:
 
 rustPlatform.buildRustPackage {

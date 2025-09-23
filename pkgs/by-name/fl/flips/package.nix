@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  libdivsufsort,
-  pkg-config,
-
-  withGTK3 ? !stdenv.hostPlatform.isDarwin,
-  gtk3,
-  llvmPackages,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitea
+, libdivsufsort
+, pkg-config
+, withGTK3 ? !stdenv.hostPlatform.isDarwin
+, gtk3
+, llvmPackages
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

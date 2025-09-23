@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  dtc,
-  libusb1,
-  zlib,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, dtc
+, libusb1
+, zlib
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  sphinx,
-  stdenv,
-  unstableGitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, sphinx
+, stdenv
+, unstableGitUpdater
+,
 }:
 
 buildPythonPackage rec {

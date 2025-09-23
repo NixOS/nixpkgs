@@ -1,14 +1,14 @@
-{
-  lib,
-  symlinkJoin,
-  makeBinaryWrapper,
-  fcitx5,
-  withConfigtool ? true,
-  fcitx5-configtool,
-  libsForQt5,
-  qt6Packages,
-  fcitx5-gtk,
-  addons ? [ ],
+{ lib
+, symlinkJoin
+, makeBinaryWrapper
+, fcitx5
+, withConfigtool ? true
+, fcitx5-configtool
+, libsForQt5
+, qt6Packages
+, fcitx5-gtk
+, addons ? [ ]
+,
 }:
 
 symlinkJoin {

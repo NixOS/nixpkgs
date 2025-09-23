@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  nanopb,
+{ lib
+, stdenv
+, nanopb
+,
 }:
 
 stdenv.mkDerivation {

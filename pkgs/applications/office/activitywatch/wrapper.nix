@@ -1,12 +1,12 @@
-{
-  lib,
-  symlinkJoin,
-  aw-server-rust,
-  aw-qt,
-  aw-notify,
-  aw-watcher-afk,
-  aw-watcher-window,
-  extraWatchers ? [ ],
+{ lib
+, symlinkJoin
+, aw-server-rust
+, aw-qt
+, aw-notify
+, aw-watcher-afk
+, aw-watcher-window
+, extraWatchers ? [ ]
+,
 }:
 
 symlinkJoin {

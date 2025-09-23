@@ -1,7 +1,7 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+,
 }:
 
 # Tests with go 1.24 do not work. For now

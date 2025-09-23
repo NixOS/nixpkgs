@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  glib,
-  cairo,
-  pango,
-  atk,
-  gdk-pixbuf,
-  gtk4,
-  wrapGAppsHook4,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, glib
+, cairo
+, pango
+, atk
+, gdk-pixbuf
+, gtk4
+, wrapGAppsHook4
+,
 }:
 
 rustPlatform.buildRustPackage rec {

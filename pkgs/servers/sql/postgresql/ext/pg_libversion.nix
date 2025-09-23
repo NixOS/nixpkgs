@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  gitUpdater,
-  lib,
-  libversion,
-  pkg-config,
-  postgresql,
-  postgresqlBuildExtension,
+{ fetchFromGitHub
+, gitUpdater
+, lib
+, libversion
+, pkg-config
+, postgresql
+, postgresqlBuildExtension
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

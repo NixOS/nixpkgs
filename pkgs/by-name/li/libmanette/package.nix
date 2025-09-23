@@ -1,23 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ninja,
-  meson,
-  mesonEmulatorHook,
-  pkg-config,
-  vala,
-  gobject-introspection,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  gi-docgen,
-  glib,
-  libgudev,
-  libevdev,
-  hidapi,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, ninja
+, meson
+, mesonEmulatorHook
+, pkg-config
+, vala
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, gi-docgen
+, glib
+, libgudev
+, libevdev
+, hidapi
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,68 +1,65 @@
 {
   # build tools
-  stdenv,
-  autoreconfHook,
-  makeWrapper,
-  pkg-config,
-
-  # check hook
-  versionCheckHook,
-
-  # fetchers
-  fetchFromGitHub,
-
-  # build inputs
-  bison,
-  brotli,
-  coreutils,
-  cunit,
-  cyrus_sasl,
-  fig2dev,
-  flex,
-  icu,
-  jansson,
-  lib,
-  libbsd,
-  libcap,
-  libchardet,
-  libical,
-  libmysqlclient,
-  libpq,
-  libsrs2,
-  libuuid,
-  libxml2,
-  nghttp2,
-  openssl,
-  pcre2,
-  perl,
-  rsync,
-  shapelib,
-  sqlite,
-  unixtools,
-  valgrind,
-  wslay,
-  xapian,
-  zlib,
-
-  # feature flags
-  enableAutoCreate ? true,
-  enableBackup ? true,
-  enableCalalarmd ? true,
-  enableHttp ? true,
-  enableIdled ? true,
-  enableJMAP ? true,
-  enableMurder ? true,
-  enableNNTP ? false,
-  enableReplication ? true,
-  enableSrs ? true,
-  enableUnitTests ? true,
-  enableXapian ? true,
-  withLibcap ? true,
-  withMySQL ? false,
-  withOpenssl ? true,
-  withPgSQL ? false,
-  withSQLite ? true,
-  withZlib ? true,
+  stdenv
+, autoreconfHook
+, makeWrapper
+, pkg-config
+, # check hook
+  versionCheckHook
+, # fetchers
+  fetchFromGitHub
+, # build inputs
+  bison
+, brotli
+, coreutils
+, cunit
+, cyrus_sasl
+, fig2dev
+, flex
+, icu
+, jansson
+, lib
+, libbsd
+, libcap
+, libchardet
+, libical
+, libmysqlclient
+, libpq
+, libsrs2
+, libuuid
+, libxml2
+, nghttp2
+, openssl
+, pcre2
+, perl
+, rsync
+, shapelib
+, sqlite
+, unixtools
+, valgrind
+, wslay
+, xapian
+, zlib
+, # feature flags
+  enableAutoCreate ? true
+, enableBackup ? true
+, enableCalalarmd ? true
+, enableHttp ? true
+, enableIdled ? true
+, enableJMAP ? true
+, enableMurder ? true
+, enableNNTP ? false
+, enableReplication ? true
+, enableSrs ? true
+, enableUnitTests ? true
+, enableXapian ? true
+, withLibcap ? true
+, withMySQL ? false
+, withOpenssl ? true
+, withPgSQL ? false
+, withSQLite ? true
+, withZlib ? true
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cyrus-imapd";

@@ -1,33 +1,28 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-
-  # nativeBuildInputs
-  pkg-config,
-
-  # buildInputs
-  openssl,
-  protobuf,
-
-  # dependencies
-  numpy,
-  pyarrow,
-
-  # optional-dependencies
-  torch,
-
-  # tests
-  datafusion,
-  duckdb,
-  ml-dtypes,
-  pandas,
-  pillow,
-  polars,
-  pytestCheckHook,
-  tqdm,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, # nativeBuildInputs
+  pkg-config
+, # buildInputs
+  openssl
+, protobuf
+, # dependencies
+  numpy
+, pyarrow
+, # optional-dependencies
+  torch
+, # tests
+  datafusion
+, duckdb
+, ml-dtypes
+, pandas
+, pillow
+, polars
+, pytestCheckHook
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

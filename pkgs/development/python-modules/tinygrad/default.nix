@@ -1,57 +1,51 @@
-{
-  lib,
-  stdenv,
-  config,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # patches
-  replaceVars,
-  addDriverRunpath,
-  cudaPackages,
-  llvmPackages,
-  ocl-icd,
-  rocmPackages,
-
-  # build-system
-  setuptools,
-
-  # optional-dependencies
-  llvmlite,
-  triton,
-  unicorn,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  blobfile,
-  bottle,
-  capstone,
-  clang,
-  hexdump,
-  hypothesis,
-  jax,
-  librosa,
-  ml-dtypes,
-  networkx,
-  numpy,
-  onnx,
-  onnxruntime,
-  pillow,
-  pytest-xdist,
-  safetensors,
-  sentencepiece,
-  tiktoken,
-  torch,
-  tqdm,
-  transformers,
-  z3-solver,
-
-  # passthru
-  tinygrad,
-
-  cudaSupport ? config.cudaSupport,
-  rocmSupport ? config.rocmSupport,
+{ lib
+, stdenv
+, config
+, buildPythonPackage
+, fetchFromGitHub
+, # patches
+  replaceVars
+, addDriverRunpath
+, cudaPackages
+, llvmPackages
+, ocl-icd
+, rocmPackages
+, # build-system
+  setuptools
+, # optional-dependencies
+  llvmlite
+, triton
+, unicorn
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+, blobfile
+, bottle
+, capstone
+, clang
+, hexdump
+, hypothesis
+, jax
+, librosa
+, ml-dtypes
+, networkx
+, numpy
+, onnx
+, onnxruntime
+, pillow
+, pytest-xdist
+, safetensors
+, sentencepiece
+, tiktoken
+, torch
+, tqdm
+, transformers
+, z3-solver
+, # passthru
+  tinygrad
+, cudaSupport ? config.cudaSupport
+, rocmSupport ? config.rocmSupport
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  nixosTests,
-  python3Packages,
-  fetchFromGitHub,
-  radicale,
+{ lib
+, stdenv
+, nixosTests
+, python3Packages
+, fetchFromGitHub
+, radicale
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "etesync-dav";

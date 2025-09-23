@@ -1,42 +1,41 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  graphviz,
-  gettext,
-  autoreconfHook,
-  disarchive,
-  git,
-  glibcLocales,
-  guile,
-  guile-avahi,
-  guile-gcrypt,
-  guile-git,
-  guile-gnutls,
-  guile-json,
-  guile-lib,
-  guile-lzlib,
-  guile-lzma,
-  guile-semver,
-  guile-ssh,
-  guile-sqlite3,
-  guile-zlib,
-  guile-zstd,
-  help2man,
-  makeWrapper,
-  pkg-config,
-  po4a,
-  scheme-bytestructures,
-  slirp4netns,
-  texinfo,
-  bzip2,
-  libgcrypt,
-  sqlite,
-  nixosTests,
-
-  stateDir ? "/var",
-  storeDir ? "/gnu/store",
-  confDir ? "/etc",
+{ lib
+, stdenv
+, fetchgit
+, graphviz
+, gettext
+, autoreconfHook
+, disarchive
+, git
+, glibcLocales
+, guile
+, guile-avahi
+, guile-gcrypt
+, guile-git
+, guile-gnutls
+, guile-json
+, guile-lib
+, guile-lzlib
+, guile-lzma
+, guile-semver
+, guile-ssh
+, guile-sqlite3
+, guile-zlib
+, guile-zstd
+, help2man
+, makeWrapper
+, pkg-config
+, po4a
+, scheme-bytestructures
+, slirp4netns
+, texinfo
+, bzip2
+, libgcrypt
+, sqlite
+, nixosTests
+, stateDir ? "/var"
+, storeDir ? "/gnu/store"
+, confDir ? "/etc"
+,
 }:
 let
   rev = "30a5d140aa5a789a362749d057754783fea83dde";

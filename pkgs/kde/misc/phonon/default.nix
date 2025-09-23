@@ -1,13 +1,13 @@
-{
-  lib,
-  mkKdeDerivation,
-  fetchurl,
-  libGLU,
-  libGL,
-  pkg-config,
-  libpulseaudio,
-  qt5compat,
-  qttools,
+{ lib
+, mkKdeDerivation
+, fetchurl
+, libGLU
+, libGL
+, pkg-config
+, libpulseaudio
+, qt5compat
+, qttools
+,
 }:
 mkKdeDerivation rec {
   pname = "phonon";

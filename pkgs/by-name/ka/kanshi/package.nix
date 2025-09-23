@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  wayland,
-  wayland-scanner,
-  libvarlink,
-  libscfg,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, scdoc
+, wayland
+, wayland-scanner
+, libvarlink
+, libscfg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,18 +1,18 @@
-{
-  buildPythonPackage,
-  cargo,
-  fetchFromGitHub,
-  grpc-interceptor,
-  grpcio,
-  httpx,
-  lib,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  pythonAtLeast,
-  rustc,
-  rustPlatform,
-  syrupy,
+{ buildPythonPackage
+, cargo
+, fetchFromGitHub
+, grpc-interceptor
+, grpcio
+, httpx
+, lib
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, pythonAtLeast
+, rustc
+, rustPlatform
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  fuse,
-  libmtp,
-  glib,
-  libmad,
-  libid3tag,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, fuse
+, libmtp
+, glib
+, libmad
+, libid3tag
+,
 }:
 
 stdenv.mkDerivation rec {

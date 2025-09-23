@@ -1,10 +1,10 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  qtbase,
-  qtquickcontrols2,
-  qtgraphicaleffects,
-  qttools,
+{ mkDerivation
+, extra-cmake-modules
+, qtbase
+, qtquickcontrols2
+, qtgraphicaleffects
+, qttools
+,
 }:
 
 mkDerivation {

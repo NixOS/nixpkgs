@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  pytestCheckHook,
-  dotnetCorePackages,
-  setuptools,
-  setuptools-scm,
-  wheel,
-  buildDotnetModule,
-  cffi,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pytestCheckHook
+, dotnetCorePackages
+, setuptools
+, setuptools-scm
+, wheel
+, buildDotnetModule
+, cffi
+,
 }:
 
 let

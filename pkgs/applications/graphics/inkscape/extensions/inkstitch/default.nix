@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  gettext,
+{ lib
+, python3
+, fetchFromGitHub
+, fetchFromGitLab
+, gettext
+,
 }:
 let
   # on update check compatibility to nixpkgs inkex

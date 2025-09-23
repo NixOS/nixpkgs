@@ -1,8 +1,8 @@
-{
-  dosbox,
-  fetchzip,
-  lib,
-  writeShellApplication,
+{ dosbox
+, fetchzip
+, lib
+, writeShellApplication
+,
 }:
 
 let

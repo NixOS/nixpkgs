@@ -1,35 +1,35 @@
-{
-  lib,
-  testers,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  gtk3,
-  ncurses,
-  libcpuid,
-  pciutils,
-  procps,
-  wrapGAppsHook3,
-  nasm,
-  opencl-headers,
-  ocl-icd,
-  vulkan-headers,
-  vulkan-loader,
-  glfw,
-  libXdmcp,
-  pcre,
-  util-linux,
-  libselinux,
-  libsepol,
-  libthai,
-  libdatrie,
-  libxkbcommon,
-  libepoxy,
-  dbus,
-  at-spi2-core,
-  libXtst,
-  gtkmm3,
+{ lib
+, testers
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gtk3
+, ncurses
+, libcpuid
+, pciutils
+, procps
+, wrapGAppsHook3
+, nasm
+, opencl-headers
+, ocl-icd
+, vulkan-headers
+, vulkan-loader
+, glfw
+, libXdmcp
+, pcre
+, util-linux
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, libxkbcommon
+, libepoxy
+, dbus
+, at-spi2-core
+, libXtst
+, gtkmm3
+,
 }:
 
 # Known issues:

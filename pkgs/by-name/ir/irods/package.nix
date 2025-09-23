@@ -1,23 +1,23 @@
-{
-  lib,
-  llvmPackages,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  bison,
-  flex,
-  libarchive,
-  pam,
-  unixODBC,
-  jsoncons,
-  curl,
-  systemdLibs,
-  openssl,
-  boost183,
-  nlohmann_json,
-  nanodbc,
-  fmt_9,
-  spdlog,
+{ lib
+, llvmPackages
+, fetchFromGitHub
+, cmake
+, ninja
+, bison
+, flex
+, libarchive
+, pam
+, unixODBC
+, jsoncons
+, curl
+, systemdLibs
+, openssl
+, boost183
+, nlohmann_json
+, nanodbc
+, fmt_9
+, spdlog
+,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {

@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  libevent,
-  libsodium,
-  libuv,
-  nlohmann_json,
-  pkg-config,
-  spdlog,
-  fmt_9,
-  sqlite,
-  systemd,
-  unbound,
-  zeromq,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, libevent
+, libsodium
+, libuv
+, nlohmann_json
+, pkg-config
+, spdlog
+, fmt_9
+, sqlite
+, systemd
+, unbound
+, zeromq
+,
 }:
 let
   # Upstream has received reports of incompatibilities with fmt, and other

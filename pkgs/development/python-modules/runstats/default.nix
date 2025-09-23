@@ -1,12 +1,12 @@
-{
-  lib,
-  setuptools,
-  cython,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-xdist,
+{ lib
+, setuptools
+, cython
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-xdist
+,
 }:
 
 buildPythonPackage rec {

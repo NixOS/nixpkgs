@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jaraco-functools,
-  pytest-freezer,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jaraco-functools
+, pytest-freezer
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

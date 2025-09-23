@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  pkg-config,
-  desktopToDarwinBundle,
-  xorg,
-  wayland,
-  wayland-protocols,
-  libxkbcommon,
-  libglvnd,
-  mpv-unwrapped,
-  waylandSupport ? false,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, pkg-config
+, desktopToDarwinBundle
+, xorg
+, wayland
+, wayland-protocols
+, libxkbcommon
+, libglvnd
+, mpv-unwrapped
+, waylandSupport ? false
+,
 }:
 
 buildGoModule rec {

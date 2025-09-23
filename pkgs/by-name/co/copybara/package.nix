@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jdk21,
-  makeWrapper,
-  git,
-  gnused,
-  gnugrep,
-  gawk,
-  which,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, jdk21
+, makeWrapper
+, git
+, gnused
+, gnugrep
+, gawk
+, which
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "copybara";

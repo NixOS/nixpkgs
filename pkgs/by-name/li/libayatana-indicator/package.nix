@@ -1,12 +1,12 @@
-{
-  ayatana-ido,
-  cmake,
-  fetchFromGitHub,
-  glib,
-  gtk3,
-  lib,
-  pkg-config,
-  stdenv,
+{ ayatana-ido
+, cmake
+, fetchFromGitHub
+, glib
+, gtk3
+, lib
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

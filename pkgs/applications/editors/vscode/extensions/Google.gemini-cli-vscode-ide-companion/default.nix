@@ -1,8 +1,8 @@
-{
-  lib,
-  vscode-utils,
-  gemini-cli,
-  vsce,
+{ lib
+, vscode-utils
+, gemini-cli
+, vsce
+,
 }:
 vscode-utils.buildVscodeExtension (finalAttrs: {
   pname = "gemini-cli-vscode-ide-companion";

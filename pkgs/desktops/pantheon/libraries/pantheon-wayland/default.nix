@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wayland-scanner,
-  glib,
-  gtk4,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, vala
+, wayland-scanner
+, glib
+, gtk4
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

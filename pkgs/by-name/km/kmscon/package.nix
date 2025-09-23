@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  libtsm,
-  systemdLibs,
-  libxkbcommon,
-  libdrm,
-  libGLU,
-  libGL,
-  pango,
-  pixman,
-  pkg-config,
-  docbook_xsl,
-  libxslt,
-  libgbm,
-  ninja,
-  check,
-  buildPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, libtsm
+, systemdLibs
+, libxkbcommon
+, libdrm
+, libGLU
+, libGL
+, pango
+, pixman
+, pkg-config
+, docbook_xsl
+, libxslt
+, libgbm
+, ninja
+, check
+, buildPackages
+,
 }:
 stdenv.mkDerivation {
   pname = "kmscon";

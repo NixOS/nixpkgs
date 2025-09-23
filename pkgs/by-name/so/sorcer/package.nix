@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost,
-  cairomm,
-  cmake,
-  libsndfile,
-  lv2,
-  ntk,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, cairomm
+, cmake
+, libsndfile
+, lv2
+, ntk
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

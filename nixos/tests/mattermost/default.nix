@@ -35,30 +35,32 @@ import ../make-test-python.nix (
 
             system.stateVersion = lib.mkDefault (lib.versions.majorMinor lib.version);
 
-            services.mattermost = lib.recursiveUpdate {
-              enable = true;
-              inherit siteName;
-              host = "0.0.0.0";
-              inherit port;
-              siteUrl = url;
-              socket = {
+            services.mattermost = lib.recursiveUpdate
+              {
                 enable = true;
-                export = true;
-              };
-              database = {
-                peerAuth = lib.mkDefault true;
-              };
-              telemetry.enableSecurityAlerts = false;
-              settings = {
-                SupportSettings.AboutLink = "https://nixos.org";
-                PluginSettings.AutomaticPrepackagedPlugins = false;
-                AnnouncementSettings = {
-                  # Disable this since it doesn't work in the sandbox and causes a timeout.
-                  AdminNoticesEnabled = false;
-                  UserNoticesEnabled = false;
+                inherit siteName;
+                host = "0.0.0.0";
+                inherit port;
+                siteUrl = url;
+                socket = {
+                  enable = true;
+                  export = true;
                 };
-              };
-            } mattermostConfig;
+                database = {
+                  peerAuth = lib.mkDefault true;
+                };
+                telemetry.enableSecurityAlerts = false;
+                settings = {
+                  SupportSettings.AboutLink = "https://nixos.org";
+                  PluginSettings.AutomaticPrepackagedPlugins = false;
+                  AnnouncementSettings = {
+                    # Disable this since it doesn't work in the sandbox and causes a timeout.
+                    AdminNoticesEnabled = false;
+                    UserNoticesEnabled = false;
+                  };
+                };
+              }
+              mattermostConfig;
 
             # Upgrade to the latest Mattermost.
             specialisation.latest.configuration = {
@@ -90,11 +92,13 @@ import ../make-test-python.nix (
     name = "mattermost";
 
     nodes = rec {
-      postgresMutable = makeMattermost {
-        mutableConfig = true;
-        preferNixConfig = false;
-        settings.SupportSettings.HelpLink = "https://search.nixos.org";
-      } { };
+      postgresMutable = makeMattermost
+        {
+          mutableConfig = true;
+          preferNixConfig = false;
+          settings.SupportSettings.HelpLink = "https://search.nixos.org";
+        }
+        { };
       postgresMostlyMutable =
         makeMattermost
           {
@@ -144,36 +148,40 @@ import ../make-test-python.nix (
               lib.versions.majorMinor lib.version
             );
           };
-      postgresImmutable = makeMattermost {
-        package = pkgs.mattermost.overrideAttrs (prev: {
-          webapp = prev.webapp.overrideAttrs (prevWebapp: {
-            # Ensure that users can add patches.
-            postPatch = prevWebapp.postPatch or "" + ''
-              substituteInPlace channels/src/root.html --replace-fail "Mattermost" "Patched Mattermost"
-            '';
+      postgresImmutable = makeMattermost
+        {
+          package = pkgs.mattermost.overrideAttrs (prev: {
+            webapp = prev.webapp.overrideAttrs (prevWebapp: {
+              # Ensure that users can add patches.
+              postPatch = prevWebapp.postPatch or "" + ''
+                substituteInPlace channels/src/root.html --replace-fail "Mattermost" "Patched Mattermost"
+              '';
+            });
           });
-        });
-        mutableConfig = false;
+          mutableConfig = false;
 
-        # Make sure something other than the default works.
-        user = "mmuser";
-        group = "mmgroup";
+          # Make sure something other than the default works.
+          user = "mmuser";
+          group = "mmgroup";
 
-        database = {
-          # Ensure that this gets tested on Postgres.
-          peerAuth = false;
-        };
-        settings.SupportSettings.HelpLink = "https://search.nixos.org";
-      } { };
-      postgresEnvironmentFile = makeMattermost {
-        mutableConfig = false;
-        database.fromEnvironment = true;
-        settings.SupportSettings.AboutLink = "https://example.org";
-        environmentFile = pkgs.writeText "mattermost-env" ''
-          MM_SQLSETTINGS_DATASOURCE=postgres:///mattermost?host=/run/postgresql
-          MM_SUPPORTSETTINGS_ABOUTLINK=https://nixos.org
-        '';
-      } { };
+          database = {
+            # Ensure that this gets tested on Postgres.
+            peerAuth = false;
+          };
+          settings.SupportSettings.HelpLink = "https://search.nixos.org";
+        }
+        { };
+      postgresEnvironmentFile = makeMattermost
+        {
+          mutableConfig = false;
+          database.fromEnvironment = true;
+          settings.SupportSettings.AboutLink = "https://example.org";
+          environmentFile = pkgs.writeText "mattermost-env" ''
+            MM_SQLSETTINGS_DATASOURCE=postgres:///mattermost?host=/run/postgresql
+            MM_SUPPORTSETTINGS_ABOUTLINK=https://nixos.org
+          '';
+        }
+        { };
 
       mysqlMutable = makeMysql postgresMutable { };
       mysqlMostlyMutable = makeMysql postgresMostlyMutable { };

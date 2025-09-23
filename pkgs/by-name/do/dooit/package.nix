@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  dooit,
-  python3,
-  testers,
-  nix-update-script,
-  extraPackages ? [ ],
+{ lib
+, fetchFromGitHub
+, dooit
+, python3
+, testers
+, nix-update-script
+, extraPackages ? [ ]
+,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";

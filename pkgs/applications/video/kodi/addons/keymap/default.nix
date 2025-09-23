@@ -1,11 +1,11 @@
-{
-  lib,
-  rel,
-  buildKodiAddon,
-  fetchzip,
-  addonUpdateScript,
-  defusedxml,
-  kodi-six,
+{ lib
+, rel
+, buildKodiAddon
+, fetchzip
+, addonUpdateScript
+, defusedxml
+, kodi-six
+,
 }:
 
 buildKodiAddon rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ffmpeg-full,
-  libaom,
-  meson,
-  nasm,
-  ninja,
-  testers,
-  xxd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ffmpeg-full
+, libaom
+, meson
+, nasm
+, ninja
+, testers
+, xxd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

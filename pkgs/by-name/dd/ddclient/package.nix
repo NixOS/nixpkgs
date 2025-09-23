@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  perlPackages,
-  autoreconfHook,
-  perl,
-  curl,
+{ lib
+, fetchFromGitHub
+, perlPackages
+, autoreconfHook
+, perl
+, curl
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  ant,
-  jdk,
-  xmlstarlet,
-  axis2,
-  dbus_java,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, ant
+, jdk
+, xmlstarlet
+, axis2
+, dbus_java
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

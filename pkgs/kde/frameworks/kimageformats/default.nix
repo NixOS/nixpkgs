@@ -1,11 +1,11 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  libheif,
-  libjxl,
-  libavif,
-  libraw,
-  openexr,
+{ mkKdeDerivation
+, pkg-config
+, libheif
+, libjxl
+, libavif
+, libraw
+, openexr
+,
 }:
 mkKdeDerivation {
   pname = "kimageformats";

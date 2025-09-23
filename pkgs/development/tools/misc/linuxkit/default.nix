@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  git,
-  sigtool,
-  testers,
-  linuxkit,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, git
+, sigtool
+, testers
+, linuxkit
+,
 }:
 
 buildGoModule rec {

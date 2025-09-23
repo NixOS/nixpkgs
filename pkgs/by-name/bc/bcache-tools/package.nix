@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  util-linux,
-  bash,
-  replaceVars,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, util-linux
+, bash
+, replaceVars
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

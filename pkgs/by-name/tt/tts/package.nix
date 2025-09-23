@@ -1,11 +1,11 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  espeak-ng,
-  tts,
-  addBinToPathHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, python3
+, fetchFromGitHub
+, espeak-ng
+, tts
+, addBinToPathHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

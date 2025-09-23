@@ -1,27 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  flex,
-  bison,
-  bash,
-  bashNonInteractive,
-  bluez,
-  libnl,
-  libxcrypt,
-  pkg-config,
-  withBluez ? false,
-  withRemote ? false,
-
-  # for passthru.tests
-  ettercap,
-  nmap,
-  ostinato,
-  tcpreplay,
-  vde2,
-  wireshark,
-  python3,
-  haskellPackages,
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, bash
+, bashNonInteractive
+, bluez
+, libnl
+, libxcrypt
+, pkg-config
+, withBluez ? false
+, withRemote ? false
+, # for passthru.tests
+  ettercap
+, nmap
+, ostinato
+, tcpreplay
+, vde2
+, wireshark
+, python3
+, haskellPackages
+,
 }:
 
 stdenv.mkDerivation rec {

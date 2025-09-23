@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kernel,
-  kernelModuleMakeFlags,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, kernelModuleMakeFlags
+, nixosTests
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  runCommand,
-  runCommandWith,
-  runCommandCC,
-  writeText,
-  bintools,
-  hello,
-  debian-devscripts,
+{ lib
+, stdenv
+, runCommand
+, runCommandWith
+, runCommandCC
+, writeText
+, bintools
+, hello
+, debian-devscripts
+,
 }:
 
 let
@@ -73,23 +73,25 @@ let
     stdenv.override {
       cc = stdenv.cc.override {
         cc = (
-          lib.extendDerivation true rec {
-            # this is ugly - have to cross-reference from
-            # hardeningUnsupportedFlagsByTargetPlatform to hardeningUnsupportedFlags
-            # because the finalAttrs mechanism that hardeningUnsupportedFlagsByTargetPlatform
-            # implementations use to do this won't work with lib.extendDerivation.
-            # but it's simplified by the fact that targetPlatform is already fixed
-            # at this point.
-            hardeningUnsupportedFlagsByTargetPlatform = _: hardeningUnsupportedFlags;
-            hardeningUnsupportedFlags =
-              (
-                if stdenv.cc.cc ? hardeningUnsupportedFlagsByTargetPlatform then
-                  stdenv.cc.cc.hardeningUnsupportedFlagsByTargetPlatform stdenv.targetPlatform
-                else
-                  (stdenv.cc.cc.hardeningUnsupportedFlags or [ ])
-              )
-              ++ additionalUnsupported;
-          } stdenv.cc.cc
+          lib.extendDerivation true
+            rec {
+              # this is ugly - have to cross-reference from
+              # hardeningUnsupportedFlagsByTargetPlatform to hardeningUnsupportedFlags
+              # because the finalAttrs mechanism that hardeningUnsupportedFlagsByTargetPlatform
+              # implementations use to do this won't work with lib.extendDerivation.
+              # but it's simplified by the fact that targetPlatform is already fixed
+              # at this point.
+              hardeningUnsupportedFlagsByTargetPlatform = _: hardeningUnsupportedFlags;
+              hardeningUnsupportedFlags =
+                (
+                  if stdenv.cc.cc ? hardeningUnsupportedFlagsByTargetPlatform then
+                    stdenv.cc.cc.hardeningUnsupportedFlagsByTargetPlatform stdenv.targetPlatform
+                  else
+                    (stdenv.cc.cc.hardeningUnsupportedFlags or [ ])
+                )
+                ++ additionalUnsupported;
+            }
+            stdenv.cc.cc
         );
       };
       allowedRequisites = null;
@@ -99,13 +101,14 @@ let
     testBin:
     {
       # can only test flags that are detectable by hardening-check
-      ignoreBindNow ? true,
-      ignoreFortify ? true,
-      ignorePie ? true,
-      ignoreRelRO ? true,
-      ignoreStackProtector ? true,
-      ignoreStackClashProtection ? true,
-      expectFailure ? false,
+      ignoreBindNow ? true
+    , ignoreFortify ? true
+    , ignorePie ? true
+    , ignoreRelRO ? true
+    , ignoreStackProtector ? true
+    , ignoreStackClashProtection ? true
+    , expectFailure ? false
+    ,
     }:
     let
       stackClashStr = "Stack clash protection: yes";
@@ -156,9 +159,9 @@ let
 
   nameDrvAfterAttrName = builtins.mapAttrs (
     name: drv:
-    drv.overrideAttrs (_: {
-      name = "test-${name}";
-    })
+      drv.overrideAttrs (_: {
+        name = "test-${name}";
+      })
   );
 
   fortifyExecTest = fortifyExecTestFull true "012345 7" "0123456 7";
@@ -198,11 +201,12 @@ let
   brokenIf =
     cond: drv:
     if cond then
-      drv.overrideAttrs (old: {
-        meta = old.meta or { } // {
-          broken = true;
-        };
-      })
+      drv.overrideAttrs
+        (old: {
+          meta = old.meta or { } // {
+            broken = true;
+          };
+        })
     else
       drv;
   overridePlatforms =
@@ -506,13 +510,17 @@ nameDrvAfterAttrName (
         }
     );
 
-    pacRetExplicitEnabled = pacRetTest (helloWithStdEnv stdenv {
-      hardeningEnable = [ "pacret" ];
-    }) false;
+    pacRetExplicitEnabled = pacRetTest
+      (helloWithStdEnv stdenv {
+        hardeningEnable = [ "pacret" ];
+      })
+      false;
 
-    shadowStackExplicitEnabled = shadowStackTest (f1exampleWithStdEnv stdenv {
-      hardeningEnable = [ "shadowstack" ];
-    }) false;
+    shadowStackExplicitEnabled = shadowStackTest
+      (f1exampleWithStdEnv stdenv {
+        hardeningEnable = [ "shadowstack" ];
+      })
+      false;
 
     glibcxxassertionsExplicitEnabled = checkGlibcxxassertionsWithStdEnv true stdenv {
       hardeningEnable = [ "glibcxxassertions" ];
@@ -705,13 +713,17 @@ nameDrvAfterAttrName (
           expectFailure = true;
         };
 
-    pacRetExplicitDisabled = pacRetTest (helloWithStdEnv stdenv {
-      hardeningDisable = [ "pacret" ];
-    }) true;
+    pacRetExplicitDisabled = pacRetTest
+      (helloWithStdEnv stdenv {
+        hardeningDisable = [ "pacret" ];
+      })
+      true;
 
-    shadowStackExplicitDisabled = shadowStackTest (f1exampleWithStdEnv stdenv {
-      hardeningDisable = [ "shadowstack" ];
-    }) true;
+    shadowStackExplicitDisabled = shadowStackTest
+      (f1exampleWithStdEnv stdenv {
+        hardeningDisable = [ "shadowstack" ];
+      })
+      true;
 
     glibcxxassertionsExplicitDisabled = checkGlibcxxassertionsWithStdEnv false stdenv {
       hardeningDisable = [ "glibcxxassertions" ];
@@ -1079,7 +1091,7 @@ nameDrvAfterAttrName (
     };
 
   }
-  // (
+    // (
     let
       tb = f2exampleWithStdEnv stdenv {
         hardeningDisable = [ "all" ];
@@ -1126,13 +1138,17 @@ nameDrvAfterAttrName (
         expectFailure = true;
       };
 
-      allExplicitDisabledPacRet = pacRetTest (helloWithStdEnv stdenv {
-        hardeningDisable = [ "all" ];
-      }) true;
+      allExplicitDisabledPacRet = pacRetTest
+        (helloWithStdEnv stdenv {
+          hardeningDisable = [ "all" ];
+        })
+        true;
 
-      allExplicitDisabledShadowStack = shadowStackTest (f1exampleWithStdEnv stdenv {
-        hardeningDisable = [ "all" ];
-      }) true;
+      allExplicitDisabledShadowStack = shadowStackTest
+        (f1exampleWithStdEnv stdenv {
+          hardeningDisable = [ "all" ];
+        })
+        true;
 
       glibcxxassertionsExplicitDisabled = checkGlibcxxassertionsWithStdEnv false stdenv {
         hardeningDisable = [ "all" ];

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  xdotool,
-  fzf,
-  imagemagick,
-  sxiv,
-  getopt,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, xdotool
+, fzf
+, imagemagick
+, sxiv
+, getopt
+,
 }:
 
 stdenv.mkDerivation rec {

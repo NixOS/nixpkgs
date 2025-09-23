@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchFromGitHub,
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+,
 }:
 
 rec {
   makeLanguages =
-    {
-      tessdataRev,
-      tessdata ? null,
-      all ? null,
-      languages ? { },
+    { tessdataRev
+    , tessdata ? null
+    , all ? null
+    , languages ? { }
+    ,
     }:
     let
       tessdataSrc = fetchFromGitHub {

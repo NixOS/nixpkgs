@@ -1,23 +1,23 @@
-{
-  lib,
-  aws-sam-translator,
-  buildPythonPackage,
-  defusedxml,
-  fetchFromGitHub,
-  jschema-to-python,
-  jsonpatch,
-  jsonschema,
-  junit-xml,
-  mock,
-  networkx,
-  pydot,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  regex,
-  sarif-om,
-  setuptools,
-  sympy,
+{ lib
+, aws-sam-translator
+, buildPythonPackage
+, defusedxml
+, fetchFromGitHub
+, jschema-to-python
+, jsonpatch
+, jsonschema
+, junit-xml
+, mock
+, networkx
+, pydot
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, regex
+, sarif-om
+, setuptools
+, sympy
+,
 }:
 
 buildPythonPackage rec {

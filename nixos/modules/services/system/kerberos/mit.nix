@@ -1,9 +1,8 @@
-{
-  pkgs,
-  config,
-  lib,
-  utils,
-  ...
+{ pkgs
+, config
+, lib
+, utils
+, ...
 }:
 
 let
@@ -33,18 +32,19 @@ let
     (mapAttrs (
       name:
       { acl, ... }:
-      lib.concatMapStringsSep "\n" (
-        {
-          principal,
-          access,
-          target,
-          ...
-        }:
-        let
-          access_code = map (a: aclMap.${a}) (lib.toList access);
-        in
-        "${principal} ${lib.concatStrings access_code} ${target}"
-      ) acl
+      lib.concatMapStringsSep "\n"
+        (
+          { principal
+          , access
+          , target
+          , ...
+          }:
+          let
+            access_code = map (a: aclMap.${a}) (lib.toList access);
+          in
+          "${principal} ${lib.concatStrings access_code} ${target}"
+        )
+        acl
     ))
 
     (lib.concatMapAttrs (

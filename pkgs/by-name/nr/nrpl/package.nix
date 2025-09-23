@@ -1,12 +1,12 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  makeWrapper,
-  nim,
-  pcre,
-  tinycc,
+{ lib
+, buildNimPackage
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, nim
+, pcre
+, tinycc
+,
 }:
 
 buildNimPackage {

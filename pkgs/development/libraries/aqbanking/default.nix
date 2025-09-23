@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gmp,
-  gwenhywfar,
-  libtool,
-  libxml2,
-  libxslt,
-  pkg-config,
-  gettext,
-  xmlsec,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, gmp
+, gwenhywfar
+, libtool
+, libxml2
+, libxslt
+, pkg-config
+, gettext
+, xmlsec
+, zlib
+,
 }:
 
 let

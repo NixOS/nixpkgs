@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  chromium,
-  makeWrapper,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, chromium
+, makeWrapper
+,
 }:
 
 buildNpmPackage rec {

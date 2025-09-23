@@ -1,20 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-
-  bzip2,
-  curl,
-  fribidi,
-  gtk3,
-  iconv,
-  libcpuid,
-  libjpeg,
-  libpng,
-  libwebp,
-  libxml2,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, bzip2
+, curl
+, fribidi
+, gtk3
+, iconv
+, libcpuid
+, libjpeg
+, libpng
+, libwebp
+, libxml2
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

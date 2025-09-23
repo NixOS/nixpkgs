@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  gcc-arm-embedded,
-  binutils-arm-embedded,
-  makeWrapper,
-  python3Packages,
-
-  # Default FSIJ IDs
-  vid ? "234b",
-  pid ? "0000",
+{ lib
+, stdenv
+, fetchFromGitLab
+, gcc-arm-embedded
+, binutils-arm-embedded
+, makeWrapper
+, python3Packages
+, # Default FSIJ IDs
+  vid ? "234b"
+, pid ? "0000"
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

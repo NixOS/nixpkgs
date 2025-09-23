@@ -1,80 +1,74 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  ## wandb-core
-  buildGo125Module,
-  gitMinimal,
-  versionCheckHook,
-
-  ## gpu-stats
-  rustPlatform,
-
-  ## wandb
-  buildPythonPackage,
-  replaceVars,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  click,
-  docker-pycreds,
-  gitpython,
-  platformdirs,
-  protobuf,
-  psutil,
-  pydantic,
-  pyyaml,
-  requests,
-  sentry-sdk,
-  setproctitle,
-  setuptools,
-  pythonOlder,
-  eval-type-backport,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  azure-core,
-  azure-containerregistry,
-  azure-identity,
-  azure-storage-blob,
-  bokeh,
-  boto3,
-  cloudpickle,
-  coverage,
-  flask,
-  google-cloud-artifact-registry,
-  google-cloud-compute,
-  google-cloud-storage,
-  hypothesis,
-  jsonschema,
-  kubernetes,
-  kubernetes-asyncio,
-  matplotlib,
-  moviepy,
-  pandas,
-  parameterized,
-  pillow,
-  plotly,
-  pyfakefs,
-  pyte,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-timeout,
-  pytest-xdist,
-  rdkit,
-  responses,
-  scikit-learn,
-  soundfile,
-  tenacity,
-  torch,
-  torchvision,
-  tqdm,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ## wandb-core
+  buildGo125Module
+, gitMinimal
+, versionCheckHook
+, ## gpu-stats
+  rustPlatform
+, ## wandb
+  buildPythonPackage
+, replaceVars
+, # build-system
+  hatchling
+, # dependencies
+  click
+, docker-pycreds
+, gitpython
+, platformdirs
+, protobuf
+, psutil
+, pydantic
+, pyyaml
+, requests
+, sentry-sdk
+, setproctitle
+, setuptools
+, pythonOlder
+, eval-type-backport
+, typing-extensions
+, # tests
+  pytestCheckHook
+, azure-core
+, azure-containerregistry
+, azure-identity
+, azure-storage-blob
+, bokeh
+, boto3
+, cloudpickle
+, coverage
+, flask
+, google-cloud-artifact-registry
+, google-cloud-compute
+, google-cloud-storage
+, hypothesis
+, jsonschema
+, kubernetes
+, kubernetes-asyncio
+, matplotlib
+, moviepy
+, pandas
+, parameterized
+, pillow
+, plotly
+, pyfakefs
+, pyte
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-mock
+, pytest-timeout
+, pytest-xdist
+, rdkit
+, responses
+, scikit-learn
+, soundfile
+, tenacity
+, torch
+, torchvision
+, tqdm
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

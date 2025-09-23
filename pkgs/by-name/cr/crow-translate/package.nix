@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  extra-cmake-modules,
-  leptonica,
-  libsForQt5,
-  qt5,
-  tesseract4,
-  gst_all_1,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, extra-cmake-modules
+, leptonica
+, libsForQt5
+, qt5
+, tesseract4
+, gst_all_1
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

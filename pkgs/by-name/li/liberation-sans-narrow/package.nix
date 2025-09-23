@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fontforge,
-  python3Packages,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fontforge
+, python3Packages
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

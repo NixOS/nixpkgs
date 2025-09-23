@@ -1,28 +1,29 @@
 lib:
 {
   # git tag
-  k3sVersion,
-  # commit hash
-  k3sCommit,
-  k3sRepoSha256 ? lib.fakeHash,
-  k3sVendorHash ? lib.fakeHash,
-  # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
-  k3sRootVersion,
-  k3sRootSha256 ? lib.fakeHash,
-  # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/scripts/download#L29-L32
+  k3sVersion
+, # commit hash
+  k3sCommit
+, k3sRepoSha256 ? lib.fakeHash
+, k3sVendorHash ? lib.fakeHash
+, # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
+  k3sRootVersion
+, k3sRootSha256 ? lib.fakeHash
+, # Based on the traefik charts here: https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/scripts/download#L29-L32
   # see also https://github.com/k3s-io/k3s/blob/d71ab6317e22dd34673faa307a412a37a16767f6/manifests/traefik.yaml#L8
-  chartVersions,
-  # Air gap container images that are released as assets with every k3s release
-  imagesVersions,
-  # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
-  k3sCNIVersion,
-  k3sCNISha256 ? lib.fakeHash,
-  # taken from ./scripts/version.sh VERSION_CONTAINERD
-  containerdVersion,
-  containerdSha256 ? lib.fakeHash,
-  # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
-  criCtlVersion,
-  updateScript ? null,
+  chartVersions
+, # Air gap container images that are released as assets with every k3s release
+  imagesVersions
+, # taken from ./scripts/version.sh VERSION_CNIPLUGINS https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L45
+  k3sCNIVersion
+, k3sCNISha256 ? lib.fakeHash
+, # taken from ./scripts/version.sh VERSION_CONTAINERD
+  containerdVersion
+, containerdSha256 ? lib.fakeHash
+, # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
+  criCtlVersion
+, updateScript ? null
+,
 }@attrs:
 
 # builder.nix contains a "builder" expression that, given k3s version and hash
@@ -31,48 +32,51 @@ lib:
 # currently.
 # It is likely we will have to split out additional builders for additional
 # versions in the future, or customize this one further.
-{
-  bash,
-  bridge-utils,
-  btrfs-progs,
-  buildGoModule,
-  conntrack-tools,
-  coreutils,
-  ethtool,
-  fetchFromGitHub,
-  fetchgit,
-  fetchurl,
-  fetchzip,
-  findutils,
-  gnugrep,
-  gnused,
-  go,
-  iproute2,
-  ipset,
-  iptables,
-  nftables,
-  kmod,
-  lib,
-  libseccomp,
-  makeBinaryWrapper,
-  nixosTests,
-  overrideBundleAttrs ? { }, # An attrSet/function to override the `k3sBundle` derivation.
-  overrideCniPluginsAttrs ? { }, # An attrSet/function to override the `k3sCNIPlugins` derivation.
-  overrideContainerdAttrs ? { }, # An attrSet/function to override the `k3sContainerd` derivation.
-  pkg-config,
-  pkgsBuildBuild,
-  procps,
-  rsync,
-  runCommand,
-  runc,
-  socat,
-  sqlite,
-  stdenv,
-  systemdMinimal,
-  util-linuxMinimal,
-  yq-go,
-  zstd,
-  versionCheckHook,
+{ bash
+, bridge-utils
+, btrfs-progs
+, buildGoModule
+, conntrack-tools
+, coreutils
+, ethtool
+, fetchFromGitHub
+, fetchgit
+, fetchurl
+, fetchzip
+, findutils
+, gnugrep
+, gnused
+, go
+, iproute2
+, ipset
+, iptables
+, nftables
+, kmod
+, lib
+, libseccomp
+, makeBinaryWrapper
+, nixosTests
+, overrideBundleAttrs ? { }
+, # An attrSet/function to override the `k3sBundle` derivation.
+  overrideCniPluginsAttrs ? { }
+, # An attrSet/function to override the `k3sCNIPlugins` derivation.
+  overrideContainerdAttrs ? { }
+, # An attrSet/function to override the `k3sContainerd` derivation.
+  pkg-config
+, pkgsBuildBuild
+, procps
+, rsync
+, runCommand
+, runc
+, socat
+, sqlite
+, stdenv
+, systemdMinimal
+, util-linuxMinimal
+, yq-go
+, zstd
+, versionCheckHook
+,
 }:
 
 # k3s is a kinda weird derivation. One of the main points of k3s is the
@@ -142,8 +146,7 @@ let
     {
       x86_64-linux = fetchurl imagesVersions.airgap-images-amd64-tar-zst;
       aarch64-linux = fetchurl imagesVersions.airgap-images-arm64-tar-zst;
-    }
-    .${stdenv.hostPlatform.system}
+    }.${stdenv.hostPlatform.system}
       or (throw "k3s: no airgap images available for system ${stdenv.hostPlatform.system}, consider using an image archive with an explicit architecture.");
 
   # so, k3s is a complicated thing to package

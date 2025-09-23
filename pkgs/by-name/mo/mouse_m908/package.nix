@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  libusb1,
-  installShellFiles,
-  fetchFromGitHub,
-  pkg-config,
+{ stdenv
+, lib
+, libusb1
+, installShellFiles
+, fetchFromGitHub
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

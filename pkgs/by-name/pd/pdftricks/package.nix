@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  pkg-config,
-  vala,
-  gtk3,
-  wrapGAppsHook3,
-  pantheon,
-  ninja,
-  ghostscript,
-  makeWrapper,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, pkg-config
+, vala
+, gtk3
+, wrapGAppsHook3
+, pantheon
+, ninja
+, ghostscript
+, makeWrapper
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdftricks";

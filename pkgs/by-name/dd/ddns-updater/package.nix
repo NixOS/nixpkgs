@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  nixosTests,
-  nix-update-script,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, nixosTests
+, nix-update-script
+,
 }:
 buildGoModule rec {
   pname = "ddns-updater";

@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  babelfont,
-  kurbopy,
-  fonttools,
-  skia-pathops,
-  tqdm,
-  uharfbuzz,
-  unittestCheckHook,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, babelfont
+, kurbopy
+, fonttools
+, skia-pathops
+, tqdm
+, uharfbuzz
+, unittestCheckHook
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  ruby,
-  bundlerApp,
-  bundlerUpdateScript,
-  defaultGemConfig,
-  nixosTests,
+{ lib
+, ruby
+, bundlerApp
+, bundlerUpdateScript
+, defaultGemConfig
+, nixosTests
+,
 }:
 
 bundlerApp {

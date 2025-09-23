@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  git,
-  obs-studio,
-  pugixml,
-  qtbase,
-  writeScript,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, curl
+, git
+, obs-studio
+, pugixml
+, qtbase
+, writeScript
+,
 }:
 
 let

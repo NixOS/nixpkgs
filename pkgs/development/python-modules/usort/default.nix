@@ -1,19 +1,19 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  libcst,
-  moreorless,
-  pythonOlder,
-  stdlibs,
-  toml,
-  trailrunner,
-  unittestCheckHook,
-  volatile,
+{ lib
+, attrs
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, libcst
+, moreorless
+, pythonOlder
+, stdlibs
+, toml
+, trailrunner
+, unittestCheckHook
+, volatile
+,
 }:
 
 buildPythonPackage rec {

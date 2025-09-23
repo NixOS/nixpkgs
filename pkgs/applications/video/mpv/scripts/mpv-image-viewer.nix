@@ -1,8 +1,8 @@
-{
-  buildLua,
-  fetchFromGitHub,
-  lib,
-  unstableGitUpdater,
+{ buildLua
+, fetchFromGitHub
+, lib
+, unstableGitUpdater
+,
 }:
 let
   mkScript =

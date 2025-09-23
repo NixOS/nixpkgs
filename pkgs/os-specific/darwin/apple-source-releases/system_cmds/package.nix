@@ -1,13 +1,13 @@
-{
-  lib,
-  apple-sdk,
-  apple-sdk_12,
-  mkAppleDerivation,
-  ncurses,
-  openpam,
-  pkg-config,
-  stdenv,
-  stdenvNoCC,
+{ lib
+, apple-sdk
+, apple-sdk_12
+, mkAppleDerivation
+, ncurses
+, openpam
+, pkg-config
+, stdenv
+, stdenvNoCC
+,
 }:
 
 let

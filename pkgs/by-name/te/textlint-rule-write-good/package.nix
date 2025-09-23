@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  fixup-yarn-lock,
-  nodejs,
-  yarn,
-  textlint,
-  textlint-rule-write-good,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, fixup-yarn-lock
+, nodejs
+, yarn
+, textlint
+, textlint-rule-write-good
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  lightdm-gtk-greeter,
-  fetchurl,
-  lightdm,
-  pkg-config,
-  intltool,
-  linkFarm,
-  wrapGAppsHook3,
-  gtk3,
-  xfce4-dev-tools,
-  at-spi2-core,
-  librsvg,
-  hicolor-icon-theme,
+{ stdenv
+, lib
+, lightdm-gtk-greeter
+, fetchurl
+, lightdm
+, pkg-config
+, intltool
+, linkFarm
+, wrapGAppsHook3
+, gtk3
+, xfce4-dev-tools
+, at-spi2-core
+, librsvg
+, hicolor-icon-theme
+,
 }:
 
 stdenv.mkDerivation rec {

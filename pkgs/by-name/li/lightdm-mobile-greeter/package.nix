@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitea,
-  gtk3,
-  libhandy_0,
-  lightdm,
-  lightdm-mobile-greeter,
-  linkFarm,
-  pkg-config,
-  rustPlatform,
+{ lib
+, fetchFromGitea
+, gtk3
+, libhandy_0
+, lightdm
+, lightdm-mobile-greeter
+, linkFarm
+, pkg-config
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage {

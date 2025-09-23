@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  bison,
-  flex,
-  libxml2,
-  openjdk,
-  ncbi-vdb,
-  mbedtls,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, python3
+, bison
+, flex
+, libxml2
+, openjdk
+, ncbi-vdb
+, mbedtls
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

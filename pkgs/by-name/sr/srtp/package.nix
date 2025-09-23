@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libpcap,
-  meson,
-  ninja,
-  openssl,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpcap
+, meson
+, ninja
+, openssl
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

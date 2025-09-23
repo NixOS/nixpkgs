@@ -1,23 +1,23 @@
-{
-  lib,
-  blas,
-  blis,
-  buildPythonPackage,
-  catalogue,
-  confection,
-  cymem,
-  cython,
-  fetchPypi,
-  hypothesis,
-  mock,
-  murmurhash,
-  numpy,
-  preshed,
-  pydantic,
-  pytestCheckHook,
-  setuptools,
-  srsly,
-  wasabi,
+{ lib
+, blas
+, blis
+, buildPythonPackage
+, catalogue
+, confection
+, cymem
+, cython
+, fetchPypi
+, hypothesis
+, mock
+, murmurhash
+, numpy
+, preshed
+, pydantic
+, pytestCheckHook
+, setuptools
+, srsly
+, wasabi
+,
 }:
 
 buildPythonPackage rec {

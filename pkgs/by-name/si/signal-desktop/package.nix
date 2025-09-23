@@ -1,24 +1,22 @@
-{
-  stdenv,
-  lib,
-  nodejs_22,
-  pnpm_10,
-  electron_37,
-  python3,
-  makeWrapper,
-  callPackage,
-  fetchFromGitHub,
-  jq,
-  makeDesktopItem,
-  copyDesktopItems,
-  replaceVars,
-  noto-fonts-color-emoji,
-  nixosTests,
-
-  # command line arguments which are always set e.g "--password-store=kwallet6"
-  commandLineArgs ? "",
-
-  withAppleEmojis ? false,
+{ stdenv
+, lib
+, nodejs_22
+, pnpm_10
+, electron_37
+, python3
+, makeWrapper
+, callPackage
+, fetchFromGitHub
+, jq
+, makeDesktopItem
+, copyDesktopItems
+, replaceVars
+, noto-fonts-color-emoji
+, nixosTests
+, # command line arguments which are always set e.g "--password-store=kwallet6"
+  commandLineArgs ? ""
+, withAppleEmojis ? false
+,
 }:
 let
   nodejs = nodejs_22;

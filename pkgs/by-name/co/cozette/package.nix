@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  writeText,
-  bdf2psf,
-  codepoints ? (import ./default-codepoints.nix),
+{ lib
+, stdenvNoCC
+, fetchzip
+, writeText
+, bdf2psf
+, codepoints ? (import ./default-codepoints.nix)
+,
 }:
 
 let

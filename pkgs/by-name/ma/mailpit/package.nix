@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  nodejs,
-  python3,
-  libtool,
-  cctools,
-  npmHooks,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  testers,
-  mailpit,
-  nixosTests,
+{ lib
+, stdenv
+, buildGoModule
+, nodejs
+, python3
+, libtool
+, cctools
+, npmHooks
+, fetchFromGitHub
+, fetchNpmDeps
+, testers
+, mailpit
+, nixosTests
+,
 }:
 
 let

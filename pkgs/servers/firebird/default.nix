@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchDebianPatch,
-  libedit,
-  autoreconfHook,
-  zlib,
-  unzip,
-  libtommath,
-  libtomcrypt,
-  icu73,
-  superServer ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchDebianPatch
+, libedit
+, autoreconfHook
+, zlib
+, unzip
+, libtommath
+, libtomcrypt
+, icu73
+, superServer ? false
+,
 }:
 
 let

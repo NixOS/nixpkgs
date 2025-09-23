@@ -1,7 +1,7 @@
-{
-  lib,
-  python3,
-  fetchPypi,
+{ lib
+, python3
+, fetchPypi
+,
 }:
 let
   localPython = python3.override {

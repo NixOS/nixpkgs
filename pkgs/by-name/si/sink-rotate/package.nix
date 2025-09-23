@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pipewire,
-  wireplumber,
-  makeWrapper,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pipewire
+, wireplumber
+, makeWrapper
+,
 }:
 let
   version = "2.3.0";

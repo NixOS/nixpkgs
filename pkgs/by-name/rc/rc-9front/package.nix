@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFrom9Front,
-  unstableGitUpdater,
-  byacc,
-  installShellFiles,
-  coreutils,
-  # for tests only
-  rc-9front,
-  runCommand,
-  nawk,
+{ lib
+, stdenv
+, fetchFrom9Front
+, unstableGitUpdater
+, byacc
+, installShellFiles
+, coreutils
+, # for tests only
+  rc-9front
+, runCommand
+, nawk
+,
 }:
 
 stdenv.mkDerivation {

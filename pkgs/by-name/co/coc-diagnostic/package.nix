@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
-  npmHooks,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
+, npmHooks
+, nix-update-script
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "coc-diagnostic";

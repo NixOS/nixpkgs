@@ -1,10 +1,10 @@
-{
-  lib,
-  crystal,
-  fetchFromGitHub,
-  fetchurl,
-  jq,
-  bash,
+{ lib
+, crystal
+, fetchFromGitHub
+, fetchurl
+, jq
+, bash
+,
 }:
 let
   icon = fetchurl {

@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  options,
-  ...
+{ lib
+, config
+, options
+, ...
 }:
 {
   imports = [ (import ./common.nix "bank") ];
@@ -83,9 +82,11 @@
   };
 
   config = {
-    services.libeufin.bank.settings.libeufin-bank.CURRENCY = lib.mkIf (
-      config.services.taler.enable && (config.services.taler.settings.taler ? CURRENCY)
-    ) config.services.taler.settings.taler.CURRENCY;
+    services.libeufin.bank.settings.libeufin-bank.CURRENCY = lib.mkIf
+      (
+        config.services.taler.enable && (config.services.taler.settings.taler ? CURRENCY)
+      )
+      config.services.taler.settings.taler.CURRENCY;
 
     services.libeufin.bank.settings.libeufin-bankdb-postgres.CONFIG =
       lib.mkIf config.services.libeufin.bank.createLocalDatabase "postgresql:///libeufin-bank";

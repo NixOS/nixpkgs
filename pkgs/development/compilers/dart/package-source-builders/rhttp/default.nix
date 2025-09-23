@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  stdenv,
-  replaceVars,
+{ lib
+, rustPlatform
+, stdenv
+, replaceVars
+,
 }:
 
 { version, src, ... }:
@@ -35,8 +35,7 @@ let
         _0_10_0 = "sha256-2SpAj53XvZXKRpMzFXJGcx7E2TlMUD+ooHkFwg/9fe4=";
         _0_11_0 = "sha256-sngh5k9GoCZhnIFTpnAVHZjxTcOv+Ui6pJ2cFyriL84=";
         _0_12_0 = "sha256-W2DcBy1n73nR2oZIQcFt6A+NElQWtfEtKB1YIweQUVo=";
-      }
-      .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
+      }.${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
         Unsupported version of pub 'rhttp': '${version}'
         Please add cargoHash here. If the cargoHash
         is the same with existing versions, add an alias here.

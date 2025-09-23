@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  distro,
-  fetchFromGitHub,
-  gevent,
-  importlib-metadata,
-  jinja2,
-  packaging,
-  paramiko,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  pywinrm,
-  setuptools,
-  typeguard,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, click
+, distro
+, fetchFromGitHub
+, gevent
+, importlib-metadata
+, jinja2
+, packaging
+, paramiko
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pywinrm
+, setuptools
+, typeguard
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

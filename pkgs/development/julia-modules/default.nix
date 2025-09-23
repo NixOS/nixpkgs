@@ -1,35 +1,32 @@
-{
-  callPackage,
-  fetchgit,
-  fontconfig,
-  git,
-  lib,
-  makeWrapper,
-  python3,
-  runCommand,
-  writeTextFile,
-
-  # Artifacts dependencies
-  fetchurl,
-  gcc,
-  glibc,
-  pkgs,
-  stdenv,
-
-  julia,
-
-  # Special registry which is equal to JuliaRegistries/General, but every Versions.toml
+{ callPackage
+, fetchgit
+, fontconfig
+, git
+, lib
+, makeWrapper
+, python3
+, runCommand
+, writeTextFile
+, # Artifacts dependencies
+  fetchurl
+, gcc
+, glibc
+, pkgs
+, stdenv
+, julia
+, # Special registry which is equal to JuliaRegistries/General, but every Versions.toml
   # entry is augmented with a Nix sha256 hash
-  augmentedRegistry ? callPackage ./registry.nix { },
-
-  # Other overridable arguments
-  extraLibs ? [ ],
-  juliaCpuTarget ? null,
-  makeTransitiveDependenciesImportable ? false, # Used to support symbol indexing
-  makeWrapperArgs ? "",
-  packageOverrides ? { },
-  precompile ? true,
-  setDefaultDepot ? true,
+  augmentedRegistry ? callPackage ./registry.nix { }
+, # Other overridable arguments
+  extraLibs ? [ ]
+, juliaCpuTarget ? null
+, makeTransitiveDependenciesImportable ? false
+, # Used to support symbol indexing
+  makeWrapperArgs ? ""
+, packageOverrides ? { }
+, precompile ? true
+, setDefaultDepot ? true
+,
 }:
 
 packageNames:
@@ -280,29 +277,29 @@ let
 in
 
 runCommand "julia-${julia.version}-env"
-  {
-    nativeBuildInputs = [ makeWrapper ];
+{
+  nativeBuildInputs = [ makeWrapper ];
 
-    passthru = {
-      inherit julia;
-      inherit juliaWrapped;
-      inherit (julia) pname version meta;
+  passthru = {
+    inherit julia;
+    inherit juliaWrapped;
+    inherit (julia) pname version meta;
 
-      # Expose the steps we used along the way in case the user wants to use them, for example to build
-      # expressions and build them separately to avoid IFD.
-      inherit dependencies;
-      inherit closureYaml;
-      inherit dependencyUuidToInfoYaml;
-      inherit dependencyUuidToRepoYaml;
-      inherit minimalRegistry;
-      inherit artifactsNix;
-      inherit overridesJson;
-      inherit overridesToml;
-      inherit project;
-      inherit projectAndDepot;
-      inherit stdlibInfos;
-    };
-  }
+    # Expose the steps we used along the way in case the user wants to use them, for example to build
+    # expressions and build them separately to avoid IFD.
+    inherit dependencies;
+    inherit closureYaml;
+    inherit dependencyUuidToInfoYaml;
+    inherit dependencyUuidToRepoYaml;
+    inherit minimalRegistry;
+    inherit artifactsNix;
+    inherit overridesJson;
+    inherit overridesToml;
+    inherit project;
+    inherit projectAndDepot;
+    inherit stdlibInfos;
+  };
+}
   (
     ''
       mkdir -p $out/bin
@@ -311,7 +308,7 @@ runCommand "julia-${julia.version}-env"
         --set-default JULIA_PROJECT "${projectAndDepot}/project" \
         --set-default JULIA_LOAD_PATH '@:${projectAndDepot}/project/Project.toml:@v#.#:@stdlib'
     ''
-    + lib.optionalString setDefaultDepot ''
+      + lib.optionalString setDefaultDepot ''
       sed -i '2 i\JULIA_DEPOT_PATH=''${JULIA_DEPOT_PATH-"$HOME/.julia"}' $out/bin/julia
     ''
   )

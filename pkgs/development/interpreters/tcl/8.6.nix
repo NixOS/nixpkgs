@@ -2,7 +2,7 @@
 
 callPackage ./generic.nix (
   args
-  // rec {
+    // rec {
     release = "8.6";
     version = "${release}.16";
 

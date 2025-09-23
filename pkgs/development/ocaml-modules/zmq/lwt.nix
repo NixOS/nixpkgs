@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  zmq,
-  lwt,
+{ buildDunePackage
+, zmq
+, lwt
+,
 }:
 
 buildDunePackage {

@@ -1,12 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-
-  pipewire,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pipewire
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

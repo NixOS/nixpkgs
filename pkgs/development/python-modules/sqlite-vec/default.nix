@@ -1,21 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchpatch,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  sqlite-vec-c, # alias for pkgs.sqlite-vec
+{ lib
+, buildPythonPackage
+, fetchpatch
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  sqlite-vec-c
+, # alias for pkgs.sqlite-vec
 
   # optional dependencies
-  numpy,
-
-  # check inputs
-  openai,
-  pytestCheckHook,
+  numpy
+, # check inputs
+  openai
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromSourcehut,
-  rustPlatform,
-  sqlite,
+{ lib
+, fetchFromSourcehut
+, rustPlatform
+, sqlite
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,27 +1,27 @@
-{
-  lib,
-  mkDerivation,
-  fetchgit,
-  gnuradio,
-  cmake,
-  pkg-config,
-  logLib,
-  mpir,
-  gmp,
-  boost,
-  libGL,
-  opencl-headers,
-  ocl-icd,
-  freetype,
-  fftwFloat,
-  qt5,
-  python,
-  enableGLFW ? true,
-  glfw3,
-  enablePNG ? true,
-  libpng,
-  gnuradioOlder,
-  gnuradioAtLeast,
+{ lib
+, mkDerivation
+, fetchgit
+, gnuradio
+, cmake
+, pkg-config
+, logLib
+, mpir
+, gmp
+, boost
+, libGL
+, opencl-headers
+, ocl-icd
+, freetype
+, fftwFloat
+, qt5
+, python
+, enableGLFW ? true
+, glfw3
+, enablePNG ? true
+, libpng
+, gnuradioOlder
+, gnuradioAtLeast
+,
 }:
 
 mkDerivation {

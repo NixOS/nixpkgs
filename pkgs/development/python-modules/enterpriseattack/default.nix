@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  requests,
-  setuptools,
-  setuptools-scm,
-  ujson,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, setuptools
+, setuptools-scm
+, ujson
+,
 }:
 
 buildPythonPackage rec {

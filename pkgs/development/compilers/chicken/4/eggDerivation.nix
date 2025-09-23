@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  chicken,
-  makeWrapper,
+{ lib
+, stdenv
+, chicken
+, makeWrapper
+,
 }:
-{
-  name,
-  src,
-  buildInputs ? [ ],
-  chickenInstallFlags ? [ ],
-  cscOptions ? [ ],
-  ...
+{ name
+, src
+, buildInputs ? [ ]
+, chickenInstallFlags ? [ ]
+, cscOptions ? [ ]
+, ...
 }@args:
 
 let
@@ -58,5 +57,5 @@ stdenv.mkDerivation (
     "buildInputs"
     "meta"
   ])
-  // override
+    // override
 )

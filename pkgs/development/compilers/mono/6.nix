@@ -1,7 +1,7 @@
-{
-  callPackage,
-  fetchurl,
-  fetchpatch,
+{ callPackage
+, fetchurl
+, fetchpatch
+,
 }:
 
 callPackage ./generic.nix rec {

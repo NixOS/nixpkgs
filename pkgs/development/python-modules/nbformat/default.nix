@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonAtLeast,
-  pythonOlder,
-  fetchPypi,
-  hatchling,
-  hatch-nodejs-version,
-  fastjsonschema,
-  jsonschema,
-  jupyter-core,
-  traitlets,
-  pep440,
-  pytestCheckHook,
-  testpath,
+{ lib
+, buildPythonPackage
+, pythonAtLeast
+, pythonOlder
+, fetchPypi
+, hatchling
+, hatch-nodejs-version
+, fastjsonschema
+, jsonschema
+, jupyter-core
+, traitlets
+, pep440
+, pytestCheckHook
+, testpath
+,
 }:
 
 buildPythonPackage rec {

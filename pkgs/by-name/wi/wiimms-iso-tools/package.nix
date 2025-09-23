@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  zlib,
-  ncurses,
-  fuse,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, zlib
+, ncurses
+, fuse
+,
 }:
 
 stdenv.mkDerivation rec {

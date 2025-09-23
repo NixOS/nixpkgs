@@ -1,8 +1,8 @@
 let
   mkTest =
-    {
-      systemWide ? false,
-      fullVersion ? false,
+    { systemWide ? false
+    , fullVersion ? false
+    ,
     }:
     import ./make-test-python.nix (
       { pkgs, lib, ... }:

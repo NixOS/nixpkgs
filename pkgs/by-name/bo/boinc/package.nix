@@ -1,29 +1,29 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  autoconf,
-  automake,
-  pkg-config,
-  m4,
-  curl,
-  libGLU,
-  libGL,
-  libXmu,
-  libXi,
-  libglut,
-  libjpeg,
-  libtool,
-  wxGTK32,
-  xcbutil,
-  sqlite,
-  gtk3,
-  patchelf,
-  libXScrnSaver,
-  libnotify,
-  libX11,
-  libxcb,
-  headless ? false,
+{ fetchFromGitHub
+, lib
+, stdenv
+, autoconf
+, automake
+, pkg-config
+, m4
+, curl
+, libGLU
+, libGL
+, libXmu
+, libXi
+, libglut
+, libjpeg
+, libtool
+, wxGTK32
+, xcbutil
+, sqlite
+, gtk3
+, patchelf
+, libXScrnSaver
+, libnotify
+, libX11
+, libxcb
+, headless ? false
+,
 }:
 
 stdenv.mkDerivation rec {

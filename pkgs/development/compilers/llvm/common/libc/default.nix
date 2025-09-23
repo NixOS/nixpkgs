@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  llvm_meta,
-  src ? null,
-  monorepoSrc ? null,
-  version,
-  release_version,
-  runCommand,
-  python3,
-  python3Packages,
-  patches ? [ ],
-  cmake,
-  ninja,
-  isFullBuild ? true,
-  linuxHeaders,
+{ lib
+, stdenv
+, llvm_meta
+, src ? null
+, monorepoSrc ? null
+, version
+, release_version
+, runCommand
+, python3
+, python3Packages
+, patches ? [ ]
+, cmake
+, ninja
+, isFullBuild ? true
+, linuxHeaders
+,
 }:
 let
   pname = "libc";

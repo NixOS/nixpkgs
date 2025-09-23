@@ -1,27 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # Build system
-  setuptools,
-
-  # Dependencies
-  pyyaml,
-
-  # Test dependencies
-  pytestCheckHook,
-
-  sanic-testing,
-  attrs,
-  coverage,
-  msgspec,
-  pydantic,
-  pytest,
-  pytest-cov-stub,
-  pytest-asyncio,
-  tox,
-  jinja2,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # Build system
+  setuptools
+, # Dependencies
+  pyyaml
+, # Test dependencies
+  pytestCheckHook
+, sanic-testing
+, attrs
+, coverage
+, msgspec
+, pydantic
+, pytest
+, pytest-cov-stub
+, pytest-asyncio
+, tox
+, jinja2
+,
 }:
 
 buildPythonPackage rec {

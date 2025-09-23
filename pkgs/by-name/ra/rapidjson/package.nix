@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  doxygen,
-  graphviz,
-  gtest,
-  unstableGitUpdater,
-  valgrind,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, doxygen
+, graphviz
+, gtest
+, unstableGitUpdater
+, valgrind
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

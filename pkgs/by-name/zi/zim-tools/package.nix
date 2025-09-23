@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  docopt_cpp,
-  file,
-  gumbo,
-  mustache-hpp,
-  libzim,
-  icu,
-  zlib,
-  gtest,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, docopt_cpp
+, file
+, gumbo
+, mustache-hpp
+, libzim
+, icu
+, zlib
+, gtest
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

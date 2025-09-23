@@ -1,14 +1,14 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  cmake,
-  gmp,
-  pkg-config,
-  sail,
-  ninja,
-  zlib,
-  z3,
+{ stdenv
+, fetchFromGitHub
+, lib
+, cmake
+, gmp
+, pkg-config
+, sail
+, ninja
+, zlib
+, z3
+,
 }:
 
 stdenv.mkDerivation rec {

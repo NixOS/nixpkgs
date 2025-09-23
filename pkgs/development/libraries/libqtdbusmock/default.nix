@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  testers,
-  cmake,
-  cmake-extras,
-  dbus,
-  dbus-test-runner,
-  gtest,
-  libqtdbustest,
-  networkmanager,
-  pkg-config,
-  procps,
-  python3,
-  qtbase,
+{ stdenv
+, lib
+, fetchFromGitLab
+, testers
+, cmake
+, cmake-extras
+, dbus
+, dbus-test-runner
+, gtest
+, libqtdbustest
+, networkmanager
+, pkg-config
+, procps
+, python3
+, qtbase
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

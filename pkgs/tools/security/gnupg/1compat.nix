@@ -1,8 +1,8 @@
-{
-  stdenv,
-  gnupg,
-  coreutils,
-  writeScript,
+{ stdenv
+, gnupg
+, coreutils
+, writeScript
+,
 }:
 
 stdenv.mkDerivation {

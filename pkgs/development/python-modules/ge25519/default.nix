@@ -1,15 +1,15 @@
-{
-  lib,
-  bitlist,
-  buildPythonPackage,
-  fe25519,
-  fetchPypi,
-  fountains,
-  parts,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, bitlist
+, buildPythonPackage
+, fe25519
+, fetchPypi
+, fountains
+, parts
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

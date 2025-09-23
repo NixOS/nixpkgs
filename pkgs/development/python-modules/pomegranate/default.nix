@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pytestCheckHook,
-  setuptools,
-  apricot-select,
-  networkx,
-  numpy,
-  scikit-learn,
-  scipy,
-  torch,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pytestCheckHook
+, setuptools
+, apricot-select
+, networkx
+, numpy
+, scikit-learn
+, scipy
+, torch
+,
 }:
 
 buildPythonPackage rec {

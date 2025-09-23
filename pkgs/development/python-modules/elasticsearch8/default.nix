@@ -1,15 +1,15 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  elastic-transport,
-  fetchPypi,
-  hatchling,
-  orjson,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  typing-extensions,
+{ lib
+, aiohttp
+, buildPythonPackage
+, elastic-transport
+, fetchPypi
+, hatchling
+, orjson
+, python-dateutil
+, pythonOlder
+, requests
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

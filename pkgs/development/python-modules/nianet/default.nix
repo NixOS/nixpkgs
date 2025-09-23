@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  niapy,
-  numpy,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-learn,
-  toml-adapt,
-  tomli,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, niapy
+, numpy
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, scikit-learn
+, toml-adapt
+, tomli
+, torch
+,
 }:
 
 buildPythonPackage rec {

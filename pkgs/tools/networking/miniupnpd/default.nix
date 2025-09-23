@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  iptables-legacy,
-  libuuid,
-  openssl,
-  pkg-config,
-  which,
-  iproute2,
-  gnused,
-  coreutils,
-  gnugrep,
-  gawk,
-  makeWrapper,
-  nixosTests,
-  firewall ? "iptables",
-  nftables,
-  libmnl,
-  libnftnl,
+{ stdenv
+, lib
+, fetchurl
+, iptables-legacy
+, libuuid
+, openssl
+, pkg-config
+, which
+, iproute2
+, gnused
+, coreutils
+, gnugrep
+, gawk
+, makeWrapper
+, nixosTests
+, firewall ? "iptables"
+, nftables
+, libmnl
+, libnftnl
+,
 }:
 
 let
@@ -42,8 +42,7 @@ let
           which
           nftables
         ];
-      }
-      .${firewall};
+      }.${firewall};
 in
 stdenv.mkDerivation rec {
   pname = "miniupnpd";
@@ -103,8 +102,7 @@ stdenv.mkDerivation rec {
           wrapProgram $script --suffix PATH : '${scriptBinEnv}:$PATH'
         done
       '';
-    }
-    .${firewall};
+    }.${firewall};
 
   passthru.tests = {
     bittorrent-integration = nixosTests.bittorrent;

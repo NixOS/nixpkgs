@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  nix-update-script,
-  pkg-config,
-  openssl,
-  rdkafka,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, nix-update-script
+, pkg-config
+, openssl
+, rdkafka
+,
 }:
 
 let

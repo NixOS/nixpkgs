@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  cmake,
-  scipopt-scip,
-  zlib,
-  mpi,
+{ lib
+, stdenv
+, fetchzip
+, cmake
+, scipopt-scip
+, zlib
+, mpi
+,
 }:
 
 stdenv.mkDerivation rec {

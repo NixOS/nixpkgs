@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  glib,
-  jre,
-  unzip,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, glib
+, jre
+, unzip
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, wrapGAppsHook3
+,
 }:
 
 let

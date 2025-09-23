@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  rocmUpdateScript,
-  cmake,
-  pkg-config,
-  libdrm,
-  wrapPython,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, rocmUpdateScript
+, cmake
+, pkg-config
+, libdrm
+, wrapPython
+, autoPatchelfHook
+,
 }:
 
 let

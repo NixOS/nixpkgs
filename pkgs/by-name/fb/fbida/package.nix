@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libGL,
-  libjpeg,
-  libexif,
-  giflib,
-  libtiff,
-  libpng,
-  libwebp,
-  libdrm,
-  pkg-config,
-  freetype,
-  fontconfig,
-  which,
-  imagemagick,
-  curl,
-  sane-backends,
-  libXpm,
-  libepoxy,
-  pixman,
-  poppler,
-  libgbm,
-  lirc,
+{ lib
+, stdenv
+, fetchurl
+, libGL
+, libjpeg
+, libexif
+, giflib
+, libtiff
+, libpng
+, libwebp
+, libdrm
+, pkg-config
+, freetype
+, fontconfig
+, which
+, imagemagick
+, curl
+, sane-backends
+, libXpm
+, libepoxy
+, pixman
+, poppler
+, libgbm
+, lirc
+,
 }:
 
 stdenv.mkDerivation rec {

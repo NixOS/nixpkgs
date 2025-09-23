@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mono,
+{ lib
+, stdenv
+, fetchFromGitHub
+, mono
+,
 }:
 stdenv.mkDerivation {
   pname = "convchain";

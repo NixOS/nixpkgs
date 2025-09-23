@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchFromGitHub,
-  pkg-config,
-  fdk_aac,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, pkg-config
+, fdk_aac
+,
 }:
 
 stdenv.mkDerivation rec {

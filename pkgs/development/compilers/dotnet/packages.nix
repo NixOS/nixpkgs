@@ -1,14 +1,14 @@
-{
-  stdenvNoCC,
-  lib,
-  callPackage,
-  vmr,
-  xmlstarlet,
-  strip-nondeterminism,
-  zip,
-  nugetPackageHook,
-  baseName ? "dotnet",
-  fallbackTargetPackages ? { },
+{ stdenvNoCC
+, lib
+, callPackage
+, vmr
+, xmlstarlet
+, strip-nondeterminism
+, zip
+, nugetPackageHook
+, baseName ? "dotnet"
+, fallbackTargetPackages ? { }
+,
 }:
 
 let
@@ -159,7 +159,7 @@ let
     '';
 
     ${
-      if stdenvNoCC.hostPlatform.isDarwin && lib.versionAtLeast version "10" then "postInstall" else null
+    if stdenvNoCC.hostPlatform.isDarwin && lib.versionAtLeast version "10" then "postInstall" else null
     } =
       ''
         mkdir -p "$out"/nix-support

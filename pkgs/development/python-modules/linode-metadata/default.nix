@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  httpx,
-  lib,
-  linode-cli,
-  pytest,
-  pytest-asyncio,
-  setuptools,
+{ buildPythonPackage
+, fetchPypi
+, httpx
+, lib
+, linode-cli
+, pytest
+, pytest-asyncio
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

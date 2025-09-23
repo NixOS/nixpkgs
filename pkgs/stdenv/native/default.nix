@@ -1,10 +1,10 @@
-{
-  lib,
-  localSystem,
-  crossSystem,
-  config,
-  overlays,
-  crossOverlays ? [ ],
+{ lib
+, localSystem
+, crossSystem
+, config
+, overlays
+, crossOverlays ? [ ]
+,
 }:
 
 assert crossSystem == localSystem;
@@ -97,12 +97,12 @@ let
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
   makeStdenv =
-    {
-      cc,
-      fetchurl,
-      extraPath ? [ ],
-      overrides ? (self: super: { }),
-      extraNativeBuildInputs ? [ ],
+    { cc
+    , fetchurl
+    , extraPath ? [ ]
+    , overrides ? (self: super: { })
+    , extraNativeBuildInputs ? [ ]
+    ,
     }:
 
     import ../generic {
@@ -154,7 +154,7 @@ in
 [
 
   (
-    { }:
+    {}:
     rec {
       __raw = true;
 
@@ -171,8 +171,7 @@ in
               # switch
               i686-solaris = "/usr/gnu";
               x86_64-solaris = "/opt/local/gcc47";
-            }
-            .${system} or "/usr";
+            }.${system} or "/usr";
         in
         import ../../build-support/cc-wrapper {
           name = "cc-native";
@@ -201,10 +200,11 @@ in
   (prevStage: {
     inherit config overlays;
     stdenv =
-      makeStdenv {
-        inherit (prevStage) cc fetchurl;
-        overrides = self: super: { inherit (prevStage) fetchurl; };
-      }
+      makeStdenv
+        {
+          inherit (prevStage) cc fetchurl;
+          overrides = self: super: { inherit (prevStage) fetchurl; };
+        }
       // {
         inherit (prevStage) fetchurl;
       };

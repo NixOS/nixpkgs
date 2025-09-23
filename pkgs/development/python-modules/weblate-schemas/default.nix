@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  fqdn,
-  jsonschema,
-  rfc3987,
-  strict-rfc3339,
-  fedora-messaging,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, fqdn
+, jsonschema
+, rfc3987
+, strict-rfc3339
+, fedora-messaging
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

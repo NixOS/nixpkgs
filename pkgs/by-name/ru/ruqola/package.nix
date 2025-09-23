@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  cmake,
-  extra-cmake-modules,
-  kdePackages,
-  qt6,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitLab
+, cmake
+, extra-cmake-modules
+, kdePackages
+, qt6
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

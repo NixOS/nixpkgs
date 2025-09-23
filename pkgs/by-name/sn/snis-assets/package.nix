@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "snis_assets";

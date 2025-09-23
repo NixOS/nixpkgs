@@ -1,28 +1,28 @@
-{
-  lib,
-  aiomysql,
-  aiopg,
-  aiosqlite,
-  asyncpg,
-  buildPythonPackage,
-  cryptography,
-  databases,
-  fastapi,
-  fetchFromGitHub,
-  httpx,
-  importlib-metadata,
-  mysqlclient,
-  nest-asyncio,
-  orjson,
-  poetry-core,
-  psycopg2,
-  pydantic,
-  pymysql,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  sqlalchemy,
-  typing-extensions,
+{ lib
+, aiomysql
+, aiopg
+, aiosqlite
+, asyncpg
+, buildPythonPackage
+, cryptography
+, databases
+, fastapi
+, fetchFromGitHub
+, httpx
+, importlib-metadata
+, mysqlclient
+, nest-asyncio
+, orjson
+, poetry-core
+, psycopg2
+, pydantic
+, pymysql
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, sqlalchemy
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

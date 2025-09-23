@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  base64,
-  bos,
-  core,
-  core_kernel,
-  core_unix ? null,
-  lwt_react,
-  ocamlgraph,
-  ppx_sexp_conv,
-  rresult,
-  sexplib,
-  tyxml,
-  ppxlib,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, base64
+, bos
+, core
+, core_kernel
+, core_unix ? null
+, lwt_react
+, ocamlgraph
+, ppx_sexp_conv
+, rresult
+, sexplib
+, tyxml
+, ppxlib
+,
 }:
 
 buildDunePackage rec {

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  cjson,
-  cmocka,
-  mbedtls,
+{ stdenv
+, lib
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, cjson
+, cmocka
+, mbedtls
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,7 +1,7 @@
-{
-  fetchFromGitHub,
-  buildPerlPackage,
-  lib,
+{ fetchFromGitHub
+, buildPerlPackage
+, lib
+,
 }:
 
 buildPerlPackage {

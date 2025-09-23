@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  ohex,
-  ounit2,
-  dune-configurator,
-  eqaf,
-  withFreestanding ? false,
-  ocaml-freestanding,
+{ lib
+, fetchurl
+, buildDunePackage
+, ohex
+, ounit2
+, dune-configurator
+, eqaf
+, withFreestanding ? false
+, ocaml-freestanding
+,
 }:
 
 buildDunePackage rec {

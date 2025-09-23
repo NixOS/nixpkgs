@@ -1,29 +1,29 @@
-{
-  stdenv,
-  kernel,
-  fetchurl,
-  lib,
-  pam,
-  libxslt,
-  libXext,
-  libXcursor,
-  libXmu,
-  glib,
-  libXrandr,
-  dbus,
-  xz,
-  pkg-config,
-  which,
-  xorg,
-  yasm,
-  patchelf,
-  makeself,
-  linuxHeaders,
-  openssl,
-  virtualboxVersion,
-  virtualboxSubVersion,
-  virtualboxSha256,
-  platform,
+{ stdenv
+, kernel
+, fetchurl
+, lib
+, pam
+, libxslt
+, libXext
+, libXcursor
+, libXmu
+, glib
+, libXrandr
+, dbus
+, xz
+, pkg-config
+, which
+, xorg
+, yasm
+, patchelf
+, makeself
+, linuxHeaders
+, openssl
+, virtualboxVersion
+, virtualboxSubVersion
+, virtualboxSha256
+, platform
+,
 }:
 
 let

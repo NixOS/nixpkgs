@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  numpy,
-  tensorflow,
-  pythonAtLeast,
-  distutils,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  numpy
+, tensorflow
+, pythonAtLeast
+, distutils
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

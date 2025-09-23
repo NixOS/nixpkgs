@@ -1,25 +1,23 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchzip,
-  openssl,
-  pkg-config,
-  installShellFiles,
-  bash,
-  # rbw-fzf
-  withFzf ? false,
-  fzf,
-  perl,
-
-  # rbw-rofi
-  withRofi ? false,
-  rofi,
-  xclip,
-
-  # pass-import
-  withPass ? false,
-  pass,
+{ lib
+, stdenv
+, rustPlatform
+, fetchzip
+, openssl
+, pkg-config
+, installShellFiles
+, bash
+, # rbw-fzf
+  withFzf ? false
+, fzf
+, perl
+, # rbw-rofi
+  withRofi ? false
+, rofi
+, xclip
+, # pass-import
+  withPass ? false
+, pass
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools-scm,
-  crc32c,
-  lz4,
-  python-snappy,
-  zstandard,
-  botocore,
-  pytest-mock,
-  pytestCheckHook,
-  xxhash,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools-scm
+, crc32c
+, lz4
+, python-snappy
+, zstandard
+, botocore
+, pytest-mock
+, pytestCheckHook
+, xxhash
+,
 }:
 
 buildPythonPackage rec {

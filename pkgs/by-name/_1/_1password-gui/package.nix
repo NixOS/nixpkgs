@@ -1,11 +1,11 @@
-{
-  stdenv,
-  callPackage,
-  channel ? "stable",
-  fetchurl,
-  lib,
-  # This is only relevant for Linux, so we need to pass it through
-  polkitPolicyOwners ? [ ],
+{ stdenv
+, callPackage
+, channel ? "stable"
+, fetchurl
+, lib
+, # This is only relevant for Linux, so we need to pass it through
+  polkitPolicyOwners ? [ ]
+,
 }:
 
 let
@@ -48,7 +48,8 @@ let
 
 in
 if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix {
+  callPackage ./darwin.nix
+  {
     inherit
       pname
       version

@@ -1,11 +1,11 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  procps,
-  stdenv,
-  versionCheckHook,
-  addBinToPathHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, procps
+, stdenv
+, versionCheckHook
+, addBinToPathHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

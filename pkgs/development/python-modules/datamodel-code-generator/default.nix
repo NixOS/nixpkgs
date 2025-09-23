@@ -1,26 +1,26 @@
-{
-  argcomplete,
-  black,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  genson,
-  graphql-core,
-  httpx,
-  inflect,
-  isort,
-  jinja2,
-  lib,
-  openapi-spec-validator,
-  packaging,
-  poetry-core,
-  poetry-dynamic-versioning,
-  prance,
-  pytest-mock,
-  pytestCheckHook,
-  pydantic,
-  pyyaml,
-  toml,
+{ argcomplete
+, black
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, genson
+, graphql-core
+, httpx
+, inflect
+, isort
+, jinja2
+, lib
+, openapi-spec-validator
+, packaging
+, poetry-core
+, poetry-dynamic-versioning
+, prance
+, pytest-mock
+, pytestCheckHook
+, pydantic
+, pyyaml
+, toml
+,
 }:
 
 buildPythonPackage rec {

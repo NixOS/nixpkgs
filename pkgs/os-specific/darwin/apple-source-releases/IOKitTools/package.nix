@@ -1,10 +1,10 @@
-{
-  lib,
-  apple-sdk,
-  mkAppleDerivation,
-  ncurses,
-  pkg-config,
-  stdenvNoCC,
+{ lib
+, apple-sdk
+, mkAppleDerivation
+, ncurses
+, pkg-config
+, stdenvNoCC
+,
 }:
 
 let

@@ -1,7 +1,7 @@
-{
-  fetchFromGitLab,
-  lib,
-  stdenvNoCC,
+{ fetchFromGitLab
+, lib
+, stdenvNoCC
+,
 }:
 let
   srcFetchFromGitLab = {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  SDL,
-  SDL_mixer,
-  libGL,
-  libGLU,
-  autoreconfHook,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL
+, SDL_mixer
+, libGL
+, libGLU
+, autoreconfHook
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

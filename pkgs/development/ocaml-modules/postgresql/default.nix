@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  pkg-config,
-  dune-configurator,
-  libpq,
+{ lib
+, fetchurl
+, buildDunePackage
+, pkg-config
+, dune-configurator
+, libpq
+,
 }:
 
 buildDunePackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bmake,
-  cleanPackaging,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bmake
+, cleanPackaging
+,
 }:
 
 stdenv.mkDerivation {

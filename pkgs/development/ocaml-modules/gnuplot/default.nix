@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  gnuplot,
-  iso8601,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, gnuplot
+, iso8601
+,
 }:
 
 buildDunePackage rec {

@@ -1,18 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  python3,
-
-  # Enable BLAS interface with 64-bit integer width.
-  blas64 ? false,
-
-  # Target architecture. x86_64 builds Intel and AMD kernels.
-  withArchitecture ? "x86_64",
-
-  # Enable OpenMP-based threading.
-  withOpenMP ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, python3
+, # Enable BLAS interface with 64-bit integer width.
+  blas64 ? false
+, # Target architecture. x86_64 builds Intel and AMD kernels.
+  withArchitecture ? "x86_64"
+, # Enable OpenMP-based threading.
+  withOpenMP ? true
+,
 }:
 
 let

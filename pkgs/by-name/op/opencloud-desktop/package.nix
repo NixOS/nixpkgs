@@ -1,14 +1,14 @@
-{
-  lib,
-  cmake,
-  kdePackages,
-  fetchFromGitHub,
-  libre-graph-api-cpp-qt-client,
-  kdsingleapplication,
-  nix-update-script,
-  qt6,
-  versionCheckHook,
-  stdenv,
+{ lib
+, cmake
+, kdePackages
+, fetchFromGitHub
+, libre-graph-api-cpp-qt-client
+, kdsingleapplication
+, nix-update-script
+, qt6
+, versionCheckHook
+, stdenv
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencloud-desktop";

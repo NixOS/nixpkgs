@@ -1,8 +1,8 @@
-{
-  qtModule,
-  qtbase,
-  qtdeclarative,
-  pkg-config,
+{ qtModule
+, qtbase
+, qtdeclarative
+, pkg-config
+,
 }:
 
 qtModule {

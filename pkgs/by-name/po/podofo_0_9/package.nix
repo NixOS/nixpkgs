@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  zlib,
-  freetype,
-  libjpeg,
-  libtiff,
-  fontconfig,
-  openssl,
-  libpng,
-  lua5,
-  pkg-config,
-  libidn,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, zlib
+, freetype
+, libjpeg
+, libtiff
+, fontconfig
+, openssl
+, libpng
+, lua5
+, pkg-config
+, libidn
+,
 }:
 
 stdenv.mkDerivation rec {

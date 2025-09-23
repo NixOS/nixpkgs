@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  bash,
-  docker,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, bash
+, docker
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

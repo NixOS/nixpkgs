@@ -1,34 +1,30 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  deprecated,
-  google-api-core,
-  google-cloud-core,
-  google-cloud-testutils,
-  grpc-google-iam-v1,
-  grpc-interceptor,
-  proto-plus,
-  protobuf,
-  sqlparse,
-
-  # optional dependencies
-  libcst,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  opentelemetry-semantic-conventions,
-  google-cloud-monitoring,
-  mmh3,
-
-  # testing
-  mock,
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  deprecated
+, google-api-core
+, google-cloud-core
+, google-cloud-testutils
+, grpc-google-iam-v1
+, grpc-interceptor
+, proto-plus
+, protobuf
+, sqlparse
+, # optional dependencies
+  libcst
+, opentelemetry-api
+, opentelemetry-sdk
+, opentelemetry-semantic-conventions
+, google-cloud-monitoring
+, mmh3
+, # testing
+  mock
+, pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

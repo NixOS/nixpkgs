@@ -1,10 +1,10 @@
-{
-  buildFHSEnv,
-  symlinkJoin,
-  bottles-unwrapped,
-  extraPkgs ? pkgs: [ ],
-  extraLibraries ? pkgs: [ ],
-  removeWarningPopup ? false,
+{ buildFHSEnv
+, symlinkJoin
+, bottles-unwrapped
+, extraPkgs ? pkgs: [ ]
+, extraLibraries ? pkgs: [ ]
+, removeWarningPopup ? false
+,
 }:
 
 let
@@ -15,14 +15,14 @@ let
 
     targetPkgs =
       pkgs:
-      with pkgs;
-      [
-        (bottles-unwrapped.override { inherit removeWarningPopup; })
-        # This only allows to enable the toggle, vkBasalt won't work if not installed with environment.systemPackages (or nix-env)
-        # See https://github.com/bottlesdevs/Bottles/issues/2401
-        vkbasalt
-      ]
-      ++ extraPkgs pkgs;
+        with pkgs;
+        [
+          (bottles-unwrapped.override { inherit removeWarningPopup; })
+          # This only allows to enable the toggle, vkBasalt won't work if not installed with environment.systemPackages (or nix-env)
+          # See https://github.com/bottlesdevs/Bottles/issues/2401
+          vkbasalt
+        ]
+        ++ extraPkgs pkgs;
 
     multiPkgs =
       let
@@ -56,57 +56,57 @@ let
           ];
       in
       pkgs:
-      with pkgs;
-      [
-        # https://wiki.winehq.org/Building_Wine
-        alsa-lib
-        cups
-        dbus
-        fontconfig
-        freetype
-        glib
-        gnutls
-        libglvnd
-        gsm
-        libgphoto2
-        libjpeg_turbo
-        libkrb5
-        libpcap
-        libpng
-        libpulseaudio
-        libtiff
-        libunwind
-        libusb1
-        libv4l
-        libxml2
-        mpg123
-        ocl-icd
-        openldap
-        samba4
-        sane-backends
-        SDL2
-        udev
-        vulkan-loader
+        with pkgs;
+        [
+          # https://wiki.winehq.org/Building_Wine
+          alsa-lib
+          cups
+          dbus
+          fontconfig
+          freetype
+          glib
+          gnutls
+          libglvnd
+          gsm
+          libgphoto2
+          libjpeg_turbo
+          libkrb5
+          libpcap
+          libpng
+          libpulseaudio
+          libtiff
+          libunwind
+          libusb1
+          libv4l
+          libxml2
+          mpg123
+          ocl-icd
+          openldap
+          samba4
+          sane-backends
+          SDL2
+          udev
+          vulkan-loader
 
-        # https://www.gloriouseggroll.tv/how-to-get-out-of-wine-dependency-hell/
-        alsa-plugins
-        dosbox
-        giflib
-        gtk3
-        libva
-        libxslt
-        ncurses
-        openal
+          # https://www.gloriouseggroll.tv/how-to-get-out-of-wine-dependency-hell/
+          alsa-plugins
+          dosbox
+          giflib
+          gtk3
+          libva
+          libxslt
+          ncurses
+          openal
 
-        # Steam runtime
-        libgcrypt
-        libgpg-error
-        p11-kit
-        zlib # Freetype
-      ]
-      ++ xorgDeps pkgs
-      ++ gstreamerDeps pkgs
-      ++ extraLibraries pkgs;
+          # Steam runtime
+          libgcrypt
+          libgpg-error
+          p11-kit
+          zlib # Freetype
+        ]
+        ++ xorgDeps pkgs
+        ++ gstreamerDeps pkgs
+        ++ extraLibraries pkgs;
   };
 in
 symlinkJoin {

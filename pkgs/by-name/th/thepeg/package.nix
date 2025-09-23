@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  boost,
-  fastjet,
-  gsl,
-  hepmc3,
-  lhapdf,
-  rivet,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, boost
+, fastjet
+, gsl
+, hepmc3
+, lhapdf
+, rivet
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

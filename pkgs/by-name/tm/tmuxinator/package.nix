@@ -1,8 +1,8 @@
-{
-  lib,
-  buildRubyGem,
-  ruby,
-  installShellFiles,
+{ lib
+, buildRubyGem
+, ruby
+, installShellFiles
+,
 }:
 
 # Cannot use bundleEnv because bundleEnv create stub with

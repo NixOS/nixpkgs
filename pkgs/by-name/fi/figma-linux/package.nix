@@ -1,16 +1,14 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-
-  electron,
-  p7zip,
-  # there's a setting "use zenity for dialogs"
-  zenity,
-
-  copyDesktopItems,
-  makeBinaryWrapper,
-  makeDesktopItem,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, electron
+, p7zip
+, # there's a setting "use zenity for dialogs"
+  zenity
+, copyDesktopItems
+, makeBinaryWrapper
+, makeDesktopItem
+,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "figma-linux";

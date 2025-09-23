@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  cmake,
-  qt6,
-  kdePackages,
-  ghostscript,
-  qpdf,
-  ninja,
-  unstableGitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, cmake
+, qt6
+, kdePackages
+, ghostscript
+, qpdf
+, ninja
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

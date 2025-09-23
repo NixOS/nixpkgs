@@ -1,24 +1,24 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook4,
-  brightnessctl,
-  cargo,
-  coreutils,
-  dbus,
-  gtk4-layer-shell,
-  libevdev,
-  libinput,
-  libpulseaudio,
-  meson,
-  ninja,
-  rustc,
-  sassc,
-  stdenv,
-  udev,
-  udevCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook4
+, brightnessctl
+, cargo
+, coreutils
+, dbus
+, gtk4-layer-shell
+, libevdev
+, libinput
+, libpulseaudio
+, meson
+, ninja
+, rustc
+, sassc
+, stdenv
+, udev
+, udevCheckHook
+,
 }:
 stdenv.mkDerivation rec {
   pname = "swayosd";

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  beautifulsoup4,
-  requests,
-  click,
-  pythonOlder,
-  poetry-core,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, beautifulsoup4
+, requests
+, click
+, pythonOlder
+, poetry-core
+,
 }:
 
 buildPythonPackage rec {

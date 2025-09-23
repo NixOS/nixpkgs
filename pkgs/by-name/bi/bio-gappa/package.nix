@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  autoconf,
-  pkg-config,
-  libz,
-  bzip2,
-  xz,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, autoconf
+, pkg-config
+, libz
+, bzip2
+, xz
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

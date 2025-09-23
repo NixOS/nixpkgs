@@ -1,12 +1,12 @@
-{
-  coreutils,
-  fetchFromGitHub,
-  lib,
-  python312,
-  bash,
-  openssl,
-  nixosTests,
-  udevCheckHook,
+{ coreutils
+, fetchFromGitHub
+, lib
+, python312
+, bash
+, openssl
+, nixosTests
+, udevCheckHook
+,
 }:
 
 let

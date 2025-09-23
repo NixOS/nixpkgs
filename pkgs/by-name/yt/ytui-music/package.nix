@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  sqlite,
-  mpv,
-  yt-dlp,
-  makeBinaryWrapper,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, sqlite
+, mpv
+, yt-dlp
+, makeBinaryWrapper
+,
 }:
 
 rustPlatform.buildRustPackage rec {

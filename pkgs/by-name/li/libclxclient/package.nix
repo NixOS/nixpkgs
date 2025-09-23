@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libclthreads,
-  libX11,
-  libXft,
-  xorg,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, libclthreads
+, libX11
+, libXft
+, xorg
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

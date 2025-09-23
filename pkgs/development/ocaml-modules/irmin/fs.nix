@@ -1,12 +1,12 @@
-{
-  buildDunePackage,
-  irmin,
-  astring,
-  logs,
-  lwt,
-  alcotest,
-  irmin-test,
-  irmin-watcher,
+{ buildDunePackage
+, irmin
+, astring
+, logs
+, lwt
+, alcotest
+, irmin-test
+, irmin-watcher
+,
 }:
 
 buildDunePackage {

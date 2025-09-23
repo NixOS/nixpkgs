@@ -1,29 +1,30 @@
-{
-  lib,
-  buildPythonPackage,
-  stdenv,
-  fetchFromGitHub,
-  # build dependencies
-  hatchling,
-  hatch-vcs,
-  # runtime dependencies
-  archspec,
-  conda-libmamba-solver,
-  conda-package-handling,
-  distro,
-  frozendict,
-  jsonpatch,
-  packaging,
-  platformdirs,
-  pluggy,
-  pycosat,
-  requests,
-  ruamel-yaml,
-  tqdm,
-  truststore,
-  # runtime options
-  defaultEnvPath ? "~/.conda/envs", # default path to store conda environments
-  defaultPkgPath ? "~/.conda/pkgs", # default path to store download conda packages
+{ lib
+, buildPythonPackage
+, stdenv
+, fetchFromGitHub
+, # build dependencies
+  hatchling
+, hatch-vcs
+, # runtime dependencies
+  archspec
+, conda-libmamba-solver
+, conda-package-handling
+, distro
+, frozendict
+, jsonpatch
+, packaging
+, platformdirs
+, pluggy
+, pycosat
+, requests
+, ruamel-yaml
+, tqdm
+, truststore
+, # runtime options
+  defaultEnvPath ? "~/.conda/envs"
+, # default path to store conda environments
+  defaultPkgPath ? "~/.conda/pkgs"
+, # default path to store download conda packages
 }:
 buildPythonPackage rec {
   __structuredAttrs = true;

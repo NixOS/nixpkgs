@@ -1,27 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-
-  # nativeBuildInputs
-  cmake,
-  pkg-config,
-
-  # buildInputs
-  flac,
-  freetype,
-  glew,
-  libjpeg,
-  libvorbis,
-  miniaudio,
-  udev,
-  libXi,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXrender,
-  xcbutilimage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, # nativeBuildInputs
+  cmake
+, pkg-config
+, # buildInputs
+  flac
+, freetype
+, glew
+, libjpeg
+, libvorbis
+, miniaudio
+, udev
+, libXi
+, libX11
+, libXcursor
+, libXrandr
+, libXrender
+, xcbutilimage
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

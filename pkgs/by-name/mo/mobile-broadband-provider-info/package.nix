@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gnome,
-  libxslt,
-  libxml2,
-  meson,
-  ninja,
+{ lib
+, stdenv
+, fetchurl
+, gnome
+, libxslt
+, libxml2
+, meson
+, ninja
+,
 }:
 
 stdenv.mkDerivation rec {

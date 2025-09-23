@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  httpbin,
-  multidict,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  six,
-  wsgiprox,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, httpbin
+, multidict
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, six
+, wsgiprox
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

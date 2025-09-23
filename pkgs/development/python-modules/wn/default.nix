@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pytest-benchmark,
-  pythonOlder,
-  hatchling,
-  httpx,
-  tomli,
-  starlette,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pytest-benchmark
+, pythonOlder
+, hatchling
+, httpx
+, tomli
+, starlette
+,
 }:
 
 buildPythonPackage rec {

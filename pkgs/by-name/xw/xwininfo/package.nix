@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libx11,
-  libxcb,
-  xorgproto,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libx11
+, libxcb
+, xorgproto
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xwininfo";

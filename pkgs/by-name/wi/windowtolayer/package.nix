@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  python3,
-  unstableGitUpdater,
-  rustfmt,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, python3
+, unstableGitUpdater
+, rustfmt
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "windowtolayer";

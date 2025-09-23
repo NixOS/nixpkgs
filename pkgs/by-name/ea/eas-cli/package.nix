@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
-  jq,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
+, jq
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "eas-cli";

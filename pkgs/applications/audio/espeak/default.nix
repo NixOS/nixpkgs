@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  portaudio,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, portaudio
+,
 }:
 
 stdenv.mkDerivation rec {

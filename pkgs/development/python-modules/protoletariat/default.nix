@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  astunparse,
-  grpcio-tools,
-  click,
-  pkgs,
-  protobuf,
-  mypy-protobuf,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, astunparse
+, grpcio-tools
+, click
+, pkgs
+, protobuf
+, mypy-protobuf
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 buildPythonPackage rec {
   pname = "protoletariat";

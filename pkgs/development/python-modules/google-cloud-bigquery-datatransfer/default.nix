@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  google-api-core,
-  libcst,
-  mock,
-  proto-plus,
-  protobuf,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, google-api-core
+, libcst
+, mock
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, pytz
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

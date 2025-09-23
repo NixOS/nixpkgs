@@ -1,43 +1,39 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  freefont_ttf,
-  spice-protocol,
-  nettle,
-  libbfd,
-  fontconfig,
-  libffi,
-  expat,
-  libGL,
-  nanosvg,
-
-  libX11,
-  libxkbcommon,
-  libXext,
-  libXrandr,
-  libXi,
-  libXScrnSaver,
-  libXinerama,
-  libXcursor,
-  libXpresent,
-  libXdmcp,
-
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-
-  pipewire,
-  pulseaudio,
-  libsamplerate,
-
-  openGLSupport ? true,
-  xorgSupport ? true,
-  waylandSupport ? true,
-  pipewireSupport ? true,
-  pulseSupport ? true,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, cmake
+, freefont_ttf
+, spice-protocol
+, nettle
+, libbfd
+, fontconfig
+, libffi
+, expat
+, libGL
+, nanosvg
+, libX11
+, libxkbcommon
+, libXext
+, libXrandr
+, libXi
+, libXScrnSaver
+, libXinerama
+, libXcursor
+, libXpresent
+, libXdmcp
+, wayland
+, wayland-protocols
+, wayland-scanner
+, pipewire
+, pulseaudio
+, libsamplerate
+, openGLSupport ? true
+, xorgSupport ? true
+, waylandSupport ? true
+, pipewireSupport ? true
+, pulseSupport ? true
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "looking-glass-client";

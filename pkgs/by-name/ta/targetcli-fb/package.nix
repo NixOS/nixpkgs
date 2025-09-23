@@ -1,11 +1,11 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  nixosTests,
-  wrapGAppsNoGuiHook,
-  gobject-introspection,
-  glib,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, nixosTests
+, wrapGAppsNoGuiHook
+, gobject-introspection
+, glib
+,
 }:
 
 python3Packages.buildPythonApplication rec {

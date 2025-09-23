@@ -1,30 +1,30 @@
-{
-  stdenv,
-  fetchFromGitLab,
-  lib,
-  cmake,
-  glslang,
-  libffi,
-  libgbm,
-  libglut,
-  libGL,
-  libGLU,
-  libglvnd,
-  makeWrapper,
-  ninja,
-  pkg-config,
-  python3,
-  vulkan-loader,
-  waffle,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  libXau,
-  libX11,
-  libXrender,
-  libxcb,
-  libxkbcommon,
-  mesa,
+{ stdenv
+, fetchFromGitLab
+, lib
+, cmake
+, glslang
+, libffi
+, libgbm
+, libglut
+, libGL
+, libGLU
+, libglvnd
+, makeWrapper
+, ninja
+, pkg-config
+, python3
+, vulkan-loader
+, waffle
+, wayland
+, wayland-protocols
+, wayland-scanner
+, libXau
+, libX11
+, libXrender
+, libxcb
+, libxkbcommon
+, mesa
+,
 }:
 
 stdenv.mkDerivation {

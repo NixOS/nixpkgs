@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  autoconf-archive,
-  alsa-lib,
-  fftw,
-  iniparser,
-  libGL,
-  libpulseaudio,
-  libtool,
-  ncurses,
-  pipewire,
-  pkgconf,
-  portaudio,
-  SDL2,
-  versionCheckHook,
-  withSDL2 ? false,
-  withPipewire ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, autoconf-archive
+, alsa-lib
+, fftw
+, iniparser
+, libGL
+, libpulseaudio
+, libtool
+, ncurses
+, pipewire
+, pkgconf
+, portaudio
+, SDL2
+, versionCheckHook
+, withSDL2 ? false
+, withPipewire ? stdenv.hostPlatform.isLinux
+,
 }:
 
 stdenv.mkDerivation rec {

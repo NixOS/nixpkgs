@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  appdirs,
-  buildPythonPackage,
-  fetchPypi,
-  mock,
-  psutil,
-  pyftpdlib,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  setuptools,
-  six,
+{ lib
+, stdenv
+, appdirs
+, buildPythonPackage
+, fetchPypi
+, mock
+, psutil
+, pyftpdlib
+, pytestCheckHook
+, pythonOlder
+, pytz
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

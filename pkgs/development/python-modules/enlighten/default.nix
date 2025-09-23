@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # dependencies
-  blessed,
-  prefixed,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # dependencies
+  blessed
+, prefixed
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

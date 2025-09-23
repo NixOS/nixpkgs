@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  requests,
-  jsonpatch,
-  schema,
-  responses,
-  setuptools,
-  tqdm,
-  urllib3,
-  pythonOlder,
-  importlib-metadata,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, requests
+, jsonpatch
+, schema
+, responses
+, setuptools
+, tqdm
+, urllib3
+, pythonOlder
+, importlib-metadata
+,
 }:
 
 buildPythonPackage rec {

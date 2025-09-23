@@ -1,32 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  affine,
-  dask,
-  numpy,
-  odc-geo,
-  odc-loader,
-  pandas,
-  pystac,
-  rasterio,
-  toolz,
-  typing-extensions,
-  xarray,
-
-  # optional-dependencies
-  botocore,
-
-  # tests
-  geopandas,
-  distributed,
-  pystac-client,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit-core
+, # dependencies
+  affine
+, dask
+, numpy
+, odc-geo
+, odc-loader
+, pandas
+, pystac
+, rasterio
+, toolz
+, typing-extensions
+, xarray
+, # optional-dependencies
+  botocore
+, # tests
+  geopandas
+, distributed
+, pystac-client
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

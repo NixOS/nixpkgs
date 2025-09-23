@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  igraph,
-  matplotlib,
-  networkx,
-  numpy,
-  pandas,
-  pylint,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, igraph
+, matplotlib
+, networkx
+, numpy
+, pandas
+, pylint
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

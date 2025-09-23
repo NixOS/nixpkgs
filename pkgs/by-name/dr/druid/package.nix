@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  mysql_jdbc,
-  extensions ? { },
-  libJars ? [ ],
-  nixosTests,
-  mysqlSupport ? true,
+{ lib
+, stdenv
+, fetchurl
+, mysql_jdbc
+, extensions ? { }
+, libJars ? [ ]
+, nixosTests
+, mysqlSupport ? true
+,
 }:
 let
   inherit (lib)
@@ -31,23 +31,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   loadExtensions = (
     concatStringsSep "\n" (
-      mapAttrsToList (
-        dir: files:
-        ''
-          if ! test -d $out/extensions/${dir}; then
-               mkdir $out/extensions/${dir};
-           fi
-        ''
-        + concatStringsSep "\n" (
-          forEach files (file: ''
-            if test -d ${file} ; then
-              cp  ${file}/* $out/extensions/${dir}/
-            else
-              cp ${file} $out/extensions/${dir}/
-            fi
-          '')
+      mapAttrsToList
+        (
+          dir: files:
+            ''
+              if ! test -d $out/extensions/${dir}; then
+                   mkdir $out/extensions/${dir};
+               fi
+            ''
+            + concatStringsSep "\n" (
+              forEach files (file: ''
+                if test -d ${file} ; then
+                  cp  ${file}/* $out/extensions/${dir}/
+                else
+                  cp ${file} $out/extensions/${dir}/
+                fi
+              '')
+            )
         )
-      ) extensions
+        extensions
     )
   );
 

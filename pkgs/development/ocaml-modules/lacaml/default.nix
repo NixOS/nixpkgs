@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  dune-configurator,
-  lapack,
-  blas,
+{ lib
+, fetchurl
+, buildDunePackage
+, dune-configurator
+, lapack
+, blas
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

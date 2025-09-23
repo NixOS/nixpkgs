@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  buildEnv,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, buildEnv
+,
 }:
 
 let
@@ -105,13 +105,15 @@ let
 
   plugins =
     let
-      plugins = builtins.filter (
-        n:
-        !(lib.elem n [
-          "out"
-          "bin"
-        ])
-      ) package.outputs;
+      plugins = builtins.filter
+        (
+          n:
+            !(lib.elem n [
+              "out"
+              "bin"
+            ])
+        )
+        package.outputs;
     in
     lib.genAttrs plugins (output: package.${output});
 

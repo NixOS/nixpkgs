@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  scx-common,
-  scx,
-  nixosTests,
+{ lib
+, stdenv
+, scx-common
+, scx
+, nixosTests
+,
 }:
 scx.cscheds.overrideAttrs (oldAttrs: {
   pname = "scx_full";

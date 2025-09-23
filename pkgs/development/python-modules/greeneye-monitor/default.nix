@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-socket,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  siobrultech-protocols,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-socket
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, siobrultech-protocols
+,
 }:
 
 buildPythonPackage rec {

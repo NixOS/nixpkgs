@@ -1,17 +1,17 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  filetype,
-  future,
-  hypothesis,
-  lib,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-oauthlib,
-  responses,
-  setuptools,
+{ buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, filetype
+, future
+, hypothesis
+, lib
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-oauthlib
+, responses
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

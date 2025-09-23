@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  makeWrapper,
-  valgrind,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, makeWrapper
+, valgrind
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-valgrind";

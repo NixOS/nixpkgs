@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  aiohttp,
-  pycryptodome,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, aiohttp
+, pycryptodome
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

@@ -3,11 +3,10 @@
   name = "cfssl";
 
   nodes.machine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
       networking.firewall.allowedTCPPorts = [ config.services.cfssl.port ];

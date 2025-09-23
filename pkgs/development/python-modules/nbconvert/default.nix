@@ -1,28 +1,28 @@
-{
-  lib,
-  fetchurl,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  hatchling,
-  beautifulsoup4,
-  bleach,
-  defusedxml,
-  jinja2,
-  jupyter-core,
-  jupyterlab-pygments,
-  markupsafe,
-  mistune,
-  nbclient,
-  packaging,
-  pandocfilters,
-  pygments,
-  traitlets,
-  importlib-metadata,
-  flaky,
-  ipykernel,
-  ipywidgets,
-  pytestCheckHook,
+{ lib
+, fetchurl
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, hatchling
+, beautifulsoup4
+, bleach
+, defusedxml
+, jinja2
+, jupyter-core
+, jupyterlab-pygments
+, markupsafe
+, mistune
+, nbclient
+, packaging
+, pandocfilters
+, pygments
+, traitlets
+, importlib-metadata
+, flaky
+, ipykernel
+, ipywidgets
+, pytestCheckHook
+,
 }:
 
 let

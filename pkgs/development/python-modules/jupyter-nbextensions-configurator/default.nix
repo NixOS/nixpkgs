@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jupyter-contrib-core,
-  jupyter-core,
-  jupyter-server,
-  notebook,
-  pyyaml,
-  tornado,
-  pytestCheckHook,
-  selenium,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jupyter-contrib-core
+, jupyter-core
+, jupyter-server
+, notebook
+, pyyaml
+, tornado
+, pytestCheckHook
+, selenium
+,
 }:
 
 buildPythonPackage rec {

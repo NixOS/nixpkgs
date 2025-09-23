@@ -1,12 +1,12 @@
-{
-  ndpi,
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  autoreconfHook,
-  autoconf,
-  automake,
-  fixDarwinDylibNames,
+{ ndpi
+, fetchFromGitHub
+, lib
+, stdenv
+, autoreconfHook
+, autoconf
+, automake
+, fixDarwinDylibNames
+,
 }:
 
 ndpi.overrideAttrs (

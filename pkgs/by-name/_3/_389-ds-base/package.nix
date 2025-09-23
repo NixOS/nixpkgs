@@ -1,42 +1,42 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoconf,
-  automake,
-  cargo,
-  libtool,
-  pkg-config,
-  cracklib,
-  lmdb,
-  json_c,
-  linux-pam,
-  libevent,
-  libxcrypt,
-  nspr,
-  nss,
-  openldap,
-  withOpenldap ? true,
-  db,
-  withBdb ? true,
-  cyrus_sasl,
-  icu,
-  net-snmp,
-  withNetSnmp ? true,
-  krb5,
-  pcre2,
-  python3,
-  rustPlatform,
-  rustc,
-  openssl,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  zlib,
-  rsync,
-  withCockpit ? true,
-  withAsan ? false,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoconf
+, automake
+, cargo
+, libtool
+, pkg-config
+, cracklib
+, lmdb
+, json_c
+, linux-pam
+, libevent
+, libxcrypt
+, nspr
+, nss
+, openldap
+, withOpenldap ? true
+, db
+, withBdb ? true
+, cyrus_sasl
+, icu
+, net-snmp
+, withNetSnmp ? true
+, krb5
+, pcre2
+, python3
+, rustPlatform
+, rustc
+, openssl
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, zlib
+, rsync
+, withCockpit ? true
+, withAsan ? false
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

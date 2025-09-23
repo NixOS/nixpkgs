@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  pnpm,
-  nodejs,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, pnpm
+, nodejs
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

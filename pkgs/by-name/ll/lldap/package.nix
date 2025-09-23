@@ -1,15 +1,15 @@
-{
-  binaryen,
-  fetchFromGitHub,
-  lib,
-  lldap,
-  makeWrapper,
-  nixosTests,
-  rustPlatform,
-  rustc,
-  wasm-bindgen-cli_0_2_100,
-  wasm-pack,
-  which,
+{ binaryen
+, fetchFromGitHub
+, lib
+, lldap
+, makeWrapper
+, nixosTests
+, rustPlatform
+, rustc
+, wasm-bindgen-cli_0_2_100
+, wasm-pack
+, which
+,
 }:
 
 let
@@ -59,7 +59,7 @@ let
 in
 rustPlatform.buildRustPackage (
   commonDerivationAttrs
-  // {
+    // {
     cargoBuildFlags = [
       "-p"
       "lldap"

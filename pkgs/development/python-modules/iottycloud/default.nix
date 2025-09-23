@@ -1,11 +1,11 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  lib,
-  pytestCheckHook,
-  requests,
+{ aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, lib
+, pytestCheckHook
+, requests
+,
 }:
 
 buildPythonPackage rec {

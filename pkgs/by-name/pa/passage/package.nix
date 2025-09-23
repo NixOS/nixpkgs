@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  replaceVars,
-  age,
-  getopt,
-  coreutils,
-  findutils,
-  gnugrep,
-  gnused,
-  qrencode ? null,
-  wl-clipboard ? null,
-  git ? null,
-  xclip ? null,
-  # Used to pretty-print list of all stored passwords, but is not needed to fetch
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeBinaryWrapper
+, replaceVars
+, age
+, getopt
+, coreutils
+, findutils
+, gnugrep
+, gnused
+, qrencode ? null
+, wl-clipboard ? null
+, git ? null
+, xclip ? null
+, # Used to pretty-print list of all stored passwords, but is not needed to fetch
   # or store password by its name. Most users would want this dependency.
-  tree ? null,
+  tree ? null
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

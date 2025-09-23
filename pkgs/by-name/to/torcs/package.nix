@@ -1,27 +1,27 @@
-{
-  fetchpatch,
-  fetchurl,
-  lib,
-  stdenv,
-  libGLU,
-  libglut,
-  libX11,
-  plib,
-  openal,
-  freealut,
-  libXrandr,
-  xorgproto,
-  libXext,
-  libSM,
-  libICE,
-  libXi,
-  libXt,
-  libXrender,
-  libXxf86vm,
-  libvorbis,
-  libpng,
-  zlib,
-  makeWrapper,
+{ fetchpatch
+, fetchurl
+, lib
+, stdenv
+, libGLU
+, libglut
+, libX11
+, plib
+, openal
+, freealut
+, libXrandr
+, xorgproto
+, libXext
+, libSM
+, libICE
+, libXi
+, libXt
+, libXrender
+, libXxf86vm
+, libvorbis
+, libpng
+, zlib
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

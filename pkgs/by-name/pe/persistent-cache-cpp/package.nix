@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  gitUpdater,
-  testers,
-  boost,
-  cmake,
-  doxygen,
-  gtest,
-  leveldb,
-  lomiri,
-  pkg-config,
-  python3,
-  validatePkgConfig,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, gitUpdater
+, testers
+, boost
+, cmake
+, doxygen
+, gtest
+, leveldb
+, lomiri
+, pkg-config
+, python3
+, validatePkgConfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

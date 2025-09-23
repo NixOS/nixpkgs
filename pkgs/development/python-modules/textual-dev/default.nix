@@ -1,19 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  aiohttp,
-  click,
-  msgpack,
-  textual,
-  textual-serve,
-  typing-extensions,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  aiohttp
+, click
+, msgpack
+, textual
+, textual-serve
+, typing-extensions
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

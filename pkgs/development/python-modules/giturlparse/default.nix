@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  setuptools,
-  unittestCheckHook,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, setuptools
+, unittestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "giturlparse";

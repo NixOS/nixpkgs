@@ -1,26 +1,25 @@
-{
-  lib,
-  stdenv,
-  alsa-lib,
-  autoPatchelfHook,
-  cairo,
-  cups,
-  fontconfig,
-  glib,
-  glibc,
-  gtk3,
-  makeWrapper,
-  musl,
-  runCommandCC,
-  setJavaClassPath,
-  unzip,
-  xorg,
-  zlib,
-  # extra params
-  extraCLibs ? [ ],
-  gtkSupport ? stdenv.hostPlatform.isLinux,
-  useMusl ? false,
-  ...
+{ lib
+, stdenv
+, alsa-lib
+, autoPatchelfHook
+, cairo
+, cups
+, fontconfig
+, glib
+, glibc
+, gtk3
+, makeWrapper
+, musl
+, runCommandCC
+, setJavaClassPath
+, unzip
+, xorg
+, zlib
+, # extra params
+  extraCLibs ? [ ]
+, gtkSupport ? stdenv.hostPlatform.isLinux
+, useMusl ? false
+, ...
 }@args:
 
 let

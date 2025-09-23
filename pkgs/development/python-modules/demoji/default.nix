@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pythonOlder,
-  pytestCheckHook,
-  ujson,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pythonOlder
+, pytestCheckHook
+, ujson
+,
 }:
 
 buildPythonPackage rec {

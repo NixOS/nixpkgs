@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gnugrep,
-  ncurses,
-  pkg-config,
-  installShellFiles,
-  readline,
-  libpq,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gnugrep
+, ncurses
+, pkg-config
+, installShellFiles
+, readline
+, libpq
+,
 }:
 
 stdenv.mkDerivation rec {

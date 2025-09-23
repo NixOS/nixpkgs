@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  curl,
-  expat,
-  fetchFromGitHub,
-  gspell,
-  gst_all_1,
-  gtk3,
-  libGL,
-  libGLU,
-  libSM,
-  libXinerama,
-  libXtst,
-  libXxf86vm,
-  libnotify,
-  libpng,
-  libsecret,
-  libtiff,
-  libjpeg_turbo,
-  libxkbcommon,
-  zlib,
-  pcre2,
-  pkg-config,
-  xorgproto,
-  compat28 ? false,
-  compat30 ? true,
-  unicode ? true,
-  withMesa ? !stdenv.hostPlatform.isDarwin,
-  withWebKit ? true,
-  webkitgtk_4_1,
+{ lib
+, stdenv
+, curl
+, expat
+, fetchFromGitHub
+, gspell
+, gst_all_1
+, gtk3
+, libGL
+, libGLU
+, libSM
+, libXinerama
+, libXtst
+, libXxf86vm
+, libnotify
+, libpng
+, libsecret
+, libtiff
+, libjpeg_turbo
+, libxkbcommon
+, zlib
+, pcre2
+, pkg-config
+, xorgproto
+, compat28 ? false
+, compat30 ? true
+, unicode ? true
+, withMesa ? !stdenv.hostPlatform.isDarwin
+, withWebKit ? true
+, webkitgtk_4_1
+,
 }:
 let
   catch = fetchFromGitHub {
@@ -113,9 +113,10 @@ stdenv.mkDerivation rec {
     "--enable-webviewwebkit"
   ];
 
-  SEARCH_LIB = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin
-  ) "${libGLU.out}/lib ${libGL.out}/lib";
+  SEARCH_LIB = lib.optionalString
+    (
+      !stdenv.hostPlatform.isDarwin
+    ) "${libGLU.out}/lib ${libGL.out}/lib";
 
   preConfigure = ''
     cp -r ${catch}/* 3rdparty/catch/

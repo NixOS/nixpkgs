@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  asciidoc,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  installShellFiles,
-  libxslt,
-  python3,
-  re2c,
-  buildPackages,
-  buildDocs ? true,
-  nix-update-script,
-  ninjaRelease ? "latest",
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, asciidoc
+, docbook_xml_dtd_45
+, docbook_xsl
+, installShellFiles
+, libxslt
+, python3
+, re2c
+, buildPackages
+, buildDocs ? true
+, nix-update-script
+, ninjaRelease ? "latest"
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,8 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     {
       "1.11" = "1.11.1";
       latest = "1.13.1";
-    }
-    .${ninjaRelease};
+    }.${ninjaRelease};
 
   src = fetchFromGitHub {
     owner = "ninja-build";
@@ -34,8 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
         # TODO: Remove Ninja 1.11 as soon as possible.
         "1.11" = "sha256-LvV/Fi2ARXBkfyA1paCRmLUwCh/rTyz+tGMg2/qEepI=";
         latest = "sha256-GhAF5wUT19E02ZekW+ywsCMVGYrt56hES+MHCH4lNG4=";
-      }
-      .${ninjaRelease} or (throw "Unsupported Ninja release: ${ninjaRelease}");
+      }.${ninjaRelease} or (throw "Unsupported Ninja release: ${ninjaRelease}");
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

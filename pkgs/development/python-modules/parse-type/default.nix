@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  parse,
-  pytestCheckHook,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, parse
+, pytestCheckHook
+, six
+,
 }:
 
 buildPythonPackage rec {

@@ -1,24 +1,24 @@
-{
-  lib,
-  aiohttp,
-  asyncclick,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  hatchling,
-  kasa-crypt,
-  mashumaro,
-  orjson,
-  ptpython,
-  pytest-asyncio,
-  pytest-freezer,
-  pytest-mock,
-  pytest-socket,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  rich,
-  voluptuous,
+{ lib
+, aiohttp
+, asyncclick
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, hatchling
+, kasa-crypt
+, mashumaro
+, orjson
+, ptpython
+, pytest-asyncio
+, pytest-freezer
+, pytest-mock
+, pytest-socket
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, rich
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

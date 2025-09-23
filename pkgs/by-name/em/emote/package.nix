@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  gobject-introspection,
-  keybinder3,
-  xdotool,
-  wl-clipboard,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, gobject-introspection
+, keybinder3
+, xdotool
+, wl-clipboard
+,
 }:
 
 python3Packages.buildPythonApplication rec {

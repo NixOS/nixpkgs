@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  buildFHSEnv,
-  installShellFiles,
-  writableTmpDirAsHomeHook,
-  go-task,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, buildFHSEnv
+, installShellFiles
+, writableTmpDirAsHomeHook
+, go-task
+,
 }:
 
 let
@@ -93,10 +93,11 @@ let
 
 in
 if stdenv.hostPlatform.isLinux then
-  # buildFHSEnv is needed because the arduino-cli downloads compiler
-  # toolchains from the internet that have their interpreters pointed at
-  # /lib64/ld-linux-x86-64.so.2
-  buildFHSEnv {
+# buildFHSEnv is needed because the arduino-cli downloads compiler
+# toolchains from the internet that have their interpreters pointed at
+# /lib64/ld-linux-x86-64.so.2
+  buildFHSEnv
+  {
     inherit (pkg) pname version meta;
 
     runScript = "${pkg.outPath}/bin/arduino-cli";

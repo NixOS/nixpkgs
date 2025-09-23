@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  apr,
-  jdk,
-  openssl,
+{ lib
+, stdenv
+, fetchurl
+, apr
+, jdk
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

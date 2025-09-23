@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gradle_8,
-  makeBinaryWrapper,
-  openjdk,
-  wrapGAppsHook3,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gradle_8
+, makeBinaryWrapper
+, openjdk
+, wrapGAppsHook3
+, xorg
+,
 }:
 
 let

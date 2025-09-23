@@ -1,10 +1,10 @@
-{
-  buildFHSEnv,
-  lib,
-  requireFile,
-  runCommand,
-  stdenv,
-  unzip,
+{ buildFHSEnv
+, lib
+, requireFile
+, runCommand
+, stdenv
+, unzip
+,
 }:
 let
   pname = "jai";
@@ -38,7 +38,8 @@ let
   };
 in
 if stdenv.hostPlatform.isLinux then
-  buildFHSEnv {
+  buildFHSEnv
+  {
     inherit meta pname version;
     targetPkgs = pkgs: [ pkgs.zlib ];
     runScript = "${jai}/jai/bin/jai-linux";

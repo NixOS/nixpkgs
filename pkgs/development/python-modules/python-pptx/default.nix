@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  lxml,
-  pillow,
-  typing-extensions,
-  xlsxwriter,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, lxml
+, pillow
+, typing-extensions
+, xlsxwriter
+,
 }:
 
 buildPythonPackage rec {

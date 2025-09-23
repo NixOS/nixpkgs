@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  playwright,
-  playwright-driver,
-  pytest,
-  pytest-base-url,
-  python-slugify,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, playwright
+, playwright-driver
+, pytest
+, pytest-base-url
+, python-slugify
+, pythonOlder
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

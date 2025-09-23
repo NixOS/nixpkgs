@@ -1,10 +1,10 @@
-{
-  lib,
-  openssl,
-  rsync,
-  python3,
-  fetchFromGitHub,
-  nixosTests,
+{ lib
+, openssl
+, rsync
+, python3
+, fetchFromGitHub
+, nixosTests
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

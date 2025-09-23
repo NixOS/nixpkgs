@@ -1,8 +1,8 @@
-{
-  lib,
-  mkCoqDerivation,
-  mathcomp,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, mathcomp
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -28,7 +28,8 @@ mkCoqDerivation {
       (case (range "1.13.0" "1.15.0") "1.14.0")
       (case (range "1.12.0" "1.14.0") "1.13.0")
       (case (range "1.10.0" "1.12.0") "1.12.0")
-    ] null;
+    ]
+      null;
 
   propagatedBuildInputs = [
     mathcomp.character

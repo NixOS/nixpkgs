@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  slurm,
+{ lib
+, stdenv
+, fetchFromGitHub
+, slurm
+,
 }:
 
 stdenv.mkDerivation rec {

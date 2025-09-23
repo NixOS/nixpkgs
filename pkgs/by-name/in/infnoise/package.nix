@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  libftdi,
-  testers,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, libftdi
+, testers
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

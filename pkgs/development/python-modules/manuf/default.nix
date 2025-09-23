@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  runCommand,
-  wireshark-cli,
-  pytestCheckHook,
-  manuf, # remove when buildPythonPackage supports finalAttrs
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, runCommand
+, wireshark-cli
+, pytestCheckHook
+, manuf
+, # remove when buildPythonPackage supports finalAttrs
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  faker,
-  fetchFromGitHub,
-  flask,
-  gunicorn,
-  pyopenssl,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  requests,
-  setuptools-scm,
-  standard-telnetlib,
+{ lib
+, buildPythonPackage
+, click
+, faker
+, fetchFromGitHub
+, flask
+, gunicorn
+, pyopenssl
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, requests
+, setuptools-scm
+, standard-telnetlib
+,
 }:
 
 buildPythonPackage rec {

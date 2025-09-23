@@ -1,12 +1,12 @@
-{
-  lib,
-  coreutils,
-  fetchFromGitHub,
-  jre,
-  libarchive,
-  makeWrapper,
-  maven,
-  nix-update-script,
+{ lib
+, coreutils
+, fetchFromGitHub
+, jre
+, libarchive
+, makeWrapper
+, maven
+, nix-update-script
+,
 }:
 
 maven.buildMavenPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  falcon,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, falcon
+,
 }:
 
 buildPythonPackage rec {

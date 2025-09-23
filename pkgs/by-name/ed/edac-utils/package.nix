@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  sysfsutils,
-  dmidecode,
-  kmod,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, sysfsutils
+, dmidecode
+, kmod
+,
 }:
 
 stdenv.mkDerivation {

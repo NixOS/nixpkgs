@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  aiocoap,
-  aiohappyeyeballs,
-  async-interrupt,
-  bleak,
-  bleak-retry-connector,
-  chacha20poly1305,
-  chacha20poly1305-reuseable,
-  commentjson,
-  cryptography,
-  fetchFromGitHub,
-  orjson,
-  poetry-core,
-  pytest-asyncio_0,
-  pytest-aiohttp,
-  pytestCheckHook,
-  pythonOlder,
-  zeroconf,
+{ lib
+, buildPythonPackage
+, aiocoap
+, aiohappyeyeballs
+, async-interrupt
+, bleak
+, bleak-retry-connector
+, chacha20poly1305
+, chacha20poly1305-reuseable
+, commentjson
+, cryptography
+, fetchFromGitHub
+, orjson
+, poetry-core
+, pytest-asyncio_0
+, pytest-aiohttp
+, pytestCheckHook
+, pythonOlder
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

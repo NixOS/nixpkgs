@@ -1,9 +1,9 @@
-{
-  lib,
-  mkKdeDerivation,
-  fetchurl,
-  qttools,
-  libvlc,
+{ lib
+, mkKdeDerivation
+, fetchurl
+, qttools
+, libvlc
+,
 }:
 mkKdeDerivation rec {
   pname = "phonon-vlc";

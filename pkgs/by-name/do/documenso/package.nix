@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  prisma,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, prisma
+, nix-update-script
+,
 }:
 let
   version = "0.9";

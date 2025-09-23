@@ -1,16 +1,16 @@
-{
-  fetchFromGitHub,
-  fetchpatch,
-  lib,
-  stdenv,
-  autoreconfHook,
-  intltool,
-  pkg-config,
-  gtk3,
-  libayatana-appindicator,
-  xdotool,
-  which,
-  wrapGAppsHook3,
+{ fetchFromGitHub
+, fetchpatch
+, lib
+, stdenv
+, autoreconfHook
+, intltool
+, pkg-config
+, gtk3
+, libayatana-appindicator
+, xdotool
+, which
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

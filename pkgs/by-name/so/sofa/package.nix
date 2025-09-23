@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-  fetchpatch,
-
-  # propagatedNativeBuildInputs
-  cmake,
-  qt6Packages,
-
-  # propagatedBuildInputs
-  boost,
-  cxxopts,
-  eigen,
-  glew,
-  gtest,
-  libGL,
-  metis,
-  tinyxml-2,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, # propagatedNativeBuildInputs
+  cmake
+, qt6Packages
+, # propagatedBuildInputs
+  boost
+, cxxopts
+, eigen
+, glew
+, gtest
+, libGL
+, metis
+, tinyxml-2
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

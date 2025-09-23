@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchurl,
-  makeDesktopItem,
-
-  copyDesktopItems,
-  makeWrapper,
-  wine,
-  winetricks,
+{ lib
+, stdenv
+, fetchzip
+, fetchurl
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, wine
+, winetricks
+,
 }:
 
 stdenv.mkDerivation rec {

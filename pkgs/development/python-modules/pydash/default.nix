@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  invoke,
-  mock,
-  pytest7CheckHook,
-  pytest-cov-stub,
-  pythonOlder,
-  setuptools,
-  sphinx-rtd-theme,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, invoke
+, mock
+, pytest7CheckHook
+, pytest-cov-stub
+, pythonOlder
+, setuptools
+, sphinx-rtd-theme
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

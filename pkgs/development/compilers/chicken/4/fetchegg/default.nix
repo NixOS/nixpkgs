@@ -1,16 +1,16 @@
 # Fetches a chicken egg from henrietta using `chicken-install -r'
 # See: http://wiki.call-cc.org/chicken-projects/egg-index-4.html
 
-{
-  lib,
-  stdenvNoCC,
-  chicken,
+{ lib
+, stdenvNoCC
+, chicken
+,
 }:
-{
-  name,
-  version,
-  md5 ? "",
-  sha256 ? "",
+{ name
+, version
+, md5 ? ""
+, sha256 ? ""
+,
 }:
 
 if md5 != "" then

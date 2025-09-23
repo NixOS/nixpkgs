@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  isPy3k,
-  pexpect,
-  notebook,
-  nix,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, isPy3k
+, pexpect
+, notebook
+, nix
+,
 }:
 
 buildPythonPackage {

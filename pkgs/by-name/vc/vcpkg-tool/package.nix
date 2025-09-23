@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runtimeShell,
-  cacert,
-  cmake,
-  cmakerc,
-  curl,
-  fmt,
-  git,
-  gzip,
-  meson,
-  ninja,
-  openssh,
-  python3,
-  unzip,
-  zip,
-  zstd,
-  runCommand,
-  writeText,
-  extraRuntimeDeps ? [ ],
-  doWrap ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, runtimeShell
+, cacert
+, cmake
+, cmakerc
+, curl
+, fmt
+, git
+, gzip
+, meson
+, ninja
+, openssh
+, python3
+, unzip
+, zip
+, zstd
+, runCommand
+, writeText
+, extraRuntimeDeps ? [ ]
+, doWrap ? true
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vcpkg-tool";

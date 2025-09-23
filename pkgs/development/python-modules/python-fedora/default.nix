@@ -1,18 +1,18 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchPypi,
-  kitchen,
-  lockfile,
-  munch,
-  openidc-client,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  six,
-  urllib3,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchPypi
+, kitchen
+, lockfile
+, munch
+, openidc-client
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, six
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

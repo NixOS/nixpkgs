@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  libsodium,
-  buildGoModule,
-  nix-update-script,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, pkg-config
+, libsodium
+, buildGoModule
+, nix-update-script
+, nixosTests
+,
 }:
 
 buildGoModule (finalAttrs: {

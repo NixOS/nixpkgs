@@ -1,7 +1,7 @@
-{
-  callPackage,
-  fetchFromGitHub,
-  gambit-support,
+{ callPackage
+, fetchFromGitHub
+, gambit-support
+,
 }:
 
 callPackage ./build.nix rec {

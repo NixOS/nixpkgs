@@ -1,40 +1,40 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  SDL2,
-  libpng,
-  zlib,
-  xz,
-  freetype,
-  fontconfig,
-  curl,
-  icu,
-  harfbuzz,
-  expat,
-  glib,
-  pcre2,
-  withOpenGFX ? true,
-  withOpenSFX ? true,
-  withOpenMSX ? true,
-  withFluidSynth ? true,
-  fluidsynth,
-  soundfont-fluid,
-  soundfont-name ? "FluidR3_GM2-2",
-  libsndfile,
-  flac,
-  libogg,
-  libvorbis,
-  libopus,
-  libmpg123,
-  pulseaudio,
-  alsa-lib,
-  libjack2,
-  makeWrapper,
-  buildPackages,
+{ lib
+, stdenv
+, fetchzip
+, fetchpatch
+, cmake
+, pkg-config
+, SDL2
+, libpng
+, zlib
+, xz
+, freetype
+, fontconfig
+, curl
+, icu
+, harfbuzz
+, expat
+, glib
+, pcre2
+, withOpenGFX ? true
+, withOpenSFX ? true
+, withOpenMSX ? true
+, withFluidSynth ? true
+, fluidsynth
+, soundfont-fluid
+, soundfont-name ? "FluidR3_GM2-2"
+, libsndfile
+, flac
+, libogg
+, libvorbis
+, libopus
+, libmpg123
+, pulseaudio
+, alsa-lib
+, libjack2
+, makeWrapper
+, buildPackages
+,
 }:
 
 let

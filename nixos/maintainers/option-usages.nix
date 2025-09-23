@@ -1,11 +1,9 @@
-{
-  configuration ? import ../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>,
-
-  # provide an option name, as a string literal.
-  testOption ? null,
-
-  # provide a list of option names, as string literals.
-  testOptions ? [ ],
+{ configuration ? import ../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>
+, # provide an option name, as a string literal.
+  testOption ? null
+, # provide a list of option names, as string literals.
+  testOptions ? [ ]
+,
 }:
 
 # This file is made to be used as follow:
@@ -48,8 +46,8 @@ with import ../../lib;
 let
 
   evalFun =
-    {
-      specialArgs ? { },
+    { specialArgs ? { }
+    ,
     }:
     import ../lib/eval-config.nix {
       modules = [ configuration ];
@@ -123,22 +121,27 @@ let
 
   overrideConfig =
     thrower:
-    recursiveUpdateUntil (
-      path: old: new:
-      path == thrower.path
-    ) eval.config thrower.config;
+    recursiveUpdateUntil
+      (
+        path: old: new:
+        path == thrower.path
+      )
+      eval.config
+      thrower.config;
 
-  graph = map (thrower: {
-    option = thrower.name;
-    usedBy =
-      assert __trace "Investigate ${thrower.name}" true;
-      reportNewFailures eval.options
-        (evalFun {
-          specialArgs = {
-            config = overrideConfig thrower;
-          };
-        }).options;
-  }) introspectionModules;
+  graph = map
+    (thrower: {
+      option = thrower.name;
+      usedBy =
+        assert __trace "Investigate ${thrower.name}" true;
+        reportNewFailures eval.options
+          (evalFun {
+            specialArgs = {
+              config = overrideConfig thrower;
+            };
+          }).options;
+    })
+    introspectionModules;
 
   displayOptionsGraph =
     let
@@ -159,12 +162,16 @@ let
 
   graphToText =
     graph:
-    concatMapStrings (
-      { usedBy, ... }:
-      concatMapStrings (user: ''
-        ${user}
-      '') usedBy
-    ) displayOptionsGraph;
+    concatMapStrings
+      (
+        { usedBy, ... }:
+        concatMapStrings
+          (user: ''
+            ${user}
+          '')
+          usedBy
+      )
+      displayOptionsGraph;
 
 in
 

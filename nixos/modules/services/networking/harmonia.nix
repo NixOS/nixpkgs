@@ -1,18 +1,19 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.harmonia;
   format = pkgs.formats.toml { };
 
   signKeyPaths = cfg.signKeyPaths ++ lib.optional (cfg.signKeyPath != null) cfg.signKeyPath;
-  credentials = lib.imap0 (i: signKeyPath: {
-    id = "sign-key-${builtins.toString i}";
-    path = signKeyPath;
-  }) signKeyPaths;
+  credentials = lib.imap0
+    (i: signKeyPath: {
+      id = "sign-key-${builtins.toString i}";
+      path = signKeyPath;
+    })
+    signKeyPaths;
 in
 {
   options = {
@@ -45,9 +46,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    warnings = lib.optional (
-      cfg.signKeyPath != null
-    ) "`services.harmonia.signKeyPath` is deprecated, use `services.harmonia.signKeyPaths` instead";
+    warnings = lib.optional
+      (
+        cfg.signKeyPath != null
+      ) "`services.harmonia.signKeyPath` is deprecated, use `services.harmonia.signKeyPaths` instead";
     nix.settings.extra-allowed-users = [ "harmonia" ];
     users.users.harmonia = {
       isSystemUser = true;
@@ -64,9 +66,11 @@ in
 
       environment = {
         CONFIG_FILE = format.generate "harmonia.toml" cfg.settings;
-        SIGN_KEY_PATHS = lib.strings.concatMapStringsSep " " (
-          credential: "%d/${credential.id}"
-        ) credentials;
+        SIGN_KEY_PATHS = lib.strings.concatMapStringsSep " "
+          (
+            credential: "%d/${credential.id}"
+          )
+          credentials;
         # Note: it's important to set this for nix-store, because it wants to use
         # $HOME in order to use a temporary cache dir. bizarre failures will occur
         # otherwise

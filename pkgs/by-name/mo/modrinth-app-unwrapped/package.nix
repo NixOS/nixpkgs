@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  cacert,
-  cargo-tauri,
-  desktop-file-utils,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  nix-update-script,
-  nodejs,
-  openssl,
-  pkg-config,
-  pnpm_9,
-  rustPlatform,
-  turbo,
-  webkitgtk_4_1,
+{ lib
+, stdenv
+, cacert
+, cargo-tauri
+, desktop-file-utils
+, fetchFromGitHub
+, makeBinaryWrapper
+, nix-update-script
+, nodejs
+, openssl
+, pkg-config
+, pnpm_9
+, rustPlatform
+, turbo
+, webkitgtk_4_1
+,
 }:
 
 let

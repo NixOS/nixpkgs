@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  cmake,
-  pkg-config,
-  qt6,
-  libvorbis,
-  libarchive,
-  libxml2,
+{ lib
+, stdenv
+, fetchgit
+, cmake
+, pkg-config
+, qt6
+, libvorbis
+, libarchive
+, libxml2
+,
 }:
 
 stdenv.mkDerivation rec {

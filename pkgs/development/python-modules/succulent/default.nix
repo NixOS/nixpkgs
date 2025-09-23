@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flask,
-  lxml,
-  numpy,
-  pandas,
-  pyyaml,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flask
+, lxml
+, numpy
+, pandas
+, pyyaml
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

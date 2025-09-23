@@ -1,12 +1,10 @@
-{
-  lib,
-  mkMesonDerivation,
+{ lib
+, mkMesonDerivation
+, doxygen
+, # Configuration Options
 
-  doxygen,
-
-  # Configuration Options
-
-  version,
+  version
+,
 }:
 
 mkMesonDerivation (finalAttrs: {

@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  unzip,
-  udev,
-  nwjs,
-  gcc-unwrapped,
-  autoPatchelfHook,
-  gsettings-desktop-schemas,
-  gtk3,
-  wrapGAppsHook3,
-  makeWrapper,
-  pinegrowVersion ? "7",
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, udev
+, nwjs
+, gcc-unwrapped
+, autoPatchelfHook
+, gsettings-desktop-schemas
+, gtk3
+, wrapGAppsHook3
+, makeWrapper
+, pinegrowVersion ? "7"
+,
 }:
 
 let

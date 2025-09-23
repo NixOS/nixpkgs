@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  replaceVars,
-  sqlite,
-  which,
-  nix-update-script,
-  writableTmpDirAsHomeHook,
+{ lib
+, fetchFromGitHub
+, python3
+, replaceVars
+, sqlite
+, which
+, nix-update-script
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

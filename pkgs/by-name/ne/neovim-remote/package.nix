@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  neovim,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, neovim
+, fetchpatch
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

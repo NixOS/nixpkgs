@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cairo,
-  expat,
-  ffmpeg,
-  libexif,
-  pango,
-  pkg-config,
-  wxGTK32,
+{ lib
+, stdenv
+, fetchurl
+, cairo
+, expat
+, ffmpeg
+, libexif
+, pango
+, pkg-config
+, wxGTK32
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

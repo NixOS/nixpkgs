@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  numactl,
-  ncurses,
-  check,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, numactl
+, ncurses
+, check
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

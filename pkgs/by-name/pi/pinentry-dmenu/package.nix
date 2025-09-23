@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fontconfig,
-  gpgme,
-  libX11,
-  libXinerama,
-  libXft,
-  pkg-config,
-  zlib,
-  writeText,
-  libassuan,
-  libconfig,
-  libgpg-error,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fontconfig
+, gpgme
+, libX11
+, libXinerama
+, libXft
+, pkg-config
+, zlib
+, writeText
+, libassuan
+, libconfig
+, libgpg-error
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

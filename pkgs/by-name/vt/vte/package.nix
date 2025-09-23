@@ -1,36 +1,36 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  desktop-file-utils,
-  gettext,
-  pkg-config,
-  meson,
-  ninja,
-  gnome,
-  glib,
-  gtk3,
-  gtk4,
-  gtkVersion ? "3",
-  gobject-introspection,
-  vala,
-  python3,
-  gi-docgen,
-  libxml2,
-  gnutls,
-  gperf,
-  pango,
-  pcre2,
-  cairo,
-  fribidi,
-  lz4,
-  icu,
-  systemd,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  fast-float,
-  nixosTests,
-  blackbox-terminal,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, desktop-file-utils
+, gettext
+, pkg-config
+, meson
+, ninja
+, gnome
+, glib
+, gtk3
+, gtk4
+, gtkVersion ? "3"
+, gobject-introspection
+, vala
+, python3
+, gi-docgen
+, libxml2
+, gnutls
+, gperf
+, pango
+, pcre2
+, cairo
+, fribidi
+, lz4
+, icu
+, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, fast-float
+, nixosTests
+, blackbox-terminal
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

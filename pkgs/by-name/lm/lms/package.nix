@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  gtest,
-  boost,
-  wt,
-  taglib,
-  libconfig,
-  libarchive,
-  graphicsmagick,
-  ffmpeg,
-  zlib,
-  libSM,
-  libICE,
-  stb,
-  openssl,
-  xxHash,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gtest
+, boost
+, wt
+, taglib
+, libconfig
+, libarchive
+, graphicsmagick
+, ffmpeg
+, zlib
+, libSM
+, libICE
+, stb
+, openssl
+, xxHash
+,
 }:
 
 stdenv.mkDerivation rec {

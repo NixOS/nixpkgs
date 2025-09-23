@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  installShellFiles,
-  stdenv,
-  darwin,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, installShellFiles
+, stdenv
+, darwin
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

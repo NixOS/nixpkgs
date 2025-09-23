@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  nodejs-slim,
-  alcotest,
-  domain_shims,
-  js_of_ocaml,
+{ lib
+, buildDunePackage
+, fetchurl
+, nodejs-slim
+, alcotest
+, domain_shims
+, js_of_ocaml
+,
 }:
 
 buildDunePackage rec {

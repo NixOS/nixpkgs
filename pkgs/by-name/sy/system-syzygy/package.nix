@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  SDL2,
-  makeWrapper,
-  makeDesktopItem,
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, SDL2
+, makeWrapper
+, makeDesktopItem
+,
 }:
 
 let

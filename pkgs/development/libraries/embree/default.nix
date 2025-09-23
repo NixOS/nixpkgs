@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  ispc,
-  tbb,
-  glfw,
-  openimageio,
-  libjpeg,
-  libpng,
-  libpthreadstubs,
-  libX11,
-  glib,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ispc
+, tbb
+, glfw
+, openimageio
+, libjpeg
+, libpng
+, libpthreadstubs
+, libX11
+, glib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

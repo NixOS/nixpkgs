@@ -1,13 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  mock,
-  jinja2,
-  pygments, # for Erlang support
-  pathspec, # for .gitignore support
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, mock
+, jinja2
+, pygments
+, # for Erlang support
+  pathspec
+, # for .gitignore support
 }:
 
 buildPythonPackage rec {

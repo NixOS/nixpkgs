@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  gtest,
-  llvmPackages,
-  meson,
-  ninja,
-  nixVersions,
-  nix-update-script,
-  nixd,
-  nixf,
-  nixt,
-  nlohmann_json,
-  pkg-config,
-  testers,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, gtest
+, llvmPackages
+, meson
+, ninja
+, nixVersions
+, nix-update-script
+, nixd
+, nixf
+, nixt
+, nlohmann_json
+, pkg-config
+, testers
+, python3
+,
 }:
 
 let

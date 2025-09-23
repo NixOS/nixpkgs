@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  glib,
-  pango,
-  gdk-pixbuf,
-  gtk4,
-  libadwaita,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, glib
+, pango
+, gdk-pixbuf
+, gtk4
+, libadwaita
+,
 }:
 
 rustPlatform.buildRustPackage rec {

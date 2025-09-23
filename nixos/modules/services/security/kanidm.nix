@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
   inherit (lib)
@@ -65,16 +64,17 @@ let
   # paths, no new bind mount is added. Adding subpaths caused problems on ofborg.
   hasPrefixInList =
     list: newPath: any (path: hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
-  mergePaths = foldl' (
-    merged: newPath:
-    let
-      # If the new path is a prefix to some existing path, we need to filter it out
-      filteredPaths = filter (p: !hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
-      # If a prefix of the new path is already in the list, do not add it
-      filteredNew = optional (!hasPrefixInList filteredPaths newPath) newPath;
-    in
-    filteredPaths ++ filteredNew
-  ) [ ];
+  mergePaths = foldl'
+    (
+      merged: newPath:
+        let
+          # If the new path is a prefix to some existing path, we need to filter it out
+          filteredPaths = filter (p: !hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
+          # If a prefix of the new path is already in the list, do not add it
+          filteredNew = optional (!hasPrefixInList filteredPaths newPath) newPath;
+        in
+        filteredPaths ++ filteredNew
+    ) [ ];
 
   defaultServiceConfig = {
     # Setting the type to notify enables additional healthchecks, ensuring units
@@ -224,11 +224,11 @@ let
       last (splitString "]:" address)
     else
     # ipv4:
-    if hasInfix "." address then
-      last (splitString ":" address)
-    # default is 8443
-    else
-      throw "Address not parseable as IPv4 nor IPv6.";
+      if hasInfix "." address then
+        last (splitString ":" address)
+      # default is 8443
+      else
+        throw "Address not parseable as IPv4 nor IPv6.";
 in
 {
   options.services.kanidm = {
@@ -476,9 +476,11 @@ in
             config.members = concatLists (
               flip mapAttrsToList cfg.provision.persons (
                 person: personCfg:
-                optional (
-                  personCfg.present && builtins.elem groupSubmod.config._module.args.name personCfg.groups
-                ) person
+                  optional
+                    (
+                      personCfg.present && builtins.elem groupSubmod.config._module.args.name personCfg.groups
+                    )
+                    person
               )
             );
           })
@@ -683,9 +685,12 @@ in
           ++ entityList "oauth2" cfg.provision.systems.oauth2;
 
         # Accumulate entities by name. Track corresponding entity types for later duplicate check.
-        entitiesByName = foldl' (
-          acc: { type, name }: acc // { ${name} = (acc.${name} or [ ]) ++ [ type ]; }
-        ) { } entities;
+        entitiesByName = foldl'
+          (
+            acc: { type, name }: acc // { ${name} = (acc.${name} or [ ]) ++ [ type ]; }
+          )
+          { }
+          entities;
 
         assertGroupsKnown =
           opt: groups:
@@ -798,66 +803,66 @@ in
       ++ (optionals (cfg.provision.extraJsonFile == null) (
         flip mapAttrsToList (filterPresent cfg.provision.persons) (
           person: personCfg:
-          assertGroupsKnown "services.kanidm.provision.persons.${person}.groups" personCfg.groups
+            assertGroupsKnown "services.kanidm.provision.persons.${person}.groups" personCfg.groups
         )
       ))
       ++ (optionals (cfg.provision.extraJsonFile == null) (
         flip mapAttrsToList (filterPresent cfg.provision.groups) (
           group: groupCfg:
-          assertEntitiesKnown "services.kanidm.provision.groups.${group}.members" groupCfg.members
+            assertEntitiesKnown "services.kanidm.provision.groups.${group}.members" groupCfg.members
         )
       ))
       ++ concatLists (
         flip mapAttrsToList (filterPresent cfg.provision.systems.oauth2) (
           oauth2: oauth2Cfg:
-          (optional (cfg.provision.extraJsonFile == null) (
-            assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.scopeMaps" (
-              attrNames oauth2Cfg.scopeMaps
+            (optional (cfg.provision.extraJsonFile == null) (
+              assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.scopeMaps" (
+                attrNames oauth2Cfg.scopeMaps
+              )
+            ))
+            ++ (optional (cfg.provision.extraJsonFile == null) (
+              assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.supplementaryScopeMaps" (
+                attrNames oauth2Cfg.supplementaryScopeMaps
+              )
+            ))
+            ++ concatLists (
+              flip mapAttrsToList oauth2Cfg.claimMaps (
+                claim: claimCfg: [
+                  (mkIf (cfg.provision.extraJsonFile == null) (
+                    assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim}.valuesByGroup" (
+                      attrNames claimCfg.valuesByGroup
+                    )
+                  ))
+                  # At least one group must map to a value in each claim map
+                  (mkIf (cfg.provision.extraJsonFile == null) {
+                    assertion =
+                      (cfg.provision.enable && cfg.enableServer)
+                      -> any (xs: xs != [ ]) (attrValues claimCfg.valuesByGroup);
+                    message = "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim} does not specify any values for any group";
+                  })
+                  # Public clients cannot define a basic secret
+                  {
+                    assertion =
+                      (cfg.provision.enable && cfg.enableServer && oauth2Cfg.public) -> oauth2Cfg.basicSecretFile == null;
+                    message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot specify a basic secret";
+                  }
+                  # Public clients cannot disable PKCE
+                  {
+                    assertion =
+                      (cfg.provision.enable && cfg.enableServer && oauth2Cfg.public)
+                      -> !oauth2Cfg.allowInsecureClientDisablePkce;
+                    message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot disable PKCE";
+                  }
+                  # Non-public clients cannot enable localhost redirects
+                  {
+                    assertion =
+                      (cfg.provision.enable && cfg.enableServer && !oauth2Cfg.public)
+                      -> !oauth2Cfg.enableLocalhostRedirects;
+                    message = "services.kanidm.provision.systems.oauth2.${oauth2} is a non-public client and thus cannot enable localhost redirects";
+                  }
+                ]
+              )
             )
-          ))
-          ++ (optional (cfg.provision.extraJsonFile == null) (
-            assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.supplementaryScopeMaps" (
-              attrNames oauth2Cfg.supplementaryScopeMaps
-            )
-          ))
-          ++ concatLists (
-            flip mapAttrsToList oauth2Cfg.claimMaps (
-              claim: claimCfg: [
-                (mkIf (cfg.provision.extraJsonFile == null) (
-                  assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim}.valuesByGroup" (
-                    attrNames claimCfg.valuesByGroup
-                  )
-                ))
-                # At least one group must map to a value in each claim map
-                (mkIf (cfg.provision.extraJsonFile == null) {
-                  assertion =
-                    (cfg.provision.enable && cfg.enableServer)
-                    -> any (xs: xs != [ ]) (attrValues claimCfg.valuesByGroup);
-                  message = "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim} does not specify any values for any group";
-                })
-                # Public clients cannot define a basic secret
-                {
-                  assertion =
-                    (cfg.provision.enable && cfg.enableServer && oauth2Cfg.public) -> oauth2Cfg.basicSecretFile == null;
-                  message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot specify a basic secret";
-                }
-                # Public clients cannot disable PKCE
-                {
-                  assertion =
-                    (cfg.provision.enable && cfg.enableServer && oauth2Cfg.public)
-                    -> !oauth2Cfg.allowInsecureClientDisablePkce;
-                  message = "services.kanidm.provision.systems.oauth2.${oauth2} is a public client and thus cannot disable PKCE";
-                }
-                # Non-public clients cannot enable localhost redirects
-                {
-                  assertion =
-                    (cfg.provision.enable && cfg.enableServer && !oauth2Cfg.public)
-                    -> !oauth2Cfg.enableLocalhostRedirects;
-                  message = "services.kanidm.provision.systems.oauth2.${oauth2} is a non-public client and thus cannot enable localhost redirects";
-                }
-              ]
-            )
-          )
         )
       );
 
@@ -913,9 +918,11 @@ in
             # To store backups
             cfg.serverSettings.online_backup.path
           ]
-          ++ optional (
-            cfg.enablePam && cfg.unixSettings ? home_mount_prefix
-          ) cfg.unixSettings.home_mount_prefix;
+          ++ optional
+            (
+              cfg.enablePam && cfg.unixSettings ? home_mount_prefix
+            )
+            cfg.unixSettings.home_mount_prefix;
 
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];

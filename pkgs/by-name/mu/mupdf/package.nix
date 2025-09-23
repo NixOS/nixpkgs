@@ -1,47 +1,46 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  copyDesktopItems,
-  makeDesktopItem,
-  desktopToDarwinBundle,
-  buildPackages,
-  pkg-config,
-  fixDarwinDylibNames,
-  freetype,
-  harfbuzz,
-  openjpeg,
-  jbig2dec,
-  libjpeg,
-  gumbo,
-  enableX11 ? (!stdenv.hostPlatform.isDarwin),
-  libX11,
-  libXext,
-  libXi,
-  libXrandr,
-  enableCurl ? true,
-  curl,
-  openssl,
-  enableGL ? true,
-  freeglut,
-  libGLU,
-  enableOcr ? false,
-  leptonica,
-  tesseract,
-  enableCxx ? false,
-  python3,
-  enablePython ? false,
-  which,
-  swig,
-  xcbuild,
-  gitUpdater,
-  enableBarcode ? false,
-
-  # for passthru.tests
-  cups-filters,
-  zathura,
-  mupdf,
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, copyDesktopItems
+, makeDesktopItem
+, desktopToDarwinBundle
+, buildPackages
+, pkg-config
+, fixDarwinDylibNames
+, freetype
+, harfbuzz
+, openjpeg
+, jbig2dec
+, libjpeg
+, gumbo
+, enableX11 ? (!stdenv.hostPlatform.isDarwin)
+, libX11
+, libXext
+, libXi
+, libXrandr
+, enableCurl ? true
+, curl
+, openssl
+, enableGL ? true
+, freeglut
+, libGLU
+, enableOcr ? false
+, leptonica
+, tesseract
+, enableCxx ? false
+, python3
+, enablePython ? false
+, which
+, swig
+, xcbuild
+, gitUpdater
+, enableBarcode ? false
+, # for passthru.tests
+  cups-filters
+, zathura
+, mupdf
+,
 }:
 
 assert enablePython -> enableCxx;

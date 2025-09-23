@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  macaddr,
-  cstruct,
+{ buildDunePackage
+, macaddr
+, cstruct
+,
 }:
 
 buildDunePackage {

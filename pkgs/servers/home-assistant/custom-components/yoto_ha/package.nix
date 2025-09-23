@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildHomeAssistantComponent,
-  yoto-api,
+{ lib
+, fetchFromGitHub
+, buildHomeAssistantComponent
+, yoto-api
+,
 }:
 
 buildHomeAssistantComponent rec {

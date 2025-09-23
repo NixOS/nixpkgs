@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  gitUpdater,
-  bencodetools,
-  flac,
-  lame,
-  libao,
-  libzakalwe,
-  makeWrapper,
-  python3,
-  pkg-config,
-  sox,
-  vorbis-tools,
-  which,
+{ lib
+, stdenv
+, fetchFromGitLab
+, gitUpdater
+, bencodetools
+, flac
+, lame
+, libao
+, libzakalwe
+, makeWrapper
+, python3
+, pkg-config
+, sox
+, vorbis-tools
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

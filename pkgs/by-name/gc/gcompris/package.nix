@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchurl,
-  gettext,
-  gst_all_1,
-  ninja,
-  kdePackages,
+{ lib
+, stdenv
+, cmake
+, fetchurl
+, gettext
+, gst_all_1
+, ninja
+, kdePackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

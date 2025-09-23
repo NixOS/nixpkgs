@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  versionCheckHook,
-  _experimental-update-script-combinators,
-  nix-update-script,
-  writeShellApplication,
-  nix,
-  gnugrep,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, versionCheckHook
+, _experimental-update-script-combinators
+, nix-update-script
+, writeShellApplication
+, nix
+, gnugrep
+,
 }:
 
 let

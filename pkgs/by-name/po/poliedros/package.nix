@@ -1,17 +1,17 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  ninja,
-  meson,
-  pkg-config,
-  wrapGAppsHook4,
-  glib,
-  desktop-file-utils,
-  appstream-glib,
-  gobject-introspection,
-  libadwaita,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, ninja
+, meson
+, pkg-config
+, wrapGAppsHook4
+, glib
+, desktop-file-utils
+, appstream-glib
+, gobject-introspection
+, libadwaita
+, nix-update-script
+,
 }:
 let
   version = "1.5.0";

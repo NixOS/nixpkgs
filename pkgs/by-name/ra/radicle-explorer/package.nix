@@ -1,11 +1,11 @@
-{
-  radicle-httpd,
-  fetchFromGitHub,
-  lib,
-  buildNpmPackage,
-  writeText,
-  jq,
-  runCommand,
+{ radicle-httpd
+, fetchFromGitHub
+, lib
+, buildNpmPackage
+, writeText
+, jq
+, runCommand
+,
 }:
 
 let
@@ -58,64 +58,66 @@ let
       );
   };
 in
-lib.fix (
-  self:
-  lib.makeOverridable (
-    {
-      npmDepsHash ? "sha256-7/DH0p66FTfC0N42FhWTqehg5m/yq929ANhL4jAt7Ss=",
-      patches ? [ ],
-    }@args:
-    buildNpmPackage {
-      pname = "radicle-explorer";
-      version = radicle-httpd.version;
-      inherit patches npmDepsHash;
+lib.fix
+  (
+    self:
+    lib.makeOverridable (
+      { npmDepsHash ? "sha256-7/DH0p66FTfC0N42FhWTqehg5m/yq929ANhL4jAt7Ss="
+      , patches ? [ ]
+      ,
+      }@args:
+      buildNpmPackage {
+        pname = "radicle-explorer";
+        version = radicle-httpd.version;
+        inherit patches npmDepsHash;
 
-      # radicle-explorer uses the radicle-httpd API, and they are developed in the
-      # same repo. For this reason we pin the sources to each other, but due to
-      # radicle-httpd using a more limited sparse checkout we need to carry a
-      # separate hash.
-      src = radicle-httpd.src.override {
-        hash = "sha256-1OhZ0x21NlZIiTPCRpvdUsx5UmeLecTjVzH8DWllPr8=";
-        sparseCheckout = [ ];
-      };
+        # radicle-explorer uses the radicle-httpd API, and they are developed in the
+        # same repo. For this reason we pin the sources to each other, but due to
+        # radicle-httpd using a more limited sparse checkout we need to carry a
+        # separate hash.
+        src = radicle-httpd.src.override {
+          hash = "sha256-1OhZ0x21NlZIiTPCRpvdUsx5UmeLecTjVzH8DWllPr8=";
+          sparseCheckout = [ ];
+        };
 
-      postPatch = ''
-        patchShebangs --build ./scripts
-        mkdir -p "public/twemoji"
-        cp -t public/twemoji -r -- ${twemojiAssets}/assets/svg/*
-        : >scripts/install-twemoji-assets
-      '';
-
-      dontConfigure = true;
-      doCheck = false;
-
-      installPhase = ''
-        runHook preInstall
-        mkdir -p "$out"
-        cp -r -t "$out" build/*
-        runHook postInstall
-      '';
-
-      passthru = mkPassthru self args;
-
-      meta = {
-        description = "Web frontend for Radicle";
-        longDescription = ''
-          Radicle Explorer is a web-frontend for Radicle which supports browsing
-          repositories, issues and patches on publicly available Radicle seeds.
-
-          This package builds the web interface, ready to be served by any web
-          server.
+        postPatch = ''
+          patchShebangs --build ./scripts
+          mkdir -p "public/twemoji"
+          cp -t public/twemoji -r -- ${twemojiAssets}/assets/svg/*
+          : >scripts/install-twemoji-assets
         '';
 
-        homepage = "https://radicle.xyz";
-        license = lib.licenses.gpl3;
+        dontConfigure = true;
+        doCheck = false;
 
-        maintainers = with lib.maintainers; [
-          tazjin
-          lorenzleutgeb
-        ];
-      };
-    }
+        installPhase = ''
+          runHook preInstall
+          mkdir -p "$out"
+          cp -r -t "$out" build/*
+          runHook postInstall
+        '';
+
+        passthru = mkPassthru self args;
+
+        meta = {
+          description = "Web frontend for Radicle";
+          longDescription = ''
+            Radicle Explorer is a web-frontend for Radicle which supports browsing
+            repositories, issues and patches on publicly available Radicle seeds.
+
+            This package builds the web interface, ready to be served by any web
+            server.
+          '';
+
+          homepage = "https://radicle.xyz";
+          license = lib.licenses.gpl3;
+
+          maintainers = with lib.maintainers; [
+            tazjin
+            lorenzleutgeb
+          ];
+        };
+      }
+    )
   )
-) { }
+{ }

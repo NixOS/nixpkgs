@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  ruamel-yaml,
-  python-dateutil,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, ruamel-yaml
+, python-dateutil
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,18 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-
-  # patches
-  replaceVars,
-  meek,
-  obfs4,
-  snowflake,
-  tor,
-
-  versionCheckHook,
-  gitUpdater,
-  onionshare-gui,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, # patches
+  replaceVars
+, meek
+, obfs4
+, snowflake
+, tor
+, versionCheckHook
+, gitUpdater
+, onionshare-gui
+, writableTmpDirAsHomeHook
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "onionshare-cli";

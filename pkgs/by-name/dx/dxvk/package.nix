@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  overrideCC,
-  pkgsCross,
-  bash,
+{ lib
+, stdenvNoCC
+, overrideCC
+, pkgsCross
+, bash
+,
 }:
 
 stdenvNoCC.mkDerivation (
@@ -27,19 +27,21 @@ stdenvNoCC.mkDerivation (
 
     dxvk32 =
       if stdenvNoCC.hostPlatform.isDarwin then
-        pkgsCross.mingw32.dxvk_1.override {
-          stdenv = mingw32Stdenv;
-          enableMoltenVKCompat = true;
-        }
+        pkgsCross.mingw32.dxvk_1.override
+          {
+            stdenv = mingw32Stdenv;
+            enableMoltenVKCompat = true;
+          }
       else
         pkgsCross.mingw32.dxvk_2.override { stdenv = mingw32Stdenv; };
 
     dxvk64 =
       if stdenvNoCC.hostPlatform.isDarwin then
-        pkgsCross.mingwW64.dxvk_1.override {
-          stdenv = mingwW64Stdenv;
-          enableMoltenVKCompat = true;
-        }
+        pkgsCross.mingwW64.dxvk_1.override
+          {
+            stdenv = mingwW64Stdenv;
+            enableMoltenVKCompat = true;
+          }
       else
         pkgsCross.mingwW64.dxvk_2.override { stdenv = mingwW64Stdenv; };
   in

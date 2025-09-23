@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchbzr,
-  fetchFromGitHub,
-  libsForQt5,
-  versionNum ? "1.1.0",
+{ lib
+, stdenv
+, fetchbzr
+, fetchFromGitHub
+, libsForQt5
+, versionNum ? "1.1.0"
+,
 }:
 
 let

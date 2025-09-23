@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  libnotify,
-  cmake,
-  ninja,
-  qt6,
+{ lib
+, stdenv
+, fetchFromGitLab
+, libnotify
+, cmake
+, ninja
+, qt6
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

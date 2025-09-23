@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchsvn,
-  cctools,
-  libtiff,
-  libpng,
-  zlib,
-  libwebp,
-  libraw,
-  openexr,
-  openjpeg,
-  libjpeg,
-  jxrlib,
-  pkg-config,
-  fixDarwinDylibNames,
+{ lib
+, stdenv
+, fetchsvn
+, cctools
+, libtiff
+, libpng
+, zlib
+, libwebp
+, libraw
+, openexr
+, openjpeg
+, libjpeg
+, jxrlib
+, pkg-config
+, fixDarwinDylibNames
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

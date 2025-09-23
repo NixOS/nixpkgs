@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  cachelib,
-  flask,
-  pytz,
-
-  # tests
-  elasticsearch,
-  flask-sqlalchemy,
-  peewee,
-  pymemcache,
-  pymongo,
-  pytestCheckHook,
-  redis,
-  redisTestHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  cachelib
+, flask
+, pytz
+, # tests
+  elasticsearch
+, flask-sqlalchemy
+, peewee
+, pymemcache
+, pymongo
+, pytestCheckHook
+, redis
+, redisTestHook
+,
 }:
 
 buildPythonPackage rec {

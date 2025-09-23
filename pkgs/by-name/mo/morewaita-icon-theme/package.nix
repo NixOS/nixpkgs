@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gtk3,
-  xdg-utils,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, xdg-utils
+, nix-update-script
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "morewaita-icon-theme";

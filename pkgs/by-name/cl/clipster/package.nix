@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  python3,
-  gtk3,
-  libwnck,
-  gobject-introspection,
-  wrapGAppsHook3,
+{ fetchFromGitHub
+, lib
+, stdenv
+, python3
+, gtk3
+, libwnck
+, gobject-introspection
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

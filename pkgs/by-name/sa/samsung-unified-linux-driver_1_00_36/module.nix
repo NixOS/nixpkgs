@@ -14,11 +14,10 @@
 # and simple-scan.  errors indicate an I/O error.  scanning works
 # again after turning the device off and on.  atm i have no idea how
 # to fix this and no time to do more about it.
-{
-  config,
-  pkgs,
-  lib ? pkgs.lib,
-  ...
+{ config
+, pkgs
+, lib ? pkgs.lib
+, ...
 }:
 let
   cfg = config.services.samsung-unified-linux-driver_1_00_36;

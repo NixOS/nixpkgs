@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  gradle_7,
-  jdk11,
-  lib,
-  stdenv,
-  rsync,
-  runCommand,
-  testers,
+{ fetchFromGitHub
+, gradle_7
+, jdk11
+, lib
+, stdenv
+, rsync
+, runCommand
+, testers
+,
 }:
 
 let

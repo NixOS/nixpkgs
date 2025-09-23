@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  testers,
-  cmake,
-  pkg-config,
-  wrapQtAppsHook,
-  pcsclite,
-  qtscxml,
-  qtsvg,
-  qttools,
-  qtwayland,
-  qtwebsockets,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, testers
+, cmake
+, pkg-config
+, wrapQtAppsHook
+, pcsclite
+, qtscxml
+, qtsvg
+, qttools
+, qtwayland
+, qtwebsockets
+, gitUpdater
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausweisapp";

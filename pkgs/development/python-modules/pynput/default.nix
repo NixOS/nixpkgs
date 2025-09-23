@@ -1,22 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitUpdater,
-
-  # build-system
-  setuptools,
-  setuptools-lint,
-  sphinx,
-
-  # dependencies
-  xlib,
-  evdev,
-  six,
-
-  # tests
-  unittestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, gitUpdater
+, # build-system
+  setuptools
+, setuptools-lint
+, sphinx
+, # dependencies
+  xlib
+, evdev
+, six
+, # tests
+  unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

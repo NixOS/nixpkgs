@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  poetry-core,
-  django,
-  django-pgtrigger,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nix-update-script
+, poetry-core
+, django
+, django-pgtrigger
+,
 }:
 
 buildPythonPackage rec {

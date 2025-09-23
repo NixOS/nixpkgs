@@ -1,7 +1,7 @@
-{
-  buildPecl,
-  lib,
-  libyaml,
+{ buildPecl
+, lib
+, libyaml
+,
 }:
 
 buildPecl {

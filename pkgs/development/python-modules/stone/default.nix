@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  jinja2,
-  mock,
-  packaging,
-  ply,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  six,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, jinja2
+, mock
+, packaging
+, ply
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

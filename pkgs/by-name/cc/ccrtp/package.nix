@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  ucommon,
-  openssl,
-  libgcrypt,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, ucommon
+, openssl
+, libgcrypt
+,
 }:
 
 stdenv.mkDerivation rec {

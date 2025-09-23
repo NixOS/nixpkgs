@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  wayland,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wayland
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  setuptools,
-  versioningit,
-  attrs,
-  platformdirs,
-  tomli,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, setuptools
+, versioningit
+, attrs
+, platformdirs
+, tomli
+,
 }:
 
 buildPythonPackage rec {

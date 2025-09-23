@@ -1,101 +1,92 @@
-{
-  fetchurl,
-  lib,
-  makeWrapper,
-  patchelf,
-  stdenvNoCC,
-  bintools,
-
-  # Linked dynamic libraries.
-  alsa-lib,
-  at-spi2-atk,
-  at-spi2-core,
-  atk,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  fontconfig,
-  freetype,
-  gcc-unwrapped,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  gtk4,
-  libdrm,
-  libglvnd,
-  libkrb5,
-  libX11,
-  libxcb,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libxkbcommon,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
-  libxshmfence,
-  libXtst,
-  libgbm,
-  nspr,
-  nss,
-  pango,
-  pipewire,
-  vulkan-loader,
-  wayland, # ozone/wayland
+{ fetchurl
+, lib
+, makeWrapper
+, patchelf
+, stdenvNoCC
+, bintools
+, # Linked dynamic libraries.
+  alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gcc-unwrapped
+, gdk-pixbuf
+, glib
+, gtk3
+, gtk4
+, libdrm
+, libglvnd
+, libkrb5
+, libX11
+, libxcb
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXext
+, libXfixes
+, libXi
+, libxkbcommon
+, libXrandr
+, libXrender
+, libXScrnSaver
+, libxshmfence
+, libXtst
+, libgbm
+, nspr
+, nss
+, pango
+, pipewire
+, vulkan-loader
+, wayland
+, # ozone/wayland
 
   # Command line programs
-  coreutils,
-
-  # command line arguments which are always set e.g "--disable-gpu"
-  commandLineArgs ? "",
-
-  # Will crash without.
-  systemd,
-
-  # Loaded at runtime.
-  libexif,
-  pciutils,
-
-  # Additional dependencies according to other distros.
+  coreutils
+, # command line arguments which are always set e.g "--disable-gpu"
+  commandLineArgs ? ""
+, # Will crash without.
+  systemd
+, # Loaded at runtime.
+  libexif
+, pciutils
+, # Additional dependencies according to other distros.
   ## Ubuntu
-  curl,
-  liberation_ttf,
-  util-linux,
-  wget,
-  xdg-utils,
-  ## Arch Linux.
-  flac,
-  harfbuzz,
-  icu,
-  libopus,
-  libpng,
-  snappy,
-  speechd-minimal,
-  ## Gentoo
-  bzip2,
-  libcap,
-
-  # Necessary for USB audio devices.
-  libpulseaudio,
-  pulseSupport ? true,
-
-  adwaita-icon-theme,
-  gsettings-desktop-schemas,
-
-  # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
-  libva,
-  libvaSupport ? true,
-
-  # For Vulkan support (--enable-features=Vulkan)
-  addDriverRunpath,
-  undmg,
-
-  # For QT support
-  qt6,
+  curl
+, liberation_ttf
+, util-linux
+, wget
+, xdg-utils
+, ## Arch Linux.
+  flac
+, harfbuzz
+, icu
+, libopus
+, libpng
+, snappy
+, speechd-minimal
+, ## Gentoo
+  bzip2
+, libcap
+, # Necessary for USB audio devices.
+  libpulseaudio
+, pulseSupport ? true
+, adwaita-icon-theme
+, gsettings-desktop-schemas
+, # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
+  libva
+, libvaSupport ? true
+, # For Vulkan support (--enable-features=Vulkan)
+  addDriverRunpath
+, undmg
+, # For QT support
+  qt6
+,
 }:
 
 let

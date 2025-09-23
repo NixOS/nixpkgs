@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  libiconv,
-  texliveFull,
-  xercesc,
+{ fetchFromGitHub
+, lib
+, stdenv
+, libiconv
+, texliveFull
+, xercesc
+,
 }:
 
 stdenv.mkDerivation rec {

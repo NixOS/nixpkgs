@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  vdr,
-  fetchFromGitHub,
-  ffmpeg,
+{ lib
+, stdenv
+, vdr
+, fetchFromGitHub
+, ffmpeg
+,
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-markad";

@@ -1,17 +1,17 @@
-{
-  buildPythonPackage,
-  charset-normalizer,
-  cryptography,
-  fetchFromGitHub,
-  hatchling,
-  lib,
-  orjson,
-  pytest-asyncio,
-  pytest-httpbin,
-  pytestCheckHook,
-  stdenv,
-  urllib3-future,
-  wassima,
+{ buildPythonPackage
+, charset-normalizer
+, cryptography
+, fetchFromGitHub
+, hatchling
+, lib
+, orjson
+, pytest-asyncio
+, pytest-httpbin
+, pytestCheckHook
+, stdenv
+, urllib3-future
+, wassima
+,
 }:
 
 buildPythonPackage rec {

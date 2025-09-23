@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bluez,
-  cmake,
-  dbus,
-  libftdi1,
-  nix-update-script,
-  pkg-config,
-  useLibFTDI ? true,
-  useOpenMP ? true,
-  buildBluetooth ? true,
-  buildBluetoothLowEnergy ? true,
-  buildONNX ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bluez
+, cmake
+, dbus
+, libftdi1
+, nix-update-script
+, pkg-config
+, useLibFTDI ? true
+, useOpenMP ? true
+, buildBluetooth ? true
+, buildBluetoothLowEnergy ? true
+, buildONNX ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

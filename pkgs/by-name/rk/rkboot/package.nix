@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  rkbin,
-  qemu,
+{ stdenv
+, lib
+, rkbin
+, qemu
+,
 }:
 
 stdenv.mkDerivation {

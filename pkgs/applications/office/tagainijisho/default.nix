@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  qtbase,
-  qttools,
-  cmake,
-  sqlite,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchzip
+, qtbase
+, qttools
+, cmake
+, sqlite
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

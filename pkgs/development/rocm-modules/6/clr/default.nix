@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  rocmUpdateScript,
-  makeWrapper,
-  cmake,
-  perl,
-  hip-common,
-  hipcc,
-  rocm-device-libs,
-  rocm-comgr,
-  rocm-runtime,
-  rocm-core,
-  roctracer,
-  rocminfo,
-  rocm-smi,
-  numactl,
-  libffi,
-  zstd,
-  zlib,
-  libGL,
-  libxml2,
-  libX11,
-  python3Packages,
-  rocm-merged-llvm,
-  khronos-ocl-icd-loader,
-  gcc-unwrapped,
-  writeShellScriptBin,
-  localGpuTargets ? null,
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, fetchpatch
+, rocmUpdateScript
+, makeWrapper
+, cmake
+, perl
+, hip-common
+, hipcc
+, rocm-device-libs
+, rocm-comgr
+, rocm-runtime
+, rocm-core
+, roctracer
+, rocminfo
+, rocm-smi
+, numactl
+, libffi
+, zstd
+, zlib
+, libGL
+, libxml2
+, libX11
+, python3Packages
+, rocm-merged-llvm
+, khronos-ocl-icd-loader
+, gcc-unwrapped
+, writeShellScriptBin
+, localGpuTargets ? null
+,
 }:
 
 let
@@ -239,7 +239,8 @@ stdenv.mkDerivation (finalAttrs: {
       "1151" # Strix Halo
       "1200" # RX 9070
       "1201" # RX 9070 XT
-    ] (target: "gfx${target}");
+    ]
+      (target: "gfx${target}");
 
     inherit hipClangPath;
 
@@ -261,8 +262,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     selectGpuTargets =
-      {
-        supported ? [ ],
+      { supported ? [ ]
+      ,
       }:
       supported;
     gpuArchSuffix = "";
@@ -271,8 +272,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit localGpuTargets;
     gpuArchSuffix = "-" + (builtins.concatStringsSep "-" localGpuTargets);
     selectGpuTargets =
-      {
-        supported ? [ ],
+      { supported ? [ ]
+      ,
       }:
       if supported == [ ] then localGpuTargets else lib.lists.intersectLists localGpuTargets supported;
   };

@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build
-  hatchling,
-
-  # runtime
-  terminado,
-
-  # tests
-  pytest-jupyter,
-  pytest-timeout,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build
+  hatchling
+, # runtime
+  terminado
+, # tests
+  pytest-jupyter
+, pytest-timeout
+, pytestCheckHook
+,
 }:
 
 let

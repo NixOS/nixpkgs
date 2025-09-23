@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
-  pkg-config,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+, pkg-config
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

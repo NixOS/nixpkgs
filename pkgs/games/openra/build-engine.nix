@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  SDL2,
-  freetype,
-  openal,
-  lua51Packages,
-  openRaUpdater,
+{ lib
+, buildDotnetModule
+, dotnetCorePackages
+, fetchFromGitHub
+, SDL2
+, freetype
+, openal
+, lua51Packages
+, openRaUpdater
+,
 }:
 engine:
 

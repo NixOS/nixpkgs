@@ -1,11 +1,10 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-
-  pathspec,
-  setuptools,
-  tree-sitter-language-pack,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, pathspec
+, setuptools
+, tree-sitter-language-pack
+,
 }:
 
 buildPythonPackage rec {

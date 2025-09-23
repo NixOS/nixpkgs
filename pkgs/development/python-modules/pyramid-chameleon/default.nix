@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  chameleon,
-  fetchpatch,
-  fetchPypi,
-  pyramid,
-  pytestCheckHook,
-  setuptools,
-  zope-interface,
+{ lib
+, buildPythonPackage
+, chameleon
+, fetchpatch
+, fetchPypi
+, pyramid
+, pytestCheckHook
+, setuptools
+, zope-interface
+,
 }:
 
 buildPythonPackage rec {

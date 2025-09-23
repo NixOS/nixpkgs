@@ -7,13 +7,13 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-{
-  lib,
-  callPackage,
-  fetchurl,
-  kaem,
-  mes,
-  mes-libc,
+{ lib
+, callPackage
+, fetchurl
+, kaem
+, mes
+, mes-libc
+,
 }:
 let
   inherit (callPackage ./common.nix { }) buildTinyccMes recompileLibc;

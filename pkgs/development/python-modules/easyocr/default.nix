@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  hdf5,
-  numpy,
-  opencv-python-headless,
-  pillow,
-  pyaml,
-  pyclipper,
-  python-bidi,
-  pythonOlder,
-  scikit-image,
-  scipy,
-  shapely,
-  torch,
-  torchvision,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, hdf5
+, numpy
+, opencv-python-headless
+, pillow
+, pyaml
+, pyclipper
+, python-bidi
+, pythonOlder
+, scikit-image
+, scipy
+, shapely
+, torch
+, torchvision
+, python
+,
 }:
 
 buildPythonPackage rec {

@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  boto3,
-  fetchFromGitHub,
-  httpretty,
-  keyring,
-  lz4,
-  pytestCheckHook,
-  python-dateutil,
-  pytz,
-  requests-gssapi,
-  requests-kerberos,
-  requests,
-  setuptools,
-  sqlalchemy,
-  testcontainers,
-  tzlocal,
-  zstandard,
+{ lib
+, buildPythonPackage
+, boto3
+, fetchFromGitHub
+, httpretty
+, keyring
+, lz4
+, pytestCheckHook
+, python-dateutil
+, pytz
+, requests-gssapi
+, requests-kerberos
+, requests
+, setuptools
+, sqlalchemy
+, testcontainers
+, tzlocal
+, zstandard
+,
 }:
 
 buildPythonPackage rec {

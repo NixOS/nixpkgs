@@ -1,26 +1,26 @@
-{
-  lib,
-  mkKdeDerivation,
-  writeText,
-  pkg-config,
-  cryptsetup,
-  lvm2,
-  mdadm,
-  smartmontools,
-  systemdMinimal,
-  util-linux,
-  btrfs-progs,
-  dosfstools,
-  e2fsprogs,
-  exfatprogs,
-  f2fs-tools,
-  fatresize,
-  jfsutils,
-  nilfs-utils,
-  ntfs3g,
-  udftools,
-  xfsprogs,
-  zfs,
+{ lib
+, mkKdeDerivation
+, writeText
+, pkg-config
+, cryptsetup
+, lvm2
+, mdadm
+, smartmontools
+, systemdMinimal
+, util-linux
+, btrfs-progs
+, dosfstools
+, e2fsprogs
+, exfatprogs
+, f2fs-tools
+, fatresize
+, jfsutils
+, nilfs-utils
+, ntfs3g
+, udftools
+, xfsprogs
+, zfs
+,
 }:
 let
   # https://github.com/KDE/kpmcore/blob/06f15334ecfbe871730a90dbe2b694ba060ee998/src/util/externalcommand_whitelist.h

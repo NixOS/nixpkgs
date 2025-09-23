@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  curl,
-  tzdata,
-  autoPatchelfHook,
-  fixDarwinDylibNames,
-  glibc,
-  version,
-  hashes,
+{ lib
+, stdenv
+, fetchurl
+, curl
+, tzdata
+, autoPatchelfHook
+, fixDarwinDylibNames
+, glibc
+, version
+, hashes
+,
 }:
 
 let
@@ -18,7 +18,7 @@ let
 in
 
 # On linux pargets like `pkgsLLVM.dmd` `cc` does not expose `libgcc`
-# and can't build `dmd`.
+  # and can't build `dmd`.
 assert hostPlatform.isLinux -> (stdenv.cc.cc ? libgcc);
 stdenv.mkDerivation {
   pname = "dmd-bootstrap";

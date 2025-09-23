@@ -1,6 +1,6 @@
-{
-  lib,
-  newScope,
+{ lib
+, newScope
+,
 }:
 
 lib.makeScope newScope (

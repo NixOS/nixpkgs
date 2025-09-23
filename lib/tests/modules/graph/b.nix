@@ -1,3 +1,3 @@
 args: {
-  imports = [ { key = "explicit-key"; } ];
+  imports = [{ key = "explicit-key"; }];
 }

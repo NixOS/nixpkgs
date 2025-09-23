@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  coverage,
-  miss-hit-core,
-  python,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, coverage
+, miss-hit-core
+, python
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

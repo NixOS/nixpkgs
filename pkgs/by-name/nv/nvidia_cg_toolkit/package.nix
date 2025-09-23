@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
+{ lib
+, stdenv
+, fetchurl
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,15 +13,17 @@ stdenv.mkDerivation rec {
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://developer.download.nvidia.com/cg/Cg_${version}/Cg-${version}_${date}_x86_64.tgz";
-        sha256 = "e8ff01e6cc38d1b3fd56a083f5860737dbd2f319a39037528fb1a74a89ae9878";
-      }
+      fetchurl
+        {
+          url = "https://developer.download.nvidia.com/cg/Cg_${version}/Cg-${version}_${date}_x86_64.tgz";
+          sha256 = "e8ff01e6cc38d1b3fd56a083f5860737dbd2f319a39037528fb1a74a89ae9878";
+        }
     else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        url = "http://developer.download.nvidia.com/cg/Cg_${version}/Cg-${version}_${date}_x86.tgz";
-        sha256 = "cef3591e436f528852db0e8c145d3842f920e0c89bcfb219c466797cb7b18879";
-      }
+      fetchurl
+        {
+          url = "http://developer.download.nvidia.com/cg/Cg_${version}/Cg-${version}_${date}_x86.tgz";
+          sha256 = "cef3591e436f528852db0e8c145d3842f920e0c89bcfb219c466797cb7b18879";
+        }
     else
       throw "nvidia-cg-toolkit does not support platform ${stdenv.hostPlatform.system}";
 

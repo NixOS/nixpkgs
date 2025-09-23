@@ -1,8 +1,8 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  bash,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, bash
+,
 }:
 buildGoModule rec {
   pname = "aws-signing-helper";

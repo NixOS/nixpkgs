@@ -12,10 +12,10 @@
 # - Wayland support (both for testing the existing terminals, and for testing wayland-only terminals like foot and havoc)
 # - Test keyboard input? (skipped for now, to eliminate the possibility of race conditions and focus issues)
 
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -121,120 +121,122 @@ let
     zutty.pkg = p: p.zutty;
   };
 in
-mapAttrs (
-  name:
-  {
-    pkg,
-    executable ? name,
-    cmd ? "SHELL=$command ${executable}",
-    colourTest ? true,
-    pinkValue ? "#FF0087",
-    kill ? false,
-  }:
-  makeTest {
-    name = "terminal-emulator-${name}";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ jjjollyjim ];
-    };
-
-    nodes.machine =
-      { pkgsInner, ... }:
-
-      {
-        imports = [
-          ./common/x11.nix
-          ./common/user-account.nix
-        ];
-
-        # Hyper (and any other electron-based terminals) won't run as root
-        test-support.displayManager.auto.user = "alice";
-
-        environment.systemPackages = [
-          (pkg pkgs)
-          (pkgs.writeShellScriptBin "report-success" ''
-            echo 1 > /tmp/term-ran-successfully
-            ${optionalString kill "pkill ${executable}"}
-          '')
-          (pkgs.writeShellScriptBin "display-colour" ''
-            # A 256-colour background colour code for pink, then spaces.
-            #
-            # Background is used rather than foreground to minimize the effect of anti-aliasing.
-            #
-            # Keep adding more in case the window is partially offscreen to the left or requires
-            # a change to correctly redraw after initialising the window (as with ctx).
-
-            while :
-            do
-                echo -ne "\e[48;5;198m                   "
-                sleep 0.5
-            done
-            sleep infinity
-          '')
-          (pkgs.writeShellScriptBin "run-in-this-term" "sudo -u alice run-in-this-term-wrapped $1")
-
-          (pkgs.writeShellScriptBin "run-in-this-term-wrapped" "command=\"$(which \"$1\")\"; ${cmd}")
-        ];
-
-        # Helpful reminder to add this test to passthru.tests
-        warnings =
-          if !((pkg pkgs) ? "passthru" && (pkg pkgs).passthru ? "tests") then
-            [ "The package for ${name} doesn't have a passthru.tests" ]
-          else
-            [ ];
+mapAttrs
+  (
+    name:
+    { pkg
+    , executable ? name
+    , cmd ? "SHELL=$command ${executable}"
+    , colourTest ? true
+    , pinkValue ? "#FF0087"
+    , kill ? false
+    ,
+    }:
+    makeTest {
+      name = "terminal-emulator-${name}";
+      meta = with pkgs.lib.maintainers; {
+        maintainers = [ jjjollyjim ];
       };
 
-    # We need imagemagick, though not tesseract
-    enableOCR = true;
+      nodes.machine =
+        { pkgsInner, ... }:
 
-    testScript =
-      { nodes, ... }:
-      let
-      in
-      ''
-        with subtest("wait for x"):
-            start_all()
-            machine.wait_for_x()
+        {
+          imports = [
+            ./common/x11.nix
+            ./common/user-account.nix
+          ];
 
-        with subtest("have the terminal run a command"):
-            # We run this command synchronously, so we can be certain the exit codes are happy
-            machine.${if kill then "execute" else "succeed"}("run-in-this-term report-success")
-            machine.wait_for_file("/tmp/term-ran-successfully")
-        ${optionalString colourTest ''
+          # Hyper (and any other electron-based terminals) won't run as root
+          test-support.displayManager.auto.user = "alice";
 
-          import tempfile
-          import subprocess
+          environment.systemPackages = [
+            (pkg pkgs)
+            (pkgs.writeShellScriptBin "report-success" ''
+              echo 1 > /tmp/term-ran-successfully
+              ${optionalString kill "pkill ${executable}"}
+            '')
+            (pkgs.writeShellScriptBin "display-colour" ''
+              # A 256-colour background colour code for pink, then spaces.
+              #
+              # Background is used rather than foreground to minimize the effect of anti-aliasing.
+              #
+              # Keep adding more in case the window is partially offscreen to the left or requires
+              # a change to correctly redraw after initialising the window (as with ctx).
+
+              while :
+              do
+                  echo -ne "\e[48;5;198m                   "
+                  sleep 0.5
+              done
+              sleep infinity
+            '')
+            (pkgs.writeShellScriptBin "run-in-this-term" "sudo -u alice run-in-this-term-wrapped $1")
+
+            (pkgs.writeShellScriptBin "run-in-this-term-wrapped" "command=\"$(which \"$1\")\"; ${cmd}")
+          ];
+
+          # Helpful reminder to add this test to passthru.tests
+          warnings =
+            if !((pkg pkgs) ? "passthru" && (pkg pkgs).passthru ? "tests") then
+              [ "The package for ${name} doesn't have a passthru.tests" ]
+            else
+              [ ];
+        };
+
+      # We need imagemagick, though not tesseract
+      enableOCR = true;
+
+      testScript =
+        { nodes, ... }:
+        let
+        in
+        ''
+          with subtest("wait for x"):
+              start_all()
+              machine.wait_for_x()
+
+          with subtest("have the terminal run a command"):
+              # We run this command synchronously, so we can be certain the exit codes are happy
+              machine.${if kill then "execute" else "succeed"}("run-in-this-term report-success")
+              machine.wait_for_file("/tmp/term-ran-successfully")
+          ${optionalString colourTest ''
+
+            import tempfile
+            import subprocess
 
 
-          def check_for_pink(final=False) -> bool:
-              with tempfile.NamedTemporaryFile() as tmpin:
-                  machine.send_monitor_command("screendump {}".format(tmpin.name))
+            def check_for_pink(final=False) -> bool:
+                with tempfile.NamedTemporaryFile() as tmpin:
+                    machine.send_monitor_command("screendump {}".format(tmpin.name))
 
-                  cmd = 'convert {} -define histogram:unique-colors=true -format "%c" histogram:info:'.format(
-                      tmpin.name
-                  )
-                  ret = subprocess.run(cmd, shell=True, capture_output=True)
-                  if ret.returncode != 0:
-                      raise Exception(
-                          "image analysis failed with exit code {}".format(ret.returncode)
-                      )
+                    cmd = 'convert {} -define histogram:unique-colors=true -format "%c" histogram:info:'.format(
+                        tmpin.name
+                    )
+                    ret = subprocess.run(cmd, shell=True, capture_output=True)
+                    if ret.returncode != 0:
+                        raise Exception(
+                            "image analysis failed with exit code {}".format(ret.returncode)
+                        )
 
-                  text = ret.stdout.decode("utf-8")
-                  return "${pinkValue}" in text
+                    text = ret.stdout.decode("utf-8")
+                    return "${pinkValue}" in text
 
 
-          with subtest("ensuring no pink is present without the terminal"):
-              assert (
-                  check_for_pink() == False
-              ), "Pink was present on the screen before we even launched a terminal!"
+            with subtest("ensuring no pink is present without the terminal"):
+                assert (
+                    check_for_pink() == False
+                ), "Pink was present on the screen before we even launched a terminal!"
 
-          with subtest("have the terminal display a colour"):
-              # We run this command in the background
-              assert machine.shell is not None
-              machine.shell.send(b"(run-in-this-term display-colour |& systemd-cat -t terminal) &\n")
+            with subtest("have the terminal display a colour"):
+                # We run this command in the background
+                assert machine.shell is not None
+                machine.shell.send(b"(run-in-this-term display-colour |& systemd-cat -t terminal) &\n")
 
-              with machine.nested("Waiting for the screen to have pink on it:"):
-                  retry(check_for_pink)
-        ''}'';
-  }
+                with machine.nested("Waiting for the screen to have pink on it:"):
+                    retry(check_for_pink)
+          ''}'';
+    }
 
-) tests
+  )
+  tests

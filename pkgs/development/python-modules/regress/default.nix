@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchPypi,
-  buildPythonPackage,
-  rustPlatform,
-  libiconv,
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, rustPlatform
+, libiconv
+,
 }:
 
 buildPythonPackage rec {

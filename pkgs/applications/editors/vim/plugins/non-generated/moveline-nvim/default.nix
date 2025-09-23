@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  vimUtils,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, vimUtils
+, stdenv
+,
 }:
 let
   version = "0.3.1-unstable-2023-07-06";

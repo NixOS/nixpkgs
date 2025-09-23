@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  libmysqlclient,
-  pkg-config,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, libmysqlclient
+, pkg-config
+,
 }:
 
 buildPythonPackage rec {

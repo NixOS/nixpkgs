@@ -1,20 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nixosTests,
-  writableTmpDirAsHomeHook,
-  writeText,
-
-  fixup-yarn-lock,
-  nodejs,
-  yarn,
-
-  # Custom application configuration placed to theme/config.theme.js file.
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, nixosTests
+, writableTmpDirAsHomeHook
+, writeText
+, fixup-yarn-lock
+, nodejs
+, yarn
+, # Custom application configuration placed to theme/config.theme.js file.
   # For the list of available configuration options see
   # https://github.com/osm-search/nominatim-ui/blob/master/dist/config.defaults.js
-  customConfig ? null,
+  customConfig ? null
+,
 }:
 
 let

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  prometheus-cpp,
-  python3,
-  caf,
-  openssl,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, prometheus-cpp
+, python3
+, caf
+, openssl
+,
 }:
 let
   src-cmake = fetchFromGitHub {

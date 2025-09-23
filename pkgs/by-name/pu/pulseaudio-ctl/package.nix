@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  bc,
-  dbus,
-  gawk,
-  gnused,
-  libnotify,
-  pulseaudio,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, bc
+, dbus
+, gawk
+, gnused
+, libnotify
+, pulseaudio
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  gtk3,
-  adwaita-icon-theme,
-  gnome-icon-theme,
-  hicolor-icon-theme,
-  jdupes,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, meson
+, ninja
+, gtk3
+, adwaita-icon-theme
+, gnome-icon-theme
+, hicolor-icon-theme
+, jdupes
+,
 }:
 
 stdenvNoCC.mkDerivation {

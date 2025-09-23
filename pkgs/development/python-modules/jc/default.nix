@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  buildPythonPackage,
-  fetchFromGitHub,
-  installShellFiles,
-  ruamel-yaml,
-  xmltodict,
-  pygments,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, stdenv
+, buildPackages
+, buildPythonPackage
+, fetchFromGitHub
+, installShellFiles
+, ruamel-yaml
+, xmltodict
+, pygments
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

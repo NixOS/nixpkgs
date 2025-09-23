@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  importlib-resources,
-  jsonschema,
-  packaging,
-  pyyaml,
-  referencing,
-  typing-extensions,
-  pytestCheckHook,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, importlib-resources
+, jsonschema
+, packaging
+, pyyaml
+, referencing
+, typing-extensions
+, pytestCheckHook
+, versionCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "kubernetes-validate";

@@ -1,18 +1,18 @@
-{
-  lib,
-  organicmaps,
-  fetchurl,
-  fetchFromGitea,
-  boost,
-  gtest,
-  glm,
-  gflags,
-  imgui,
-  jansson,
-  python3,
-  optipng,
-  utf8cpp,
-  nix-update-script,
+{ lib
+, organicmaps
+, fetchurl
+, fetchFromGitea
+, boost
+, gtest
+, glm
+, gflags
+, imgui
+, jansson
+, python3
+, optipng
+, utf8cpp
+, nix-update-script
+,
 }:
 let
   mapRev = 250822;

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gfortran,
-  autoreconfHook,
-  perl,
-  mpi,
-  mpiCheckPhaseHook,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gfortran
+, autoreconfHook
+, perl
+, mpi
+, mpiCheckPhaseHook
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

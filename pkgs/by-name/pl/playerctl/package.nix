@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  docbook_xsl,
-  fetchFromGitHub,
-  glib,
-  gobject-introspection,
-  gtk-doc,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  pkg-config,
-  withDocs ? stdenv.hostPlatform.emulatorAvailable buildPackages,
+{ lib
+, stdenv
+, buildPackages
+, docbook_xsl
+, fetchFromGitHub
+, glib
+, gobject-introspection
+, gtk-doc
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, withDocs ? stdenv.hostPlatform.emulatorAvailable buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

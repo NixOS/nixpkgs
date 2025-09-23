@@ -1,19 +1,20 @@
 # To build this derivation, run `nix-build -A nixpkgs-manual.tests.manpage-urls`
-{
-  lib,
-  runCommand,
-  invalidateFetcherByDrvHash,
-  cacert,
-  python3,
+{ lib
+, runCommand
+, invalidateFetcherByDrvHash
+, cacert
+, python3
+,
 }:
 
-invalidateFetcherByDrvHash (
-  {
-    name ? "manual_check-manpage-urls",
-    script ? ./manpage-urls.py,
-    urlsFile ? ../manpage-urls.json,
-  }:
-  runCommand name
+invalidateFetcherByDrvHash
+  (
+    { name ? "manual_check-manpage-urls"
+    , script ? ./manpage-urls.py
+    , urlsFile ? ../manpage-urls.json
+    ,
+    }:
+    runCommand name
     {
       nativeBuildInputs = [
         cacert
@@ -25,8 +26,9 @@ invalidateFetcherByDrvHash (
       ];
       outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU="; # Empty output
     }
-    ''
-      python3 ${script} ${urlsFile}
-      touch $out
-    ''
-) { }
+      ''
+        python3 ${script} ${urlsFile}
+        touch $out
+      ''
+  )
+{ }

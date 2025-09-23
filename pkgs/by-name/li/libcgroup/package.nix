@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pam,
-  bison,
-  flex,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  systemdLibs,
-  musl-fts,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pam
+, bison
+, flex
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+, systemdLibs
+, musl-fts
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

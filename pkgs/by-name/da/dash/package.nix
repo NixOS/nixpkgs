@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  pkg-config,
-  fetchurl,
-  libedit,
-  runCommand,
-  dash,
+{ lib
+, stdenv
+, buildPackages
+, pkg-config
+, fetchurl
+, libedit
+, runCommand
+, dash
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

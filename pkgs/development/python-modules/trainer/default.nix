@@ -1,19 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-
-  coqpit,
-  fsspec,
-  torch,
-  tensorboard,
-  protobuf,
-  psutil,
-
-  pytestCheckHook,
-  soundfile,
-  torchvision,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, coqpit
+, fsspec
+, torch
+, tensorboard
+, protobuf
+, psutil
+, pytestCheckHook
+, soundfile
+, torchvision
+,
 }:
 
 let

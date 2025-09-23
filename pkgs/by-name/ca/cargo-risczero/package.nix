@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchCrate,
-  fetchurl,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchCrate
+, fetchurl
+, rustPlatform
+, pkg-config
+, openssl
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

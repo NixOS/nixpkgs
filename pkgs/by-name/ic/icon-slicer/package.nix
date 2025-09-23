@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gdk-pixbuf,
-  popt,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gdk-pixbuf
+, popt
+,
 }:
 stdenv.mkDerivation rec {
   pname = "icon-slicer";

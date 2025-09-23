@@ -1,11 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  makeWrapper,
-  jdk23_headless,
-  libwebp, # Fixes https://github.com/gotson/komga/issues/1294
-  nixosTests,
+{ lib
+, stdenvNoCC
+, fetchurl
+, makeWrapper
+, jdk23_headless
+, libwebp
+, # Fixes https://github.com/gotson/komga/issues/1294
+  nixosTests
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

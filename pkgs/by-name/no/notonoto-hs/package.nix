@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenvNoCC,
-  fontforge,
-  python3,
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, fontforge
+, python3
+,
 }:
 
 let

@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libsodium,
-  asciidoc,
-  xmlto,
-  enableDrafts ? false,
-  fetchpatch,
-  # for passthru.tests
-  azmq,
-  cppzmq,
-  czmq,
-  zmqpp,
-  ffmpeg,
-  python3,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libsodium
+, asciidoc
+, xmlto
+, enableDrafts ? false
+, fetchpatch
+, # for passthru.tests
+  azmq
+, cppzmq
+, czmq
+, zmqpp
+, ffmpeg
+, python3
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

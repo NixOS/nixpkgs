@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  pkg-config,
-  cmake,
-  fetchurl,
-  git,
-  cctools,
-  darwin,
-  makeWrapper,
-  bison,
-  openssl,
-  protobuf,
-  curl,
-  zlib,
-  libssh,
-  zstd,
-  lz4,
-  readline,
-  libtirpc,
-  rpcsvc-proto,
-  libedit,
-  libevent,
-  icu,
-  re2,
-  ncurses,
-  libfido2,
-  python3,
-  cyrus_sasl,
-  openldap,
-  antlr,
+{ lib
+, stdenv
+, pkg-config
+, cmake
+, fetchurl
+, git
+, cctools
+, darwin
+, makeWrapper
+, bison
+, openssl
+, protobuf
+, curl
+, zlib
+, libssh
+, zstd
+, lz4
+, readline
+, libtirpc
+, rpcsvc-proto
+, libedit
+, libevent
+, icu
+, re2
+, ncurses
+, libfido2
+, python3
+, cyrus_sasl
+, openldap
+, antlr
+,
 }:
 
 let

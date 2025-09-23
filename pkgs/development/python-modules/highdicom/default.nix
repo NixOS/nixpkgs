@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  numpy,
-  pillow,
-  pydicom,
-  pyjpegls,
-  pylibjpeg,
-  pylibjpeg-libjpeg,
-  pylibjpeg-openjpeg,
-  setuptools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, numpy
+, pillow
+, pydicom
+, pyjpegls
+, pylibjpeg
+, pylibjpeg-libjpeg
+, pylibjpeg-openjpeg
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

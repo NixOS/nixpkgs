@@ -1,21 +1,21 @@
-{
-  lib,
-  appstream,
-  blueprint-compiler,
-  desktop-file-utils,
-  fetchFromGitLab,
-  glib,
-  gobject-introspection,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  nix-update-script,
-  pandoc,
-  pkg-config,
-  python3Packages,
-  webkitgtk_6_0,
-  wrapGAppsHook4,
+{ lib
+, appstream
+, blueprint-compiler
+, desktop-file-utils
+, fetchFromGitLab
+, glib
+, gobject-introspection
+, gtk4
+, libadwaita
+, meson
+, ninja
+, nix-update-script
+, pandoc
+, pkg-config
+, python3Packages
+, webkitgtk_6_0
+, wrapGAppsHook4
+,
 }:
 
 python3Packages.buildPythonApplication rec {

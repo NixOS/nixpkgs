@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  pkg-config,
-  libgit2,
-  openssl,
-  stdenv,
-  expat,
-  fontconfig,
-  libGL,
-  xorg,
+{ lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, libgit2
+, openssl
+, stdenv
+, expat
+, fontconfig
+, libGL
+, xorg
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  sqlite,
-  corrosion,
-  rustPlatform,
-  cargo,
-  rustc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, sqlite
+, corrosion
+, rustPlatform
+, cargo
+, rustc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

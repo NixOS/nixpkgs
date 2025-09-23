@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  pandas,
-  pyarrow,
-  pythonOlder,
-  pytz,
-  setuptools,
-  tomlkit,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, pandas
+, pyarrow
+, pythonOlder
+, pytz
+, setuptools
+, tomlkit
+,
 }:
 
 buildPythonPackage rec {

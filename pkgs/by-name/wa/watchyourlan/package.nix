@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  lib,
-  arp-scan,
+{ buildGoModule
+, fetchFromGitHub
+, makeBinaryWrapper
+, lib
+, arp-scan
+,
 }:
 
 buildGoModule rec {

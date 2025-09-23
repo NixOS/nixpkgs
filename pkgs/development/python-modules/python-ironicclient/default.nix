@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cliff,
-  dogpile-cache,
-  jsonschema,
-  keystoneauth1,
-  openstackdocstheme,
-  openstacksdk,
-  osc-lib,
-  oslo-utils,
-  oslotest,
-  pbr,
-  platformdirs,
-  pyyaml,
-  requests,
-  requests-mock,
-  setuptools,
-  sphinxcontrib-apidoc,
-  sphinxHook,
-  stestr,
-  stevedore,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cliff
+, dogpile-cache
+, jsonschema
+, keystoneauth1
+, openstackdocstheme
+, openstacksdk
+, osc-lib
+, oslo-utils
+, oslotest
+, pbr
+, platformdirs
+, pyyaml
+, requests
+, requests-mock
+, setuptools
+, sphinxcontrib-apidoc
+, sphinxHook
+, stestr
+, stevedore
+,
 }:
 
 buildPythonPackage rec {

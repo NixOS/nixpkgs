@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  ruby,
-  fetchurl,
-  openssl,
-  ncurses,
-  libiconv,
-  tcl,
-  libxcrypt,
-  perl,
+{ lib
+, stdenv
+, ruby
+, fetchurl
+, openssl
+, ncurses
+, libiconv
+, tcl
+, libxcrypt
+, perl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

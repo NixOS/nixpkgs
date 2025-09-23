@@ -1,13 +1,13 @@
-{
-  clang,
-  fetchFromGitHub,
-  lib,
-  lzo,
-  lz4,
-  stdenv,
-  ucl,
-  unstableGitUpdater,
-  zlib,
+{ clang
+, fetchFromGitHub
+, lib
+, lzo
+, lz4
+, stdenv
+, ucl
+, unstableGitUpdater
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

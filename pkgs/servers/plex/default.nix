@@ -1,13 +1,12 @@
 # The actual Plex package that we run is a FHS userenv of the "raw" package.
-{
-  stdenv,
-  buildFHSEnv,
-  writeScript,
-  plexRaw,
-
-  # Old argument for overriding the Plex data directory; not used for this
+{ stdenv
+, buildFHSEnv
+, writeScript
+, plexRaw
+, # Old argument for overriding the Plex data directory; not used for this
   # version of Plex, but still around for backwards-compatibility.
-  dataDir ? "/var/lib/plex",
+  dataDir ? "/var/lib/plex"
+,
 }:
 
 buildFHSEnv {

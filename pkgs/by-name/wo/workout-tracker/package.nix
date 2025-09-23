@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  nixosTests,
+{ lib
+, buildGoModule
+, buildNpmPackage
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+,
 }:
 let
   pname = "workout-tracker";

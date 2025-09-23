@@ -1,16 +1,16 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  wrapGAppsHook3,
-  gtk3,
-  librsvg,
-  gtk-layer-shell,
-  stdenv,
-  libdbusmenu-gtk3,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, wrapGAppsHook3
+, gtk3
+, librsvg
+, gtk-layer-shell
+, stdenv
+, libdbusmenu-gtk3
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

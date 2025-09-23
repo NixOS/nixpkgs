@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  aiooui,
-  buildPythonPackage,
-  fetchFromGitHub,
-  home-assistant-bluetooth,
-  mac-vendor-lookup,
-  poetry-core,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, aiohttp
+, aiooui
+, buildPythonPackage
+, fetchFromGitHub
+, home-assistant-bluetooth
+, mac-vendor-lookup
+, poetry-core
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

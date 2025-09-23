@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  dbus,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, dbus
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "spotify-cli-linux";

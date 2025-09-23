@@ -1,9 +1,9 @@
-{
-  config,
-  lib,
-  stdenv,
-  newScope,
-  useMupdf ? true,
+{ config
+, lib
+, stdenv
+, newScope
+, useMupdf ? true
+,
 }:
 
 lib.makeScope newScope (

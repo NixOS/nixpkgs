@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  nbval,
-  writableTmpDirAsHomeHook,
-  fetchurl,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, nbval
+, writableTmpDirAsHomeHook
+, fetchurl
+,
 }:
 buildPythonPackage rec {
   pname = "ziafont";

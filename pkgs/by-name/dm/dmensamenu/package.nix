@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  replaceVars,
-  dmenu,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, replaceVars
+, dmenu
+,
 }:
 
 python3Packages.buildPythonApplication rec {

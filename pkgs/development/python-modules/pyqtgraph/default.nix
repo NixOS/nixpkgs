@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  scipy,
-  numpy,
-  pyqt6,
-  pyopengl,
-  qt6,
-  pytestCheckHook,
-  freefont_ttf,
-  makeFontsConf,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, scipy
+, numpy
+, pyqt6
+, pyopengl
+, qt6
+, pytestCheckHook
+, freefont_ttf
+, makeFontsConf
+, setuptools
+,
 }:
 
 let

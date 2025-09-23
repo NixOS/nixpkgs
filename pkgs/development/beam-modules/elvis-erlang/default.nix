@@ -1,11 +1,11 @@
-{
-  buildRebar3,
-  fetchFromGitHub,
-  fetchHex,
-  fetchgit,
-  lib,
-  rebar3Relx,
-  writeScript,
+{ buildRebar3
+, fetchFromGitHub
+, fetchHex
+, fetchgit
+, lib
+, rebar3Relx
+, writeScript
+,
 }:
 
 rebar3Relx rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  autoPatchelfHook,
-  libgcc,
-  libxcrypt-legacy,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, autoPatchelfHook
+, libgcc
+, libxcrypt-legacy
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       selectSystem =
         attrs:
-        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+          attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
       suffix = selectSystem {
         aarch64-darwin = "macos-arm64";
         x86_64-darwin = "macos-x64";

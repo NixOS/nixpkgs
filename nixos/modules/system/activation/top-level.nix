@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -85,7 +84,7 @@ let
       inherit (config.system.replaceDependencies) replacements cutoffPackages;
     in
     if replacements == [ ] then
-      # Avoid IFD if possible, by sidestepping replaceDependencies if no replacements are specified.
+    # Avoid IFD if possible, by sidestepping replaceDependencies if no replacements are specified.
       baseSystemAssertWarn
     else
       (pkgs.replaceDependencies.override {
@@ -347,14 +346,16 @@ in
       ''
       + optionalString (config.system.forbiddenDependenciesRegexes != [ ]) (
         lib.concatStringsSep "\n" (
-          map (regex: ''
-            if [[ ${regex} != "" && -n $closureInfo ]]; then
-              if forbiddenPaths="$(grep -E -- "${regex}" $closureInfo/store-paths)"; then
-                echo -e "System closure $out contains the following disallowed paths:\n$forbiddenPaths"
-                exit 1
+          map
+            (regex: ''
+              if [[ ${regex} != "" && -n $closureInfo ]]; then
+                if forbiddenPaths="$(grep -E -- "${regex}" $closureInfo/store-paths)"; then
+                  echo -e "System closure $out contains the following disallowed paths:\n$forbiddenPaths"
+                  exit 1
+                fi
               fi
-            fi
-          '') config.system.forbiddenDependenciesRegexes
+            '')
+            config.system.forbiddenDependenciesRegexes
         )
       );
 

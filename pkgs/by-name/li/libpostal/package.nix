@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchzip,
-  autoreconfHook,
-  withData ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, autoreconfHook
+, withData ? false
+,
 }:
 
 let

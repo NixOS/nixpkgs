@@ -1,37 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  autoconf,
-  automake116x,
-  zlib,
-  shadow,
-  capabilitiesSupport ? stdenv.hostPlatform.isLinux,
-  libcap_ng,
-  libxcrypt,
-  # Disable this by default because `mount` is setuid. However, we also support
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, autoconf
+, automake116x
+, zlib
+, shadow
+, capabilitiesSupport ? stdenv.hostPlatform.isLinux
+, libcap_ng
+, libxcrypt
+, # Disable this by default because `mount` is setuid. However, we also support
   # "dlopen" as a value here. Note that the nixpkgs setuid wrapper and ld-linux.so will filter out LD_LIBRARY_PATH
   # if you set this to dlopen, so ensure you're accessing it without the wrapper if you depend on that.
-  cryptsetupSupport ? false,
-  cryptsetup,
-  ncursesSupport ? true,
-  ncurses,
-  pamSupport ? lib.meta.availableOn stdenv.hostPlatform pam,
-  pam,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  sqlite,
-  nlsSupport ? true,
-  translateManpages ? true,
-  po4a,
-  installShellFiles,
-  writeSupport ? stdenv.hostPlatform.isLinux,
-  shadowSupport ? stdenv.hostPlatform.isLinux,
-  # Doesn't build on Darwin, only makes sense on systems which have pam
-  withLastlog ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform pam,
-  gitUpdater,
-  nixosTests,
+  cryptsetupSupport ? false
+, cryptsetup
+, ncursesSupport ? true
+, ncurses
+, pamSupport ? lib.meta.availableOn stdenv.hostPlatform pam
+, pam
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, sqlite
+, nlsSupport ? true
+, translateManpages ? true
+, po4a
+, installShellFiles
+, writeSupport ? stdenv.hostPlatform.isLinux
+, shadowSupport ? stdenv.hostPlatform.isLinux
+, # Doesn't build on Darwin, only makes sense on systems which have pam
+  withLastlog ? !stdenv.hostPlatform.isDarwin && lib.meta.availableOn stdenv.hostPlatform pam
+, gitUpdater
+, nixosTests
+,
 }:
 
 let

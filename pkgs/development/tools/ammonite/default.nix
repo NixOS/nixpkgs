@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jre,
-  writeScript,
-  common-updater-scripts,
-  git,
-  nix,
-  coreutils,
-  gnused,
-  disableRemoteLogging ? true,
+{ lib
+, stdenv
+, fetchurl
+, jre
+, writeScript
+, common-updater-scripts
+, git
+, nix
+, coreutils
+, gnused
+, disableRemoteLogging ? true
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  unstableGitUpdater,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, unstableGitUpdater
+,
 }:
 
 buildDotnetModule (finalAttrs: {

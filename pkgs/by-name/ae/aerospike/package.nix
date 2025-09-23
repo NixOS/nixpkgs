@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  cmake,
-  libtool,
-  openssl,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, cmake
+, libtool
+, openssl
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

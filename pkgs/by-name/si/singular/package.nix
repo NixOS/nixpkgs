@@ -1,32 +1,32 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  gmp,
-  bison,
-  perl,
-  ncurses,
-  readline,
-  coreutils,
-  pkg-config,
-  lib,
-  autoreconfHook,
-  buildPackages,
-  sharutils,
-  file,
-  getconf,
-  flint3,
-  ntl,
-  mpfr,
-  cddlib,
-  gfan,
-  lrcalc,
-  doxygen,
-  graphviz,
-  latex2html,
-  texinfo,
-  texliveSmall,
-  enableDocs ? true,
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, gmp
+, bison
+, perl
+, ncurses
+, readline
+, coreutils
+, pkg-config
+, lib
+, autoreconfHook
+, buildPackages
+, sharutils
+, file
+, getconf
+, flint3
+, ntl
+, mpfr
+, cddlib
+, gfan
+, lrcalc
+, doxygen
+, graphviz
+, latex2html
+, texinfo
+, texliveSmall
+, enableDocs ? true
+,
 }:
 
 stdenv.mkDerivation rec {

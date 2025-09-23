@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  nixosTests,
-  cmake,
-  gettext,
-  glib,
-  gobject-introspection,
-  intltool,
-  libayatana-common,
-  lomiri,
-  pkg-config,
-  systemd,
-  vala,
-  wrapGAppsHook3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, nixosTests
+, cmake
+, gettext
+, glib
+, gobject-introspection
+, intltool
+, libayatana-common
+, lomiri
+, pkg-config
+, systemd
+, vala
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

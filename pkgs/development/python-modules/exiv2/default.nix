@@ -1,14 +1,14 @@
-{
-  lib,
-  pkg-config,
-  exiv2,
-  gettext,
-  fetchFromGitHub,
-  gitUpdater,
-  buildPythonPackage,
-  setuptools,
-  toml,
-  unittestCheckHook,
+{ lib
+, pkg-config
+, exiv2
+, gettext
+, fetchFromGitHub
+, gitUpdater
+, buildPythonPackage
+, setuptools
+, toml
+, unittestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "exiv2";

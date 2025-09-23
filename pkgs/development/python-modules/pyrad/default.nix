@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  unittestCheckHook,
-  poetry-core,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, unittestCheckHook
+, poetry-core
+,
 }:
 
 buildPythonPackage {

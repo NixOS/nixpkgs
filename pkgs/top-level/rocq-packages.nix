@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  callPackage,
-  newScope,
-  recurseIntoAttrs,
-  ocamlPackages_4_14,
-  fetchpatch,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, callPackage
+, newScope
+, recurseIntoAttrs
+, ocamlPackages_4_14
+, fetchpatch
+, makeWrapper
+,
 }@args:
 let
   lib = import ../build-support/rocq/extra-lib.nix { inherit (args) lib; };
@@ -48,17 +48,19 @@ let
   filterRocqPackages =
     set:
     lib.listToAttrs (
-      lib.concatMap (
-        name:
-        let
-          v = set.${name} or null;
-        in
-        lib.optional (!v.meta.rocqFilter or false) (
-          lib.nameValuePair name (
-            if lib.isAttrs v && v.recurseForDerivations or false then filterRocqPackages v else v
+      lib.concatMap
+        (
+          name:
+          let
+            v = set.${name} or null;
+          in
+          lib.optional (!v.meta.rocqFilter or false) (
+            lib.nameValuePair name (
+              if lib.isAttrs v && v.recurseForDerivations or false then filterRocqPackages v else v
+            )
           )
         )
-      ) (lib.attrNames set)
+        (lib.attrNames set)
     );
   mkRocq =
     version:

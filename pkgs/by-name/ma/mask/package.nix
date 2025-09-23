@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  versionCheckHook,
-  nix-update-script,
-
-  # tests
-  nodejs,
-  python3,
-  php,
-  ruby,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, versionCheckHook
+, nix-update-script
+, # tests
+  nodejs
+, python3
+, php
+, ruby
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,26 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  darwin,
-  libtool,
-  pkg-config,
-  pkgsStatic,
-
-  # for passthru.tests
-  bind,
-  cmake,
-  knot-resolver,
-  sbclPackages,
-  luajitPackages,
-  mosquitto,
-  neovim,
-  nodejs,
-  ocamlPackages,
-  python3,
-  testers,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoconf
+, automake
+, darwin
+, libtool
+, pkg-config
+, pkgsStatic
+, # for passthru.tests
+  bind
+, cmake
+, knot-resolver
+, sbclPackages
+, luajitPackages
+, mosquitto
+, neovim
+, nodejs
+, ocamlPackages
+, python3
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  krb5,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, krb5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

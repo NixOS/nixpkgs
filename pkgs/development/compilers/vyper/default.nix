@@ -1,21 +1,21 @@
-{
-  lib,
-  lark,
-  asttokens,
-  buildPythonPackage,
-  cbor2,
-  fetchPypi,
-  git,
-  immutables,
-  importlib-metadata,
-  packaging,
-  pycryptodome,
-  pythonOlder,
-  recommonmark,
-  setuptools-scm,
-  sphinx,
-  sphinx-rtd-theme,
-  writeText,
+{ lib
+, lark
+, asttokens
+, buildPythonPackage
+, cbor2
+, fetchPypi
+, git
+, immutables
+, importlib-metadata
+, packaging
+, pycryptodome
+, pythonOlder
+, recommonmark
+, setuptools-scm
+, sphinx
+, sphinx-rtd-theme
+, writeText
+,
 }:
 
 let

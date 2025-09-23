@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  flit-core,
-  ipython,
-  matplotlib,
-  numpy,
-  pillow,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, flit-core
+, ipython
+, matplotlib
+, numpy
+, pillow
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  librsync,
+{ lib
+, python3Packages
+, fetchPypi
+, librsync
+,
 }:
 
 let

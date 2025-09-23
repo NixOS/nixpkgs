@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchFromGitHub,
-  bison,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, bison
+,
 }:
 
 let

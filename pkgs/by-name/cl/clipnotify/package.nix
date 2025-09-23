@@ -1,9 +1,9 @@
-{
-  libX11,
-  libXfixes,
-  lib,
-  stdenv,
-  fetchFromGitHub,
+{ libX11
+, libXfixes
+, lib
+, stdenv
+, fetchFromGitHub
+,
 }:
 stdenv.mkDerivation rec {
   pname = "clipnotify";

@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  nixosTests,
-  biometryd,
-  cmake,
-  gettext,
-  lomiri-content-hub,
-  lomiri-thumbnailer,
-  lomiri-ui-extras,
-  lomiri-ui-toolkit,
-  pkg-config,
-  python3,
-  qtbase,
-  qtdeclarative,
-  samba,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, nixosTests
+, biometryd
+, cmake
+, gettext
+, lomiri-content-hub
+, lomiri-thumbnailer
+, lomiri-ui-extras
+, lomiri-ui-toolkit
+, pkg-config
+, python3
+, qtbase
+, qtdeclarative
+, samba
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

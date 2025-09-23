@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  docutils,
-  meson,
-  ninja,
-  pkg-config,
-  dbus,
-  linuxHeaders,
-  systemd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, docutils
+, meson
+, ninja
+, pkg-config
+, dbus
+, linuxHeaders
+, systemd
+,
 }:
 
 let
@@ -22,12 +22,12 @@ let
   };
 
   dep =
-    {
-      pname,
-      version,
-      hash,
-      rev ? "v${version}",
-      buildInputs ? [ ],
+    { pname
+    , version
+    , hash
+    , rev ? "v${version}"
+    , buildInputs ? [ ]
+    ,
     }:
     stdenv.mkDerivation {
       inherit pname version;

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  systemd,
-  boost,
-  libsodium,
-  libedit,
-  re2,
-  net-snmp,
-  lua,
-  protobuf,
-  openssl,
-  zlib,
-  h2o,
-  nghttp2,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, systemd
+, boost
+, libsodium
+, libedit
+, re2
+, net-snmp
+, lua
+, protobuf
+, openssl
+, zlib
+, h2o
+, nghttp2
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

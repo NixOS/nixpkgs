@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # dependencies
-  django-compressor,
-  libsass,
-
-  # tests
-  django,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # dependencies
+  django-compressor
+, libsass
+, # tests
+  django
+, python
+,
 }:
 
 buildPythonPackage rec {

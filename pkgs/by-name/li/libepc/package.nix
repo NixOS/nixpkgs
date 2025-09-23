@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoreconfHook,
-  gnome-common,
-  pkg-config,
-  intltool,
-  gtk-doc,
-  glib,
-  avahi,
-  gnutls,
-  libuuid,
-  libsoup_2_4,
-  gtk3,
-  gnome,
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, gnome-common
+, pkg-config
+, intltool
+, gtk-doc
+, glib
+, avahi
+, gnutls
+, libuuid
+, libsoup_2_4
+, gtk3
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

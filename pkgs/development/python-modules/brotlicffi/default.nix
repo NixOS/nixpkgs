@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  cffi,
-  # overridden as pkgs.brotli
-  brotli,
-  setuptools,
-  pytestCheckHook,
-  hypothesis,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, cffi
+, # overridden as pkgs.brotli
+  brotli
+, setuptools
+, pytestCheckHook
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

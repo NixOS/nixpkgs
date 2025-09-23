@@ -1,13 +1,13 @@
-{
-  buildPythonApplication,
-  fetchPypi,
-  pandocfilters,
-  panflute,
-  lib,
-  pandoc,
-  pandoc-acro,
-  texliveTeTeX,
-  runCommand,
+{ buildPythonApplication
+, fetchPypi
+, pandocfilters
+, panflute
+, lib
+, pandoc
+, pandoc-acro
+, texliveTeTeX
+, runCommand
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  libkrb5,
-  openssl,
-  postgresql,
-  postgresqlBuildExtension,
+{ fetchFromGitHub
+, lib
+, libkrb5
+, openssl
+, postgresql
+, postgresqlBuildExtension
+,
 }:
 
 let

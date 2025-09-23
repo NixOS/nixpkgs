@@ -1,12 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-
-  # runtime dependencies
-  nix-prefetch-git,
-  git, # for git ls-remote
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, # runtime dependencies
+  nix-prefetch-git
+, git
+, # for git ls-remote
 }:
 
 let

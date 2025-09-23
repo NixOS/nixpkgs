@@ -1,33 +1,33 @@
-{
-  lib,
-  attrs,
-  authlib,
-  avro,
-  azure-identity,
-  azure-keyvault-keys,
-  boto3,
-  buildPythonPackage,
-  cachetools,
-  fastavro,
-  fetchFromGitHub,
-  google-auth,
-  google-api-core,
-  google-cloud-kms,
-  hvac,
-  httpx,
-  jsonschema,
-  orjson,
-  protobuf,
-  pyflakes,
-  pyrsistent,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  rdkafka,
-  requests,
-  requests-mock,
-  respx,
-  setuptools,
+{ lib
+, attrs
+, authlib
+, avro
+, azure-identity
+, azure-keyvault-keys
+, boto3
+, buildPythonPackage
+, cachetools
+, fastavro
+, fetchFromGitHub
+, google-auth
+, google-api-core
+, google-cloud-kms
+, hvac
+, httpx
+, jsonschema
+, orjson
+, protobuf
+, pyflakes
+, pyrsistent
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, rdkafka
+, requests
+, requests-mock
+, respx
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

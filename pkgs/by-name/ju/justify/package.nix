@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitea
+, cmake
+,
 }:
 
 stdenv.mkDerivation {

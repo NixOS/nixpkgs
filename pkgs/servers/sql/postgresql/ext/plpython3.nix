@@ -1,8 +1,8 @@
-{
-  buildEnv,
-  postgresql,
-  postgresqlTestExtension,
-  python3,
+{ buildEnv
+, postgresql
+, postgresqlTestExtension
+, python3
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  github,
-  yojson,
-  atdgen,
-  atdgen-runtime,
+{ buildDunePackage
+, github
+, yojson
+, atdgen
+, atdgen-runtime
+,
 }:
 
 buildDunePackage {

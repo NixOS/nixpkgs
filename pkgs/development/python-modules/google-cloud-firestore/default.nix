@@ -1,19 +1,19 @@
-{
-  lib,
-  aiounittest,
-  buildPythonPackage,
-  fetchPypi,
-  freezegun,
-  google-api-core,
-  google-cloud-core,
-  google-cloud-testutils,
-  mock,
-  proto-plus,
-  protobuf,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiounittest
+, buildPythonPackage
+, fetchPypi
+, freezegun
+, google-api-core
+, google-cloud-core
+, google-cloud-testutils
+, mock
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

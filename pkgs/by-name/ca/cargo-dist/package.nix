@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  pkg-config,
-  bzip2,
-  xz,
-  zstd,
-  git,
-  rustup,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, bzip2
+, xz
+, zstd
+, git
+, rustup
+,
 }:
 
 rustPlatform.buildRustPackage rec {

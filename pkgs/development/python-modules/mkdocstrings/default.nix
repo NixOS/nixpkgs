@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  importlib-metadata,
-  jinja2,
-  markdown,
-  markupsafe,
-  mkdocs,
-  mkdocs-autorefs,
-  pdm-backend,
-  pymdown-extensions,
-  pytestCheckHook,
-  pythonOlder,
-  dirty-equals,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, importlib-metadata
+, jinja2
+, markdown
+, markupsafe
+, mkdocs
+, mkdocs-autorefs
+, pdm-backend
+, pymdown-extensions
+, pytestCheckHook
+, pythonOlder
+, dirty-equals
+,
 }:
 
 buildPythonPackage rec {

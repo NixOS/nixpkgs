@@ -1,13 +1,13 @@
-{
-  lib,
-  asn1crypto,
-  asysocks,
-  buildPythonPackage,
-  fetchPypi,
-  minikerberos,
-  pythonOlder,
-  setuptools,
-  unicrypto,
+{ lib
+, asn1crypto
+, asysocks
+, buildPythonPackage
+, fetchPypi
+, minikerberos
+, pythonOlder
+, setuptools
+, unicrypto
+,
 }:
 
 buildPythonPackage rec {

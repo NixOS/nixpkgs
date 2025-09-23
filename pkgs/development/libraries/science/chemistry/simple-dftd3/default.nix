@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gfortran,
-  meson,
-  ninja,
-  cmake,
-  pkg-config,
-  mctc-lib,
-  mstore,
-  toml-f,
-  blas,
-  buildType ? "meson",
+{ stdenv
+, lib
+, fetchFromGitHub
+, gfortran
+, meson
+, ninja
+, cmake
+, pkg-config
+, mctc-lib
+, mstore
+, toml-f
+, blas
+, buildType ? "meson"
+,
 }:
 
 assert !blas.isILP64;

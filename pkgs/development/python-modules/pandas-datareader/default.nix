@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  pythonAtLeast,
-  fetchPypi,
-  setuptools,
-  pandas,
-  lxml,
-  requests,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, pythonAtLeast
+, fetchPypi
+, setuptools
+, pandas
+, lxml
+, requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  glibcLocales,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  cld2,
-  coreutils,
-  emacs,
-  glib,
-  gmime3,
-  texinfo,
-  xapian,
+{ lib
+, stdenv
+, fetchFromGitHub
+, glibcLocales
+, meson
+, ninja
+, pkg-config
+, python3
+, cld2
+, coreutils
+, emacs
+, glib
+, gmime3
+, texinfo
+, xapian
+,
 }:
 
 stdenv.mkDerivation rec {

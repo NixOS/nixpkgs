@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  elfutils,
-  extra-cmake-modules,
-  kitemmodels,
-  libiberty,
-  libdwarf,
-  libopcodes,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, elfutils
+, extra-cmake-modules
+, kitemmodels
+, libiberty
+, libdwarf
+, libopcodes
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchurl,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchurl
+, setuptools
+,
 }:
 let
   # 4 binaries which require vendoring, as otherwise

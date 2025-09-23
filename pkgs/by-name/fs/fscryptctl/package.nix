@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pandoc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pandoc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

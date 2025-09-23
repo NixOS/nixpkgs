@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  coreutils,
-  gawk,
-  gnugrep,
-  gnused,
-  rofi,
-  todo-txt-cli,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, gawk
+, gnugrep
+, gnused
+, rofi
+, todo-txt-cli
+,
 }:
 
 stdenv.mkDerivation rec {

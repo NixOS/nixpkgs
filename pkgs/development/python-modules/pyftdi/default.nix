@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyserial,
-  pythonOlder,
-  pyusb,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyserial
+, pythonOlder
+, pyusb
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

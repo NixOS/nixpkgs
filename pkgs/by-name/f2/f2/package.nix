@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGo125Module,
-  exiftool,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildGo125Module
+, exiftool
+, nix-update-script
+,
 }:
 
 buildGo125Module (finalAttrs: {

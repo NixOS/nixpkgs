@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libpng,
-  zlib,
-  lcms2,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libpng
+, zlib
+, lcms2
+,
 }:
 
 rustPlatform.buildRustPackage rec {

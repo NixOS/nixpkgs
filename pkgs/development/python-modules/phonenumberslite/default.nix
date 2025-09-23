@@ -1,6 +1,6 @@
-{
-  mkPythonMetaPackage,
-  phonenumbers,
+{ mkPythonMetaPackage
+, phonenumbers
+,
 }:
 
 mkPythonMetaPackage {

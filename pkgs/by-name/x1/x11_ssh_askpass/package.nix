@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchDebianPatch,
-  autoreconfHook,
-  pkg-config,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, fetchDebianPatch
+, autoreconfHook
+, pkg-config
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

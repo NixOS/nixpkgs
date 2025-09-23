@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  curl,
-  jansson,
-  perl,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, curl
+, jansson
+, perl
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

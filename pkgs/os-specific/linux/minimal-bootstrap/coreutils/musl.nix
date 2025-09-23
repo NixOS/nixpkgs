@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumake,
-  gnugrep,
-  gnused,
-  gawk,
-  gnutar,
-  gzip,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, tinycc
+, gnumake
+, gnugrep
+, gnused
+, gawk
+, gnutar
+, gzip
+,
 }:
 let
   pname = "bootstrap-coreutils-musl";
@@ -32,34 +32,34 @@ let
   ];
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnused
-      gnugrep
-      gawk
-      gnutar
-      gzip
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnused
+    gnugrep
+    gawk
+    gnutar
+    gzip
+  ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/cat --version
-        mkdir $out
-      '';
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/cat --version
+      mkdir $out
+    '';
 
-    meta = with lib; {
-      description = "GNU Core Utilities";
-      homepage = "https://www.gnu.org/software/coreutils";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "GNU Core Utilities";
+    homepage = "https://www.gnu.org/software/coreutils";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     tar xzf ${src}

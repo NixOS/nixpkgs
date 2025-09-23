@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  pkg-config,
-  libbfd,
-  popt,
-  zlib,
-  linuxHeaders,
-  libiberty_static,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, pkg-config
+, libbfd
+, popt
+, zlib
+, linuxHeaders
+, libiberty_static
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

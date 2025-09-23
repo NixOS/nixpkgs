@@ -1,26 +1,27 @@
-{
-  lib,
-  runCommand,
-  awscli,
+{ lib
+, runCommand
+, awscli
+,
 }:
 lib.fetchers.withNormalizedHash { } (
-  {
-    s3url,
-    name ? builtins.baseNameOf s3url,
-    outputHash,
-    outputHashAlgo,
-    region ? "us-east-1",
-    credentials ? null, # Default to looking at local EC2 metadata service
-    recursiveHash ? false,
-    postFetch ? null,
+  { s3url
+  , name ? builtins.baseNameOf s3url
+  , outputHash
+  , outputHashAlgo
+  , region ? "us-east-1"
+  , credentials ? null
+  , # Default to looking at local EC2 metadata service
+    recursiveHash ? false
+  , postFetch ? null
+  ,
   }:
 
   let
     mkCredentials =
-      {
-        access_key_id,
-        secret_access_key,
-        session_token ? null,
+      { access_key_id
+      , secret_access_key
+      , session_token ? null
+      ,
       }:
       {
         AWS_ACCESS_KEY_ID = access_key_id;
@@ -42,7 +43,7 @@ lib.fetchers.withNormalizedHash { } (
 
         AWS_DEFAULT_REGION = region;
       }
-      // credentialAttrs
+        // credentialAttrs
     )
     (
       if postFetch != null then

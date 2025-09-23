@@ -1,26 +1,24 @@
-{
-  stdenv,
-  lib,
-  makeBinaryWrapper,
-  fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
-  imagemagick,
-  jdk23,
-  dpkg,
-  writeShellScript,
-  tor,
-  zip,
-  gnupg,
-  coreutils,
-
-  # Used by the bundled webcam-app
-  libv4l,
-
-  # Used by the testing package bisq2-webcam-app
-  callPackage,
-  socat,
-  unzip,
+{ stdenv
+, lib
+, makeBinaryWrapper
+, fetchurl
+, makeDesktopItem
+, copyDesktopItems
+, imagemagick
+, jdk23
+, dpkg
+, writeShellScript
+, tor
+, zip
+, gnupg
+, coreutils
+, # Used by the bundled webcam-app
+  libv4l
+, # Used by the testing package bisq2-webcam-app
+  callPackage
+, socat
+, unzip
+,
 }:
 
 let

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libxaw,
-  libxt,
-  wrapWithXFileSearchPathHook,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libxaw
+, libxt
+, wrapWithXFileSearchPathHook
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xgc";

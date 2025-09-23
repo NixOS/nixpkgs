@@ -1,11 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-
-  pkg-config,
-  openssl,
-  crate ? "cli",
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, crate ? "cli"
+,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -47,8 +46,7 @@ rustPlatform.buildRustPackage rec {
       {
         api = "genealogos-api";
         cli = "genealogos";
-      }
-      .${crate};
+      }.${crate};
     platforms = lib.platforms.unix;
   };
 }

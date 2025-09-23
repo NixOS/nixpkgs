@@ -1,15 +1,15 @@
-{
-  bison,
-  bzip2,
-  cmake,
-  fetchFromGitLab,
-  flex,
-  gfortran,
-  lib,
-  mpi,
-  stdenv,
-  zlib,
-  xz,
+{ bison
+, bzip2
+, cmake
+, fetchFromGitLab
+, flex
+, gfortran
+, lib
+, mpi
+, stdenv
+, zlib
+, xz
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

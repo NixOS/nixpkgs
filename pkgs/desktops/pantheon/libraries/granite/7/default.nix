@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  nix-update-script,
-  meson,
-  ninja,
-  sassc,
-  vala,
-  pkg-config,
-  libgee,
-  gtk4,
-  glib,
-  gettext,
-  gsettings-desktop-schemas,
-  gobject-introspection,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, meson
+, ninja
+, sassc
+, vala
+, pkg-config
+, libgee
+, gtk4
+, glib
+, gettext
+, gsettings-desktop-schemas
+, gobject-introspection
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation rec {

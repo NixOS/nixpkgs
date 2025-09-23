@@ -1,13 +1,13 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  electron,
-  copyDesktopItems,
-  makeDesktopItem,
-  nix-update-script,
-  makeWrapper,
-  kopia,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, electron
+, copyDesktopItems
+, makeDesktopItem
+, nix-update-script
+, makeWrapper
+, kopia
+,
 }:
 let
   version = "0.21.1";

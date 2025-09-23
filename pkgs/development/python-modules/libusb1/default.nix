@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  setuptools,
-  libusb1,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, setuptools
+, libusb1
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

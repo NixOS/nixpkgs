@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  telepathy-glib,
-  farstream,
-  dbus-glib,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, telepathy-glib
+, farstream
+, dbus-glib
+,
 }:
 
 stdenv.mkDerivation rec {

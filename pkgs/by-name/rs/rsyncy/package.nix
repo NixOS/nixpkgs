@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  rsync,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, rsync
+,
 }:
 
 buildGoModule (finalAttrs: {

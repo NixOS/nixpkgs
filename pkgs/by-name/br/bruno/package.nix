@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildNpmPackage,
-  nix-update-script,
-  electron,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  pkg-config,
-  pixman,
-  cairo,
-  pango,
-  npm-lockfile-fix,
-  jq,
-  moreutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildNpmPackage
+, nix-update-script
+, electron
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, pkg-config
+, pixman
+, cairo
+, pango
+, npm-lockfile-fix
+, jq
+, moreutils
+,
 }:
 
 buildNpmPackage rec {

@@ -1,14 +1,14 @@
-{
-  rustPlatform,
-  glib-networking,
-  gpauth,
-  makeWrapper,
-  openconnect,
-  openssl,
-  perl,
-  pkg-config,
-  vpnc-scripts,
-  fetchFromGitHub,
+{ rustPlatform
+, glib-networking
+, gpauth
+, makeWrapper
+, openconnect
+, openssl
+, perl
+, pkg-config
+, vpnc-scripts
+, fetchFromGitHub
+,
 }:
 
 rustPlatform.buildRustPackage rec {

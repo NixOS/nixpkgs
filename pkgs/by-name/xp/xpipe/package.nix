@@ -1,29 +1,29 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchzip,
-  makeDesktopItem,
-  autoPatchelfHook,
-  zlib,
-  fontconfig,
-  udev,
-  gtk3,
-  freetype,
-  alsa-lib,
-  makeShellWrapper,
-  libX11,
-  libXext,
-  libXdamage,
-  libXfixes,
-  libxcb,
-  libXcomposite,
-  libXcursor,
-  libXi,
-  libXrender,
-  libXtst,
-  libXxf86vm,
-  util-linux,
-  socat,
+{ stdenvNoCC
+, lib
+, fetchzip
+, makeDesktopItem
+, autoPatchelfHook
+, zlib
+, fontconfig
+, udev
+, gtk3
+, freetype
+, alsa-lib
+, makeShellWrapper
+, libX11
+, libXext
+, libXdamage
+, libXfixes
+, libxcb
+, libXcomposite
+, libXcursor
+, libXi
+, libXrender
+, libXtst
+, libXxf86vm
+, util-linux
+, socat
+,
 }:
 
 let
@@ -34,14 +34,12 @@ let
   arch =
     {
       x86_64-linux = "x86_64";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   hash =
     {
       x86_64-linux = "sha256-1Wbznj4UQtb6r3k3UdfsfYfhh+2Q+8N5KaaHrkcBlDE=";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   displayname = "XPipe";
 

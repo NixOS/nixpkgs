@@ -1,13 +1,13 @@
-{
-  rustPlatform,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  lib,
-  udev,
-  udevCheckHook,
-  nix-update-script,
-  versionCheckHook,
+{ rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, lib
+, udev
+, udevCheckHook
+, nix-update-script
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rust-streamdeck";

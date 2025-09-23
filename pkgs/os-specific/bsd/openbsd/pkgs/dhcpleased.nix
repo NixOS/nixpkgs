@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  libevent,
-  byacc,
+{ mkDerivation
+, libevent
+, byacc
+,
 }:
 mkDerivation {
   path = "sbin/dhcpleased";

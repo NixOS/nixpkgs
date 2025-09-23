@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  lilypond,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, lilypond
+,
 }:
 
 python3Packages.buildPythonApplication rec {

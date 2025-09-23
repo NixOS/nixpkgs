@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  libdrm,
-  libX11,
-  libGL,
-  wayland,
-  wayland-protocols,
-  libxkbcommon,
-  libXrandr,
-  libXi,
-  libXcursor,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, libdrm
+, libX11
+, libGL
+, wayland
+, wayland-protocols
+, libxkbcommon
+, libXrandr
+, libXi
+, libXcursor
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

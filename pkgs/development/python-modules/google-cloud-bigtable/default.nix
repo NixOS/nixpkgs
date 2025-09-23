@@ -1,26 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  google-api-core,
-  google-cloud-core,
-  google-crc32c,
-  grpc-google-iam-v1,
-  proto-plus,
-  protobuf,
-
-  # optional dependencies
-  libcst,
-
-  # testing
-  grpcio,
-  mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  google-api-core
+, google-cloud-core
+, google-crc32c
+, grpc-google-iam-v1
+, proto-plus
+, protobuf
+, # optional dependencies
+  libcst
+, # testing
+  grpcio
+, mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

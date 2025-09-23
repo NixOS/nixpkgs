@@ -1,13 +1,12 @@
-{
-  lib,
-  lldb,
-  makeWrapper,
-  rustPlatform,
-  stdenv,
-
-  pname,
-  src,
-  version,
+{ lib
+, lldb
+, makeWrapper
+, rustPlatform
+, stdenv
+, pname
+, src
+, version
+,
 }:
 let
   # debugservers on macOS require the 'com.apple.security.cs.debugger'

@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  cmake,
-  installShellFiles,
-  pkg-config,
-  ronn,
-  stdenv,
-  curl,
-  libgit2,
-  libssh2,
-  openssl,
-  zlib,
+{ lib
+, rustPlatform
+, fetchCrate
+, cmake
+, installShellFiles
+, pkg-config
+, ronn
+, stdenv
+, curl
+, libgit2
+, libssh2
+, openssl
+, zlib
+,
 }:
 
 rustPlatform.buildRustPackage rec {

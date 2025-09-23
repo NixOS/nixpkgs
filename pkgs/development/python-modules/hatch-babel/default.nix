@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  babel,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, babel
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

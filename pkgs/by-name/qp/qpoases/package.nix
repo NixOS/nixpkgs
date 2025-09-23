@@ -1,13 +1,10 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-  nix-update-script,
-
-  cmake,
-
-  withShared ? (!stdenv.hostPlatform.isStatic),
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, withShared ? (!stdenv.hostPlatform.isStatic)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

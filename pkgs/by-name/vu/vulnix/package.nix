@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  nix,
-  ronn,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, nix
+, ronn
+,
 }:
 
 python3Packages.buildPythonApplication rec {

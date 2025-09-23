@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.blendfarm;
@@ -108,9 +107,10 @@ in
         User = cfg.user;
         Group = cfg.group;
         StateDirectoryMode = "0755";
-        LoadCredential = lib.optional (
-          cfg.basicSecurityPasswordFile != null
-        ) "BLENDFARM_PASS_FILE:${cfg.basicSecurityPasswordFile}";
+        LoadCredential = lib.optional
+          (
+            cfg.basicSecurityPasswordFile != null
+          ) "BLENDFARM_PASS_FILE:${cfg.basicSecurityPasswordFile}";
         ReadWritePaths = "";
         CapabilityBoundingSet = "";
         RestrictAddressFamilies = [

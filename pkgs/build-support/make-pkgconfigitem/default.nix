@@ -1,24 +1,25 @@
-{
-  lib,
-  writeTextFile,
-  buildPackages,
+{ lib
+, writeTextFile
+, buildPackages
+,
 }:
 
 # See https://people.freedesktop.org/~dbn/pkg-config-guide.html#concepts
-{
-  name, # The name of the pc file
+{ name
+, # The name of the pc file
   # keywords
   # provide a default description for convenience. it's not important but still required by pkg-config.
-  description ? "Pkg-config file for ${name}",
-  url ? "",
-  version ? "",
-  requires ? [ ],
-  requiresPrivate ? [ ],
-  conflicts ? [ ],
-  cflags ? [ ],
-  libs ? [ ],
-  libsPrivate ? [ ],
-  variables ? { },
+  description ? "Pkg-config file for ${name}"
+, url ? ""
+, version ? ""
+, requires ? [ ]
+, requiresPrivate ? [ ]
+, conflicts ? [ ]
+, cflags ? [ ]
+, libs ? [ ]
+, libsPrivate ? [ ]
+, variables ? { }
+,
 }:
 
 let
@@ -51,14 +52,16 @@ let
 
   renderVariable =
     name: value:
-    lib.optionalString (
-      value != "" && value != [ ]
-    ) "${name}=${replacePlaceholderAndListToString value}";
+    lib.optionalString
+      (
+        value != "" && value != [ ]
+      ) "${name}=${replacePlaceholderAndListToString value}";
   renderKeyword =
     name: value:
-    lib.optionalString (
-      value != "" && value != [ ]
-    ) "${name}: ${replacePlaceholderAndListToString value}";
+    lib.optionalString
+      (
+        value != "" && value != [ ]
+      ) "${name}: ${replacePlaceholderAndListToString value}";
 
   renderSomething =
     renderFunc: attrs:

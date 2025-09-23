@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  # native
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  desktop-file-utils,
-  appstream-glib,
-  wrapGAppsHook4,
-  python3,
-  # Not native
-  gst_all_1,
-  gsettings-desktop-schemas,
-  gtk4,
-  avahi,
-  glib,
-  networkmanager,
-  json-glib,
-  libadwaita,
-  libportal-gtk4,
-  libpulseaudio,
-  libsoup_3,
-  pipewire,
-  protobufc,
+{ lib
+, stdenv
+, fetchurl
+, # native
+  meson
+, ninja
+, pkg-config
+, gettext
+, desktop-file-utils
+, appstream-glib
+, wrapGAppsHook4
+, python3
+, # Not native
+  gst_all_1
+, gsettings-desktop-schemas
+, gtk4
+, avahi
+, glib
+, networkmanager
+, json-glib
+, libadwaita
+, libportal-gtk4
+, libpulseaudio
+, libsoup_3
+, pipewire
+, protobufc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

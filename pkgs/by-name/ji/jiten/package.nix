@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  bash,
-  makeWrapper,
-  kanjidraw,
-  installShellFiles,
-  pcre,
-  sqlite,
-  nodejs,
+{ lib
+, fetchFromGitHub
+, python3
+, bash
+, makeWrapper
+, kanjidraw
+, installShellFiles
+, pcre
+, sqlite
+, nodejs
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

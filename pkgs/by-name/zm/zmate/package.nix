@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  zellij,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, zellij
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

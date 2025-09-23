@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  braceexpand,
-  numpy,
-  pyyaml,
-
-  # tests
-  imageio,
-  lmdb,
-  msgpack,
-  pytestCheckHook,
-  torch,
-  torchvision,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  braceexpand
+, numpy
+, pyyaml
+, # tests
+  imageio
+, lmdb
+, msgpack
+, pytestCheckHook
+, torch
+, torchvision
+,
 }:
 buildPythonPackage rec {
   pname = "webdataset";

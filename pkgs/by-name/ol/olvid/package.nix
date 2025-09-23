@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  zlib,
-  libXext,
-  libX11,
-  libXrender,
-  libXtst,
-  libXi,
-  freetype,
-  alsa-lib,
-  jdk21,
-  openjfx21,
-  autoPatchelfHook,
-  makeBinaryWrapper,
-  wrapGAppsHook3,
+{ stdenv
+, lib
+, fetchurl
+, zlib
+, libXext
+, libX11
+, libXrender
+, libXtst
+, libXi
+, freetype
+, alsa-lib
+, jdk21
+, openjfx21
+, autoPatchelfHook
+, makeBinaryWrapper
+, wrapGAppsHook3
+,
 }:
 
 let
@@ -30,11 +30,13 @@ let
   ];
 
   classpath =
-    lib.concatMap (mod: [
-      "${openjfx21}/modules_src/javafx.${mod}/module-info.java"
-      "${openjfx21}/modules/javafx.${mod}"
-      "${openjfx21}/modules_libs/javafx.${mod}"
-    ]) javafxModules
+    lib.concatMap
+      (mod: [
+        "${openjfx21}/modules_src/javafx.${mod}/module-info.java"
+        "${openjfx21}/modules/javafx.${mod}"
+        "${openjfx21}/modules_libs/javafx.${mod}"
+      ])
+      javafxModules
     ++ [ "$out/share/${repo}/*" ];
 
   jvmArgs = [

@@ -1,14 +1,14 @@
 src: version:
-{
-  lib,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  dart-sass,
-  nodePackages_latest,
-  fixup-yarn-lock,
-  stdenv,
-  yarn,
-  writableTmpDirAsHomeHook,
+{ lib
+, fetchFromGitHub
+, fetchYarnDeps
+, dart-sass
+, nodePackages_latest
+, fixup-yarn-lock
+, stdenv
+, yarn
+, writableTmpDirAsHomeHook
+,
 }:
 let
   nodejs = nodePackages_latest.nodejs;

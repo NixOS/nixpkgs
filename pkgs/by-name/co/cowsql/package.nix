@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libuv,
-  raft-cowsql,
-  sqlite,
-  incus,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libuv
+, raft-cowsql
+, sqlite
+, incus
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

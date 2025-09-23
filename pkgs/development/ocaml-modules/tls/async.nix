@@ -1,10 +1,10 @@
-{
-  buildDunePackage,
-  tls,
-  async,
-  cstruct-async,
-  core,
-  mirage-crypto-rng,
+{ buildDunePackage
+, tls
+, async
+, cstruct-async
+, core
+, mirage-crypto-rng
+,
 }:
 
 buildDunePackage {

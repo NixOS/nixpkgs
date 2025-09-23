@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  requests,
-  distro,
-  click,
-  typing-extensions,
-  matrix-nio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, requests
+, distro
+, click
+, typing-extensions
+, matrix-nio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  qt6Packages,
-  # nativeBuildInputs
-  pkg-config,
-  cmake,
-  extra-cmake-modules,
-  # buildInputs
-  sqlite,
-  libsecret,
-  libre-graph-api-cpp-qt-client,
-  kdsingleapplication,
-  ## darwin only
-  libinotify-kqueue,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, qt6Packages
+, # nativeBuildInputs
+  pkg-config
+, cmake
+, extra-cmake-modules
+, # buildInputs
+  sqlite
+, libsecret
+, libre-graph-api-cpp-qt-client
+, kdsingleapplication
+, ## darwin only
+  libinotify-kqueue
+,
 }:
 
 stdenv.mkDerivation rec {

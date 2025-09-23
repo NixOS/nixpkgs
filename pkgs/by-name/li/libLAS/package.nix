@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  boost,
-  cmake,
-  libgeotiff,
-  libtiff,
-  laszip_2,
-  zlib,
-  fixDarwinDylibNames,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, boost
+, cmake
+, libgeotiff
+, libtiff
+, laszip_2
+, zlib
+, fixDarwinDylibNames
+,
 }:
 
 stdenv.mkDerivation rec {

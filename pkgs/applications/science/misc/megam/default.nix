@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ocaml,
-  ncurses,
+{ lib
+, stdenv
+, fetchurl
+, ocaml
+, ncurses
+,
 }:
 
 stdenv.mkDerivation {

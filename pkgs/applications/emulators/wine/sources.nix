@@ -1,5 +1,5 @@
-{
-  pkgs ? import <nixpkgs> { },
+{ pkgs ? import <nixpkgs> { }
+,
 }:
 ## we default to importing <nixpkgs> here, so that you can use
 ## a simple shell command to insert new hashes into this file
@@ -11,40 +11,40 @@
 let
   fetchurl = args@{ url, hash, ... }: pkgs.fetchurl { inherit url hash; } // args;
   fetchFromGitHub =
-    args@{
-      owner,
-      repo,
-      rev,
-      hash,
-      ...
+    args@{ owner
+    , repo
+    , rev
+    , hash
+    , ...
     }:
-    pkgs.fetchFromGitHub {
-      inherit
-        owner
-        repo
-        rev
-        hash
-        ;
-    }
+    pkgs.fetchFromGitHub
+      {
+        inherit
+          owner
+          repo
+          rev
+          hash
+          ;
+      }
     // args;
   fetchFromGitLab =
-    args@{
-      domain,
-      owner,
-      repo,
-      rev,
-      hash,
-      ...
+    args@{ domain
+    , owner
+    , repo
+    , rev
+    , hash
+    , ...
     }:
-    pkgs.fetchFromGitLab {
-      inherit
-        domain
-        owner
-        repo
-        rev
-        hash
-        ;
-    }
+    pkgs.fetchFromGitLab
+      {
+        inherit
+          domain
+          owner
+          repo
+          rev
+          hash
+          ;
+      }
     // args;
 
   updateScriptPreamble = ''
@@ -116,19 +116,21 @@ rec {
     ]
     ++ patches-binutils-2_44-fix-wine-older-than-10_2;
 
-    updateScript = writeShellScript "update-wine-stable" (''
-      ${updateScriptPreamble}
-      major=''${UPDATE_NIX_OLD_VERSION%%.*}
-      latest_stable=$(get_latest_wine_version "$major.0")
+    updateScript = writeShellScript "update-wine-stable" (
+      ''
+        ${updateScriptPreamble}
+        major=''${UPDATE_NIX_OLD_VERSION%%.*}
+        latest_stable=$(get_latest_wine_version "$major.0")
 
-      # Can't use autobump on stable because we don't want the path
-      # <source/7.0/wine-7.0.tar.xz> to become <source/7.0.1/wine-7.0.1.tar.xz>.
-      if [[ "$UPDATE_NIX_OLD_VERSION" != "$latest_stable" ]]; then
-          set_version_and_hash stable "$latest_stable" "$(nix-prefetch-url "$wine_url_base/source/$major.0/wine-$latest_stable.tar.xz")"
-      fi
+        # Can't use autobump on stable because we don't want the path
+        # <source/7.0/wine-7.0.tar.xz> to become <source/7.0.1/wine-7.0.1.tar.xz>.
+        if [[ "$UPDATE_NIX_OLD_VERSION" != "$latest_stable" ]]; then
+            set_version_and_hash stable "$latest_stable" "$(nix-prefetch-url "$wine_url_base/source/$major.0/wine-$latest_stable.tar.xz")"
+        fi
 
-      do_update
-    '');
+        do_update
+      ''
+    );
   };
 
   unstable = fetchurl rec {

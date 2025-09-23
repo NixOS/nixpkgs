@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  fetchpatch,
-  ncurses,
-  boehmgc,
-  gettext,
-  zlib,
-  sslSupport ? true,
-  openssl,
-  graphicsSupport ? !stdenv.hostPlatform.isDarwin,
-  imlib2,
-  x11Support ? graphicsSupport,
-  libX11,
-  mouseSupport ? !stdenv.hostPlatform.isDarwin,
-  gpm-ncurses,
-  perl,
-  man,
-  pkg-config,
-  buildPackages,
-  w3m,
-  testers,
-  updateAutotoolsGnuConfigScriptsHook,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, fetchpatch
+, ncurses
+, boehmgc
+, gettext
+, zlib
+, sslSupport ? true
+, openssl
+, graphicsSupport ? !stdenv.hostPlatform.isDarwin
+, imlib2
+, x11Support ? graphicsSupport
+, libX11
+, mouseSupport ? !stdenv.hostPlatform.isDarwin
+, gpm-ncurses
+, perl
+, man
+, pkg-config
+, buildPackages
+, w3m
+, testers
+, updateAutotoolsGnuConfigScriptsHook
+,
 }:
 
 let

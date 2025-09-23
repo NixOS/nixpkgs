@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  jq,
-  yarnConfigHook,
-  nodejs,
-  jitsi-meet,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, jq
+, yarnConfigHook
+, nodejs
+, jitsi-meet
+,
 }:
 
 let
@@ -19,7 +19,7 @@ in
 stdenv.mkDerivation (
   finalAttrs:
   builtins.removeAttrs pinData [ "hashes" ]
-  // {
+    // {
     pname = "element-web";
 
     src = fetchFromGitHub {

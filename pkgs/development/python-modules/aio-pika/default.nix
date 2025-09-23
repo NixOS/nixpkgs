@@ -1,19 +1,19 @@
-{
-  lib,
-  aiomisc-pytest,
-  aiormq,
-  buildPythonPackage,
-  docker,
-  exceptiongroup,
-  fetchFromGitHub,
-  pamqp,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  shortuuid,
-  testcontainers,
-  wrapt,
-  yarl,
+{ lib
+, aiomisc-pytest
+, aiormq
+, buildPythonPackage
+, docker
+, exceptiongroup
+, fetchFromGitHub
+, pamqp
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, shortuuid
+, testcontainers
+, wrapt
+, yarl
+,
 }:
 
 buildPythonPackage rec {

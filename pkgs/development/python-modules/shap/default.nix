@@ -1,32 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  writeText,
-  catboost,
-  cloudpickle,
-  cython,
-  ipython,
-  lightgbm,
-  lime,
-  matplotlib,
-  numba,
-  numpy,
-  opencv4,
-  pandas,
-  pyspark,
-  pytest-mpl,
-  scikit-learn,
-  scipy,
-  sentencepiece,
-  setuptools,
-  setuptools-scm,
-  slicer,
-  tqdm,
-  transformers,
-  xgboost,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, writeText
+, catboost
+, cloudpickle
+, cython
+, ipython
+, lightgbm
+, lime
+, matplotlib
+, numba
+, numpy
+, opencv4
+, pandas
+, pyspark
+, pytest-mpl
+, scikit-learn
+, scipy
+, sentencepiece
+, setuptools
+, setuptools-scm
+, slicer
+, tqdm
+, transformers
+, xgboost
+,
 }:
 
 buildPythonPackage rec {

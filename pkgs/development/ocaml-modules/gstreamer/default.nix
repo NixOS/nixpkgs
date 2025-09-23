@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  dune-configurator,
-  pkg-config,
-  glib,
-  gst_all_1,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, dune-configurator
+, pkg-config
+, glib
+, gst_all_1
+,
 }:
 
 buildDunePackage rec {

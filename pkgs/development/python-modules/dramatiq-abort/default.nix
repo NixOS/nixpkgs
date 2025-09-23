@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gevent,
-  pytestCheckHook,
-  pytest-cov-stub,
-  dramatiq,
-  redis,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gevent
+, pytestCheckHook
+, pytest-cov-stub
+, dramatiq
+, redis
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

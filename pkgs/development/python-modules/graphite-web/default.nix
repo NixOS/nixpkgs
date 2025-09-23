@@ -1,32 +1,29 @@
-{
-  lib,
-  stdenv,
-  pkgs,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # dependencies
-  cairocffi,
-  django,
-  django-tagging,
-  gunicorn,
-  pyparsing,
-  python-memcached,
-  pytz,
-  six,
-  txamqp,
-  urllib3,
-  whisper,
-
-  # tests
-  mock,
-  redis,
-  rrdtool,
-  writableTmpDirAsHomeHook,
-  python,
-
-  # passthru
-  nixosTests,
+{ lib
+, stdenv
+, pkgs
+, buildPythonPackage
+, fetchFromGitHub
+, # dependencies
+  cairocffi
+, django
+, django-tagging
+, gunicorn
+, pyparsing
+, python-memcached
+, pytz
+, six
+, txamqp
+, urllib3
+, whisper
+, # tests
+  mock
+, redis
+, rrdtool
+, writableTmpDirAsHomeHook
+, python
+, # passthru
+  nixosTests
+,
 }:
 
 buildPythonPackage {

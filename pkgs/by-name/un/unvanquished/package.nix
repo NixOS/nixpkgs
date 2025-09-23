@@ -1,36 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchFromGitHub,
-  SDL2,
-  buildFHSEnv,
-  cmake,
-  copyDesktopItems,
-  curl,
-  freetype,
-  gcc,
-  geoip,
-  glew,
-  gmp,
-  libGL,
-  libjpeg,
-  libogg,
-  libopus,
-  libpng,
-  libvorbis,
-  libwebp,
-  libX11,
-  lua5,
-  makeDesktopItem,
-  ncurses,
-  nettle,
-  openal,
-  opusfile,
-  zlib,
-  # to download assets
-  aria2,
-  cacert,
+{ lib
+, stdenv
+, fetchzip
+, fetchFromGitHub
+, SDL2
+, buildFHSEnv
+, cmake
+, copyDesktopItems
+, curl
+, freetype
+, gcc
+, geoip
+, glew
+, gmp
+, libGL
+, libjpeg
+, libogg
+, libopus
+, libpng
+, libvorbis
+, libwebp
+, libX11
+, lua5
+, makeDesktopItem
+, ncurses
+, nettle
+, openal
+, opusfile
+, zlib
+, # to download assets
+  aria2
+, cacert
+,
 }:
 
 let

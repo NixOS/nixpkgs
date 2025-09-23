@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  maven,
-  jdk17,
-  jre17_minimal,
-  fetchFromGitHub,
-  fetchpatch,
-  makeWrapper,
-  mvnDepsHash ? null,
-  enableGui ? true,
-  enableOcr ? true,
-  runCommand,
-  tesseract,
-  nixosTests,
+{ lib
+, stdenv
+, maven
+, jdk17
+, jre17_minimal
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, mvnDepsHash ? null
+, enableGui ? true
+, enableOcr ? true
+, runCommand
+, tesseract
+, nixosTests
+,
 }:
 
 let

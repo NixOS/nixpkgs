@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libGL,
-  libspng,
-  libxkbcommon,
-  luajit,
-  meson,
-  ninja,
-  pkg-config,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  xorg,
-  xwayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libGL
+, libspng
+, libxkbcommon
+, luajit
+, meson
+, ninja
+, pkg-config
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xorg
+, xwayland
+,
 }:
 stdenv.mkDerivation {
   pname = "waywall";

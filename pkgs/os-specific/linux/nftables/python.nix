@@ -1,7 +1,7 @@
-{
-  buildPythonPackage,
-  setuptools,
-  nftables,
+{ buildPythonPackage
+, setuptools
+, nftables
+,
 }:
 
 buildPythonPackage {

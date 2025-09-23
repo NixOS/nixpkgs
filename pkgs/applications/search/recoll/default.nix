@@ -1,45 +1,45 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  mkDerivation,
-  antiword,
-  aspell,
-  bison,
-  catdoc,
-  catdvi,
-  chmlib,
-  djvulibre,
-  file,
-  gawk,
-  ghostscript,
-  gnugrep,
-  gnused,
-  gnutar,
-  groff,
-  gzip,
-  libiconv,
-  libwpd,
-  libxslt,
-  lyx,
-  makeWrapper,
-  meson,
-  ninja,
-  perl,
-  perlPackages,
-  pkg-config,
-  poppler-utils,
-  python3Packages,
-  qtbase,
-  qttools,
-  unrtf,
-  untex,
-  unzip,
-  which,
-  xapian,
-  zlib,
-  withGui ? true,
-  withPython ? with stdenv; buildPlatform.canExecute hostPlatform,
+{ stdenv
+, fetchurl
+, lib
+, mkDerivation
+, antiword
+, aspell
+, bison
+, catdoc
+, catdvi
+, chmlib
+, djvulibre
+, file
+, gawk
+, ghostscript
+, gnugrep
+, gnused
+, gnutar
+, groff
+, gzip
+, libiconv
+, libwpd
+, libxslt
+, lyx
+, makeWrapper
+, meson
+, ninja
+, perl
+, perlPackages
+, pkg-config
+, poppler-utils
+, python3Packages
+, qtbase
+, qttools
+, unrtf
+, untex
+, unzip
+, which
+, xapian
+, zlib
+, withGui ? true
+, withPython ? with stdenv; buildPlatform.canExecute hostPlatform
+,
 }:
 
 let
@@ -164,9 +164,13 @@ mkDerivation rec {
       if [[ ! "$f" =~ \.zip$ ]]; then
   ''
   + lib.concatStrings (
-    lib.mapAttrsToList (k: v: (''
-      substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
-    '')) filters
+    lib.mapAttrsToList
+      (k: v: (
+        ''
+          substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
+        ''
+      ))
+      filters
   )
   + ''
         substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'

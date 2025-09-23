@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  nixosTests,
-  nix-update-script,
-  php,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, nixosTests
+, nix-update-script
+, php
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  ocaml,
-  findlib,
-  ocamlbuild,
-  topkg,
-  js_of_ocaml-compiler,
-  js_of_ocaml-toplevel,
+{ stdenv
+, lib
+, fetchurl
+, ocaml
+, findlib
+, ocamlbuild
+, topkg
+, js_of_ocaml-compiler
+, js_of_ocaml-toplevel
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  stdenv,
-  mate,
-  glib,
-  wrapGAppsHook3,
+{ stdenv
+, mate
+, glib
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation {

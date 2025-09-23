@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  grequests,
-  hawkauthlib,
-  mock,
-  pybrowserid,
-  pyjwt,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  responses,
-  hatchling,
-  parameterized,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, grequests
+, hawkauthlib
+, mock
+, pybrowserid
+, pyjwt
+, pytestCheckHook
+, pythonOlder
+, requests
+, responses
+, hatchling
+, parameterized
+,
 }:
 
 buildPythonPackage rec {

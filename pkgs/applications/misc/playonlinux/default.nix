@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  fetchurl,
-  cabextract,
-  gettext,
-  gnupg,
-  icoutils,
-  imagemagick,
-  mesa-demos,
-  netcat-gnu,
-  p7zip,
-  python3,
-  unzip,
-  wget,
-  wine,
-  xdg-user-dirs,
-  xterm,
-  pkgs,
-  pkgsi686Linux,
-  which,
-  curl,
-  jq,
-  xorg,
-  libGL,
-  steam-run,
-  # needed for avoiding crash on file selector
-  gsettings-desktop-schemas,
-  glib,
-  wrapGAppsHook3,
-  hicolor-icon-theme,
+{ lib
+, stdenv
+, makeWrapper
+, fetchurl
+, cabextract
+, gettext
+, gnupg
+, icoutils
+, imagemagick
+, mesa-demos
+, netcat-gnu
+, p7zip
+, python3
+, unzip
+, wget
+, wine
+, xdg-user-dirs
+, xterm
+, pkgs
+, pkgsi686Linux
+, which
+, curl
+, jq
+, xorg
+, libGL
+, steam-run
+, # needed for avoiding crash on file selector
+  gsettings-desktop-schemas
+, glib
+, wrapGAppsHook3
+, hicolor-icon-theme
+,
 }:
 
 let

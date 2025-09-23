@@ -1,22 +1,22 @@
-{
-  openapi-generator-cli,
-  fetchurl,
-  runCommand,
+{ openapi-generator-cli
+, fetchurl
+, runCommand
+,
 }:
 
 runCommand "openapi-generator-cli-test"
-  {
-    nativeBuildInputs = [ openapi-generator-cli ];
-    petstore = fetchurl {
-      url = "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/14c0908becbccd78252be49bd92be8c53cd2b9e3/examples/v3.0/petstore.yaml";
-      hash = "sha256-q2D1naR41KwxLNn6vMbL0G+Pl1q4oaDCApsqQfZf7dU=";
-    };
-    config = builtins.toJSON {
-      elmVersion = "0.19";
-      elmPrefixCustomTypeVariants = false;
-    };
-    passAsFile = [ "config" ];
-  }
+{
+  nativeBuildInputs = [ openapi-generator-cli ];
+  petstore = fetchurl {
+    url = "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/14c0908becbccd78252be49bd92be8c53cd2b9e3/examples/v3.0/petstore.yaml";
+    hash = "sha256-q2D1naR41KwxLNn6vMbL0G+Pl1q4oaDCApsqQfZf7dU=";
+  };
+  config = builtins.toJSON {
+    elmVersion = "0.19";
+    elmPrefixCustomTypeVariants = false;
+  };
+  passAsFile = [ "config" ];
+}
   ''
     openapi-generator-cli generate \
       --input-spec $petstore \

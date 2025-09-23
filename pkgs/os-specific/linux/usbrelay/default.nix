@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  hidapi,
-  installShellFiles,
+{ stdenv
+, lib
+, fetchFromGitHub
+, hidapi
+, installShellFiles
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "usbrelay";

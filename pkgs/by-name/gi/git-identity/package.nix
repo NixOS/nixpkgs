@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  installShellFiles,
-  ronn,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, installShellFiles
+, ronn
+, nix-update-script
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "git-identity";

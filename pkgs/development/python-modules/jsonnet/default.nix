@@ -1,7 +1,7 @@
-{
-  pkgs,
-  buildPythonPackage,
-  setuptools,
+{ pkgs
+, buildPythonPackage
+, setuptools
+,
 }:
 
 buildPythonPackage {

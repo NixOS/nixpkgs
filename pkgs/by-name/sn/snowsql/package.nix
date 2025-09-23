@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  rpmextract,
-  patchelf,
-  makeWrapper,
-  openssl,
-  libxcrypt-legacy,
+{ lib
+, stdenv
+, fetchurl
+, rpmextract
+, patchelf
+, makeWrapper
+, openssl
+, libxcrypt-legacy
+,
 }:
 
 stdenv.mkDerivation rec {

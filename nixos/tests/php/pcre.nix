@@ -1,11 +1,10 @@
 let
   testString = "can-use-subgroups";
 in
-{
-  pkgs,
-  lib,
-  php,
-  ...
+{ pkgs
+, lib
+, php
+, ...
 }:
 {
   name = "php-${php.version}-httpd-pcre-jit-test";

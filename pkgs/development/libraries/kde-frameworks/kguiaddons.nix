@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  extra-cmake-modules,
-  wayland-scanner,
-  qtbase,
-  qtx11extras,
-  wayland,
-  plasma-wayland-protocols,
+{ lib
+, stdenv
+, mkDerivation
+, extra-cmake-modules
+, wayland-scanner
+, qtbase
+, qtx11extras
+, wayland
+, plasma-wayland-protocols
+,
 }:
 
 mkDerivation {

@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  domdf-python-tools,
-  handy-archives,
-  hatchling,
-  hatch-requirements-txt,
-  packaging,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, domdf-python-tools
+, handy-archives
+, hatchling
+, hatch-requirements-txt
+, packaging
+,
 }:
 buildPythonPackage rec {
   pname = "dist-meta";

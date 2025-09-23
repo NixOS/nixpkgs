@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  python-json-logger,
-  jsonschema,
-  ruamel-yaml,
-  traitlets,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, python-json-logger
+, jsonschema
+, ruamel-yaml
+, traitlets
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

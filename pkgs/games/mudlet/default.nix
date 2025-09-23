@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  git,
-  pkg-config,
-  qttools,
-  which,
-  wrapQtAppsHook,
-  boost,
-  hunspell,
-  libGLU,
-  libsForQt5,
-  libsecret,
-  libzip,
-  lua,
-  pcre,
-  pugixml,
-  qtbase,
-  qtmultimedia,
-  discord-rpc,
-  yajl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, git
+, pkg-config
+, qttools
+, which
+, wrapQtAppsHook
+, boost
+, hunspell
+, libGLU
+, libsForQt5
+, libsecret
+, libzip
+, lua
+, pcre
+, pugixml
+, qtbase
+, qtmultimedia
+, discord-rpc
+, yajl
+,
 }:
 
 let

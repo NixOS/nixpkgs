@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  google-api-python-client,
-  google-auth-oauthlib,
-  jsonschema,
-  jupyterhub,
-  mwoauth,
-  pyjwt,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  requests,
-  requests-mock,
-  ruamel-yaml,
-  setuptools,
-  tornado,
-  traitlets,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, google-api-python-client
+, google-auth-oauthlib
+, jsonschema
+, jupyterhub
+, mwoauth
+, pyjwt
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, requests
+, requests-mock
+, ruamel-yaml
+, setuptools
+, tornado
+, traitlets
+,
 }:
 
 buildPythonPackage rec {

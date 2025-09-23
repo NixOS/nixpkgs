@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  libsodium,
-  xz,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, libsodium
+, xz
+,
 }:
 
 rustPlatform.buildRustPackage rec {

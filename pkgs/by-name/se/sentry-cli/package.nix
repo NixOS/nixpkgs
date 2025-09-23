@@ -1,11 +1,11 @@
-{
-  rustPlatform,
-  fetchFromGitHub,
-  lib,
-  installShellFiles,
-  openssl,
-  pkg-config,
-  stdenv,
+{ rustPlatform
+, fetchFromGitHub
+, lib
+, installShellFiles
+, openssl
+, pkg-config
+, stdenv
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sentry-cli";

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  libmysofa,
-  zlib,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, libmysofa
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gibberish-detector,
-  mock,
-  pkgs,
-  pyahocorasick,
-  pytest7CheckHook,
-  pythonOlder,
-  pyyaml,
-  requests,
-  responses,
-  setuptools,
-  unidiff,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gibberish-detector
+, mock
+, pkgs
+, pyahocorasick
+, pytest7CheckHook
+, pythonOlder
+, pyyaml
+, requests
+, responses
+, setuptools
+, unidiff
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

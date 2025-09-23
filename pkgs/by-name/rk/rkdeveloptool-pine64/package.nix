@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  pkg-config,
-  libusb1,
-  scdoc,
-  ninja,
-  cmake,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, pkg-config
+, libusb1
+, scdoc
+, ninja
+, cmake
+,
 }:
 
 let

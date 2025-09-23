@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  sbcl,
+{ lib
+, stdenvNoCC
+, fetchzip
+, sbcl
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shen-sbcl";

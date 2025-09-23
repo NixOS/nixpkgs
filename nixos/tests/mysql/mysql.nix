@@ -1,8 +1,8 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
-  lib ? pkgs.lib,
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../../.. { inherit system config; }
+, lib ? pkgs.lib
+,
 }:
 
 let
@@ -16,12 +16,12 @@ let
   makeTest = import ./../make-test-python.nix;
   # Setup common users
   makeMySQLTest =
-    {
-      package,
-      name ? mkTestName package,
-      useSocketAuth ? true,
-      hasMroonga ? true,
-      hasRocksDB ? pkgs.stdenv.hostPlatform.is64bit,
+    { package
+    , name ? mkTestName package
+    , useSocketAuth ? true
+    , hasMroonga ? true
+    , hasRocksDB ? pkgs.stdenv.hostPlatform.is64bit
+    ,
     }:
     makeTest {
       inherit name;
@@ -159,27 +159,33 @@ let
       '';
     };
 in
-lib.mapAttrs (
-  _: package:
-  makeMySQLTest {
-    inherit package;
-    hasRocksDB = false;
-    hasMroonga = false;
-    useSocketAuth = false;
-  }
-) mysqlPackages
-// (lib.mapAttrs (
-  _: package:
-  makeMySQLTest {
-    inherit package;
-  }
-) mariadbPackages)
-// (lib.mapAttrs (
-  _: package:
-  makeMySQLTest {
-    inherit package;
-    name = builtins.replaceStrings [ "-" ] [ "_" ] package.pname;
-    hasMroonga = false;
-    useSocketAuth = false;
-  }
-) perconaPackages)
+lib.mapAttrs
+  (
+    _: package:
+      makeMySQLTest {
+        inherit package;
+        hasRocksDB = false;
+        hasMroonga = false;
+        useSocketAuth = false;
+      }
+  )
+  mysqlPackages
+// (lib.mapAttrs
+  (
+    _: package:
+      makeMySQLTest {
+        inherit package;
+      }
+  )
+  mariadbPackages)
+  // (lib.mapAttrs
+  (
+    _: package:
+      makeMySQLTest {
+        inherit package;
+        name = builtins.replaceStrings [ "-" ] [ "_" ] package.pname;
+        hasMroonga = false;
+        useSocketAuth = false;
+      }
+  )
+  perconaPackages)

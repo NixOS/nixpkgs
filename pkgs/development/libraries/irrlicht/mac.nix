@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchFromGitHub,
-  cmake,
+{ lib
+, stdenv
+, fetchzip
+, fetchFromGitHub
+, cmake
+,
 }:
 
 let

@@ -1,12 +1,12 @@
-{
-  lib,
-  callPackage,
-  fetchFromGitHub,
-  nix,
-  nix-prefetch-git,
-  nixpkgs-review,
-  python3Packages,
-  nix-update,
+{ lib
+, callPackage
+, fetchFromGitHub
+, nix
+, nix-prefetch-git
+, nixpkgs-review
+, python3Packages
+, nix-update
+,
 }:
 
 python3Packages.buildPythonApplication rec {

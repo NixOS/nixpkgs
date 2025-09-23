@@ -1,15 +1,15 @@
-{
-  callPackage,
-  lib,
-  zig_0_14,
-  stdenv,
-  fetchFromGitHub,
-  fcft,
-  pixman,
-  pkg-config,
-  wayland,
-  wayland-scanner,
-  wayland-protocols,
+{ callPackage
+, lib
+, zig_0_14
+, stdenv
+, fetchFromGitHub
+, fcft
+, pixman
+, pkg-config
+, wayland
+, wayland-scanner
+, wayland-protocols
+,
 }:
 let
   zig = zig_0_14;

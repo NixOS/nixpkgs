@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  perl,
-  gnused,
-  dpkg,
-  makeWrapper,
-  autoPatchelfHook,
-  libredirect,
+{ stdenv
+, lib
+, fetchurl
+, perl
+, gnused
+, dpkg
+, makeWrapper
+, autoPatchelfHook
+, libredirect
+,
 }:
 
 stdenv.mkDerivation rec {

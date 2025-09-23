@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  removeReferencesTo,
-  cppSupport ? true,
-  zlibSupport ? true,
-  zlib,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  javaSupport ? false,
-  jdk,
+{ lib
+, stdenv
+, fetchurl
+, removeReferencesTo
+, cppSupport ? true
+, zlibSupport ? true
+, zlib
+, enableShared ? !stdenv.hostPlatform.isStatic
+, javaSupport ? false
+, jdk
+,
 }:
 
 let

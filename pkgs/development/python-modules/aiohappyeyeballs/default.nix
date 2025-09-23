@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-
-  # optional-dependencies
-  furo,
-  myst-parser,
-  sphinx,
-  sphinxHook,
-
-  # tests
-  pytest-asyncio_0,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  poetry-core
+, # optional-dependencies
+  furo
+, myst-parser
+, sphinx
+, sphinxHook
+, # tests
+  pytest-asyncio_0
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

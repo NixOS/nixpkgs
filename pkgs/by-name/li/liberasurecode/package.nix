@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  doxygen,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  zlib,
+{ lib
+, stdenv
+, autoreconfHook
+, doxygen
+, fetchFromGitHub
+, installShellFiles
+, testers
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,19 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  makeWrapper,
-  meson,
-  ninja,
-  pkg-config,
-  runtimeShell,
-  installShellFiles,
-
-  android-tools,
-  ffmpeg,
-  libusb1,
-  SDL2,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, makeWrapper
+, meson
+, ninja
+, pkg-config
+, runtimeShell
+, installShellFiles
+, android-tools
+, ffmpeg
+, libusb1
+, SDL2
+,
 }:
 
 let

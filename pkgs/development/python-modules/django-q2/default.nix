@@ -1,20 +1,20 @@
-{
-  lib,
-  arrow,
-  blessed,
-  bson,
-  buildPythonPackage,
-  croniter,
-  django,
-  django-picklefield,
-  django-redis,
-  fetchFromGitHub,
-  hiredis,
-  poetry-core,
-  pytest-django,
-  pytestCheckHook,
-  redisTestHook,
-  stdenv,
+{ lib
+, arrow
+, blessed
+, bson
+, buildPythonPackage
+, croniter
+, django
+, django-picklefield
+, django-redis
+, fetchFromGitHub
+, hiredis
+, poetry-core
+, pytest-django
+, pytestCheckHook
+, redisTestHook
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

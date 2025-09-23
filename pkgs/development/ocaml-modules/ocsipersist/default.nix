@@ -1,6 +1,6 @@
-{
-  buildDunePackage,
-  ocsipersist-lib,
+{ buildDunePackage
+, ocsipersist-lib
+,
 }:
 
 buildDunePackage {

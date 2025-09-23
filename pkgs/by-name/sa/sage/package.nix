@@ -1,8 +1,8 @@
-{
-  pkgs,
-  withDoc ? false,
-  requireSageTests ? true,
-  extraPythonPackages ? ps: [ ],
+{ pkgs
+, withDoc ? false
+, requireSageTests ? true
+, extraPythonPackages ? ps: [ ]
+,
 }:
 
 # Here sage and its dependencies are put together. Some dependencies may be pinned
@@ -134,10 +134,11 @@ let
     ++ extraPythonPackages python3.pkgs;
 
   pythonEnv =
-    python3.buildEnv.override {
-      extraLibs = pythonRuntimeDeps;
-      ignoreCollisions = true;
-    }
+    python3.buildEnv.override
+      {
+        extraLibs = pythonRuntimeDeps;
+        ignoreCollisions = true;
+      }
     // {
       extraLibs = pythonRuntimeDeps;
     }; # make the libs accessible

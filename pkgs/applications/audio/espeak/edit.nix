@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  unzip,
-  portaudio,
-  wxGTK32,
-  sox,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, unzip
+, portaudio
+, wxGTK32
+, sox
+,
 }:
 
 stdenv.mkDerivation rec {

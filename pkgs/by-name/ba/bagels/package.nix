@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  writableTmpDirAsHomeHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

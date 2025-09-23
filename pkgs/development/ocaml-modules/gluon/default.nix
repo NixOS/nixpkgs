@@ -1,13 +1,13 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  fetchpatch,
-  bytestring,
-  config,
-  libc,
-  rio,
-  uri,
+{ lib
+, buildDunePackage
+, fetchurl
+, fetchpatch
+, bytestring
+, config
+, libc
+, rio
+, uri
+,
 }:
 
 buildDunePackage rec {

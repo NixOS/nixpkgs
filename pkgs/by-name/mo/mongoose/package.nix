@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  blas,
-  llvmPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, blas
+, llvmPackages
+,
 }:
 
 let

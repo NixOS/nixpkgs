@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  rel,
-  addonDir,
-  buildKodiBinaryAddon,
-  fetchFromGitHub,
-  pugixml,
-  glib,
-  nspr,
-  nss,
-  gtest,
-  rapidjson,
+{ stdenv
+, lib
+, rel
+, addonDir
+, buildKodiBinaryAddon
+, fetchFromGitHub
+, pugixml
+, glib
+, nspr
+, nss
+, gtest
+, rapidjson
+,
 }:
 let
   bento4 = fetchFromGitHub {

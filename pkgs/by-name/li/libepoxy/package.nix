@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  utilmacros,
-  python3,
-  libGL,
-  libX11,
-  x11Support ? !stdenv.hostPlatform.isDarwin,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, utilmacros
+, python3
+, libGL
+, libX11
+, x11Support ? !stdenv.hostPlatform.isDarwin
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,9 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dx11=${lib.boolToString x11Support}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    x11Support && !stdenv.hostPlatform.isDarwin
-  ) ''-DLIBGL_PATH="${lib.getLib libGL}/lib"'';
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      x11Support && !stdenv.hostPlatform.isDarwin
+    ) ''-DLIBGL_PATH="${lib.getLib libGL}/lib"'';
 
   doCheck = true;
 

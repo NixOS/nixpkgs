@@ -1,10 +1,10 @@
-{
-  writeShellApplication,
-  nix,
-  nix-update,
-  curl,
-  jq,
-  common-updater-scripts,
+{ writeShellApplication
+, nix
+, nix-update
+, curl
+, jq
+, common-updater-scripts
+,
 }:
 
 writeShellApplication {

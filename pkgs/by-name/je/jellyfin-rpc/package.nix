@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  rustPlatform,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, rustPlatform
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

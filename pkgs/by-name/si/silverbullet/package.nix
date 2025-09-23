@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  deno,
-  makeWrapper,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, deno
+, makeWrapper
+, nixosTests
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "silverbullet";

@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  wrapQtAppsHook,
-  wayland-scanner,
-  qtbase,
-  wayland,
-  wayland-protocols,
-  wlr-protocols,
-  pixman,
-  libgbm,
-  vulkan-loader,
-  libinput,
-  xorg,
-  seatd,
-  wlroots,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wrapQtAppsHook
+, wayland-scanner
+, qtbase
+, wayland
+, wayland-protocols
+, wlr-protocols
+, pixman
+, libgbm
+, vulkan-loader
+, libinput
+, xorg
+, seatd
+, wlroots
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

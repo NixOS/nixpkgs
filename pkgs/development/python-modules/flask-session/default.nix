@@ -1,27 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  flask,
-  cachelib,
-  msgspec,
-
-  # tests
-  boto3,
-  flask-sqlalchemy,
-  memcachedTestHook,
-  pytestCheckHook,
-  redis,
-  redisTestHook,
-  pymongo,
-  pymemcache,
-  python-memcached,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  flit-core
+, # dependencies
+  flask
+, cachelib
+, msgspec
+, # tests
+  boto3
+, flask-sqlalchemy
+, memcachedTestHook
+, pytestCheckHook
+, redis
+, redisTestHook
+, pymongo
+, pymemcache
+, python-memcached
+,
 }:
 
 buildPythonPackage rec {

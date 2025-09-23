@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  nix-update-source,
-  lib,
-  python3,
-  which,
-  runtimeShell,
-  pylint,
+{ stdenv
+, fetchFromGitHub
+, nix-update-source
+, lib
+, python3
+, which
+, runtimeShell
+, pylint
+,
 }:
 stdenv.mkDerivation rec {
   version = "0.9.2";

@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  libusb-compat-0_1,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, libusb-compat-0_1
+,
 }:
 
 let

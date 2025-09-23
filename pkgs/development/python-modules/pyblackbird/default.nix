@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyserial,
-  pyserial-asyncio,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyserial
+, pyserial-asyncio
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

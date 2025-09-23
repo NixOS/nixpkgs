@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  openssh,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, openssh
+,
 }:
 
 stdenv.mkDerivation {

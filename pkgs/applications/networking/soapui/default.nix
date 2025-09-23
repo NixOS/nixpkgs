@@ -1,11 +1,11 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  writeText,
-  jdk,
-  makeWrapper,
-  nixosTests,
+{ fetchurl
+, lib
+, stdenv
+, writeText
+, jdk
+, makeWrapper
+, nixosTests
+,
 }:
 stdenv.mkDerivation rec {
   pname = "soapui";

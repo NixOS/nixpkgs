@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  stdenv,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  numpy,
-  onnxruntime,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, stdenv
+, # build-system
+  setuptools
+, # dependencies
+  numpy
+, onnxruntime
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

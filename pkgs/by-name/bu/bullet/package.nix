@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libGLU,
-  libGL,
-  libglut,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libGLU
+, libGL
+, libglut
+,
 }:
 
 stdenv.mkDerivation rec {

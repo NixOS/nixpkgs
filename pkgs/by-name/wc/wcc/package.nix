@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  cargo,
-  capstone,
-  libbfd,
-  libelf,
-  libiberty,
-  readline,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, cargo
+, capstone
+, libbfd
+, libelf
+, libiberty
+, readline
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

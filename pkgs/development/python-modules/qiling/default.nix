@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  capstone,
-  fetchPypi,
-  gevent,
-  keystone-engine,
-  multiprocess,
-  pefile,
-  pyelftools,
-  pythonOlder,
-  python-fx,
-  python-registry,
-  pyyaml,
-  questionary,
-  termcolor,
-  unicorn,
+{ lib
+, buildPythonPackage
+, capstone
+, fetchPypi
+, gevent
+, keystone-engine
+, multiprocess
+, pefile
+, pyelftools
+, pythonOlder
+, python-fx
+, python-registry
+, pyyaml
+, questionary
+, termcolor
+, unicorn
+,
 }:
 
 buildPythonPackage rec {

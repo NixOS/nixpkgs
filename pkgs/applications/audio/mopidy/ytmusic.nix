@@ -1,8 +1,8 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  mopidy,
+{ lib
+, python3
+, fetchFromGitHub
+, mopidy
+,
 }:
 
 let

@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  jdk_headless,
-  jre_minimal,
-  maven,
-  writeShellApplication,
-  curl,
-  pcre,
-  common-updater-scripts,
-  jq,
-  gnused,
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, jdk_headless
+, jre_minimal
+, maven
+, writeShellApplication
+, curl
+, pcre
+, common-updater-scripts
+, jq
+, gnused
+,
 }:
 
 let

@@ -1,7 +1,7 @@
-{
-  config,
-  pkgs,
-  haskellLib,
+{ config
+, pkgs
+, haskellLib
+,
 }:
 
 with haskellLib;
@@ -138,9 +138,11 @@ self: super: {
   ghc-api-compat = unmarkBroken super.ghc-api-compat;
 
   # 2021-09-18: cabal2nix does not detect the need for ghc-api-compat.
-  hiedb = overrideCabal (old: {
-    libraryHaskellDepends = old.libraryHaskellDepends ++ [ self.ghc-api-compat ];
-  }) super.hiedb;
+  hiedb = overrideCabal
+    (old: {
+      libraryHaskellDepends = old.libraryHaskellDepends ++ [ self.ghc-api-compat ];
+    })
+    super.hiedb;
 
   # https://github.com/lspitzner/butcher/issues/7
   butcher = doJailbreak super.butcher;
@@ -186,9 +188,11 @@ self: super: {
   base-compat-batteries = addBuildDepends [
     self.foldable1-classes-compat
     self.OneTuple
-  ] super.base-compat-batteries;
+  ]
+    super.base-compat-batteries;
   OneTuple = addBuildDepends [
     self.foldable1-classes-compat
     self.base-orphans
-  ] super.OneTuple;
+  ]
+    super.OneTuple;
 }

@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  twiggy,
-  requests,
-  offtrac,
-  python-bugzilla,
-  taskw,
-  python-dateutil,
-  pytz,
-  keyring,
-  six,
-  jinja2,
-  pycurl,
-  dogpile-cache,
-  lockfile,
-  click,
-  pyxdg,
-  future,
-  jira,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, twiggy
+, requests
+, offtrac
+, python-bugzilla
+, taskw
+, python-dateutil
+, pytz
+, keyring
+, six
+, jinja2
+, pycurl
+, dogpile-cache
+, lockfile
+, click
+, pyxdg
+, future
+, jira
+,
 }:
 
 buildPythonPackage rec {

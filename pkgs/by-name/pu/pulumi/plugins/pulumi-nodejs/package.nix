@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  pulumi,
-  bash,
-  nodejs,
-  python3,
+{ lib
+, buildGoModule
+, pulumi
+, bash
+, nodejs
+, python3
+,
 }:
 buildGoModule rec {
   pname = "pulumi-nodejs";

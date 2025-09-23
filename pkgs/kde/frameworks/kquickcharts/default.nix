@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
+{ mkKdeDerivation
+, qtdeclarative
+,
 }:
 mkKdeDerivation {
   pname = "kquickcharts";

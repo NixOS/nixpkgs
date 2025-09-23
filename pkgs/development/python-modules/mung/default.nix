@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  lxml,
-  numpy,
-  pytestCheckHook,
-  scikit-image,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, lxml
+, numpy
+, pytestCheckHook
+, scikit-image
+,
 }:
 let
   version = "1.2.1";

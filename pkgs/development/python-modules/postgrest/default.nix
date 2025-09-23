@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  deprecation,
-  h2,
-  httpx,
-  poetry-core,
-  pydantic,
-  pytestCheckHook,
-  pythonPackages,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, deprecation
+, h2
+, httpx
+, poetry-core
+, pydantic
+, pytestCheckHook
+, pythonPackages
+,
 }:
 
 buildPythonPackage rec {

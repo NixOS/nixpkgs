@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libGL,
-  libpng,
-  pkg-config,
-  xorg,
-  freetype,
-  fontconfig,
-  alsa-lib,
-  libXrender,
-  libXinerama,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libGL
+, libpng
+, pkg-config
+, xorg
+, freetype
+, fontconfig
+, alsa-lib
+, libXrender
+, libXinerama
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

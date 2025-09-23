@@ -1,28 +1,24 @@
-{
-  lib,
-  callPackage,
-  callPackages,
-  stdenvNoCC,
-  fetchurl,
-  fetchFromGitHub,
-  runCommand,
-  installShellFiles,
-  python3,
-  writeShellScriptBin,
-
-  black,
-  isort,
-  mypy,
-  makeWrapper,
-
-  # Whether to include patches that enable placing certain behavior-defining
+{ lib
+, callPackage
+, callPackages
+, stdenvNoCC
+, fetchurl
+, fetchFromGitHub
+, runCommand
+, installShellFiles
+, python3
+, writeShellScriptBin
+, black
+, isort
+, mypy
+, makeWrapper
+, # Whether to include patches that enable placing certain behavior-defining
   # configuration files in the Nix store.
-  withImmutableConfig ? true,
-
-  # List of extensions/plugins to include.
-  withExtensions ? [ ],
-
-  azure-cli,
+  withImmutableConfig ? true
+, # List of extensions/plugins to include.
+  withExtensions ? [ ]
+, azure-cli
+,
 }:
 
 let
@@ -42,13 +38,12 @@ let
   # Builder for Azure CLI extensions. Extensions are Python wheels that
   # outside of nix would be fetched by the CLI itself from various sources.
   mkAzExtension =
-    {
-      pname,
-      version,
-      url,
-      hash,
-      description,
-      ...
+    { pname
+    , version
+    , url
+    , hash
+    , description
+    , ...
     }@args:
     let
       self = python3.pkgs.buildPythonPackage (
@@ -111,9 +106,11 @@ let
       done
     '';
 
-  extensions-generated = lib.mapAttrs (
-    name: ext: mkAzExtension (ext // { passthru.updateScript = [ ]; })
-  ) (builtins.fromJSON (builtins.readFile ./extensions-generated.json));
+  extensions-generated = lib.mapAttrs
+    (
+      name: ext: mkAzExtension (ext // { passthru.updateScript = [ ]; })
+    )
+    (builtins.fromJSON (builtins.readFile ./extensions-generated.json));
   extensions-manual = callPackages ./extensions-manual.nix {
     inherit mkAzExtension;
     python3Packages = python3.pkgs;

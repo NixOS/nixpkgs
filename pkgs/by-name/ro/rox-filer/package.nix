@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  wrapGAppsHook3,
-  libxml2,
-  gtk2,
-  libSM,
-  shared-mime-info,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, wrapGAppsHook3
+, libxml2
+, gtk2
+, libSM
+, shared-mime-info
+,
 }:
 
 stdenv.mkDerivation rec {

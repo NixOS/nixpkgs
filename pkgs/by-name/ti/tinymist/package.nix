@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  buildPackages,
-  versionCheckHook,
-  nix-update-script,
-  vscode-extensions,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, buildPackages
+, versionCheckHook
+, nix-update-script
+, vscode-extensions
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

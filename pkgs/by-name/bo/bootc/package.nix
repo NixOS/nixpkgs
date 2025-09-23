@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  libz,
-  zstd,
-  pkg-config,
-  openssl,
-  glib,
-  ostree-full,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, libz
+, zstd
+, pkg-config
+, openssl
+, glib
+, ostree-full
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

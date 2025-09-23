@@ -1,11 +1,11 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  fetchpatch,
-  which,
-  acpica-tools,
-  unstableGitUpdater,
+{ lib
+, python3
+, fetchFromGitHub
+, fetchpatch
+, which
+, acpica-tools
+, unstableGitUpdater
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

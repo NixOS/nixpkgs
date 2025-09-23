@@ -1,24 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  isPyPy,
-
-  # build-system
-  setuptools,
-
-  # propagates
-  markupsafe,
-
-  # optional-dependencies
-  babel,
-  lingua,
-
-  # tests
-  chameleon,
-  mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, isPyPy
+, # build-system
+  setuptools
+, # propagates
+  markupsafe
+, # optional-dependencies
+  babel
+, lingua
+, # tests
+  chameleon
+, mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

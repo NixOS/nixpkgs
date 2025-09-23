@@ -1,9 +1,9 @@
-{
-  rustPlatform,
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  hvm,
+{ rustPlatform
+, fetchFromGitHub
+, lib
+, makeWrapper
+, hvm
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  vscode-utils,
-  callPackage,
+{ lib
+, stdenv
+, vscode-utils
+, callPackage
+,
 }:
 let
   extVersion = "1.62.0";

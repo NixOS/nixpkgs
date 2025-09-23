@@ -1,12 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  boost,
-  openssl,
-  version,
-  sha256,
-  ...
+{ lib
+, stdenv
+, fetchurl
+, boost
+, openssl
+, version
+, sha256
+, ...
 }:
 
 stdenv.mkDerivation {

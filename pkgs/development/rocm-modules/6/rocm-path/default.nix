@@ -1,15 +1,15 @@
-{
-  symlinkJoin,
-  linkFarm,
-  clr,
-  hipblas,
-  hipblas-common,
-  rocblas,
-  rocsolver,
-  rocsparse,
-  rocm-device-libs,
-  rocm-smi,
-  llvm,
+{ symlinkJoin
+, linkFarm
+, clr
+, hipblas
+, hipblas-common
+, rocblas
+, rocsolver
+, rocsparse
+, rocm-device-libs
+, rocm-smi
+, llvm
+,
 }:
 symlinkJoin {
   name = "rocm-path-${clr.version}";

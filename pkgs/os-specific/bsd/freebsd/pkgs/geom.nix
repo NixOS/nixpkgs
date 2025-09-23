@@ -1,9 +1,9 @@
-{
-  lib,
-  mkDerivation,
-  libgeom,
-  libufs,
-  openssl,
+{ lib
+, mkDerivation
+, libgeom
+, libufs
+, openssl
+,
 }:
 let
   libs = mkDerivation {

@@ -1,8 +1,8 @@
-{
-  lib,
-  bundlerApp,
-  bundlerUpdateScript,
-  makeBinaryWrapper,
+{ lib
+, bundlerApp
+, bundlerUpdateScript
+, makeBinaryWrapper
+,
 }:
 
 bundlerApp {

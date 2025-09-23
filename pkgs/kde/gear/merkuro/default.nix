@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtlocation,
-  qtsvg,
-  libplasma,
+{ mkKdeDerivation
+, qtlocation
+, qtsvg
+, libplasma
+,
 }:
 mkKdeDerivation {
   pname = "merkuro";

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  jdk8,
-  jre8,
-  strip-nondeterminism,
-  makeWrapper,
-  zip,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, jdk8
+, jre8
+, strip-nondeterminism
+, makeWrapper
+, zip
+,
 }:
 
 let

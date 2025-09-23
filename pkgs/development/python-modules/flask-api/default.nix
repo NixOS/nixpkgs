@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  flask,
-
-  # tests
-  markdown,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  setuptools
+, # dependencies
+  flask
+, # tests
+  markdown
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

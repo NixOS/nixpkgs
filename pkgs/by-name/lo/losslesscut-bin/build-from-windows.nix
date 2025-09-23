@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  p7zip,
-  pname,
-  version,
-  hash,
-  metaCommon ? { },
+{ lib
+, stdenvNoCC
+, fetchurl
+, p7zip
+, pname
+, version
+, hash
+, metaCommon ? { }
+,
 }:
 
 stdenvNoCC.mkDerivation {

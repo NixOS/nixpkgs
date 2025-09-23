@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchurl,
-  version,
-  hash,
-  npmDepsHash,
-  packageLockFile,
+{ lib
+, buildNpmPackage
+, fetchurl
+, version
+, hash
+, npmDepsHash
+, packageLockFile
+,
 }:
 
 buildNpmPackage rec {

@@ -1,9 +1,8 @@
-{
-  pkgs,
-  lib,
-  fetchFromGitHub,
-  leveldb,
-  ...
+{ pkgs
+, lib
+, fetchFromGitHub
+, leveldb
+, ...
 }:
 
 {

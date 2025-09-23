@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  buildPackages,
-  ncurses,
-  tcl,
-  openssl,
-  pam,
-  libkrb5,
-  openldap,
-  libxcrypt,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchgit
+, buildPackages
+, ncurses
+, tcl
+, openssl
+, pam
+, libkrb5
+, openldap
+, libxcrypt
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

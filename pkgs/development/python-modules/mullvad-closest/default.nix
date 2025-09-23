@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools,
-  click,
-  geopy,
-  ping3,
-  requests,
-  tabulate,
-  fetchFromGitHub,
+{ lib
+, buildPythonPackage
+, setuptools
+, click
+, geopy
+, ping3
+, requests
+, tabulate
+, fetchFromGitHub
+,
 }:
 
 buildPythonPackage {

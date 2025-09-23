@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  looseversion,
-  matplotlib,
-  numba,
-  numpy,
-  pandas,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  scipy,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, looseversion
+, matplotlib
+, numba
+, numpy
+, pandas
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, scipy
+,
 }:
 
 buildPythonPackage rec {

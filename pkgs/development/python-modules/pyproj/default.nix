@@ -1,19 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  replaceVars,
-
-  certifi,
-  cython,
-  numpy,
-  pandas,
-  proj,
-  setuptools,
-  shapely,
-  xarray,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, replaceVars
+, certifi
+, cython
+, numpy
+, pandas
+, proj
+, setuptools
+, shapely
+, xarray
+,
 }:
 
 buildPythonPackage rec {

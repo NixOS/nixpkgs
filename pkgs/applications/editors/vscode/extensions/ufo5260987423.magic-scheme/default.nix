@@ -1,11 +1,11 @@
-{
-  lib,
-  vscode-utils,
-  jq,
-  akkuPackages,
-  chez,
-  akku,
-  moreutils,
+{ lib
+, vscode-utils
+, jq
+, akkuPackages
+, chez
+, akku
+, moreutils
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

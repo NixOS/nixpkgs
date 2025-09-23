@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pyopengl,
-  writers,
-  tkinter,
-  pyopengltk,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pyopengl
+, writers
+, tkinter
+, pyopengltk
+,
 }:
 
 buildPythonPackage rec {
@@ -34,10 +34,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyopengltk" ];
 
   passthru.tests = {
-    cube = writers.writePython3 "cube" {
-      libraries = [ pyopengltk ];
-      doCheck = false;
-    } (builtins.readFile "${src}/examples/cube.py");
+    cube = writers.writePython3 "cube"
+      {
+        libraries = [ pyopengltk ];
+        doCheck = false;
+      }
+      (builtins.readFile "${src}/examples/cube.py");
   };
 
   meta = {

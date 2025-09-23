@@ -1,30 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  hatchling,
-  hatch-fancy-pypi-readme,
-
-  # dependencies
-  annotated-types,
-  pydantic-core,
-  typing-extensions,
-  typing-inspection,
-
-  # tests
-  cloudpickle,
-  email-validator,
-  dirty-equals,
-  jsonschema,
-  pytestCheckHook,
-  pytest-codspeed,
-  pytest-mock,
-  pytest-run-parallel,
-  eval-type-backport,
-  rich,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  hatchling
+, hatch-fancy-pypi-readme
+, # dependencies
+  annotated-types
+, pydantic-core
+, typing-extensions
+, typing-inspection
+, # tests
+  cloudpickle
+, email-validator
+, dirty-equals
+, jsonschema
+, pytestCheckHook
+, pytest-codspeed
+, pytest-mock
+, pytest-run-parallel
+, eval-type-backport
+, rich
+,
 }:
 
 buildPythonPackage rec {

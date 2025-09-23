@@ -1,6 +1,6 @@
-{
-  system ? builtins.currentSystem,
-  pkgs ? import ../../.. { inherit system; },
+{ system ? builtins.currentSystem
+, pkgs ? import ../../.. { inherit system; }
+,
 }:
 with import ./base.nix { inherit system; };
 let
@@ -98,11 +98,10 @@ let
   };
 
   extraConfiguration =
-    {
-      config,
-      pkgs,
-      lib,
-      ...
+    { config
+    , pkgs
+    , lib
+    , ...
     }:
     {
       environment.systemPackages = [ pkgs.bind.host ];

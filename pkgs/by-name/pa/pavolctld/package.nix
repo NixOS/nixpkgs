@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  libpulseaudio,
+{ lib
+, stdenv
+, fetchgit
+, libpulseaudio
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

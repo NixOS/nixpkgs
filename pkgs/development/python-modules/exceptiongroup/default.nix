@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-scm,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-scm
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  fzf,
-  installShellFiles,
-  libnotify,
-  makeWrapper,
-  mpc,
-  perlPackages,
-  rofi,
-  stdenv,
-  tmux,
-  unstableGitUpdater,
-  util-linux,
+{ lib
+, fetchFromGitHub
+, fzf
+, installShellFiles
+, libnotify
+, makeWrapper
+, mpc
+, perlPackages
+, rofi
+, stdenv
+, tmux
+, unstableGitUpdater
+, util-linux
+,
 }:
 
 stdenv.mkDerivation {

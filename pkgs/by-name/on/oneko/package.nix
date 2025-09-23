@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  imake,
-  gccmakedep,
-  libX11,
-  libXext,
+{ lib
+, stdenv
+, fetchFromGitHub
+, imake
+, gccmakedep
+, libX11
+, libXext
+,
 }:
 
 stdenv.mkDerivation rec {

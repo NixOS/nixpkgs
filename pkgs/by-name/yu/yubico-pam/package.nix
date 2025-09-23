@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  asciidoc,
-  libxslt,
-  docbook_xsl,
-  pam,
-  yubikey-personalization,
-  libyubikey,
-  libykclient,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, asciidoc
+, libxslt
+, docbook_xsl
+, pam
+, yubikey-personalization
+, libyubikey
+, libykclient
+,
 }:
 
 stdenv.mkDerivation rec {

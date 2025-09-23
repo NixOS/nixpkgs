@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchFromGitea,
-  meson,
-  ninja,
-  pkg-config,
-  glib,
-  gtk4,
-  libadwaita,
-  python3Packages,
-  clamav,
-  appstream-glib,
-  desktop-file-utils,
-  libxml2,
-  gobject-introspection,
-  wrapGAppsHook4,
-  librsvg,
+{ lib
+, fetchFromGitea
+, meson
+, ninja
+, pkg-config
+, glib
+, gtk4
+, libadwaita
+, python3Packages
+, clamav
+, appstream-glib
+, desktop-file-utils
+, libxml2
+, gobject-introspection
+, wrapGAppsHook4
+, librsvg
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "kapitano";

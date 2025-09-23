@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  dateutils,
-  future,
-  lxml,
-  python-dateutil,
-  pytz,
-  requests,
-  tinytag,
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, dateutils
+, future
+, lxml
+, python-dateutil
+, pytz
+, requests
+, tinytag
+, pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

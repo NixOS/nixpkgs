@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  appimageTools,
-  makeWrapper,
-  _7zz,
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, makeWrapper
+, _7zz
+,
 }:
 
 let

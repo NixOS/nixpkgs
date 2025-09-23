@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fltk,
-  giflib,
-  libjpeg,
-  libpng,
-  libXdmcp,
-  openssl,
-  pkg-config,
-  wget,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fltk
+, giflib
+, libjpeg
+, libpng
+, libXdmcp
+, openssl
+, pkg-config
+, wget
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

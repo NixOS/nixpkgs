@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  valkey,
-  redis,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, valkey
+, redis
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

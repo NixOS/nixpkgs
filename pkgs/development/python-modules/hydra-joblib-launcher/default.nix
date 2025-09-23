@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  hydra-core,
-  joblib,
-
-  # test
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  hydra-core
+, joblib
+, # test
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

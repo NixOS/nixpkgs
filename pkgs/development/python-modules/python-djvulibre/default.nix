@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  djvulibre,
-  setuptools,
-  ghostscript_headless,
-  pkg-config,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, djvulibre
+, setuptools
+, ghostscript_headless
+, pkg-config
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

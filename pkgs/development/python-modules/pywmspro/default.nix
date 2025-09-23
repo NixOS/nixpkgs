@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  aiohttp,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, aiohttp
+,
 }:
 
 buildPythonPackage rec {

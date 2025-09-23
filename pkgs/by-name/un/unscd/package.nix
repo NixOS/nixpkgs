@@ -1,9 +1,9 @@
-{
-  fetchurl,
-  fetchpatch,
-  stdenv,
-  systemd,
-  lib,
+{ fetchurl
+, fetchpatch
+, stdenv
+, systemd
+, lib
+,
 }:
 
 stdenv.mkDerivation rec {

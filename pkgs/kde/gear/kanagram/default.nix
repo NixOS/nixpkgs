@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  qtspeech,
+{ mkKdeDerivation
+, qtspeech
+,
 }:
 mkKdeDerivation {
   pname = "kanagram";

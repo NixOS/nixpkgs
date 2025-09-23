@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  python3,
-  cmake,
-  doxygen,
-  graphviz,
-  quickmem,
-  arpa2common,
-  arpa2cm,
-  ensureNewerSourcesForZipFilesHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchFromGitLab
+, python3
+, cmake
+, doxygen
+, graphviz
+, quickmem
+, arpa2common
+, arpa2cm
+, ensureNewerSourcesForZipFilesHook
+,
 }:
 
 let

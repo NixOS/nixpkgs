@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  buildGoModule,
-  nodejs,
-  pnpm_9,
-  esbuild,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, buildGoModule
+, nodejs
+, pnpm_9
+, esbuild
+,
 }:
 
 buildGoModule rec {

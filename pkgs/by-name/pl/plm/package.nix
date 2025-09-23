@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jre,
-  gcc,
-  valgrind,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jre
+, gcc
+, valgrind
+,
 }:
 # gcc and valgrind are not strict dependencies, they could be made
 # optional. They are here because plm can only help you learn C if you

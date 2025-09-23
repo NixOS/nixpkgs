@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fontconfig,
-  libX11,
-  libXext,
-  libXft,
-  ncurses,
-  pkg-config,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fontconfig
+, libX11
+, libXext
+, libXft
+, ncurses
+, pkg-config
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation {

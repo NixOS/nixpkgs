@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 let
   cfg = config.services.logrotate;
@@ -120,9 +119,10 @@ let
     '';
   };
 
-  mailOption = lib.optionalString (lib.foldr (n: a: a || (n.mail or false) != false) false (
-    lib.attrValues cfg.settings
-  )) "--mail=${pkgs.mailutils}/bin/mail";
+  mailOption = lib.optionalString
+    (lib.foldr (n: a: a || (n.mail or false) != false) false (
+      lib.attrValues cfg.settings
+    )) "--mail=${pkgs.mailutils}/bin/mail";
 in
 {
   imports = [

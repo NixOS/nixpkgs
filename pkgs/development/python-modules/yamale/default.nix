@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  pyyaml,
-  ruamel-yaml,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, pyyaml
+, ruamel-yaml
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

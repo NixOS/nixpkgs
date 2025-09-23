@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  json_c,
-  libbsd,
+{ stdenv
+, lib
+, fetchFromGitHub
+, json_c
+, libbsd
+,
 }:
 
 stdenv.mkDerivation rec {

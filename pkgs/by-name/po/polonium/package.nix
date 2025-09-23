@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  libsForQt5,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, libsForQt5
+,
 }:
 
 # how to update:

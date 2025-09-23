@@ -1,18 +1,18 @@
-{
-  lib,
-  beets,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  packaging,
-  poetry-core,
-  pycountry,
-  pytest-cov-stub,
-  pytestCheckHook,
-  rich-tables,
-  filelock,
-  writableTmpDirAsHomeHook,
-  nix-update-script,
+{ lib
+, beets
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, packaging
+, poetry-core
+, pycountry
+, pytest-cov-stub
+, pytestCheckHook
+, rich-tables
+, filelock
+, writableTmpDirAsHomeHook
+, nix-update-script
+,
 }:
 
 let

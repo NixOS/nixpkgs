@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  melange-json,
-  ppxlib,
-  yojson,
+{ buildDunePackage
+, melange-json
+, ppxlib
+, yojson
+,
 }:
 
 buildDunePackage {

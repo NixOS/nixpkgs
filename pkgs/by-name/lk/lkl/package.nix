@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bc,
-  python3,
-  bison,
-  flex,
-  fuse3,
-  libarchive,
-  buildPackages,
-
-  firewallSupport ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bc
+, python3
+, bison
+, flex
+, fuse3
+, libarchive
+, buildPackages
+, firewallSupport ? false
+,
 }:
 
 stdenv.mkDerivation {

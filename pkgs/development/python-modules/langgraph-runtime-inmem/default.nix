@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  blockbuster,
-  langgraph,
-  langgraph-checkpoint,
-  sse-starlette,
-  starlette,
-  structlog,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, blockbuster
+, langgraph
+, langgraph-checkpoint
+, sse-starlette
+, starlette
+, structlog
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  meson,
-  rustc,
-  cargo,
-  ninja,
-  xdg-desktop-portal,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, meson
+, rustc
+, cargo
+, ninja
+, xdg-desktop-portal
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

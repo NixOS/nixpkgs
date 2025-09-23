@@ -87,9 +87,9 @@ rec {
     : whether to throw if no hash was present in the input; otherwise returns the original input, unmodified
   */
   normalizeHash =
-    {
-      hashTypes ? [ "sha256" ],
-      required ? true,
+    { hashTypes ? [ "sha256" ]
+    , required ? true
+    ,
     }:
     let
       inherit (lib)
@@ -188,8 +188,8 @@ rec {
     and is implemented somewhat more efficiently.
   */
   withNormalizedHash =
-    {
-      hashTypes ? [ "sha256" ],
+    { hashTypes ? [ "sha256" ]
+    ,
     }:
     fetcher:
     let

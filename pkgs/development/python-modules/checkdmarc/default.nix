@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  dnspython,
-  expiringdict,
-  fetchFromGitHub,
-  hatchling,
-  importlib-resources,
-  pem,
-  publicsuffixlist,
-  pyleri,
-  pyopenssl,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  timeout-decorator,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, cryptography
+, dnspython
+, expiringdict
+, fetchFromGitHub
+, hatchling
+, importlib-resources
+, pem
+, publicsuffixlist
+, pyleri
+, pyopenssl
+, pytestCheckHook
+, pythonOlder
+, requests
+, timeout-decorator
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

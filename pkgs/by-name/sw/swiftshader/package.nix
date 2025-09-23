@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  python3,
-  cmake,
-  jq,
+{ lib
+, stdenv
+, fetchgit
+, python3
+, cmake
+, jq
+,
 }:
 
 stdenv.mkDerivation {

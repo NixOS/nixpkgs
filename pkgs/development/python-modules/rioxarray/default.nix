@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  numpy,
-  packaging,
-  pyproj,
-  rasterio,
-  xarray,
-
-  # tests
-  dask,
-  netcdf4,
-  pytestCheckHook,
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  numpy
+, packaging
+, pyproj
+, rasterio
+, xarray
+, # tests
+  dask
+, netcdf4
+, pytestCheckHook
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

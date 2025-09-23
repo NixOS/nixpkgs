@@ -1,10 +1,10 @@
-{
-  callPackage,
-  curl,
-  fetchFromGitHub,
-  lib,
-  stdenvNoCC,
-  zig_0_14,
+{ callPackage
+, curl
+, fetchFromGitHub
+, lib
+, stdenvNoCC
+, zig_0_14
+,
 }:
 
 let

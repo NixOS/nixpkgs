@@ -1,9 +1,9 @@
-{
-  python,
-  fetchPypi,
-  lib,
-  pymeta3,
-  buildPythonPackage,
+{ python
+, fetchPypi
+, lib
+, pymeta3
+, buildPythonPackage
+,
 }:
 buildPythonPackage rec {
   pname = "pybars3";

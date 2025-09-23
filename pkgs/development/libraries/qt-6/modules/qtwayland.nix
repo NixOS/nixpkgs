@@ -1,14 +1,14 @@
-{
-  pkgsBuildBuild,
-  stdenv,
-  lib,
-  qtModule,
-  qtbase,
-  qtdeclarative,
-  wayland,
-  wayland-scanner,
-  pkg-config,
-  libdrm,
+{ pkgsBuildBuild
+, stdenv
+, lib
+, qtModule
+, qtbase
+, qtdeclarative
+, wayland
+, wayland-scanner
+, pkg-config
+, libdrm
+,
 }:
 
 qtModule {

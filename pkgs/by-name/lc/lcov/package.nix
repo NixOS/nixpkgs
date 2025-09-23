@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  python3,
-  perlPackages,
-  makeWrapper,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, python3
+, perlPackages
+, makeWrapper
+, versionCheckHook
+,
 }:
 
 let

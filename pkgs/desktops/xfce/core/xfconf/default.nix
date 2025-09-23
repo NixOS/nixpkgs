@@ -1,16 +1,15 @@
-{
-  stdenv,
-  lib,
-  mkXfceDerivation,
-  gobject-introspection,
-  perl,
-  vala,
-  libxfce4util,
-  glib,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
+{ stdenv
+, lib
+, mkXfceDerivation
+, gobject-introspection
+, perl
+, vala
+, libxfce4util
+, glib
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+,
 }:
 
 mkXfceDerivation {

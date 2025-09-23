@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cmake,
-  ninja,
-  pybind11,
-  scikit-build-core,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cmake
+, ninja
+, pybind11
+, scikit-build-core
+, numpy
+,
 }:
 
 buildPythonPackage rec {

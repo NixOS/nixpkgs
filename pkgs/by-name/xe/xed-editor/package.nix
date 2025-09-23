@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  libxml2,
-  libpeas,
-  glib,
-  gtk3,
-  gtksourceview4,
-  gspell,
-  xapp,
-  pkg-config,
-  python3,
-  meson,
-  ninja,
-  versionCheckHook,
-  wrapGAppsHook3,
-  intltool,
-  itstool,
+{ stdenv
+, lib
+, fetchFromGitHub
+, libxml2
+, libpeas
+, glib
+, gtk3
+, gtksourceview4
+, gspell
+, xapp
+, pkg-config
+, python3
+, meson
+, ninja
+, versionCheckHook
+, wrapGAppsHook3
+, intltool
+, itstool
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,23 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  setuptools,
-  setuptools-scm,
-  pybind11,
-
-  # dependencies
-  cffi,
-  numpy,
-
-  # native dependencies
-  libsamplerate,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cmake
+, setuptools
+, setuptools-scm
+, pybind11
+, # dependencies
+  cffi
+, numpy
+, # native dependencies
+  libsamplerate
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

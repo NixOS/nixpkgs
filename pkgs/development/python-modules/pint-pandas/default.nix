@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  wheel,
-  pint,
-  pandas,
-  packaging,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, setuptools-scm
+, wheel
+, pint
+, pandas
+, packaging
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

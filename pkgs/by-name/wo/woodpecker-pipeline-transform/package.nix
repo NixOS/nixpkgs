@@ -1,7 +1,7 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitea,
+{ lib
+, buildGoModule
+, fetchFromGitea
+,
 }:
 buildGoModule rec {
   pname = "woodpecker-pipeline-transform";

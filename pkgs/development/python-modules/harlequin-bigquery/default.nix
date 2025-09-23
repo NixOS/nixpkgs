@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  google-cloud-bigquery,
-  google-cloud-bigquery-storage,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, google-cloud-bigquery
+, google-cloud-bigquery-storage
+,
 }:
 
 buildPythonPackage rec {

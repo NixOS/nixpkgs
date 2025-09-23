@@ -1,7 +1,7 @@
-{
-  name,
-  plugin ? null,
-  pluginOpts ? "",
+{ name
+, plugin ? null
+, pluginOpts ? ""
+,
 }:
 
 import ../make-test-python.nix (

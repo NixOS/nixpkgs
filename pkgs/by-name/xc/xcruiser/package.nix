@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gccmakedep,
-  imake,
-  libXt,
-  libXaw,
-  libXpm,
-  libXext,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, gccmakedep
+, imake
+, libXt
+, libXaw
+, libXpm
+, libXext
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {

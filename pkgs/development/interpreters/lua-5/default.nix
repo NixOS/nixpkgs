@@ -1,12 +1,12 @@
 # similar to interpreters/python/default.nix
-{
-  stdenv,
-  config,
-  lib,
-  callPackage,
-  fetchFromGitHub,
-  fetchurl,
-  makeBinaryWrapper,
+{ stdenv
+, config
+, lib
+, callPackage
+, fetchFromGitHub
+, fetchurl
+, makeBinaryWrapper
+,
 }:
 
 let
@@ -14,17 +14,17 @@ let
   # Common passthru for all lua interpreters.
   # copied from python
   passthruFun =
-    {
-      executable,
-      luaversion,
-      packageOverrides,
-      luaOnBuildForBuild,
-      luaOnBuildForHost,
-      luaOnBuildForTarget,
-      luaOnHostForHost,
-      luaOnTargetForTarget,
-      luaAttr ? null,
-      self, # is luaOnHostForTarget
+    { executable
+    , luaversion
+    , packageOverrides
+    , luaOnBuildForBuild
+    , luaOnBuildForHost
+    , luaOnBuildForTarget
+    , luaOnHostForHost
+    , luaOnTargetForTarget
+    , luaAttr ? null
+    , self
+    , # is luaOnHostForTarget
     }:
     let
       luaPackages =
@@ -34,11 +34,11 @@ let
           # - adds spliced package sets to the package set
           # - applies overrides from `packageOverrides`
           (
-            {
-              lua,
-              overrides,
-              callPackage,
-              makeScopeWithSplicing',
+            { lua
+            , overrides
+            , callPackage
+            , makeScopeWithSplicing'
+            ,
             }:
             let
               luaPackagesFun = callPackage ../../../top-level/lua-packages.nix {
@@ -48,7 +48,7 @@ let
                 if (builtins.pathExists ../../lua-modules/generated-packages.nix) then
                   (
                     final: prev:
-                    callPackage ../../lua-modules/generated-packages.nix { inherit (final) callPackage; } final prev
+                      callPackage ../../lua-modules/generated-packages.nix { inherit (final) callPackage; } final prev
                   )
                 else
                   (final: prev: { });

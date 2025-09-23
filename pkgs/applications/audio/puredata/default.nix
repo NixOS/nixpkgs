@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  gettext,
-  makeWrapper,
-  alsa-lib,
-  libjack2,
-  tk,
-  fftw,
-  portaudio,
-  portmidi,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, gettext
+, makeWrapper
+, alsa-lib
+, libjack2
+, tk
+, fftw
+, portaudio
+, portmidi
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  alsa-lib,
-  buildGoModule,
-  fetchFromGitHub,
-  glib,
-  gobject-introspection,
-  gtk4,
-  libadwaita,
-  nix-update-script,
-  pkg-config,
-  wrapGAppsHook4,
+{ lib
+, alsa-lib
+, buildGoModule
+, fetchFromGitHub
+, glib
+, gobject-introspection
+, gtk4
+, libadwaita
+, nix-update-script
+, pkg-config
+, wrapGAppsHook4
+,
 }:
 
 buildGoModule rec {

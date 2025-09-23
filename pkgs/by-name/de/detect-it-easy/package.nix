@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libsForQt5,
-  freetype,
-  graphite2,
-  icu,
-  krb5,
-  systemdLibs,
-  imagemagick,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libsForQt5
+, freetype
+, graphite2
+, icu
+, krb5
+, systemdLibs
+, imagemagick
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

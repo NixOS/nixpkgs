@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  fetchurl,
-  youtube-dl,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, fetchurl
+, youtube-dl
+,
 }:
 
 let

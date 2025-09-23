@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  pkg-config,
-  libstrophe,
-  installShellFiles,
+{ lib
+, fetchFromGitHub
+, stdenv
+, pkg-config
+, libstrophe
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation rec {

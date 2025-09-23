@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  numpy,
-  pandas,
-  property-cached,
-  pytestCheckHook,
-  scipy,
-  setuptools,
-  setuptools-scm,
-  statsmodels,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, numpy
+, pandas
+, property-cached
+, pytestCheckHook
+, scipy
+, setuptools
+, setuptools-scm
+, statsmodels
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  patchelf,
-  bash,
-  gmp,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, patchelf
+, bash
+, gmp
+,
 }:
 let
   dynamic-linker = stdenv.cc.bintools.dynamicLinker;

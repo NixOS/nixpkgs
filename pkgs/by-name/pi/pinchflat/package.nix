@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  beamPackages,
-  yarn,
-  nodejs,
-  esbuild,
-  tailwindcss,
-  fixup-yarn-lock,
-  apprise,
-  yt-dlp,
+{ lib
+, fetchFromGitHub
+, fetchYarnDeps
+, beamPackages
+, yarn
+, nodejs
+, esbuild
+, tailwindcss
+, fixup-yarn-lock
+, apprise
+, yt-dlp
+,
 }:
 beamPackages.mixRelease rec {
   pname = "pinchflat";

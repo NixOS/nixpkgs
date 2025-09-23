@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  copyPkgconfigItems,
-  fetchFromGitHub,
-  makePkgconfigItem,
-  pkg-config,
-  SDL,
-  SDL_image,
-  SDL_mixer,
-  SDL_net,
-  SDL_ttf,
+{ lib
+, stdenv
+, copyPkgconfigItems
+, fetchFromGitHub
+, makePkgconfigItem
+, pkg-config
+, SDL
+, SDL_image
+, SDL_mixer
+, SDL_net
+, SDL_ttf
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

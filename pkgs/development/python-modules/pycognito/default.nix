@@ -1,18 +1,18 @@
-{
-  lib,
-  boto3,
-  buildPythonPackage,
-  envs,
-  fetchFromGitHub,
-  freezegun,
-  mock,
-  moto,
-  pyjwt,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-mock,
-  setuptools,
+{ lib
+, boto3
+, buildPythonPackage
+, envs
+, fetchFromGitHub
+, freezegun
+, mock
+, moto
+, pyjwt
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

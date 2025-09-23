@@ -1,6 +1,6 @@
-{
-  lib,
-  python3,
+{ lib
+, python3
+,
 }:
 
 let

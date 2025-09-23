@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -20,9 +19,11 @@ let
       )
     else
       client;
-  filteredSettings = mapAttrs (
-    n: v: if n == "staticClients" then (builtins.map fixClient v) else v
-  ) cfg.settings;
+  filteredSettings = mapAttrs
+    (
+      n: v: if n == "staticClients" then (builtins.map fixClient v) else v
+    )
+    cfg.settings;
   secretFiles = flatten (
     builtins.map (c: optional (c ? secretFile) c.secretFile) (cfg.settings.staticClients or [ ])
   );
@@ -32,9 +33,11 @@ let
 
   startPreScript = pkgs.writeShellScript "dex-start-pre" (
     concatStringsSep "\n" (
-      map (file: ''
-        replace-secret '${file}' '${file}' /run/dex/config.yaml
-      '') secretFiles
+      map
+        (file: ''
+          replace-secret '${file}' '${file}' /run/dex/config.yaml
+        '')
+        secretFiles
     )
   );
 

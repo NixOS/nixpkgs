@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  lndir,
-  testers,
-  regclient,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, lndir
+, testers
+, regclient
+,
 }:
 
 let
@@ -42,22 +42,24 @@ buildGoModule rec {
     lndir
   ];
 
-  postInstall = lib.concatMapStringsSep "\n" (bin: ''
-    export bin=''$${bin}
-    export outputBin=bin
+  postInstall = lib.concatMapStringsSep "\n"
+    (bin: ''
+      export bin=''$${bin}
+      export outputBin=bin
 
-    mkdir -p $bin/bin
-    mv $out/bin/${bin} $bin/bin
+      mkdir -p $bin/bin
+      mv $out/bin/${bin} $bin/bin
 
-    installShellCompletion --cmd ${bin} \
-      --bash <($bin/bin/${bin} completion bash) \
-      --fish <($bin/bin/${bin} completion fish) \
-      --zsh <($bin/bin/${bin} completion zsh)
+      installShellCompletion --cmd ${bin} \
+        --bash <($bin/bin/${bin} completion bash) \
+        --fish <($bin/bin/${bin} completion fish) \
+        --zsh <($bin/bin/${bin} completion zsh)
 
-    lndir -silent $bin $out
+      lndir -silent $bin $out
 
-    unset bin outputBin
-  '') bins;
+      unset bin outputBin
+    '')
+    bins;
 
   checkFlags = [
     # touches network
@@ -65,13 +67,15 @@ buildGoModule rec {
   ];
 
   passthru.tests = lib.mergeAttrsList (
-    map (bin: {
-      "${bin}Version" = testers.testVersion {
-        package = regclient;
-        command = "${bin} version";
-        version = tag;
-      };
-    }) bins
+    map
+      (bin: {
+        "${bin}Version" = testers.testVersion {
+          package = regclient;
+          command = "${bin} version";
+          version = tag;
+        };
+      })
+      bins
   );
 
   __darwinAllowLocalNetworking = true;

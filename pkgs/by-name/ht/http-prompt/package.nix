@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  httpie,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, python3
+, httpie
+, versionCheckHook
+,
 }:
 
 let

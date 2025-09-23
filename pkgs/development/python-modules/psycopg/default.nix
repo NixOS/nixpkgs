@@ -1,35 +1,30 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchurl,
-  replaceVars,
-
-  # build
-  libpq,
-  setuptools,
-
-  # propagates
-  typing-extensions,
-
-  # psycopg-c
-  cython,
-  tomli,
-
-  # docs
-  furo,
-  shapely,
-  sphinxHook,
-  sphinx-autodoc-typehints,
-
-  # tests
-  anyio,
-  pproxy,
-  pytest-randomly,
-  pytestCheckHook,
-  postgresql,
-  postgresqlTestHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchurl
+, replaceVars
+, # build
+  libpq
+, setuptools
+, # propagates
+  typing-extensions
+, # psycopg-c
+  cython
+, tomli
+, # docs
+  furo
+, shapely
+, sphinxHook
+, sphinx-autodoc-typehints
+, # tests
+  anyio
+, pproxy
+, pytest-randomly
+, pytestCheckHook
+, postgresql
+, postgresqlTestHook
+,
 }:
 
 let

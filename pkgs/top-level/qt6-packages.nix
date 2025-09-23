@@ -4,15 +4,15 @@
 # for every Qt version. Qt applications are called from `all-packages.nix` via
 # this file.
 
-{
-  lib,
-  config,
-  __splicedPackages,
-  makeScopeWithSplicing',
-  generateSplicesForMkScope,
-  stdenv,
-  pkgsHostTarget,
-  kdePackages,
+{ lib
+, config
+, __splicedPackages
+, makeScopeWithSplicing'
+, generateSplicesForMkScope
+, stdenv
+, pkgsHostTarget
+, kdePackages
+,
 }:
 
 let

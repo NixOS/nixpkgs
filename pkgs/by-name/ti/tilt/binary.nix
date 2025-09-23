@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  src,
-  version,
-  tilt-assets,
-  stdenv,
-  installShellFiles,
+{ lib
+, buildGoModule
+, src
+, version
+, tilt-assets
+, stdenv
+, installShellFiles
+,
 }:
 
 buildGoModule rec {

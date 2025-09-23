@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  alsa-lib,
-  audiofile,
-  autoconf,
-  automake,
-  gettext,
-  gnome2,
-  gtk2,
-  libGL,
-  libjack2,
-  libpulseaudio,
-  libtool,
-  libxml2,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib
+, audiofile
+, autoconf
+, automake
+, gettext
+, gnome2
+, gtk2
+, libGL
+, libjack2
+, libpulseaudio
+, libtool
+, libxml2
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  types-futures,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, types-futures
+,
 }:
 
 buildPythonPackage rec {

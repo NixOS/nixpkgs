@@ -1,11 +1,11 @@
-{
-  lib,
-  azure-core,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitUpdater,
-  setuptools,
-  typing-extensions,
+{ lib
+, azure-core
+, buildPythonPackage
+, fetchFromGitHub
+, gitUpdater
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

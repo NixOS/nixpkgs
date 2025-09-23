@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  flatbuffers,
-  gettext,
-  pkg-config,
-  libdigidocpp,
-  opensc,
-  openldap,
-  openssl,
-  pcsclite,
-  qt6,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, flatbuffers
+, gettext
+, pkg-config
+, libdigidocpp
+, opensc
+, openldap
+, openssl
+, pcsclite
+, qt6
+,
 }:
 
 stdenv.mkDerivation rec {

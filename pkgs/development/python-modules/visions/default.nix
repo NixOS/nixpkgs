@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  setuptools,
-  attrs,
-  imagehash,
-  matplotlib,
-  multimethod,
-  networkx,
-  numpy,
-  pandas,
-  pillow,
-  puremagic,
-  pydot,
-  pygraphviz,
-  shapely,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, setuptools
+, attrs
+, imagehash
+, matplotlib
+, multimethod
+, networkx
+, numpy
+, pandas
+, pillow
+, puremagic
+, pydot
+, pygraphviz
+, shapely
+,
 }:
 
 buildPythonPackage rec {

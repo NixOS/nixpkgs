@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  bashNonInteractive,
-  binutils,
-  bootBinutils,
-  bootGCC,
-  buildPackages,
-  busyboxMinimal,
-  bzip2,
-  coreutilsMinimal,
-  diffutils,
-  findutils,
-  gawk,
-  gmpxx,
-  gnugrep,
-  gnumake,
-  gnused,
-  gzip,
-  libc,
-  libmpc,
-  mpfr,
-  patch,
-  patchelf,
-  runCommand,
-  tarMinimal,
-  zlib,
+{ lib
+, stdenv
+, bashNonInteractive
+, binutils
+, bootBinutils
+, bootGCC
+, buildPackages
+, busyboxMinimal
+, bzip2
+, coreutilsMinimal
+, diffutils
+, findutils
+, gawk
+, gmpxx
+, gnugrep
+, gnumake
+, gnused
+, gzip
+, libc
+, libmpc
+, mpfr
+, patch
+, patchelf
+, runCommand
+, tarMinimal
+, zlib
+,
 }:
 let
   # ${libc.src}/sysdeps/unix/sysv/linux/loongarch/lp64/libnsl.abilist does not exist!

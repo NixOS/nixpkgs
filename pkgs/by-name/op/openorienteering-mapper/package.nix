@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  clipper,
-  cmake,
-  cups,
-  doxygen,
-  gdal,
-  ninja,
-  proj,
-  qt5,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, clipper
+, cmake
+, cups
+, doxygen
+, gdal
+, ninja
+, proj
+, qt5
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

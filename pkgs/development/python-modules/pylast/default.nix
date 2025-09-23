@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flaky,
-  hatch-vcs,
-  hatchling,
-  httpx,
-  importlib-metadata,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flaky
+, hatch-vcs
+, hatchling
+, httpx
+, importlib-metadata
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

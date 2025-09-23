@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  open62541,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, open62541
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

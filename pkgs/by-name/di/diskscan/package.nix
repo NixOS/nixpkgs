@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ncurses,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ncurses
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

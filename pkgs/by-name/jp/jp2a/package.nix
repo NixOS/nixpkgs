@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libjpeg,
-  libpng,
-  ncurses,
-  autoreconfHook,
-  autoconf-archive,
-  pkg-config,
-  bash-completion,
-  libwebp,
-  libexif,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libjpeg
+, libpng
+, ncurses
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, bash-completion
+, libwebp
+, libexif
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

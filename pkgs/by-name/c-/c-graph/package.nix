@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gfortran,
-  gnuplot,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, gfortran
+, gnuplot
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

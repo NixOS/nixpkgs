@@ -1,26 +1,26 @@
-{
-  lib,
-  aiohttp-retry,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  ical,
-  mashumaro,
-  parameterized,
-  pycryptodome,
-  pytest-aiohttp,
-  pytest-asyncio_0,
-  pytest-cov-stub,
-  pytest-golden,
-  pytest-mock,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  pyyaml,
-  requests,
-  requests-mock,
-  responses,
-  setuptools,
+{ lib
+, aiohttp-retry
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, ical
+, mashumaro
+, parameterized
+, pycryptodome
+, pytest-aiohttp
+, pytest-asyncio_0
+, pytest-cov-stub
+, pytest-golden
+, pytest-mock
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pyyaml
+, requests
+, requests-mock
+, responses
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  file,
-  openssl,
-  atool,
-  bat,
-  chafa,
-  delta,
-  ffmpeg,
-  ffmpegthumbnailer,
-  fontforge,
-  glow,
-  imagemagick,
-  jq,
-  poppler-utils,
-  ueberzug,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, file
+, openssl
+, atool
+, bat
+, chafa
+, delta
+, ffmpeg
+, ffmpegthumbnailer
+, fontforge
+, glow
+, imagemagick
+, jq
+, poppler-utils
+, ueberzug
+,
 }:
 
 stdenv.mkDerivation rec {

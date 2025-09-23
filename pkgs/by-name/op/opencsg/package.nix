@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  libGLU,
-  libGL,
-  libglut,
-  glew,
-  libXmu,
-  libXext,
-  libX11,
-  fixDarwinDylibNames,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, libGLU
+, libGL
+, libglut
+, glew
+, libXmu
+, libXext
+, libX11
+, fixDarwinDylibNames
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

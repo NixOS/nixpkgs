@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cacert,
-  faster-whisper,
-  flac,
-  google-cloud-speech,
-  groq,
-  httpx,
-  openai-whisper,
-  openai,
-  pocketsphinx,
-  pyaudio,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  respx,
-  setuptools,
-  soundfile,
-  standard-aifc,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cacert
+, faster-whisper
+, flac
+, google-cloud-speech
+, groq
+, httpx
+, openai-whisper
+, openai
+, pocketsphinx
+, pyaudio
+, pytestCheckHook
+, pythonOlder
+, requests
+, respx
+, setuptools
+, soundfile
+, standard-aifc
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

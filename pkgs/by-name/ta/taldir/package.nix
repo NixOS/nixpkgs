@@ -1,8 +1,8 @@
-{
-  fetchgit,
-  lib,
-  recutils,
-  buildGoModule,
+{ fetchgit
+, lib
+, recutils
+, buildGoModule
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "taldir";

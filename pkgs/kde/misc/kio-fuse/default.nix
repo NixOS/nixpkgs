@@ -1,9 +1,9 @@
-{
-  lib,
-  mkKdeDerivation,
-  fetchurl,
-  pkg-config,
-  fuse3,
+{ lib
+, mkKdeDerivation
+, fetchurl
+, pkg-config
+, fuse3
+,
 }:
 mkKdeDerivation rec {
   pname = "kio-fuse";

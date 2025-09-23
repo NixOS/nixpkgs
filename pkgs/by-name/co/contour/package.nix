@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  boxed-cpp,
-  freetype,
-  fontconfig,
-  libunicode,
-  libutempter,
-  termbench-pro,
-  qt6,
-  pcre,
-  boost,
-  catch2_3,
-  fmt,
-  microsoft-gsl,
-  range-v3,
-  yaml-cpp,
-  ncurses,
-  file,
-  darwin,
-  nixosTests,
-  installShellFiles,
-  reflection-cpp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, boxed-cpp
+, freetype
+, fontconfig
+, libunicode
+, libutempter
+, termbench-pro
+, qt6
+, pcre
+, boost
+, catch2_3
+, fmt
+, microsoft-gsl
+, range-v3
+, yaml-cpp
+, ncurses
+, file
+, darwin
+, nixosTests
+, installShellFiles
+, reflection-cpp
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

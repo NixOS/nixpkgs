@@ -1,16 +1,16 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  makeBinaryWrapper,
-  poppler-utils,
-  tesseract,
-  catdoc,
-  unrtf,
-  python3Packages,
-  nix-update-script,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, makeBinaryWrapper
+, poppler-utils
+, tesseract
+, catdoc
+, unrtf
+, python3Packages
+, nix-update-script
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildGoModule (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 buildGoModule (finalAttrs: {

@@ -1,9 +1,8 @@
-{
-  config,
-  options,
-  lib,
-  pkgs,
-  ...
+{ config
+, options
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -553,15 +552,18 @@ in
   imports = [
     (lib.mkChangedOptionModule [ "docker-containers" ] [ "virtualisation" "oci-containers" ] (oldcfg: {
       backend = "docker";
-      containers = lib.mapAttrs (
-        n: v:
-        builtins.removeAttrs (
-          v
-          // {
-            extraOptions = v.extraDockerOptions or [ ];
-          }
-        ) [ "extraDockerOptions" ]
-      ) oldcfg.docker-containers;
+      containers = lib.mapAttrs
+        (
+          n: v:
+            builtins.removeAttrs
+              (
+                v
+                // {
+                  extraOptions = v.extraDockerOptions or [ ];
+                }
+              ) [ "extraDockerOptions" ]
+        )
+        oldcfg.docker-containers;
     }))
   ];
 
@@ -593,11 +595,10 @@ in
           let
             toAssertions =
               name:
-              {
-                imageFile,
-                imageStream,
-                podman,
-                ...
+              { imageFile
+              , imageStream
+              , podman
+              , ...
               }:
               [
                 {
@@ -623,22 +624,24 @@ in
           concatMap (name: toAssertions name cfg.containers.${name}) (lib.attrNames cfg.containers);
 
         warnings = mkIf (cfg.backend == "podman") (
-          lib.foldlAttrs (
-            warnings: name:
-            { podman, ... }:
-            let
-              inherit (config.users.users.${podman.user}) linger;
-            in
-            warnings
-            ++ lib.optional (podman.user != "root" && linger && podman.sdnotify == "conmon") ''
-              Podman container ${name} is configured as rootless (user ${podman.user})
-              with `--sdnotify=conmon`, but lingering for this user is turned on.
-            ''
-            ++ lib.optional (podman.user != "root" && !linger && podman.sdnotify == "healthy") ''
-              Podman container ${name} is configured as rootless (user ${podman.user})
-              with `--sdnotify=healthy`, but lingering for this user is turned off.
-            ''
-          ) [ ] cfg.containers
+          lib.foldlAttrs
+            (
+              warnings: name:
+                { podman, ... }:
+                let
+                  inherit (config.users.users.${podman.user}) linger;
+                in
+                warnings
+                ++ lib.optional (podman.user != "root" && linger && podman.sdnotify == "conmon") ''
+                  Podman container ${name} is configured as rootless (user ${podman.user})
+                  with `--sdnotify=conmon`, but lingering for this user is turned on.
+                ''
+                ++ lib.optional (podman.user != "root" && !linger && podman.sdnotify == "healthy") ''
+                  Podman container ${name} is configured as rootless (user ${podman.user})
+                  with `--sdnotify=healthy`, but lingering for this user is turned off.
+                ''
+            ) [ ]
+            cfg.containers
         );
       }
       (lib.mkIf (cfg.backend == "podman") {

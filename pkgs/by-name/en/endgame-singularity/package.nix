@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  unzip,
-  python3,
-  enableDefaultMusicPack ? true,
+{ lib
+, fetchurl
+, fetchFromGitHub
+, unzip
+, python3
+, enableDefaultMusicPack ? true
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lxml,
-  pillow,
-  reportlab,
-  lib,
+{ buildPythonPackage
+, fetchFromGitHub
+, lxml
+, pillow
+, reportlab
+, lib
+,
 }:
 buildPythonPackage rec {
   pname = "hocr-tools";

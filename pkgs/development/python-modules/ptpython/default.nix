@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  appdirs,
-  jedi,
-  prompt-toolkit,
-  pygments,
-  setuptools,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, appdirs
+, jedi
+, prompt-toolkit
+, pygments
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

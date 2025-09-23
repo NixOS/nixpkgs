@@ -1,9 +1,9 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  garminconnect,
-  tzlocal,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, garminconnect
+, tzlocal
+,
 }:
 
 buildHomeAssistantComponent rec {

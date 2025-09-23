@@ -1,24 +1,24 @@
-{
-  lib,
-  azure-storage-blob,
-  buildPythonPackage,
-  fetchpatch,
-  fetchFromGitHub,
-  flask,
-  flask-mongoengine,
-  flask-sqlalchemy,
-  geoalchemy2,
-  mongoengine,
-  pillow,
-  psycopg2,
-  pymongo,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  shapely,
-  sqlalchemy,
-  wtf-peewee,
-  wtforms,
+{ lib
+, azure-storage-blob
+, buildPythonPackage
+, fetchpatch
+, fetchFromGitHub
+, flask
+, flask-mongoengine
+, flask-sqlalchemy
+, geoalchemy2
+, mongoengine
+, pillow
+, psycopg2
+, pymongo
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, shapely
+, sqlalchemy
+, wtf-peewee
+, wtforms
+,
 }:
 
 buildPythonPackage rec {

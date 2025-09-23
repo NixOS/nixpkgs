@@ -1,40 +1,32 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-  fetchpatch,
-
-  cmake,
-  ninja,
-  pkg-config,
-
-  double-conversion,
-  fast-float,
-  gflags,
-  glog,
-  libevent,
-  zlib,
-  openssl,
-  xz,
-  lz4,
-  zstd,
-  libiberty,
-  libunwind,
-
-  boost,
-  fmt_11,
-  jemalloc,
-
-  gtest,
-
-  follyMobile ? false,
-
-  nix-update-script,
-
-  # for passthru.tests
-  python3,
-  watchman,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ninja
+, pkg-config
+, double-conversion
+, fast-float
+, gflags
+, glog
+, libevent
+, zlib
+, openssl
+, xz
+, lz4
+, zstd
+, libiberty
+, libunwind
+, boost
+, fmt_11
+, jemalloc
+, gtest
+, follyMobile ? false
+, nix-update-script
+, # for passthru.tests
+  python3
+, watchman
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

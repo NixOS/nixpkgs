@@ -1,15 +1,15 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libimobiledevice,
-  libusb1,
-  avahi,
-  clang,
-  git,
-  libgeneral,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libimobiledevice
+, libusb1
+, avahi
+, clang
+, git
+, libgeneral
+,
 }:
 clangStdenv.mkDerivation {
   pname = "usbmuxd2";

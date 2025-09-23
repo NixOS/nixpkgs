@@ -1,12 +1,12 @@
-{
-  lib,
-  qt5,
-  stdenv,
-  gitMinimal,
-  fetchFromGitHub,
-  cmake,
-  alsa-lib,
-  qttools,
+{ lib
+, qt5
+, stdenv
+, gitMinimal
+, fetchFromGitHub
+, cmake
+, alsa-lib
+, qttools
+,
 }:
 
 stdenv.mkDerivation rec {

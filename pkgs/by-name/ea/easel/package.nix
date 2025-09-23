@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  perl,
-  python3,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, perl
+, python3
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

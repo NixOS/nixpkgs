@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  isPy3k,
-  unittestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, isPy3k
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  matplotlib,
-  matplotx,
-  numpy,
-  rich,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, matplotlib
+, matplotx
+, numpy
+, rich
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

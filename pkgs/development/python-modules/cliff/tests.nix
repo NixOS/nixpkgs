@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  cliff,
-  sphinx,
-  stestr,
-  testscenarios,
+{ buildPythonPackage
+, cliff
+, sphinx
+, stestr
+, testscenarios
+,
 }:
 
 buildPythonPackage {

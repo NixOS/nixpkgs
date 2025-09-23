@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  docbook2x,
-  pkg-config,
-  gtk3,
-  dconf,
-  gobject-introspection,
-  ibus,
-  python3,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, docbook2x
+, pkg-config
+, gtk3
+, dconf
+, gobject-introspection
+, ibus
+, python3
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

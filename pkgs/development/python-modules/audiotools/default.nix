@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pkg-config,
-  libmpg123,
-  lame,
-  twolame,
-  libopus,
-  opusfile,
-  libvorbis,
-  libcdio,
-  libcdio-paranoia,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pkg-config
+, libmpg123
+, lame
+, twolame
+, libopus
+, opusfile
+, libvorbis
+, libcdio
+, libcdio-paranoia
+,
 }:
 
 buildPythonPackage {

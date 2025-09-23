@@ -1,11 +1,11 @@
-{
-  lib,
-  angr,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  tqdm,
+{ lib
+, angr
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

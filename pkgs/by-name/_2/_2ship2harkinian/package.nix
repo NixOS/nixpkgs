@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  SDL2,
-  cmake,
-  copyDesktopItems,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
-  imagemagick,
-  imgui,
-  libpng,
-  libpulseaudio,
-  libzip,
-  lsb-release,
-  makeDesktopItem,
-  makeWrapper,
-  ninja,
-  nlohmann_json,
-  pkg-config,
-  python3,
-  spdlog,
-  stormlib,
-  tinyxml-2,
-  writeTextFile,
-  zenity,
+{ lib
+, stdenv
+, SDL2
+, cmake
+, copyDesktopItems
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, imagemagick
+, imgui
+, libpng
+, libpulseaudio
+, libzip
+, lsb-release
+, makeDesktopItem
+, makeWrapper
+, ninja
+, nlohmann_json
+, pkg-config
+, python3
+, spdlog
+, stormlib
+, tinyxml-2
+, writeTextFile
+, zenity
+,
 }:
 
 let

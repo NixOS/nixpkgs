@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  cmake,
-  pkg-config,
-  adwaita-qt,
-  adwaita-qt6,
-  glib,
-  gtk3,
-  qtbase,
-  qtwayland,
-  replaceVars,
-  gsettings-desktop-schemas,
-  useQt6 ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, pkg-config
+, adwaita-qt
+, adwaita-qt6
+, glib
+, gtk3
+, qtbase
+, qtwayland
+, replaceVars
+, gsettings-desktop-schemas
+, useQt6 ? false
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,16 +1,16 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  google-api-core,
-  google-auth,
-  grpc-google-iam-v1,
-  lib,
-  proto-plus,
-  protobuf,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ buildPythonPackage
+, fetchPypi
+, google-api-core
+, google-auth
+, grpc-google-iam-v1
+, lib
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

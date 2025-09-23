@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  cmake,
-  extra-cmake-modules,
-  libsForQt5,
-  mkcal,
-  pkg-config,
-  tzdata,
+{ stdenv
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+, cmake
+, extra-cmake-modules
+, libsForQt5
+, mkcal
+, pkg-config
+, tzdata
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

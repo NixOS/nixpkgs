@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  curl,
-  stdenv,
-  testers,
-  static-server,
-  replaceVars,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, curl
+, stdenv
+, testers
+, static-server
+, replaceVars
+,
 }:
 
 buildGoModule rec {

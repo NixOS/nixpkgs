@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoconf,
-  autoconf-archive,
-  automake,
-  libtool,
-  gettext,
-  flex,
-  perl,
-  pkg-config,
-  pcsclite,
-  libusb1,
-  libiconv,
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, autoconf-archive
+, automake
+, libtool
+, gettext
+, flex
+, perl
+, pkg-config
+, pcsclite
+, libusb1
+, libiconv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

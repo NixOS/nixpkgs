@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchpatch,
-  makeFontsConf,
-  inkscape,
-  xcursorgen,
-  bc,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchpatch
+, makeFontsConf
+, inkscape
+, xcursorgen
+, bc
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

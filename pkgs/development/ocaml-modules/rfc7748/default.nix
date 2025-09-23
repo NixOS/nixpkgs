@@ -1,12 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  fetchpatch,
-  ocaml,
-
-  ounit,
-  zarith,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, fetchpatch
+, ocaml
+, ounit
+, zarith
+,
 }:
 
 buildDunePackage rec {

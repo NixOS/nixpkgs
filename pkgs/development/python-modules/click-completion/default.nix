@@ -1,14 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPy27,
-
-  # propagates
-  click,
-  jinja2,
-  shellingham,
-  six,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, # propagates
+  click
+, jinja2
+, shellingham
+, six
+,
 }:
 
 buildPythonPackage rec {

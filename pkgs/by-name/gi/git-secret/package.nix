@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  git,
-  gnupg,
-  gawk,
-  installShellFiles,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, git
+, gnupg
+, gawk
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation {

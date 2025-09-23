@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  click,
-  pytestCheckHook,
-  pyyaml,
-  pytest-icdiff,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, click
+, pytestCheckHook
+, pyyaml
+, pytest-icdiff
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,141 +1,141 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchzip,
-  fetchpatch,
-  autoconf,
-  automake,
-  libtool,
-  makeWrapper,
-  pkg-config,
-  cmake,
-  yasm,
-  python3Packages,
-  libxcrypt,
-  libgcrypt,
-  libgpg-error,
-  libunistring,
-  boost,
-  avahi,
-  lame,
-  gettext,
-  pcre-cpp,
-  yajl,
-  fribidi,
-  which,
-  openssl,
-  gperf,
-  tinyxml2,
-  tinyxml-2,
-  taglib,
-  libssh,
-  jre_headless,
-  gtest,
-  ncurses,
-  spdlog,
-  libxml2,
-  systemd,
-  alsa-lib,
-  libGLU,
-  libGL,
-  ffmpeg,
-  fontconfig,
-  freetype,
-  ftgl,
-  libjpeg,
-  libpng,
-  libtiff,
-  libmpeg2,
-  libsamplerate,
-  libmad,
-  libogg,
-  libvorbis,
-  flac,
-  libxslt,
-  lzo,
-  libcdio,
-  libmodplug,
-  libass,
-  libbluray,
-  libudfread,
-  sqlite,
-  libmysqlclient,
-  nasm,
-  gnutls,
-  libva,
-  libdrm,
-  curl,
-  bzip2,
-  zip,
-  unzip,
-  mesa-demos,
-  libcec,
-  libcec_platform,
-  dcadec,
-  libuuid,
-  libcrossguid,
-  libmicrohttpd,
-  bluez,
-  doxygen,
-  giflib,
-  glib,
-  harfbuzz,
-  lcms2,
-  libidn2,
-  libpthreadstubs,
-  libtasn1,
-  libplist,
-  p11-kit,
-  zlib,
-  flatbuffers,
-  fstrcmp,
-  rapidjson,
-  lirc,
-  mesa-gl-headers,
-  x11Support ? true,
-  libX11,
-  xorgproto,
-  libXt,
-  libXmu,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
-  libXfixes,
-  xdpyinfo,
-  libXdmcp,
-  dbusSupport ? true,
-  dbus,
-  joystickSupport ? true,
-  cwiid,
-  nfsSupport ? true,
-  libnfs,
-  pulseSupport ? true,
-  libpulseaudio,
-  pipewireSupport ? true,
-  pipewire,
-  rtmpSupport ? true,
-  rtmpdump,
-  sambaSupport ? true,
-  samba,
-  udevSupport ? true,
-  udev,
-  opticalSupport ? true,
-  usbSupport ? false,
-  libusb-compat-0_1,
-  vdpauSupport ? true,
-  libvdpau,
-  waylandSupport ? false,
-  wayland,
-  wayland-protocols,
-  waylandpp ? null,
-  libxkbcommon,
-  gbmSupport ? false,
-  libgbm,
-  libinput,
-  libdisplay-info,
-  buildPackages,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchzip
+, fetchpatch
+, autoconf
+, automake
+, libtool
+, makeWrapper
+, pkg-config
+, cmake
+, yasm
+, python3Packages
+, libxcrypt
+, libgcrypt
+, libgpg-error
+, libunistring
+, boost
+, avahi
+, lame
+, gettext
+, pcre-cpp
+, yajl
+, fribidi
+, which
+, openssl
+, gperf
+, tinyxml2
+, tinyxml-2
+, taglib
+, libssh
+, jre_headless
+, gtest
+, ncurses
+, spdlog
+, libxml2
+, systemd
+, alsa-lib
+, libGLU
+, libGL
+, ffmpeg
+, fontconfig
+, freetype
+, ftgl
+, libjpeg
+, libpng
+, libtiff
+, libmpeg2
+, libsamplerate
+, libmad
+, libogg
+, libvorbis
+, flac
+, libxslt
+, lzo
+, libcdio
+, libmodplug
+, libass
+, libbluray
+, libudfread
+, sqlite
+, libmysqlclient
+, nasm
+, gnutls
+, libva
+, libdrm
+, curl
+, bzip2
+, zip
+, unzip
+, mesa-demos
+, libcec
+, libcec_platform
+, dcadec
+, libuuid
+, libcrossguid
+, libmicrohttpd
+, bluez
+, doxygen
+, giflib
+, glib
+, harfbuzz
+, lcms2
+, libidn2
+, libpthreadstubs
+, libtasn1
+, libplist
+, p11-kit
+, zlib
+, flatbuffers
+, fstrcmp
+, rapidjson
+, lirc
+, mesa-gl-headers
+, x11Support ? true
+, libX11
+, xorgproto
+, libXt
+, libXmu
+, libXext
+, libXinerama
+, libXrandr
+, libXtst
+, libXfixes
+, xdpyinfo
+, libXdmcp
+, dbusSupport ? true
+, dbus
+, joystickSupport ? true
+, cwiid
+, nfsSupport ? true
+, libnfs
+, pulseSupport ? true
+, libpulseaudio
+, pipewireSupport ? true
+, pipewire
+, rtmpSupport ? true
+, rtmpdump
+, sambaSupport ? true
+, samba
+, udevSupport ? true
+, udev
+, opticalSupport ? true
+, usbSupport ? false
+, libusb-compat-0_1
+, vdpauSupport ? true
+, libvdpau
+, waylandSupport ? false
+, wayland
+, wayland-protocols
+, waylandpp ? null
+, libxkbcommon
+, gbmSupport ? false
+, libgbm
+, libinput
+, libdisplay-info
+, buildPackages
+,
 }:
 
 assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is available
@@ -190,59 +190,63 @@ in
 stdenv.mkDerivation (
   finalAttrs:
   let
-    texturePacker = buildPackages.callPackage (
-      {
-        cmake,
-        giflib,
-        libjpeg,
-        libpng,
-        lzo,
-        stdenv,
-        zlib,
-        pkg-config,
-      }:
-      stdenv.mkDerivation {
-        pname = finalAttrs.pname + "-build-tool-texture-packer";
-        inherit (finalAttrs) version src;
+    texturePacker = buildPackages.callPackage
+      (
+        { cmake
+        , giflib
+        , libjpeg
+        , libpng
+        , lzo
+        , stdenv
+        , zlib
+        , pkg-config
+        ,
+        }:
+        stdenv.mkDerivation {
+          pname = finalAttrs.pname + "-build-tool-texture-packer";
+          inherit (finalAttrs) version src;
 
-        sourceRoot = "${finalAttrs.src.name}/tools/depends/native/TexturePacker/src";
+          sourceRoot = "${finalAttrs.src.name}/tools/depends/native/TexturePacker/src";
 
-        nativeBuildInputs = [
-          pkg-config
-          cmake
-        ];
+          nativeBuildInputs = [
+            pkg-config
+            cmake
+          ];
 
-        buildInputs = [
-          giflib
-          libjpeg
-          libpng
-          lzo
-          zlib
-        ];
+          buildInputs = [
+            giflib
+            libjpeg
+            libpng
+            lzo
+            zlib
+          ];
 
-        env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isWindows) "-DTARGET_POSIX";
+          env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isWindows) "-DTARGET_POSIX";
 
-        preConfigure = ''
-          cmakeFlagsArray+=(-DKODI_SOURCE_DIR=$src -DCMAKE_MODULE_PATH=$src/cmake/modules)
-        '';
+          preConfigure = ''
+            cmakeFlagsArray+=(-DKODI_SOURCE_DIR=$src -DCMAKE_MODULE_PATH=$src/cmake/modules)
+          '';
 
-        meta.mainProgram = "TexturePacker";
-      }
-    ) { };
+          meta.mainProgram = "TexturePacker";
+        }
+      )
+      { };
 
-    jsonSchemaBuilder = buildPackages.callPackage (
-      { stdenv, cmake }:
-      stdenv.mkDerivation {
-        pname = finalAttrs.pname + "-build-tool-json-schema-builder";
-        inherit (finalAttrs) version src;
+    jsonSchemaBuilder = buildPackages.callPackage
+      (
+        { stdenv, cmake }:
+        stdenv.mkDerivation {
+          pname = finalAttrs.pname + "-build-tool-json-schema-builder";
+          inherit (finalAttrs) version src;
 
-        sourceRoot = "${finalAttrs.src.name}/tools/depends/native/JsonSchemaBuilder/src";
+          sourceRoot = "${finalAttrs.src.name}/tools/depends/native/JsonSchemaBuilder/src";
 
-        nativeBuildInputs = [ cmake ];
+          nativeBuildInputs = [ cmake ];
 
-        meta.mainProgram = "JsonSchemaBuilder";
-      }
-    ) { };
+          meta.mainProgram = "JsonSchemaBuilder";
+        }
+      )
+      { };
   in
   {
     pname = "kodi";

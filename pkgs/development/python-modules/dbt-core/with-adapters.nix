@@ -1,10 +1,10 @@
-{
-  python,
-  dbt-bigquery,
-  dbt-core,
-  dbt-postgres,
-  dbt-redshift,
-  dbt-snowflake,
+{ python
+, dbt-bigquery
+, dbt-core
+, dbt-postgres
+, dbt-redshift
+, dbt-snowflake
+,
 }:
 let
   adapters = {
@@ -21,4 +21,4 @@ adapterFun:
   extraLibs = [ dbt-core ] ++ (adapterFun adapters);
   ignoreCollisions = true;
 }).overrideAttrs
-  { meta.mainProgram = dbt-core.meta.mainProgram; }
+{ meta.mainProgram = dbt-core.meta.mainProgram; }

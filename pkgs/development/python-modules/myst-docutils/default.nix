@@ -1,22 +1,22 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  defusedxml,
-  docutils,
-  fetchFromGitHub,
-  flit-core,
-  jinja2,
-  markdown-it-py,
-  mdit-py-plugins,
-  pytest-param-files,
-  pytest-regressions,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  sphinx-pytest,
-  sphinx,
-  typing-extensions,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, defusedxml
+, docutils
+, fetchFromGitHub
+, flit-core
+, jinja2
+, markdown-it-py
+, mdit-py-plugins
+, pytest-param-files
+, pytest-regressions
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, sphinx-pytest
+, sphinx
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

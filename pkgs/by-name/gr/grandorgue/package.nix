@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  cmake,
-  pkg-config,
-  fftwFloat,
-  alsa-lib,
-  zlib,
-  wavpack,
-  wxGTK32,
-  udev,
-  jackaudioSupport ? false,
-  libjack2,
-  imagemagick,
-  libicns,
-  yaml-cpp,
-  makeWrapper,
-  includeDemo ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapGAppsHook3
+, cmake
+, pkg-config
+, fftwFloat
+, alsa-lib
+, zlib
+, wavpack
+, wxGTK32
+, udev
+, jackaudioSupport ? false
+, libjack2
+, imagemagick
+, libicns
+, yaml-cpp
+, makeWrapper
+, includeDemo ? true
+,
 }:
 
 stdenv.mkDerivation rec {

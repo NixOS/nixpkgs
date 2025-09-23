@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  django-classy-tags,
-  pytestCheckHook,
-  pytest-django,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, django-classy-tags
+, pytestCheckHook
+, pytest-django
+,
 }:
 
 buildPythonPackage rec {

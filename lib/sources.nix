@@ -38,31 +38,31 @@ let
     let
       baseName = baseNameOf (toString name);
     in
-    !(
-      # Filter out version control software files/directories
-      (
-        baseName == ".git"
-        ||
+      !(
+        # Filter out version control software files/directories
+        (
+          baseName == ".git"
+          ||
           type == "directory"
           && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg" || baseName == ".jj")
-      )
-      ||
+        )
+        ||
         # Filter out editor backup / swap files.
         lib.hasSuffix "~" baseName
-      || match "^\\.sw[a-z]$" baseName != null
-      || match "^\\..*\\.sw[a-z]$" baseName != null
-      ||
+        || match "^\\.sw[a-z]$" baseName != null
+        || match "^\\..*\\.sw[a-z]$" baseName != null
+        ||
 
         # Filter out generates files.
         lib.hasSuffix ".o" baseName
-      || lib.hasSuffix ".so" baseName
-      ||
+        || lib.hasSuffix ".so" baseName
+        ||
         # Filter out nix-build result symlinks
         (type == "symlink" && lib.hasPrefix "result" baseName)
-      ||
+        ||
         # Filter out sockets and other types of files we can't have in the store.
         (type == "unknown")
-    );
+      );
 
   /**
     Filters a source tree removing version control files and directories using cleanSourceFilter.
@@ -118,17 +118,18 @@ let
   cleanSourceWith =
     {
       # A path or cleanSourceWith result to filter and/or rename.
-      src,
-      # Optional with default value: constant true (include everything)
+      src
+    , # Optional with default value: constant true (include everything)
       # The function will be combined with the && operator such
       # that src.filter is called lazily.
       # For implementing a filter, see
       # https://nixos.org/nix/manual/#builtin-filterSource
       # Type: A function (path -> type -> bool)
-      filter ? _path: _type: true,
-      # Optional name to use as part of the store path.
+      filter ? _path: _type: true
+    , # Optional name to use as part of the store path.
       # This defaults to `src.name` or otherwise `"source"`.
-      name ? null,
+      name ? null
+    ,
     }:
     let
       orig = toSourceAttributes src;
@@ -160,17 +161,18 @@ let
     let
       attrs = toSourceAttributes src;
     in
-    fromSourceAttributes (
-      attrs
-      // {
-        filter =
-          path: type:
-          let
-            r = attrs.filter path type;
-          in
-          builtins.trace "${attrs.name}.filter ${path} = ${boolToString r}" r;
-      }
-    )
+    fromSourceAttributes
+      (
+        attrs
+        // {
+          filter =
+            path: type:
+            let
+              r = attrs.filter path type;
+            in
+            builtins.trace "${attrs.name}.filter ${path} = ${boolToString r}" r;
+        }
+      )
     // {
       satisfiesSubpathInvariant = src ? satisfiesSubpathInvariant && src.satisfiesSubpathInvariant;
     };
@@ -207,10 +209,10 @@ let
     lib.cleanSourceWith {
       filter = (
         path: type:
-        let
-          relPath = lib.removePrefix (toString origSrc + "/") (toString path);
-        in
-        lib.any (re: match re relPath != null) regexes
+          let
+            relPath = lib.removePrefix (toString origSrc + "/") (toString path);
+          in
+          lib.any (re: match re relPath != null) regexes
       );
       inherit src;
     };
@@ -288,7 +290,7 @@ let
     let
       commitIdOrError = _commitIdFromGitRepoOrError path;
     in
-    commitIdOrError.value or (throw commitIdOrError.error);
+      commitIdOrError.value or (throw commitIdOrError.error);
 
   # Get the commit id of a git repo.
 
@@ -391,10 +393,10 @@ let
   #
   # Inverse of toSourceAttributes for Source objects.
   fromSourceAttributes =
-    {
-      origSrc,
-      filter,
-      name,
+    { origSrc
+    , filter
+    , name
+    ,
     }:
     {
       _isLibCleanSourceWith = true;

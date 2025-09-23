@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  nettle,
-  libidn,
-  libnetfilter_conntrack,
-  nftables,
-  buildPackages,
-  dbusSupport ? stdenv.hostPlatform.isLinux,
-  dbus,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, nettle
+, libidn
+, libnetfilter_conntrack
+, nftables
+, buildPackages
+, dbusSupport ? stdenv.hostPlatform.isLinux
+, dbus
+, nixosTests
+,
 }:
 
 let

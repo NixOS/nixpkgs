@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchurl,
-  dbus-glib,
-  gtk2,
-  pkg-config,
-  wordnet,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchurl
+, dbus-glib
+, gtk2
+, pkg-config
+, wordnet
+,
 }:
 
 stdenv.mkDerivation rec {

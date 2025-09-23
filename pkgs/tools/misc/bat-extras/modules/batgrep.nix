@@ -1,8 +1,8 @@
-{
-  buildBatExtrasPkg,
-  less,
-  coreutils,
-  ripgrep,
+{ buildBatExtrasPkg
+, less
+, coreutils
+, ripgrep
+,
 }:
 buildBatExtrasPkg {
   name = "batgrep";

@@ -1,24 +1,24 @@
-{
-  autoconf,
-  automake,
-  bashNonInteractive,
-  coreutils,
-  fetchFromGitHub,
-  fuse,
-  gawk,
-  gnugrep,
-  gnused,
-  lib,
-  libusb1,
-  makeBinaryWrapper,
-  pciutils,
-  pkg-config,
-  procps,
-  pv,
-  stdenv,
-  which,
-  util-linux,
-  withBfbInstall ? true,
+{ autoconf
+, automake
+, bashNonInteractive
+, coreutils
+, fetchFromGitHub
+, fuse
+, gawk
+, gnugrep
+, gnused
+, lib
+, libusb1
+, makeBinaryWrapper
+, pciutils
+, pkg-config
+, procps
+, pv
+, stdenv
+, which
+, util-linux
+, withBfbInstall ? true
+,
 }:
 
 stdenv.mkDerivation rec {

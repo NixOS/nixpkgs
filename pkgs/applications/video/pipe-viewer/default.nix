@@ -1,44 +1,44 @@
-{
-  lib,
-  fetchFromGitHub,
-  perl,
-  buildPerlModule,
-  makeWrapper,
-  wrapGAppsHook3,
-  withGtk3 ? false,
-  ffmpeg,
-  mpv,
-  wget,
-  xdg-utils,
-  yt-dlp,
-  TestPod,
-  Gtk3,
+{ lib
+, fetchFromGitHub
+, perl
+, buildPerlModule
+, makeWrapper
+, wrapGAppsHook3
+, withGtk3 ? false
+, ffmpeg
+, mpv
+, wget
+, xdg-utils
+, yt-dlp
+, TestPod
+, Gtk3
+,
 }:
 let
   perlEnv = perl.withPackages (
     ps:
-    with ps;
-    [
-      AnyURIEscape
-      DataDump
-      Encode
-      FilePath
-      GetoptLong
-      HTTPMessage
-      JSON
-      JSONXS
-      LWPProtocolHttps
-      LWPUserAgentCached
-      Memoize
-      PathTools
-      ScalarListUtils
-      TermReadLineGnu
-      TextParsewords
-      UnicodeLineBreak
-    ]
-    ++ lib.optionals withGtk3 [
-      FileShareDir
-    ]
+      with ps;
+      [
+        AnyURIEscape
+        DataDump
+        Encode
+        FilePath
+        GetoptLong
+        HTTPMessage
+        JSON
+        JSONXS
+        LWPProtocolHttps
+        LWPUserAgentCached
+        Memoize
+        PathTools
+        ScalarListUtils
+        TermReadLineGnu
+        TextParsewords
+        UnicodeLineBreak
+      ]
+      ++ lib.optionals withGtk3 [
+        FileShareDir
+      ]
   );
 in
 buildPerlModule rec {

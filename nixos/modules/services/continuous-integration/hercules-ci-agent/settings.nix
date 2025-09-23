@@ -10,11 +10,10 @@ let
   format = pkgs.formats.toml { };
 
   settingsModule =
-    {
-      config,
-      packageOption,
-      pkgs,
-      ...
+    { config
+    , packageOption
+    , pkgs
+    , ...
     }:
     {
       freeformType = format.type;

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -99,34 +98,36 @@ in
   };
   config = lib.mkIf (cfg.filesystems != { }) {
     systemd.packages = [ pkgs.bees ];
-    systemd.services = lib.mapAttrs' (
-      name: fs:
-      lib.nameValuePair "beesd@${name}" {
-        overrideStrategy = "asDropin";
-        serviceConfig = {
-          ExecStart =
-            let
-              configOpts = [
-                fs.spec
-                "verbosity=${toString fs.verbosity}"
-                "idxSizeMB=${toString fs.hashTableSizeMB}"
-                "workDir=${fs.workDir}"
-              ];
-              configOptsStr = lib.escapeShellArgs configOpts;
-            in
-            [
-              ""
-              "${pkgs.bees}/bin/bees-service-wrapper run ${configOptsStr} -- --no-timestamps ${lib.escapeShellArgs fs.extraOptions}"
-            ];
-          SyslogIdentifier = "beesd"; # would otherwise be "bees-service-wrapper"
+    systemd.services = lib.mapAttrs'
+      (
+        name: fs:
+          lib.nameValuePair "beesd@${name}" {
+            overrideStrategy = "asDropin";
+            serviceConfig = {
+              ExecStart =
+                let
+                  configOpts = [
+                    fs.spec
+                    "verbosity=${toString fs.verbosity}"
+                    "idxSizeMB=${toString fs.hashTableSizeMB}"
+                    "workDir=${fs.workDir}"
+                  ];
+                  configOptsStr = lib.escapeShellArgs configOpts;
+                in
+                [
+                  ""
+                  "${pkgs.bees}/bin/bees-service-wrapper run ${configOptsStr} -- --no-timestamps ${lib.escapeShellArgs fs.extraOptions}"
+                ];
+              SyslogIdentifier = "beesd"; # would otherwise be "bees-service-wrapper"
 
-          # Ensure that hashtable can be locked into memory
-          LimitMEMLOCK = "${toString fs.hashTableSizeMB}M";
-          MemoryMin = "${toString fs.hashTableSizeMB}M";
-        };
-        unitConfig.RequiresMountsFor = lib.mkIf (lib.hasPrefix "/" fs.spec) fs.spec;
-        wantedBy = [ "multi-user.target" ];
-      }
-    ) cfg.filesystems;
+              # Ensure that hashtable can be locked into memory
+              LimitMEMLOCK = "${toString fs.hashTableSizeMB}M";
+              MemoryMin = "${toString fs.hashTableSizeMB}M";
+            };
+            unitConfig.RequiresMountsFor = lib.mkIf (lib.hasPrefix "/" fs.spec) fs.spec;
+            wantedBy = [ "multi-user.target" ];
+          }
+      )
+      cfg.filesystems;
   };
 }

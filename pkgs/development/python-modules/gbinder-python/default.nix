@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  cython,
-  pkg-config,
-  libgbinder,
-  setuptools,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, cython
+, pkg-config
+, libgbinder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

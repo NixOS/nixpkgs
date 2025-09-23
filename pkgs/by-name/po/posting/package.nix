@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  xorg,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, xorg
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "posting";

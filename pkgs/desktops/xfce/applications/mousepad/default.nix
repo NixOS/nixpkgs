@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  glib,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  gspell,
-  gtk3,
-  gtksourceview4,
-  libxfce4ui,
-  xfconf,
-  enablePolkit ? true,
-  polkit,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, glib
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, gspell
+, gtk3
+, gtksourceview4
+, libxfce4ui
+, xfconf
+, enablePolkit ? true
+, polkit
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

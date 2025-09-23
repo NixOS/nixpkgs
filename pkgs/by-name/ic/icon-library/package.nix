@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  wrapGAppsHook4,
-  buildPackages,
-  cargo,
-  desktop-file-utils,
-  meson,
-  ninja,
-  pkg-config,
-  rustc,
-  gettext,
-  gdk-pixbuf,
-  glib,
-  gtk4,
-  gtksourceview5,
-  libadwaita,
+{ lib
+, stdenv
+, fetchurl
+, wrapGAppsHook4
+, buildPackages
+, cargo
+, desktop-file-utils
+, meson
+, ninja
+, pkg-config
+, rustc
+, gettext
+, gdk-pixbuf
+, glib
+, gtk4
+, gtksourceview5
+, libadwaita
+,
 }:
 
 stdenv.mkDerivation rec {

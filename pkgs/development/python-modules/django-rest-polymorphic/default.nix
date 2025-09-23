@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  django-polymorphic,
-  djangorestframework,
-  pytest-django,
-  pytest-mock,
-  pytestCheckHook,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, django-polymorphic
+, djangorestframework
+, pytest-django
+, pytest-mock
+, pytestCheckHook
+, six
+,
 }:
 
 buildPythonPackage {

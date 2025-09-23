@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -15,20 +14,23 @@ let
   portRangesToString =
     ranges:
     lib.concatStringsSep "," (
-      map (
-        x:
-        if x.from == x.to then
-          builtins.toString x.from
-        else
-          builtins.toString x.from + "-" + builtins.toString x.to
-      ) ranges
+      map
+        (
+          x:
+          if x.from == x.to then
+            builtins.toString x.from
+          else
+            builtins.toString x.from + "-" + builtins.toString x.to
+        )
+        ranges
     );
 
   customToKeyValue = lib.generators.toKeyValue {
-    mkKeyValue = lib.generators.mkKeyValueDefault {
-      mkValueString =
-        v: if builtins.isList v then portRangesToString v else lib.generators.mkValueStringDefault { } v;
-    } "=";
+    mkKeyValue = lib.generators.mkKeyValueDefault
+      {
+        mkValueString =
+          v: if builtins.isList v then portRangesToString v else lib.generators.mkValueStringDefault { } v;
+      } "=";
   };
 in
 {

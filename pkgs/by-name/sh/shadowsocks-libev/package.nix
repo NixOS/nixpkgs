@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libsodium,
-  mbedtls_2,
-  libev,
-  c-ares,
-  pcre,
-  asciidoc,
-  xmlto,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  libxslt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libsodium
+, mbedtls_2
+, libev
+, c-ares
+, pcre
+, asciidoc
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxslt
+,
 }:
 
 stdenv.mkDerivation rec {

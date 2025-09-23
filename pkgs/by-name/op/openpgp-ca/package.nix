@@ -1,14 +1,14 @@
-{
-  fetchFromGitLab,
-  lib,
-  nettle,
-  nix-update-script,
-  rustPlatform,
-  pkg-config,
-  pcsclite,
-  openssl,
-  gnupg,
-  sqlite,
+{ fetchFromGitLab
+, lib
+, nettle
+, nix-update-script
+, rustPlatform
+, pkg-config
+, pcsclite
+, openssl
+, gnupg
+, sqlite
+,
 }:
 
 rustPlatform.buildRustPackage rec {

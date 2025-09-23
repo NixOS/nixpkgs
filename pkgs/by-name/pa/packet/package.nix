@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cargo,
-  meson,
-  ninja,
-  pkg-config,
-  protobuf,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
-  cairo,
-  dbus,
-  gdk-pixbuf,
-  glib,
-  gtk4,
-  libadwaita,
-  pango,
-  blueprint-compiler,
-  desktop-file-utils,
-  appstream,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cargo
+, meson
+, ninja
+, pkg-config
+, protobuf
+, rustPlatform
+, rustc
+, wrapGAppsHook4
+, cairo
+, dbus
+, gdk-pixbuf
+, glib
+, gtk4
+, libadwaita
+, pango
+, blueprint-compiler
+, desktop-file-utils
+, appstream
+, python3Packages
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "packet";

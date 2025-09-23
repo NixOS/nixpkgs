@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  netifaces,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, netifaces
+,
 }:
 
 buildPythonPackage {

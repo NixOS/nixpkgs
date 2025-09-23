@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  pytestCheckHook,
-  fontmath,
-  fonttools,
-  glyphslib,
-  setuptools,
-  setuptools-scm,
-  skia-pathops,
-  ttfautohint-py,
-  ufo2ft,
-  ufolib2,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, pytestCheckHook
+, fontmath
+, fonttools
+, glyphslib
+, setuptools
+, setuptools-scm
+, skia-pathops
+, ttfautohint-py
+, ufo2ft
+, ufolib2
+,
 }:
 
 buildPythonPackage rec {

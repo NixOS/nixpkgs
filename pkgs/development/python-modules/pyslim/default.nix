@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
-  pythonOlder,
-  msprime,
-  numpy,
-  tskit,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, pythonOlder
+, msprime
+, numpy
+, tskit
+,
 }:
 
 buildPythonPackage rec {

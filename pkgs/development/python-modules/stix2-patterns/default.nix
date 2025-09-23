@@ -1,12 +1,12 @@
-{
-  lib,
-  antlr4-python3-runtime,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  six,
+{ lib
+, antlr4-python3-runtime
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

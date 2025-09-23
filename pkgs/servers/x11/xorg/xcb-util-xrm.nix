@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  m4,
-  libxcb,
-  xcbutil,
-  libX11,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, m4
+, libxcb
+, xcbutil
+, libX11
+,
 }:
 
 stdenv.mkDerivation rec {

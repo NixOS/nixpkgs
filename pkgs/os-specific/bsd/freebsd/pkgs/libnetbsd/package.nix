@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  bsdSetupHook,
-  freebsdSetupHook,
-  makeMinimal,
-  mandoc,
-  groff,
-  boot-install,
-  install,
+{ lib
+, stdenv
+, mkDerivation
+, bsdSetupHook
+, freebsdSetupHook
+, makeMinimal
+, mandoc
+, groff
+, boot-install
+, install
+,
 }:
 
 mkDerivation {

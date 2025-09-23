@@ -1,31 +1,27 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pybind11,
-  setuptools,
-
-  # dependencies
-  einops,
-  numpy,
-  matplotlib,
-  pandas,
-  pytorch-msssim,
-  scipy,
-  torch,
-  torch-geometric,
-  torchvision,
-
-  # optional-dependencies
-  ipywidgets,
-  jupyter,
-
-  # tests
-  plotly,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pybind11
+, setuptools
+, # dependencies
+  einops
+, numpy
+, matplotlib
+, pandas
+, pytorch-msssim
+, scipy
+, torch
+, torch-geometric
+, torchvision
+, # optional-dependencies
+  ipywidgets
+, jupyter
+, # tests
+  plotly
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

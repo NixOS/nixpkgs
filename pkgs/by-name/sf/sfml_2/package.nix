@@ -1,24 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-
-  # buildInputs
-  flac,
-  freetype,
-  glew,
-  libjpeg,
-  libvorbis,
-  openal,
-  udev,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXrender,
-  xcbutilimage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  cmake
+, # buildInputs
+  flac
+, freetype
+, glew
+, libjpeg
+, libvorbis
+, openal
+, udev
+, libX11
+, libXcursor
+, libXrandr
+, libXrender
+, xcbutilimage
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sfml";

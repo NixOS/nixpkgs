@@ -1,15 +1,15 @@
-{
-  mkDerivation,
-  base,
-  fetchFromGitHub,
-  lib,
-  prettyprinter,
-  prettyprinter-ansi-terminal,
-  process,
-  QuickCheck,
-  text,
-  transformers,
-  transformers-compat,
+{ mkDerivation
+, base
+, fetchFromGitHub
+, lib
+, prettyprinter
+, prettyprinter-ansi-terminal
+, process
+, QuickCheck
+, text
+, transformers
+, transformers-compat
+,
 }:
 mkDerivation {
   pname = "hercules-ci-optparse-applicative";

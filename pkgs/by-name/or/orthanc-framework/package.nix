@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  orthanc,
-  gtest,
-  icu,
-  zlib,
+{ lib
+, stdenv
+, orthanc
+, gtest
+, icu
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

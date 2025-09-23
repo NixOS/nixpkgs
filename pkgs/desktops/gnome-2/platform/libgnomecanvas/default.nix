@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gtk2,
-  intltool,
-  libart_lgpl,
-  libglade,
-  glib,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gtk2
+, intltool
+, libart_lgpl
+, libglade
+, glib
+,
 }:
 
 stdenv.mkDerivation rec {

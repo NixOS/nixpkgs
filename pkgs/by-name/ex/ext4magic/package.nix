@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  file,
-  libuuid,
-  e2fsprogs,
-  zlib,
-  bzip2,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, file
+, libuuid
+, e2fsprogs
+, zlib
+, bzip2
+,
 }:
 
 stdenv.mkDerivation rec {

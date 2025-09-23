@@ -3,15 +3,15 @@
 let
   mkVersionInfo =
     _:
-    {
-      major,
-      minor,
-      patch,
-      x64hash,
-      x86hash,
-      x64suffix,
-      x86suffix,
-      homepage,
+    { major
+    , minor
+    , patch
+    , x64hash
+    , x86hash
+    , x64suffix
+    , x86suffix
+    , homepage
+    ,
     }:
     {
       inherit homepage;

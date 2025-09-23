@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  testers,
-  cmake-lint,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, testers
+, cmake-lint
+,
 }:
 
 python3Packages.buildPythonApplication rec {

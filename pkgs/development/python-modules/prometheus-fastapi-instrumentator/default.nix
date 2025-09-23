@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  devtools,
-  fastapi,
-  httpx,
-  poetry-core,
-  prometheus-client,
-  requests,
-  starlette,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, devtools
+, fastapi
+, httpx
+, poetry-core
+, prometheus-client
+, requests
+, starlette
+,
 }:
 
 buildPythonPackage rec {

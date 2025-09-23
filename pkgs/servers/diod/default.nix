@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  munge,
-  lua,
-  libcap,
-  perl,
-  ncurses,
+{ lib
+, stdenv
+, fetchurl
+, munge
+, lua
+, libcap
+, perl
+, ncurses
+,
 }:
 
 stdenv.mkDerivation rec {

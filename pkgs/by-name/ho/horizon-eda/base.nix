@@ -1,22 +1,22 @@
-{
-  lib,
-  cmake,
-  cppzmq,
-  curl,
-  fetchFromGitHub,
-  glm,
-  gtkmm3,
-  libarchive,
-  libepoxy,
-  libgit2,
-  librsvg,
-  libuuid,
-  meson,
-  ninja,
-  opencascade-occt_7_6,
-  pkg-config,
-  podofo_0_10,
-  sqlite,
+{ lib
+, cmake
+, cppzmq
+, curl
+, fetchFromGitHub
+, glm
+, gtkmm3
+, libarchive
+, libepoxy
+, libgit2
+, librsvg
+, libuuid
+, meson
+, ninja
+, opencascade-occt_7_6
+, pkg-config
+, podofo_0_10
+, sqlite
+,
 }:
 let
   opencascade-occt = opencascade-occt_7_6;

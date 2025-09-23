@@ -1,14 +1,14 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  domain-local-await,
-  domain-local-timeout,
-  alcotest,
-  multicore-magic,
-  backoff,
-  domain_shims,
-  mdx,
+{ lib
+, buildDunePackage
+, fetchurl
+, domain-local-await
+, domain-local-timeout
+, alcotest
+, multicore-magic
+, backoff
+, domain_shims
+, mdx
+,
 }:
 
 buildDunePackage rec {

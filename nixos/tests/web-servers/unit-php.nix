@@ -8,11 +8,10 @@ in
   meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
 
   nodes.machine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
       services.unit = {

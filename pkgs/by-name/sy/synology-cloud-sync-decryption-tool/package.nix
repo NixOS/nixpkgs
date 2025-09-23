@@ -1,10 +1,10 @@
-{
-  lib,
-  writeScript,
-  stdenv,
-  qt5,
-  fetchurl,
-  autoPatchelfHook,
+{ lib
+, writeScript
+, stdenv
+, qt5
+, fetchurl
+, autoPatchelfHook
+,
 }:
 
 stdenv.mkDerivation rec {

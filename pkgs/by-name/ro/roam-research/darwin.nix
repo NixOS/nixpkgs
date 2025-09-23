@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  _7zz,
-  fetchurl,
+{ lib
+, stdenv
+, _7zz
+, fetchurl
+,
 }:
 let
   common = import ./common.nix { inherit fetchurl; };

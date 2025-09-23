@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  libudev-zero,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, libudev-zero
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "uni-sync";

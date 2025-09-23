@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitea
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

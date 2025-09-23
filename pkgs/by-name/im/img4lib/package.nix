@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  lzfse,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, openssl
+, lzfse
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "img4lib";

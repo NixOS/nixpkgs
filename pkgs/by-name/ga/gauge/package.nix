@@ -1,12 +1,12 @@
-{
-  gauge-unwrapped,
-  gauge,
-  makeWrapper,
-  stdenvNoCC,
-  lib,
-  xorg,
-  gaugePlugins,
-  plugins ? [ ],
+{ gauge-unwrapped
+, gauge
+, makeWrapper
+, stdenvNoCC
+, lib
+, xorg
+, gaugePlugins
+, plugins ? [ ]
+,
 }:
 
 stdenvNoCC.mkDerivation {

@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build dependencies
-  poetry-core,
-
-  # dependencies
-  babelfish,
-  pyyaml,
-  rebulk,
-  unidecode,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build dependencies
+  poetry-core
+, # dependencies
+  babelfish
+, pyyaml
+, rebulk
+, unidecode
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

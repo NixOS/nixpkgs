@@ -1,31 +1,27 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  distutils,
-  h5py,
-  numpy,
-  qtpy,
-  requests,
-  tomli,
-
-  # tests
-  pytestCheckHook,
-  qt6,
-  pyqt6,
-
-  # passthru.tests
-  guidata,
-  pyside6,
-  qt5,
-  pyqt5,
-  pyside2,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  distutils
+, h5py
+, numpy
+, qtpy
+, requests
+, tomli
+, # tests
+  pytestCheckHook
+, qt6
+, pyqt6
+, # passthru.tests
+  guidata
+, pyside6
+, qt5
+, pyqt5
+, pyside2
+,
 }:
 
 buildPythonPackage rec {

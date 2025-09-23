@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  udev,
-  libcec_platform,
-  withLibraspberrypi ? false,
-  libraspberrypi,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, udev
+, libcec_platform
+, withLibraspberrypi ? false
+, libraspberrypi
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  libsForQt5,
-  exiv2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, libsForQt5
+, exiv2
+,
 }:
 
 stdenv.mkDerivation rec {

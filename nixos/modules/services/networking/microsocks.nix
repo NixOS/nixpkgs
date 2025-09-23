@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -126,9 +125,10 @@ in
         Group = cfg.group;
         Restart = "on-failure";
         RestartSec = 10;
-        LoadCredential = lib.optionalString (
-          cfg.authPasswordFile != null
-        ) "MICROSOCKS_PASSWORD_FILE:${cfg.authPasswordFile}";
+        LoadCredential = lib.optionalString
+          (
+            cfg.authPasswordFile != null
+          ) "MICROSOCKS_PASSWORD_FILE:${cfg.authPasswordFile}";
         MemoryDenyWriteExecute = true;
         SystemCallArchitectures = "native";
         PrivateTmp = true;

@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  django,
-  tablib,
-
-  # tests
-  django-filter,
-  lxml,
-  openpyxl,
-  psycopg2,
-  pytz,
-  pyyaml,
-  pytest-django,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  django
+, tablib
+, # tests
+  django-filter
+, lxml
+, openpyxl
+, psycopg2
+, pytz
+, pyyaml
+, pytest-django
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

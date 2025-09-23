@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  openssl,
-  zeromq,
-  cppzmq,
-  tbb_2022,
-  spdlog,
-  libsodium,
-  fmt,
-  vips,
-  nlohmann_json,
-  libsixel,
-  microsoft-gsl,
-  chafa,
-  cli11,
-  libexif,
-  range-v3,
-  enableOpencv ? stdenv.hostPlatform.isLinux,
-  opencv,
-  enableWayland ? stdenv.hostPlatform.isLinux,
-  extra-cmake-modules,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  enableX11 ? stdenv.hostPlatform.isLinux,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, openssl
+, zeromq
+, cppzmq
+, tbb_2022
+, spdlog
+, libsodium
+, fmt
+, vips
+, nlohmann_json
+, libsixel
+, microsoft-gsl
+, chafa
+, cli11
+, libexif
+, range-v3
+, enableOpencv ? stdenv.hostPlatform.isLinux
+, opencv
+, enableWayland ? stdenv.hostPlatform.isLinux
+, extra-cmake-modules
+, wayland
+, wayland-protocols
+, wayland-scanner
+, enableX11 ? stdenv.hostPlatform.isLinux
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

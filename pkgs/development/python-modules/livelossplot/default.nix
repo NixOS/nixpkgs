@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  bokeh,
-  ipython,
-  matplotlib,
-  nbconvert,
-  nbformat,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, bokeh
+, ipython
+, matplotlib
+, nbconvert
+, nbformat
+,
 }:
 
 buildPythonPackage rec {

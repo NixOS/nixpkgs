@@ -1,7 +1,7 @@
-{
-  lib,
-  lua,
-  toVimPlugin,
+{ lib
+, lua
+, toVimPlugin
+,
 }:
 let
   # sanitizeDerivationName
@@ -9,11 +9,11 @@ let
 in
 
 # function to create vim plugin from lua packages that are already packaged in
-# luaPackages
+  # luaPackages
 {
   # the lua derivation to convert into a neovim plugin
-  luaAttr ? (lua.pkgs.${normalizeName attrs.pname}),
-  ...
+  luaAttr ? (lua.pkgs.${normalizeName attrs.pname})
+, ...
 }@attrs:
 let
   originalLuaDrv =

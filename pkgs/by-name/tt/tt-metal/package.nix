@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  callPackage,
-  pkg-config,
-  cmake,
-  ninja,
-  boost,
-  numactl,
-  mpi,
-  hwloc,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, callPackage
+, pkg-config
+, cmake
+, ninja
+, boost
+, numactl
+, mpi
+, hwloc
+, python3
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tt-metal";

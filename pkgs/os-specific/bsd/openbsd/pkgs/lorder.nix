@@ -1,10 +1,10 @@
-{
-  lib,
-  mkDerivation,
-  bsdSetupHook,
-  openbsdSetupHook,
-  makeMinimal,
-  install,
+{ lib
+, mkDerivation
+, bsdSetupHook
+, openbsdSetupHook
+, makeMinimal
+, install
+,
 }:
 
 mkDerivation {

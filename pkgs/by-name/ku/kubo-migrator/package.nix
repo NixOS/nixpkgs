@@ -1,9 +1,9 @@
-{
-  lib,
-  buildEnv,
-  makeWrapper,
-  kubo-migrator-unwrapped,
-  kubo-fs-repo-migrations,
+{ lib
+, buildEnv
+, makeWrapper
+, kubo-migrator-unwrapped
+, kubo-fs-repo-migrations
+,
 }:
 
 buildEnv {

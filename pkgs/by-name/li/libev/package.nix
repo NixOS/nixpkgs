@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  updateAutotoolsGnuConfigScriptsHook,
-  # Note: -static hasn’t work on darwin
-  static ? with stdenv.hostPlatform; isStatic && !isDarwin,
+{ lib
+, stdenv
+, fetchurl
+, updateAutotoolsGnuConfigScriptsHook
+, # Note: -static hasn’t work on darwin
+  static ? with stdenv.hostPlatform; isStatic && !isDarwin
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

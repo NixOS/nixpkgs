@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ocl-icd,
-  opencl-headers,
-  libsForQt5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocl-icd
+, opencl-headers
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

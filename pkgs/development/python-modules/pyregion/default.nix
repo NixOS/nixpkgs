@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  # needed to build
-  cython,
-  extension-helpers,
-  oldest-supported-numpy,
-  setuptools,
-  setuptools-scm,
-  # needed to run
-  astropy,
-  numpy,
-  pyparsing,
-  # needed to check
-  pytestCheckHook,
-  pytest-astropy,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # needed to build
+  cython
+, extension-helpers
+, oldest-supported-numpy
+, setuptools
+, setuptools-scm
+, # needed to run
+  astropy
+, numpy
+, pyparsing
+, # needed to check
+  pytestCheckHook
+, pytest-astropy
+,
 }:
 
 buildPythonPackage rec {

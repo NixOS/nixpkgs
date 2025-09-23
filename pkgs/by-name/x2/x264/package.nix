@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  nasm,
-  enableShared ? !stdenv.hostPlatform.isStatic,
+{ stdenv
+, lib
+, fetchFromGitLab
+, nasm
+, enableShared ? !stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation {
@@ -48,9 +48,10 @@ stdenv.mkDerivation {
   configureFlags =
     lib.optional enableShared "--enable-shared"
     ++ lib.optional (!stdenv.hostPlatform.isi686) "--enable-pic"
-    ++ lib.optional (
-      stdenv.buildPlatform != stdenv.hostPlatform
-    ) "--cross-prefix=${stdenv.cc.targetPrefix}";
+    ++ lib.optional
+      (
+        stdenv.buildPlatform != stdenv.hostPlatform
+      ) "--cross-prefix=${stdenv.cc.targetPrefix}";
 
   makeFlags = [
     "BASHCOMPLETIONSDIR=$(out)/share/bash-completion/completions"

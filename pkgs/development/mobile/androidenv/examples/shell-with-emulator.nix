@@ -17,10 +17,10 @@
   # If you want to use the in-tree version of nixpkgs:
   pkgs ? import ../../../../.. {
     config.allowUnfree = true;
-  },
-
-  # You probably need to set it to true to express consent.
-  licenseAccepted ? pkgs.callPackage ../license.nix { },
+  }
+, # You probably need to set it to true to express consent.
+  licenseAccepted ? pkgs.callPackage ../license.nix { }
+,
 }:
 
 # Copy this file to your Android project.

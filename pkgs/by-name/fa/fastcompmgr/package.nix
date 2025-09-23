@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  xorg,
-  pkgs,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, xorg
+, pkgs
+, lib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastcompmgr";

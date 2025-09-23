@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  makeself,
-  yasm,
-  fuse,
-  wxGTK32,
-  lvm2,
-  replaceVars,
-  e2fsprogs,
-  exfat,
-  ntfs3g,
-  btrfs-progs,
-  pcsclite,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, makeself
+, yasm
+, fuse
+, wxGTK32
+, lvm2
+, replaceVars
+, e2fsprogs
+, exfat
+, ntfs3g
+, btrfs-progs
+, pcsclite
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

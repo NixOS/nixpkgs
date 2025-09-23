@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  stdenv_32bit,
-  pkgsi686Linux,
-  fetchFromGitHub,
-  fetchurl,
+{ lib
+, stdenv
+, stdenv_32bit
+, pkgsi686Linux
+, fetchFromGitHub
+, fetchurl
+,
 }:
 
 stdenv.mkDerivation rec {

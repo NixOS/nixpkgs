@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  pam,
-  libxcrypt,
-  nixosTests,
-
-  withPAM ? true,
-  withTimestamp ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, pam
+, libxcrypt
+, nixosTests
+, withPAM ? true
+, withTimestamp ? true
+,
 }:
 
 stdenv.mkDerivation rec {

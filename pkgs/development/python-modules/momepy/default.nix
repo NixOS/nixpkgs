@@ -1,20 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-
-  geopandas,
-  inequality,
-  libpysal,
-  mapclassify,
-  networkx,
-  packaging,
-  pandas,
-  setuptools-scm,
-  shapely,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, geopandas
+, inequality
+, libpysal
+, mapclassify
+, networkx
+, packaging
+, pandas
+, setuptools-scm
+, shapely
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

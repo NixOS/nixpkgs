@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  rocksdb_7_10,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, rocksdb_7_10
+,
 }:
 
 let

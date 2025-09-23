@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fltk13,
-  ghostscript,
+{ lib
+, stdenv
+, fetchurl
+, fltk13
+, ghostscript
+,
 }:
 
 stdenv.mkDerivation rec {

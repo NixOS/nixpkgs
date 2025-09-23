@@ -1,26 +1,26 @@
-{
-  pkgs,
-  mkDerivation,
-  lib,
-  callPackage,
-  fetchzip,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  ninja,
-  copyDesktopItems,
-  qtbase,
-  qttools,
-  opencv4,
-  procps,
-  eigen,
-  libXdmcp,
-  libevdev,
-  makeDesktopItem,
-  fetchurl,
-  fetchpatch,
-  wineWowPackages,
-  onnxruntime,
+{ pkgs
+, mkDerivation
+, lib
+, callPackage
+, fetchzip
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ninja
+, copyDesktopItems
+, qtbase
+, qttools
+, opencv4
+, procps
+, eigen
+, libXdmcp
+, libevdev
+, makeDesktopItem
+, fetchurl
+, fetchpatch
+, wineWowPackages
+, onnxruntime
+,
 }:
 let
   version = "2023.3.0";

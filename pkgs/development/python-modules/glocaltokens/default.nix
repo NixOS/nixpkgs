@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build system
-  hatchling,
-  hatch-vcs,
-
-  # dependencies
-  ghome-foyer-api,
-  gpsoauth,
-  grpcio,
-  requests,
-  simplejson,
-  zeroconf,
-
-  # test dependencies
-  pytestCheckHook,
-  faker,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build system
+  hatchling
+, hatch-vcs
+, # dependencies
+  ghome-foyer-api
+, gpsoauth
+, grpcio
+, requests
+, simplejson
+, zeroconf
+, # test dependencies
+  pytestCheckHook
+, faker
+,
 }:
 
 buildPythonPackage rec {

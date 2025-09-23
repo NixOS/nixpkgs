@@ -1,9 +1,9 @@
-pkgargs@{
-  stdenv,
-  lib,
-  haskellPackages,
-  writeText,
-  gawk,
+pkgargs@{ stdenv
+, lib
+, haskellPackages
+, writeText
+, gawk
+,
 }:
 let
   generic-fetcher = import ./generic-fetcher.nix pkgargs;
@@ -17,5 +17,5 @@ generic-fetcher (
     name = "docker-layer-${layerDigest}.tar.gz";
     tag = "unused";
   }
-  // args
+    // args
 )

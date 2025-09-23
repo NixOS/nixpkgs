@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  defusedxml,
-  fetchPypi,
-  hatchling,
-  pytestCheckHook,
-  sphinx,
+{ lib
+, buildPythonPackage
+, defusedxml
+, fetchPypi
+, hatchling
+, pytestCheckHook
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  fetchFromGitHub,
-  fixDarwinDylibNames,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, fetchFromGitHub
+, fixDarwinDylibNames
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,9 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
     ));
 
   # Fix undefined reference errors with version script under LLVM.
-  NIX_LDFLAGS = lib.optionalString (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
+  NIX_LDFLAGS = lib.optionalString
+    (
+      stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+    ) "--undefined-version";
 
   enableParallelBuilding = true;
 

@@ -1,8 +1,7 @@
-{
-  lib,
-  kernelPackages ? null,
-  useNetworkd ? false,
-  ...
+{ lib
+, kernelPackages ? null
+, useNetworkd ? false
+, ...
 }:
 let
   wg-snakeoil-keys = import ./snakeoil-keys.nix;
@@ -39,11 +38,10 @@ in
       };
 
     client =
-      {
-        nodes,
-        lib,
-        pkgs,
-        ...
+      { nodes
+      , lib
+      , pkgs
+      , ...
       }:
       {
         virtualisation.vlans = [

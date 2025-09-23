@@ -1,29 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build
-  hatchling,
-
-  # runtime
-  jsonschema,
-  packaging,
-  python-json-logger,
-  pyyaml,
-  referencing,
-  rfc3339-validator,
-  rfc3986-validator,
-  traitlets,
-
-  # optionals
-  click,
-  rich,
-
-  # tests
-  pytest-asyncio,
-  pytest-console-scripts,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build
+  hatchling
+, # runtime
+  jsonschema
+, packaging
+, python-json-logger
+, pyyaml
+, referencing
+, rfc3339-validator
+, rfc3986-validator
+, traitlets
+, # optionals
+  click
+, rich
+, # tests
+  pytest-asyncio
+, pytest-console-scripts
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

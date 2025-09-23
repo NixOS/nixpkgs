@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  makeWrapper,
-  jdk17,
-  makeDesktopItem,
-  copyDesktopItems,
-  wrapGAppsHook3,
-  shared-mime-info,
-  gdk-pixbuf,
+{ lib
+, stdenvNoCC
+, fetchzip
+, makeWrapper
+, jdk17
+, makeDesktopItem
+, copyDesktopItems
+, wrapGAppsHook3
+, shared-mime-info
+, gdk-pixbuf
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

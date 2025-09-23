@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  isPyPy,
-  fetchPypi,
-  libpq,
-  postgresql,
-  postgresqlTestHook,
-  openssl,
-  sphinxHook,
-  sphinx-better-theme,
-  buildPackages,
+{ stdenv
+, lib
+, buildPythonPackage
+, pythonOlder
+, isPyPy
+, fetchPypi
+, libpq
+, postgresql
+, postgresqlTestHook
+, openssl
+, sphinxHook
+, sphinx-better-theme
+, buildPackages
+,
 }:
 
 buildPythonPackage rec {

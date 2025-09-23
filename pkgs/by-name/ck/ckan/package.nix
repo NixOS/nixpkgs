@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  mono,
-  gtk2,
-  curl,
-  imagemagick,
-  copyDesktopItems,
-  makeDesktopItem,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, mono
+, gtk2
+, curl
+, imagemagick
+, copyDesktopItems
+, makeDesktopItem
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

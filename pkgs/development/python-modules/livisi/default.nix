@@ -1,12 +1,12 @@
-{
-  aiohttp,
-  buildPythonPackage,
-  colorlog,
-  fetchFromGitHub,
-  lib,
-  python-dateutil,
-  setuptools,
-  websockets,
+{ aiohttp
+, buildPythonPackage
+, colorlog
+, fetchFromGitHub
+, lib
+, python-dateutil
+, setuptools
+, websockets
+,
 }:
 
 buildPythonPackage rec {

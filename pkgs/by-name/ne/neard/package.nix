@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  autoconf-archive,
-  gobject-introspection,
-  pkg-config,
-  wrapGAppsHook3,
-  glib,
-  dbus,
-  libnl,
-  python3Packages,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, autoconf-archive
+, gobject-introspection
+, pkg-config
+, wrapGAppsHook3
+, glib
+, dbus
+, libnl
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation {

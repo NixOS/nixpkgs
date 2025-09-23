@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  unittestCheckHook,
-  html-tidy,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, unittestCheckHook
+, html-tidy
+,
 }:
 
 buildPythonPackage rec {

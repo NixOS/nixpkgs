@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  version ? null,
-  ssreflect,
-  stdlib,
+{ lib
+, mkCoqDerivation
+, coq
+, version ? null
+, ssreflect
+, stdlib
+,
 }:
 
 mkCoqDerivation {

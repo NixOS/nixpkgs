@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  graalvmPackages,
-  libyaml,
-  openssl,
+{ lib
+, stdenv
+, fetchurl
+, graalvmPackages
+, libyaml
+, openssl
+,
 }:
 
 graalvmPackages.buildGraalvmProduct {

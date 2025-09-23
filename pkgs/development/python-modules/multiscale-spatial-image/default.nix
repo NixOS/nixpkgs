@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  hatchling,
-  dask,
-  numpy,
-  python-dateutil,
-  spatial-image,
-  xarray,
-  xarray-dataclass,
-  zarr,
-  dask-image,
-  fsspec,
-  jsonschema,
-  nbmake,
-  pooch,
-  pytestCheckHook,
-  pytest-mypy,
-  urllib3,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, hatchling
+, dask
+, numpy
+, python-dateutil
+, spatial-image
+, xarray
+, xarray-dataclass
+, zarr
+, dask-image
+, fsspec
+, jsonschema
+, nbmake
+, pooch
+, pytestCheckHook
+, pytest-mypy
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

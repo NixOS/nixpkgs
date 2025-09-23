@@ -1,10 +1,10 @@
-{
-  lib,
-  gitMinimal,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
+{ lib
+, gitMinimal
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+,
 }:
 
 buildGoModule (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  git,
-  installShellFiles,
-  openssl,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, git
+, installShellFiles
+, openssl
+,
 }:
 
 buildGoModule (finalAttrs: {

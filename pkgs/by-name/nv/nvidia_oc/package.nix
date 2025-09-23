@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  autoAddDriverRunpath,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, autoAddDriverRunpath
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

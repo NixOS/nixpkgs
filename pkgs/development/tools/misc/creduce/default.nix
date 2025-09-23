@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  makeWrapper,
-  llvm,
-  libclang,
-  flex,
-  zlib,
-  perlPackages,
-  util-linux,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, llvm
+, libclang
+, flex
+, zlib
+, perlPackages
+, util-linux
+,
 }:
 
 stdenv.mkDerivation rec {

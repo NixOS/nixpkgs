@@ -1,9 +1,9 @@
-{
-  lib,
-  alsa-lib,
-  fetchFromGitHub,
-  mkLibretroCore,
-  python3,
+{ lib
+, alsa-lib
+, fetchFromGitHub
+, mkLibretroCore
+, python3
+,
 }:
 mkLibretroCore {
   core = "mame2015";

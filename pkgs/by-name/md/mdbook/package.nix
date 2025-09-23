@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix,
-  rustPlatform,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix
+, rustPlatform
+, installShellFiles
+,
 }:
 let
   version = "0.4.52";

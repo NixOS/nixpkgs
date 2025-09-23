@@ -1,11 +1,11 @@
-{
-  buildDunePackage,
-  fetchpatch,
-  conan,
-  alcotest,
-  crowbar,
-  fmt,
-  rresult,
+{ buildDunePackage
+, fetchpatch
+, conan
+, alcotest
+, crowbar
+, fmt
+, rresult
+,
 }:
 
 buildDunePackage {

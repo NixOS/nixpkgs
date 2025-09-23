@@ -1,38 +1,34 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  attrs,
-  duet,
-  matplotlib,
-  networkx,
-  numpy,
-  pandas,
-  requests,
-  scipy,
-  sortedcontainers,
-  sympy,
-  tqdm,
-  typing-extensions,
-  autoray ? null,
-  opt-einsum,
-  ply,
-  pylatex ? null,
-  pyquil ? null,
-  quimb ? null,
-
-  # tests
-  freezegun,
-  pytest-asyncio,
-  pytestCheckHook,
-
-  withContribRequires ? false,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  attrs
+, duet
+, matplotlib
+, networkx
+, numpy
+, pandas
+, requests
+, scipy
+, sortedcontainers
+, sympy
+, tqdm
+, typing-extensions
+, autoray ? null
+, opt-einsum
+, ply
+, pylatex ? null
+, pyquil ? null
+, quimb ? null
+, # tests
+  freezegun
+, pytest-asyncio
+, pytestCheckHook
+, withContribRequires ? false
+,
 }:
 
 buildPythonPackage rec {

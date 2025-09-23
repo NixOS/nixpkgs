@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
-  perl,
-  makeWrapper,
-  rresult,
-  bos,
-  pcre2,
-  re,
-  camlp-streams,
-  legacy ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocaml
+, findlib
+, perl
+, makeWrapper
+, rresult
+, bos
+, pcre2
+, re
+, camlp-streams
+, legacy ? false
+,
 }:
 
 if lib.versionOlder ocaml.version "4.02" then
@@ -71,7 +71,7 @@ else
 
   stdenv.mkDerivation (
     params
-    // {
+      // {
 
       pname = "ocaml${ocaml.version}-camlp5";
 

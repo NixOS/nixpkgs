@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+,
 }:
 
 let
@@ -13,15 +13,13 @@ let
     {
       x86_64-darwin = "darwin";
       x86_64-linux = "linux";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   sha256 =
     {
       x86_64-darwin = "sha256-OIyEu3Hsobui9s5+T9nC10SxMw0MhgmTA4SN9Ridyzo=";
       x86_64-linux = "sha256-SxBjRd95hoh2zwX6IDnkZnTWVduQafPHvnWw8qTuM78=";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 in
 stdenv.mkDerivation rec {
   pname = "flywheel-cli";

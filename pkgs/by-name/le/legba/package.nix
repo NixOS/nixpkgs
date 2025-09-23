@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  openssl,
-  samba,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, pkg-config
+, openssl
+, samba
+,
 }:
 
 rustPlatform.buildRustPackage rec {

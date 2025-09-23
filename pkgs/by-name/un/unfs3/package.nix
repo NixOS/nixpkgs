@@ -1,15 +1,15 @@
-{
-  fetchFromGitHub,
-  fetchpatch2,
-  lib,
-  stdenv,
-  flex,
-  bison,
-  autoreconfHook,
-  pkg-config,
-  libtirpc,
-  versionCheckHook,
-  nix-update-script,
+{ fetchFromGitHub
+, fetchpatch2
+, lib
+, stdenv
+, flex
+, bison
+, autoreconfHook
+, pkg-config
+, libtirpc
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

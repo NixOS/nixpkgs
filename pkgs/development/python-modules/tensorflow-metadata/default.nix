@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  absl-py,
-  googleapis-common-protos,
-  protobuf,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  absl-py
+, googleapis-common-protos
+, protobuf
+,
 }:
 
 buildPythonPackage rec {

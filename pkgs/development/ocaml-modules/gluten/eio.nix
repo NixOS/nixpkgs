@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  gluten,
-  eio,
+{ buildDunePackage
+, gluten
+, eio
+,
 }:
 
 buildDunePackage {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  poetry-core,
-  dataprep-ml,
-  numpy,
-  pandas,
-  scikit-learn,
-  type-infer,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, poetry-core
+, dataprep-ml
+, numpy
+, pandas
+, scikit-learn
+, type-infer
+,
 }:
 
 buildPythonPackage rec {

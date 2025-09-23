@@ -1,17 +1,17 @@
-{
-  llvmPackages,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  curl,
-  libxml2,
-  libffi,
-  xar,
-  versionCheckHook,
-  rev ? "unknown",
-  debug ? false,
-  checks ? true,
+{ llvmPackages
+, lib
+, fetchFromGitHub
+, cmake
+, python3
+, curl
+, libxml2
+, libffi
+, xar
+, versionCheckHook
+, rev ? "unknown"
+, debug ? false
+, checks ? true
+,
 }:
 let
   inherit (lib.strings) optionalString;

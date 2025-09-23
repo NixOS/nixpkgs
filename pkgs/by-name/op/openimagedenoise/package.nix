@@ -1,15 +1,15 @@
-{
-  cmake,
-  config,
-  cudaPackages,
-  cudaSupport ? config.cudaSupport,
-  fetchzip,
-  ispc,
-  lib,
-  python3,
-  stdenv,
-  tbb,
-  xcodebuild,
+{ cmake
+, config
+, cudaPackages
+, cudaSupport ? config.cudaSupport
+, fetchzip
+, ispc
+, lib
+, python3
+, stdenv
+, tbb
+, xcodebuild
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

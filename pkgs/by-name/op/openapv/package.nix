@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  writeText,
-  fetchFromGitHub,
-  cmake,
+{ lib
+, stdenv
+, writeText
+, fetchFromGitHub
+, cmake
+,
 }:
 let
   # Requires an /etc/os-release file, so we override it with this.

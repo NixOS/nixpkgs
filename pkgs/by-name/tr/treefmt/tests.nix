@@ -1,9 +1,9 @@
-{
-  lib,
-  runCommand,
-  testers,
-  treefmt,
-  nixfmt,
+{ lib
+, runCommand
+, testers
+, treefmt
+, nixfmt
+,
 }:
 let
   inherit (treefmt) buildConfig withConfig;

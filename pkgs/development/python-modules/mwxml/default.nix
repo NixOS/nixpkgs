@@ -1,19 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  jsonschema,
-  mwcli,
-  mwtypes,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  jsonschema
+, mwcli
+, mwtypes
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

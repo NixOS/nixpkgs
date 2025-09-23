@@ -1,15 +1,15 @@
-{
-  lib,
-  asn1crypto,
-  buildPythonPackage,
-  certvalidator,
-  fetchFromGitHub,
-  mscerts,
-  oscrypto,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ lib
+, asn1crypto
+, buildPythonPackage
+, certvalidator
+, fetchFromGitHub
+, mscerts
+, oscrypto
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

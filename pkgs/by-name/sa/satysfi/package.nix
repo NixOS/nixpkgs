@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  ocaml-ng,
-  ipaexfont,
-  junicode,
-  lmodern,
-  lmmath,
-  which,
+{ lib
+, fetchFromGitHub
+, ocaml-ng
+, ipaexfont
+, junicode
+, lmodern
+, lmmath
+, which
+,
 }:
 let
   camlpdf = ocamlPackages.camlpdf.overrideAttrs (o: {

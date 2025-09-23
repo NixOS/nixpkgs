@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchPypi,
-  ordered-set,
-  pillow,
-  pythonOlder,
-  setuptools,
-  setuptools-dso,
-  sortedcollections,
+{ lib
+, buildPythonPackage
+, click
+, fetchPypi
+, ordered-set
+, pillow
+, pythonOlder
+, setuptools
+, setuptools-dso
+, sortedcollections
+,
 }:
 
 buildPythonPackage rec {

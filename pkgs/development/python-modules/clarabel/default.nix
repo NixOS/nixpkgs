@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  rustPlatform,
-  libiconv,
-  numpy,
-  scipy,
-  nix-update-script,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, rustPlatform
+, libiconv
+, numpy
+, scipy
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

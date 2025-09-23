@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fftw,
-  libjpeg,
-  log4cpp,
-  openjpeg,
-  libpng12,
-  poppler,
-  qtbase,
-  qt5,
-  qmake,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fftw
+, libjpeg
+, log4cpp
+, openjpeg
+, libpng12
+, poppler
+, qtbase
+, qt5
+, qmake
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

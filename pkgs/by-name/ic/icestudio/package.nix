@@ -1,14 +1,13 @@
-{
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  buildNpmPackage,
-  makeDesktopItem,
-  makeWrapper,
-  unstableGitUpdater,
-
-  nwjs,
-  python3,
+{ lib
+, fetchurl
+, fetchFromGitHub
+, buildNpmPackage
+, makeDesktopItem
+, makeWrapper
+, unstableGitUpdater
+, nwjs
+, python3
+,
 }:
 
 let

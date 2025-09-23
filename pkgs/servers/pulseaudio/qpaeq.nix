@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  makeDesktopItem,
-  python3,
-  lib,
-  pulseaudio,
+{ mkDerivation
+, makeDesktopItem
+, python3
+, lib
+, pulseaudio
+,
 }:
 
 let

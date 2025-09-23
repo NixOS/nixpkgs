@@ -1,23 +1,23 @@
-{
-  stdenv,
-  mkXfceDerivation,
-  lib,
-  docbook_xsl,
-  exo,
-  gdk-pixbuf,
-  gtk3,
-  libexif,
-  libgudev,
-  libnotify,
-  libX11,
-  libxfce4ui,
-  libxfce4util,
-  libxslt,
-  pcre2,
-  xfce4-panel,
-  xfconf,
-  withIntrospection ? false,
-  gobject-introspection,
+{ stdenv
+, mkXfceDerivation
+, lib
+, docbook_xsl
+, exo
+, gdk-pixbuf
+, gtk3
+, libexif
+, libgudev
+, libnotify
+, libX11
+, libxfce4ui
+, libxfce4util
+, libxslt
+, pcre2
+, xfce4-panel
+, xfconf
+, withIntrospection ? false
+, gobject-introspection
+,
 }:
 
 mkXfceDerivation {

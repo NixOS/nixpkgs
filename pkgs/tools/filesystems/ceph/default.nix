@@ -1,33 +1,29 @@
-{
-  lib,
-  stdenv,
-  runCommand,
-  fetchurl,
-  fetchFromGitHub,
-  fetchPypi,
-  fetchpatch2,
-
-  # Build time
-  autoconf,
-  automake,
-  cmake,
-  ensureNewerSourcesHook,
-  fmt,
-  git,
-  libtool,
-  makeWrapper,
-  nasm,
-  pkg-config,
-  which,
-  openssl,
-
-  # Tests
-  nixosTests,
-
-  # Runtime dependencies
-  arrow-cpp,
-  babeltrace,
-  # Note when trying to upgrade boost:
+{ lib
+, stdenv
+, runCommand
+, fetchurl
+, fetchFromGitHub
+, fetchPypi
+, fetchpatch2
+, # Build time
+  autoconf
+, automake
+, cmake
+, ensureNewerSourcesHook
+, fmt
+, git
+, libtool
+, makeWrapper
+, nasm
+, pkg-config
+, which
+, openssl
+, # Tests
+  nixosTests
+, # Runtime dependencies
+  arrow-cpp
+, babeltrace
+, # Note when trying to upgrade boost:
   # * When upgrading Ceph, it's recommended to check which boost version Ceph uses on Fedora,
   #   and default to that.
   # * The version that Ceph downloads if `-DWITH_SYSTEM_BOOST:BOOL=ON` is not given
@@ -36,76 +32,72 @@
   # If you want to upgrade to boost >= 1.86, you need a Ceph version that
   # has this PR in:
   #     https://github.com/ceph/ceph/pull/61312
-  boost183,
-  bzip2,
-  cryptsetup,
-  cunit,
-  e2fsprogs,
-  doxygen,
-  gperf,
-  graphviz,
-  gnugrep,
-  gtest,
-  icu,
-  kmod,
-  libcap,
-  libcap_ng,
-  libnbd,
-  libnl,
-  libxml2,
-  lmdb,
-  lttng-ust,
-  lua,
-  lvm2,
-  lz4,
-  oath-toolkit,
-  openldap,
-  parted,
-  python311, # to get an idea which Python versions are supported by Ceph, see upstream `do_cmake.sh` (see `PYBUILD=` variable)
-  rdkafka,
-  rocksdb,
-  snappy,
-  openssh,
-  sqlite,
-  utf8proc,
-  xfsprogs,
-  zlib,
-  zstd,
-
-  # Dependencies of overridden Python dependencies, hopefully we can remove these soon.
-  rustPlatform,
-
-  # Optional Dependencies
-  curl ? null,
-  expat ? null,
-  fuse ? null,
-  libatomic_ops ? null,
-  libedit ? null,
-  libs3 ? null,
-  yasm ? null,
-
-  # Mallocs
-  gperftools ? null,
-  jemalloc ? null,
-
-  # Crypto Dependencies
-  cryptopp ? null,
-  nspr ? null,
-  nss ? null,
-
-  # Linux Only Dependencies
-  linuxHeaders,
-  util-linux,
-  libuuid,
-  udev,
-  keyutils,
-  rdma-core,
-  rabbitmq-c,
-  libaio ? null,
-  libxfs ? null,
-  liburing ? null,
-  zfs ? null,
-  ...
+  boost183
+, bzip2
+, cryptsetup
+, cunit
+, e2fsprogs
+, doxygen
+, gperf
+, graphviz
+, gnugrep
+, gtest
+, icu
+, kmod
+, libcap
+, libcap_ng
+, libnbd
+, libnl
+, libxml2
+, lmdb
+, lttng-ust
+, lua
+, lvm2
+, lz4
+, oath-toolkit
+, openldap
+, parted
+, python311
+, # to get an idea which Python versions are supported by Ceph, see upstream `do_cmake.sh` (see `PYBUILD=` variable)
+  rdkafka
+, rocksdb
+, snappy
+, openssh
+, sqlite
+, utf8proc
+, xfsprogs
+, zlib
+, zstd
+, # Dependencies of overridden Python dependencies, hopefully we can remove these soon.
+  rustPlatform
+, # Optional Dependencies
+  curl ? null
+, expat ? null
+, fuse ? null
+, libatomic_ops ? null
+, libedit ? null
+, libs3 ? null
+, yasm ? null
+, # Mallocs
+  gperftools ? null
+, jemalloc ? null
+, # Crypto Dependencies
+  cryptopp ? null
+, nspr ? null
+, nss ? null
+, # Linux Only Dependencies
+  linuxHeaders
+, util-linux
+, libuuid
+, udev
+, keyutils
+, rdma-core
+, rabbitmq-c
+, libaio ? null
+, libxfs ? null
+, liburing ? null
+, zfs ? null
+, ...
 }:
 
 # We must have one crypto library

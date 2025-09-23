@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  argparse-manpage,
-  setuptools,
-  packaging,
-  pyxdg,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, argparse-manpage
+, setuptools
+, packaging
+, pyxdg
+,
 }:
 
 buildPythonPackage rec {

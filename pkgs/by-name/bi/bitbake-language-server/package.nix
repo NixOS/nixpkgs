@@ -1,9 +1,9 @@
-{
-  lib,
-  nix-update-script,
-  python3,
-  oelint-adv,
-  fetchFromGitHub,
+{ lib
+, nix-update-script
+, python3
+, oelint-adv
+, fetchFromGitHub
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

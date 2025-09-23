@@ -1,18 +1,19 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
   cfg = config.boot.bcachefs;
   cfgScrub = config.services.bcachefs.autoScrub;
 
-  bootFs = lib.filterAttrs (
-    n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)
-  ) config.fileSystems;
+  bootFs = lib.filterAttrs
+    (
+      n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)
+    )
+    config.fileSystems;
 
   commonFunctions = ''
     prompt() {
@@ -299,17 +300,20 @@ in
           let
             isDeviceInList = list: device: builtins.filter (e: e.device == device) list != [ ];
 
-            uniqueDeviceList = lib.foldl' (
-              acc: e: if isDeviceInList acc e.device then acc else acc ++ [ e ]
-            ) [ ];
+            uniqueDeviceList = lib.foldl'
+              (
+                acc: e: if isDeviceInList acc e.device then acc else acc ++ [ e ]
+              ) [ ];
           in
           lib.mkDefault (
             map (e: e.mountPoint) (
               uniqueDeviceList (
-                lib.mapAttrsToList (name: fs: {
-                  mountPoint = fs.mountPoint;
-                  device = fs.device;
-                }) (lib.filterAttrs (name: fs: fs.fsType == "bcachefs") config.fileSystems)
+                lib.mapAttrsToList
+                  (name: fs: {
+                    mountPoint = fs.mountPoint;
+                    device = fs.device;
+                  })
+                  (lib.filterAttrs (name: fs: fs.fsType == "bcachefs") config.fileSystems)
               )
             )
           );

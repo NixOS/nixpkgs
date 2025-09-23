@@ -1,47 +1,47 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  mpi,
-  mpiCheckPhaseHook,
-  ctestCheckHook,
-  gfortran,
-  blas,
-  lapack,
-  gsl,
-  libxc,
-  hdf5,
-  spglib,
-  spfft,
-  spla,
-  costa,
-  umpire,
-  scalapack,
-  boost,
-  eigen,
-  libvdwxc,
-  dftd4,
-  simple-dftd3,
-  mctc-lib,
-  jonquil,
-  toml-f,
-  multicharge,
-  enablePython ? false,
-  pythonPackages ? null,
-  llvmPackages,
-  cudaPackages,
-  rocmPackages,
-  config,
-  gpuBackend ? (
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, mpi
+, mpiCheckPhaseHook
+, ctestCheckHook
+, gfortran
+, blas
+, lapack
+, gsl
+, libxc
+, hdf5
+, spglib
+, spfft
+, spla
+, costa
+, umpire
+, scalapack
+, boost
+, eigen
+, libvdwxc
+, dftd4
+, simple-dftd3
+, mctc-lib
+, jonquil
+, toml-f
+, multicharge
+, enablePython ? false
+, pythonPackages ? null
+, llvmPackages
+, cudaPackages
+, rocmPackages
+, config
+, gpuBackend ? (
     if config.cudaSupport then
       "cuda"
     else if config.rocmSupport then
       "rocm"
     else
       "none"
-  ),
+  )
+,
 }:
 
 assert builtins.elem gpuBackend [

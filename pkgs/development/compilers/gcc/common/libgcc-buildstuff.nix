@@ -1,6 +1,6 @@
-{
-  lib,
-  stdenv,
+{ lib
+, stdenv
+,
 }:
 
 # Trick to build a gcc that is capable of emitting shared libraries *without* having the
@@ -55,6 +55,6 @@ in
     touch libgcc/config/${stdenv.targetPlatform.parsed.cpu.family}/crt{i,n}.S
   ''
 )
-+ lib.optionalString (stdenv.targetPlatform.isPower && !stdenv.targetPlatform.isPower64) ''
+  + lib.optionalString (stdenv.targetPlatform.isPower && !stdenv.targetPlatform.isPower64) ''
   touch libgcc/config/rs6000/crt{i,n}.S
 ''

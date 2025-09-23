@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  setuptools,
-  pkg-config,
-  libnl,
-  net-tools,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, setuptools
+, pkg-config
+, libnl
+, net-tools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

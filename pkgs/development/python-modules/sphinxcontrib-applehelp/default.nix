@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  flit-core,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, flit-core
+,
 }:
 
 buildPythonPackage rec {

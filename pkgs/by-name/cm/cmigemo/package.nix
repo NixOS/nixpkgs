@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  iconv,
-  nkf,
-  perl,
-  which,
-  skkDictionaries,
+{ lib
+, stdenv
+, fetchFromGitHub
+, iconv
+, nkf
+, perl
+, which
+, skkDictionaries
+,
 }:
 
 stdenv.mkDerivation {

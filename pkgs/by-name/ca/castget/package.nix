@@ -1,19 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # native
-  autoreconfHook,
-  glibcLocales,
-  pkg-config,
-
-  # host
-  curl,
-  glib,
-  id3lib,
-  libxml2,
-  taglib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # native
+  autoreconfHook
+, glibcLocales
+, pkg-config
+, # host
+  curl
+, glib
+, id3lib
+, libxml2
+, taglib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

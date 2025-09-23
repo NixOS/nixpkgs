@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchurl,
-  kaem,
-  tinycc,
-  gnumake,
-  gnupatch,
-  coreutils,
+{ lib
+, fetchurl
+, kaem
+, tinycc
+, gnumake
+, gnupatch
+, coreutils
+,
 }:
 let
   pname = "heirloom-devtools";
@@ -34,28 +34,28 @@ let
   ];
 in
 kaem.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnupatch
-      coreutils
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnupatch
+    coreutils
+  ];
+
+  meta = with lib; {
+    description = "Portable yacc and lex derived from OpenSolaris";
+    homepage = "https://heirloom.sourceforge.net/devtools.html";
+    license = with licenses; [
+      cddl
+      bsdOriginalUC
+      caldera
     ];
-
-    meta = with lib; {
-      description = "Portable yacc and lex derived from OpenSolaris";
-      homepage = "https://heirloom.sourceforge.net/devtools.html";
-      license = with licenses; [
-        cddl
-        bsdOriginalUC
-        caldera
-      ];
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
-  }
+    teams = [ teams.minimal-bootstrap ];
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     unbz2 --file ${src} --output heirloom-devtools.tar

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  hidapi,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, hidapi
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation {

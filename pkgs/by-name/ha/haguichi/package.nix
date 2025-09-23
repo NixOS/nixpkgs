@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  desktop-file-utils,
-  glib,
-  gtk4,
-  libadwaita,
-  libgee,
-  libportal-gtk4,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  vala,
-  wrapGAppsHook4,
+{ stdenv
+, lib
+, fetchFromGitHub
+, desktop-file-utils
+, glib
+, gtk4
+, libadwaita
+, libgee
+, libportal-gtk4
+, meson
+, ninja
+, pkg-config
+, python3
+, vala
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

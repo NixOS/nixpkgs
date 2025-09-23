@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  six,
-  poetry-core,
-  fetchFromGitLab,
+{ lib
+, buildPythonPackage
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, six
+, poetry-core
+, fetchFromGitLab
+,
 }:
 
 buildPythonPackage {

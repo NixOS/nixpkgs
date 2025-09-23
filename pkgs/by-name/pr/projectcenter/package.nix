@@ -1,12 +1,12 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
-  gdb,
-  gnumake,
-  gnustep-back,
-  gorm,
-  wrapGNUstepAppsHook,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+, gdb
+, gnumake
+, gnustep-back
+, gorm
+, wrapGNUstepAppsHook
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

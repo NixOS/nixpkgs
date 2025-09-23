@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  packaging,
-  tomli,
-  coverage,
-  pytestCheckHook,
-  build,
-  hatchling,
-  pydantic,
-  pytest-cov-stub,
-  pytest-mock,
-  setuptools,
-  gitMinimal,
-  mercurial,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, packaging
+, tomli
+, coverage
+, pytestCheckHook
+, build
+, hatchling
+, pydantic
+, pytest-cov-stub
+, pytest-mock
+, setuptools
+, gitMinimal
+, mercurial
+,
 }:
 
 buildPythonPackage rec {

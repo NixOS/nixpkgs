@@ -2,7 +2,7 @@
 
 lib.recursiveUpdate lib (
   import ./extra-lib-common.nix { inherit lib; }
-  // {
+    // {
 
     /*
       Override arguments to mkRocqDerivation for a Rocq library.

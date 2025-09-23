@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchPypi,
-  flit-core,
-  pygithub,
-  requests,
-  terminaltables3,
+{ lib
+, buildPythonPackage
+, click
+, fetchPypi
+, flit-core
+, pygithub
+, requests
+, terminaltables3
+,
 }:
 
 buildPythonPackage rec {

@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  cairo,
-  meson,
-  ninja,
-  pkg-config,
-  gstreamer,
-  gst-plugins-base,
-  gst-plugins-bad,
-  gst-rtsp-server,
-  python3,
-  gobject-introspection,
-  rustPlatform,
-  rustc,
-  cargo,
-  json-glib,
-  # Checks meson.is_cross_build(), so even canExecute isn't enough.
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
-  hotdoc,
-  directoryListingUpdater,
-  _experimental-update-script-combinators,
-  common-updater-scripts,
-  apple-sdk_gstreamer,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cairo
+, meson
+, ninja
+, pkg-config
+, gstreamer
+, gst-plugins-base
+, gst-plugins-bad
+, gst-rtsp-server
+, python3
+, gobject-introspection
+, rustPlatform
+, rustc
+, cargo
+, json-glib
+, # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, hotdoc
+, directoryListingUpdater
+, _experimental-update-script-combinators
+, common-updater-scripts
+, apple-sdk_gstreamer
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

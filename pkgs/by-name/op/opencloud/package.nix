@@ -1,19 +1,19 @@
-{
-  lib,
-  callPackage,
-  buildGoModule,
-  fetchFromGitHub,
-  ncurses,
-  gettext,
-  pigeon,
-  go-mockery,
-  protoc-go-inject-tag,
-  libxcrypt,
-  vips,
-  pkg-config,
-  nixosTests,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, callPackage
+, buildGoModule
+, fetchFromGitHub
+, ncurses
+, gettext
+, pigeon
+, go-mockery
+, protoc-go-inject-tag
+, libxcrypt
+, vips
+, pkg-config
+, nixosTests
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 let

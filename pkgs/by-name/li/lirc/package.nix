@@ -1,22 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  help2man,
-  python3,
-  linuxHeaders,
-
-  alsa-lib,
-  libxslt,
-  systemd,
-  libusb-compat-0_1,
-  libftdi1,
-  libICE,
-  libSM,
-  libX11,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, help2man
+, python3
+, linuxHeaders
+, alsa-lib
+, libxslt
+, systemd
+, libusb-compat-0_1
+, libftdi1
+, libICE
+, libSM
+, libX11
+,
 }:
 
 let

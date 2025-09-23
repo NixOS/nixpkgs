@@ -1,17 +1,17 @@
-{
-  autoPatchelfHook,
-  aeron,
-  cmake,
-  fetchFromGitHub,
-  fetchMavenArtifact,
-  jdk11,
-  lib,
-  libbsd,
-  libuuid,
-  makeWrapper,
-  patchelf,
-  stdenv,
-  zlib,
+{ autoPatchelfHook
+, aeron
+, cmake
+, fetchFromGitHub
+, fetchMavenArtifact
+, jdk11
+, lib
+, libbsd
+, libuuid
+, makeWrapper
+, patchelf
+, stdenv
+, zlib
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  sqlite,
-  zstd,
-  nixosTests,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, sqlite
+, zstd
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage rec {

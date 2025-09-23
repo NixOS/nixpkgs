@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  poetry-core,
-  cryptography,
-  fido2,
-  requests,
-  tlv8,
-  pyserial,
-  protobuf,
-  semver,
-  crcmod,
-  hidapi,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, poetry-core
+, cryptography
+, fido2
+, requests
+, tlv8
+, pyserial
+, protobuf
+, semver
+, crcmod
+, hidapi
+,
 }:
 
 buildPythonPackage rec {

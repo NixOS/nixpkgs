@@ -1,49 +1,49 @@
-{
-  stdenv,
-  lib,
-  pythonAtLeast,
-  pythonOlder,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cargo,
-  rustPlatform,
-  rustc,
-  libiconv,
-  # Python requirements
-  dill,
-  numpy,
-  networkx,
-  ply,
-  psutil,
-  python-constraint,
-  python-dateutil,
-  rustworkx,
-  scipy,
-  scikit-quant ? null,
-  setuptools-rust,
-  stevedore,
-  symengine,
-  sympy,
-  tweedledum,
-  withVisualization ? false,
-  # Python visualization requirements, optional
-  ipywidgets,
-  matplotlib,
-  pillow,
-  pydot,
-  pygments,
-  pylatexenc,
-  seaborn,
-  # Crosstalk-adaptive layout pass
-  withCrosstalkPass ? false,
-  z3-solver,
-  # test requirements
-  ddt,
-  hypothesis,
-  nbformat,
-  nbconvert,
-  pytestCheckHook,
-  python,
+{ stdenv
+, lib
+, pythonAtLeast
+, pythonOlder
+, buildPythonPackage
+, fetchFromGitHub
+, cargo
+, rustPlatform
+, rustc
+, libiconv
+, # Python requirements
+  dill
+, numpy
+, networkx
+, ply
+, psutil
+, python-constraint
+, python-dateutil
+, rustworkx
+, scipy
+, scikit-quant ? null
+, setuptools-rust
+, stevedore
+, symengine
+, sympy
+, tweedledum
+, withVisualization ? false
+, # Python visualization requirements, optional
+  ipywidgets
+, matplotlib
+, pillow
+, pydot
+, pygments
+, pylatexenc
+, seaborn
+, # Crosstalk-adaptive layout pass
+  withCrosstalkPass ? false
+, z3-solver
+, # test requirements
+  ddt
+, hypothesis
+, nbformat
+, nbconvert
+, pytestCheckHook
+, python
+,
 }:
 
 let

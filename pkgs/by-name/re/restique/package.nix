@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  qt5,
-  libsForQt5,
-  fetchgit,
-  cmake,
-  libsecret,
-  restic,
+{ lib
+, stdenv
+, qt5
+, libsForQt5
+, fetchgit
+, cmake
+, libsecret
+, restic
+,
 }:
 
 stdenv.mkDerivation {

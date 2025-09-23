@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  npmHooks,
-  yarnBuildHook,
-  yarnConfigHook,
-  runCommand,
-  textlint,
-  textlint-rule-prh,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchYarnDeps
+, nodejs
+, npmHooks
+, yarnBuildHook
+, yarnConfigHook
+, runCommand
+, textlint
+, textlint-rule-prh
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

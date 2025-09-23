@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libpng,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libpng
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

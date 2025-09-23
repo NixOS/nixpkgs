@@ -2,8 +2,8 @@
 # Update them all at the same time, or else misbuilds will happen!
 # TODO: automate the update of this file
 
-{
-  fetchFromGitHub,
+{ fetchFromGitHub
+,
 }:
 
 {

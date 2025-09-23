@@ -1,15 +1,15 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  makeWrapper,
-  gtk3,
-  openssl,
-  perl,
-  perlPackages,
-  pkg-config,
-  vte,
-  withGamt ? false,
+{ fetchFromGitHub
+, lib
+, stdenv
+, makeWrapper
+, gtk3
+, openssl
+, perl
+, perlPackages
+, pkg-config
+, vte
+, withGamt ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

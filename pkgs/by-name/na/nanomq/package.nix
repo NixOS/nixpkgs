@@ -1,23 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  pkg-config,
-  cyclonedds,
-  libmysqlclient,
-  mariadb,
-  mbedtls,
-  sqlite,
-  zeromq,
-  flex,
-  bison,
-
-  # for tests
-  python3,
-  mosquitto,
-  netcat-gnu,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, cyclonedds
+, libmysqlclient
+, mariadb
+, mbedtls
+, sqlite
+, zeromq
+, flex
+, bison
+, # for tests
+  python3
+, mosquitto
+, netcat-gnu
+,
 }:
 
 let

@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -747,12 +746,14 @@ in
     };
 
     systemd.services.httpd.after =
-      optional (
-        cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "mysql"
-      ) "mysql.service"
-      ++ optional (
-        cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "postgres"
-      ) "postgresql.target";
+      optional
+        (
+          cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "mysql"
+        ) "mysql.service"
+      ++ optional
+        (
+          cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "postgres"
+        ) "postgresql.target";
 
     users.users.${user} = {
       inherit group;

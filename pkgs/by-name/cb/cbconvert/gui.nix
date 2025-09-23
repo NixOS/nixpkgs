@@ -1,10 +1,10 @@
-{
-  buildGoModule,
-  cbconvert,
-  gtk3,
-  pkg-config,
-  versionCheckHook,
-  wrapGAppsHook3,
+{ buildGoModule
+, cbconvert
+, gtk3
+, pkg-config
+, versionCheckHook
+, wrapGAppsHook3
+,
 }:
 
 buildGoModule rec {

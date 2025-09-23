@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  eigen,
-  fmt,
-  fetchFromGitHub,
-  cmake,
+{ lib
+, stdenv
+, eigen
+, fmt
+, fetchFromGitHub
+, cmake
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

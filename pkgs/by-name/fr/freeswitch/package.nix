@@ -1,29 +1,29 @@
-{
-  fetchFromGitHub,
-  stdenv,
-  lib,
-  pkg-config,
-  autoreconfHook,
-  ncurses,
-  gnutls,
-  readline,
-  openssl,
-  perl,
-  sqlite,
-  libjpeg,
-  speex,
-  pcre,
-  libuuid,
-  ldns,
-  libedit,
-  yasm,
-  which,
-  libsndfile,
-  libtiff,
-  libxcrypt,
-  callPackage,
-  modules ? null,
-  nixosTests,
+{ fetchFromGitHub
+, stdenv
+, lib
+, pkg-config
+, autoreconfHook
+, ncurses
+, gnutls
+, readline
+, openssl
+, perl
+, sqlite
+, libjpeg
+, speex
+, pcre
+, libuuid
+, ldns
+, libedit
+, yasm
+, which
+, libsndfile
+, libtiff
+, libxcrypt
+, callPackage
+, modules ? null
+, nixosTests
+,
 }:
 
 let
@@ -33,68 +33,68 @@ let
   # the default list from v1.8.7, except with applications/mod_signalwire also disabled
   defaultModules =
     mods:
-    with mods;
-    [
-      applications.commands
-      applications.conference
-      applications.db
-      applications.dptools
-      applications.enum
-      applications.esf
-      applications.expr
-      applications.fifo
-      applications.fsv
-      applications.hash
-      applications.httapi
-      applications.sms
-      applications.spandsp
-      applications.valet_parking
-      applications.voicemail
+      with mods;
+      [
+        applications.commands
+        applications.conference
+        applications.db
+        applications.dptools
+        applications.enum
+        applications.esf
+        applications.expr
+        applications.fifo
+        applications.fsv
+        applications.hash
+        applications.httapi
+        applications.sms
+        applications.spandsp
+        applications.valet_parking
+        applications.voicemail
 
-      applications.curl
+        applications.curl
 
-      codecs.amr
-      codecs.b64
-      codecs.g723_1
-      codecs.g729
-      codecs.h26x
-      codecs.opus
+        codecs.amr
+        codecs.b64
+        codecs.g723_1
+        codecs.g729
+        codecs.h26x
+        codecs.opus
 
-      databases.mariadb
-      databases.pgsql
+        databases.mariadb
+        databases.pgsql
 
-      dialplans.asterisk
-      dialplans.xml
+        dialplans.asterisk
+        dialplans.xml
 
-      endpoints.loopback
-      endpoints.rtc
-      endpoints.skinny
-      endpoints.sofia
-      endpoints.verto
+        endpoints.loopback
+        endpoints.rtc
+        endpoints.skinny
+        endpoints.sofia
+        endpoints.verto
 
-      event_handlers.cdr_csv
-      event_handlers.cdr_sqlite
-      event_handlers.event_socket
+        event_handlers.cdr_csv
+        event_handlers.cdr_sqlite
+        event_handlers.event_socket
 
-      formats.local_stream
-      formats.native_file
-      formats.png
-      formats.sndfile
-      formats.tone_stream
+        formats.local_stream
+        formats.native_file
+        formats.png
+        formats.sndfile
+        formats.tone_stream
 
-      languages.lua
+        languages.lua
 
-      loggers.console
-      loggers.logfile
-      loggers.syslog
+        loggers.console
+        loggers.logfile
+        loggers.syslog
 
-      say.en
+        say.en
 
-      xml_int.cdr
-      xml_int.rpc
-      xml_int.scgi
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ endpoints.gsmopen ];
+        xml_int.cdr
+        xml_int.rpc
+        xml_int.scgi
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ endpoints.gsmopen ];
 
   enabledModules = (if modules != null then modules else defaultModules) availableModules;
 

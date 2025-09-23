@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  opencc,
-  rapidjson,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, opencc
+, rapidjson
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

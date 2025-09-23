@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  vapoursynth,
+{ lib
+, stdenv
+, fetchFromGitHub
+, vapoursynth
+,
 }:
 
 stdenv.mkDerivation {

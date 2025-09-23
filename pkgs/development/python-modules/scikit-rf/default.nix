@@ -1,28 +1,28 @@
-{
-  stdenv,
-  lib,
-  pythonOlder,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  scipy,
-  pandas,
-  matplotlib,
-  nbval,
-  pyvisa,
-  networkx,
-  ipython,
-  ipykernel,
-  ipywidgets,
-  jupyter-client,
-  sphinx-rtd-theme,
-  sphinx,
-  nbsphinx,
-  openpyxl,
-  setuptools,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mock,
+{ stdenv
+, lib
+, pythonOlder
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, scipy
+, pandas
+, matplotlib
+, nbval
+, pyvisa
+, networkx
+, ipython
+, ipykernel
+, ipywidgets
+, jupyter-client
+, sphinx-rtd-theme
+, sphinx
+, nbsphinx
+, openpyxl
+, setuptools
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

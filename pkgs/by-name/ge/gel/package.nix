@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  patchelf,
-  fetchFromGitHub,
-  rustPlatform,
-  makeBinaryWrapper,
-  pkg-config,
-  curl,
-  openssl,
-  xz,
-  replaceVars,
-  # for passthru.tests:
-  gel,
-  testers,
+{ stdenv
+, lib
+, patchelf
+, fetchFromGitHub
+, rustPlatform
+, makeBinaryWrapper
+, pkg-config
+, curl
+, openssl
+, xz
+, replaceVars
+, # for passthru.tests:
+  gel
+, testers
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gel";

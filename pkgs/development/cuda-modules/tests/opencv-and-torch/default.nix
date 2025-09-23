@@ -1,11 +1,11 @@
-{
-  cudaPackages,
-  lib,
-  writeGpuTestPython,
-  # Configuration flags
-  openCVFirst,
-  useOpenCVDefaultCuda,
-  useTorchDefaultCuda,
+{ cudaPackages
+, lib
+, writeGpuTestPython
+, # Configuration flags
+  openCVFirst
+, useOpenCVDefaultCuda
+, useTorchDefaultCuda
+,
 }:
 let
   inherit (lib.strings) optionalString;
@@ -54,8 +54,9 @@ let
   openCVName = "opencv4" + optionalString useOpenCVDefaultCuda "-with-default-cuda";
 in
 # TODO: Ensure the expected CUDA libraries are loaded.
-# TODO: Ensure GPU access works as expected.
-writeGpuTestPython {
+  # TODO: Ensure GPU access works as expected.
+writeGpuTestPython
+{
   name = if openCVFirst then "${openCVName}-then-${torchName}" else "${torchName}-then-${openCVName}";
   libraries =
     # NOTE: These are purposefully in this order.
@@ -78,4 +79,5 @@ writeGpuTestPython {
         effectiveTorch
         effectiveOpenCV
       ];
-} content
+}
+  content

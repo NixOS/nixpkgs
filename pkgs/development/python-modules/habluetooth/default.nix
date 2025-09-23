@@ -1,22 +1,22 @@
-{
-  lib,
-  async-interrupt,
-  bleak-retry-connector,
-  bleak,
-  bluetooth-adapters,
-  bluetooth-auto-recovery,
-  bluetooth-data-tools,
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
-  freezegun,
-  poetry-core,
-  pytest-asyncio,
-  pytest-codspeed,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, async-interrupt
+, bleak-retry-connector
+, bleak
+, bluetooth-adapters
+, bluetooth-auto-recovery
+, bluetooth-data-tools
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, freezegun
+, poetry-core
+, pytest-asyncio
+, pytest-codspeed
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

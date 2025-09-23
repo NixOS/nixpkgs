@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -13,9 +12,10 @@ let
   runtimeDir = "/run/soju";
   listen = cfg.listen ++ optional cfg.adminSocket.enable "unix+admin://${runtimeDir}/admin";
   listenCfg = concatMapStringsSep "\n" (l: "listen ${l}") listen;
-  tlsCfg = optionalString (
-    cfg.tlsCertificate != null
-  ) "tls ${cfg.tlsCertificate} ${cfg.tlsCertificateKey}";
+  tlsCfg = optionalString
+    (
+      cfg.tlsCertificate != null
+    ) "tls ${cfg.tlsCertificate} ${cfg.tlsCertificateKey}";
   logCfg = optionalString cfg.enableMessageLogging "message-store fs ${stateDir}/logs";
 
   configFile = pkgs.writeText "soju.conf" ''

@@ -1,16 +1,16 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-  pkg-config,
-  fontconfig,
-  xorg,
-  libxkbcommon,
-  wayland,
-  libGL,
-  openssl,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, pkg-config
+, fontconfig
+, xorg
+, libxkbcommon
+, wayland
+, libGL
+, openssl
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,11 +1,12 @@
-{
-  autoPatchelfHook,
-  fetchzip,
-  lib,
-  libfprint-tod,
-  openssl,
-  patchelfUnstable, # have to use patchelfUnstable to support --rename-dynamic-symbols
-  stdenv,
+{ autoPatchelfHook
+, fetchzip
+, lib
+, libfprint-tod
+, openssl
+, patchelfUnstable
+, # have to use patchelfUnstable to support --rename-dynamic-symbols
+  stdenv
+,
 }:
 
 # Based on ideas from (using a wrapper library to redirect fopen() calls to firmware files):

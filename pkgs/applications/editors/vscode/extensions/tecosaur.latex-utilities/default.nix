@@ -1,9 +1,9 @@
-{
-  lib,
-  vscode-utils,
-  jq,
-  moreutils,
-  texlivePackages,
+{ lib
+, vscode-utils
+, jq
+, moreutils
+, texlivePackages
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {

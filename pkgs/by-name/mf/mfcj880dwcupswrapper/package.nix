@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  mfcj880dwlpr,
-  makeWrapper,
-  bash,
+{ lib
+, stdenv
+, fetchurl
+, mfcj880dwlpr
+, makeWrapper
+, bash
+,
 }:
 
 stdenv.mkDerivation rec {

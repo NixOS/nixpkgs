@@ -1,10 +1,11 @@
-{
-  lib,
-  dotnet-sdk,
-  buildPackages, # buildDotnetModule, dotnet-runtime
-  testers,
-  runCommand,
-  removeReferencesTo,
+{ lib
+, dotnet-sdk
+, buildPackages
+, # buildDotnetModule, dotnet-runtime
+  testers
+, runCommand
+, removeReferencesTo
+,
 }:
 let
   inherit (buildPackages) buildDotnetModule dotnet-runtime;

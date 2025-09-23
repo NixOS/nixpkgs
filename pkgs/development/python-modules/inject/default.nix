@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  lib,
-  nix-update-script,
-  pytestCheckHook,
+{ buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, lib
+, nix-update-script
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

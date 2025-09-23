@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  rsync,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, python3
+, rsync
+, nix-update-script
+,
 }:
 python3.pkgs.buildPythonApplication rec {
   name = "ietf-cli";

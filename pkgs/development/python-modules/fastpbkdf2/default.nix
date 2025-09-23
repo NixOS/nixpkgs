@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  openssl,
-  pytest,
-  cffi,
-  six,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, openssl
+, pytest
+, cffi
+, six
+,
 }:
 
 buildPythonPackage rec {

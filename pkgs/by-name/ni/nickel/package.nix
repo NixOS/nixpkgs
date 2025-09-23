@@ -1,15 +1,15 @@
-{
-  lib,
-  boost,
-  rustPlatform,
-  fetchFromGitHub,
-  python3,
-  gitMinimal,
-  versionCheckHook,
-  pkg-config,
-  nixVersions,
-  nix-update-script,
-  enableNixImport ? false,
+{ lib
+, boost
+, rustPlatform
+, fetchFromGitHub
+, python3
+, gitMinimal
+, versionCheckHook
+, pkg-config
+, nixVersions
+, nix-update-script
+, enableNixImport ? false
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  validatePkgConfig,
-  fixDarwinDylibNames,
+{ lib
+, stdenv
+, fetchFromGitHub
+, validatePkgConfig
+, fixDarwinDylibNames
+,
 }:
 
 stdenv.mkDerivation {

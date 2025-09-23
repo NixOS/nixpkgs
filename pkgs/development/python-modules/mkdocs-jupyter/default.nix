@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  ipykernel,
-  jupytext,
-  mkdocs,
-  mkdocs-material,
-  nbconvert,
-  pygments,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, ipykernel
+, jupytext
+, mkdocs
+, mkdocs-material
+, nbconvert
+, pygments
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

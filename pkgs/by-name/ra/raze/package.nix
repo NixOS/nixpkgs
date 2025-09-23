@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  SDL2,
-  zmusic,
-  libvpx,
-  pkg-config,
-  makeWrapper,
-  bzip2,
-  gtk3,
-  fluidsynth,
-  openal,
-  libGL,
-  vulkan-loader,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, SDL2
+, zmusic
+, libvpx
+, pkg-config
+, makeWrapper
+, bzip2
+, gtk3
+, fluidsynth
+, openal
+, libGL
+, vulkan-loader
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

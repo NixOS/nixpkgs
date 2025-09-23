@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  mpv,
-  makeWrapper,
-  installShellFiles,
-  nix-update-script,
-  testers,
-  radioboat,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, mpv
+, makeWrapper
+, installShellFiles
+, nix-update-script
+, testers
+, radioboat
+,
 }:
 
 buildGoModule rec {

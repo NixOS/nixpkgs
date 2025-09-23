@@ -1,23 +1,23 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  makeWrapper,
-  installShellFiles,
-  dbus,
-  libpulseaudio,
-  notmuch,
-  openssl,
-  ethtool,
-  lm_sensors,
-  iw,
-  iproute2,
-  pandoc,
-  pipewire,
-  withICUCalendar ? false,
-  withPipewire ? true,
-  withNotmuch ? false,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, makeWrapper
+, installShellFiles
+, dbus
+, libpulseaudio
+, notmuch
+, openssl
+, ethtool
+, lm_sensors
+, iw
+, iproute2
+, pandoc
+, pipewire
+, withICUCalendar ? false
+, withPipewire ? true
+, withNotmuch ? false
+,
 }:
 
 rustPlatform.buildRustPackage rec {

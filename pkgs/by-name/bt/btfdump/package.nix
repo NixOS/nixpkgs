@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchCrate,
-  cargo-hack,
-  rustc,
-  zlib,
-  libxml2,
+{ lib
+, stdenv
+, rustPlatform
+, fetchCrate
+, cargo-hack
+, rustc
+, zlib
+, libxml2
+,
 }:
 
 rustPlatform.buildRustPackage rec {

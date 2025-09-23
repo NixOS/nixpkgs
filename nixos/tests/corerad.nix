@@ -29,7 +29,7 @@
             {
               name = "eth1";
               advertise = true;
-              prefix = [ { prefix = "::/64"; } ];
+              prefix = [{ prefix = "::/64"; }];
             }
           ];
           debug = {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  which,
-  makeWrapper,
-  installShellFiles,
-  jdk,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, which
+, makeWrapper
+, installShellFiles
+, jdk
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 # at runtime, need jdk

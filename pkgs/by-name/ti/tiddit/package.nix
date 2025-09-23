@@ -1,10 +1,10 @@
-{
-  bwa,
-  lib,
-  fermi2,
-  ropebwt2,
-  fetchFromGitHub,
-  python3Packages,
+{ bwa
+, lib
+, fermi2
+, ropebwt2
+, fetchFromGitHub
+, python3Packages
+,
 }:
 python3Packages.buildPythonApplication rec {
   name = "tiddit";

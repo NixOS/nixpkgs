@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  writeShellApplication,
-  curl,
-  coreutils,
-  jq,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, writeShellApplication
+, curl
+, coreutils
+, jq
+,
 }:
 
 let

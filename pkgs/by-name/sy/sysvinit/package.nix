@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libxcrypt,
-  withoutInitTools ? false,
+{ lib
+, stdenv
+, fetchurl
+, libxcrypt
+, withoutInitTools ? false
+,
 }:
 
 stdenv.mkDerivation rec {

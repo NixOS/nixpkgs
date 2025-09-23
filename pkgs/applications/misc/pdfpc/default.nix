@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  vala,
-  gtk3,
-  libgee,
-  poppler,
-  libpthreadstubs,
-  gstreamer,
-  gst-plugins-base,
-  gst-plugins-good,
-  gst-libav,
-  gobject-introspection,
-  wrapGAppsHook3,
-  qrencode,
-  webkitgtk_4_1,
-  discount,
-  json-glib,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, vala
+, gtk3
+, libgee
+, poppler
+, libpthreadstubs
+, gstreamer
+, gst-plugins-base
+, gst-plugins-good
+, gst-libav
+, gobject-introspection
+, wrapGAppsHook3
+, qrencode
+, webkitgtk_4_1
+, discount
+, json-glib
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

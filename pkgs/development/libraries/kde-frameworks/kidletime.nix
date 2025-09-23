@@ -1,12 +1,12 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  wayland-scanner,
-  qtbase,
-  qtx11extras,
-  wayland,
-  wayland-protocols,
-  plasma-wayland-protocols,
+{ mkDerivation
+, extra-cmake-modules
+, wayland-scanner
+, qtbase
+, qtx11extras
+, wayland
+, wayland-protocols
+, plasma-wayland-protocols
+,
 }:
 
 mkDerivation {

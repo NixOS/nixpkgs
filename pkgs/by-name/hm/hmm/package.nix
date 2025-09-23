@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  perl,
-  writableTmpDirAsHomeHook,
+{ lib
+, rustPlatform
+, fetchCrate
+, perl
+, writableTmpDirAsHomeHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

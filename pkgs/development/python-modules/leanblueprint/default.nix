@@ -1,21 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  plasTeX,
-  plastexshowmore,
-  plastexdepgraph,
-  click,
-  rich,
-  rich-click,
-  tomlkit,
-  jinja2,
-  gitpython,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  plasTeX
+, plastexshowmore
+, plastexdepgraph
+, click
+, rich
+, rich-click
+, tomlkit
+, jinja2
+, gitpython
+,
 }:
 buildPythonPackage {
   pname = "leanblueprint";

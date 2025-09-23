@@ -1,10 +1,10 @@
-{
-  lib,
-  rel,
-  buildKodiBinaryAddon,
-  fetchFromGitHub,
-  libretro,
-  gw,
+{ lib
+, rel
+, buildKodiBinaryAddon
+, fetchFromGitHub
+, libretro
+, gw
+,
 }:
 
 buildKodiBinaryAddon rec {

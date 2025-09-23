@@ -1,13 +1,13 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  libGL,
-  libGLU,
-  mkLibretroCore,
-  perl,
-  pkg-config,
-  xz,
+{ lib
+, cmake
+, fetchFromGitHub
+, libGL
+, libGLU
+, mkLibretroCore
+, perl
+, pkg-config
+, xz
+,
 }:
 mkLibretroCore {
   core = "pcsx2";

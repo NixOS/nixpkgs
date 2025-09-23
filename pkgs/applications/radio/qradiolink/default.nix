@@ -1,27 +1,27 @@
-{
-  lib,
-  fetchFromGitHub,
-  libpulseaudio,
-  libconfig,
-  # Needs a gnuradio built with qt gui support
-  gnuradio,
-  log4cpp,
-  thrift,
-  # Not gnuradioPackages'
-  codec2,
-  gmp,
-  gsm,
-  libopus,
-  libjpeg,
-  libsndfile,
-  libftdi,
-  limesuite,
-  soapysdr-with-plugins,
-  protobuf,
-  speex,
-  speexdsp,
-  cppzmq,
-  uhd,
+{ lib
+, fetchFromGitHub
+, libpulseaudio
+, libconfig
+, # Needs a gnuradio built with qt gui support
+  gnuradio
+, log4cpp
+, thrift
+, # Not gnuradioPackages'
+  codec2
+, gmp
+, gsm
+, libopus
+, libjpeg
+, libsndfile
+, libftdi
+, limesuite
+, soapysdr-with-plugins
+, protobuf
+, speex
+, speexdsp
+, cppzmq
+, uhd
+,
 }:
 
 gnuradio.pkgs.mkDerivation {

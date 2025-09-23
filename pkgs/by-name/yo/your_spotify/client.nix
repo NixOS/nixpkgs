@@ -1,13 +1,13 @@
-{
-  stdenv,
-  src,
-  version,
-  meta,
-  offlineCache,
-  apiEndpoint ? "http://localhost:3000",
-  yarnConfigHook,
-  yarnBuildHook,
-  nodejs,
+{ stdenv
+, src
+, version
+, meta
+, offlineCache
+, apiEndpoint ? "http://localhost:3000"
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

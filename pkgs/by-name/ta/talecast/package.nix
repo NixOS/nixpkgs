@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchCrate,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  nix-update-script,
-  testers,
-  talecast,
+{ lib
+, fetchCrate
+, rustPlatform
+, pkg-config
+, openssl
+, nix-update-script
+, testers
+, talecast
+,
 }:
 
 rustPlatform.buildRustPackage rec {

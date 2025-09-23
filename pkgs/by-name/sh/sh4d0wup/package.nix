@@ -1,21 +1,22 @@
-{
-  lib,
-  fetchFromGitHub,
-  gcc,
-  go,
-  makeWrapper,
-  nix-update-script,
-  openssl,
-  pcsclite,
-  pkg-config,
-  podman,
-  rustPlatform,
-  rustc,
-  sequoia-sq,
-  shared-mime-info,
-  versionCheckHook,
-  xz, # for liblzma
-  zstd,
+{ lib
+, fetchFromGitHub
+, gcc
+, go
+, makeWrapper
+, nix-update-script
+, openssl
+, pcsclite
+, pkg-config
+, podman
+, rustPlatform
+, rustc
+, sequoia-sq
+, shared-mime-info
+, versionCheckHook
+, xz
+, # for liblzma
+  zstd
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

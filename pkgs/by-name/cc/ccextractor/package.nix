@@ -1,31 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeTextFile,
-
-  pkg-config,
-  cmake,
-  ninja,
-  cargo,
-  rustc,
-  corrosion,
-  rustPlatform,
-
-  gpac,
-  protobufc,
-  libpng,
-  zlib,
-  utf8proc,
-  freetype,
-  ffmpeg,
-  libarchive,
-  curl,
-  libiconv,
-
-  enableOcr ? true,
-  leptonica,
-  tesseract,
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeTextFile
+, pkg-config
+, cmake
+, ninja
+, cargo
+, rustc
+, corrosion
+, rustPlatform
+, gpac
+, protobufc
+, libpng
+, zlib
+, utf8proc
+, freetype
+, ffmpeg
+, libarchive
+, curl
+, libiconv
+, enableOcr ? true
+, leptonica
+, tesseract
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

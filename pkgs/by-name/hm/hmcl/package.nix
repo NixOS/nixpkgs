@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeDesktopItem,
-  wrapGAppsHook3,
-  copyDesktopItems,
-  imagemagick,
-  jdk,
-  jdk17,
-  jdk21,
-  hmclJdk ? jdk,
-  minecraftJdks ? [
+{ lib
+, stdenv
+, fetchurl
+, makeDesktopItem
+, wrapGAppsHook3
+, copyDesktopItems
+, imagemagick
+, jdk
+, jdk17
+, jdk21
+, hmclJdk ? jdk
+, minecraftJdks ? [
     jdk
     jdk17
     jdk21
-  ],
-  xorg,
-  glib,
-  libGL,
-  glfw,
-  openal,
-  libglvnd,
-  alsa-lib,
-  wayland,
-  vulkan-loader,
-  libpulseaudio,
-  gobject-introspection,
-  callPackage,
+  ]
+, xorg
+, glib
+, libGL
+, glfw
+, openal
+, libglvnd
+, alsa-lib
+, wayland
+, vulkan-loader
+, libpulseaudio
+, gobject-introspection
+, callPackage
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

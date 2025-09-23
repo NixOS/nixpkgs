@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  setuptools-scm,
-  cffi,
-  pytestCheckHook,
-  pytest-mock,
-  pkgs, # only for cmph
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, setuptools-scm
+, cffi
+, pytestCheckHook
+, pytest-mock
+, pkgs
+, # only for cmph
 }:
 
 buildPythonPackage rec {

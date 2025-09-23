@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  python3,
+{ lib
+, rustPlatform
+, fetchCrate
+, python3
+,
 }:
 
 rustPlatform.buildRustPackage rec {

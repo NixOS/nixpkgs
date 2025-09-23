@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  hatchling,
-  ipywidgets,
-  numpy,
-  pillow,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, hatchling
+, ipywidgets
+, numpy
+, pillow
+,
 }:
 
 buildPythonPackage rec {

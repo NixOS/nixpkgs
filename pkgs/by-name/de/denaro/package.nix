@@ -1,16 +1,16 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  gtk4,
-  libadwaita,
-  pkg-config,
-  wrapGAppsHook4,
-  glib,
-  shared-mime-info,
-  gdk-pixbuf,
-  blueprint-compiler,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, gtk4
+, libadwaita
+, pkg-config
+, wrapGAppsHook4
+, glib
+, shared-mime-info
+, gdk-pixbuf
+, blueprint-compiler
+,
 }:
 
 buildDotnetModule rec {

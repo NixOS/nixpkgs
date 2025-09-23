@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
+{ pkgs
+, lib
+, config
+, ...
 }:
 
 let
@@ -47,9 +46,11 @@ in
       message = "Plugins cannot be set if package is null";
     };
 
-    programs.obs-studio.finalPackage = lib.mapNullable (
-      obs-studio: pkgs.wrapOBS.override { inherit obs-studio; } { plugins = cfg.plugins; }
-    ) cfg.package;
+    programs.obs-studio.finalPackage = lib.mapNullable
+      (
+        obs-studio: pkgs.wrapOBS.override { inherit obs-studio; } { plugins = cfg.plugins; }
+      )
+      cfg.package;
 
     environment.systemPackages = lib.optional (cfg.finalPackage != null) cfg.finalPackage;
 

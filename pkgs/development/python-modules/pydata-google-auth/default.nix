@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  google-auth-oauthlib,
-  google-auth,
-  pythonOlder,
-  setuptools,
-  versioneer,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, google-auth-oauthlib
+, google-auth
+, pythonOlder
+, setuptools
+, versioneer
+,
 }:
 
 buildPythonPackage rec {

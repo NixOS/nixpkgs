@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  jinja2,
-  pytest,
-  rich,
-  syrupy,
-  textual,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  jinja2
+, pytest
+, rich
+, syrupy
+, textual
+,
 }:
 
 buildPythonPackage rec {

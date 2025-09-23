@@ -1,19 +1,19 @@
-{
-  lib,
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  fetchFromGitHub,
-  python3,
-  wrapGAppsHook3,
-  gtk3,
-  glib,
-  desktop-file-utils,
-  appstream-glib,
-  adwaita-icon-theme,
-  gobject-introspection,
-  librsvg,
+{ lib
+, meson
+, ninja
+, pkg-config
+, gettext
+, fetchFromGitHub
+, python3
+, wrapGAppsHook3
+, gtk3
+, glib
+, desktop-file-utils
+, appstream-glib
+, adwaita-icon-theme
+, gobject-introspection
+, librsvg
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  beancount,
-  click,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  python-dateutil,
-  pytestCheckHook,
-  setuptools,
-  tatsu-lts,
+{ lib
+, beancount
+, click
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, python-dateutil
+, pytestCheckHook
+, setuptools
+, tatsu-lts
+,
 }:
 buildPythonPackage rec {
   pname = "beanquery";

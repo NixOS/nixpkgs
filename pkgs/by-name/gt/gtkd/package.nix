@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  atk,
-  cairo,
-  dcompiler ? ldc,
-  gdk-pixbuf,
-  gst_all_1,
-  ldc,
-  librsvg,
-  glib,
-  gtk3,
-  gtksourceview4,
-  libpeas,
-  pango,
-  pkg-config,
-  which,
-  vte,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, atk
+, cairo
+, dcompiler ? ldc
+, gdk-pixbuf
+, gst_all_1
+, ldc
+, librsvg
+, glib
+, gtk3
+, gtksourceview4
+, libpeas
+, pango
+, pkg-config
+, which
+, vte
+,
 }:
 
 let

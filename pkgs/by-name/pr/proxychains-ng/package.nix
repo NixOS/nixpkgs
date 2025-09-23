@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  # "dlsym" for OSX version < 12
-  darwinHookMethod ? "dyld",
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, # "dlsym" for OSX version < 12
+  darwinHookMethod ? "dyld"
+,
 }:
 
 stdenv.mkDerivation rec {

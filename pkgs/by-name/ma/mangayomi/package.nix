@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  flutter332,
-  rustPlatform,
-  fetchFromGitHub,
-  copyDesktopItems,
-  mpv-unwrapped,
-  webkitgtk_4_1,
-  makeDesktopItem,
-  writeText,
+{ lib
+, stdenv
+, flutter332
+, rustPlatform
+, fetchFromGitHub
+, copyDesktopItems
+, mpv-unwrapped
+, webkitgtk_4_1
+, makeDesktopItem
+, writeText
+,
 }:
 
 let

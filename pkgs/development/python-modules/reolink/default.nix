@@ -1,13 +1,13 @@
-{
-  lib,
-  aiohttp,
-  aiounittest,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ffmpeg-python,
-  pytestCheckHook,
-  requests,
-  setuptools,
+{ lib
+, aiohttp
+, aiounittest
+, buildPythonPackage
+, fetchFromGitHub
+, ffmpeg-python
+, pytestCheckHook
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

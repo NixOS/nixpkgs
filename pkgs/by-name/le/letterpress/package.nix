@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  wrapGAppsHook4,
-  appstream,
-  blueprint-compiler,
-  desktop-file-utils,
-  gettext,
-  gobject-introspection,
-  jp2a,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  python3Packages,
-  nix-update-script,
+{ lib
+, fetchFromGitLab
+, fetchpatch
+, wrapGAppsHook4
+, appstream
+, blueprint-compiler
+, desktop-file-utils
+, gettext
+, gobject-introspection
+, jp2a
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, python3Packages
+, nix-update-script
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "letterpress";

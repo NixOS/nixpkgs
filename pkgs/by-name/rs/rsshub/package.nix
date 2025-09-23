@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  nodejs,
-  pnpm_9,
-  replaceVars,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, makeBinaryWrapper
+, nodejs
+, pnpm_9
+, replaceVars
+, stdenv
+,
 }:
 let
   pnpm = pnpm_9;

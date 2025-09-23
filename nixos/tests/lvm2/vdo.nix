@@ -1,6 +1,6 @@
-{
-  kernelPackages ? null,
-  mkXfsFlags ? "",
+{ kernelPackages ? null
+, mkXfsFlags ? ""
+,
 }:
 import ../make-test-python.nix (
   { pkgs, lib, ... }:

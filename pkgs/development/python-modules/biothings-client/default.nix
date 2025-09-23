@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  httpx,
-  pytestCheckHook,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, httpx
+, pytestCheckHook
+, pytest-asyncio
+,
 }:
 buildPythonPackage rec {
   pname = "biothings-client";

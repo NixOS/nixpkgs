@@ -1,7 +1,6 @@
-{
-  pkgs,
-  python3,
-  ...
+{ pkgs
+, python3
+, ...
 }:
 # propagatedBuildInputs are for Python libraries and executables
 # buildInputs are for libraries

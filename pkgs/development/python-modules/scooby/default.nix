@@ -1,17 +1,17 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  iniconfig,
-  numpy,
-  psutil,
-  pytest-console-scripts,
-  pytestCheckHook,
-  pythonOlder,
-  pyvips,
-  scipy,
-  setuptools-scm,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, iniconfig
+, numpy
+, psutil
+, pytest-console-scripts
+, pytestCheckHook
+, pythonOlder
+, pyvips
+, scipy
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

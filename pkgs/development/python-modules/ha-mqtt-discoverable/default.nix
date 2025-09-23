@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitlike-commands,
-  paho-mqtt,
-  poetry-core,
-  pyaml,
-  pydantic,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gitlike-commands
+, paho-mqtt
+, poetry-core
+, pyaml
+, pydantic
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cachetools,
-  decorator,
-  fetchFromGitHub,
-  pysmt,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
-  z3-solver,
+{ lib
+, buildPythonPackage
+, cachetools
+, decorator
+, fetchFromGitHub
+, pysmt
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typing-extensions
+, z3-solver
+,
 }:
 
 buildPythonPackage rec {

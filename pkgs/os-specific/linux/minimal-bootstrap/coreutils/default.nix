@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  kaem,
-  tinycc,
-  gnumake,
-  gnupatch,
+{ lib
+, fetchurl
+, kaem
+, tinycc
+, gnumake
+, gnupatch
+,
 }:
 let
   pname = "bootstrap-coreutils";
@@ -72,23 +72,23 @@ let
   ];
 in
 kaem.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnupatch
-    ];
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnupatch
+  ];
 
-    meta = with lib; {
-      description = "GNU Core Utilities";
-      homepage = "https://www.gnu.org/software/coreutils";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "GNU Core Utilities";
+    homepage = "https://www.gnu.org/software/coreutils";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     ungz --file ${src} --output coreutils.tar

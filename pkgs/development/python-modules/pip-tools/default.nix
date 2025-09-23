@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  build,
-  click,
-  fetchPypi,
-  pep517,
-  pip,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  tomli,
-  tomli-w,
-  wheel,
+{ lib
+, stdenv
+, buildPythonPackage
+, build
+, click
+, fetchPypi
+, pep517
+, pip
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, tomli
+, tomli-w
+, wheel
+,
 }:
 
 buildPythonPackage rec {

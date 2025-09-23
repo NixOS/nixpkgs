@@ -1,21 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  pytorch-lightning,
-  torch,
-
-  # tests
-  pythonOlder,
-  pythonAtLeast,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  setuptools
+, # dependencies
+  pytorch-lightning
+, torch
+, # tests
+  pythonOlder
+, pythonAtLeast
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

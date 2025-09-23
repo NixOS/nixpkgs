@@ -1,34 +1,29 @@
-{
-  lib,
-  stdenv,
-  config,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-  qt6,
-  pkg-config,
-
-  # buildInputs
-  eigen,
-  libXt,
-  libpcap,
-  libusb1,
-  llvmPackages,
-  nanoflann,
-
-  # nativeBuildInputs
-  boost,
-  flann,
-  libpng,
-  libtiff,
-  qhull,
-  vtk,
-
-  gitUpdater,
-
-  cudaSupport ? config.cudaSupport,
-  cudaPackages,
+{ lib
+, stdenv
+, config
+, fetchFromGitHub
+, # nativeBuildInputs
+  cmake
+, qt6
+, pkg-config
+, # buildInputs
+  eigen
+, libXt
+, libpcap
+, libusb1
+, llvmPackages
+, nanoflann
+, # nativeBuildInputs
+  boost
+, flann
+, libpng
+, libtiff
+, qhull
+, vtk
+, gitUpdater
+, cudaSupport ? config.cudaSupport
+, cudaPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  derivationWithMeta,
-  writeText,
-  kaem,
-  kaem-unwrapped,
-  mescc-tools,
-  mescc-tools-extra,
-  version,
-  platforms,
+{ lib
+, derivationWithMeta
+, writeText
+, kaem
+, kaem-unwrapped
+, mescc-tools
+, mescc-tools-extra
+, version
+, platforms
+,
 }:
 
 # Once mescc-tools-extra is available we can install kaem at /bin/kaem

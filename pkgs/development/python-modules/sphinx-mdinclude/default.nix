@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  docutils,
-  mistune,
-  pygments,
-  sphinx,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  flit-core
+, # dependencies
+  docutils
+, mistune
+, pygments
+, sphinx
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  zstd,
-  writeShellApplication,
-  common-updater-scripts,
-  pcre2,
+{ lib
+, stdenv
+, fetchzip
+, zstd
+, writeShellApplication
+, common-updater-scripts
+, pcre2
+,
 }:
 
 stdenv.mkDerivation rec {

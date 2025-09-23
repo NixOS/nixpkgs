@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  jupyterlab,
-  setuptools,
-
-  ipywidgets,
-  ipydatawidgets,
-  numpy,
-  traitlets,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, jupyterlab
+, setuptools
+, ipywidgets
+, ipydatawidgets
+, numpy
+, traitlets
+,
 }:
 
 buildPythonPackage rec {

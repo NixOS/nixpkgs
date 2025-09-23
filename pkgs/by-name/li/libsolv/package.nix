@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  pkg-config,
-  zlib,
-  xz,
-  bzip2,
-  zchunk,
-  zstd,
-  expat,
-  withRpm ? !stdenv.hostPlatform.isDarwin,
-  rpm,
-  db,
-  withConda ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, zlib
+, xz
+, bzip2
+, zchunk
+, zstd
+, expat
+, withRpm ? !stdenv.hostPlatform.isDarwin
+, rpm
+, db
+, withConda ? true
+,
 }:
 
 stdenv.mkDerivation rec {

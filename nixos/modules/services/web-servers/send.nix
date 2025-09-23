@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib) mkOption types;
@@ -156,9 +155,10 @@ in
         StateDirectory = "send";
         WorkingDirectory = cfg.dataDir;
         ReadWritePaths = cfg.dataDir;
-        LoadCredential = lib.optionalString (
-          cfg.redis.passwordFile != null
-        ) "redis-password:${cfg.redis.passwordFile}";
+        LoadCredential = lib.optionalString
+          (
+            cfg.redis.passwordFile != null
+          ) "redis-password:${cfg.redis.passwordFile}";
 
         # Hardening
         RestrictAddressFamilies = [
@@ -196,15 +196,17 @@ in
         REDIS_HOST = cfg.redis.host;
         REDIS_PORT = toString cfg.redis.port;
       }
-      // (lib.mapAttrs (
-        name: value:
-        if lib.isList value then
-          "[" + lib.concatStringsSep ", " (map (x: toString x) value) + "]"
-        else if lib.isBool value then
-          lib.boolToString value
-        else
-          toString value
-      ) cfg.environment);
+      // (lib.mapAttrs
+        (
+          name: value:
+            if lib.isList value then
+              "[" + lib.concatStringsSep ", " (map (x: toString x) value) + "]"
+            else if lib.isBool value then
+              lib.boolToString value
+            else
+              toString value
+        )
+        cfg.environment);
       after = [
         "network.target"
       ]

@@ -4,21 +4,23 @@ let
   inherit (pkgs) lib;
   inherit (lib.strings) hasSuffix removeSuffix;
 
-  pathsByName = lib.concatMapAttrs (
-    name: type:
-    lib.optionalAttrs (type == "regular" && hasSuffix ".nix" name) {
-      ${removeSuffix ".nix" name} = ./replacements-by-name + "/${name}";
-    }
-  ) (builtins.readDir ./replacements-by-name);
+  pathsByName = lib.concatMapAttrs
+    (
+      name: type:
+        lib.optionalAttrs (type == "regular" && hasSuffix ".nix" name) {
+          ${removeSuffix ".nix" name} = ./replacements-by-name + "/${name}";
+        }
+    )
+    (builtins.readDir ./replacements-by-name);
 in
 
 # EXTRA HASKELL PACKAGES NOT ON HACKAGE
-#
-# This file should only contain packages that are not in ./hackage-packages.nix.
-# Attributes in this set should be nothing more than a callPackage call.
-# Overrides to these packages should go to either configuration-nix.nix,
-# configuration-common.nix or to one of the compiler specific configuration
-# files.
+  #
+  # This file should only contain packages that are not in ./hackage-packages.nix.
+  # Attributes in this set should be nothing more than a callPackage call.
+  # Overrides to these packages should go to either configuration-nix.nix,
+  # configuration-common.nix or to one of the compiler specific configuration
+  # files.
 self: super:
 {
 
@@ -55,4 +57,4 @@ self: super:
       { };
 
 }
-// lib.mapAttrs (_name: path: self.callPackage path { }) pathsByName
+  // lib.mapAttrs (_name: path: self.callPackage path { }) pathsByName

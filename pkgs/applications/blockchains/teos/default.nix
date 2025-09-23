@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  protobuf,
-  rustfmt,
-  pkg-config,
-  openssl,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, protobuf
+, rustfmt
+, pkg-config
+, openssl
+,
 }:
 
 let

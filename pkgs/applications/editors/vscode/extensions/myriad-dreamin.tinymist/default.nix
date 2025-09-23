@@ -1,9 +1,9 @@
-{
-  jq,
-  lib,
-  moreutils,
-  tinymist,
-  vscode-utils,
+{ jq
+, lib
+, moreutils
+, tinymist
+, vscode-utils
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

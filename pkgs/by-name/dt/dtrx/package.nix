@@ -1,24 +1,24 @@
-{
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  python3Packages,
-  gnutar,
-  unzip,
-  lhasa,
-  rpm,
-  binutils,
-  cpio,
-  gzip,
-  p7zip,
-  cabextract,
-  unrar,
-  unshield,
-  bzip2,
-  xz,
-  lzip,
-  unzipSupport ? false,
-  unrarSupport ? false,
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, python3Packages
+, gnutar
+, unzip
+, lhasa
+, rpm
+, binutils
+, cpio
+, gzip
+, p7zip
+, cabextract
+, unrar
+, unshield
+, bzip2
+, xz
+, lzip
+, unzipSupport ? false
+, unrarSupport ? false
+,
 }:
 
 python3Packages.buildPythonApplication rec {

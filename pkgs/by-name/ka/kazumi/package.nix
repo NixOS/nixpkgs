@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  flutter335,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  alsa-lib,
-  gst_all_1,
-  libayatana-appindicator,
-  mimalloc,
-  mpv-unwrapped,
-  webkitgtk_4_1,
-  _experimental-update-script-combinators,
-  gitUpdater,
-  runCommand,
-  yq-go,
+{ lib
+, stdenv
+, flutter335
+, fetchFromGitHub
+, autoPatchelfHook
+, alsa-lib
+, gst_all_1
+, libayatana-appindicator
+, mimalloc
+, mpv-unwrapped
+, webkitgtk_4_1
+, _experimental-update-script-combinators
+, gitUpdater
+, runCommand
+, yq-go
+,
 }:
 
 let

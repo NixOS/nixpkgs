@@ -1,18 +1,18 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitHub,
-  gfortran,
-  makeWrapper,
-  setuptools,
-  setuptools-scm,
-  numpy,
-  scipy,
-  distutils,
-  pytestCheckHook,
-  mock,
-  pytest-mock,
-  pythonAtLeast,
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, gfortran
+, makeWrapper
+, setuptools
+, setuptools-scm
+, numpy
+, scipy
+, distutils
+, pytestCheckHook
+, mock
+, pytest-mock
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

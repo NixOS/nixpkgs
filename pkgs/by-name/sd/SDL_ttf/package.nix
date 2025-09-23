@@ -1,12 +1,12 @@
-{
-  lib,
-  SDL,
-  fetchFromGitHub,
-  freetype,
-  stdenv,
-  unstableGitUpdater,
-  # Boolean flags
-  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+{ lib
+, SDL
+, fetchFromGitHub
+, freetype
+, stdenv
+, unstableGitUpdater
+, # Boolean flags
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

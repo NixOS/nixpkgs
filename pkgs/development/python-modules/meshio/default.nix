@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  h5py,
-  netcdf4,
-  numpy,
-  rich,
-
-  # tests
-  exdown,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  h5py
+, netcdf4
+, numpy
+, rich
+, # tests
+  exdown
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

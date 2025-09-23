@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  ply,
-  setuptools,
-  poetry-core,
-  withOpenSCAD ? false,
-  openscad,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, ply
+, setuptools
+, poetry-core
+, withOpenSCAD ? false
+, openscad
+,
 }:
 buildPythonPackage rec {
   pname = "solidpython2";

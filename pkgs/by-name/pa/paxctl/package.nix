@@ -1,8 +1,8 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  elf-header,
+{ fetchurl
+, lib
+, stdenv
+, elf-header
+,
 }:
 
 stdenv.mkDerivation rec {

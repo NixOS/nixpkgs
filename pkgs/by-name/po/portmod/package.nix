@@ -1,15 +1,15 @@
-{
-  lib,
-  bubblewrap,
-  cacert,
-  fetchFromGitLab,
-  git,
-  imagemagick,
-  openmw,
-  python3Packages,
-  rustPlatform,
-  tes3cmd,
-  tr-patcher,
+{ lib
+, bubblewrap
+, cacert
+, fetchFromGitLab
+, git
+, imagemagick
+, openmw
+, python3Packages
+, rustPlatform
+, tes3cmd
+, tr-patcher
+,
 }:
 
 let

@@ -1,53 +1,49 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build system
-  poetry-core,
-
-  # dependencies
-  accelerate,
-  beautifulsoup4,
-  certifi,
-  docling-core,
-  docling-ibm-models,
-  docling-parse,
-  easyocr,
-  filetype,
-  huggingface-hub,
-  lxml,
-  marko,
-  # ocrmac # not yet packaged
-  onnxruntime,
-  openpyxl,
-  pandas,
-  pillow,
-  pluggy,
-  pydantic,
-  pydantic-settings,
-  pylatexenc,
-  pypdfium2,
-  python-docx,
-  python-pptx,
-  rapidocr,
-  requests,
-  rtree,
-  scipy,
-  tesserocr,
-  tqdm,
-  transformers,
-  typer,
-
-  # optional dependencies
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build system
+  poetry-core
+, # dependencies
+  accelerate
+, beautifulsoup4
+, certifi
+, docling-core
+, docling-ibm-models
+, docling-parse
+, easyocr
+, filetype
+, huggingface-hub
+, lxml
+, marko
+, # ocrmac # not yet packaged
+  onnxruntime
+, openpyxl
+, pandas
+, pillow
+, pluggy
+, pydantic
+, pydantic-settings
+, pylatexenc
+, pypdfium2
+, python-docx
+, python-pptx
+, rapidocr
+, requests
+, rtree
+, scipy
+, tesserocr
+, tqdm
+, transformers
+, typer
+, # optional dependencies
   # mkdocs-click # not yet packaged
-  mkdocs-jupyter,
-  mkdocs-material,
-  mkdocstrings,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+  mkdocs-jupyter
+, mkdocs-material
+, mkdocstrings
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

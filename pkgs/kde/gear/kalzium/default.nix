@@ -1,11 +1,11 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  ocaml,
-  eigen,
-  openbabel,
-  qtsvg,
-  qtscxml,
+{ mkKdeDerivation
+, pkg-config
+, ocaml
+, eigen
+, openbabel
+, qtsvg
+, qtscxml
+,
 }:
 mkKdeDerivation {
   pname = "kalzium";

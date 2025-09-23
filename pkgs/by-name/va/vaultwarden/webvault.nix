@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nixosTests,
-  python3,
-  vaultwarden,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nixosTests
+, python3
+, vaultwarden
+,
 }:
 
 buildNpmPackage rec {

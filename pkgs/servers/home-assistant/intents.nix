@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # codegen
-  hassil,
-  python,
-  pyyaml,
-  voluptuous,
-  regex,
-  jinja2,
-
-  # tests
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools
+, # codegen
+  hassil
+, python
+, pyyaml
+, voluptuous
+, regex
+, jinja2
+, # tests
+  pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

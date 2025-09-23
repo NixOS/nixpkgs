@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  versionCheckHook,
-  nix-update-script,
-  vimUtils,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, versionCheckHook
+, nix-update-script
+, vimUtils
+,
 }:
 let
   version = "2.2.7";

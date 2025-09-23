@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  libsForQt5,
-  fetchFromGitHub,
-  cmake,
-  doxygen,
-  msgpack,
-  neovim,
-  python3Packages,
+{ stdenv
+, lib
+, libsForQt5
+, fetchFromGitHub
+, cmake
+, doxygen
+, msgpack
+, neovim
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

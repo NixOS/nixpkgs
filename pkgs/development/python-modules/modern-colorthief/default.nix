@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  colorthief,
-  fetchFromGitHub,
-  nix-update-script,
-  pillow,
-  pytestCheckHook,
-  rustPlatform,
+{ lib
+, buildPythonPackage
+, colorthief
+, fetchFromGitHub
+, nix-update-script
+, pillow
+, pytestCheckHook
+, rustPlatform
+,
 }:
 
 buildPythonPackage rec {

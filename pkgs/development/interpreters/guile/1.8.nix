@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPackages,
-  gawk,
-  gmp,
-  libtool,
-  makeWrapper,
-  pkg-config,
-  pkgsBuildBuild,
-  readline,
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, gawk
+, gmp
+, libtool
+, makeWrapper
+, pkg-config
+, pkgsBuildBuild
+, readline
+,
 }:
 
 stdenv.mkDerivation rec {

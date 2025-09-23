@@ -1,18 +1,18 @@
-{
-  fetchgit,
-  gitUpdater,
-  lib,
-  libftdi1,
-  libgpiod,
-  libjaylink,
-  libusb1,
-  meson,
-  ninja,
-  pciutils,
-  pkg-config,
-  stdenv,
-  withJlink ? true,
-  withGpio ? stdenv.hostPlatform.isLinux,
+{ fetchgit
+, gitUpdater
+, lib
+, libftdi1
+, libgpiod
+, libjaylink
+, libusb1
+, meson
+, ninja
+, pciutils
+, pkg-config
+, stdenv
+, withJlink ? true
+, withGpio ? stdenv.hostPlatform.isLinux
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

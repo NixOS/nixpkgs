@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  replaceVars,
-  SDL2,
-  frei0r,
-  ladspaPlugins,
-  gettext,
-  mlt,
-  jack1,
-  pkg-config,
-  fftw,
-  qt6,
-  cmake,
-  gitUpdater,
-  ffmpeg,
+{ lib
+, fetchFromGitHub
+, stdenv
+, replaceVars
+, SDL2
+, frei0r
+, ladspaPlugins
+, gettext
+, mlt
+, jack1
+, pkg-config
+, fftw
+, qt6
+, cmake
+, gitUpdater
+, ffmpeg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

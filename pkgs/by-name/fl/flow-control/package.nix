@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  zig_0_14,
-  callPackage,
+{ lib
+, fetchFromGitHub
+, stdenv
+, zig_0_14
+, callPackage
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

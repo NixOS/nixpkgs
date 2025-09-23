@@ -1,12 +1,12 @@
-{
-  fetchurl,
-  godot,
-  hash,
-  lib,
-  stdenvNoCC,
-  unzip,
-  version,
-  withMono ? false,
+{ fetchurl
+, godot
+, hash
+, lib
+, stdenvNoCC
+, unzip
+, version
+, withMono ? false
+,
 }:
 # Export templates is necessary for setting up Godot engine, it's used when exporting projects.
 # Godot applications/games packages needs to reference export templates.

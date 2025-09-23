@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  pkg-config,
-  zig_0_15,
-  zstd,
-  installShellFiles,
-  versionCheckHook,
-  pie ? stdenv.hostPlatform.isDarwin,
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, pkg-config
+, zig_0_15
+, zstd
+, installShellFiles
+, versionCheckHook
+, pie ? stdenv.hostPlatform.isDarwin
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

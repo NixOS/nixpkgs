@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-
-  poetry-core,
-  setuptools,
-
-  typing-extensions,
-  numpy,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, poetry-core
+, setuptools
+, typing-extensions
+, numpy
+, scipy
+,
 }:
 
 buildPythonPackage rec {

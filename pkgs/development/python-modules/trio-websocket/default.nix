@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  exceptiongroup,
-  pytest-trio,
-  pytestCheckHook,
-  trio,
-  trustme,
-  wsproto,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, exceptiongroup
+, pytest-trio
+, pytestCheckHook
+, trio
+, trustme
+, wsproto
+,
 }:
 
 buildPythonPackage rec {

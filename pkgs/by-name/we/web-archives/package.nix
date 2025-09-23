@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  meson,
-  ninja,
-  vala,
-  pkg-config,
-  wrapGAppsHook3,
-  libzim-glib,
-  sqlite,
-  webkitgtk_4_1,
-  tinysparql,
-  libxml2,
-  libisocodes,
-  libhandy,
-  glib-networking,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, meson
+, ninja
+, vala
+, pkg-config
+, wrapGAppsHook3
+, libzim-glib
+, sqlite
+, webkitgtk_4_1
+, tinysparql
+, libxml2
+, libisocodes
+, libhandy
+, glib-networking
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

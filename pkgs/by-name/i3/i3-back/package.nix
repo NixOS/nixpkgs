@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  testers,
-  i3-back,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, testers
+, i3-back
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "i3-back";

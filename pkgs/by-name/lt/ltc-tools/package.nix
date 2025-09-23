@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libltc,
-  libsndfile,
-  jack2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libltc
+, libsndfile
+, jack2
+,
 }:
 
 stdenv.mkDerivation rec {

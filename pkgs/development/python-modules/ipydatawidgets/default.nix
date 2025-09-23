@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPy27,
-  pytestCheckHook,
-  nbval,
-  jupyter-packaging,
-  ipywidgets,
-  numpy,
-  six,
-  traittypes,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, pytestCheckHook
+, nbval
+, jupyter-packaging
+, ipywidgets
+, numpy
+, six
+, traittypes
+,
 }:
 
 buildPythonPackage rec {

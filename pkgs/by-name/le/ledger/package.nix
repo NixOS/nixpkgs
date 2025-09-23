@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  boost,
-  gmp,
-  mpfr,
-  libedit,
-  python3,
-  gpgme,
-  installShellFiles,
-  texinfo,
-  gnused,
-  usePython ? false,
-  gpgmeSupport ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, boost
+, gmp
+, mpfr
+, libedit
+, python3
+, gpgme
+, installShellFiles
+, texinfo
+, gnused
+, usePython ? false
+, gpgmeSupport ? false
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -4,11 +4,10 @@
    - nixos/modules/config/nix.nix: the nix.conf
    - nixos/modules/config/nix-remote-build.nix: the nix.conf
 */
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 

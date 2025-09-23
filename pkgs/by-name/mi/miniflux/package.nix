@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  nixosTests,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, nixosTests
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

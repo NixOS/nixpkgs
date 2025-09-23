@@ -1,12 +1,12 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  mathcomp-ssreflect,
-  mathcomp-algebra,
-  mathcomp-fingroup,
-  paramcoq,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, mathcomp-ssreflect
+, mathcomp-algebra
+, mathcomp-fingroup
+, paramcoq
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -30,7 +30,8 @@ mkCoqDerivation {
         case = range "8.11" "8.12";
         out = "0.4";
       }
-    ] null;
+    ]
+      null;
 
   propagatedBuildInputs = [
     mathcomp-ssreflect

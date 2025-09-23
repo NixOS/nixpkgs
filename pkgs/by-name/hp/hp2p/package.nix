@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  autoconf,
-  automake,
-  mpi,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, autoconf
+, automake
+, mpi
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

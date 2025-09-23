@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch2,
-  updateAutotoolsGnuConfigScriptsHook,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch2
+, updateAutotoolsGnuConfigScriptsHook
+,
 }:
 
 stdenv.mkDerivation rec {

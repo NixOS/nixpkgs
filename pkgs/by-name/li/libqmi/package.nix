@@ -1,27 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
-  help2man,
-  glib,
-  python3,
-  mesonEmulatorHook,
-  libgudev,
-  bash-completion,
-  libmbim,
-  libqrtr-glib,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, help2man
+, glib
+, python3
+, mesonEmulatorHook
+, libgudev
+, bash-completion
+, libmbim
+, libqrtr-glib
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, withMan ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+,
 }:
 
 stdenv.mkDerivation rec {

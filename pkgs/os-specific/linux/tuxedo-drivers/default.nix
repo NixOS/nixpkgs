@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  kernel,
-  kernelModuleMakeFlags,
-  kmod,
-  pahole,
-  gitUpdater,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, kernel
+, kernelModuleMakeFlags
+, kmod
+, pahole
+, gitUpdater
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

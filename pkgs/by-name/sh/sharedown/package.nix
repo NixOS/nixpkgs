@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  ffmpeg,
-  yt-dlp,
-  libsecret,
-  python3,
-  pkg-config,
-  nodejs,
-  electron,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  yarn2nix-moretea,
-  fetchYarnDeps,
-  chromium,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, ffmpeg
+, yt-dlp
+, libsecret
+, python3
+, pkg-config
+, nodejs
+, electron
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, yarn2nix-moretea
+, fetchYarnDeps
+, chromium
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

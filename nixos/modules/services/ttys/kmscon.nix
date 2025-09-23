@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   inherit (lib)
@@ -122,16 +121,18 @@ in
       let
         xkb = optionals cfg.useXkbConfig (
           lib.mapAttrsToList (n: v: "xkb-${n}=${v}") (
-            lib.filterAttrs (
-              n: v:
-              builtins.elem n [
-                "layout"
-                "model"
-                "options"
-                "variant"
-              ]
-              && v != ""
-            ) config.services.xserver.xkb
+            lib.filterAttrs
+              (
+                n: v:
+                  builtins.elem n [
+                    "layout"
+                    "model"
+                    "options"
+                    "variant"
+                  ]
+                  && v != ""
+              )
+              config.services.xserver.xkb
           )
         );
         render = optionals cfg.hwRender [

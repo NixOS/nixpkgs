@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, SDL2_image
+, SDL2_mixer
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  libtool,
-  makeWrapper,
-  coreutils,
-  ctags,
-  ncurses,
-  python3Packages,
-  sqlite,
-  universal-ctags,
+{ fetchurl
+, lib
+, stdenv
+, libtool
+, makeWrapper
+, coreutils
+, ctags
+, ncurses
+, python3Packages
+, sqlite
+, universal-ctags
+,
 }:
 
 let

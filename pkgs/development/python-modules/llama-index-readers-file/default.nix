@@ -1,15 +1,15 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  defusedxml,
-  fetchPypi,
-  hatchling,
-  llama-index-core,
-  pymupdf,
-  pypdf,
-  pythonOlder,
-  striprtf,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, defusedxml
+, fetchPypi
+, hatchling
+, llama-index-core
+, pymupdf
+, pypdf
+, pythonOlder
+, striprtf
+,
 }:
 
 buildPythonPackage rec {

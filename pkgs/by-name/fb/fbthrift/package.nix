@@ -1,26 +1,21 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-  fetchpatch,
-
-  cmake,
-  ninja,
-
-  openssl,
-  gflags,
-  glog,
-  folly,
-  fizz,
-  wangle,
-  zlib,
-  zstd,
-  xxHash,
-
-  mvfst,
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ninja
+, openssl
+, gflags
+, glog
+, folly
+, fizz
+, wangle
+, zlib
+, zstd
+, xxHash
+, mvfst
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

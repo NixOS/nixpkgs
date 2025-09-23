@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  libusb1,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, libusb1
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  python3,
-  fetchFromGitHub,
-  makeWrapper,
-  makeDesktopItem,
-  libsForQt5,
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+, makeWrapper
+, makeDesktopItem
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

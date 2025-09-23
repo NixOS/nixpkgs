@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  python312,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, python312
+,
 }:
 
 python312.pkgs.buildPythonApplication rec {

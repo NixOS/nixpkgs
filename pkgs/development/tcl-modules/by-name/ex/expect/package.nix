@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  tcl,
-  makeWrapper,
-  autoreconfHook,
-  fetchpatch,
-  replaceVars,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, tcl
+, makeWrapper
+, autoreconfHook
+, fetchpatch
+, replaceVars
+,
 }:
 
 tcl.mkTclDerivation rec {

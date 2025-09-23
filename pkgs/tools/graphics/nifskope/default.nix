@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qmake,
-  qtbase,
-  qttools,
-  replaceVars,
-  libGLU,
-  zlib,
-  wrapQtAppsHook,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, qtbase
+, qttools
+, replaceVars
+, libGLU
+, zlib
+, wrapQtAppsHook
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation {

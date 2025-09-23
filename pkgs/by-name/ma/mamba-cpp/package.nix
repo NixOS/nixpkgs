@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  bzip2,
-  cmake,
-  cli11,
-  yaml-cpp,
-  nlohmann_json,
-  zstd,
-  reproc,
-  spdlog,
-  tl-expected,
-  libmamba,
-  python3,
-  versionCheckHook,
+{ lib
+, stdenv
+, bzip2
+, cmake
+, cli11
+, yaml-cpp
+, nlohmann_json
+, zstd
+, reproc
+, spdlog
+, tl-expected
+, libmamba
+, python3
+, versionCheckHook
+,
 }:
 stdenv.mkDerivation {
   pname = "mamba-cpp";

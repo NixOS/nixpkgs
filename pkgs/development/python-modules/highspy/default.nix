@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-build-core,
-  pybind11,
-  numpy,
-  cmake,
-  ninja,
-  pathspec,
-  highs,
+{ lib
+, buildPythonPackage
+, pytestCheckHook
+, pythonOlder
+, scikit-build-core
+, pybind11
+, numpy
+, cmake
+, ninja
+, pathspec
+, highs
+,
 }:
 buildPythonPackage {
   pname = "highspy";

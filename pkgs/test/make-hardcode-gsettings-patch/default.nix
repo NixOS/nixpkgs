@@ -1,19 +1,19 @@
-{
-  runCommandLocal,
-  lib,
-  git,
-  clang-tools,
-  makeHardcodeGsettingsPatch,
+{ runCommandLocal
+, lib
+, git
+, clang-tools
+, makeHardcodeGsettingsPatch
+,
 }:
 
 let
   mkTest =
-    {
-      name,
-      expected,
-      src,
-      patches ? [ ],
-      args,
+    { name
+    , expected
+    , src
+    , patches ? [ ]
+    , args
+    ,
     }:
 
     let

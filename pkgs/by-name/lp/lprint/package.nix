@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pappl,
-  cups,
-  pkg-config,
-  # Enables support for untested printers. It makes sense to default this to true, as it's unlikely to result in any issues
-  enableExperimental ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pappl
+, cups
+, pkg-config
+, # Enables support for untested printers. It makes sense to default this to true, as it's unlikely to result in any issues
+  enableExperimental ? true
+,
 }:
 
 stdenv.mkDerivation rec {

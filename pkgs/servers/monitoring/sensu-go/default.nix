@@ -1,16 +1,16 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+,
 }:
 
 let
   generic =
-    {
-      subPackages,
-      pname,
-      postInstall ? "",
-      mainProgram,
+    { subPackages
+    , pname
+    , postInstall ? ""
+    , mainProgram
+    ,
     }:
     buildGoModule rec {
       inherit pname;

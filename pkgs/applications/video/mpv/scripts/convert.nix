@@ -1,12 +1,11 @@
-{
-  lib,
-  fetchgit,
-  unstableGitUpdater,
-
-  buildLua,
-  libnotify,
-  mkvtoolnix-cli,
-  yad,
+{ lib
+, fetchgit
+, unstableGitUpdater
+, buildLua
+, libnotify
+, mkvtoolnix-cli
+, yad
+,
 }:
 
 buildLua {

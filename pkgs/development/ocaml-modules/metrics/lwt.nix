@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  logs,
-  lwt,
-  metrics,
+{ buildDunePackage
+, logs
+, lwt
+, metrics
+,
 }:
 
 buildDunePackage {

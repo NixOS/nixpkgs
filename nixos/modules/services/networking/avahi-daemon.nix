@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.avahi;
@@ -311,12 +310,14 @@ in
     environment.systemPackages = [ cfg.package ];
 
     environment.etc = (
-      lib.mapAttrs' (
-        n: v:
-        lib.nameValuePair "avahi/services/${n}.service" {
-          ${if lib.types.path.check v then "source" else "text"} = v;
-        }
-      ) cfg.extraServiceFiles
+      lib.mapAttrs'
+        (
+          n: v:
+            lib.nameValuePair "avahi/services/${n}.service" {
+              ${if lib.types.path.check v then "source" else "text"} = v;
+            }
+        )
+        cfg.extraServiceFiles
     );
 
     systemd.sockets.avahi-daemon = {

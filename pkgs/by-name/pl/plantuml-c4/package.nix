@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  jre,
-  makeWrapper,
-  plantuml-c4,
-  plantuml,
-  runCommand,
+{ lib
+, stdenv
+, fetchzip
+, jre
+, makeWrapper
+, plantuml-c4
+, plantuml
+, runCommand
+,
 }:
 
 # The C4-PlantUML docs say that it suffices to run plantuml with the

@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  runCommand,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  imagemagick,
-  gtest,
-  SDL2,
-  SDL2_mixer,
-  freetype,
-  libGL,
-  libiconv,
-  libpng,
-  libvlc,
-  libvorbis,
-  libX11,
-  openal,
-  python3,
-  zlib,
-  # the GLES backend on rpi is untested as I don't have the hardware
-  backend ? if stdenv.hostPlatform.isx86 then "OpenGL" else "GLES",
+{ lib
+, stdenv
+, runCommand
+, fetchFromGitHub
+, cmake
+, pkg-config
+, imagemagick
+, gtest
+, SDL2
+, SDL2_mixer
+, freetype
+, libGL
+, libiconv
+, libpng
+, libvlc
+, libvorbis
+, libX11
+, openal
+, python3
+, zlib
+, # the GLES backend on rpi is untested as I don't have the hardware
+  backend ? if stdenv.hostPlatform.isx86 then "OpenGL" else "GLES"
+,
 }:
 
 # Previously we only used libvlc *on* darwin, which is incorrect. According to

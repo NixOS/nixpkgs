@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  paretosecurity,
-  nixosTests,
-  pkg-config,
-  gtk3,
-  webkitgtk_4_1,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, paretosecurity
+, nixosTests
+, pkg-config
+, gtk3
+, webkitgtk_4_1
+,
 }:
 
 buildGoModule (finalAttrs: {

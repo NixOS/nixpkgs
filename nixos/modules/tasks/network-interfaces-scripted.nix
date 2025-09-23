@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 with utils;
@@ -83,9 +82,10 @@ let
           nameValuePair "40-${i.name}" {
             matchConfig.OriginalName = i.name;
             linkConfig =
-              optionalAttrs (i.macAddress != null) {
-                MACAddress = i.macAddress;
-              }
+              optionalAttrs (i.macAddress != null)
+                {
+                  MACAddress = i.macAddress;
+                }
               // optionalAttrs (i.mtu != null) {
                 MTUBytes = toString i.mtu;
               };
@@ -794,9 +794,10 @@ let
           );
 
       in
-      listToAttrs (
-        map configureAddrs interfaces ++ map createTunDevice (filter (i: i.virtual) interfaces)
-      )
+      listToAttrs
+        (
+          map configureAddrs interfaces ++ map createTunDevice (filter (i: i.virtual) interfaces)
+        )
       // mapAttrs' createBridgeDevice cfg.bridges
       // mapAttrs' createVswitchDevice cfg.vswitches
       // mapAttrs' createBondDevice cfg.bonds

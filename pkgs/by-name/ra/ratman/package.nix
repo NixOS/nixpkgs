@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitea,
-  fetchNpmDeps,
-  installShellFiles,
-  pkg-config,
-  rustPlatform,
-  npmHooks,
-  stdenv,
-  nodejs,
-  udev,
+{ lib
+, fetchFromGitea
+, fetchNpmDeps
+, installShellFiles
+, pkg-config
+, rustPlatform
+, npmHooks
+, stdenv
+, nodejs
+, udev
+,
 }:
 
 rustPlatform.buildRustPackage rec {

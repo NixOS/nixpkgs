@@ -1,14 +1,14 @@
-{
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  withSixel ? false,
-  libsixel,
-  xorg,
-  withSki ? true,
+{ fetchFromGitHub
+, installShellFiles
+, lib
+, pkg-config
+, rustPlatform
+, stdenv
+, withSixel ? false
+, libsixel
+, xorg
+, withSki ? true
+,
 }:
 
 rustPlatform.buildRustPackage rec {

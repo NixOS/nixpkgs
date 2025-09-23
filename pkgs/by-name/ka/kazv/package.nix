@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  boost,
-  cmake,
-  cmark,
-  cryptopp,
-  extra-cmake-modules,
-  immer,
-  kdePackages,
-  lager,
-  libkazv,
-  nlohmann_json,
-  olm,
-  pkg-config,
-  qt6,
-  zug,
+{ lib
+, stdenv
+, fetchFromGitLab
+, boost
+, cmake
+, cmark
+, cryptopp
+, extra-cmake-modules
+, immer
+, kdePackages
+, lager
+, libkazv
+, nlohmann_json
+, olm
+, pkg-config
+, qt6
+, zug
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  glibcLocales,
-  removeReferencesTo,
-  graalvmPackages,
+{ lib
+, stdenv
+, glibcLocales
+, removeReferencesTo
+, graalvmPackages
+,
 }:
 
 lib.extendMkDerivation {
@@ -19,38 +19,32 @@ lib.extendMkDerivation {
 
   extendDrvArgs =
     finalAttrs:
-    {
-      dontUnpack ? true,
-      strictDeps ? true,
-      __structuredAttrs ? true,
-
-      # The GraalVM derivation to use
-      graalvmDrv ? graalvmPackages.graalvm-ce,
-
-      executable ? finalAttrs.meta.mainProgram,
-
-      # Default native-image arguments. You probably don't want to set this,
+    { dontUnpack ? true
+    , strictDeps ? true
+    , __structuredAttrs ? true
+    , # The GraalVM derivation to use
+      graalvmDrv ? graalvmPackages.graalvm-ce
+    , executable ? finalAttrs.meta.mainProgram
+    , # Default native-image arguments. You probably don't want to set this,
       # except in special cases. In most cases, use extraNativeBuildArgs instead
       nativeImageBuildArgs ? [
         (lib.optionalString stdenv.hostPlatform.isDarwin "-H:-CheckToolchain")
-        (lib.optionalString (
-          stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
-        ) "-H:PageSize=64K")
+        (lib.optionalString
+          (
+            stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
+          ) "-H:PageSize=64K")
         "-H:Name=${executable}"
         "-march=compatibility"
         "--verbose"
-      ],
-
-      # Extra arguments to be passed to the native-image
-      extraNativeImageBuildArgs ? [ ],
-
-      # XMX size of GraalVM during build
-      graalvmXmx ? "-J-Xmx6g",
-
-      env ? { },
-      meta ? { },
-      passthru ? { },
-      ...
+      ]
+    , # Extra arguments to be passed to the native-image
+      extraNativeImageBuildArgs ? [ ]
+    , # XMX size of GraalVM during build
+      graalvmXmx ? "-J-Xmx6g"
+    , env ? { }
+    , meta ? { }
+    , passthru ? { }
+    , ...
     }@args:
     {
       env = {

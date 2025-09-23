@@ -1,27 +1,27 @@
-{
-  lib,
-  addDriverRunpath,
-  autoconf,
-  automake,
-  bison,
-  cmake,
-  fetchFromGitHub,
-  fetchpatch,
-  libXdmcp,
-  libglvnd,
-  libpthreadstubs,
-  makeWrapper,
-  nix-update-script,
-  pcre,
-  pkg-config,
-  # python3Packages.shiboken2 is currently broken
-  python312Packages,
-  qt5,
-  stdenv,
-  vulkan-loader,
-  wayland,
-  # Boolean flags
-  waylandSupport ? true,
+{ lib
+, addDriverRunpath
+, autoconf
+, automake
+, bison
+, cmake
+, fetchFromGitHub
+, fetchpatch
+, libXdmcp
+, libglvnd
+, libpthreadstubs
+, makeWrapper
+, nix-update-script
+, pcre
+, pkg-config
+, # python3Packages.shiboken2 is currently broken
+  python312Packages
+, qt5
+, stdenv
+, vulkan-loader
+, wayland
+, # Boolean flags
+  waylandSupport ? true
+,
 }:
 
 let

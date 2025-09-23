@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  stdenv,
-  ...
+{ pkgs
+, lib
+, stdenv
+, ...
 }:
 
 let
@@ -23,8 +22,7 @@ let
       in
       {
         expr =
-          (builtins.tryEval (nixos.config.systemd.services.systemd-test-nixos.serviceConfig.StateDirectory))
-          .success;
+          (builtins.tryEval (nixos.config.systemd.services.systemd-test-nixos.serviceConfig.StateDirectory)).success;
         expected = false;
       };
 

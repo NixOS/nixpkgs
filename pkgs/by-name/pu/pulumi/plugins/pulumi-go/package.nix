@@ -1,7 +1,7 @@
-{
-  lib,
-  buildGoModule,
-  pulumi,
+{ lib
+, buildGoModule
+, pulumi
+,
 }:
 buildGoModule rec {
   pname = "pulumi-go";

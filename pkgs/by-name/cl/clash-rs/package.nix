@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  protobuf,
-  versionCheckHook,
-  cmake,
-  pkg-config,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, protobuf
+, versionCheckHook
+, cmake
+, pkg-config
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";

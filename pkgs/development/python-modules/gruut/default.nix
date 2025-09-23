@@ -1,28 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  callPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  babel,
-  dateparser,
-  gruut-ipa,
-  jsonlines,
-  networkx,
-  num2words,
-  numpy,
-  python-crfsuite,
-
-  # optional dependencies
-  pydub,
-  rapidfuzz,
-
-  # checks
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, callPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  babel
+, dateparser
+, gruut-ipa
+, jsonlines
+, networkx
+, num2words
+, numpy
+, python-crfsuite
+, # optional dependencies
+  pydub
+, rapidfuzz
+, # checks
+  pytestCheckHook
+,
 }:
 
 let

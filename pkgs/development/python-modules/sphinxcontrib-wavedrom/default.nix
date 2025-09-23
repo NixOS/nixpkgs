@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
-  sphinx,
-  wavedrom,
-  xcffib,
-  cairosvg,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, sphinx
+, wavedrom
+, xcffib
+, cairosvg
+,
 }:
 
 buildPythonPackage rec {

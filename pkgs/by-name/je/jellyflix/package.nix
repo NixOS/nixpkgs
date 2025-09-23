@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  flutter332,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  alsa-lib,
-  mpv-unwrapped,
+{ lib
+, stdenv
+, flutter332
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, alsa-lib
+, mpv-unwrapped
+,
 }:
 flutter332.buildFlutterApplication rec {
   pname = "jellyflix";

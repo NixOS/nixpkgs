@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pyrect,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pyrect
+,
 }:
 buildPythonPackage rec {
   pname = "pygetwindow";

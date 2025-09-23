@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  python3Packages,
-  pkg-config,
-  libedit,
-  cppcheck,
-  coreutils,
-  asciidoctor,
+{ lib
+, stdenv
+, fetchFromGitLab
+, python3Packages
+, pkg-config
+, libedit
+, cppcheck
+, coreutils
+, asciidoctor
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

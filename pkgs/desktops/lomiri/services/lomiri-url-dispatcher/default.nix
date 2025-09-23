@@ -1,31 +1,31 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  testers,
-  cmake,
-  cmake-extras,
-  dbus,
-  dbus-test-runner,
-  glib,
-  gtest,
-  intltool,
-  json-glib,
-  libapparmor,
-  libxkbcommon,
-  lomiri-app-launch,
-  lomiri-ui-toolkit,
-  makeWrapper,
-  pkg-config,
-  python3,
-  qtbase,
-  qtdeclarative,
-  qtwayland,
-  runtimeShell,
-  sqlite,
-  systemd,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, testers
+, cmake
+, cmake-extras
+, dbus
+, dbus-test-runner
+, glib
+, gtest
+, intltool
+, json-glib
+, libapparmor
+, libxkbcommon
+, lomiri-app-launch
+, lomiri-ui-toolkit
+, makeWrapper
+, pkg-config
+, python3
+, qtbase
+, qtdeclarative
+, qtwayland
+, runtimeShell
+, sqlite
+, systemd
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -73,13 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     (python3.withPackages (
       ps:
-      with ps;
-      [
-        setuptools
-      ]
-      ++ lib.optionals finalAttrs.finalPackage.doCheck [
-        python-dbusmock
-      ]
+        with ps;
+        [
+          setuptools
+        ]
+        ++ lib.optionals finalAttrs.finalPackage.doCheck [
+          python-dbusmock
+        ]
     ))
     wrapQtAppsHook
   ];

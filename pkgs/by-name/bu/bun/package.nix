@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  autoPatchelfHook,
-  unzip,
-  installShellFiles,
-  makeWrapper,
-  openssl,
-  writeShellScript,
-  curl,
-  jq,
-  common-updater-scripts,
-  cctools,
-  darwin,
-  rcodesign,
+{ lib
+, stdenvNoCC
+, fetchurl
+, autoPatchelfHook
+, unzip
+, installShellFiles
+, makeWrapper
+, openssl
+, writeShellScript
+, curl
+, jq
+, common-updater-scripts
+, cctools
+, darwin
+, rcodesign
+,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -28,8 +28,7 @@ stdenvNoCC.mkDerivation rec {
     {
       aarch64-darwin = "bun-darwin-aarch64";
       x86_64-darwin = "bun-darwin-x64-baseline";
-    }
-    .${stdenvNoCC.hostPlatform.system} or null;
+    }.${stdenvNoCC.hostPlatform.system} or null;
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -65,23 +64,23 @@ stdenvNoCC.mkDerivation rec {
     #
     # The baseline builds are no longer an option because they too now require avx support.
     +
-      lib.optionalString
-        (
-          stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform
-          && !(stdenvNoCC.hostPlatform.isDarwin && stdenvNoCC.hostPlatform.isx86_64)
-        )
-        ''
-          completions_dir=$(mktemp -d)
+    lib.optionalString
+      (
+        stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform
+        && !(stdenvNoCC.hostPlatform.isDarwin && stdenvNoCC.hostPlatform.isx86_64)
+      )
+      ''
+        completions_dir=$(mktemp -d)
 
-          SHELL="bash" $out/bin/bun completions $completions_dir
-          SHELL="zsh" $out/bin/bun completions $completions_dir
-          SHELL="fish" $out/bin/bun completions $completions_dir
+        SHELL="bash" $out/bin/bun completions $completions_dir
+        SHELL="zsh" $out/bin/bun completions $completions_dir
+        SHELL="fish" $out/bin/bun completions $completions_dir
 
-          installShellCompletion --name bun \
-            --bash $completions_dir/bun.completion.bash \
-            --zsh $completions_dir/_bun \
-            --fish $completions_dir/bun.fish
-        '';
+        installShellCompletion --name bun \
+          --bash $completions_dir/bun.completion.bash \
+          --zsh $completions_dir/_bun \
+          --fish $completions_dir/bun.fish
+      '';
 
   passthru = {
     sources = {

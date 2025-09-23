@@ -1,8 +1,8 @@
-{
-  lib,
-  vimUtils,
-  fetchFromSourcehut,
-  nix-update-script,
+{ lib
+, vimUtils
+, fetchFromSourcehut
+, nix-update-script
+,
 }:
 vimUtils.buildVimPlugin {
   pname = "hare.vim";

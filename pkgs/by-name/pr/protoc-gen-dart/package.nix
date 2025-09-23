@@ -1,7 +1,7 @@
-{
-  lib,
-  buildDartApplication,
-  fetchFromGitHub,
+{ lib
+, buildDartApplication
+, fetchFromGitHub
+,
 }:
 
 buildDartApplication rec {

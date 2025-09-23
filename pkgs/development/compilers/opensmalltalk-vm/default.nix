@@ -1,31 +1,32 @@
-{
-  config,
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchurl,
-  alsa-lib,
-  coreutils,
-  file,
-  freetype,
-  gnugrep,
-  libpulseaudio,
-  libtool,
-  libuuid,
-  openssl,
-  pango,
-  pkg-config,
-  xorg,
+{ config
+, stdenv
+, lib
+, fetchFromGitHub
+, fetchurl
+, alsa-lib
+, coreutils
+, file
+, freetype
+, gnugrep
+, libpulseaudio
+, libtool
+, libuuid
+, openssl
+, pango
+, pkg-config
+, xorg
+,
 }:
 let
   buildVM =
     {
       # VM-specific information, manually extracted from building/<platformDir>/<vmName>/build/mvm
-      platformDir,
-      vmName,
-      scriptName,
-      configureFlagsArray,
-      configureFlags,
+      platformDir
+    , vmName
+    , scriptName
+    , configureFlagsArray
+    , configureFlags
+    ,
     }:
     let
       src = fetchFromGitHub {
@@ -192,7 +193,7 @@ let
   platform = stdenv.targetPlatform.system;
 in
 if (!config.allowAliases && !(vmsByPlatform ? platform)) then
-  # Don't throw without aliases to not break CI.
+# Don't throw without aliases to not break CI.
   null
 else
   vmsByPlatform.${platform} or (throw (

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  perl,
-  icmake,
-  util-linux,
-  bash,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, perl
+, icmake
+, util-linux
+, bash
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

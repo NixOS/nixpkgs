@@ -1,11 +1,11 @@
-{
-  crun,
-  haskell,
-  haskellPackages,
-  lib,
-  makeWrapper,
-  stdenv,
-  emptyDirectory,
+{ crun
+, haskell
+, haskellPackages
+, lib
+, makeWrapper
+, stdenv
+, emptyDirectory
+,
 }:
 let
   inherit (haskell.lib.compose)
@@ -18,16 +18,18 @@ let
   bundledBins = lib.optional stdenv.hostPlatform.isLinux crun;
 
   overrides = old: {
-    hercules-ci-agent = overrideCabal (o: {
-      isLibrary = true;
-      isExecutable = false;
-      postInstall = ""; # ignore completions
-      enableSharedExecutables = false;
-      buildTarget = "lib:hercules-ci-agent hercules-ci-agent-unit-tests";
-      configureFlags = o.configureFlags or [ ] ++ [
-        "--bindir=${emptyDirectory}/hercules-ci-built-without-binaries/no-bin"
-      ];
-    }) old.hercules-ci-agent;
+    hercules-ci-agent = overrideCabal
+      (o: {
+        isLibrary = true;
+        isExecutable = false;
+        postInstall = ""; # ignore completions
+        enableSharedExecutables = false;
+        buildTarget = "lib:hercules-ci-agent hercules-ci-agent-unit-tests";
+        configureFlags = o.configureFlags or [ ] ++ [
+          "--bindir=${emptyDirectory}/hercules-ci-built-without-binaries/no-bin"
+        ];
+      })
+      old.hercules-ci-agent;
   };
 
   pkg =
@@ -56,7 +58,7 @@ let
       );
 in
 pkg
-// {
+  // {
   meta = pkg.meta // {
     position = toString ./package.nix + ":1";
   };

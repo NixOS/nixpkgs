@@ -1,20 +1,20 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  protobuf,
-  go-protobuf,
-  pkg-config,
-  libnetfilter_queue,
-  libnfnetlink,
-  lib,
-  iptables,
-  makeWrapper,
-  protoc-gen-go-grpc,
-  testers,
-  opensnitch,
-  nixosTests,
-  opensnitch-ui,
-  nix-update-script,
+{ buildGoModule
+, fetchFromGitHub
+, protobuf
+, go-protobuf
+, pkg-config
+, libnetfilter_queue
+, libnfnetlink
+, lib
+, iptables
+, makeWrapper
+, protoc-gen-go-grpc
+, testers
+, opensnitch
+, nixosTests
+, opensnitch-ui
+, nix-update-script
+,
 }:
 let
   # Override protoc-gen-go-grpc to use the compatible version

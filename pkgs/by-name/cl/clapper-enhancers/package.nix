@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  libpeas2,
-  json-glib,
-  libsoup_3,
-  glib,
-  clapper-unwrapped,
-  gst_all_1,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, libpeas2
+, json-glib
+, libsoup_3
+, glib
+, clapper-unwrapped
+, gst_all_1
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

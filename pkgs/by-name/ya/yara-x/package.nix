@@ -1,13 +1,13 @@
-{
-  lib,
-  rust,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  installShellFiles,
-  cargo-c,
-  testers,
-  yara-x,
+{ lib
+, rust
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, cargo-c
+, testers
+, yara-x
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  lib,
-  bundlerEnv,
-  bundlerUpdateScript,
-  ruby,
+{ lib
+, bundlerEnv
+, bundlerUpdateScript
+, ruby
+,
 }:
 
 bundlerEnv {

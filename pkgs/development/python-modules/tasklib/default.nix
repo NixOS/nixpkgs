@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  six,
-  pytz,
-  tzlocal,
-  fetchPypi,
-  taskwarrior2,
-  writeShellScriptBin,
+{ lib
+, buildPythonPackage
+, six
+, pytz
+, tzlocal
+, fetchPypi
+, taskwarrior2
+, writeShellScriptBin
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  bash,
-  coreutils,
-  diffutils,
-  gawk,
-  gnugrep,
-  gnused,
-  host,
-  netcat-openbsd,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, bash
+, coreutils
+, diffutils
+, gawk
+, gnugrep
+, gnused
+, host
+, netcat-openbsd
+,
 }:
 
 stdenvNoCC.mkDerivation {

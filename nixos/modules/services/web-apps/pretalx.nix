@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -25,9 +24,11 @@ let
       ]
       ++ finalPackage.optional-dependencies.redis
       ++ lib.optionals cfg.celery.enable [ celery ]
-      ++ lib.optionals (
-        cfg.settings.database.backend == "postgresql"
-      ) finalPackage.optional-dependencies.postgres;
+      ++ lib.optionals
+        (
+          cfg.settings.database.backend == "postgresql"
+        )
+        finalPackage.optional-dependencies.postgres;
   };
 in
 

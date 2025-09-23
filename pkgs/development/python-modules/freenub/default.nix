@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  aiohttp,
-  cbor2,
-  pycryptodomex,
-  busypie,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-vcr,
-  pytestCheckHook,
-  requests,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, aiohttp
+, cbor2
+, pycryptodomex
+, busypie
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-vcr
+, pytestCheckHook
+, requests
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

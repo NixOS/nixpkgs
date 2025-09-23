@@ -1,5 +1,5 @@
-{
-  ncurses,
+{ ncurses
+,
 }:
 
 ncurses.override {

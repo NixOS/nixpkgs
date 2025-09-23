@@ -1,20 +1,20 @@
-{
-  lib,
-  cargo-tauri,
-  dbus,
-  fetchgit,
-  fetchYarnDeps,
-  freetype,
-  gsettings-desktop-schemas,
-  yarnConfigHook,
-  nodejs,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  webkitgtk_4_1,
-  libayatana-appindicator,
-  wrapGAppsHook4,
-  sqlite,
+{ lib
+, cargo-tauri
+, dbus
+, fetchgit
+, fetchYarnDeps
+, freetype
+, gsettings-desktop-schemas
+, yarnConfigHook
+, nodejs
+, openssl
+, pkg-config
+, rustPlatform
+, webkitgtk_4_1
+, libayatana-appindicator
+, wrapGAppsHook4
+, sqlite
+,
 }:
 
 rustPlatform.buildRustPackage rec {

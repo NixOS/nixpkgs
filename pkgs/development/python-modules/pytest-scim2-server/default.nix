@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  portpicker,
-  pytest,
-  scim2-server,
-  pytestCheckHook,
-  scim2-client,
-  cacert,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, portpicker
+, pytest
+, scim2-server
+, pytestCheckHook
+, scim2-client
+, cacert
+,
 }:
 
 buildPythonPackage rec {

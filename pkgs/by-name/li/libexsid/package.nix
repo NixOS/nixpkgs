@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  docSupport ? true,
-  doxygen,
-  libftdi1,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, docSupport ? true
+, doxygen
+, libftdi1
+,
 }:
 
 stdenv.mkDerivation rec {

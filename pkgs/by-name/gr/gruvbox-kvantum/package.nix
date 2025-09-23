@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  fetchFromGitHub,
-  lib,
-  variant ? "Gruvbox-Dark-Brown",
+{ stdenvNoCC
+, fetchFromGitHub
+, lib
+, variant ? "Gruvbox-Dark-Brown"
+,
 }:
 let
   pname = "gruvbox-kvantum";
@@ -19,29 +19,29 @@ lib.checkListOfEnum "${pname}: variant"
   [ variant ]
 
   stdenvNoCC.mkDerivation
-  {
-    inherit pname;
-    version = "1.1";
+{
+  inherit pname;
+  version = "1.1";
 
-    src = fetchFromGitHub {
-      owner = "sachnr";
-      repo = "gruvbox-kvantum-themes";
-      rev = "f47670be407c1f07c64890ad53884ee9977a7db1";
-      sha256 = "sha256-u2J4Zf9HuMjNCt3qVpgEffkytl/t277FzOvWL8Nm8os=";
-    };
+  src = fetchFromGitHub {
+    owner = "sachnr";
+    repo = "gruvbox-kvantum-themes";
+    rev = "f47670be407c1f07c64890ad53884ee9977a7db1";
+    sha256 = "sha256-u2J4Zf9HuMjNCt3qVpgEffkytl/t277FzOvWL8Nm8os=";
+  };
 
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/share/Kvantum
-      cp -a "${variant}" $out/share/Kvantum
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/share/Kvantum
+    cp -a "${variant}" $out/share/Kvantum
+    runHook postInstall
+  '';
 
-    meta = {
-      description = "Gruvbox themes for kvantum";
-      homepage = "https://github.com/sachnr/gruvbox-kvantum-themes";
-      license = lib.licenses.gpl3;
-      platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ istudyatuni ];
-    };
-  }
+  meta = {
+    description = "Gruvbox themes for kvantum";
+    homepage = "https://github.com/sachnr/gruvbox-kvantum-themes";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ istudyatuni ];
+  };
+}

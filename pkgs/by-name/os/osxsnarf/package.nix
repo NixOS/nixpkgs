@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  plan9port,
+{ stdenv
+, lib
+, fetchFromGitHub
+, plan9port
+,
 }:
 
 stdenv.mkDerivation rec {

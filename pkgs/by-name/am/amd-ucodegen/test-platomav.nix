@@ -1,7 +1,7 @@
-{
-  stdenvNoCC,
-  fetchFromGitHub,
-  amd-ucodegen,
+{ stdenvNoCC
+, fetchFromGitHub
+, amd-ucodegen
+,
 }:
 
 stdenvNoCC.mkDerivation {

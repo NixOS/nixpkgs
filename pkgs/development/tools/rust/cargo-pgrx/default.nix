@@ -1,17 +1,17 @@
-{
-  fetchCrate,
-  lib,
-  openssl,
-  pkg-config,
-  rustPlatform,
+{ fetchCrate
+, lib
+, openssl
+, pkg-config
+, rustPlatform
+,
 }:
 
 let
   generic =
-    {
-      version,
-      hash,
-      cargoHash,
+    { version
+    , hash
+    , cargoHash
+    ,
     }:
     rustPlatform.buildRustPackage {
       pname = "cargo-pgrx";
@@ -65,4 +65,4 @@ in
     cargoHash = "sha256-3eyBDWDoCzSU0tbab8qbjSnBkkN0oOgd7YbuyHLEHYw=";
   };
 }
-// lib.mapAttrs (_: generic) (import ./pinned.nix)
+  // lib.mapAttrs (_: generic) (import ./pinned.nix)

@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkYaziPlugin,
+{ lib
+, fetchFromGitHub
+, mkYaziPlugin
+,
 }:
 mkYaziPlugin {
   pname = "relative-motions.yazi";

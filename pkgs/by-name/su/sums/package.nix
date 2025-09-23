@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libadwaita,
-  mpfr,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, desktop-file-utils
+, libadwaita
+, mpfr
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

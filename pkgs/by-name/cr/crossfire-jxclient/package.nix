@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  makeWrapper,
-  gradle,
-  jre,
-  ffmpeg,
+{ stdenv
+, lib
+, fetchgit
+, makeWrapper
+, gradle
+, jre
+, ffmpeg
+,
 }:
 
 stdenv.mkDerivation rec {

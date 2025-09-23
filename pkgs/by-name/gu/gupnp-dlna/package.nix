@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_412,
-  libxml2,
-  gst_all_1,
-  gnome,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_412
+, libxml2
+, gst_all_1
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

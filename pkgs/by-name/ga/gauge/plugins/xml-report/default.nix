@@ -1,6 +1,6 @@
-{
-  lib,
-  makeGaugePlugin,
+{ lib
+, makeGaugePlugin
+,
 }:
 makeGaugePlugin {
   pname = "xml-report";

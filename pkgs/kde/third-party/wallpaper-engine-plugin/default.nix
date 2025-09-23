@@ -1,19 +1,19 @@
-{
-  extra-cmake-modules,
-  fetchFromGitHub,
-  kpackage,
-  libplasma,
-  lib,
-  lz4,
-  mkKdeDerivation,
-  mpv-unwrapped,
-  pkg-config,
-  python3,
-  qtbase,
-  qtmultimedia,
-  qtwebchannel,
-  qtwebengine,
-  qtwebsockets,
+{ extra-cmake-modules
+, fetchFromGitHub
+, kpackage
+, libplasma
+, lib
+, lz4
+, mkKdeDerivation
+, mpv-unwrapped
+, pkg-config
+, python3
+, qtbase
+, qtmultimedia
+, qtwebchannel
+, qtwebengine
+, qtwebsockets
+,
 }:
 mkKdeDerivation {
   pname = "wallpaper-engine-kde-plugin";

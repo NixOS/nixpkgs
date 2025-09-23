@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  diagrams,
-  fetchFromGitHub,
-  osc-sdk-python,
-  setuptools,
+{ lib
+, buildPythonPackage
+, diagrams
+, fetchFromGitHub
+, osc-sdk-python
+, setuptools
+,
 }:
 
 buildPythonPackage {

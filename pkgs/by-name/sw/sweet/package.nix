@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  unzip,
-  gtk-engine-murrine,
-  colorVariants ? [ ], # default: install all icons
+{ lib
+, stdenvNoCC
+, fetchurl
+, unzip
+, gtk-engine-murrine
+, colorVariants ? [ ]
+, # default: install all icons
 }:
 
 let

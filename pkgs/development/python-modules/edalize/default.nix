@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  coreutils,
-  jinja2,
-  pandas,
-  pyparsing,
-  pytestCheckHook,
-  pythonOlder,
-  which,
-  yosys,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, coreutils
+, jinja2
+, pandas
+, pyparsing
+, pytestCheckHook
+, pythonOlder
+, which
+, yosys
+,
 }:
 
 buildPythonPackage rec {

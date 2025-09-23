@@ -1,42 +1,39 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  attrs,
-  boto3,
-  cloudpickle,
-  docker,
-  fastapi,
-  google-pasta,
-  graphene,
-  importlib-metadata,
-  jsonschema,
-  numpy,
-  omegaconf,
-  packaging,
-  pandas,
-  pathos,
-  platformdirs,
-  protobuf,
-  psutil,
-  pyyaml,
-  requests,
-  sagemaker-core,
-  schema,
-  smdebug-rulesconfig,
-  tblib,
-  tqdm,
-  urllib3,
-  uvicorn,
-
-  # optional-dependencies
-  scipy,
-  accelerate,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  attrs
+, boto3
+, cloudpickle
+, docker
+, fastapi
+, google-pasta
+, graphene
+, importlib-metadata
+, jsonschema
+, numpy
+, omegaconf
+, packaging
+, pandas
+, pathos
+, platformdirs
+, protobuf
+, psutil
+, pyyaml
+, requests
+, sagemaker-core
+, schema
+, smdebug-rulesconfig
+, tblib
+, tqdm
+, urllib3
+, uvicorn
+, # optional-dependencies
+  scipy
+, accelerate
+,
 }:
 
 buildPythonPackage rec {

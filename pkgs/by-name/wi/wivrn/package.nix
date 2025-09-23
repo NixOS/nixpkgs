@@ -1,55 +1,55 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  fetchpatch,
-  applyPatches,
-  autoAddDriverRunpath,
-  avahi,
-  boost,
-  cli11,
-  cmake,
-  cudaPackages ? { },
-  cudaSupport ? config.cudaSupport,
-  eigen,
-  ffmpeg,
-  freetype,
-  git,
-  glib,
-  glm,
-  glslang,
-  harfbuzz,
-  kdePackages,
-  libarchive,
-  libdrm,
-  libGL,
-  libnotify,
-  libpulseaudio,
-  librsvg,
-  libva,
-  libX11,
-  libXrandr,
-  makeDesktopItem,
-  nix-update-script,
-  nlohmann_json,
-  onnxruntime,
-  opencomposite,
-  openxr-loader,
-  ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite",
-  pipewire,
-  pkg-config,
-  python3,
-  qt6,
-  shaderc,
-  spdlog,
-  systemd,
-  udev,
-  vulkan-headers,
-  vulkan-loader,
-  x264,
-  xrizer,
+{ config
+, lib
+, stdenv
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchpatch
+, applyPatches
+, autoAddDriverRunpath
+, avahi
+, boost
+, cli11
+, cmake
+, cudaPackages ? { }
+, cudaSupport ? config.cudaSupport
+, eigen
+, ffmpeg
+, freetype
+, git
+, glib
+, glm
+, glslang
+, harfbuzz
+, kdePackages
+, libarchive
+, libdrm
+, libGL
+, libnotify
+, libpulseaudio
+, librsvg
+, libva
+, libX11
+, libXrandr
+, makeDesktopItem
+, nix-update-script
+, nlohmann_json
+, onnxruntime
+, opencomposite
+, openxr-loader
+, ovrCompatSearchPaths ? "${xrizer}/lib/xrizer:${opencomposite}/lib/opencomposite"
+, pipewire
+, pkg-config
+, python3
+, qt6
+, shaderc
+, spdlog
+, systemd
+, udev
+, vulkan-headers
+, vulkan-loader
+, x264
+, xrizer
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";

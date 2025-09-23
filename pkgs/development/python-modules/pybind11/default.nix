@@ -1,31 +1,32 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  setuptools,
-  boost,
-  eigen,
-  python,
-  catch,
-  numpy,
-  pytestCheckHook,
-  libxcrypt,
-  makeSetupHook,
+{ stdenv
+, lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, cmake
+, ninja
+, setuptools
+, boost
+, eigen
+, python
+, catch
+, numpy
+, pytestCheckHook
+, libxcrypt
+, makeSetupHook
+,
 }:
 let
-  setupHook = makeSetupHook {
-    name = "pybind11-setup-hook";
-    substitutions = {
-      out = placeholder "out";
-      pythonInterpreter = python.pythonOnBuildForHost.interpreter;
-      pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
-      pythonSitePackages = "${python}/${python.sitePackages}";
-    };
-  } ./setup-hook.sh;
+  setupHook = makeSetupHook
+    {
+      name = "pybind11-setup-hook";
+      substitutions = {
+        out = placeholder "out";
+        pythonInterpreter = python.pythonOnBuildForHost.interpreter;
+        pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
+        pythonSitePackages = "${python}/${python.sitePackages}";
+      };
+    } ./setup-hook.sh;
 in
 buildPythonPackage rec {
   pname = "pybind11";

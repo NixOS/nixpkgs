@@ -1,13 +1,13 @@
-{
-  cmake,
-  enableGUI ? false,
-  fetchFromSourcehut,
-  gitUpdater,
-  lib,
-  libusb1,
-  pkg-config,
-  qt6,
-  stdenv,
+{ cmake
+, enableGUI ? false
+, fetchFromSourcehut
+, gitUpdater
+, lib
+, libusb1
+, pkg-config
+, qt6
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

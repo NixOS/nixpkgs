@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  mystmd,
-  testers,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, mystmd
+, testers
+, nix-update-script
+,
 }:
 
 buildNpmPackage rec {

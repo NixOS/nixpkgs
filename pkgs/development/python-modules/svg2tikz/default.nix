@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  inkex,
-  lxml,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, inkex
+, lxml
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

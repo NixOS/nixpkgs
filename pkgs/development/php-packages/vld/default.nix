@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPecl,
-  fetchFromGitHub,
-  nix-update-script,
-  php,
+{ lib
+, buildPecl
+, fetchFromGitHub
+, nix-update-script
+, php
+,
 }:
 
 let

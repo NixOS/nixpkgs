@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -77,7 +76,8 @@ in
         package = mkPackageOption pkgs [
           "pingvin-share"
           "backend"
-        ] { };
+        ]
+          { };
 
         port = mkOption {
           type = types.port;
@@ -93,7 +93,8 @@ in
         package = mkPackageOption pkgs [
           "pingvin-share"
           "frontend"
-        ] { };
+        ]
+          { };
 
         port = mkOption {
           type = types.port;

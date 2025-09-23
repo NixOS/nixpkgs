@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
-  ncurses,
-  gettext,
-  pkg-config,
-  cscope,
-  ruby_3_2,
-  tcl,
-  perl540,
-  luajit,
-  darwin,
-  libiconv,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, ncurses
+, gettext
+, pkg-config
+, cscope
+, ruby_3_2
+, tcl
+, perl540
+, luajit
+, darwin
+, libiconv
+, python3
+,
 }:
 
 # Try to match MacVim's documented script interface compatibility

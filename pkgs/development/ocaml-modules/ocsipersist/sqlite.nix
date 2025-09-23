@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  ocsipersist,
-  lwt_log,
-  ocaml_sqlite3,
-  ocsigen_server,
+{ buildDunePackage
+, ocsipersist
+, lwt_log
+, ocaml_sqlite3
+, ocsigen_server
+,
 }:
 
 buildDunePackage {

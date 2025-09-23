@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  vdr,
-  util-linux,
-  groff,
-  perl,
-  pcre,
+{ lib
+, stdenv
+, fetchFromGitHub
+, vdr
+, util-linux
+, groff
+, perl
+, pcre
+,
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-epgsearch";

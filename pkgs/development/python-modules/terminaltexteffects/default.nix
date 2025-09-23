@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

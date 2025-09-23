@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -726,10 +725,11 @@ in
         Group = "frigate";
         SupplementaryGroups = [ "render" ] ++ optionals withCoral [ "coral" ];
 
-        AmbientCapabilities = optionals (elem cfg.vaapiDriver [
-          "i965"
-          "iHD"
-        ]) [ "CAP_PERFMON" ]; # for intel_gpu_top
+        AmbientCapabilities = optionals
+          (elem cfg.vaapiDriver [
+            "i965"
+            "iHD"
+          ]) [ "CAP_PERFMON" ]; # for intel_gpu_top
 
         UMask = "0027";
 

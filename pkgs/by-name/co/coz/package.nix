@@ -1,12 +1,12 @@
-{
-  lib,
-  docutils,
-  fetchFromGitHub,
-  libelfin,
-  ncurses,
-  pkg-config,
-  python3Packages,
-  makeWrapper,
+{ lib
+, docutils
+, fetchFromGitHub
+, libelfin
+, ncurses
+, pkg-config
+, python3Packages
+, makeWrapper
+,
 }:
 
 python3Packages.buildPythonApplication rec {

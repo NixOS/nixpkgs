@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  makeDesktopItem,
-  yarn,
-  nodejs,
-  jq,
-  electron_37,
-  element-web,
-  sqlcipher,
-  callPackage,
-  desktopToDarwinBundle,
-  typescript,
-  useKeytar ? true,
-  # command line arguments which are always set
-  commandLineArgs ? "",
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, makeDesktopItem
+, yarn
+, nodejs
+, jq
+, electron_37
+, element-web
+, sqlcipher
+, callPackage
+, desktopToDarwinBundle
+, typescript
+, useKeytar ? true
+, # command line arguments which are always set
+  commandLineArgs ? ""
+,
 }:
 
 let
@@ -31,7 +31,7 @@ in
 stdenv.mkDerivation (
   finalAttrs:
   builtins.removeAttrs pinData [ "hashes" ]
-  // {
+    // {
     pname = "element-desktop";
     name = "${finalAttrs.pname}-${finalAttrs.version}";
     src = fetchFromGitHub {

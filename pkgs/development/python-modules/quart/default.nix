@@ -1,34 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  flit-core,
-
-  # propagates
-  aiofiles,
-  blinker,
-  click,
-  flask,
-  hypercorn,
-  importlib-metadata,
-  itsdangerous,
-  jinja2,
-  markupsafe,
-  pydata-sphinx-theme,
-  python-dotenv,
-  typing-extensions,
-  werkzeug,
-
-  # tests
-  hypothesis,
-  mock,
-  py,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  flit-core
+, # propagates
+  aiofiles
+, blinker
+, click
+, flask
+, hypercorn
+, importlib-metadata
+, itsdangerous
+, jinja2
+, markupsafe
+, pydata-sphinx-theme
+, python-dotenv
+, typing-extensions
+, werkzeug
+, # tests
+  hypothesis
+, mock
+, py
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

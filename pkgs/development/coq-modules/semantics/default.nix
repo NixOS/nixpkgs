@@ -1,8 +1,8 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -42,7 +42,8 @@ mkCoqDerivation {
         case = "8.6";
         out = "8.6.0";
       }
-    ] null;
+    ]
+      null;
 
   mlPlugin = true;
   nativeBuildInputs = (with coq.ocamlPackages; [ ocamlbuild ]);

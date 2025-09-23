@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  # Python Inputs
-  setuptools,
-  ipywidgets,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # Python Inputs
+  setuptools
+, ipywidgets
+,
 }:
 
 buildPythonPackage rec {

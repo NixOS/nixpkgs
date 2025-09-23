@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ant,
-  jdk,
-  stripJavaArchivesHook,
-  cunit,
-  ncurses,
+{ lib
+, stdenv
+, fetchurl
+, ant
+, jdk
+, stripJavaArchivesHook
+, cunit
+, ncurses
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

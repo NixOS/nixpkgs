@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  glib,
-  udev,
-  libevdev,
-  libconfig,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, glib
+, udev
+, libevdev
+, libconfig
+,
 }:
 
 stdenv.mkDerivation (oldAttrs: {

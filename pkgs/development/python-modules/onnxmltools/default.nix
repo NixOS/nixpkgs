@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  numpy,
-  onnx,
-  skl2onnx,
-
-  # tests
-  pytestCheckHook,
-  pandas,
-  xgboost,
-  onnxruntime,
-  scikit-learn,
-  pyspark,
-  lightgbm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  numpy
+, onnx
+, skl2onnx
+, # tests
+  pytestCheckHook
+, pandas
+, xgboost
+, onnxruntime
+, scikit-learn
+, pyspark
+, lightgbm
+,
 }:
 
 buildPythonPackage rec {

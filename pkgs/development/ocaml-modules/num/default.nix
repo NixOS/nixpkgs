@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
-  withStatic ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, ocaml
+, findlib
+, withStatic ? false
+,
 }:
 
 stdenv.mkDerivation (
@@ -43,7 +43,7 @@ stdenv.mkDerivation (
       inherit (src.meta) homepage;
     };
   }
-  // (lib.optionalAttrs (lib.versions.majorMinor ocaml.version == "4.06") {
+    // (lib.optionalAttrs (lib.versions.majorMinor ocaml.version == "4.06") {
     env.NIX_CFLAGS_COMPILE = "-fcommon";
   })
 )

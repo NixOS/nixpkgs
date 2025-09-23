@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libgit2,
-  rust-jemalloc-sys,
-  zlib,
-  gitMinimal,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libgit2
+, rust-jemalloc-sys
+, zlib
+, gitMinimal
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "biome";

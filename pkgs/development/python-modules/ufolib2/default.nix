@@ -1,17 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  attrs,
-  fonttools,
-  pytestCheckHook,
-  setuptools-scm,
-
-  # optionals
-  cattrs,
-  lxml,
-  orjson,
-  msgpack,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, attrs
+, fonttools
+, pytestCheckHook
+, setuptools-scm
+, # optionals
+  cattrs
+, lxml
+, orjson
+, msgpack
+,
 }:
 
 buildPythonPackage rec {

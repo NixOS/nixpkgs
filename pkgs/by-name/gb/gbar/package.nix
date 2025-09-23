@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  cmake,
-  pkg-config,
-  libdbusmenu-gtk3,
-  gtk-layer-shell,
-  libsass,
-  wayland-protocols,
-  wayland-scanner,
-  bluez,
-  gtk3,
-  libpulseaudio,
-  wayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, cmake
+, pkg-config
+, libdbusmenu-gtk3
+, gtk-layer-shell
+, libsass
+, wayland-protocols
+, wayland-scanner
+, bluez
+, gtk3
+, libpulseaudio
+, wayland
+,
 }:
 
 stdenv.mkDerivation {

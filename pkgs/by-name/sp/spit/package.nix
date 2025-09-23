@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  installShellFiles,
-  fetchFromGitHub,
+{ stdenv
+, lib
+, installShellFiles
+, fetchFromGitHub
+,
 }:
 
 stdenv.mkDerivation rec {

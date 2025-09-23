@@ -1,16 +1,16 @@
-{
-  lib,
-  buildGoModule,
-  bzip2,
-  fetchFromGitHub,
-  lz4,
-  nixosTests,
-  pkg-config,
-  rocksdb_9_10,
-  snappy,
-  stdenv,
-  zeromq,
-  zlib,
+{ lib
+, buildGoModule
+, bzip2
+, fetchFromGitHub
+, lz4
+, nixosTests
+, pkg-config
+, rocksdb_9_10
+, snappy
+, stdenv
+, zeromq
+, zlib
+,
 }:
 
 let

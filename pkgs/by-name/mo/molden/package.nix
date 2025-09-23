@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  which,
-  gfortran,
-  libGLU,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, which
+, gfortran
+, libGLU
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

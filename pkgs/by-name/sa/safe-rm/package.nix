@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchgit,
-  coreutils,
-  installShellFiles,
+{ lib
+, rustPlatform
+, fetchgit
+, coreutils
+, installShellFiles
+,
 }:
 
 rustPlatform.buildRustPackage rec {

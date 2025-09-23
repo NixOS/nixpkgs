@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bash,
-  flex,
-  bison,
-  valgrind,
+{ lib
+, stdenv
+, fetchurl
+, bash
+, flex
+, bison
+, valgrind
+,
 }:
 
 stdenv.mkDerivation rec {

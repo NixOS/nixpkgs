@@ -49,16 +49,16 @@ with pkgs;
               (filter (n: n != "gcc12Stdenv"))
             ]
             ++
-              lib.optionals
-                (
-                  !(
-                    (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.isx86_64)
-                    && (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)
-                  )
+            lib.optionals
+              (
+                !(
+                  (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.isx86_64)
+                  && (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)
                 )
-                [
-                  (filter (n: !lib.hasSuffix "MultiStdenv" n))
-                ]
+              )
+              [
+                (filter (n: !lib.hasSuffix "MultiStdenv" n))
+              ]
           );
         in
         lib.genAttrs pkgSets (name: callPackage ./cc-wrapper { stdenv = pkgs.${name}; });
@@ -214,12 +214,14 @@ with pkgs;
 
   # Accumulate all passthru.tests from arrayUtilities into a single attribute set.
   arrayUtilities = recurseIntoAttrs (
-    lib.concatMapAttrs (
-      name: value:
-      lib.optionalAttrs (value ? passthru.tests) {
-        ${name} = value.passthru.tests;
-      }
-    ) arrayUtilities
+    lib.concatMapAttrs
+      (
+        name: value:
+          lib.optionalAttrs (value ? passthru.tests) {
+            ${name} = value.passthru.tests;
+          }
+      )
+      arrayUtilities
   );
 
   srcOnly = callPackage ../build-support/src-only/tests.nix { };

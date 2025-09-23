@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cached-property,
-  click,
-  fetchFromGitHub,
-  packaging,
-  pytest-cov-stub,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cached-property
+, click
+, fetchFromGitHub
+, packaging
+, pytest-cov-stub
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

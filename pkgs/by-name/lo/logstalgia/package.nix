@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  SDL2,
-  ftgl,
-  pkg-config,
-  libpng,
-  libjpeg,
-  pcre2,
-  SDL2_image,
-  glew,
-  libGLU,
-  libGL,
-  libX11,
-  boost,
-  glm,
-  freetype,
+{ lib
+, stdenv
+, fetchurl
+, SDL2
+, ftgl
+, pkg-config
+, libpng
+, libjpeg
+, pcre2
+, SDL2_image
+, glew
+, libGLU
+, libGL
+, libX11
+, boost
+, glm
+, freetype
+,
 }:
 
 stdenv.mkDerivation rec {

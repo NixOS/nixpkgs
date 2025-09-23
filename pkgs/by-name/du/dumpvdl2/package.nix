@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  versionCheckHook,
-  cmake,
-  pkg-config,
-  glib,
-  soapysdr,
-  sdrplay,
-  sdrplaySupport ? false,
-  sqlite,
-  zeromq,
-  libacars,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nix-update-script
+, versionCheckHook
+, cmake
+, pkg-config
+, glib
+, soapysdr
+, sdrplay
+, sdrplaySupport ? false
+, sqlite
+, zeromq
+, libacars
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

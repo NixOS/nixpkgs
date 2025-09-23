@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  setuptools,
-  setuptools-scm,
-  attrs,
-  pdfminer-six,
-  commoncode,
-  plugincode,
-  binaryornot,
-  typecode-libmagic,
-  pytestCheckHook,
-  pytest-xdist,
-  pythonOlder,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools
+, setuptools-scm
+, attrs
+, pdfminer-six
+, commoncode
+, plugincode
+, binaryornot
+, typecode-libmagic
+, pytestCheckHook
+, pytest-xdist
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

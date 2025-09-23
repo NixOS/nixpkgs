@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  smartmontools,
-  fetchFromGitHub,
-  fetchzip,
-  cmake,
-  qt6,
-  qdiskinfo,
-  themeBundle ? null,
-  nix-update-script,
+{ lib
+, stdenv
+, smartmontools
+, fetchFromGitHub
+, fetchzip
+, cmake
+, qt6
+, qdiskinfo
+, themeBundle ? null
+, nix-update-script
+,
 }:
 
 let
@@ -25,14 +25,14 @@ in
 
 # check theme bundle
 assert
-  isThemed
+isThemed
   -> (
-    themeBundle' ? src
-    && themeBundle' ? paths.bgDark
-    && themeBundle' ? paths.bgLight
-    && themeBundle' ? paths.status
-    && themeBundle' ? rightCharacter
-  );
+  themeBundle' ? src
+  && themeBundle' ? paths.bgDark
+  && themeBundle' ? paths.bgLight
+  && themeBundle' ? paths.status
+  && themeBundle' ? rightCharacter
+);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdiskinfo";
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
       themeBundles = import ./themes.nix { inherit themeSources; };
       tests = lib.flip lib.mapAttrs themeBundles (
         themeName: themeBundle:
-        (qdiskinfo.override { inherit themeBundle; }).overrideAttrs { pname = "qdiskinfo-${themeName}"; }
+          (qdiskinfo.override { inherit themeBundle; }).overrideAttrs { pname = "qdiskinfo-${themeName}"; }
       );
       updateScript = nix-update-script { };
     };

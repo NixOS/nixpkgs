@@ -1,25 +1,24 @@
-{
-  stdenv,
-  lib,
-  addDriverRunpath,
-  alsa-lib,
-  autoPatchelfHook,
-  cairo,
-  fetchurl,
-  flac,
-  gcc14,
-  gssdp,
-  gupnp,
-  gupnp-av,
-  lame,
-  libgmpris,
-  libusb-compat-0_1,
-  llvmPackages_19,
-  mpg123,
-  rpmextract,
-  wavpack,
-
-  callPackage,
+{ stdenv
+, lib
+, addDriverRunpath
+, alsa-lib
+, autoPatchelfHook
+, cairo
+, fetchurl
+, flac
+, gcc14
+, gssdp
+, gupnp
+, gupnp-av
+, lame
+, libgmpris
+, libusb-compat-0_1
+, llvmPackages_19
+, mpg123
+, rpmextract
+, wavpack
+, callPackage
+,
 }:
 let
   rygel-hqplayerd = callPackage ./rygel.nix { };

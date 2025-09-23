@@ -1,16 +1,16 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  curl,
-  pkg-config,
-  openssl,
-  zlib,
-  asciidoctor,
-  nix-update-script,
-  findutils,
-  installShellFiles,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, curl
+, pkg-config
+, openssl
+, zlib
+, asciidoctor
+, nix-update-script
+, findutils
+, installShellFiles
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

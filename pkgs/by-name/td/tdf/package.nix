@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  cairo,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, cairo
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

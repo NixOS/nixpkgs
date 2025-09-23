@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitea,
-  unstableGitUpdater,
+{ lib
+, buildGoModule
+, fetchFromGitea
+, unstableGitUpdater
+,
 }:
 buildGoModule {
   pname = "mozhi";

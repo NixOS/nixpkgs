@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  replaceVars,
-  graphviz,
-  coreutils,
-  pkg-config,
-  setuptools,
-  pytest,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, replaceVars
+, graphviz
+, coreutils
+, pkg-config
+, setuptools
+, pytest
+,
 }:
 
 buildPythonPackage rec {

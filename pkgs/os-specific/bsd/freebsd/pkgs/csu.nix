@@ -1,15 +1,15 @@
-{
-  lib,
-  mkDerivation,
-  versionData,
-  bsdSetupHook,
-  freebsdSetupHook,
-  makeMinimal,
-  install,
-  flex,
-  byacc,
-  gencat,
-  include,
+{ lib
+, mkDerivation
+, versionData
+, bsdSetupHook
+, freebsdSetupHook
+, makeMinimal
+, install
+, flex
+, byacc
+, gencat
+, include
+,
 }:
 
 mkDerivation {

@@ -1,22 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # dependencies
-  appdirs,
-  keras,
-  mhcgnomes,
-  numpy,
-  pandas,
-  pyyaml,
-  scikit-learn,
-  tensorflow,
-  tf-keras,
-  tqdm,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # dependencies
+  appdirs
+, keras
+, mhcgnomes
+, numpy
+, pandas
+, pyyaml
+, scikit-learn
+, tensorflow
+, tf-keras
+, tqdm
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

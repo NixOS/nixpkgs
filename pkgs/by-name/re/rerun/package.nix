@@ -1,36 +1,36 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  # nativeBuildInputs
-  binaryen,
-  lld,
-  llvmPackages,
-  pkg-config,
-  protobuf,
-  rustfmt,
-  nasm,
-  # buildInputs
-  freetype,
-  glib,
-  gtk3,
-  libxkbcommon,
-  openssl,
-  vulkan-loader,
-  wayland,
-  versionCheckHook,
-  # passthru
-  nix-update-script,
-  python3Packages,
-  # Expose features to the user for the wasm web viewer build
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, # nativeBuildInputs
+  binaryen
+, lld
+, llvmPackages
+, pkg-config
+, protobuf
+, rustfmt
+, nasm
+, # buildInputs
+  freetype
+, glib
+, gtk3
+, libxkbcommon
+, openssl
+, vulkan-loader
+, wayland
+, versionCheckHook
+, # passthru
+  nix-update-script
+, python3Packages
+, # Expose features to the user for the wasm web viewer build
   # So he can easily override them
   # We omit the "analytics" feature because it is opt-out and not opt-in.
   # More information can be found in there README:
   # https://raw.githubusercontent.com/rerun-io/rerun/5a9794990c4903c088ad77174e65eb2573162d97/crates/utils/re_analytics/README.md
   buildWebViewerFeatures ? [
     "map_view"
-  ],
+  ]
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";

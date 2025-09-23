@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  perl,
-  pkg-config,
-  curl,
-  nix,
-  libsodium,
-  boost,
-  autoreconfHook,
-  autoconf-archive,
-  xz,
-  meson,
-  ninja,
-  bzip2,
-  libarchive,
+{ stdenv
+, lib
+, perl
+, pkg-config
+, curl
+, nix
+, libsodium
+, boost
+, autoreconfHook
+, autoconf-archive
+, xz
+, meson
+, ninja
+, bzip2
+, libarchive
+,
 }:
 
 let
@@ -22,10 +22,10 @@ let
   atLeast226 = lib.versionAtLeast nix.version "2.26";
 
   mkConfigureOption =
-    {
-      mesonOption,
-      autoconfOption,
-      value,
+    { mesonOption
+    , autoconfOption
+    , value
+    ,
     }:
     let
       setFlagTo =

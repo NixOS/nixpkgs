@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  makeBinaryWrapper,
-  jre_headless,
-  nixosTests,
-  callPackage,
-  confFile ? null,
-  plugins ? [ ],
-  extraFeatures ? [ ],
-  disabledFeatures ? [ ],
+{ lib
+, stdenv
+, fetchzip
+, makeBinaryWrapper
+, jre_headless
+, nixosTests
+, callPackage
+, confFile ? null
+, plugins ? [ ]
+, extraFeatures ? [ ]
+, disabledFeatures ? [ ]
+,
 }:
 
 let

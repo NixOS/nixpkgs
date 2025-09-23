@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, fetchzip
+, fetchFromGitHub
+,
 }:
 let
   pname = "nitrokey-storage-firmware";

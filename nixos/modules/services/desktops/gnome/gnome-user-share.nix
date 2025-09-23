@@ -1,10 +1,9 @@
 # GNOME User Share daemon.
 
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 {

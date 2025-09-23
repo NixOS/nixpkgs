@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  buildLua,
-  lib,
-  unstableGitUpdater,
+{ fetchFromGitHub
+, buildLua
+, lib
+, unstableGitUpdater
+,
 }:
 
 buildLua {

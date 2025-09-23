@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  pkg-config,
-  fftw,
-  fftwFloat,
-  python3,
-  datatype ? "double",
-  libpng,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  enableOpenmp ? false,
-  llvmPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, fftw
+, fftwFloat
+, python3
+, datatype ? "double"
+, libpng
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableOpenmp ? false
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

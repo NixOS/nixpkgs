@@ -1,12 +1,12 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  kyverno-chainsaw,
-  lib,
-  nix-update-script,
-  stdenv,
-  testers,
+{ buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, kyverno-chainsaw
+, lib
+, nix-update-script
+, stdenv
+, testers
+,
 }:
 
 buildGoModule rec {

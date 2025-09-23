@@ -1,8 +1,8 @@
-{
-  runCommand,
-  gcc,
-  sparse,
-  writeText,
+{ runCommand
+, gcc
+, sparse
+, writeText
+,
 }:
 let
   src = writeText "CODE.c" ''
@@ -16,13 +16,13 @@ let
   '';
 in
 runCommand "${sparse.pname}-tests"
-  {
-    buildInputs = [
-      gcc
-      sparse
-    ];
-    meta.timeout = 3;
-  }
+{
+  buildInputs = [
+    gcc
+    sparse
+  ];
+  meta.timeout = 3;
+}
   ''
     set -eu
     ${sparse}/bin/cgcc ${src} > output 2>&1 || ret=$?

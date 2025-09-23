@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  liboprf,
-  setuptools,
-  ble-serial,
-  pyserial,
-  pyserial-asyncio,
-  pysodium,
-  pyudev,
-  securestring,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, liboprf
+, setuptools
+, ble-serial
+, pyserial
+, pyserial-asyncio
+, pysodium
+, pyudev
+, securestring
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

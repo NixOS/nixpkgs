@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchFromGitHub,
-  gperf,
-  gawk,
-  gitUpdater,
-  pkg-config,
-  boost,
-  luajit_openresty,
-  asciidoctor,
-  emilua,
-  liburing,
-  openssl,
-  cmake,
-  fmt,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchFromGitHub
+, gperf
+, gawk
+, gitUpdater
+, pkg-config
+, boost
+, luajit_openresty
+, asciidoctor
+, emilua
+, liburing
+, openssl
+, cmake
+, fmt
+, zlib
+,
 }:
 
 let

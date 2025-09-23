@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+,
 }:
 
 let

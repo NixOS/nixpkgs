@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchfossil,
-  openssl,
+{ lib
+, stdenv
+, fetchfossil
+, openssl
+,
 }:
 
 stdenv.mkDerivation {

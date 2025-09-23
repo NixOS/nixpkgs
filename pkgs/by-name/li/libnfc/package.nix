@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libusb-compat-0_1,
-  readline,
-  autoreconfHook,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libusb-compat-0_1
+, readline
+, autoreconfHook
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

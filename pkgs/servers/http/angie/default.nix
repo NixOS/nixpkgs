@@ -1,11 +1,10 @@
-{
-  callPackage,
-  lib,
-  fetchurl,
-  nixosTests,
-  withAcme ? false,
-  withQuic ? false,
-  ...
+{ callPackage
+, lib
+, fetchurl
+, nixosTests
+, withAcme ? false
+, withQuic ? false
+, ...
 }@args:
 
 callPackage ../nginx/generic.nix args rec {

@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  google-api-core,
-  google-cloud-logging,
-  proto-plus,
-  protobuf,
-
-  # testing
-  google-cloud-testutils,
-  mock,
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  google-api-core
+, google-cloud-logging
+, proto-plus
+, protobuf
+, # testing
+  google-cloud-testutils
+, mock
+, pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

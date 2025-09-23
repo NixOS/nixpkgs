@@ -1,22 +1,25 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 with lib;
 let
   cfg = config.services.anki-sync-server;
   name = "anki-sync-server";
   specEscape = replaceStrings [ "%" ] [ "%%" ];
-  usersWithIndexes = lists.imap1 (i: user: {
-    i = i;
-    user = user;
-  }) cfg.users;
+  usersWithIndexes = lists.imap1
+    (i: user: {
+      i = i;
+      user = user;
+    })
+    cfg.users;
   usersWithIndexesFile = filter (x: x.user.passwordFile != null) usersWithIndexes;
-  usersWithIndexesNoFile = filter (
-    x: x.user.passwordFile == null && x.user.password != null
-  ) usersWithIndexes;
+  usersWithIndexesNoFile = filter
+    (
+      x: x.user.passwordFile == null && x.user.password != null
+    )
+    usersWithIndexes;
   anki-sync-server-run = pkgs.writeShellScript "anki-sync-server-run" ''
     # When services.anki-sync-server.users.passwordFile is set,
     # each password file is passed as a systemd credential, which is mounted in
@@ -130,9 +133,11 @@ in
         StateDirectory = name;
         ExecStart = anki-sync-server-run;
         Restart = "always";
-        LoadCredential = map (
-          x: "${specEscape x.user.username}:${specEscape (toString x.user.passwordFile)}"
-        ) usersWithIndexesFile;
+        LoadCredential = map
+          (
+            x: "${specEscape x.user.username}:${specEscape (toString x.user.passwordFile)}"
+          )
+          usersWithIndexesFile;
       };
     };
   };

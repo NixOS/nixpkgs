@@ -16,14 +16,12 @@ lib.makeScope pkgs.newScope (
         "gtk2" = "gtk2";
         "gtk3" = "gtk3";
         "sixel" = "framebuffer";
-      }
-      .${self.ui} or null; # Null will never happen
+      }.${self.ui} or null; # Null will never happen
     SDL =
       {
         "sixel" = pkgs.SDL_sixel;
         "framebuffer" = pkgs.SDL;
-      }
-      .${self.ui} or null;
+      }.${self.ui} or null;
 
     browser = callPackage ./browser.nix { };
 

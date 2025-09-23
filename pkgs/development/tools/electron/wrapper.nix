@@ -1,12 +1,12 @@
-{
-  stdenv,
-  electron-unwrapped,
-  wrapGAppsHook3,
-  makeWrapper,
-  gsettings-desktop-schemas,
-  glib,
-  gtk3,
-  gtk4,
+{ stdenv
+, electron-unwrapped
+, wrapGAppsHook3
+, makeWrapper
+, gsettings-desktop-schemas
+, glib
+, gtk3
+, gtk4
+,
 }:
 
 stdenv.mkDerivation {

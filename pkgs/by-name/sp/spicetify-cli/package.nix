@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  replaceVars,
-  spicetify-cli,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, replaceVars
+, spicetify-cli
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "spicetify-cli";

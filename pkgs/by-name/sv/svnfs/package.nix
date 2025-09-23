@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  subversion,
-  fuse,
-  apr,
-  perl,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, subversion
+, fuse
+, apr
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

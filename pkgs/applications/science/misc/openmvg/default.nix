@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  cereal,
-  ceres-solver,
-  clp,
-  coin-utils,
-  eigen,
-  lemon-graph,
-  libjpeg,
-  libpng,
-  libtiff,
-  nix-update-script,
-  openmp,
-  osi,
-  zlib,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableExamples ? false,
-  enableDocs ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, cereal
+, ceres-solver
+, clp
+, coin-utils
+, eigen
+, lemon-graph
+, libjpeg
+, libpng
+, libtiff
+, nix-update-script
+, openmp
+, osi
+, zlib
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableExamples ? false
+, enableDocs ? false
+,
 }:
 
 stdenv.mkDerivation rec {

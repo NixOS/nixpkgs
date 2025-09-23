@@ -1,14 +1,14 @@
-{
-  lib,
-  curl,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  asciidoctor,
-  openssl,
-  ansi2html,
-  installShellFiles,
+{ lib
+, curl
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, asciidoctor
+, openssl
+, ansi2html
+, installShellFiles
+,
 }:
 
 rustPlatform.buildRustPackage rec {

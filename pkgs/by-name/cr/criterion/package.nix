@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boxfort,
-  meson,
-  libcsptr,
-  pkg-config,
-  gettext,
-  cmake,
-  ninja,
-  protobuf,
-  libffi,
-  libgit2,
-  dyncall,
-  nanomsg,
-  nanopbMalloc,
-  python3Packages,
-  testers,
-  criterion,
-  callPackage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boxfort
+, meson
+, libcsptr
+, pkg-config
+, gettext
+, cmake
+, ninja
+, protobuf
+, libffi
+, libgit2
+, dyncall
+, nanomsg
+, nanopbMalloc
+, python3Packages
+, testers
+, criterion
+, callPackage
+,
 }:
 
 let

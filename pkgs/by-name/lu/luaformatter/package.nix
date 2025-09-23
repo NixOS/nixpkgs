@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  antlr4_9,
-  libargs,
-  catch2,
-  cmake,
-  yaml-cpp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, antlr4_9
+, libargs
+, catch2
+, cmake
+, yaml-cpp
+,
 }:
 let
   antlr4 = antlr4_9;

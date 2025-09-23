@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  boost,
-  bzip2,
-  cereal_1_3_2,
-  cmake,
-  curl,
-  fetchFromGitHub,
-  icu,
-  jemalloc,
-  libgff,
-  libiconv,
-  libstaden-read,
-  pkg-config,
-  tbb_2022,
-  xz,
-  zlib,
+{ lib
+, stdenv
+, boost
+, bzip2
+, cereal_1_3_2
+, cmake
+, curl
+, fetchFromGitHub
+, icu
+, jemalloc
+, libgff
+, libiconv
+, libstaden-read
+, pkg-config
+, tbb_2022
+, xz
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

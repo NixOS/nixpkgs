@@ -1,19 +1,19 @@
-{
-  buildGo124Module,
-  buildPackages,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  lib,
-  nodejs,
-  npmHooks,
-  pkg-config,
-  stdenv,
-  ffmpeg-headless,
-  taglib,
-  zlib,
-  nixosTests,
-  nix-update-script,
-  ffmpegSupport ? true,
+{ buildGo124Module
+, buildPackages
+, fetchFromGitHub
+, fetchNpmDeps
+, lib
+, nodejs
+, npmHooks
+, pkg-config
+, stdenv
+, ffmpeg-headless
+, taglib
+, zlib
+, nixosTests
+, nix-update-script
+, ffmpegSupport ? true
+,
 }:
 
 buildGo124Module rec {

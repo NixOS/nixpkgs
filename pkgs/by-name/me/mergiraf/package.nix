@@ -1,12 +1,11 @@
-{
-  lib,
-  fetchFromGitea,
-  rustPlatform,
-  nix-update-script,
-
-  # native check inputs
-  git,
-  versionCheckHook,
+{ lib
+, fetchFromGitea
+, rustPlatform
+, nix-update-script
+, # native check inputs
+  git
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

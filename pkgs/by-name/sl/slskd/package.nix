@@ -1,15 +1,15 @@
-{
-  lib,
-  buildDotnetModule,
-  buildPackages,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  mono,
-  nodejs_20,
-  slskd,
-  testers,
-  nix-update-script,
+{ lib
+, buildDotnetModule
+, buildPackages
+, dotnetCorePackages
+, fetchFromGitHub
+, fetchNpmDeps
+, mono
+, nodejs_20
+, slskd
+, testers
+, nix-update-script
+,
 }:
 
 let

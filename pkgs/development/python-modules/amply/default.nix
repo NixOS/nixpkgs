@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  setuptools-scm,
-  docutils,
-  pyparsing,
-  pytestCheckHook,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools-scm
+, docutils
+, pyparsing
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

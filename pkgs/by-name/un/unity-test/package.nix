@@ -1,25 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  meson,
-  ninja,
-  ruby,
-  python3,
-  nix-update-script,
-  testers,
-  iniparser,
-  validatePkgConfig,
-  # Adds test groups and extra CLI flags.
-  buildFixture ? false,
-  # Adds the ablilty to track malloc and free calls.
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, meson
+, ninja
+, ruby
+, python3
+, nix-update-script
+, testers
+, iniparser
+, validatePkgConfig
+, # Adds test groups and extra CLI flags.
+  buildFixture ? false
+, # Adds the ablilty to track malloc and free calls.
   # Note that if fixtures are enabled, this option is ignored
   # and will always be enabled.
-  buildMemory ? buildFixture,
-  # Adds double precision floating point assertions
-  supportDouble ? false,
-
+  buildMemory ? buildFixture
+, # Adds double precision floating point assertions
+  supportDouble ? false
+,
 }:
 let
   # On newer versions of Clang, Weverything is too much of everything.

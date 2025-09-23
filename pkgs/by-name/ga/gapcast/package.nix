@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  libpcap,
-  xorg,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, libpcap
+, xorg
+,
 }:
 
 buildGoModule rec {

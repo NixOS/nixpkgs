@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  hatchling,
-  pyyaml,
-  ua-parser,
-  versioningit,
+{ buildPythonPackage
+, hatchling
+, pyyaml
+, ua-parser
+, versioningit
+,
 }:
 
 buildPythonPackage rec {

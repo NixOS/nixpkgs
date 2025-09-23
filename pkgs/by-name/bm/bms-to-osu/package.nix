@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDotnetModule,
-  ncurses,
-  ffmpeg,
+{ lib
+, fetchFromGitHub
+, buildDotnetModule
+, ncurses
+, ffmpeg
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gfortran,
-  cmake,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gfortran
+, cmake
+,
 }:
 
 stdenv.mkDerivation rec {

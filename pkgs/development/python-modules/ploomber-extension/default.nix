@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  hatch-jupyter-builder,
-  hatch-nodejs-version,
-  jupyterlab,
-  ploomber-core,
-  pytestCheckHook,
-  pytest-jupyter,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, hatch-jupyter-builder
+, hatch-nodejs-version
+, jupyterlab
+, ploomber-core
+, pytestCheckHook
+, pytest-jupyter
+,
 }:
 
 buildPythonPackage rec {

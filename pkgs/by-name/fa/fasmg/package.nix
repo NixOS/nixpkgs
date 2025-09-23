@@ -1,15 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-
-  # update script
-  writeScript,
-  coreutils,
-  curl,
-  gnugrep,
-  htmlq,
-  nix-update,
+{ lib
+, stdenv
+, fetchzip
+, # update script
+  writeScript
+, coreutils
+, curl
+, gnugrep
+, htmlq
+, nix-update
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,8 +43,7 @@ stdenv.mkDerivation rec {
             bin = "source/macos/fasmg";
             asm = "source/macos/fasmg.asm";
           };
-        }
-        .${system} or (throw "Unsupported system: ${system}");
+        }.${system} or (throw "Unsupported system: ${system}");
 
     in
     ''

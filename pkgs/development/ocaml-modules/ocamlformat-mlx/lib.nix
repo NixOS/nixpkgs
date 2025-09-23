@@ -1,26 +1,26 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  menhir,
-  alcotest,
-  base,
-  dune-build-info,
-  either,
-  fix,
-  fpath,
-  menhirLib,
-  menhirSdk,
-  ocaml-version,
-  ocamlformat-rpc-lib,
-  ocp-indent,
-  stdio,
-  uuseg,
-  csexp,
-  astring,
-  result,
-  camlp-streams,
-  odoc,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, menhir
+, alcotest
+, base
+, dune-build-info
+, either
+, fix
+, fpath
+, menhirLib
+, menhirSdk
+, ocaml-version
+, ocamlformat-rpc-lib
+, ocp-indent
+, stdio
+, uuseg
+, csexp
+, astring
+, result
+, camlp-streams
+, odoc
+,
 }:
 buildDunePackage rec {
   pname = "ocamlformat-mlx-lib";

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  autoPatchelfHook,
-  blisp,
-  dfu-util,
-  fontconfig,
-  glib,
-  gtk3,
-  openssl,
-  systemd,
-  libGL,
-  libxkbcommon,
-  nix-update-script,
-  wayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, autoPatchelfHook
+, blisp
+, dfu-util
+, fontconfig
+, glib
+, gtk3
+, openssl
+, systemd
+, libGL
+, libxkbcommon
+, nix-update-script
+, wayland
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pineflash";

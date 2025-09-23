@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  just,
-  pkg-config,
-  wrapGAppsHook4,
-  cairo,
-  dbus,
-  gdk-pixbuf,
-  glib,
-  graphene,
-  gtk4,
-  libadwaita,
-  librclone,
-  pango,
-  rclone,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, just
+, pkg-config
+, wrapGAppsHook4
+, cairo
+, dbus
+, gdk-pixbuf
+, glib
+, graphene
+, gtk4
+, libadwaita
+, librclone
+, pango
+, rclone
+,
 }:
 
 rustPlatform.buildRustPackage rec {

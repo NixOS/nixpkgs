@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  importlib-resources,
-  pydsdl,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, importlib-resources
+, pydsdl
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

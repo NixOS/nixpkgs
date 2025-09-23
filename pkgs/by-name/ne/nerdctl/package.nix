@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  installShellFiles,
-  buildkit,
-  cni-plugins,
-  extraPackages ? [ ],
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, installShellFiles
+, buildkit
+, cni-plugins
+, extraPackages ? [ ]
+,
 }:
 
 buildGoModule rec {

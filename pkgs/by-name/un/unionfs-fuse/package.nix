@@ -1,11 +1,11 @@
-{
-  nix-update-script,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  fuse3,
+{ nix-update-script
+, lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, fuse3
+,
 }:
 
 stdenv.mkDerivation rec {

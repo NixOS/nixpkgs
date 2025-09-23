@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -150,16 +149,17 @@ let
       n2y =
         indent: val:
         if doRecurse val then
-          concatStringsSep "\n${indent}" (
-            mapAttrsToList
-              # This is a bit wacky - set directly under a set would start on bad indent,
-              # so we start those on a new line, but not other types of attribute values.
-              (
-                aname: aval:
-                "${aname}:${if doRecurse aval then "\n${indent}  " else " "}" + n2y (indent + "  ") aval
-              )
-              val
-          )
+          concatStringsSep "\n${indent}"
+            (
+              mapAttrsToList
+                # This is a bit wacky - set directly under a set would start on bad indent,
+                # so we start those on a new line, but not other types of attribute values.
+                (
+                  aname: aval:
+                  "${aname}:${if doRecurse aval then "\n${indent}  " else " "}" + n2y (indent + "  ") aval
+                )
+                val
+            )
           + "\n"
         else
         /*
@@ -168,14 +168,14 @@ let
             val
             else
         */
-        if
-          isList val # and long indent
-        then
-          "[ " + concatMapStringsSep ", " quoteString val + " ]"
-        else if isBool val then
-          (if val then "on" else "off")
-        else
-          quoteString val;
+          if
+            isList val # and long indent
+          then
+            "[ " + concatMapStringsSep ", " quoteString val + " ]"
+          else if isBool val then
+            (if val then "on" else "off")
+          else
+            quoteString val;
 
       # We don't want paths like ./my-zone.txt be converted to plain strings.
       quoteString = s: ''"${if builtins.typeOf s == "path" then s else toString s}"'';
@@ -187,7 +187,7 @@ let
 
   configFile =
     if cfg.settingsFile != null then
-      # Note: with extraConfig, the 23.05 compat code did include keyFiles from settingsFile.
+    # Note: with extraConfig, the 23.05 compat code did include keyFiles from settingsFile.
       assert cfg.settings == { } && (cfg.keyFiles == [ ] || cfg.extraConfig != null);
       cfg.settingsFile
     else

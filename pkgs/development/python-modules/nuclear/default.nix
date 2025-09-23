@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  colorama,
-  mock,
-  pyyaml,
-  pydantic,
-  backoff,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, colorama
+, mock
+, pyyaml
+, pydantic
+, backoff
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  python3,
-  cmake,
-  libmysqlclient,
-  makeBinaryWrapper,
-  lib,
-  nix-update-script,
+{ fetchFromGitHub
+, rustPlatform
+, pkg-config
+, python3
+, cmake
+, libmysqlclient
+, makeBinaryWrapper
+, lib
+, nix-update-script
+,
 }:
 
 let

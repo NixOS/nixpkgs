@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  gettext,
-  python3Packages,
-  adwaita-icon-theme,
-  gtk3,
-  glib,
-  gdk-pixbuf,
-  gsettings-desktop-schemas,
-  gobject-introspection,
+{ lib
+, fetchFromGitHub
+, wrapGAppsHook3
+, gettext
+, python3Packages
+, adwaita-icon-theme
+, gtk3
+, glib
+, gdk-pixbuf
+, gsettings-desktop-schemas
+, gobject-introspection
+,
 }:
 
 let

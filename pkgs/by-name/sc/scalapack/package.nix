@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  mpiCheckPhaseHook,
-  mpi,
-  blas,
-  lapack,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, mpiCheckPhaseHook
+, mpi
+, blas
+, lapack
+,
 }:
 
 assert blas.isILP64 == lapack.isILP64;

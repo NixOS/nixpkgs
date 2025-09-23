@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  cargo,
-  meson,
-  ninja,
-  pkg-config,
-  rustc,
-  rustPlatform,
-  aemu,
-  gfxstream,
-  libdrm,
-  libiconv,
-  withGfxstream ? lib.meta.availableOn stdenv.hostPlatform gfxstream,
+{ lib
+, stdenv
+, fetchgit
+, cargo
+, meson
+, ninja
+, pkg-config
+, rustc
+, rustPlatform
+, aemu
+, gfxstream
+, libdrm
+, libiconv
+, withGfxstream ? lib.meta.availableOn stdenv.hostPlatform gfxstream
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

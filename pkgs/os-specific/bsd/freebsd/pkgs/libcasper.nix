@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  libnv,
+{ lib
+, stdenv
+, mkDerivation
+, libnv
+,
 }:
 mkDerivation {
   path = "lib/libcasper/libcasper";

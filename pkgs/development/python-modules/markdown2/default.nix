@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  latex2mathml,
-  pygments,
-  pytest7CheckHook,
-  pythonOlder,
-  setuptools,
-  wavedrom,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, latex2mathml
+, pygments
+, pytest7CheckHook
+, pythonOlder
+, setuptools
+, wavedrom
+,
 }:
 
 buildPythonPackage rec {

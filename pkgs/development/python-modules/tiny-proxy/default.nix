@@ -1,10 +1,10 @@
-{
-  lib,
-  anyio,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
+{ lib
+, anyio
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  pkg-config,
-  dbus,
-  mpv-unwrapped,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, pkg-config
+, dbus
+, mpv-unwrapped
+,
 }:
 
 stdenv.mkDerivation rec {

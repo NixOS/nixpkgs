@@ -1,26 +1,25 @@
 # Build an idris package
-{
-  stdenv,
-  lib,
-  gmp,
-  prelude,
-  base,
-  with-packages,
-  idris,
+{ stdenv
+, lib
+, gmp
+, prelude
+, base
+, with-packages
+, idris
+,
 }:
-{
-  idrisDeps ? [ ],
-  noPrelude ? false,
-  noBase ? false,
-  pname,
-  version,
-  ipkgName ? pname,
-  extraBuildInputs ? [ ],
-  idrisBuildOptions ? [ ],
-  idrisTestOptions ? [ ],
-  idrisInstallOptions ? [ ],
-  idrisDocOptions ? [ ],
-  ...
+{ idrisDeps ? [ ]
+, noPrelude ? false
+, noBase ? false
+, pname
+, version
+, ipkgName ? pname
+, extraBuildInputs ? [ ]
+, idrisBuildOptions ? [ ]
+, idrisTestOptions ? [ ]
+, idrisInstallOptions ? [ ]
+, idrisDocOptions ? [ ]
+, ...
 }@attrs:
 let
   allIdrisDeps = idrisDeps ++ lib.optional (!noPrelude) prelude ++ lib.optional (!noBase) base;
@@ -96,5 +95,5 @@ stdenv.mkDerivation (
     '';
 
   }
-  // newAttrs
+    // newAttrs
 )

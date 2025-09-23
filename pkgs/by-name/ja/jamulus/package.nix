@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  libsForQt5,
-  libjack2,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, libsForQt5
+, libjack2
+,
 }:
 stdenv.mkDerivation rec {
   pname = "jamulus";

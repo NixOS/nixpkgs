@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  testers,
-  minify,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, testers
+, minify
+,
 }:
 
 buildGoModule rec {

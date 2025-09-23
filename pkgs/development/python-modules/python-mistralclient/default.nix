@@ -1,27 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  cliff,
-  fetchFromGitHub,
-  keystoneauth1,
-  openstackdocstheme,
-  openstacksdk,
-  osc-lib,
-  oslo-i18n,
-  oslo-serialization,
-  oslo-utils,
-  oslotest,
-  osprofiler,
-  pbr,
-  pyyaml,
-  requests-mock,
-  requests,
-  setuptools,
-  sphinxcontrib-apidoc,
-  sphinxHook,
-  stestr,
-  stevedore,
-  tempest,
+{ lib
+, buildPythonPackage
+, cliff
+, fetchFromGitHub
+, keystoneauth1
+, openstackdocstheme
+, openstacksdk
+, osc-lib
+, oslo-i18n
+, oslo-serialization
+, oslo-utils
+, oslotest
+, osprofiler
+, pbr
+, pyyaml
+, requests-mock
+, requests
+, setuptools
+, sphinxcontrib-apidoc
+, sphinxHook
+, stestr
+, stevedore
+, tempest
+,
 }:
 
 buildPythonPackage rec {

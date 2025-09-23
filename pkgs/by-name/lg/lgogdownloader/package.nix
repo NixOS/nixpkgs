@@ -1,22 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  curl,
-  boost,
-  liboauth,
-  jsoncpp,
-  htmlcxx,
-  rhash,
-  tinyxml-2,
-  help2man,
-  html-tidy,
-  libsForQt5,
-  testers,
-
-  enableGui ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, curl
+, boost
+, liboauth
+, jsoncpp
+, htmlcxx
+, rhash
+, tinyxml-2
+, help2man
+, html-tidy
+, libsForQt5
+, testers
+, enableGui ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

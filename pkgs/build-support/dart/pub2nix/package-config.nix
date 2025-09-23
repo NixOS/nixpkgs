@@ -1,18 +1,16 @@
-{
-  lib,
-  runCommand,
-  jq,
-  yq,
+{ lib
+, runCommand
+, jq
+, yq
+,
 }:
 
-{
-  pname ? null,
-
-  # A list of dependency package names.
-  dependencies,
-
-  # An attribute set of package names to sources.
-  dependencySources,
+{ pname ? null
+, # A list of dependency package names.
+  dependencies
+, # An attribute set of package names to sources.
+  dependencySources
+,
 }:
 
 let

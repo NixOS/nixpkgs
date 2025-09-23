@@ -1,15 +1,13 @@
-{
-  comet-gog_kind ? "latest",
-
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  buildPackages,
-
-  meson,
-  ninja,
-  pkgsCross,
+{ comet-gog_kind ? "latest"
+, lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, buildPackages
+, meson
+, ninja
+, pkgsCross
+,
 }:
 
 let

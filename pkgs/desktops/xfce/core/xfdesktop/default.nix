@@ -1,17 +1,17 @@
-{
-  lib,
-  mkXfceDerivation,
-  exo,
-  gtk3,
-  libxfce4ui,
-  libxfce4util,
-  libxfce4windowing,
-  libyaml,
-  xfconf,
-  libnotify,
-  garcon,
-  gtk-layer-shell,
-  thunar,
+{ lib
+, mkXfceDerivation
+, exo
+, gtk3
+, libxfce4ui
+, libxfce4util
+, libxfce4windowing
+, libyaml
+, xfconf
+, libnotify
+, garcon
+, gtk-layer-shell
+, thunar
+,
 }:
 
 mkXfceDerivation {

@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  cargo,
-  rustc,
-  clippy,
-  gcc,
-  makeWrapper,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, cargo
+, rustc
+, clippy
+, gcc
+, makeWrapper
+,
 }:
 let
   pname = "rustlings";

@@ -1,7 +1,7 @@
-{
-  runCommand,
-  purescript,
-  nodejs,
+{ runCommand
+, purescript
+, nodejs
+,
 }:
 
 runCommand "purescript-test-minimal-module" { } ''

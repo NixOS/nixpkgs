@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  testers,
-  bazel-watcher,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, testers
+, bazel-watcher
+, stdenv
+,
 }:
 
 buildGoModule rec {

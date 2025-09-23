@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  makeDesktopItem,
-  copyDesktopItems,
-  nwjs,
-  wrapGAppsHook3,
-  gsettings-desktop-schemas,
-  gtk3,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, makeDesktopItem
+, copyDesktopItems
+, nwjs
+, wrapGAppsHook3
+, gsettings-desktop-schemas
+, gtk3
+,
 }:
 
 stdenv.mkDerivation rec {

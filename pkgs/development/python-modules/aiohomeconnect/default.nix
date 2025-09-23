@@ -1,20 +1,20 @@
-{
-  lib,
-  authlib,
-  buildPythonPackage,
-  fastapi,
-  fetchFromGitHub,
-  httpx-sse,
-  httpx,
-  mashumaro,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-httpx,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typer,
-  uvicorn,
+{ lib
+, authlib
+, buildPythonPackage
+, fastapi
+, fetchFromGitHub
+, httpx-sse
+, httpx
+, mashumaro
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-httpx
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typer
+, uvicorn
+,
 }:
 
 buildPythonPackage rec {

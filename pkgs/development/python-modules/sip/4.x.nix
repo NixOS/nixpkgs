@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchurl,
-  fetchpatch,
-  buildPythonPackage,
-  python,
-  isPyPy,
-  pythonAtLeast,
-  pythonOlder,
-  sip-module ? "sip",
-  setuptools,
+{ lib
+, fetchurl
+, fetchpatch
+, buildPythonPackage
+, python
+, isPyPy
+, pythonAtLeast
+, pythonOlder
+, sip-module ? "sip"
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  asar,
-  dpkg,
-  electron_36,
-  makeWrapper,
-  nixosTests,
-  undmg,
+{ lib
+, stdenv
+, fetchurl
+, asar
+, dpkg
+, electron_36
+, makeWrapper
+, nixosTests
+, undmg
+,
 }:
 
 let
@@ -76,8 +76,7 @@ let
       };
 
       aarch64-darwin = x86_64-darwin;
-    }
-    .${system} or {
+    }.${system} or {
       src = throw "Unsupported system: ${system}";
     };
 in
@@ -102,5 +101,5 @@ stdenv.mkDerivation (
       ];
     };
   }
-  // systemArgs
+    // systemArgs
 )

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchpatch,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  wheel,
-  numpy,
-  tqdm,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchpatch
+, fetchPypi
+, setuptools
+, setuptools-scm
+, wheel
+, numpy
+, tqdm
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

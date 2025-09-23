@@ -1,24 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  distutils,
-  setuptools,
-
-  # native dependencies
-  openldap,
-  cyrus_sasl,
-
-  pyasn1,
-  pyasn1-modules,
-
-  # tests
-  pytestCheckHook,
-  jaraco-functools,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  distutils
+, setuptools
+, # native dependencies
+  openldap
+, cyrus_sasl
+, pyasn1
+, pyasn1-modules
+, # tests
+  pytestCheckHook
+, jaraco-functools
+,
 }:
 
 buildPythonPackage rec {

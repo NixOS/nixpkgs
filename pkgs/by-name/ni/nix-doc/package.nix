@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  boost,
-  nix,
-  pkg-config,
-  # Whether to build the nix-doc plugin for Nix
-  withPlugin ? false, # no longer needed for nix 2.24
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, boost
+, nix
+, pkg-config
+, # Whether to build the nix-doc plugin for Nix
+  withPlugin ? false
+, # no longer needed for nix 2.24
 }:
 
 let

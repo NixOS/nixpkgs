@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  sqlite,
-  zstd,
-  fetchurl,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, sqlite
+, zstd
+, fetchurl
+,
 }:
 
 let

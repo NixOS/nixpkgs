@@ -1,34 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  jsonschema,
-  numpy,
-  opencv-python-headless,
-  pillow,
-  pydantic,
-  pydantic-extra-types,
-  requests,
-  sentencepiece,
-  tiktoken,
-  typing-extensions,
-
-  # tests
-  click,
-  fastapi,
-  huggingface-hub,
-  openai,
-  pycountry,
-  pydantic-settings,
-  pytestCheckHook,
-  soundfile,
-  soxr,
-  uvicorn,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  jsonschema
+, numpy
+, opencv-python-headless
+, pillow
+, pydantic
+, pydantic-extra-types
+, requests
+, sentencepiece
+, tiktoken
+, typing-extensions
+, # tests
+  click
+, fastapi
+, huggingface-hub
+, openai
+, pycountry
+, pydantic-settings
+, pytestCheckHook
+, soundfile
+, soxr
+, uvicorn
+,
 }:
 
 buildPythonPackage rec {

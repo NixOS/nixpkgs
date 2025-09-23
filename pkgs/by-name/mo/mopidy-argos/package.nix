@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  pkg-config,
-  meson,
-  ninja,
-  appstream-glib,
-  desktop-file-utils,
-  wrapGAppsHook3,
-  gobject-introspection,
+{ stdenv
+, lib
+, python3Packages
+, fetchFromGitHub
+, pkg-config
+, meson
+, ninja
+, appstream-glib
+, desktop-file-utils
+, wrapGAppsHook3
+, gobject-introspection
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "mopidy-argos";

@@ -1,21 +1,21 @@
-{
-  lib,
-  buildGoModule,
-  callPackage,
-  cdrkit,
-  coreutils,
-  debootstrap,
-  fetchFromGitHub,
-  gnupg,
-  gnutar,
-  hivex,
-  makeWrapper,
-  nix-update-script,
-  nixosTests,
-  pkg-config,
-  squashfsTools,
-  stdenv,
-  wimlib,
+{ lib
+, buildGoModule
+, callPackage
+, cdrkit
+, coreutils
+, debootstrap
+, fetchFromGitHub
+, gnupg
+, gnutar
+, hivex
+, makeWrapper
+, nix-update-script
+, nixosTests
+, pkg-config
+, squashfsTools
+, stdenv
+, wimlib
+,
 }:
 
 let

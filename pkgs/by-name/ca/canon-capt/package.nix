@@ -1,10 +1,10 @@
-{
-  autoconf,
-  automake,
-  cups,
-  fetchFromGitHub,
-  lib,
-  stdenv,
+{ autoconf
+, automake
+, cups
+, fetchFromGitHub
+, lib
+, stdenv
+,
 }:
 
 let

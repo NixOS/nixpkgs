@@ -1,11 +1,11 @@
-{
-  cmake,
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  storeDir ? builtins.storeDir,
-  spdlog,
-  yaml-cpp,
+{ cmake
+, fetchFromGitHub
+, lib
+, stdenv
+, storeDir ? builtins.storeDir
+, spdlog
+, yaml-cpp
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ld-audit-search-mod";

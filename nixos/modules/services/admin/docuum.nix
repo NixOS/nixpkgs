@@ -1,9 +1,8 @@
-{
-  config,
-  pkgs,
-  lib,
-  utils,
-  ...
+{ config
+, pkgs
+, lib
+, utils
+, ...
 }:
 
 let
@@ -78,10 +77,12 @@ in
             "--deletion-chunk-size"
             cfg.deletionChunkSize
           ]
-          ++ (concatMap (keep: [
-            "--keep"
-            keep
-          ]) cfg.keep)
+          ++ (concatMap
+            (keep: [
+              "--keep"
+              keep
+            ])
+            cfg.keep)
           ++ (optionals (cfg.minAge != null) [
             "--min-age"
             cfg.minAge

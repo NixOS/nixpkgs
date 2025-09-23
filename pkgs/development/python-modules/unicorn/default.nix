@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  capstone,
-  pytestCheckHook,
-  setuptools-scm,
-  setuptools,
-  unicorn,
+{ lib
+, stdenv
+, buildPythonPackage
+, capstone
+, pytestCheckHook
+, setuptools-scm
+, setuptools
+, unicorn
+,
 }:
 
 buildPythonPackage rec {

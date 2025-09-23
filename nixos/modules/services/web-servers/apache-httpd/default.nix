@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -39,13 +38,15 @@ let
   vhosts = attrValues cfg.virtualHosts;
 
   # certName is used later on to determine systemd service names.
-  acmeEnabledVhosts = map (
-    hostOpts:
-    hostOpts
-    // {
-      certName = if hostOpts.useACMEHost != null then hostOpts.useACMEHost else hostOpts.hostName;
-    }
-  ) (filter (hostOpts: hostOpts.enableACME || hostOpts.useACMEHost != null) vhosts);
+  acmeEnabledVhosts = map
+    (
+      hostOpts:
+      hostOpts
+      // {
+        certName = if hostOpts.useACMEHost != null then hostOpts.useACMEHost else hostOpts.hostName;
+      }
+    )
+    (filter (hostOpts: hostOpts.enableACME || hostOpts.useACMEHost != null) vhosts);
 
   vhostCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
 
@@ -54,19 +55,24 @@ let
     if hostOpts.listen != [ ] then
       hostOpts.listen
     else
-      optionals (hostOpts.onlySSL || hostOpts.addSSL || hostOpts.forceSSL) (
-        map (addr: {
-          ip = addr;
-          port = 443;
-          ssl = true;
-        }) hostOpts.listenAddresses
-      )
+      optionals (hostOpts.onlySSL || hostOpts.addSSL || hostOpts.forceSSL)
+        (
+          map
+            (addr: {
+              ip = addr;
+              port = 443;
+              ssl = true;
+            })
+            hostOpts.listenAddresses
+        )
       ++ optionals (!hostOpts.onlySSL) (
-        map (addr: {
-          ip = addr;
-          port = 80;
-          ssl = false;
-        }) hostOpts.listenAddresses
+        map
+          (addr: {
+            ip = addr;
+            port = 80;
+            ssl = false;
+          })
+          hostOpts.listenAddresses
       );
 
   listenInfo = unique (concatMap mkListenInfo vhosts);
@@ -260,27 +266,29 @@ let
       mkLocations =
         locations:
         concatStringsSep "\n" (
-          map (config: ''
-            <Location ${config.location}>
-              ${optionalString (config.proxyPass != null) ''
-                <IfModule mod_proxy.c>
-                    ProxyPass ${config.proxyPass}
-                    ProxyPassReverse ${config.proxyPass}
-                </IfModule>
-              ''}
-              ${optionalString (config.index != null) ''
-                <IfModule mod_dir.c>
-                    DirectoryIndex ${config.index}
-                </IfModule>
-              ''}
-              ${optionalString (config.alias != null) ''
-                <IfModule mod_alias.c>
-                    Alias "${config.alias}"
-                </IfModule>
-              ''}
-              ${config.extraConfig}
-            </Location>
-          '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations))
+          map
+            (config: ''
+              <Location ${config.location}>
+                ${optionalString (config.proxyPass != null) ''
+                  <IfModule mod_proxy.c>
+                      ProxyPass ${config.proxyPass}
+                      ProxyPassReverse ${config.proxyPass}
+                  </IfModule>
+                ''}
+                ${optionalString (config.index != null) ''
+                  <IfModule mod_dir.c>
+                      DirectoryIndex ${config.index}
+                  </IfModule>
+                ''}
+                ${optionalString (config.alias != null) ''
+                  <IfModule mod_alias.c>
+                      Alias "${config.alias}"
+                  </IfModule>
+                ''}
+                ${config.extraConfig}
+              </Location>
+            '')
+            (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations))
         );
     in
     ''
@@ -749,9 +757,11 @@ in
         '';
       }
       {
-        assertion = all (
-          hostOpts: with hostOpts; !(addSSL && onlySSL) && !(forceSSL && onlySSL) && !(addSSL && forceSSL)
-        ) vhosts;
+        assertion = all
+          (
+            hostOpts: with hostOpts; !(addSSL && onlySSL) && !(forceSSL && onlySSL) && !(addSSL && forceSSL)
+          )
+          vhosts;
         message = ''
           Options `services.httpd.virtualHosts.<name>.addSSL`,
           `services.httpd.virtualHosts.<name>.onlySSL` and `services.httpd.virtualHosts.<name>.forceSSL`
@@ -773,21 +783,25 @@ in
         '';
       }
     ]
-    ++ map (
-      name:
-      mkCertOwnershipAssertion {
-        cert = config.security.acme.certs.${name};
-        groups = config.users.groups;
-        services = [
-          config.systemd.services.httpd
-        ]
-        ++ lib.optional (vhostCertNames != [ ]) config.systemd.services.httpd-config-reload;
-      }
-    ) vhostCertNames;
+    ++ map
+      (
+        name:
+        mkCertOwnershipAssertion {
+          cert = config.security.acme.certs.${name};
+          groups = config.users.groups;
+          services = [
+            config.systemd.services.httpd
+          ]
+          ++ lib.optional (vhostCertNames != [ ]) config.systemd.services.httpd-config-reload;
+        }
+      )
+      vhostCertNames;
 
-    warnings = mapAttrsToList (name: hostOpts: ''
-      Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
-    '') (filterAttrs (name: hostOpts: hostOpts.servedFiles != [ ]) cfg.virtualHosts);
+    warnings = mapAttrsToList
+      (name: hostOpts: ''
+        Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
+      '')
+      (filterAttrs (name: hostOpts: hostOpts.servedFiles != [ ]) cfg.virtualHosts);
 
     users.users = optionalAttrs (cfg.user == "wwwrun") {
       wwwrun = {
@@ -803,26 +817,28 @@ in
 
     security.acme.certs =
       let
-        acmePairs = map (
-          hostOpts:
-          let
-            hasRoot = hostOpts.acmeRoot != null;
-          in
-          nameValuePair hostOpts.hostName {
-            group = mkDefault cfg.group;
-            # if acmeRoot is null inherit config.security.acme
-            # Since config.security.acme.certs.<cert>.webroot's own default value
-            # should take precedence set priority higher than mkOptionDefault
-            webroot = mkOverride (if hasRoot then 1000 else 2000) hostOpts.acmeRoot;
-            # Also nudge dnsProvider to null in case it is inherited
-            dnsProvider = mkOverride (if hasRoot then 1000 else 2000) null;
-            extraDomainNames = hostOpts.serverAliases;
-            # Use the vhost-specific email address if provided, otherwise let
-            # security.acme.email or security.acme.certs.<cert>.email be used.
-            email = mkOverride 2000 (if hostOpts.adminAddr != null then hostOpts.adminAddr else cfg.adminAddr);
-            # Filter for enableACME-only vhosts. Don't want to create dud certs
-          }
-        ) (filter (hostOpts: hostOpts.useACMEHost == null) acmeEnabledVhosts);
+        acmePairs = map
+          (
+            hostOpts:
+            let
+              hasRoot = hostOpts.acmeRoot != null;
+            in
+            nameValuePair hostOpts.hostName {
+              group = mkDefault cfg.group;
+              # if acmeRoot is null inherit config.security.acme
+              # Since config.security.acme.certs.<cert>.webroot's own default value
+              # should take precedence set priority higher than mkOptionDefault
+              webroot = mkOverride (if hasRoot then 1000 else 2000) hostOpts.acmeRoot;
+              # Also nudge dnsProvider to null in case it is inherited
+              dnsProvider = mkOverride (if hasRoot then 1000 else 2000) null;
+              extraDomainNames = hostOpts.serverAliases;
+              # Use the vhost-specific email address if provided, otherwise let
+              # security.acme.email or security.acme.certs.<cert>.email be used.
+              email = mkOverride 2000 (if hostOpts.adminAddr != null then hostOpts.adminAddr else cfg.adminAddr);
+              # Filter for enableACME-only vhosts. Don't want to create dud certs
+            }
+          )
+          (filter (hostOpts: hostOpts.useACMEHost == null) acmeEnabledVhosts);
       in
       listToAttrs acmePairs;
 
@@ -974,9 +990,11 @@ in
         restartTriggers = [ cfg.configFile ];
         # Block reloading if not all certs exist yet.
         # Happens when config changes add new vhosts/certs.
-        unitConfig.ConditionPathExists = map (
-          certName: certs.${certName}.directory + "/fullchain.pem"
-        ) vhostCertNames;
+        unitConfig.ConditionPathExists = map
+          (
+            certName: certs.${certName}.directory + "/fullchain.pem"
+          )
+          vhostCertNames;
         serviceConfig = {
           Type = "oneshot";
           TimeoutSec = 60;

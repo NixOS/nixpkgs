@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  antlr4-python3-runtime,
-  asciimatics,
-  buildPythonPackage,
-  click,
-  dacite,
-  decorator,
-  fetchFromGitHub,
-  first,
-  jsonpath-ng,
-  loguru,
-  overrides,
-  pillow,
-  ply,
-  pyfiglet,
-  pyperclip,
-  pytestCheckHook,
-  pythonOlder,
-  antlr4,
-  pyyaml,
-  setuptools,
-  urwid,
-  parameterized,
-  wcwidth,
-  yamale,
+{ lib
+, stdenv
+, antlr4-python3-runtime
+, asciimatics
+, buildPythonPackage
+, click
+, dacite
+, decorator
+, fetchFromGitHub
+, first
+, jsonpath-ng
+, loguru
+, overrides
+, pillow
+, ply
+, pyfiglet
+, pyperclip
+, pytestCheckHook
+, pythonOlder
+, antlr4
+, pyyaml
+, setuptools
+, urwid
+, parameterized
+, wcwidth
+, yamale
+,
 }:
 
 buildPythonPackage rec {

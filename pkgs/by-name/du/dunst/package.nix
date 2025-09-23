@@ -1,32 +1,32 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  pkg-config,
-  which,
-  perl,
-  jq,
-  libXrandr,
-  coreutils,
-  cairo,
-  dbus,
-  systemd,
-  gdk-pixbuf,
-  glib,
-  libX11,
-  libXScrnSaver,
-  wayland,
-  wayland-protocols,
-  libXinerama,
-  libnotify,
-  pango,
-  xorgproto,
-  librsvg,
-  versionCheckHook,
-  nix-update-script,
-  withX11 ? true,
-  withWayland ? true,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, pkg-config
+, which
+, perl
+, jq
+, libXrandr
+, coreutils
+, cairo
+, dbus
+, systemd
+, gdk-pixbuf
+, glib
+, libX11
+, libXScrnSaver
+, wayland
+, wayland-protocols
+, libXinerama
+, libnotify
+, pango
+, xorgproto
+, librsvg
+, versionCheckHook
+, nix-update-script
+, withX11 ? true
+, withWayland ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

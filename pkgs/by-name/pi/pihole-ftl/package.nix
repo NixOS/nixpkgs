@@ -1,18 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gmp,
-  libidn2,
-  libunistring,
-  mbedtls,
-  ncurses,
-  nettle,
-  readline,
-  xxd,
-  iproute2,
-  ...
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gmp
+, libidn2
+, libunistring
+, mbedtls
+, ncurses
+, nettle
+, readline
+, xxd
+, iproute2
+, ...
 }:
 
 stdenv.mkDerivation (finalAttrs: {

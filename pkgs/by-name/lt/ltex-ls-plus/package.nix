@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  makeBinaryWrapper,
-  jre_headless,
-  jvmOptions ? [ ],
+{ lib
+, stdenvNoCC
+, fetchurl
+, makeBinaryWrapper
+, jre_headless
+, jvmOptions ? [ ]
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  wheel,
-  aiohttp,
-  attrs,
-  multidict,
-  yarl,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, wheel
+, aiohttp
+, attrs
+, multidict
+, yarl
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pathable,
-  pyyaml,
-  referencing,
-  pytest-cov-stub,
-  pytestCheckHook,
-  responses,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pathable
+, pyyaml
+, referencing
+, pytest-cov-stub
+, pytestCheckHook
+, responses
+,
 }:
 
 buildPythonPackage rec {

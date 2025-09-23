@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  ewmhlib,
-  pymonctl,
-  pywinbox,
-  xlib,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, ewmhlib
+, pymonctl
+, pywinbox
+, xlib
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

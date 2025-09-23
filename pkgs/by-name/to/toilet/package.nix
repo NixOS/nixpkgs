@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libcaca,
-  toilet,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libcaca
+, toilet
+, testers
+,
 }:
 
 stdenv.mkDerivation rec {

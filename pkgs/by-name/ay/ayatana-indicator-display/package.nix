@@ -1,32 +1,32 @@
-{
-  stdenv,
-  lib,
-  gitUpdater,
-  fetchFromGitHub,
-  nixosTests,
-  accountsservice,
-  cmake,
-  cppcheck,
-  dbus,
-  geoclue2,
-  glib,
-  gsettings-desktop-schemas,
-  gtest,
-  intltool,
-  libayatana-common,
-  libgudev,
-  libqtdbusmock,
-  libqtdbustest,
-  librda,
-  libsForQt5,
-  lomiri,
-  mate,
-  pkg-config,
-  properties-cpp,
-  python3,
-  systemd,
-  wrapGAppsHook3,
-  xsct,
+{ stdenv
+, lib
+, gitUpdater
+, fetchFromGitHub
+, nixosTests
+, accountsservice
+, cmake
+, cppcheck
+, dbus
+, geoclue2
+, glib
+, gsettings-desktop-schemas
+, gtest
+, intltool
+, libayatana-common
+, libgudev
+, libqtdbusmock
+, libqtdbustest
+, librda
+, libsForQt5
+, lomiri
+, mate
+, pkg-config
+, properties-cpp
+, python3
+, systemd
+, wrapGAppsHook3
+, xsct
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

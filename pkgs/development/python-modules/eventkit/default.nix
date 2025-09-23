@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchPypi,
-  numpy,
+{ buildPythonPackage
+, lib
+, fetchPypi
+, numpy
+,
 }:
 let
   pname = "eventkit";

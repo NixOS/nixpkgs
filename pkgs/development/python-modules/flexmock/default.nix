@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pythonOlder,
-  poetry-core,
-  teamcity-messages,
-  testtools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, poetry-core
+, teamcity-messages
+, testtools
+,
 }:
 
 buildPythonPackage rec {

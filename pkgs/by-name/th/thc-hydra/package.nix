@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  zlib,
-  openssl,
-  ncurses,
-  libidn,
-  pcre2,
-  libssh,
-  libmysqlclient,
-  libpq,
-  samba,
-  withGUI ? false,
-  makeWrapper,
-  pkg-config,
-  gtk2,
+{ stdenv
+, lib
+, fetchFromGitHub
+, zlib
+, openssl
+, ncurses
+, libidn
+, pcre2
+, libssh
+, libmysqlclient
+, libpq
+, samba
+, withGUI ? false
+, makeWrapper
+, pkg-config
+, gtk2
+,
 }:
 
 stdenv.mkDerivation rec {

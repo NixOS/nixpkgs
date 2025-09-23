@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  dissect-cstruct,
-  dissect-util,
-  fetchFromGitHub,
-  flow-record,
-  hatch-vcs,
-  hatchling,
-  httpx,
-  lark,
-  pycryptodome,
-  pyshark,
-  pytest-httpserver,
-  pytestCheckHook,
-  pythonOlder,
-  rich,
+{ lib
+, buildPythonPackage
+, dissect-cstruct
+, dissect-util
+, fetchFromGitHub
+, flow-record
+, hatch-vcs
+, hatchling
+, httpx
+, lark
+, pycryptodome
+, pyshark
+, pytest-httpserver
+, pytestCheckHook
+, pythonOlder
+, rich
+,
 }:
 
 buildPythonPackage rec {

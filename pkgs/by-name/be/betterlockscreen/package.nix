@@ -1,22 +1,21 @@
-{
-  fetchFromGitHub,
-  lib,
-  makeWrapper,
-  stdenv,
-
-  # Dependencies (@see https://github.com/pavanjadhaw/betterlockscreen/blob/master/shell.nix)
-  bc,
-  coreutils,
-  dbus,
-  withDunst ? true,
-  dunst,
-  i3lock-color,
-  gawk,
-  gnugrep,
-  gnused,
-  imagemagick,
-  procps,
-  xorg,
+{ fetchFromGitHub
+, lib
+, makeWrapper
+, stdenv
+, # Dependencies (@see https://github.com/pavanjadhaw/betterlockscreen/blob/master/shell.nix)
+  bc
+, coreutils
+, dbus
+, withDunst ? true
+, dunst
+, i3lock-color
+, gawk
+, gnugrep
+, gnused
+, imagemagick
+, procps
+, xorg
+,
 }:
 
 let

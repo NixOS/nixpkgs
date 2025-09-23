@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  msgpack,
-  numpy,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-rapidjson,
-  pythonOlder,
-  pyzmq,
-  ruamel-yaml,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, msgpack
+, numpy
+, pytest-asyncio
+, pytestCheckHook
+, python-rapidjson
+, pythonOlder
+, pyzmq
+, ruamel-yaml
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

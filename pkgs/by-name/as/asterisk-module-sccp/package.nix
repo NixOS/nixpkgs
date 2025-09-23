@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  binutils-unwrapped,
-  patchelf,
-  asterisk,
+{ lib
+, stdenv
+, fetchFromGitHub
+, binutils-unwrapped
+, patchelf
+, asterisk
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "asterisk-module-sccp";

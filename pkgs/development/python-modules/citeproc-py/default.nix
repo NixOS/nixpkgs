@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  git,
-  lxml,
-  rnc2rng,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, git
+, lxml
+, rnc2rng
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

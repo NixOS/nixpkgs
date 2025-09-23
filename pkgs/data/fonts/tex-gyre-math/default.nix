@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
+{ lib
+, stdenv
+, fetchzip
+,
 }:
 
 let
@@ -34,11 +34,11 @@ let
 
   mkVariant =
     variant:
-    {
-      displayName,
-      version,
-      sha256,
-      outputHash,
+    { displayName
+    , version
+    , sha256
+    , outputHash
+    ,
     }:
     let
       dotless_version = builtins.replaceStrings [ "." ] [ "" ] version;

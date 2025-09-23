@@ -1,16 +1,15 @@
-{
-  lib,
-  fetchurl,
-  makeWrapper,
-  stdenv,
-  undmg,
-  variant ?
-    if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) then
-      "arm64"
-    else if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
-      "intel64"
-    else
-      "universal", # not reachable by normal means
+{ lib
+, fetchurl
+, makeWrapper
+, stdenv
+, undmg
+, variant ? if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) then
+    "arm64"
+  else if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
+    "intel64"
+  else
+    "universal"
+, # not reachable by normal means
 }:
 
 assert builtins.elem variant [
@@ -29,8 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
         "arm64" = "sha256-Fd1lv2SJ2p7Gpn9VhcdMQKWJk6z/QagpWKkW3XQXgEQ=";
         "intel64" = "sha256-1DH9BRw9x68CvTE8bQXZDPYEtw7T7Fu6b9TEnvPmONk=";
         "universal" = "sha256-UDgOVvgdYw41MUJqJlq/iz3ubAgiu3yeMLUyx9aaZcA=";
-      }
-      .${variant};
+      }.${variant};
   };
 
   sourceRoot = ".";

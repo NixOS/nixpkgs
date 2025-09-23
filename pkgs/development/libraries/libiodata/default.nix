@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  gitUpdater,
-  bison,
-  flex,
-  qmake,
-  pkg-config,
-  libxcrypt,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, gitUpdater
+, bison
+, flex
+, qmake
+, pkg-config
+, libxcrypt
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

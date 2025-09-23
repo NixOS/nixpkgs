@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  stdenv,
-
-  # build-system
-  pybind11,
-  setuptools,
-
-  # native dependencies
-  abseil-cpp,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, stdenv
+, # build-system
+  pybind11
+, setuptools
+, # native dependencies
+  abseil-cpp
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

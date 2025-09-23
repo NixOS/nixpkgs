@@ -1,45 +1,44 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  shared-mime-info,
-  autoconf,
-  automake,
-  intltool,
-  libtool,
-  pkg-config,
-  cmake,
-  ruby,
-  librsvg,
-  ncurses,
-  m17n_lib,
-  m17n_db,
-  expat,
-  withAnthy ? true,
-  anthy ? null,
-  withGtk ? true,
-  withGtk2 ? withGtk,
-  gtk2 ? null,
-  withGtk3 ? withGtk,
-  gtk3 ? null,
-  # Was never enabled in the history of this package and is not needed by any
+{ lib
+, stdenv
+, fetchFromGitHub
+, shared-mime-info
+, autoconf
+, automake
+, intltool
+, libtool
+, pkg-config
+, cmake
+, ruby
+, librsvg
+, ncurses
+, m17n_lib
+, m17n_db
+, expat
+, withAnthy ? true
+, anthy ? null
+, withGtk ? true
+, withGtk2 ? withGtk
+, gtk2 ? null
+, withGtk3 ? withGtk
+, gtk3 ? null
+, # Was never enabled in the history of this package and is not needed by any
   # dependent package, hence disabled to save up closure size.
-  withQt ? false,
-  withQt5 ? withQt,
-  qt5 ? null,
-  withLibnotify ? true,
-  libnotify ? null,
-  withSqlite ? true,
-  sqlite ? null,
-  withNetworking ? true,
-  curl ? null,
-  openssl ? null,
-  withFFI ? true,
-  libffi ? null,
-
-  # Things that are clearly an overkill to be enabled by default
-  withMisc ? false,
-  libeb ? null,
+  withQt ? false
+, withQt5 ? withQt
+, qt5 ? null
+, withLibnotify ? true
+, libnotify ? null
+, withSqlite ? true
+, sqlite ? null
+, withNetworking ? true
+, curl ? null
+, openssl ? null
+, withFFI ? true
+, libffi ? null
+, # Things that are clearly an overkill to be enabled by default
+  withMisc ? false
+, libeb ? null
+,
 }:
 
 assert withGtk2 -> gtk2 != null;

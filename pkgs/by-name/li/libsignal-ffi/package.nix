@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  runCommand,
-  xcodebuild,
-  protobuf,
-  boringssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, runCommand
+, xcodebuild
+, protobuf
+, boringssl
+,
 }:
 let
   # boring-sys expects the static libraries in build/ instead of lib/

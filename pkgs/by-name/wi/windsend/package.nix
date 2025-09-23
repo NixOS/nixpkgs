@@ -1,9 +1,9 @@
-{
-  lib,
-  flutter332,
-  fetchFromGitHub,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, flutter332
+, fetchFromGitHub
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 flutter332.buildFlutterApplication rec {

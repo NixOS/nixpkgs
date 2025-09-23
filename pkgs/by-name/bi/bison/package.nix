@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  m4,
-  perl,
-  help2man,
+{ lib
+, stdenv
+, fetchurl
+, m4
+, perl
+, help2man
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus

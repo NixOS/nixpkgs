@@ -1,18 +1,18 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  metar,
-  pytest-aiohttp,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  tenacity,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, metar
+, pytest-aiohttp
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

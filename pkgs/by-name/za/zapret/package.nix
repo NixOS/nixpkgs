@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-
-  libcap,
-  zlib,
-  libnetfilter_queue,
-  libnfnetlink,
-  libmnl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, libcap
+, zlib
+, libnetfilter_queue
+, libnfnetlink
+, libmnl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gtk3,
-  plasma5Packages,
-  gnome-icon-theme,
-  hicolor-icon-theme,
-  nix-update-script,
-  folder-color ? "plasma", # Supported colors: black blue caramel citron firebrick gold green grey highland jade lavender lime olive orange pistachio plasma pumpkin purple red rust sapphire tomato violet white yellow
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, plasma5Packages
+, gnome-icon-theme
+, hicolor-icon-theme
+, nix-update-script
+, folder-color ? "plasma"
+, # Supported colors: black blue caramel citron firebrick gold green grey highland jade lavender lime olive orange pistachio plasma pumpkin purple red rust sapphire tomato violet white yellow
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

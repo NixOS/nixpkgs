@@ -1,27 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  cmake,
-  ninja,
-  pkg-config,
-  wayland-scanner,
-
-  capstone,
-  dbus,
-  freetype,
-  glfw,
-  tbb,
-
-  withGtkFileSelector ? false,
-  gtk3,
-
-  withWayland ? stdenv.hostPlatform.isLinux,
-  libglvnd,
-  libxkbcommon,
-  wayland,
-  wayland-protocols,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, wayland-scanner
+, capstone
+, dbus
+, freetype
+, glfw
+, tbb
+, withGtkFileSelector ? false
+, gtk3
+, withWayland ? stdenv.hostPlatform.isLinux
+, libglvnd
+, libxkbcommon
+, wayland
+, wayland-protocols
+,
 }:
 
 assert withGtkFileSelector -> stdenv.hostPlatform.isLinux;
@@ -37,9 +33,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-HofqYJT1srDJ6Y1f18h7xtAbI/Gvvz0t9f0wBNnOZK8=";
   };
 
-  patches = lib.optional (
-    stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11"
-  ) ./dont-use-the-uniformtypeidentifiers-framework.patch;
+  patches = lib.optional
+    (
+      stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11"
+    ) ./dont-use-the-uniformtypeidentifiers-framework.patch;
 
   nativeBuildInputs = [
     cmake

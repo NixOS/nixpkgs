@@ -1,14 +1,14 @@
-{
-  aiohttp,
-  aresponses,
-  attrs,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  lib,
-  poetry-core,
-  pytestCheckHook,
-  pytz,
+{ aiohttp
+, aresponses
+, attrs
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, lib
+, poetry-core
+, pytestCheckHook
+, pytz
+,
 }:
 
 buildPythonPackage rec {

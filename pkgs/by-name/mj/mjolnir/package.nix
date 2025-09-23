@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
-  nodejs,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  matrix-sdk-crypto-nodejs,
-  makeWrapper,
-  nixosTests,
+{ lib
+, stdenv
+, yarnConfigHook
+, yarnBuildHook
+, yarnInstallHook
+, nodejs
+, fetchFromGitHub
+, fetchYarnDeps
+, matrix-sdk-crypto-nodejs
+, makeWrapper
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

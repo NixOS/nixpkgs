@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  steamcmd,
-  fetchFromGitHub,
-  steam-run,
-  openssl,
-  pkg-config,
-  runtimeShell,
-  withWine ? false,
-  wine,
+{ lib
+, rustPlatform
+, steamcmd
+, fetchFromGitHub
+, steam-run
+, openssl
+, pkg-config
+, runtimeShell
+, withWine ? false
+, wine
+,
 }:
 
 rustPlatform.buildRustPackage rec {

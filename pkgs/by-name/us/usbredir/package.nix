@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
-  meson,
-  ninja,
-  glib,
-  libusb1,
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, meson
+, ninja
+, glib
+, libusb1
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  callPackage,
-  zig_0_14,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, zig_0_14
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

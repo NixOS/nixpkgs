@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  vscode-generic,
-  fetchurl,
-  extraCommandLineArgs ? "",
-  useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
+{ lib
+, stdenv
+, callPackage
+, vscode-generic
+, fetchurl
+, extraCommandLineArgs ? ""
+, useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin
+,
 }:
 
 let

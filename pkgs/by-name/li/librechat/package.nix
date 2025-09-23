@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  pkg-config,
-  node-gyp,
-  vips,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, pkg-config
+, node-gyp
+, vips
+, nix-update-script
+,
 }:
 
 buildNpmPackage rec {

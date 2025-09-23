@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchgit,
-  SDL,
-  stdenv,
-  alsa-lib,
-  libGL,
-  libogg,
-  libvorbis,
-  libmad,
-  xdelta,
+{ lib
+, fetchgit
+, SDL
+, stdenv
+, alsa-lib
+, libGL
+, libogg
+, libvorbis
+, libmad
+, xdelta
+,
 }:
 
 stdenv.mkDerivation {

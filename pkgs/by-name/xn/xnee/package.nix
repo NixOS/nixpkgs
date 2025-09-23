@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  fetchDebianPatch,
-  autoreconfHook,
-  pkg-config,
-  gtk2,
-  libX11,
-  libXext,
-  libXi,
-  libXtst,
-  texinfo,
-  xorgproto,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, fetchDebianPatch
+, autoreconfHook
+, pkg-config
+, gtk2
+, libX11
+, libXext
+, libXi
+, libXtst
+, texinfo
+, xorgproto
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

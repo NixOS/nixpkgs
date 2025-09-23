@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  coloredlogs,
-  executor,
-  fetchFromGitHub,
-  humanfriendly,
-  naturalsort,
-  property-manager,
-  pytestCheckHook,
-  pythonOlder,
-  six,
+{ lib
+, buildPythonPackage
+, coloredlogs
+, executor
+, fetchFromGitHub
+, humanfriendly
+, naturalsort
+, property-manager
+, pytestCheckHook
+, pythonOlder
+, six
+,
 }:
 
 buildPythonPackage rec {

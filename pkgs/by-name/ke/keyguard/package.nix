@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gradle,
-  jdk21,
-  fontconfig,
-  libXinerama,
-  libXrandr,
-  file,
-  gtk3,
-  glib,
-  cups,
-  lcms2,
-  alsa-lib,
-  makeDesktopItem,
-  copyDesktopItems,
-  libglvnd,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gradle
+, jdk21
+, fontconfig
+, libXinerama
+, libXrandr
+, file
+, gtk3
+, glib
+, cups
+, lcms2
+, alsa-lib
+, makeDesktopItem
+, copyDesktopItems
+, libglvnd
+, autoPatchelfHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  intltool,
-  pkg-config,
-  gtk3,
-  gpgme,
-  libgpg-error,
-  libassuan,
+{ lib
+, stdenv
+, fetchurl
+, intltool
+, pkg-config
+, gtk3
+, gpgme
+, libgpg-error
+, libassuan
+,
 }:
 
 stdenv.mkDerivation rec {

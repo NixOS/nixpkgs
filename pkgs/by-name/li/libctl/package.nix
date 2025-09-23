@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  gfortran,
-  guile,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gfortran
+, guile
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

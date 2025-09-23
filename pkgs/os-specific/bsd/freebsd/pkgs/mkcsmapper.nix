@@ -1,8 +1,8 @@
-{
-  stdenv,
-  mkDerivation,
-  byacc,
-  flex,
+{ stdenv
+, mkDerivation
+, byacc
+, flex
+,
 }:
 
 mkDerivation {

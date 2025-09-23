@@ -1,8 +1,8 @@
-{
-  src,
-  rustPlatform,
-  version,
-  cargoDeps,
+{ src
+, rustPlatform
+, version
+, cargoDeps
+,
 }:
 
 rustPlatform.buildRustPackage {

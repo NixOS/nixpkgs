@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  textlint,
-  textlint-rule-diacritics,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, textlint
+, textlint-rule-diacritics
+,
 }:
 
 buildNpmPackage rec {

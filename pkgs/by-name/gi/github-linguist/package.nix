@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildRubyGem,
-  bundlerEnv,
-  ruby_3_4,
+{ lib
+, fetchFromGitHub
+, buildRubyGem
+, bundlerEnv
+, ruby_3_4
+,
 }:
 
 let

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  aiohttp,
-  buildPythonPackage,
-  ed25519,
-  fetchFromGitHub,
-  nats-server,
-  nkeys,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  uvloop,
+{ lib
+, stdenv
+, aiohttp
+, buildPythonPackage
+, ed25519
+, fetchFromGitHub
+, nats-server
+, nkeys
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, uvloop
+,
 }:
 
 buildPythonPackage rec {

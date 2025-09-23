@@ -1,19 +1,19 @@
-{
-  alsa-lib,
-  alsa-utils,
-  autoPatchelfHook,
-  cifs-utils,
-  fetchurl,
-  ffmpeg,
-  freetype,
-  icu66,
-  krb5,
-  lib,
-  libtasn1,
-  lttng-ust_2_12,
-  makeWrapper,
-  openssl,
-  stdenv,
+{ alsa-lib
+, alsa-utils
+, autoPatchelfHook
+, cifs-utils
+, fetchurl
+, ffmpeg
+, freetype
+, icu66
+, krb5
+, lib
+, libtasn1
+, lttng-ust_2_12
+, makeWrapper
+, openssl
+, stdenv
+,
 }:
 let
   version = "2.54.1554";

@@ -1,25 +1,25 @@
-{
-  autoconf,
-  automake,
-  boost,
-  buildNpmPackage,
-  closurecompiler,
-  fetchFromGitHub,
-  glibc,
-  harfbuzz,
-  icu,
-  jdk,
-  lib,
-  nodejs,
-  nodePackages,
-  # needs to be static and built with MD2 support!
-  openssl,
-  pkg-config,
-  qt5,
-  runCommand,
-  stdenv,
-  writeScript,
-  x2t,
+{ autoconf
+, automake
+, boost
+, buildNpmPackage
+, closurecompiler
+, fetchFromGitHub
+, glibc
+, harfbuzz
+, icu
+, jdk
+, lib
+, nodejs
+, nodePackages
+, # needs to be static and built with MD2 support!
+  openssl
+, pkg-config
+, qt5
+, runCommand
+, stdenv
+, writeScript
+, x2t
+,
 }:
 
 let

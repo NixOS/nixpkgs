@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  qtbase,
-  qtscxml,
-  cmake,
-  json_c,
-  mesa_glu,
-  libglut,
-  trace-cmd,
-  pkg-config,
-  libtraceevent,
-  libtracefs,
-  freefont_ttf,
-  wrapQtAppsHook,
-  qtwayland,
+{ lib
+, stdenv
+, fetchzip
+, qtbase
+, qtscxml
+, cmake
+, json_c
+, mesa_glu
+, libglut
+, trace-cmd
+, pkg-config
+, libtraceevent
+, libtracefs
+, freefont_ttf
+, wrapQtAppsHook
+, qtwayland
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

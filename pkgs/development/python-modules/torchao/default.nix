@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  torch,
-
-  # tests
-  bitsandbytes,
-  expecttest,
-  fire,
-  pytest-xdist,
-  pytestCheckHook,
-  parameterized,
-  tabulate,
-  transformers,
-  unittest-xml-reporting,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  torch
+, # tests
+  bitsandbytes
+, expecttest
+, fire
+, pytest-xdist
+, pytestCheckHook
+, parameterized
+, tabulate
+, transformers
+, unittest-xml-reporting
+,
 }:
 
 buildPythonPackage rec {

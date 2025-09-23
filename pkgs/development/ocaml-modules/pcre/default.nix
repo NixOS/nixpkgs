@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  pcre,
-  dune-configurator,
+{ lib
+, buildDunePackage
+, fetchurl
+, pcre
+, dune-configurator
+,
 }:
 
 buildDunePackage rec {

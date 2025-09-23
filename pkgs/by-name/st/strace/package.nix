@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  libunwind,
-  buildPackages,
-  gitUpdater,
-  elfutils,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, libunwind
+, buildPackages
+, gitUpdater
+, elfutils
+,
 }:
 
 stdenv.mkDerivation rec {

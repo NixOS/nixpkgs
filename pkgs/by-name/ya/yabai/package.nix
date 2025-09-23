@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchzip,
-  apple-sdk_15,
-  common-updater-scripts,
-  curl,
-  installShellFiles,
-  jq,
-  versionCheckHook,
-  writeShellScript,
-  xxd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, apple-sdk_15
+, common-updater-scripts
+, curl
+, installShellFiles
+, jq
+, versionCheckHook
+, writeShellScript
+, xxd
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "yabai";

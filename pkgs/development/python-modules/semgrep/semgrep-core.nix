@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchPypi,
-  unzip,
+{ lib
+, stdenvNoCC
+, fetchPypi
+, unzip
+,
 }:
 
 let

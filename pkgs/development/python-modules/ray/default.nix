@@ -1,65 +1,63 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  pythonAtLeast,
-  python,
-  fetchPypi,
-  autoPatchelfHook,
-
-  # dependencies
-  click,
-  filelock,
-  jsonschema,
-  msgpack,
-  packaging,
-  protobuf,
-  pyyaml,
-  requests,
-  watchfiles,
-
-  # optional-dependencies
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, pythonAtLeast
+, python
+, fetchPypi
+, autoPatchelfHook
+, # dependencies
+  click
+, filelock
+, jsonschema
+, msgpack
+, packaging
+, protobuf
+, pyyaml
+, requests
+, watchfiles
+, # optional-dependencies
   # cgraph
-  cupy,
-  # client
-  grpcio,
-  # data
-  fsspec,
-  numpy,
-  pandas,
-  pyarrow,
-  # default
-  aiohttp,
-  aiohttp-cors,
-  colorful,
-  opencensus,
-  prometheus-client,
-  pydantic,
-  py-spy,
-  smart-open,
-  virtualenv,
-  # observability
-  memray,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  opentelemetry-exporter-otlp,
-  # rllib
-  dm-tree,
-  gymnasium,
-  lz4,
-  # ormsgpack,
-  scipy,
-  typer,
-  rich,
-  # serve
-  fastapi,
-  starlette,
-  uvicorn,
-  # serve-grpc
-  pyopenssl,
-  # tune
-  tensorboardx,
+  cupy
+, # client
+  grpcio
+, # data
+  fsspec
+, numpy
+, pandas
+, pyarrow
+, # default
+  aiohttp
+, aiohttp-cors
+, colorful
+, opencensus
+, prometheus-client
+, pydantic
+, py-spy
+, smart-open
+, virtualenv
+, # observability
+  memray
+, opentelemetry-api
+, opentelemetry-sdk
+, opentelemetry-exporter-otlp
+, # rllib
+  dm-tree
+, gymnasium
+, lz4
+, # ormsgpack,
+  scipy
+, typer
+, rich
+, # serve
+  fastapi
+, starlette
+, uvicorn
+, # serve-grpc
+  pyopenssl
+, # tune
+  tensorboardx
+,
 }:
 
 let

@@ -14,13 +14,13 @@ import ../make-test-python.nix (
 
     makeTincHost =
       name:
-      {
-        subnet,
-        extraConfig ? { },
+      { subnet
+      , extraConfig ? { }
+      ,
       }:
       lib.mkMerge [
         {
-          subnets = [ { address = subnet; } ];
+          subnets = [{ address = subnet; }];
           settings = {
             Ed25519PublicKey = snakeoil-keys.${name}.ed25519Public;
           };
@@ -44,10 +44,12 @@ import ../make-test-python.nix (
                 subnet = "10.0.0.11";
                 # Only specify the addresses in the node's vlans, Tinc does not
                 # seem to try each one, unlike the documentation suggests...
-                extraConfig.addresses = map (vlan: {
-                  address = "192.168.${toString vlan}.11";
-                  port = 655;
-                }) config.virtualisation.vlans;
+                extraConfig.addresses = map
+                  (vlan: {
+                    address = "192.168.${toString vlan}.11";
+                    port = 655;
+                  })
+                  config.virtualisation.vlans;
               };
               dynamic1 = {
                 subnet = "10.0.0.21";

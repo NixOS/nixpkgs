@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  git,
-  gtkmm4,
-  gtk4-layer-shell,
-  wrapGAppsHook4,
-  unstableGitUpdater,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, git
+, gtkmm4
+, gtk4-layer-shell
+, wrapGAppsHook4
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

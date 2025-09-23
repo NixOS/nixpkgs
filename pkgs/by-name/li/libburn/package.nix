@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitea
+, fetchpatch
+, autoreconfHook
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

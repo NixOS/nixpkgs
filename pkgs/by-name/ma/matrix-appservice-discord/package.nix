@@ -1,14 +1,14 @@
-{
-  lib,
-  mkYarnPackage,
-  fetchYarnDeps,
-  fetchFromGitHub,
-  srcOnly,
-  makeWrapper,
-  removeReferencesTo,
-  python3,
-  nodejs_20,
-  matrix-sdk-crypto-nodejs,
+{ lib
+, mkYarnPackage
+, fetchYarnDeps
+, fetchFromGitHub
+, srcOnly
+, makeWrapper
+, removeReferencesTo
+, python3
+, nodejs_20
+, matrix-sdk-crypto-nodejs
+,
 }:
 
 let

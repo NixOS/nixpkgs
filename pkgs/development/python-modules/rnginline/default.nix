@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  poetry-core,
-  lxml,
-  docopt-ng,
-  typing-extensions,
-  importlib-metadata,
-  importlib-resources,
-  pytestCheckHook,
-  mock,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, poetry-core
+, lxml
+, docopt-ng
+, typing-extensions
+, importlib-metadata
+, importlib-resources
+, pytestCheckHook
+, mock
+,
 }:
 
 buildPythonPackage rec {

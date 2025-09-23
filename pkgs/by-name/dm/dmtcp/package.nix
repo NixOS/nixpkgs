@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bash,
-  perl,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bash
+, perl
+, python3
+,
 }:
 
 stdenv.mkDerivation {

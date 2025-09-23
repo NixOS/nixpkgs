@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  vscode-utils,
-  autoPatchelfHook,
-  icu,
-  openssl,
-  libz,
-  glibc,
-  libxml2,
-  libkrb5,
-  patchelf,
+{ lib
+, stdenv
+, vscode-utils
+, autoPatchelfHook
+, icu
+, openssl
+, libz
+, glibc
+, libxml2
+, libkrb5
+, patchelf
+,
 }:
 let
   extInfo = (
@@ -30,8 +30,7 @@ let
         arch = "darwin-arm64";
         hash = "sha256-1LMV1e9xCoXa0UhyUkNFJJ0Nr0xJasPbfYAr6h7l6EE=";
       };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
   );
 in
 vscode-utils.buildVscodeMarketplaceExtension {

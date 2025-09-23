@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  autoPatchelfHook,
-  makeWrapper,
-  alsa-lib,
-  curl,
-  gtk3,
-  webkitgtk_4_0,
-  zenity,
+{ lib
+, stdenv
+, fetchzip
+, autoPatchelfHook
+, makeWrapper
+, alsa-lib
+, curl
+, gtk3
+, webkitgtk_4_0
+, zenity
+,
 }:
 
 stdenv.mkDerivation rec {

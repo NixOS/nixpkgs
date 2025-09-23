@@ -1,15 +1,15 @@
-{
-  lib,
-  flutter332,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  copyDesktopItems,
-  makeDesktopItem,
-  runCommand,
-  yq,
-  chatmcp,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, flutter332
+, fetchFromGitHub
+, autoPatchelfHook
+, copyDesktopItems
+, makeDesktopItem
+, runCommand
+, yq
+, chatmcp
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 flutter332.buildFlutterApplication rec {

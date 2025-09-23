@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  stdenv,
-  pkg-config,
-  expat,
-  fontconfig,
-  freetype,
-  libGL,
-  xorg,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, pkg-config
+, expat
+, fontconfig
+, freetype
+, libGL
+, xorg
+,
 }:
 
 rustPlatform.buildRustPackage rec {

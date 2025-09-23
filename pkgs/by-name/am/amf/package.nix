@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  libdrm,
-  amdenc,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, libdrm
+, amdenc
+, autoPatchelfHook
+,
 }:
 
 let

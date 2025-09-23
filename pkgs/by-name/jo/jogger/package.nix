@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  rustPlatform,
-  meson,
-  ninja,
-  pkg-config,
-  cargo,
-  rustc,
-  blueprint-compiler,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  libadwaita,
-  libshumate,
-  alsa-lib,
-  espeak,
-  sqlite,
-  glib-networking,
+{ lib
+, stdenv
+, fetchFromGitea
+, rustPlatform
+, meson
+, ninja
+, pkg-config
+, cargo
+, rustc
+, blueprint-compiler
+, wrapGAppsHook4
+, desktop-file-utils
+, libadwaita
+, libshumate
+, alsa-lib
+, espeak
+, sqlite
+, glib-networking
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

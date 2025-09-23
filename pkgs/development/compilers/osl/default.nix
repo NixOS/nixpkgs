@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  clang,
-  libclang,
-  libxml2,
-  zlib,
-  openexr,
-  openimageio,
-  llvm,
-  boost,
-  flex,
-  bison,
-  partio,
-  pugixml,
-  robin-map,
-  util-linux,
-  python3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, clang
+, libclang
+, libxml2
+, zlib
+, openexr
+, openimageio
+, llvm
+, boost
+, flex
+, bison
+, partio
+, pugixml
+, robin-map
+, util-linux
+, python3
+,
 }:
 
 let

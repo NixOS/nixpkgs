@@ -1,33 +1,29 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cmake,
-  cython,
-  ninja,
-  pkg-config,
-  scikit-build-core,
-
-  # native dependencies
-  c-blosc2,
-
-  # dependencies
-  msgpack,
-  ndindex,
-  numexpr,
-  numpy,
-  platformdirs,
-  py-cpuinfo,
-  requests,
-
-  # tests
-  psutil,
-  pytestCheckHook,
-  torch,
-  runTorchTests ? lib.meta.availableOn stdenv.hostPlatform torch,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cmake
+, cython
+, ninja
+, pkg-config
+, scikit-build-core
+, # native dependencies
+  c-blosc2
+, # dependencies
+  msgpack
+, ndindex
+, numexpr
+, numpy
+, platformdirs
+, py-cpuinfo
+, requests
+, # tests
+  psutil
+, pytestCheckHook
+, torch
+, runTorchTests ? lib.meta.availableOn stdenv.hostPlatform torch
+,
 }:
 
 buildPythonPackage rec {

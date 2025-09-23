@@ -1,19 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  nasm,
-  autoreconfHook,
-
-  versionCheckHook,
-
-  # passthru
-  runCommand,
-  nix,
-  pkgs,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  nasm
+, autoreconfHook
+, versionCheckHook
+, # passthru
+  runCommand
+, nix
+, pkgs
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

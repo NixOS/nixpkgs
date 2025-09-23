@@ -1,12 +1,12 @@
-{
-  lib,
-  awesomeversion,
-  buildPythonPackage,
-  aiohttp,
-  fetchFromGitHub,
-  setuptools,
-  pythonOlder,
-  packaging,
+{ lib
+, awesomeversion
+, buildPythonPackage
+, aiohttp
+, fetchFromGitHub
+, setuptools
+, pythonOlder
+, packaging
+,
 }:
 
 buildPythonPackage rec {

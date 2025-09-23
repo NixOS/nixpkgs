@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  testers,
-  dotenvx,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, testers
+, dotenvx
+,
 }:
 
 buildNpmPackage rec {

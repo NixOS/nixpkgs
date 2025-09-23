@@ -1,11 +1,11 @@
-{
-  testers,
-  fetchFromGitLab,
-  fetchgit,
-  fetchurl,
-  fetchzip,
-  linkFarm,
-  tor,
+{ testers
+, fetchFromGitLab
+, fetchgit
+, fetchurl
+, fetchzip
+, linkFarm
+, tor
+,
 }:
 let
   domain = "eweiibe6tdjsdprb4px6rqrzzcsi22m4koia44kc5pcjr7nec2rlxyad.onion";

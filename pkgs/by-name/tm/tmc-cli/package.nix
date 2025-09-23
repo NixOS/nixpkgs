@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, writableTmpDirAsHomeHook
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

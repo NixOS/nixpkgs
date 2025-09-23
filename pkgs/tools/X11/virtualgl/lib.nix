@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  libGL,
-  libGLU,
-  libXv,
-  libXtst,
-  libXi,
-  libjpeg_turbo,
-  fltk,
-  xorg,
-  opencl-headers,
-  opencl-clhpp,
-  ocl-icd,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, libGL
+, libGLU
+, libXv
+, libXtst
+, libXi
+, libjpeg_turbo
+, fltk
+, xorg
+, opencl-headers
+, opencl-clhpp
+, ocl-icd
+,
 }:
 
 stdenv.mkDerivation rec {

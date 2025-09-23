@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  # build inputs
-  tblib,
-  pytest,
-  py,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build inputs
+  tblib
+, pytest
+, py
+,
 }:
 let
   pname = "pytest-parallel";

@@ -1,22 +1,22 @@
-{
-  lib,
-  pkgs,
-  pulumiPackages,
-  buildPythonPackage,
-  pythonOlder,
-  hatchling,
-  protobuf,
-  grpcio,
-  dill,
-  six,
-  semver,
-  pyyaml,
-  debugpy,
-  pip,
-  pytest,
-  pytest-asyncio,
-  pytest-timeout,
-  python,
+{ lib
+, pkgs
+, pulumiPackages
+, buildPythonPackage
+, pythonOlder
+, hatchling
+, protobuf
+, grpcio
+, dill
+, six
+, semver
+, pyyaml
+, debugpy
+, pip
+, pytest
+, pytest-asyncio
+, pytest-timeout
+, python
+,
 }:
 let
   inherit (pkgs.pulumi) pname version src;

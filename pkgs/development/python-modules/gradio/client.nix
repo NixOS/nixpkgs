@@ -1,32 +1,29 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nix-update-script,
-
-  # build-system
-  hatchling,
-  hatch-requirements-txt,
-  hatch-fancy-pypi-readme,
-
-  # dependencies
-  fsspec,
-  httpx,
-  huggingface-hub,
-  packaging,
-  typing-extensions,
-  websockets,
-
-  # tests
-  gradio,
-  pydub,
-  pytest-asyncio,
-  pytestCheckHook,
-  rich,
-  safehttpx,
-  tomlkit,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, nix-update-script
+, # build-system
+  hatchling
+, hatch-requirements-txt
+, hatch-fancy-pypi-readme
+, # dependencies
+  fsspec
+, httpx
+, huggingface-hub
+, packaging
+, typing-extensions
+, websockets
+, # tests
+  gradio
+, pydub
+, pytest-asyncio
+, pytestCheckHook
+, rich
+, safehttpx
+, tomlkit
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

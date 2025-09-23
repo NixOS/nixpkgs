@@ -1,16 +1,16 @@
-{
-  coreutils,
-  fetchFromGitHub,
-  gnused,
-  lib,
-  maven,
-  makeWrapper,
-  openjdk,
-  libGL,
-  makeDesktopItem,
-  copyDesktopItems,
-  imagemagick,
-  nix-update-script,
+{ coreutils
+, fetchFromGitHub
+, gnused
+, lib
+, maven
+, makeWrapper
+, openjdk
+, libGL
+, makeDesktopItem
+, copyDesktopItems
+, imagemagick
+, nix-update-script
+,
 }:
 
 let

@@ -1,21 +1,21 @@
-{
-  lib,
-  appdirs,
-  buildPythonPackage,
-  cachelib,
-  colorama,
-  cssselect,
-  fetchFromGitHub,
-  fetchpatch,
-  keep,
-  lxml,
-  pygments,
-  pyquery,
-  requests,
-  rich,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, appdirs
+, buildPythonPackage
+, cachelib
+, colorama
+, cssselect
+, fetchFromGitHub
+, fetchpatch
+, keep
+, lxml
+, pygments
+, pyquery
+, requests
+, rich
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

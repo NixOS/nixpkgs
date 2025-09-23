@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  greenlet,
-  pytest,
-  decorator,
-  twisted,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, greenlet
+, pytest
+, decorator
+, twisted
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

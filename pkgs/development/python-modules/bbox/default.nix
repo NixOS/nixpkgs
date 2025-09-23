@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  matplotlib,
-  numpy,
-  pendulum,
-  pillow,
-  poetry-core,
-  pyquaternion,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, matplotlib
+, numpy
+, pendulum
+, pillow
+, poetry-core
+, pyquaternion
+,
 }:
 
 buildPythonPackage {

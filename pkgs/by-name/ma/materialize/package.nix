@@ -1,34 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  rustPlatform,
-  fetchFromGitHub,
-  protobuf,
-
-  # nativeBuildInputs
-  cmake,
-  perl,
-  pkg-config,
-  darwin,
-
-  # buildInputs
-  openssl,
-  rdkafka,
-
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchzip
+, rustPlatform
+, fetchFromGitHub
+, protobuf
+, # nativeBuildInputs
+  cmake
+, perl
+, pkg-config
+, darwin
+, # buildInputs
+  openssl
+, rdkafka
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 let
   fetchNpmPackage =
-    {
-      name,
-      version,
-      hash,
-      js_prod_file,
-      js_dev_file,
-      ...
+    { name
+    , version
+    , hash
+    , js_prod_file
+    , js_dev_file
+    , ...
     }@args:
     let
       package = fetchzip {

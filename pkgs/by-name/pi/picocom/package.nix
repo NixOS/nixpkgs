@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  replaceVars,
-  pkg-config,
-  go-md2man,
-  installShellFiles,
-  linenoise,
-  lrzsz,
+{ lib
+, stdenv
+, fetchFromGitLab
+, replaceVars
+, pkg-config
+, go-md2man
+, installShellFiles
+, linenoise
+, lrzsz
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

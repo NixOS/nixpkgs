@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  decoders,
-  ezxmlm,
-  containers,
+{ lib
+, buildDunePackage
+, decoders
+, ezxmlm
+, containers
+,
 }:
 
 buildDunePackage rec {

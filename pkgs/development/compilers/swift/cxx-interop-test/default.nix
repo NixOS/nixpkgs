@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  swift,
-  swiftpm,
-  swiftPackages,
+{ lib
+, stdenv
+, swift
+, swiftpm
+, swiftPackages
+,
 }:
 
 swiftPackages.stdenv.mkDerivation (finalAttrs: {

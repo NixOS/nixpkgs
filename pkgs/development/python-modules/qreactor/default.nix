@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  twisted,
-  qtpy,
-  pyqt5,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, twisted
+, qtpy
+, pyqt5
+,
 }:
 
 buildPythonPackage {

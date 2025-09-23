@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  pkg-config,
-  gsl,
-  dune-configurator,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, pkg-config
+, gsl
+, dune-configurator
+,
 }:
 
 buildDunePackage rec {

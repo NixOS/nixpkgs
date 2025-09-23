@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  mkdocs,
-  pandas,
-  tabulate,
-  pyyaml,
-  pytestCheckHook,
-  openpyxl,
-  mkdocs-macros-plugin,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, mkdocs
+, pandas
+, tabulate
+, pyyaml
+, pytestCheckHook
+, openpyxl
+, mkdocs-macros-plugin
+,
 }:
 
 buildPythonPackage rec {

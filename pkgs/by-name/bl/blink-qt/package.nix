@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch2,
-  python3Packages,
-  qt6Packages,
-  libvncserver,
+{ lib
+, fetchFromGitHub
+, fetchpatch2
+, python3Packages
+, qt6Packages
+, libvncserver
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  jaraco-functools,
-  jaraco-text,
-  more-itertools,
-  portend,
-  pypytools,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-toolbelt,
-  requests-unixsocket,
-  setuptools-scm,
-  six,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, jaraco-functools
+, jaraco-text
+, more-itertools
+, portend
+, pypytools
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-toolbelt
+, requests-unixsocket
+, setuptools-scm
+, six
+,
 }:
 
 buildPythonPackage rec {

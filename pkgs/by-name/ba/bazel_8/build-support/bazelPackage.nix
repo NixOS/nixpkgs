@@ -1,35 +1,35 @@
-{
-  callPackage,
-  gnugrep,
-  lib,
-  autoPatchelfHook,
-  stdenv,
+{ callPackage
+, gnugrep
+, lib
+, autoPatchelfHook
+, stdenv
+,
 }:
 
-{
-  name,
-  src,
-  sourceRoot ? null,
-  version ? null,
-  targets,
-  bazel,
-  startupArgs ? [ ],
-  commandArgs ? [ ],
-  env ? { },
-  serverJavabase ? null,
-  registry ? null,
-  bazelRepoCacheFOD ? {
+{ name
+, src
+, sourceRoot ? null
+, version ? null
+, targets
+, bazel
+, startupArgs ? [ ]
+, commandArgs ? [ ]
+, env ? { }
+, serverJavabase ? null
+, registry ? null
+, bazelRepoCacheFOD ? {
     outputHash = null;
     outputHashAlgo = "sha256";
-  },
-  bazelVendorDepsFOD ? {
+  }
+, bazelVendorDepsFOD ? {
     outputHash = null;
     outputHashAlgo = "sha256";
-  },
-  installPhase,
-  buildInputs ? [ ],
-  nativeBuildInputs ? [ ],
-  autoPatchelfIgnoreMissingDeps ? null,
+  }
+, installPhase
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, autoPatchelfIgnoreMissingDeps ? null
+,
 }:
 let
   # FOD produced by `bazel fetch`

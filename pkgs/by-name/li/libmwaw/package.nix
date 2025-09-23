@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  boost,
-  pkg-config,
-  cppunit,
-  zlib,
-  libwpg,
-  libwpd,
-  librevenge,
+{ lib
+, stdenv
+, fetchurl
+, boost
+, pkg-config
+, cppunit
+, zlib
+, libwpg
+, libwpd
+, librevenge
+,
 }:
 
 stdenv.mkDerivation rec {

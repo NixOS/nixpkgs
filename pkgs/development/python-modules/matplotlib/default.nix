@@ -1,78 +1,67 @@
-{
-  lib,
-  stdenv,
-  fetchPypi,
-  buildPythonPackage,
-  isPyPy,
-  pythonOlder,
-
-  # build-system
-  certifi,
-  pkg-config,
-  pybind11,
-  meson-python,
-  setuptools-scm,
-  pytestCheckHook,
-  python,
-  matplotlib,
-  fetchurl,
-
-  # native libraries
-  ffmpeg-headless,
-  freetype,
-  # By default, almost all tests fail due to the fact we use our version of
+{ lib
+, stdenv
+, fetchPypi
+, buildPythonPackage
+, isPyPy
+, pythonOlder
+, # build-system
+  certifi
+, pkg-config
+, pybind11
+, meson-python
+, setuptools-scm
+, pytestCheckHook
+, python
+, matplotlib
+, fetchurl
+, # native libraries
+  ffmpeg-headless
+, freetype
+, # By default, almost all tests fail due to the fact we use our version of
   # freetype. We still use this argument to define the overridden
   # derivation `matplotlib.passthru.tests.withoutOutdatedFreetype` - which
   # builds matplotlib with the freetype version they default to, with which all
   # tests should pass.
-  doCheck ? false,
-  qhull,
-
-  # propagates
-  contourpy,
-  cycler,
-  fonttools,
-  kiwisolver,
-  numpy,
-  packaging,
-  pillow,
-  pyparsing,
-  python-dateutil,
-
-  # optional
-  importlib-resources,
-
-  # GTK3
-  enableGtk3 ? false,
-  cairo,
-  gobject-introspection,
-  gtk3,
-  pycairo,
-  pygobject3,
-
-  # Tk
+  doCheck ? false
+, qhull
+, # propagates
+  contourpy
+, cycler
+, fonttools
+, kiwisolver
+, numpy
+, packaging
+, pillow
+, pyparsing
+, python-dateutil
+, # optional
+  importlib-resources
+, # GTK3
+  enableGtk3 ? false
+, cairo
+, gobject-introspection
+, gtk3
+, pycairo
+, pygobject3
+, # Tk
   # Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
-  enableTk ? (!stdenv.hostPlatform.isDarwin && !isPyPy),
-  tkinter,
-
-  # Qt
-  enableQt ? false,
-  pyqt5,
-
-  # Webagg
-  enableWebagg ? false,
-  tornado,
-
-  # nbagg
-  enableNbagg ? false,
-  ipykernel,
-
-  # required for headless detection
-  libX11,
-  wayland,
-
-  # Reverse dependency
-  sage,
+  enableTk ? (!stdenv.hostPlatform.isDarwin && !isPyPy)
+, tkinter
+, # Qt
+  enableQt ? false
+, pyqt5
+, # Webagg
+  enableWebagg ? false
+, tornado
+, # nbagg
+  enableNbagg ? false
+, ipykernel
+, # required for headless detection
+  libX11
+, wayland
+, # Reverse dependency
+  sage
+,
 }:
 
 let

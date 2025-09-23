@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  buildPackages,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, buildPackages
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

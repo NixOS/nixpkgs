@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.druid;
@@ -70,12 +69,12 @@ let
   };
 
   druidServiceConfig =
-    {
-      name,
-      serviceOptions ? cfg."${name}",
-      allowedTCPPorts ? [ ],
-      tmpDirs ? [ ],
-      extraConfig ? { },
+    { name
+    , serviceOptions ? cfg."${name}"
+    , allowedTCPPorts ? [ ]
+    , tmpDirs ? [ ]
+    , extraConfig ? { }
+    ,
     }:
     (mkIf serviceOptions.enable (mkMerge [
       {
@@ -128,9 +127,13 @@ let
 
           tmpfiles.rules = concatMap (x: [ "d ${x} 0755 druid druid" ]) (cfg.commonTmpDirs ++ tmpDirs);
         };
-        networking.firewall.allowedTCPPorts = mkIf (attrByPath [
-          "openFirewall"
-        ] false serviceOptions) allowedTCPPorts;
+        networking.firewall.allowedTCPPorts = mkIf
+          (attrByPath [
+            "openFirewall"
+          ]
+            false
+            serviceOptions)
+          allowedTCPPorts;
 
         users = {
           users.druid = {

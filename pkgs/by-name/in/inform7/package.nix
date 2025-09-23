@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  coreutils,
-  perl,
-  gnutar,
-  gzip,
+{ lib
+, stdenv
+, fetchzip
+, coreutils
+, perl
+, gnutar
+, gzip
+,
 }:
 let
   version = "6M62";

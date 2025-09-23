@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pam,
-  openldap,
-  perl,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pam
+, openldap
+, perl
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

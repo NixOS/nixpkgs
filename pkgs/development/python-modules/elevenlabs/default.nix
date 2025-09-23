@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  lib,
-  poetry-core,
-  pyaudio,
-  pydantic,
-  pydantic-core,
-  requests,
-  typing-extensions,
-  websockets,
+{ buildPythonPackage
+, fetchFromGitHub
+, httpx
+, lib
+, poetry-core
+, pyaudio
+, pydantic
+, pydantic-core
+, requests
+, typing-extensions
+, websockets
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "codesnap";

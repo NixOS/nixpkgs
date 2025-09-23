@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  bleak,
-  coloredlogs,
-  pyserial,
-  bless,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, bleak
+, coloredlogs
+, pyserial
+, bless
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gfortran,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, gfortran
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

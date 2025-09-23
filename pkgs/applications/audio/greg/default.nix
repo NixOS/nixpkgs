@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  pythonPackages,
+{ lib
+, fetchFromGitHub
+, pythonPackages
+,
 }:
 
 with pythonPackages;

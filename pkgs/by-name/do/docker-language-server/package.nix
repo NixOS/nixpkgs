@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  docker,
-  gotestsum,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, docker
+, gotestsum
+,
 }:
 
 buildGoModule rec {

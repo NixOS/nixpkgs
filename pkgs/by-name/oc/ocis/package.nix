@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  buildGoModule,
-  callPackage,
-  gnumake,
-  pnpm_9,
-  nodejs,
-  ocis,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, buildGoModule
+, callPackage
+, gnumake
+, pnpm_9
+, nodejs
+, ocis
+,
 }:
 let
   idp-assets = stdenvNoCC.mkDerivation {

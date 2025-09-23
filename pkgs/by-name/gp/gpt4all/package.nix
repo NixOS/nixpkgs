@@ -1,19 +1,19 @@
-{
-  lib,
-  config,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  cmake,
-  qt6,
-  duckx,
-  fmt,
-  shaderc,
-  vulkan-headers,
-  wayland,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
-  autoAddDriverRunpath,
+{ lib
+, config
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, cmake
+, qt6
+, duckx
+, fmt
+, shaderc
+, vulkan-headers
+, wayland
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
+, autoAddDriverRunpath
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

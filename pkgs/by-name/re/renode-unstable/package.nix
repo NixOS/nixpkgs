@@ -1,7 +1,7 @@
-{
-  fetchFromGitHub,
-  nix-update-script,
-  renode,
+{ fetchFromGitHub
+, nix-update-script
+, renode
+,
 }:
 renode.overrideAttrs (old: rec {
   pname = "renode-unstable";

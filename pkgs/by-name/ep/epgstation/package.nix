@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchpatch,
-  fetchFromGitHub,
-  buildNpmPackage,
-  installShellFiles,
-  makeWrapper,
-  bash,
-  nodejs,
-  python3,
+{ lib
+, fetchpatch
+, fetchFromGitHub
+, buildNpmPackage
+, installShellFiles
+, makeWrapper
+, bash
+, nodejs
+, python3
+,
 }:
 
 buildNpmPackage rec {

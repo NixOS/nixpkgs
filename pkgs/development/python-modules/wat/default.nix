@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  nuclear,
-  pydantic,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, nuclear
+, pydantic
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

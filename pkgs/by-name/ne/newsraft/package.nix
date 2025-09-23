@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  pkg-config,
-  curl,
-  expat,
-  gumbo,
-  sqlite,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitea
+, pkg-config
+, curl
+, expat
+, gumbo
+, sqlite
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

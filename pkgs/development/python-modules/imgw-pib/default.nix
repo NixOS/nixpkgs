@@ -1,16 +1,16 @@
-{
-  aiofiles,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  lib,
-  orjson,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
-  syrupy,
+{ aiofiles
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, lib
+, orjson
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

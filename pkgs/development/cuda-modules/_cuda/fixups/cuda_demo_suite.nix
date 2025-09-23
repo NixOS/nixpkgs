@@ -1,10 +1,10 @@
-{
-  libglut,
-  libcufft,
-  libcurand,
-  libGLU,
-  libglvnd,
-  libgbm,
+{ libglut
+, libcufft
+, libcurand
+, libGLU
+, libglvnd
+, libgbm
+,
 }:
 prevAttrs: {
   buildInputs = prevAttrs.buildInputs or [ ] ++ [

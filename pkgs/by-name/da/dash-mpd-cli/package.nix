@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenvNoCC,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  protobuf,
-  ffmpeg,
-  libxslt,
-  shaka-packager,
-  nix-update-script,
-  runCommand,
+{ lib
+, stdenvNoCC
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, protobuf
+, ffmpeg
+, libxslt
+, shaka-packager
+, nix-update-script
+, runCommand
+,
 }:
 
 let

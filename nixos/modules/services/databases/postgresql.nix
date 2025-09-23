@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -651,19 +650,21 @@ in
         "PostgreSQL ${lib.versions.major cfg.package.version} is currently ${unstableState}, and is not advised for use in production environments."
     );
 
-    assertions = map (
-      { name, ensureDBOwnership, ... }:
-      {
-        assertion = ensureDBOwnership -> elem name cfg.ensureDatabases;
-        message = ''
-          For each database user defined with `services.postgresql.ensureUsers` and
-          `ensureDBOwnership = true;`, a database with the same name must be defined
-          in `services.postgresql.ensureDatabases`.
+    assertions = map
+      (
+        { name, ensureDBOwnership, ... }:
+        {
+          assertion = ensureDBOwnership -> elem name cfg.ensureDatabases;
+          message = ''
+            For each database user defined with `services.postgresql.ensureUsers` and
+            `ensureDBOwnership = true;`, a database with the same name must be defined
+            in `services.postgresql.ensureDatabases`.
 
-          Offender: ${name} has not been found among databases.
-        '';
-      }
-    ) cfg.ensureUsers;
+            Offender: ${name} has not been found among databases.
+          '';
+        }
+      )
+      cfg.ensureUsers;
 
     services.postgresql.settings = {
       hba_file = "${pkgs.writeText "pg_hba.conf" cfg.authentication}";
@@ -706,8 +707,8 @@ in
             mkThrow "9_5";
       in
       # Note: when changing the default, make it conditional on
-      # ‘system.stateVersion’ to maintain compatibility with existing
-      # systems!
+        # ‘system.stateVersion’ to maintain compatibility with existing
+        # systems!
       mkDefault (if cfg.enableJIT then base.withJIT else base);
 
     services.postgresql.dataDir = mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
@@ -762,9 +763,11 @@ in
       "/share/postgresql"
     ];
 
-    system.checks = lib.optional (
-      cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform
-    ) configFileCheck;
+    system.checks = lib.optional
+      (
+        cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform
+      )
+      configFileCheck;
 
     systemd.targets.postgresql = {
       description = "PostgreSQL";

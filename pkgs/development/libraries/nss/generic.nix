@@ -1,30 +1,30 @@
-{
-  version,
-  hash,
-  filename,
-  versionRegex,
+{ version
+, hash
+, filename
+, versionRegex
+,
 }:
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nspr,
-  perl,
-  installShellFiles,
-  zlib,
-  sqlite,
-  ninja,
-  cctools,
-  fixDarwinDylibNames,
-  buildPackages,
-  useP11kit ? true,
-  p11-kit,
-  # allow FIPS mode. Note that this makes the output non-reproducible.
+{ lib
+, stdenv
+, fetchFromGitHub
+, nspr
+, perl
+, installShellFiles
+, zlib
+, sqlite
+, ninja
+, cctools
+, fixDarwinDylibNames
+, buildPackages
+, useP11kit ? true
+, p11-kit
+, # allow FIPS mode. Note that this makes the output non-reproducible.
   # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6
-  enableFIPS ? false,
-  nixosTests,
-  nss_latest,
-  nix-update-script,
+  enableFIPS ? false
+, nixosTests
+, nss_latest
+, nix-update-script
+,
 }:
 
 let
@@ -245,9 +245,10 @@ stdenv.mkDerivation rec {
   };
 
   passthru.tests =
-    lib.optionalAttrs (lib.versionOlder version nss_latest.version) {
-      inherit (nixosTests) firefox-esr;
-    }
+    lib.optionalAttrs (lib.versionOlder version nss_latest.version)
+      {
+        inherit (nixosTests) firefox-esr;
+      }
     // lib.optionalAttrs (lib.versionAtLeast version nss_latest.version) {
       inherit (nixosTests) firefox;
     };

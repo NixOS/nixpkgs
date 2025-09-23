@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  xcodebuild,
-  xcbuildHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, xcodebuild
+, xcbuildHook
+,
 }:
 
 stdenv.mkDerivation rec {

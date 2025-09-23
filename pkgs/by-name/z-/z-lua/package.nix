@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  lua52Packages,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, lua52Packages
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

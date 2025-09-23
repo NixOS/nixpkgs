@@ -1,6 +1,5 @@
-{
-  runTest,
-  ...
+{ runTest
+, ...
 }:
 
 let

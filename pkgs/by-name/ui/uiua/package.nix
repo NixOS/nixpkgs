@@ -1,24 +1,21 @@
-{
-  uiua_versionType ? "stable",
-
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  versionCheckHook,
-
-  libffi,
-  audioSupport ? true,
-  alsa-lib,
-  webcamSupport ? false,
-  libGL,
-  libxkbcommon,
-  wayland,
-  xorg,
-  windowSupport ? false,
-
-  runCommand,
+{ uiua_versionType ? "stable"
+, lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, versionCheckHook
+, libffi
+, audioSupport ? true
+, alsa-lib
+, webcamSupport ? false
+, libGL
+, libxkbcommon
+, wayland
+, xorg
+, windowSupport ? false
+, runCommand
+,
 }:
 
 let
@@ -26,8 +23,7 @@ let
     {
       "stable" = import ./stable.nix;
       "unstable" = import ./unstable.nix;
-    }
-    .${uiua_versionType};
+    }.${uiua_versionType};
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nixVersions,
-  nixComponents ? nixVersions.nixComponents_2_30,
-  cmake,
-  pkg-config,
-  boost,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nixVersions
+, nixComponents ? nixVersions.nixComponents_2_30
+, cmake
+, pkg-config
+, boost
+,
 }:
 
 stdenv.mkDerivation rec {

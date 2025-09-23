@@ -1,8 +1,8 @@
-{
-  pkgs,
-  lib,
-  emscripten,
-  python3,
+{ pkgs
+, lib
+, emscripten
+, python3
+,
 }:
 
 argsFun:
@@ -11,18 +11,15 @@ let
   wrapDerivation = f: pkgs.stdenv.mkDerivation (finalAttrs: f (lib.toFunction argsFun finalAttrs));
 in
 wrapDerivation (
-  {
-    buildInputs ? [ ],
-    nativeBuildInputs ? [ ],
-
-    enableParallelBuilding ? true,
-
-    meta ? { },
-    ...
+  { buildInputs ? [ ]
+  , nativeBuildInputs ? [ ]
+  , enableParallelBuilding ? true
+  , meta ? { }
+  , ...
   }@args:
 
   args
-  // {
+    // {
 
     pname = "emscripten-${lib.getName args}";
     version = lib.getVersion args;

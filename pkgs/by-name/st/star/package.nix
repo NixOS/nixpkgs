@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  xxd,
-  zlib,
-  llvmPackages,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, xxd
+, zlib
+, llvmPackages
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

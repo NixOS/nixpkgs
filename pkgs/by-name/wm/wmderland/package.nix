@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libnotify,
-  libX11,
-  xorgproto,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libnotify
+, libX11
+, xorgproto
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation {

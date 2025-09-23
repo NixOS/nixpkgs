@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch2,
-  makeBinaryWrapper,
-  jre_headless,
-  maven,
-  pcsclite,
-  yubico-piv-tool,
-  opensc,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch2
+, makeBinaryWrapper
+, jre_headless
+, maven
+, pcsclite
+, yubico-piv-tool
+, opensc
+,
 }:
 
 let

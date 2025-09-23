@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  cargo-tauri,
-  nodejs,
-  pnpm_8,
-  pkg-config,
-  wrapGAppsHook3,
-  openssl,
-  webkitgtk_4_1,
-  glib-networking,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cargo-tauri
+, nodejs
+, pnpm_8
+, pkg-config
+, wrapGAppsHook3
+, openssl
+, webkitgtk_4_1
+, glib-networking
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

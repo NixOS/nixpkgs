@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ruby,
-  bundlerEnv,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ruby
+, bundlerEnv
+, udevCheckHook
+,
 }:
 let
 

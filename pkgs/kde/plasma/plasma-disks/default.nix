@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  lib,
-  replaceVars,
-  smartmontools,
+{ mkKdeDerivation
+, lib
+, replaceVars
+, smartmontools
+,
 }:
 mkKdeDerivation {
   pname = "plasma-disks";

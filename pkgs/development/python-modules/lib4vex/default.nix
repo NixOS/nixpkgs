@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  csaf-tool,
-  lib4sbom,
-  packageurl-python,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, csaf-tool
+, lib4sbom
+, packageurl-python
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,9 @@
 # Test a minimal hbase cluster
 { pkgs, ... }:
 import ../make-test-python.nix (
-  {
-    hadoop ? pkgs.hadoop,
-    hbase ? pkgs.hbase,
-    ...
+  { hadoop ? pkgs.hadoop
+  , hbase ? pkgs.hbase
+  , ...
   }:
   with pkgs.lib;
   {

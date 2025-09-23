@@ -1,10 +1,10 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  libX11,
-  pam,
-  stdenv,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, libX11
+, pam
+, stdenv
+,
 }:
 
 buildGoModule rec {

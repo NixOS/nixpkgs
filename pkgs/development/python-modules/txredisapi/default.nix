@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  six,
-  twisted,
-  nixosTests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, six
+, twisted
+, nixosTests
+,
 }:
 
 buildPythonPackage rec {

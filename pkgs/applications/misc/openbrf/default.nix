@@ -1,16 +1,16 @@
-{
-  mkDerivation,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  qtbase,
-  vcg,
-  glew,
-  qmake,
-  libGLU,
-  eigen,
-  libGL,
+{ mkDerivation
+, lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, qtbase
+, vcg
+, glew
+, qmake
+, libGLU
+, eigen
+, libGL
+,
 }:
 
 mkDerivation {

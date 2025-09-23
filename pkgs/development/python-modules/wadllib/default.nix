@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  lazr-uri,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, lazr-uri
+,
 }:
 
 buildPythonPackage rec {

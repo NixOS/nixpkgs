@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  cmake,
-  pkg-config,
-  curl,
-  libunistring,
-  openssl,
-  pcre,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitea
+, cmake
+, pkg-config
+, curl
+, libunistring
+, openssl
+, pcre
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

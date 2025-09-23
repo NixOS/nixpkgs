@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  setuptools-scm,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, setuptools-scm
+,
 }:
 buildPythonPackage rec {
   pname = "git-find-repos";

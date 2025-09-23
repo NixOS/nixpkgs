@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  libao,
-  libmodplug,
-  libsamplerate,
-  libsndfile,
-  libvorbis,
-  ncurses,
-  which,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, libao
+, libmodplug
+, libsamplerate
+, libsndfile
+, libvorbis
+, ncurses
+, which
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

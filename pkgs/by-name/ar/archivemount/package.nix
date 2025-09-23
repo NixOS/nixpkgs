@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  pkg-config,
-  fuse,
-  libarchive,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, pkg-config
+, fuse
+, libarchive
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  wayland-scanner,
-  wayland,
-  wayland-protocols,
-  ffmpeg,
-  x264,
-  libpulseaudio,
-  pipewire,
-  libgbm,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, wayland-scanner
+, wayland
+, wayland-protocols
+, ffmpeg
+, x264
+, libpulseaudio
+, pipewire
+, libgbm
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

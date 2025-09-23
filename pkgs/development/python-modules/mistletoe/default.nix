@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  parameterized,
-  pygments,
-  pythonOlder,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, parameterized
+, pygments
+, pythonOlder
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

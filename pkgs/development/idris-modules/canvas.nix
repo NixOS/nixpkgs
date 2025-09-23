@@ -1,7 +1,7 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, lib
+,
 }:
 build-idris-package {
   pname = "canvas";

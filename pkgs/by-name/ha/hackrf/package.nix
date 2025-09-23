@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libusb1,
-  fftwSinglePrec,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libusb1
+, fftwSinglePrec
+,
 }:
 
 stdenv.mkDerivation rec {

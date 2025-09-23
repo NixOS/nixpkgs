@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  blueprint-compiler,
-  wrapGAppsHook4,
-  libadwaita,
-  libgee,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, vala
+, blueprint-compiler
+, wrapGAppsHook4
+, libadwaita
+, libgee
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

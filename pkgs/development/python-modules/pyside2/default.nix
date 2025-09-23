@@ -1,14 +1,14 @@
-{
-  python,
-  fetchurl,
-  lib,
-  stdenv,
-  cmake,
-  libxcrypt,
-  ninja,
-  qt5,
-  shiboken2,
-  withWebengine ? false, # vulnerable, so omit by default
+{ python
+, fetchurl
+, lib
+, stdenv
+, cmake
+, libxcrypt
+, ninja
+, qt5
+, shiboken2
+, withWebengine ? false
+, # vulnerable, so omit by default
 }:
 stdenv.mkDerivation rec {
   pname = "pyside2";

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  cmake,
-  ninja,
-  swift,
-  Foundation,
-  DarwinTools,
+{ lib
+, stdenv
+, callPackage
+, cmake
+, ninja
+, swift
+, Foundation
+, DarwinTools
+,
 }:
 
 let

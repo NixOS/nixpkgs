@@ -1,21 +1,21 @@
-{
-  SDL2,
-  fetchFromGitLab,
-  glib,
-  glm,
-  glslang,
-  lib,
-  libGL,
-  makeWrapper,
-  meson,
-  ninja,
-  openxr-loader,
-  pkg-config,
-  stdenv,
-  unstableGitUpdater,
-  vulkan-headers,
-  vulkan-loader,
-  xxd,
+{ SDL2
+, fetchFromGitLab
+, glib
+, glm
+, glslang
+, lib
+, libGL
+, makeWrapper
+, meson
+, ninja
+, openxr-loader
+, pkg-config
+, stdenv
+, unstableGitUpdater
+, vulkan-headers
+, vulkan-loader
+, xxd
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,10 +1,10 @@
 dotnetPackages:
-{
-  buildEnv,
-  makeWrapper,
-  lib,
-  symlinkJoin,
-  callPackage,
+{ buildEnv
+, makeWrapper
+, lib
+, symlinkJoin
+, callPackage
+,
 }:
 # TODO: Rethink how we determine and/or get the CLI.
 #       Possible options raised in #187118:
@@ -68,9 +68,9 @@ mkWrapper "sdk" (
         ;
     };
   }).overrideAttrs
-    {
-      propagatedSandboxProfile = toString (
-        lib.unique (lib.concatLists (lib.catAttrs "__propagatedSandboxProfile" dotnetPackages))
-      );
-    }
+  {
+    propagatedSandboxProfile = toString (
+      lib.unique (lib.concatLists (lib.catAttrs "__propagatedSandboxProfile" dotnetPackages))
+    );
+  }
 )

@@ -1,9 +1,9 @@
-{
-  makeScopeWithSplicing',
-  generateSplicesForMkScope,
-  callPackage,
-  attributePathToSplice ? [ "freebsd" ],
-  branch ? "release/14.2.0",
+{ makeScopeWithSplicing'
+, generateSplicesForMkScope
+, callPackage
+, attributePathToSplice ? [ "freebsd" ]
+, branch ? "release/14.2.0"
+,
 }:
 
 let
@@ -28,13 +28,13 @@ let
   otherSplices = generateSplicesForMkScope attributePathToSplice;
 in
 # `./package-set.nix` should never know the name of the package set we
-# are constructing; just this function is allowed to know that. This
-# is why we:
-#
-#  - do the splicing for cross compilation here
-#
-#  - construct the *anonymized* `buildFreebsd` attribute to be passed
-#    to `./package-set.nix`.
+  # are constructing; just this function is allowed to know that. This
+  # is why we:
+  #
+  #  - do the splicing for cross compilation here
+  #
+  #  - construct the *anonymized* `buildFreebsd` attribute to be passed
+  #    to `./package-set.nix`.
 makeScopeWithSplicing' {
   inherit otherSplices;
   f =
@@ -42,10 +42,12 @@ makeScopeWithSplicing' {
     {
       inherit branch;
     }
-    // callPackage ./package-set.nix ({
-      sourceData = versions.${self.branch} or (throw (badBranchError self.branch));
-      versionData = self.sourceData.version;
-      buildFreebsd = otherSplices.selfBuildHost;
-      patchesRoot = ./patches + "/${self.versionData.revision}";
-    }) self;
+    // callPackage ./package-set.nix
+      ({
+        sourceData = versions.${self.branch} or (throw (badBranchError self.branch));
+        versionData = self.sourceData.version;
+        buildFreebsd = otherSplices.selfBuildHost;
+        patchesRoot = ./patches + "/${self.versionData.revision}";
+      })
+      self;
 }

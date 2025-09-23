@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  blinker,
-  click,
-  crochet,
-  jsonschema,
-  pika,
-  pyopenssl,
-  requests,
-  service-identity,
-  tomli,
-  twisted,
-  pytest-mock,
-  pytest-twisted,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, blinker
+, click
+, crochet
+, jsonschema
+, pika
+, pyopenssl
+, requests
+, service-identity
+, tomli
+, twisted
+, pytest-mock
+, pytest-twisted
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.commafeed;
@@ -66,9 +65,11 @@ in
     systemd.services.commafeed = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = lib.mapAttrs (
-        _: v: if lib.isBool v then lib.boolToString v else toString v
-      ) cfg.environment;
+      environment = lib.mapAttrs
+        (
+          _: v: if lib.isBool v then lib.boolToString v else toString v
+        )
+        cfg.environment;
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} server ${cfg.package}/share/config.yml";
         User = cfg.user;

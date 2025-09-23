@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libxml2,
-  readline,
-  zlib,
-  perl,
-  cairo,
-  gtk3,
-  gsl,
-  pkg-config,
-  gtksourceview4,
-  pango,
-  gettext,
-  dconf,
-  makeWrapper,
-  gsettings-desktop-schemas,
-  hicolor-icon-theme,
-  texinfo,
-  ssw,
-  python3,
-  iconv,
+{ lib
+, stdenv
+, fetchurl
+, libxml2
+, readline
+, zlib
+, perl
+, cairo
+, gtk3
+, gsl
+, pkg-config
+, gtksourceview4
+, pango
+, gettext
+, dconf
+, makeWrapper
+, gsettings-desktop-schemas
+, hicolor-icon-theme
+, texinfo
+, ssw
+, python3
+, iconv
+,
 }:
 
 stdenv.mkDerivation rec {

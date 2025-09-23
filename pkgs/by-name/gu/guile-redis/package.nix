@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  guile,
-  pkg-config,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, guile
+, pkg-config
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  pkgs,
-  lib,
-  stdenvNoCC,
-  themeConfig ? null,
-  embeddedTheme ? "astronaut",
+{ pkgs
+, lib
+, stdenvNoCC
+, themeConfig ? null
+, embeddedTheme ? "astronaut"
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "sddm-astronaut";

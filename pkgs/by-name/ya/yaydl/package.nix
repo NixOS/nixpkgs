@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  makeWrapper,
-  openssl,
-  ffmpeg,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, makeWrapper
+, openssl
+, ffmpeg
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  alsa-lib,
-  wl-clipboard,
-  xclip,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, alsa-lib
+, wl-clipboard
+, xclip
+,
 }:
 
 buildGoModule rec {

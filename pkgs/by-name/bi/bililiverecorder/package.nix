@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  makeWrapper,
-  dotnetCorePackages,
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, dotnetCorePackages
+,
 }:
 
 let

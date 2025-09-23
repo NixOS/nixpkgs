@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchCrate,
-  rustPlatform,
-  openssl,
-  pkg-config,
-  libiconv,
+{ lib
+, stdenv
+, fetchCrate
+, rustPlatform
+, openssl
+, pkg-config
+, libiconv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

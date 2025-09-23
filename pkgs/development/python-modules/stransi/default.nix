@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  hypothesis,
-  pytestCheckHook,
-  ochre,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, hypothesis
+, pytestCheckHook
+, ochre
+,
 }:
 
 buildPythonPackage rec {

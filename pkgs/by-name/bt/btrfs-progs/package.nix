@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPackages,
-  pkg-config,
-  zstd,
-  acl,
-  attr,
-  e2fsprogs,
-  libuuid,
-  lzo,
-  udev,
-  zlib,
-  runCommand,
-  btrfs-progs,
-  gitUpdater,
-  udevSupport ? true,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, pkg-config
+, zstd
+, acl
+, attr
+, e2fsprogs
+, libuuid
+, lzo
+, udev
+, zlib
+, runCommand
+, btrfs-progs
+, gitUpdater
+, udevSupport ? true
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

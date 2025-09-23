@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  defcon,
-  fetchPypi,
-  fonttools,
-  gflanguages,
-  glyphslib,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  requests,
-  setuptools-scm,
-  setuptools,
-  tabulate,
-  unicodedata2,
-  youseedee,
+{ lib
+, buildPythonPackage
+, defcon
+, fetchPypi
+, fonttools
+, gflanguages
+, glyphslib
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, setuptools-scm
+, setuptools
+, tabulate
+, unicodedata2
+, youseedee
+,
 }:
 
 buildPythonPackage rec {

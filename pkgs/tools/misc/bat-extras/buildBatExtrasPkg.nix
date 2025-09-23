@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  core,
-
-  bash,
-  bat,
-  fish,
-  getconf,
-  makeWrapper,
-  zsh,
+{ lib
+, stdenv
+, core
+, bash
+, bat
+, fish
+, getconf
+, makeWrapper
+, zsh
+,
 }:
 let
   cleanArgs = lib.flip builtins.removeAttrs [
@@ -16,16 +15,15 @@ let
     "meta"
   ];
 in
-{
-  name,
-  dependencies,
-  meta ? { },
-  ...
+{ name
+, dependencies
+, meta ? { }
+, ...
 }@args:
 stdenv.mkDerivation (
   finalAttrs:
   cleanArgs args
-  // {
+    // {
     inherit (core) version;
 
     src = core;

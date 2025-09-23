@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  gcc,
-  lua54Packages,
-  readline,
+{ lib
+, fetchFromGitHub
+, gcc
+, lua54Packages
+, readline
+,
 }:
 lua54Packages.buildLuaPackage {
   pname = "sbarLua";

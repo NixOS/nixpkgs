@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  httpx,
-  pyjwt,
-  websockets,
-  yarl,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, httpx
+, pyjwt
+, websockets
+, yarl
+,
 }:
 
 buildPythonPackage rec {

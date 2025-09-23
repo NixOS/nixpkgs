@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  versionData,
-  bsdSetupHook,
-  freebsdSetupHook,
-  makeMinimal,
-  boot-install,
-  which,
-  freebsd-lib,
-  expat,
-  zlib,
-  extraSrc ? [ ],
+{ lib
+, stdenv
+, mkDerivation
+, versionData
+, bsdSetupHook
+, freebsdSetupHook
+, makeMinimal
+, boot-install
+, which
+, freebsd-lib
+, expat
+, zlib
+, extraSrc ? [ ]
+,
 }:
 
 let

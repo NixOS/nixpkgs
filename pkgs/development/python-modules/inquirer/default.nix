@@ -1,21 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # native
-  poetry-core,
-
-  # propagated
-  blessed,
-  editor,
-  readchar,
-
-  # tests
-  pytest-mock,
-  pytestCheckHook,
-  pexpect,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # native
+  poetry-core
+, # propagated
+  blessed
+, editor
+, readchar
+, # tests
+  pytest-mock
+, pytestCheckHook
+, pexpect
+,
 }:
 
 buildPythonPackage rec {

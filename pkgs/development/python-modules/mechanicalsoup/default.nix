@@ -1,16 +1,16 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lxml,
-  pytest-cov-stub,
-  pytest-httpbin,
-  pytest-mock,
-  pytestCheckHook,
-  requests-mock,
-  requests,
-  setuptools,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, lxml
+, pytest-cov-stub
+, pytest-httpbin
+, pytest-mock
+, pytestCheckHook
+, requests-mock
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

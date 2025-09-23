@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  jq,
-  makeWrapper,
-  nodejs_22,
-  python3,
-  yarn-berry_4,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, jq
+, makeWrapper
+, nodejs_22
+, python3
+, yarn-berry_4
+, nixosTests
+,
 }:
 let
   yarn-berry = yarn-berry_4;

@@ -1,37 +1,37 @@
-{
-  lib,
-  autoPatchelfHook,
-  bash,
-  copyDesktopItems,
-  coreutils,
-  cryptsetup,
-  dosfstools,
-  e2fsprogs,
-  exfat,
-  fetchurl,
-  gawk,
-  gnugrep,
-  gnused,
-  gtk3,
-  hexdump,
-  makeDesktopItem,
-  makeWrapper,
-  ntfs3g,
-  parted,
-  procps,
-  stdenv,
-  util-linux,
-  which,
-  xfsprogs,
-  xz,
-  defaultGuiType ? "",
-  withCryptsetup ? false,
-  withXfs ? false,
-  withExt4 ? false,
-  withNtfs ? false,
-  withGtk3 ? defaultGuiType == "gtk3",
-  withQt5 ? defaultGuiType == "qt5",
-  libsForQt5,
+{ lib
+, autoPatchelfHook
+, bash
+, copyDesktopItems
+, coreutils
+, cryptsetup
+, dosfstools
+, e2fsprogs
+, exfat
+, fetchurl
+, gawk
+, gnugrep
+, gnused
+, gtk3
+, hexdump
+, makeDesktopItem
+, makeWrapper
+, ntfs3g
+, parted
+, procps
+, stdenv
+, util-linux
+, which
+, xfsprogs
+, xz
+, defaultGuiType ? ""
+, withCryptsetup ? false
+, withXfs ? false
+, withExt4 ? false
+, withNtfs ? false
+, withGtk3 ? defaultGuiType == "gtk3"
+, withQt5 ? defaultGuiType == "qt5"
+, libsForQt5
+,
 }:
 
 assert lib.elem defaultGuiType [
@@ -51,8 +51,7 @@ let
       i686-linux = "i386";
       aarch64-linux = "aarch64";
       mipsel-linux = "mips64el";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported platform: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname =

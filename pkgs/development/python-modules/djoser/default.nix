@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  django,
-  djangorestframework-simplejwt,
-  social-auth-app-django,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, django
+, djangorestframework-simplejwt
+, social-auth-app-django
+,
 }:
 
 buildPythonPackage rec {

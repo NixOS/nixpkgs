@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  nasm,
-  cpuinfo,
-  libdovi,
-  hdr10plus,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, nasm
+, cpuinfo
+, libdovi
+, hdr10plus
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,9 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
     lib.mapAttrsToList
       (
         n: v:
-        lib.cmakeOptionType (builtins.typeOf v) n (
-          if builtins.isBool v then lib.boolToString v else toString v
-        )
+          lib.cmakeOptionType (builtins.typeOf v) n (
+            if builtins.isBool v then lib.boolToString v else toString v
+          )
       )
       {
         LIBDOVI_FOUND = true;

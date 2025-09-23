@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  apple-sdk_15,
-  findutils,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, apple-sdk_15
+, findutils
+,
 }:
 
 buildGoModule (finalAttrs: {

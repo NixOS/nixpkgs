@@ -1,9 +1,9 @@
-{
-  lib,
-  anki-utils,
-  fetchFromGitHub,
-  esbuild,
-  aab,
+{ lib
+, anki-utils
+, fetchFromGitHub
+, esbuild
+, aab
+,
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "review-heatmap";

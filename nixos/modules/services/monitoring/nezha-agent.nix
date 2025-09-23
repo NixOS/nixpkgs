@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.nezha-agent;
@@ -238,9 +237,10 @@ in
         WorkingDirectory = "/var/lib/nezha-agent";
         ReadWritePaths = "/var/lib/nezha-agent";
 
-        LoadCredential = lib.optionalString (
-          cfg.clientSecretFile != null
-        ) "client-secret:${cfg.clientSecretFile}";
+        LoadCredential = lib.optionalString
+          (
+            cfg.clientSecretFile != null
+          ) "client-secret:${cfg.clientSecretFile}";
 
         # Hardening
         ProcSubset = "all"; # Needed to get host information

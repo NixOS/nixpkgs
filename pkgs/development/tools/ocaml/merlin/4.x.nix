@@ -1,36 +1,34 @@
-{
-  lib,
-  replaceVars,
-  fetchurl,
-  ocaml,
-  dune_3,
-  buildDunePackage,
-  yojson,
-  csexp,
-  merlin-lib,
-  dot-merlin-reader,
-  jq,
-  menhir,
-  menhirLib,
-  menhirSdk,
-  # Each releases of Merlin support a limited range of versions of OCaml.
-  version ?
-    {
-      "4.12.0" = "4.7-412";
-      "4.12.1" = "4.7-412";
-      "4.13.0" = "4.7-413";
-      "4.13.1" = "4.7-413";
-      "4.14.0" = "4.19-414";
-      "4.14.1" = "4.19-414";
-      "4.14.2" = "4.19-414";
-      "5.0.0" = "4.14-500";
-      "5.1.0" = "4.17.1-501";
-      "5.1.1" = "4.17.1-501";
-      "5.2.0" = "5.3-502";
-      "5.2.1" = "5.3-502";
-      "5.3.0" = "5.5-503";
-    }
-    ."${ocaml.version}",
+{ lib
+, replaceVars
+, fetchurl
+, ocaml
+, dune_3
+, buildDunePackage
+, yojson
+, csexp
+, merlin-lib
+, dot-merlin-reader
+, jq
+, menhir
+, menhirLib
+, menhirSdk
+, # Each releases of Merlin support a limited range of versions of OCaml.
+  version ? {
+    "4.12.0" = "4.7-412";
+    "4.12.1" = "4.7-412";
+    "4.13.0" = "4.7-413";
+    "4.13.1" = "4.7-413";
+    "4.14.0" = "4.19-414";
+    "4.14.1" = "4.19-414";
+    "4.14.2" = "4.19-414";
+    "5.0.0" = "4.14-500";
+    "5.1.0" = "4.17.1-501";
+    "5.1.1" = "4.17.1-501";
+    "5.2.0" = "5.3-502";
+    "5.2.1" = "5.3-502";
+    "5.3.0" = "5.5-503";
+  }."${ocaml.version}"
+,
 }:
 
 let

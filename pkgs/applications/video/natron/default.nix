@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  wrapQtAppsHook,
-  boost,
-  cairo,
-  ceres-solver,
-  expat,
-  extra-cmake-modules,
-  glog,
-  libXdmcp,
-  python312,
-  wayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, wrapQtAppsHook
+, boost
+, cairo
+, ceres-solver
+, expat
+, extra-cmake-modules
+, glog
+, libXdmcp
+, python312
+, wayland
+,
 }:
 
 let

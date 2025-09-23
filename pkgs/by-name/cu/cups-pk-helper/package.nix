@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  intltool,
-  pkg-config,
-  glib,
-  polkit,
-  cups,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchurl
+, intltool
+, pkg-config
+, glib
+, polkit
+, cups
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

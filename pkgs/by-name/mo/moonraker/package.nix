@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  python3,
-  makeWrapper,
-  unstableGitUpdater,
-  nixosTests,
-  useGpiod ? false,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, python3
+, makeWrapper
+, unstableGitUpdater
+, nixosTests
+, useGpiod ? false
+,
 }:
 
 let

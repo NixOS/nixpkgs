@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  meson,
-  meson-python,
-  numpy,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, meson
+, meson-python
+, numpy
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

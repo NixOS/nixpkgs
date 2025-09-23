@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  perlPackages,
-  makeWrapper,
-  glibc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, perlPackages
+, makeWrapper
+, glibc
+,
 }:
 
 stdenv.mkDerivation rec {

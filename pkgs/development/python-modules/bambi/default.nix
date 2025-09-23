@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  arviz,
-  formulae,
-  graphviz,
-  pandas,
-  pymc,
-
-  # tests
-  blackjax,
-  numpyro,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  arviz
+, formulae
+, graphviz
+, pandas
+, pymc
+, # tests
+  blackjax
+, numpyro
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

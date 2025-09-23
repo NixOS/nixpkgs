@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libunwind,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libunwind
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

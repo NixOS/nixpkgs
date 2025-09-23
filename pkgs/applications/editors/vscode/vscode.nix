@@ -1,21 +1,20 @@
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  callPackage,
-  fetchurl,
-  nixosTests,
-  srcOnly,
-  isInsiders ? false,
-  # sourceExecutableName is the name of the binary in the source archive over
+{ lib
+, stdenv
+, stdenvNoCC
+, callPackage
+, fetchurl
+, nixosTests
+, srcOnly
+, isInsiders ? false
+, # sourceExecutableName is the name of the binary in the source archive over
   # which we have no control and it is needed to run the insider version as
   # documented in https://wiki.nixos.org/wiki/Visual_Studio_Code#Insiders_Build
   # On MacOS the insider binary is still called code instead of code-insiders as
   # of 2023-08-06.
-  sourceExecutableName ?
-    "code" + lib.optionalString (isInsiders && stdenv.hostPlatform.isLinux) "-insiders",
-  commandLineArgs ? "",
-  useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
+  sourceExecutableName ? "code" + lib.optionalString (isInsiders && stdenv.hostPlatform.isLinux) "-insiders"
+, commandLineArgs ? ""
+, useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin
+,
 }:
 
 let
@@ -29,8 +28,7 @@ let
       aarch64-linux = "linux-arm64";
       aarch64-darwin = "darwin-arm64";
       armv7l-linux = "linux-armhf";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   archive_fmt = if stdenv.hostPlatform.isDarwin then "zip" else "tar.gz";
 
@@ -41,8 +39,7 @@ let
       aarch64-linux = "sha256-DF8QnqvVFqNyxjrphR6NaUXOKr8Koe34NitRa5mTBYs=";
       aarch64-darwin = "sha256-v+m8AMpPph6CztUCjneBKC9txEOAKvcHsAXr/8KjIeA=";
       armv7l-linux = "sha256-py1FZYd77YVNloQbXm36ou4HGowmteY8HzOiUioGD8Y=";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.

@@ -1,39 +1,35 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  click,
-  cloudpickle,
-  fsspec,
-  importlib-metadata,
-  packaging,
-  partd,
-  pyyaml,
-  toolz,
-
-  # optional-dependencies
-  numpy,
-  pyarrow,
-  lz4,
-  pandas,
-  distributed,
-  bokeh,
-  jinja2,
-
-  # tests
-  hypothesis,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-rerunfailures,
-  pytest-xdist,
-  pytestCheckHook,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  click
+, cloudpickle
+, fsspec
+, importlib-metadata
+, packaging
+, partd
+, pyyaml
+, toolz
+, # optional-dependencies
+  numpy
+, pyarrow
+, lz4
+, pandas
+, distributed
+, bokeh
+, jinja2
+, # tests
+  hypothesis
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-mock
+, pytest-rerunfailures
+, pytest-xdist
+, pytestCheckHook
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

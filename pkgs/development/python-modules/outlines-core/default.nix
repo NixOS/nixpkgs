@@ -1,35 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cargo,
-  pkg-config,
-  rustPlatform,
-  rustc,
-
-  # buildInputs
-  openssl,
-
-  # build-system
-  setuptools-rust,
-  setuptools-scm,
-
-  # dependencies
-  interegular,
-  jsonschema,
-
-  # optional-dependencies
-  datasets,
-  numpy,
-  pydantic,
-  scipy,
-  torch,
-  transformers,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # nativeBuildInputs
+  cargo
+, pkg-config
+, rustPlatform
+, rustc
+, # buildInputs
+  openssl
+, # build-system
+  setuptools-rust
+, setuptools-scm
+, # dependencies
+  interegular
+, jsonschema
+, # optional-dependencies
+  datasets
+, numpy
+, pydantic
+, scipy
+, torch
+, transformers
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

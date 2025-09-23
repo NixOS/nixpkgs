@@ -1,33 +1,33 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  copyDesktopItems,
-  makeDesktopItem,
-  xorg,
-  freetype,
-  expat,
-  libGL,
-  libjack2,
-  curl,
-  webkitgtk_4_1,
-  libsysprof-capture,
-  pcre2,
-  util-linux,
-  libselinux,
-  libsepol,
-  libthai,
-  libxkbcommon,
-  libdatrie,
-  libepoxy,
-  lerc,
-  sqlite,
-  ninja,
-  # Disable VST building by default, since NixOS doesn't have a VST license
-  enableVST2 ? false,
+{ stdenv
+, fetchFromGitHub
+, lib
+, cmake
+, pkg-config
+, alsa-lib
+, copyDesktopItems
+, makeDesktopItem
+, xorg
+, freetype
+, expat
+, libGL
+, libjack2
+, curl
+, webkitgtk_4_1
+, libsysprof-capture
+, pcre2
+, util-linux
+, libselinux
+, libsepol
+, libthai
+, libxkbcommon
+, libdatrie
+, libepoxy
+, lerc
+, sqlite
+, ninja
+, # Disable VST building by default, since NixOS doesn't have a VST license
+  enableVST2 ? false
+,
 }:
 stdenv.mkDerivation {
   pname = "socalabs-sid";

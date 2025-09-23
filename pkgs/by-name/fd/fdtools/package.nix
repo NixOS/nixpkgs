@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  skawarePackages,
+{ stdenv
+, lib
+, fetchurl
+, skawarePackages
+,
 }:
 
 let

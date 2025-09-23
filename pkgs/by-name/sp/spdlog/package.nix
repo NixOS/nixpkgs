@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  fmt,
-  catch2_3,
-  staticBuild ? stdenv.hostPlatform.isStatic,
-
-  # passthru
-  bear,
-  tiledb,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, fmt
+, catch2_3
+, staticBuild ? stdenv.hostPlatform.isStatic
+, # passthru
+  bear
+, tiledb
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

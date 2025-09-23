@@ -1,22 +1,21 @@
-{
-  lib,
-  writeShellScript,
-  coreutils,
-  gnused,
-  gnugrep,
-  curl,
-  gnupg,
-  nix,
-  common-updater-scripts,
-
-  # options
-  pname,
-  version,
-  meta,
-  baseUrl ? "https://dist.torproject.org/torbrowser/",
-  # name used to match published archive
-  name ? "tor-browser",
-  prerelease ? false,
+{ lib
+, writeShellScript
+, coreutils
+, gnused
+, gnugrep
+, curl
+, gnupg
+, nix
+, common-updater-scripts
+, # options
+  pname
+, version
+, meta
+, baseUrl ? "https://dist.torproject.org/torbrowser/"
+, # name used to match published archive
+  name ? "tor-browser"
+, prerelease ? false
+,
 }:
 
 let

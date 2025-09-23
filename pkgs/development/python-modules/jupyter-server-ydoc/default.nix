@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  jsonschema,
-  jupyter-events,
-  jupyter-server,
-  jupyter-server-fileid,
-  jupyter-ydoc,
-  pycrdt,
-  pycrdt-websocket,
-  jupyter-collaboration,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, jsonschema
+, jupyter-events
+, jupyter-server
+, jupyter-server-fileid
+, jupyter-ydoc
+, pycrdt
+, pycrdt-websocket
+, jupyter-collaboration
+,
 }:
 
 buildPythonPackage rec {

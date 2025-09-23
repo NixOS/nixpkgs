@@ -1,17 +1,15 @@
-{
-  callPackage,
-  stdenv,
-  fetchzip,
-  lib,
-  libcxx,
-  llvmPackages,
-  config,
-
-  addDriverRunpath,
-  patchelf,
-  fixDarwinDylibNames,
-
-  cudaSupport ? config.cudaSupport,
+{ callPackage
+, stdenv
+, fetchzip
+, lib
+, libcxx
+, llvmPackages
+, config
+, addDriverRunpath
+, patchelf
+, fixDarwinDylibNames
+, cudaSupport ? config.cudaSupport
+,
 }:
 
 let

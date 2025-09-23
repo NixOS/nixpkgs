@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  writableTmpDirAsHomeHook,
-  unstableGitUpdater,
-  ocamlPackages,
-  opam,
+{ lib
+, fetchFromGitHub
+, writableTmpDirAsHomeHook
+, unstableGitUpdater
+, ocamlPackages
+, opam
+,
 }:
 ocamlPackages.buildDunePackage {
   pname = "cerberus";

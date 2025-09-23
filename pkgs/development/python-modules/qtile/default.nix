@@ -1,36 +1,36 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cairocffi,
-  dbus-fast,
-  glib,
-  iwlib,
-  libcst,
-  libdrm,
-  libinput,
-  libxkbcommon,
-  mpd2,
-  pango,
-  pixman,
-  pkg-config,
-  psutil,
-  pulsectl-asyncio,
-  pygobject3,
-  pytz,
-  pywayland,
-  pywlroots,
-  pyxdg,
-  setuptools,
-  setuptools-scm,
-  wayland,
-  wlroots,
-  xcbutilcursor,
-  xcbutilwm,
-  xcffib,
-  xkbcommon,
-  nixosTests,
-  extraPackages ? [ ],
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cairocffi
+, dbus-fast
+, glib
+, iwlib
+, libcst
+, libdrm
+, libinput
+, libxkbcommon
+, mpd2
+, pango
+, pixman
+, pkg-config
+, psutil
+, pulsectl-asyncio
+, pygobject3
+, pytz
+, pywayland
+, pywlroots
+, pyxdg
+, setuptools
+, setuptools-scm
+, wayland
+, wlroots
+, xcbutilcursor
+, xcbutilwm
+, xcffib
+, xkbcommon
+, nixosTests
+, extraPackages ? [ ]
+,
 }:
 
 buildPythonPackage rec {

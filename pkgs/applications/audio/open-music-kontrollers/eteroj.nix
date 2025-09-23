@@ -2,7 +2,7 @@
 
 callPackage ./generic.nix (
   args
-  // {
+    // {
     pname = "eteroj";
     version = "0.10.0";
 

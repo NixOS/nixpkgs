@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  networkx,
-  pythonOlder,
-  setuptools,
-  tqdm,
-  z3-solver,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, networkx
+, pythonOlder
+, setuptools
+, tqdm
+, z3-solver
+,
 }:
 
 buildPythonPackage rec {

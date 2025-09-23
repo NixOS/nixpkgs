@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtsvg,
-  pkg-config,
-  libsodium,
+{ mkKdeDerivation
+, qtsvg
+, pkg-config
+, libsodium
+,
 }:
 mkKdeDerivation {
   pname = "keysmith";

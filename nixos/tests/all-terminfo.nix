@@ -6,11 +6,10 @@
   };
 
   nodes.machine =
-    {
-      pkgs,
-      config,
-      lib,
-      ...
+    { pkgs
+    , config
+    , lib
+    , ...
     }:
     let
       # Use derivations instead of attr names to avoid listing missing packages
@@ -30,12 +29,16 @@
         && lib.meta.availableOn pkgs.stdenv.hostPlatform o.value
         && !(builtins.elem o.value maskedTerminfos);
       terminfos = lib.filterAttrs infoFilter pkgs;
-      excludedTerminfos = lib.filterAttrs (
-        _: drv: !(builtins.elem drv.terminfo config.environment.systemPackages)
-      ) terminfos;
-      includedOuts = lib.filterAttrs (
-        _: drv: builtins.elem drv.out config.environment.systemPackages
-      ) terminfos;
+      excludedTerminfos = lib.filterAttrs
+        (
+          _: drv: !(builtins.elem drv.terminfo config.environment.systemPackages)
+        )
+        terminfos;
+      includedOuts = lib.filterAttrs
+        (
+          _: drv: builtins.elem drv.out config.environment.systemPackages
+        )
+        terminfos;
     in
     {
       environment = {

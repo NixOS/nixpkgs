@@ -1,15 +1,15 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  lib,
-  nixosTests,
-  nodejs,
-  stash,
-  stdenv,
-  testers,
-  yarnBuildHook,
-  yarnConfigHook,
+{ buildGoModule
+, fetchFromGitHub
+, fetchYarnDeps
+, lib
+, nixosTests
+, nodejs
+, stash
+, stdenv
+, testers
+, yarnBuildHook
+, yarnConfigHook
+,
 }:
 let
   inherit (lib.importJSON ./version.json)

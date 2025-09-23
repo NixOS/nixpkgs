@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  moralerspace,
+{ lib
+, stdenvNoCC
+, fetchzip
+, moralerspace
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

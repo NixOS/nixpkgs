@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  zsh,
-  revolver,
-  installShellFiles,
-  testers,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, zsh
+, revolver
+, installShellFiles
+, testers
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

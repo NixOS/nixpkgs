@@ -6,11 +6,10 @@
   };
 
   nodes.server =
-    {
-      config,
-      pkgs,
-      modulesPath,
-      ...
+    { config
+    , pkgs
+    , modulesPath
+    , ...
     }:
     {
       imports = [

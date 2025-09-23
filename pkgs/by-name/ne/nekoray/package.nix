@@ -1,21 +1,17 @@
-{
-  lib,
-  stdenv,
-
-  buildGoModule,
-  fetchFromGitHub,
-  fetchpatch,
-  makeDesktopItem,
-
-  cmake,
-  copyDesktopItems,
-  ninja,
-
-  protobuf,
-  qt6Packages,
-
-  sing-geoip,
-  sing-geosite,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, makeDesktopItem
+, cmake
+, copyDesktopItems
+, ninja
+, protobuf
+, qt6Packages
+, sing-geoip
+, sing-geosite
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

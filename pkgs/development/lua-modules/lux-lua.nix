@@ -1,17 +1,17 @@
-{
-  gnupg,
-  gpgme,
-  isLuaJIT,
-  lib,
-  libgit2,
-  libgpg-error,
-  lua,
-  lux-cli,
-  nix,
-  openssl,
-  perl,
-  pkg-config,
-  rustPlatform,
+{ gnupg
+, gpgme
+, isLuaJIT
+, lib
+, libgit2
+, libgpg-error
+, lua
+, lux-cli
+, nix
+, openssl
+, perl
+, pkg-config
+, rustPlatform
+,
 }:
 let
   luaMajorMinor = lib.take 2 (lib.splitVersion lua.version);

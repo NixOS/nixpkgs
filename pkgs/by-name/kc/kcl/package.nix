@@ -1,12 +1,12 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  kclvm_cli,
-  kclvm,
-  lib,
-  nix-update-script,
-  stdenv,
+{ buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, kclvm_cli
+, kclvm
+, lib
+, nix-update-script
+, stdenv
+,
 }:
 
 buildGoModule rec {

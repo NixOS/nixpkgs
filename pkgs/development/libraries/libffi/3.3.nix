@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  doCheck ? true, # test suite depends on dejagnu which cannot be used during bootstrapping
-  dejagnu,
+{ lib
+, stdenv
+, fetchurl
+, doCheck ? true
+, # test suite depends on dejagnu which cannot be used during bootstrapping
+  dejagnu
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  appstream-glib,
-  desktop-file-utils,
-  gettext,
-  glib,
-  gobject-introspection,
-  gst_all_1,
-  gtk4,
-  hicolor-icon-theme,
-  isocodes,
-  itstool,
-  libadwaita,
-  libxml2,
-  meson,
-  ninja,
-  pkg-config,
-  pocketsphinx,
-  python3,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream-glib
+, desktop-file-utils
+, gettext
+, glib
+, gobject-introspection
+, gst_all_1
+, gtk4
+, hicolor-icon-theme
+, isocodes
+, itstool
+, libadwaita
+, libxml2
+, meson
+, ninja
+, pkg-config
+, pocketsphinx
+, python3
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation rec {

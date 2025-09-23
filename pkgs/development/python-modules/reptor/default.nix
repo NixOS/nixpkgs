@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  certifi,
-  cvss,
-  deepl,
-  django,
-  fetchFromGitHub,
-  fetchpatch,
-  gql,
-  pytestCheckHook,
-  pyyaml,
-  requests,
-  rich,
-  setuptools,
-  sqlparse,
-  termcolor,
-  tomli-w,
-  tomli,
-  tomlkit,
-  urllib3,
-  writableTmpDirAsHomeHook,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, certifi
+, cvss
+, deepl
+, django
+, fetchFromGitHub
+, fetchpatch
+, gql
+, pytestCheckHook
+, pyyaml
+, requests
+, rich
+, setuptools
+, sqlparse
+, termcolor
+, tomli-w
+, tomli
+, tomlkit
+, urllib3
+, writableTmpDirAsHomeHook
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

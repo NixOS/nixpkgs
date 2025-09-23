@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  buildPackages,
-  pkg-config,
-  libtool,
-  xbitmaps,
-  libXext,
-  libXft,
-  libXrender,
-  libXmu,
-  libXt,
-  expat,
-  libjpeg,
-  libpng,
-  libiconv,
-  flex,
-  libXp,
-  libXau,
-  demoSupport ? false,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, buildPackages
+, pkg-config
+, libtool
+, xbitmaps
+, libXext
+, libXft
+, libXrender
+, libXmu
+, libXt
+, expat
+, libjpeg
+, libpng
+, libiconv
+, flex
+, libXp
+, libXau
+, demoSupport ? false
+,
 }:
 # refer to the gentoo package
 

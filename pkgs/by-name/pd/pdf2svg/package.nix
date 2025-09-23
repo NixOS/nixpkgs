@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  cairo,
-  gtk2,
-  poppler,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, cairo
+, gtk2
+, poppler
+,
 }:
 
 stdenv.mkDerivation rec {

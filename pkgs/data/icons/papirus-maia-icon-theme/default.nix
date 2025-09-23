@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gtk3,
-  breeze-icons,
-  gnome-icon-theme,
-  papirus-icon-theme,
-  hicolor-icon-theme,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gtk3
+, breeze-icons
+, gnome-icon-theme
+, papirus-icon-theme
+, hicolor-icon-theme
+,
 }:
 
 stdenv.mkDerivation rec {

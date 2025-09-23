@@ -1,25 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  fetchurl,
-  lua,
-  jemalloc,
-  pkg-config,
-  tcl,
-  which,
-  ps,
-  getconf,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  # dependency ordering is broken at the moment when building with openssl
-  tlsSupport ? !stdenv.hostPlatform.isStatic,
-  openssl,
-
-  # Using system jemalloc fixes cross-compilation and various setups.
+{ lib
+, stdenv
+, fetchFromGitea
+, fetchurl
+, lua
+, jemalloc
+, pkg-config
+, tcl
+, which
+, ps
+, getconf
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, # dependency ordering is broken at the moment when building with openssl
+  tlsSupport ? !stdenv.hostPlatform.isStatic
+, openssl
+, # Using system jemalloc fixes cross-compilation and various setups.
   # However the experimental 'active defragmentation' feature of redict requires
   # their custom patched version of jemalloc.
-  useSystemJemalloc ? true,
+  useSystemJemalloc ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  ncurses,
-  texinfo,
-  writeScript,
-  common-updater-scripts,
-  gitMinimal,
-  nix,
-  coreutils,
-  gnused,
-  callPackage,
-  file ? null,
-  gettext ? null,
-  enableNls ? true,
-  enableTiny ? false,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, ncurses
+, texinfo
+, writeScript
+, common-updater-scripts
+, gitMinimal
+, nix
+, coreutils
+, gnused
+, callPackage
+, file ? null
+, gettext ? null
+, enableNls ? true
+, enableTiny ? false
+,
 }:
 
 assert enableNls -> (gettext != null);

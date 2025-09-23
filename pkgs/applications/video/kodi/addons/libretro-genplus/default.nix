@@ -1,9 +1,9 @@
-{
-  lib,
-  buildKodiBinaryAddon,
-  fetchFromGitHub,
-  libretro,
-  genesis-plus-gx,
+{ lib
+, buildKodiBinaryAddon
+, fetchFromGitHub
+, libretro
+, genesis-plus-gx
+,
 }:
 
 buildKodiBinaryAddon rec {

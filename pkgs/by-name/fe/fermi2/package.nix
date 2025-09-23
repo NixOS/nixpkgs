@@ -1,9 +1,9 @@
-{
-  config,
-  lib,
-  fetchFromGitHub,
-  zlib,
-  stdenv,
+{ config
+, lib
+, fetchFromGitHub
+, zlib
+, stdenv
+,
 }:
 stdenv.mkDerivation {
   pname = "fermi2";

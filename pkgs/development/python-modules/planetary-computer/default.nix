@@ -1,28 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  click,
-  packaging,
-  pydantic,
-  pystac,
-  pystac-client,
-  python-dotenv,
-  pytz,
-  requests,
-
-  # optional-dependencies
-  adlfs,
-  azure-storage-blob,
-
-  # test
-  responses,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  click
+, packaging
+, pydantic
+, pystac
+, pystac-client
+, python-dotenv
+, pytz
+, requests
+, # optional-dependencies
+  adlfs
+, azure-storage-blob
+, # test
+  responses
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

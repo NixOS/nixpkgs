@@ -1,16 +1,15 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenv,
-  copyDesktopItems,
-  makeDesktopItem,
-
-  xorg,
-  glfw,
-  gtk3,
-  pkg-config,
-  wrapGAppsHook3,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+, copyDesktopItems
+, makeDesktopItem
+, xorg
+, glfw
+, gtk3
+, pkg-config
+, wrapGAppsHook3
+,
 }:
 
 buildGoModule (finalAttrs: {

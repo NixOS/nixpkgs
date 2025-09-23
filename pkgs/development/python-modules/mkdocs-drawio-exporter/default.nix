@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  drawio-headless,
-  fetchPypi,
-  isPy3k,
-  lib,
-  mkdocs,
-  poetry-core,
-  livereload,
-  tornado,
+{ buildPythonPackage
+, drawio-headless
+, fetchPypi
+, isPy3k
+, lib
+, mkdocs
+, poetry-core
+, livereload
+, tornado
+,
 }:
 
 buildPythonPackage rec {

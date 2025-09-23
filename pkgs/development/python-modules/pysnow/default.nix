@@ -1,17 +1,17 @@
-{
-  lib,
-  brotli,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  httpretty,
-  ijson,
-  poetry-core,
-  python-magic,
-  pytz,
-  six,
-  pytestCheckHook,
-  requests-oauthlib,
+{ lib
+, brotli
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, httpretty
+, ijson
+, poetry-core
+, python-magic
+, pytz
+, six
+, pytestCheckHook
+, requests-oauthlib
+,
 }:
 
 buildPythonPackage rec {

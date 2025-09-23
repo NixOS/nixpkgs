@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  symlinkJoin,
-  makeWrapper,
-  idris-no-deps,
-  gmp,
+{ stdenv
+, lib
+, symlinkJoin
+, makeWrapper
+, idris-no-deps
+, gmp
+,
 }:
 
 symlinkJoin {

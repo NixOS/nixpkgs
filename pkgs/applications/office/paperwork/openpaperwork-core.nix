@@ -1,18 +1,15 @@
-{
-  buildPythonPackage,
-  lib,
-  callPackage,
-
-  isPy3k,
-  isPyPy,
-
-  distro,
-  setuptools,
-  psutil,
-  certifi,
-  setuptools-scm,
-
-  pkgs,
+{ buildPythonPackage
+, lib
+, callPackage
+, isPy3k
+, isPyPy
+, distro
+, setuptools
+, psutil
+, certifi
+, setuptools-scm
+, pkgs
+,
 }:
 
 buildPythonPackage rec {

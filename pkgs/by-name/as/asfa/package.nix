@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  stdenv,
-  help2man,
-  openssl,
-  pkg-config,
-  installShellFiles,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, help2man
+, openssl
+, pkg-config
+, installShellFiles
+,
 }:
 let
   version = "0.10.0-1";

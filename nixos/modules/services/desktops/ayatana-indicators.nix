@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -44,24 +43,30 @@ in
         indicatorServices =
           target:
           lib.lists.flatten (
-            map (
-              pkg:
-              if lib.isList pkg.passthru.ayatana-indicators then
+            map
+              (
+                pkg:
+                if lib.isList pkg.passthru.ayatana-indicators then
                 # Old format, add to every target
-                (lib.warn "${pkg.name} is using the old passthru.ayatana-indicators format, please update it!" (
-                  namesToServices pkg.passthru.ayatana-indicators
-                ))
-              else
+                  (lib.warn "${pkg.name} is using the old passthru.ayatana-indicators format, please update it!" (
+                    namesToServices pkg.passthru.ayatana-indicators
+                  ))
+                else
                 # New format, filter by target being mentioned
-                (namesToServices (
-                  builtins.filter (
-                    service:
-                    builtins.any (
-                      targetPrefix: "${targetPrefix}-indicators" == target
-                    ) pkg.passthru.ayatana-indicators.${service}
-                  ) (builtins.attrNames pkg.passthru.ayatana-indicators)
-                ))
-            ) cfg.packages
+                  (namesToServices (
+                    builtins.filter
+                      (
+                        service:
+                        builtins.any
+                          (
+                            targetPrefix: "${targetPrefix}-indicators" == target
+                          )
+                          pkg.passthru.ayatana-indicators.${service}
+                      )
+                      (builtins.attrNames pkg.passthru.ayatana-indicators)
+                  ))
+              )
+              cfg.packages
           );
       in
       lib.attrsets.mapAttrs

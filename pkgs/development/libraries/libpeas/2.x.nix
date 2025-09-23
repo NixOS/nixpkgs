@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  buildPackages,
-  fetchurl,
-  pkgsCross,
-  replaceVars,
-  pkg-config,
-  gi-docgen,
-  gobject-introspection,
-  meson,
-  ninja,
-  vala,
-  gjs,
-  glib,
-  lua5_1,
-  python3,
-  spidermonkey_128,
-  gnome,
+{ stdenv
+, lib
+, buildPackages
+, fetchurl
+, pkgsCross
+, replaceVars
+, pkg-config
+, gi-docgen
+, gobject-introspection
+, meson
+, ninja
+, vala
+, gjs
+, glib
+, lua5_1
+, python3
+, spidermonkey_128
+, gnome
+,
 }:
 
 let

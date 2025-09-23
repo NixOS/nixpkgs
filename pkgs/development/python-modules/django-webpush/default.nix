@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  pythonOlder,
-  pywebpush,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, pythonOlder
+, pywebpush
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

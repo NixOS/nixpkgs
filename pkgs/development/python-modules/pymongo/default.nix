@@ -1,20 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  hatch-requirements-txt,
-  setuptools,
-  pythonOlder,
-  dnspython,
-
-  # for passthru.tests
-  celery, # check-input only
-  flask-pymongo,
-  kombu, # check-input only
-  mongoengine,
-  motor,
-  pymongo-inmemory,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, hatch-requirements-txt
+, setuptools
+, pythonOlder
+, dnspython
+, # for passthru.tests
+  celery
+, # check-input only
+  flask-pymongo
+, kombu
+, # check-input only
+  mongoengine
+, motor
+, pymongo-inmemory
+,
 }:
 
 buildPythonPackage rec {

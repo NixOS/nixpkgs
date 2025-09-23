@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  appstream-glib,
-  desktop-file-utils,
-  meson,
-  ninja,
-  pantheon,
-  pkg-config,
-  python3,
-  vala,
-  wrapGAppsHook3,
-  cairo,
-  glib,
-  goocanvas3,
-  gtk3,
-  gtksourceview3,
-  json-glib,
-  libarchive,
-  libgee,
-  libxml2,
+{ stdenv
+, lib
+, fetchFromGitHub
+, appstream-glib
+, desktop-file-utils
+, meson
+, ninja
+, pantheon
+, pkg-config
+, python3
+, vala
+, wrapGAppsHook3
+, cairo
+, glib
+, goocanvas3
+, gtk3
+, gtksourceview3
+, json-glib
+, libarchive
+, libgee
+, libxml2
+,
 }:
 
 stdenv.mkDerivation rec {

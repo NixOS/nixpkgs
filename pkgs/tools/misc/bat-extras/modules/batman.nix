@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  buildBatExtrasPkg,
-  util-linux,
+{ lib
+, stdenv
+, buildBatExtrasPkg
+, util-linux
+,
 }:
 buildBatExtrasPkg {
   name = "batman";

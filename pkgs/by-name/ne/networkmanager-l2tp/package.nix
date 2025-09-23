@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  replaceVars,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  gtk3,
-  gtk4,
-  networkmanager,
-  ppp,
-  xl2tpd,
-  strongswan,
-  libsecret,
-  withGnome ? true,
-  libnma,
-  libnma-gtk4,
-  glib,
-  openssl,
-  nss,
+{ stdenv
+, lib
+, replaceVars
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gtk3
+, gtk4
+, networkmanager
+, ppp
+, xl2tpd
+, strongswan
+, libsecret
+, withGnome ? true
+, libnma
+, libnma-gtk4
+, glib
+, openssl
+, nss
+,
 }:
 
 stdenv.mkDerivation rec {

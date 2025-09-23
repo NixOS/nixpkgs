@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  alsa-lib,
-  boost,
-  curl,
-  ffmpeg_6,
-  icoutils,
-  libGLU,
-  libmad,
-  libogg,
-  libpng,
-  libsndfile,
-  libvorbis,
-  lua,
-  makeDesktopItem,
-  makeWrapper,
-  miniupnpc,
-  openal,
-  pkg-config,
-  SDL2,
-  SDL2_image,
-  SDL2_net,
-  SDL2_ttf,
-  speex,
-  unzip,
-  zlib,
-  zziplib,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib
+, boost
+, curl
+, ffmpeg_6
+, icoutils
+, libGLU
+, libmad
+, libogg
+, libpng
+, libsndfile
+, libvorbis
+, lua
+, makeDesktopItem
+, makeWrapper
+, miniupnpc
+, openal
+, pkg-config
+, SDL2
+, SDL2_image
+, SDL2_net
+, SDL2_ttf
+, speex
+, unzip
+, zlib
+, zziplib
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -103,14 +103,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru.makeWrapper =
-    {
-      pname,
-      desktopName,
-      version,
-      zip,
-      meta,
-      icon ? finalAttrs.finalPackage.icons + "/alephone.png",
-      ...
+    { pname
+    , desktopName
+    , version
+    , zip
+    , meta
+    , icon ? finalAttrs.finalPackage.icons + "/alephone.png"
+    , ...
     }@extraArgs:
     stdenv.mkDerivation (
       {

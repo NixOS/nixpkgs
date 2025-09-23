@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qttools,
-  qtbase,
-  qtsvg,
-  kcolorpicker,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qttools
+, qtbase
+, qtsvg
+, kcolorpicker
+,
 }:
 
 let

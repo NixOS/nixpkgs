@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  haskellPackages,
-  fetchFromGitHub,
-  # dependencies
-  slither-analyzer,
+{ lib
+, stdenv
+, makeWrapper
+, haskellPackages
+, fetchFromGitHub
+, # dependencies
+  slither-analyzer
+,
 }:
 
 haskellPackages.mkDerivation rec {

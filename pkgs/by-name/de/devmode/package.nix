@@ -1,12 +1,12 @@
-{
-  live-server,
-  parallel,
-  watchexec,
-  writeShellApplication,
-  # arguments to `nix-build`, e.g. `"foo.nix -A bar"`
-  buildArgs ? "",
-  # what path to open a browser at
-  open ? "/index.html",
+{ live-server
+, parallel
+, watchexec
+, writeShellApplication
+, # arguments to `nix-build`, e.g. `"foo.nix -A bar"`
+  buildArgs ? ""
+, # what path to open a browser at
+  open ? "/index.html"
+,
 }:
 let
   error-page = writeShellApplication {

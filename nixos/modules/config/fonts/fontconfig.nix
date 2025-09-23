@@ -20,11 +20,10 @@
   - @K900, March 2023
 */
 
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.fonts.fontconfig;
@@ -41,7 +40,7 @@ let
   # <cachedir> part. fontconfig still works but is a little slower in
   # looking things up.
   makeCacheConf =
-    { }:
+    {}:
     let
       makeCache =
         fontconfig:

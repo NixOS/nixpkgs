@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkgsHostTarget,
-  libgcrypt,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchurl
+, pkgsHostTarget
+, libgcrypt
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

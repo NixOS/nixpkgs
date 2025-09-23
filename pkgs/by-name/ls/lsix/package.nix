@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  imagemagick,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, imagemagick
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

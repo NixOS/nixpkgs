@@ -1,26 +1,26 @@
-{
-  lib,
-  aenum,
-  aiohttp,
-  buildPythonPackage,
-  fetchPypi,
-  flatdict,
-  jwcrypto,
-  pycryptodome,
-  pycryptodomex,
-  pydash,
-  pyfakefs,
-  pyjwt,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-recording,
-  pytestCheckHook,
-  python-jose,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  xmltodict,
-  yarl,
+{ lib
+, aenum
+, aiohttp
+, buildPythonPackage
+, fetchPypi
+, flatdict
+, jwcrypto
+, pycryptodome
+, pycryptodomex
+, pydash
+, pyfakefs
+, pyjwt
+, pytest-asyncio
+, pytest-mock
+, pytest-recording
+, pytestCheckHook
+, python-jose
+, pythonOlder
+, pyyaml
+, setuptools
+, xmltodict
+, yarl
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  feedparser,
-  requests,
-
-  # tests
-  mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  feedparser
+, requests
+, # tests
+  mock
+, pytestCheckHook
+,
 }:
 buildPythonPackage rec {
   pname = "arxiv";

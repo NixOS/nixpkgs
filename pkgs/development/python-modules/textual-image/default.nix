@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # dependencies
-  rich,
-
-  # tests
-  pillow,
-  pytestCheckHook,
-  syrupy,
-
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # dependencies
+  rich
+, # tests
+  pillow
+, pytestCheckHook
+, syrupy
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

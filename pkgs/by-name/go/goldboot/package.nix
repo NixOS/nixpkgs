@@ -1,15 +1,15 @@
-{
-  fetchFromGitHub,
-  rustPlatform,
-  lib,
-  versionCheckHook,
-  pkg-config,
-  zstd,
-  OVMF,
-  qemu,
-  qemu-utils,
-  openssl,
-  nix-update-script,
+{ fetchFromGitHub
+, rustPlatform
+, lib
+, versionCheckHook
+, pkg-config
+, zstd
+, OVMF
+, qemu
+, qemu-utils
+, openssl
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fossil,
-  cacert,
+{ stdenv
+, lib
+, fossil
+, cacert
+,
 }:
 
 lib.fetchers.withNormalizedHash { } (
-  {
-    name ? null,
-    url,
-    rev,
-    outputHash ? lib.fakeHash,
-    outputHashAlgo ? null,
+  { name ? null
+  , url
+  , rev
+  , outputHash ? lib.fakeHash
+  , outputHashAlgo ? null
+  ,
   }:
 
   stdenv.mkDerivation {

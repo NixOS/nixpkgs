@@ -1,29 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  attrs,
-  argcomplete,
-  colorlog,
-  dependency-groups,
-  jinja2,
-  packaging,
-  tomli,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-
-  # passthru
-  tox,
-  uv,
-  virtualenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  hatchling
+, # dependencies
+  attrs
+, argcomplete
+, colorlog
+, dependency-groups
+, jinja2
+, packaging
+, tomli
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+, # passthru
+  tox
+, uv
+, virtualenv
+,
 }:
 
 buildPythonPackage rec {

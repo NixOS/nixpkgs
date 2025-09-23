@@ -1,16 +1,16 @@
-{
-  lib,
-  buildDunePackage,
-  fetchzip,
-  bos,
-  cmdliner,
-  fmt,
-  fpath,
-  menhir,
-  menhirLib,
-  prelude,
-  sedlex,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildDunePackage
+, fetchzip
+, bos
+, cmdliner
+, fmt
+, fpath
+, menhir
+, menhirLib
+, prelude
+, sedlex
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildDunePackage rec {

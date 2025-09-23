@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  beautifulsoup4,
-  docutils,
-  gitpython,
-  requests,
-  sphinx,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, beautifulsoup4
+, docutils
+, gitpython
+, requests
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

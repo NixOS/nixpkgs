@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoLatestModule,
-  fetchFromGitHub,
-  nixosTests,
-  nix-update-script,
+{ lib
+, buildGoLatestModule
+, fetchFromGitHub
+, nixosTests
+, nix-update-script
+,
 }:
 let
   version = "2.15.0";

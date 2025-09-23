@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kernel,
-  kernelModuleMakeFlags,
-  bluez,
-  nixosTests,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, kernelModuleMakeFlags
+, bluez
+, nixosTests
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  python,
-  fetchPypi,
-  pari,
-  gmp,
-  cython,
-  cysignals,
-
-  # Reverse dependency
-  sage,
+{ lib
+, buildPythonPackage
+, python
+, fetchPypi
+, pari
+, gmp
+, cython
+, cysignals
+, # Reverse dependency
+  sage
+,
 }:
 
 buildPythonPackage rec {

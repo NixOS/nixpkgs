@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  jre,
-  rhino,
-  stripJavaArchivesHook,
-  makeWrapper,
+{ lib
+, stdenvNoCC
+, fetchurl
+, jre
+, rhino
+, stripJavaArchivesHook
+, makeWrapper
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

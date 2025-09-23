@@ -1,33 +1,33 @@
-{
-  stdenv,
-  fetchurl,
-  alsa-lib,
-  atk,
-  cairo,
-  dpkg,
-  ffmpeg,
-  freetype,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  harfbuzz,
-  lcms,
-  lib,
-  libglvnd,
-  libjack2,
-  libjpeg,
-  libnghttp2,
-  libudev-zero,
-  libxkbcommon,
-  makeWrapper,
-  pango,
-  pipewire,
-  vulkan-loader,
-  wrapGAppsHook3,
-  xcb-imdkit,
-  xdg-utils,
-  xorg,
-  zlib,
+{ stdenv
+, fetchurl
+, alsa-lib
+, atk
+, cairo
+, dpkg
+, ffmpeg
+, freetype
+, gdk-pixbuf
+, glib
+, gtk3
+, harfbuzz
+, lcms
+, lib
+, libglvnd
+, libjack2
+, libjpeg
+, libnghttp2
+, libudev-zero
+, libxkbcommon
+, makeWrapper
+, pango
+, pipewire
+, vulkan-loader
+, wrapGAppsHook3
+, xcb-imdkit
+, xdg-utils
+, xorg
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

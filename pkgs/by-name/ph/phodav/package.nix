@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  libsoup_3,
-  libxml2,
-  meson,
-  ninja,
-  gnome,
-  udevCheckHook,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, libsoup_3
+, libxml2
+, meson
+, ninja
+, gnome
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

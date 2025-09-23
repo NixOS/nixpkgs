@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  fontconfig,
-  autoreconfHook,
-  withJava ? false,
-  jdk17,
-  ant,
-  stripJavaArchivesHook,
-  withAACS ? false,
-  libaacs,
-  withBDplus ? false,
-  libbdplus,
-  withMetadata ? true,
-  libxml2,
-  withFonts ? true,
-  freetype,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, fontconfig
+, autoreconfHook
+, withJava ? false
+, jdk17
+, ant
+, stripJavaArchivesHook
+, withAACS ? false
+, libaacs
+, withBDplus ? false
+, libbdplus
+, withMetadata ? true
+, libxml2
+, withFonts ? true
+, freetype
+,
 }:
 
 # Info on how to use:

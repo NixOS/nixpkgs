@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  dbus,
-  cmake,
-  pkg-config,
-  wayland-scanner,
-  glib,
-  udev,
-  polkit,
-  libusb1,
-  libjpeg,
-  libmodule,
-  libXdmcp,
-  util-linux,
-  libpthreadstubs,
-  enableDdc ? true,
-  ddcutil,
-  enableDpms ? true,
-  libXext,
-  enableGamma ? true,
-  libdrm,
-  libXrandr,
-  libiio,
-  wayland,
-  enableScreen ? true,
-  enableYoctolight ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, dbus
+, cmake
+, pkg-config
+, wayland-scanner
+, glib
+, udev
+, polkit
+, libusb1
+, libjpeg
+, libmodule
+, libXdmcp
+, util-linux
+, libpthreadstubs
+, enableDdc ? true
+, ddcutil
+, enableDpms ? true
+, libXext
+, enableGamma ? true
+, libdrm
+, libXrandr
+, libiio
+, wayland
+, enableScreen ? true
+, enableYoctolight ? true
+,
 }:
 
 stdenv.mkDerivation rec {

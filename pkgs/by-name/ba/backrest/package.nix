@@ -1,14 +1,14 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  gzip,
-  lib,
-  nodejs,
-  pnpm_9,
-  restic,
-  stdenv,
-  util-linux,
-  makeBinaryWrapper,
+{ buildGoModule
+, fetchFromGitHub
+, gzip
+, lib
+, nodejs
+, pnpm_9
+, restic
+, stdenv
+, util-linux
+, makeBinaryWrapper
+,
 }:
 let
   pname = "backrest";

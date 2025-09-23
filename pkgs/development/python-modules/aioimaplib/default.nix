@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  imaplib2,
-  mock,
-  poetry-core,
-  pyopenssl,
-  pytest-asyncio_0,
-  pytestCheckHook,
-  pytz,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, imaplib2
+, mock
+, poetry-core
+, pyopenssl
+, pytest-asyncio_0
+, pytestCheckHook
+, pytz
+,
 }:
 
 buildPythonPackage rec {

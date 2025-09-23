@@ -1,8 +1,7 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }:
 
 let
@@ -16,10 +15,12 @@ let
 
   artisan = "${cfg.package}/artisan";
 
-  env-file-values = lib.mapAttrs' (n: v: {
-    name = lib.removeSuffix "_FILE" n;
-    value = v;
-  }) (lib.filterAttrs (n: v: v != null && lib.match ".+_FILE" n != null) cfg.settings);
+  env-file-values = lib.mapAttrs'
+    (n: v: {
+      name = lib.removeSuffix "_FILE" n;
+      value = v;
+    })
+    (lib.filterAttrs (n: v: v != null && lib.match ".+_FILE" n != null) cfg.settings);
 
   env-nonfile-values = lib.filterAttrs (n: v: lib.match ".+_FILE" n == null) cfg.settings;
 

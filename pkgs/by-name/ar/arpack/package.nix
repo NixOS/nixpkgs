@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  gfortran,
-  blas,
-  lapack,
-  eigen,
-  useMpi ? false,
-  mpi,
-  mpiCheckPhaseHook,
-  igraph,
-  useAccel ? false, # use Accelerate framework on darwin
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, gfortran
+, blas
+, lapack
+, eigen
+, useMpi ? false
+, mpi
+, mpiCheckPhaseHook
+, igraph
+, useAccel ? false
+, # use Accelerate framework on darwin
 }:
 
 # MPI version can only be built with LP64 interface.

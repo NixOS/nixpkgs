@@ -12,12 +12,11 @@
 # The client is behind the nat (read: protected by the nat) and the server is on the external network, attempting to access services behind the NAT.
 
 import ./make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    withFirewall ? false,
-    nftables ? false,
-    ...
+  { pkgs
+  , lib
+  , withFirewall ? false
+  , nftables ? false
+  , ...
   }:
   let
     unit = if nftables then "nftables" else (if withFirewall then "firewall" else "nat");
@@ -94,8 +93,8 @@ import ./make-test-python.nix (
 
   in
   # VLANS:
-  # 1 -- simulates the internal network
-  # 2 -- simulates the external network
+    # 1 -- simulates the internal network
+    # 2 -- simulates the external network
   {
     name =
       "nat"

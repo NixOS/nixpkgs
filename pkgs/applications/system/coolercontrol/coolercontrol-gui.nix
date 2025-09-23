@@ -1,13 +1,13 @@
-{
-  cmake,
-  stdenv,
-  qt6,
+{ cmake
+, stdenv
+, qt6
+,
 }:
 
-{
-  version,
-  src,
-  meta,
+{ version
+, src
+, meta
+,
 }:
 
 stdenv.mkDerivation {

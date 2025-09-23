@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  unzip,
+{ stdenv
+, lib
+, fetchurl
+, unzip
+,
 }:
 let
   sources = lib.importJSON ./sources.json;

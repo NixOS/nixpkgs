@@ -1,18 +1,18 @@
 # Derivation containing the Limine host tool and the compiled bootloader
-{
-  fetchurl,
-  lib,
-  llvmPackages,
-  mtools,
-  nasm,
-  nixosTests,
-  # The following options map to configure flags.
-  enableAll ? false,
-  buildCDs ? false,
-  targets ? [ ],
-  # x86 specific flags
-  biosSupport ? true,
-  pxeSupport ? false,
+{ fetchurl
+, lib
+, llvmPackages
+, mtools
+, nasm
+, nixosTests
+, # The following options map to configure flags.
+  enableAll ? false
+, buildCDs ? false
+, targets ? [ ]
+, # x86 specific flags
+  biosSupport ? true
+, pxeSupport ? false
+,
 }:
 
 let
@@ -28,18 +28,17 @@ let
 
   uefiFlags =
     target:
-    {
-      aarch64 = [ "--enable-uefi-aarch64" ];
-      i686 = [ "--enable-uefi-ia32" ];
-      loongarch64 = [ "--enable-uefi-loongarch64" ];
-      riscv64 = [ "--enable-uefi-riscv64" ];
-      x86_64 = [ "--enable-uefi-x86-64" ];
-    }
-    .${target} or (throw "Unsupported target ${target}");
+      {
+        aarch64 = [ "--enable-uefi-aarch64" ];
+        i686 = [ "--enable-uefi-ia32" ];
+        loongarch64 = [ "--enable-uefi-loongarch64" ];
+        riscv64 = [ "--enable-uefi-riscv64" ];
+        x86_64 = [ "--enable-uefi-x86-64" ];
+      }.${target} or (throw "Unsupported target ${target}");
 in
 
 # The output of the derivation is a tool to create bootable images using Limine
-# as bootloader for various platforms and corresponding binary and helper files.
+  # as bootloader for various platforms and corresponding binary and helper files.
 stdenv.mkDerivation (finalAttrs: {
   pname = "limine";
   version = "10.0.0";

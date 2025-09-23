@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dbus-glib,
-  glib,
-  python3,
-  pkg-config,
-  libxslt,
-  gobject-introspection,
-  vala,
-  glibcLocales,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchurl
+, dbus-glib
+, glib
+, python3
+, pkg-config
+, libxslt
+, gobject-introspection
+, vala
+, glibcLocales
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

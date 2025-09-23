@@ -1,18 +1,18 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  click,
-  essentials-openapi,
-  flask,
-  hatchling,
-  httpx,
-  jinja2,
-  mkdocs,
-  pytestCheckHook,
-  rich,
-  setuptools,
-  stdenv,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, click
+, essentials-openapi
+, flask
+, hatchling
+, httpx
+, jinja2
+, mkdocs
+, pytestCheckHook
+, rich
+, setuptools
+, stdenv
+,
 }:
 buildPythonPackage rec {
   pname = "neoteroi-mkdocs";

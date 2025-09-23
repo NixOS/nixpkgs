@@ -1,15 +1,15 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  dacite,
-  orjson,
-  pytest-asyncio,
-  pytest-error-for-skips,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, dacite
+, orjson
+, pytest-asyncio
+, pytest-error-for-skips
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

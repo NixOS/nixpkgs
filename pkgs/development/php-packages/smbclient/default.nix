@@ -1,8 +1,8 @@
-{
-  buildPecl,
-  lib,
-  samba,
-  pkg-config,
+{ buildPecl
+, lib
+, samba
+, pkg-config
+,
 }:
 buildPecl {
   pname = "smbclient";

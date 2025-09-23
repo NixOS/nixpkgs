@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchzip,
-  writeScript,
+{ lib
+, python3Packages
+, fetchzip
+, writeScript
+,
 }:
 
 python3Packages.buildPythonApplication rec {

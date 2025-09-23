@@ -1,64 +1,62 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  writableTmpDirAsHomeHook,
-  docbook-xsl-nons,
-  libxslt,
-  pkg-config,
-  alsa-lib,
-  faac,
-  faad2,
-  ffmpeg,
-  fuse3,
-  glib,
-  openh264,
-  openssl,
-  pcre2,
-  pkcs11helper,
-  uriparser,
-  zlib,
-  libX11,
-  libXcursor,
-  libXdamage,
-  libXdmcp,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libXtst,
-  libXv,
-  libxkbcommon,
-  libxkbfile,
-  wayland,
-  wayland-scanner,
-  icu,
-  libunwind,
-  orc,
-  cairo,
-  cjson,
-  libusb1,
-  libpulseaudio,
-  cups,
-  pcsclite,
-  SDL2,
-  SDL2_ttf,
-  SDL2_image,
-  systemd,
-  libjpeg_turbo,
-  libkrb5,
-  libopus,
-  buildServer ? true,
-  nocaps ? false,
-  withUnfree ? false,
-
-  # tries to compile and run generate_argument_docbook.c
-  withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-
-  gnome-remote-desktop,
-  remmina,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, writableTmpDirAsHomeHook
+, docbook-xsl-nons
+, libxslt
+, pkg-config
+, alsa-lib
+, faac
+, faad2
+, ffmpeg
+, fuse3
+, glib
+, openh264
+, openssl
+, pcre2
+, pkcs11helper
+, uriparser
+, zlib
+, libX11
+, libXcursor
+, libXdamage
+, libXdmcp
+, libXext
+, libXi
+, libXinerama
+, libXrandr
+, libXrender
+, libXtst
+, libXv
+, libxkbcommon
+, libxkbfile
+, wayland
+, wayland-scanner
+, icu
+, libunwind
+, orc
+, cairo
+, cjson
+, libusb1
+, libpulseaudio
+, cups
+, pcsclite
+, SDL2
+, SDL2_ttf
+, SDL2_image
+, systemd
+, libjpeg_turbo
+, libkrb5
+, libopus
+, buildServer ? true
+, nocaps ? false
+, withUnfree ? false
+, # tries to compile and run generate_argument_docbook.c
+  withManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, gnome-remote-desktop
+, remmina
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,18 +1,17 @@
-{
-  lib,
-  beamPackages,
-  buildNpmPackage,
-  rustPlatform,
-  fetchFromGitHub,
-  nodejs,
-  runCommand,
-  nixosTests,
-  npm-lockfile-fix,
-  nix-update-script,
-  brotli,
-  tailwindcss_3,
-  esbuild,
-  ...
+{ lib
+, beamPackages
+, buildNpmPackage
+, rustPlatform
+, fetchFromGitHub
+, nodejs
+, runCommand
+, nixosTests
+, npm-lockfile-fix
+, nix-update-script
+, brotli
+, tailwindcss_3
+, esbuild
+, ...
 }:
 
 let

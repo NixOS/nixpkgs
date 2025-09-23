@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -41,10 +40,12 @@ let
       toString value;
 
   configFile = pkgs.writeText "davfs2.conf" (
-    toINIWithGlobalSection {
-      mkSectionName = escapeString;
-      mkKeyValue = k: v: "${k} ${formatValue v}";
-    } cfg.settings
+    toINIWithGlobalSection
+      {
+        mkSectionName = escapeString;
+        mkKeyValue = k: v: "${k} ${formatValue v}";
+      }
+      cfg.settings
   );
 in
 {

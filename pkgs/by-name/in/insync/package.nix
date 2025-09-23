@@ -1,19 +1,19 @@
-{
-  lib,
-  writeShellScript,
-  buildFHSEnv,
-  stdenvNoCC,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
-  nss,
-  alsa-lib,
-  lz4,
-  libgcrypt,
-  xkeyboard_config,
-  libthai,
-  libsForQt5,
-  xz,
+{ lib
+, writeShellScript
+, buildFHSEnv
+, stdenvNoCC
+, fetchurl
+, autoPatchelfHook
+, dpkg
+, nss
+, alsa-lib
+, lz4
+, libgcrypt
+, xkeyboard_config
+, libthai
+, libsForQt5
+, xz
+,
 }:
 
 let

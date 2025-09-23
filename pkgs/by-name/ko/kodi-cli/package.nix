@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  curl,
-  bash,
-  jq,
-  youtube-dl,
-  zenity,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, curl
+, bash
+, jq
+, youtube-dl
+, zenity
+,
 }:
 
 stdenv.mkDerivation rec {

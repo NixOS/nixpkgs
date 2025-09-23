@@ -1,12 +1,12 @@
-{
-  apr,
-  aprutil,
-  directoryListingUpdater,
-  fetchurl,
-  lib,
-  mod_ca,
-  pkg-config,
-  stdenv,
+{ apr
+, aprutil
+, directoryListingUpdater
+, fetchurl
+, lib
+, mod_ca
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

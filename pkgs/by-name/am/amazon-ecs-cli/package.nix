@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
+{ lib
+, stdenv
+, fetchurl
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,15 +10,17 @@ stdenv.mkDerivation rec {
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-v${version}";
-        sha256 = "sEHwhirU2EYwtBRegiIvN4yr7VKtmy7e6xx5gZOkuY0=";
-      }
+      fetchurl
+        {
+          url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-v${version}";
+          sha256 = "sEHwhirU2EYwtBRegiIvN4yr7VKtmy7e6xx5gZOkuY0=";
+        }
     else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      fetchurl {
-        url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-darwin-amd64-v${version}";
-        sha256 = "1viala49sifpcmgn3jw24h5bkrlm4ffadjiqagbxj3lr0r78i9nm";
-      }
+      fetchurl
+        {
+          url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-darwin-amd64-v${version}";
+          sha256 = "1viala49sifpcmgn3jw24h5bkrlm4ffadjiqagbxj3lr0r78i9nm";
+        }
     else
       throw "Architecture not supported";
 

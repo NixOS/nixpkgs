@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  grpcio,
-  protobuf,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, grpcio
+, protobuf
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

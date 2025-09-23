@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ant,
-  jdk,
-  jre,
-  docbook-xsl-ns,
-  docbook_xml_dtd_42,
-  imagemagick,
-  libxslt,
-  stripJavaArchivesHook,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ant
+, jdk
+, jre
+, docbook-xsl-ns
+, docbook_xml_dtd_42
+, imagemagick
+, libxslt
+, stripJavaArchivesHook
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

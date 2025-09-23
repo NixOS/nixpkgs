@@ -1,30 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pybind11,
-  setuptools,
-  setuptools-scm,
-
-  # nativeBuildInputs
-  cmake,
-  ninja,
-
-  # dependencies
-  cloudpickle,
-  importlib-metadata,
-  numpy,
-  orjson,
-  packaging,
-  pyvers,
-  torch,
-
-  # tests
-  h5py,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pybind11
+, setuptools
+, setuptools-scm
+, # nativeBuildInputs
+  cmake
+, ninja
+, # dependencies
+  cloudpickle
+, importlib-metadata
+, numpy
+, orjson
+, packaging
+, pyvers
+, torch
+, # tests
+  h5py
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

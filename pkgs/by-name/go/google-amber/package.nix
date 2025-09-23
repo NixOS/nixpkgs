@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  cctools,
-  makeWrapper,
-  mesa,
-  python3,
-  runCommand,
-  vulkan-headers,
-  vulkan-loader,
-  vulkan-validation-layers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, cctools
+, makeWrapper
+, mesa
+, python3
+, runCommand
+, vulkan-headers
+, vulkan-loader
+, vulkan-validation-layers
+,
 }:
 let
   # From https://github.com/google/amber/blob/main/DEPS

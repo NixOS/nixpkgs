@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  zlib,
-  blas,
-  lapack,
+{ lib
+, stdenv
+, fetchFromGitHub
+, zlib
+, blas
+, lapack
+,
 }:
 
 stdenv.mkDerivation rec {

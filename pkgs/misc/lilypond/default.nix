@@ -1,37 +1,36 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  ghostscript,
-  texinfo,
-  imagemagick,
-  texi2html,
-  extractpdfmark,
-  guile,
-  python3,
-  gettext,
-  glib,
-  gmp,
-  flex,
-  perl,
-  bison,
-  pkg-config,
-  autoreconfHook,
-  dblatex,
-  fontconfig,
-  freetype,
-  pango,
-  fontforge,
-  help2man,
-  freefont_ttf,
-  makeFontsConf,
-  makeWrapper,
-  t1utils,
-  boehmgc,
-  rsync,
-  coreutils,
-  texliveSmall,
-  tex ? texliveSmall.withPackages (
+{ stdenv
+, lib
+, fetchzip
+, ghostscript
+, texinfo
+, imagemagick
+, texi2html
+, extractpdfmark
+, guile
+, python3
+, gettext
+, glib
+, gmp
+, flex
+, perl
+, bison
+, pkg-config
+, autoreconfHook
+, dblatex
+, fontconfig
+, freetype
+, pango
+, fontforge
+, help2man
+, freefont_ttf
+, makeFontsConf
+, makeWrapper
+, t1utils
+, boehmgc
+, rsync
+, coreutils
+, texliveSmall
+, tex ? texliveSmall.withPackages (
     ps: with ps; [
       epsf
       fontinst
@@ -39,7 +38,8 @@
       lh
       metafont
     ]
-  ),
+  )
+,
 }:
 
 stdenv.mkDerivation rec {

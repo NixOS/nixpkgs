@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  _7zz,
-  jdk,
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, _7zz
+, jdk
+,
 }:
 
 let
@@ -29,12 +29,13 @@ let
 
   src =
     if stdenv.hostPlatform.isLinux then
-      fetchurl {
-        url = "https://download.ej-technologies.com/jprofiler/jprofiler_linux_${
+      fetchurl
+        {
+          url = "https://download.ej-technologies.com/jprofiler/jprofiler_linux_${
           lib.replaceStrings [ "." ] [ "_" ] version
         }.tar.gz";
-        hash = "sha256-S7e2WurDJ0ePzpMg0YK94Mn0eHfb8/jNmf0kYts2Y0M=";
-      }
+          hash = "sha256-S7e2WurDJ0ePzpMg0YK94Mn0eHfb8/jNmf0kYts2Y0M=";
+        }
     else
       fetchurl {
         url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_${

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  googleapis-common-protos,
-  grpcio,
-  protobuf,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, googleapis-common-protos
+, grpcio
+, protobuf
+, pythonOlder
+,
 }:
 
 # This package should be updated together with the main grpc package and other

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  wrapGAppsHook3,
-  avahi,
-  avahi-compat,
-  gst_all_1,
-  libplist,
-  openssl,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wrapGAppsHook3
+, avahi
+, avahi-compat
+, gst_all_1
+, libplist
+, openssl
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  emilua,
-  meson,
-  gperf,
-  ninja,
-  asciidoctor,
-  pkg-config,
-  fetchFromGitLab,
-  gitUpdater,
+{ lib
+, stdenv
+, emilua
+, meson
+, gperf
+, ninja
+, asciidoctor
+, pkg-config
+, fetchFromGitLab
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (self: {

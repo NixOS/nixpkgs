@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-  setuptools,
-
-  # dependencies
-  habluetooth,
-
-  # tests
-  bleak,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  poetry-core
+, setuptools
+, # dependencies
+  habluetooth
+, # tests
+  bleak
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

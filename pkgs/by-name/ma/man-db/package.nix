@@ -1,19 +1,19 @@
-{
-  buildPackages,
-  gdbm,
-  fetchurl,
-  groff,
-  gzip,
-  lib,
-  libiconv,
-  libiconvReal,
-  libpipeline,
-  makeWrapper,
-  nixosTests,
-  pkg-config,
-  stdenv,
-  util-linuxMinimal,
-  zstd,
+{ buildPackages
+, gdbm
+, fetchurl
+, groff
+, gzip
+, lib
+, libiconv
+, libiconvReal
+, libpipeline
+, makeWrapper
+, nixosTests
+, pkg-config
+, stdenv
+, util-linuxMinimal
+, zstd
+,
 }:
 
 let

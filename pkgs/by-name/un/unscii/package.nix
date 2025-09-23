@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  bdftopcf,
-  fontforge,
-  SDL,
-  SDL_image,
-  mkfontscale,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, bdftopcf
+, fontforge
+, SDL
+, SDL_image
+, mkfontscale
+,
 }:
 
 let

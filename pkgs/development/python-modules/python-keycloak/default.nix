@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  deprecation,
-  fetchFromGitHub,
-  jwcrypto,
-  poetry-core,
-  pythonOlder,
-  requests,
-  requests-toolbelt,
+{ lib
+, buildPythonPackage
+, deprecation
+, fetchFromGitHub
+, jwcrypto
+, poetry-core
+, pythonOlder
+, requests
+, requests-toolbelt
+,
 }:
 
 buildPythonPackage rec {

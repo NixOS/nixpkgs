@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  ant,
-  jdk,
-  perl,
-  stripJavaArchivesHook,
-  afflib,
-  libewf,
-  openssl,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, ant
+, jdk
+, perl
+, stripJavaArchivesHook
+, afflib
+, libewf
+, openssl
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

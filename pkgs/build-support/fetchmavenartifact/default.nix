@@ -1,9 +1,9 @@
 # Adaptation of the MIT-licensed work on `sbt2nix` done by Charles O'Farrell
 
-{
-  lib,
-  fetchurl,
-  stdenv,
+{ lib
+, fetchurl
+, stdenv
+,
 }:
 let
   defaultRepos = [
@@ -16,24 +16,24 @@ in
 
 args@{
   # Example: "org.apache.httpcomponents"
-  groupId,
-  # Example: "httpclient"
-  artifactId,
-  # Example: "4.3.6"
-  version,
-  # Example: "jdk11"
-  classifier ? null,
-  # List of maven repositories from where to fetch the artifact.
+  groupId
+, # Example: "httpclient"
+  artifactId
+, # Example: "4.3.6"
+  version
+, # Example: "jdk11"
+  classifier ? null
+, # List of maven repositories from where to fetch the artifact.
   # Example: [ http://oss.sonatype.org/content/repositories/public ].
-  repos ? defaultRepos,
-  # The `url` and `urls` parameters, if specified should point to the JAR
+  repos ? defaultRepos
+, # The `url` and `urls` parameters, if specified should point to the JAR
   # file and will take precedence over the `repos` parameter. Only one of `url`
   # and `urls` can be specified, not both.
-  url ? "",
-  urls ? [ ],
-  # Metadata
-  meta ? { },
-  # The rest of the arguments are just forwarded to `fetchurl`.
+  url ? ""
+, urls ? [ ]
+, # Metadata
+  meta ? { }
+, # The rest of the arguments are just forwarded to `fetchurl`.
   ...
 }:
 

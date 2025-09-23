@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pcre,
-  zlib,
-  python3,
-  openssl,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pcre
+, zlib
+, python3
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

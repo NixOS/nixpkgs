@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  rpm,
-  cpio,
-  glib,
-  gusb,
-  pixman,
-  libgudev,
-  nss,
-  libfprint,
-  cairo,
-  pkg-config,
-  autoPatchelfHook,
-  makePkgconfigItem,
-  copyPkgconfigItems,
+{ stdenv
+, lib
+, fetchurl
+, rpm
+, cpio
+, glib
+, gusb
+, pixman
+, libgudev
+, nss
+, libfprint
+, cairo
+, pkg-config
+, autoPatchelfHook
+, makePkgconfigItem
+, copyPkgconfigItems
+,
 }:
 
 # https://discourse.nixos.org/t/request-for-libfprint-port-for-2808-a658/55474

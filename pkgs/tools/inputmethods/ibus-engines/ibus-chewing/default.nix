@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  wrapGAppsHook4,
-  glib,
-  gtk4,
-  ibus,
-  libadwaita,
-  libchewing,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wrapGAppsHook4
+, glib
+, gtk4
+, ibus
+, libadwaita
+, libchewing
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

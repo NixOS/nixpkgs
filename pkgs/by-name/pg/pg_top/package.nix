@@ -1,11 +1,11 @@
-{
-  cmake,
-  fetchurl,
-  lib,
-  libbsd,
-  ncurses,
-  libpq,
-  stdenv,
+{ cmake
+, fetchurl
+, lib
+, libbsd
+, ncurses
+, libpq
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

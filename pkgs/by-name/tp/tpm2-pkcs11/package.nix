@@ -1,43 +1,44 @@
-{
-  autoconf-archive,
-  autoreconfHook,
-  buildEnv,
-  clangStdenv,
-  cmocka,
-  dbus,
-  expect,
-  fetchFromGitHub,
-  glibc,
-  gnutls,
-  iproute2,
-  lib,
-  libyaml,
-  makeWrapper,
-  opensc,
-  openssh,
-  openssl,
-  nss,
-  p11-kit,
-  patchelf,
-  pkg-config,
-  python3,
-  stdenv,
-  sqlite,
-  swtpm,
-  tpm2-abrmd,
-  tpm2-openssl,
-  tpm2-pkcs11, # for passthru tests
-  tpm2-pkcs11-esapi,
-  tpm2-pkcs11-fapi,
-  tpm2-tools,
-  tpm2-tss,
-  which,
-  xxd,
-  abrmdSupport ? false,
-  fapiSupport ? true,
-  defaultToFapi ? false,
-  enableFuzzing ? false,
-  extraDescription ? null,
+{ autoconf-archive
+, autoreconfHook
+, buildEnv
+, clangStdenv
+, cmocka
+, dbus
+, expect
+, fetchFromGitHub
+, glibc
+, gnutls
+, iproute2
+, lib
+, libyaml
+, makeWrapper
+, opensc
+, openssh
+, openssl
+, nss
+, p11-kit
+, patchelf
+, pkg-config
+, python3
+, stdenv
+, sqlite
+, swtpm
+, tpm2-abrmd
+, tpm2-openssl
+, tpm2-pkcs11
+, # for passthru tests
+  tpm2-pkcs11-esapi
+, tpm2-pkcs11-fapi
+, tpm2-tools
+, tpm2-tss
+, which
+, xxd
+, abrmdSupport ? false
+, fapiSupport ? true
+, defaultToFapi ? false
+, enableFuzzing ? false
+, extraDescription ? null
+,
 }:
 
 let
@@ -104,16 +105,16 @@ chosenStdenv.mkDerivation (finalAttrs: {
     pkg-config
     (python3.withPackages (
       ps:
-      with ps;
-      [
-        packaging
-        pyyaml
-        python-pkcs11
-        cryptography
-        pyasn1-modules
-        tpm2-pytss
-      ]
-      ++ cryptography.optional-dependencies.ssh
+        with ps;
+        [
+          packaging
+          pyyaml
+          python-pkcs11
+          cryptography
+          pyasn1-modules
+          tpm2-pytss
+        ]
+        ++ cryptography.optional-dependencies.ssh
     ))
   ];
 

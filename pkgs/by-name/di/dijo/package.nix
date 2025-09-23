@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  ncurses,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, ncurses
+,
 }:
 
 rustPlatform.buildRustPackage rec {

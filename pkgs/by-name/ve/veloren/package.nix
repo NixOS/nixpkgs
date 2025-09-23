@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  pkg-config,
-  vulkan-loader,
-  alsa-lib,
-  udev,
-  shaderc,
-  xorg,
-  libxkbcommon,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, pkg-config
+, vulkan-loader
+, alsa-lib
+, udev
+, shaderc
+, xorg
+, libxkbcommon
+,
 }:
 
 let

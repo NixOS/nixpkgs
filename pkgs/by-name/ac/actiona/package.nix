@@ -1,19 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  cmake,
-  pkg-config,
-
-  bluez,
-  libnotify,
-  opencv,
-  qt6,
-
-  # Running with TTS support causes the program to freeze for a few seconds every time at startup,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, bluez
+, libnotify
+, opencv
+, qt6
+, # Running with TTS support causes the program to freeze for a few seconds every time at startup,
   # so it is disabled by default
-  textToSpeechSupport ? false,
+  textToSpeechSupport ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

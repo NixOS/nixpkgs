@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  certifi,
-  cython,
-  mbedtls_2,
-  pytestCheckHook,
-  setuptools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, certifi
+, cython
+, mbedtls_2
+, pytestCheckHook
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

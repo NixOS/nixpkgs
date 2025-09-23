@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, aiohttp
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  cf-terraforming,
-  testers,
-  installShellFiles,
-  stdenv,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, cf-terraforming
+, testers
+, installShellFiles
+, stdenv
+,
 }:
 
 buildGoModule rec {

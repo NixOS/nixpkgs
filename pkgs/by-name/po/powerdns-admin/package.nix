@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  nixosTests,
-  writeText,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, yarnConfigHook
+, nixosTests
+, writeText
+, python3
+,
 }:
 
 let

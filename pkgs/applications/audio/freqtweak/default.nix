@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  pkg-config,
-  fftwFloat,
-  libjack2,
-  libsigcxx,
-  libxml2,
-  wxGTK,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, pkg-config
+, fftwFloat
+, libjack2
+, libsigcxx
+, libxml2
+, wxGTK
+,
 }:
 
 stdenv.mkDerivation rec {

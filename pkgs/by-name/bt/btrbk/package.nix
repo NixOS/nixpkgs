@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bash,
-  btrfs-progs,
-  openssh,
-  perl,
-  perlPackages,
-  util-linux,
-  asciidoctor,
-  mbuffer,
-  makeWrapper,
-  genericUpdater,
-  curl,
-  writeShellScript,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, bash
+, btrfs-progs
+, openssh
+, perl
+, perlPackages
+, util-linux
+, asciidoctor
+, mbuffer
+, makeWrapper
+, genericUpdater
+, curl
+, writeShellScript
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

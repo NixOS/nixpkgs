@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  buildPackages,
-  fetchurl,
-  flex,
-  lzip,
-  readline,
-  ed,
-  texinfo,
+{ lib
+, stdenv
+, autoreconfHook
+, buildPackages
+, fetchurl
+, flex
+, lzip
+, readline
+, ed
+, texinfo
+,
 }:
 
 stdenv.mkDerivation rec {

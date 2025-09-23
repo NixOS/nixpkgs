@@ -1,20 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-
-  cmake,
-  makeWrapper,
-  pkg-config,
-
-  boost,
-  fmt_11,
-  openssl,
-  sv-lang,
-  mimalloc,
-
-  verible,
-  verilator,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, pkg-config
+, boost
+, fmt_11
+, openssl
+, sv-lang
+, mimalloc
+, verible
+, verilator
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "veridian";

@@ -1,45 +1,46 @@
-{
-  lib,
-  stdenv,
-  cleanPackaging,
-  fetchurl,
-  nix-update-script,
+{ lib
+, stdenv
+, cleanPackaging
+, fetchurl
+, nix-update-script
+,
 }:
 {
   # : string
-  pname,
-  # : string
-  version,
-  # : string
-  sha256 ? lib.fakeSha256,
-  # : drv | null
-  manpages ? null,
-  # : string
-  description,
-  # : list Platform
-  platforms ? lib.platforms.all,
-  # : list string
+  pname
+, # : string
+  version
+, # : string
+  sha256 ? lib.fakeSha256
+, # : drv | null
+  manpages ? null
+, # : string
+  description
+, # : list Platform
+  platforms ? lib.platforms.all
+, # : list string
   outputs ? [
     "bin"
     "lib"
     "dev"
     "doc"
     "out"
-  ],
-  # TODO(Profpatsch): automatically infer most of these
+  ]
+, # TODO(Profpatsch): automatically infer most of these
   # : list string
-  configureFlags,
-  # : string
-  postConfigure ? null,
-  # mostly for moving and deleting files from the build directory
+  configureFlags
+, # : string
+  postConfigure ? null
+, # mostly for moving and deleting files from the build directory
   # : lines
-  postInstall,
-  # : list Maintainer
-  maintainers ? [ ],
-  # : passthru arguments (e.g. tests)
-  passthru ? { },
-  # : attributes to be merged into meta
-  broken ? false,
+  postInstall
+, # : list Maintainer
+  maintainers ? [ ]
+, # : passthru arguments (e.g. tests)
+  passthru ? { }
+, # : attributes to be merged into meta
+  broken ? false
+,
 }:
 
 let

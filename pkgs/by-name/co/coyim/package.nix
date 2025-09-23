@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  cairo,
-  gdk-pixbuf,
-  glib,
-  adwaita-icon-theme,
-  wrapGAppsHook3,
-  gtk3,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, cairo
+, gdk-pixbuf
+, glib
+, adwaita-icon-theme
+, wrapGAppsHook3
+, gtk3
+,
 }:
 
 buildGoModule {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  numpy,
-  ollama,
-  openai,
-  python-redis-lock,
-  umap-learn,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, numpy
+, ollama
+, openai
+, python-redis-lock
+, umap-learn
+,
 }:
 
 buildPythonPackage rec {

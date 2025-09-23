@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  git,
-  multipath-tools,
-  openssl,
-  ps,
-  fetchFromGitLab,
-  sudo,
-  python3Packages,
-  gitUpdater,
-  util-linux,
-  versionCheckHook,
+{ stdenv
+, lib
+, git
+, multipath-tools
+, openssl
+, ps
+, fetchFromGitLab
+, sudo
+, python3Packages
+, gitUpdater
+, util-linux
+, versionCheckHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

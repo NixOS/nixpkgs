@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  poetry-core,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, poetry-core
+,
 }:
 
 buildPythonPackage rec {

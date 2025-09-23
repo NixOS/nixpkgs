@@ -1,21 +1,21 @@
-{
-  runCommand,
-  mcat-unwrapped,
-  makeWrapper,
-  lib,
-  chromium,
-  ffmpeg-headless,
-  useChromium ? false,
-  useFfmpeg ? false,
+{ runCommand
+, mcat-unwrapped
+, makeWrapper
+, lib
+, chromium
+, ffmpeg-headless
+, useChromium ? false
+, useFfmpeg ? false
+,
 }:
 
 runCommand "mcat"
-  {
-    pname = "mcat";
-    inherit (mcat-unwrapped) version meta;
+{
+  pname = "mcat";
+  inherit (mcat-unwrapped) version meta;
 
-    nativeBuildInputs = [ makeWrapper ];
-  }
+  nativeBuildInputs = [ makeWrapper ];
+}
   ''
     mkdir -p $out/bin
     makeWrapper ${lib.getExe mcat-unwrapped} $out/bin/mcat --prefix PATH : ${

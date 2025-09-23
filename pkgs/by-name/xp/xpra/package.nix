@@ -1,53 +1,53 @@
-{
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  runCommand,
-  writeText,
-  wrapGAppsHook3,
-  withNvenc ? false,
-  atk,
-  cairo,
-  cudatoolkit,
-  cudaPackages,
-  ffmpeg,
-  gdk-pixbuf,
-  getopt,
-  glib,
-  gobject-introspection,
-  gst_all_1,
-  gtk3,
-  libappindicator,
-  libfakeXinerama,
-  librsvg,
-  libvpx,
-  libwebp,
-  systemd,
-  lz4,
-  nv-codec-headers-10,
-  nvidia_x11 ? null,
-  pam,
-  pandoc,
-  pango,
-  pulseaudioFull,
-  python3,
-  stdenv,
-  util-linux,
-  which,
-  x264,
-  x265,
-  libavif,
-  openh264,
-  libyuv,
-  xauth,
-  xdg-utils,
-  xorg,
-  xorgserver,
-  xxHash,
-  clang,
-  withHtml ? true,
-  xpra-html5,
-  udevCheckHook,
+{ lib
+, fetchFromGitHub
+, pkg-config
+, runCommand
+, writeText
+, wrapGAppsHook3
+, withNvenc ? false
+, atk
+, cairo
+, cudatoolkit
+, cudaPackages
+, ffmpeg
+, gdk-pixbuf
+, getopt
+, glib
+, gobject-introspection
+, gst_all_1
+, gtk3
+, libappindicator
+, libfakeXinerama
+, librsvg
+, libvpx
+, libwebp
+, systemd
+, lz4
+, nv-codec-headers-10
+, nvidia_x11 ? null
+, pam
+, pandoc
+, pango
+, pulseaudioFull
+, python3
+, stdenv
+, util-linux
+, which
+, x264
+, x265
+, libavif
+, openh264
+, libyuv
+, xauth
+, xdg-utils
+, xorg
+, xorgserver
+, xxHash
+, clang
+, withHtml ? true
+, xpra-html5
+, udevCheckHook
+,
 }@args:
 
 let

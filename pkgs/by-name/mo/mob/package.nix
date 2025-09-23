@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenv,
-  withSpeech ? !stdenv.hostPlatform.isDarwin,
-  makeWrapper,
-  espeak-ng,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+, withSpeech ? !stdenv.hostPlatform.isDarwin
+, makeWrapper
+, espeak-ng
+,
 }:
 
 buildGoModule rec {

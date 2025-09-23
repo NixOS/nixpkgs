@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  tzdata,
-  fetchpatch,
-  replaceVars,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, tzdata
+, fetchpatch
+, replaceVars
+,
 }:
 
 stdenv.mkDerivation rec {

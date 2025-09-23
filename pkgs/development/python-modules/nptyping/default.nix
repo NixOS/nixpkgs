@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  beartype,
-  invoke,
-  numpy,
-  pandas,
-  feedparser,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, beartype
+, invoke
+, numpy
+, pandas
+, feedparser
+,
 }:
 
 buildPythonPackage rec {

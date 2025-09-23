@@ -1,17 +1,16 @@
 {
   # Evaluation
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # Build
-  setuptools,
-
-  # Dependencies
-  gitpython,
-  mkdocs,
-  requests,
+  lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # Build
+  setuptools
+, # Dependencies
+  gitpython
+, mkdocs
+, requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  makeDesktopItem,
-  copyDesktopItems,
-  libX11,
-  libxcb,
-  qt5,
+{ fetchFromGitHub
+, lib
+, stdenv
+, makeDesktopItem
+, copyDesktopItems
+, libX11
+, libxcb
+, qt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

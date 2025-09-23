@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  glib,
-  intltool,
-  libfm,
-  libX11,
-  pango,
-  pkg-config,
-  wrapGAppsHook3,
-  adwaita-icon-theme,
-  withGtk3 ? true,
-  gtk2,
-  gtk3,
-  gettext,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, glib
+, intltool
+, libfm
+, libX11
+, pango
+, pkg-config
+, wrapGAppsHook3
+, adwaita-icon-theme
+, withGtk3 ? true
+, gtk2
+, gtk3
+, gettext
+, nix-update-script
+,
 }:
 
 let

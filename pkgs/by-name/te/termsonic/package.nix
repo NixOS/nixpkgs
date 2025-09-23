@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchzip,
-  pkg-config,
-  alsa-lib,
+{ lib
+, buildGoModule
+, fetchzip
+, pkg-config
+, alsa-lib
+,
 }:
 buildGoModule {
   name = "termsonic";

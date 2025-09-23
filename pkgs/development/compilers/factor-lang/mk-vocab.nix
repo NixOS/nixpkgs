@@ -1,22 +1,21 @@
-{
-  stdenv,
+{ stdenv
+,
 }@initAttrs:
 
 drvArgs:
 
 (stdenv.mkDerivation drvArgs).overrideAttrs (
   finalAttrs:
-  {
-    name ? "${finalAttrs.pname}-${finalAttrs.version}",
-    vocabName ? finalAttrs.pname or name,
-    vocabRoot ? "extra",
-    # Runtime libraries needed to run this vocab, handed to runtime wrapper
-    extraLibs ? [ ],
-    # Extra vocabularies, handed to runtime wrapper
-    extraVocabs ? [ ],
-    # Extra binaries in PATH, handed to runtime wrapper
-    extraPaths ? [ ],
-    ...
+  { name ? "${finalAttrs.pname}-${finalAttrs.version}"
+  , vocabName ? finalAttrs.pname or name
+  , vocabRoot ? "extra"
+  , # Runtime libraries needed to run this vocab, handed to runtime wrapper
+    extraLibs ? [ ]
+  , # Extra vocabularies, handed to runtime wrapper
+    extraVocabs ? [ ]
+  , # Extra binaries in PATH, handed to runtime wrapper
+    extraPaths ? [ ]
+  , ...
   }@attrs:
   {
     inherit vocabName vocabRoot;

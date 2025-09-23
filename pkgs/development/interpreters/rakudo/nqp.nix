@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  lib,
-  moarvm,
+{ stdenv
+, fetchFromGitHub
+, perl
+, lib
+, moarvm
+,
 }:
 
 stdenv.mkDerivation rec {

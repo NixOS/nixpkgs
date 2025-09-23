@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  git,
-  gmp,
-  cadical,
-  pkg-config,
-  libuv,
-  enableMimalloc ? true,
-  perl,
-  testers,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, git
+, gmp
+, cadical
+, pkg-config
+, libuv
+, enableMimalloc ? true
+, perl
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

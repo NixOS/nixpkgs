@@ -1,28 +1,28 @@
-{
-  buildPackages,
-  fontconfig,
-  lib,
-  runCommand,
-  stdenv,
+{ buildPackages
+, fontconfig
+, lib
+, runCommand
+, stdenv
+,
 }:
 let
   fontconfig' = fontconfig;
 in
-{
-  fontconfig ? fontconfig',
-  fontDirectories,
+{ fontconfig ? fontconfig'
+, fontDirectories
+,
 }:
 
 runCommand "fc-cache"
-  {
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-    passAsFile = [ "fontDirs" ];
-    fontDirs = ''
-      <!-- Font directories -->
-      ${lib.concatStringsSep "\n" (map (font: "<dir>${font}</dir>") fontDirectories)}
-    '';
-  }
+{
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+  passAsFile = [ "fontDirs" ];
+  fontDirs = ''
+    <!-- Font directories -->
+    ${lib.concatStringsSep "\n" (map (font: "<dir>${font}</dir>") fontDirectories)}
+  '';
+}
   ''
     export FONTCONFIG_FILE=$(pwd)/fonts.conf
 

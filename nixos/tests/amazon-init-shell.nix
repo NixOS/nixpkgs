@@ -5,9 +5,8 @@
 # Note that other tests verify that amazon-init can treat user-data as a nixos
 # configuration expression.
 
-{
-  lib,
-  ...
+{ lib
+, ...
 }:
 
 {

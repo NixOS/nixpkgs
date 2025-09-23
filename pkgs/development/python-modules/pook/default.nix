@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  falcon,
-  fetchFromGitHub,
-  furl,
-  hatchling,
-  jsonschema,
-  pytest-asyncio,
-  pytest-httpbin,
-  pytest-pook,
-  pytestCheckHook,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, falcon
+, fetchFromGitHub
+, furl
+, hatchling
+, jsonschema
+, pytest-asyncio
+, pytest-httpbin
+, pytest-pook
+, pytestCheckHook
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

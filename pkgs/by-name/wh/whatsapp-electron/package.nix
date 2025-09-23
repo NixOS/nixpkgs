@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  electron,
-  stdenv,
-  copyDesktopItems,
-  nodejs,
-  fetchNpmDeps,
-  makeDesktopItem,
-  npmHooks,
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, electron
+, stdenv
+, copyDesktopItems
+, nodejs
+, fetchNpmDeps
+, makeDesktopItem
+, npmHooks
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

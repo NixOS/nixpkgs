@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  cmake,
-  alsa-lib,
-  udev,
-  qt6Packages,
+{ stdenv
+, lib
+, fetchFromGitLab
+, cmake
+, alsa-lib
+, udev
+, qt6Packages
+,
 }:
 
 stdenv.mkDerivation rec {

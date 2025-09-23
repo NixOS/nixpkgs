@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPy3k,
-  pygccxml,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, pygccxml
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -5,12 +5,12 @@
   contains non-critical package sets. The intent is to be a shorthand
   for things like using different toolchains in every package in nixpkgs.
 */
-{
-  lib,
-  stdenv,
-  nixpkgsFun,
-  overlays,
-  makeMuslParsedPlatform,
+{ lib
+, stdenv
+, nixpkgsFun
+, overlays
+, makeMuslParsedPlatform
+,
 }:
 let
   makeLLVMParsedPlatform =
@@ -76,39 +76,41 @@ self: super: {
   # supported. 32-bit is also not supported.
   pkgsMusl =
     if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then
-      nixpkgsFun {
-        overlays = [
-          (self': super': {
-            pkgsMusl = super';
-          })
-        ]
-        ++ overlays;
-        ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
-          config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
-        };
-      }
+      nixpkgsFun
+        {
+          overlays = [
+            (self': super': {
+              pkgsMusl = super';
+            })
+          ]
+          ++ overlays;
+          ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
+            config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
+          };
+        }
     else
       throw "Musl libc only supports 64-bit Linux systems.";
 
   # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
   pkgsx86_64Darwin =
     if stdenv.hostPlatform.isDarwin then
-      nixpkgsFun {
-        overlays = [
-          (self': super': {
-            pkgsx86_64Darwin = super';
-          })
-        ]
-        ++ overlays;
-        localSystem = {
-          config = lib.systems.parse.tripleFromSystem (
-            stdenv.hostPlatform.parsed
-            // {
-              cpu = lib.systems.parse.cpuTypes.x86_64;
-            }
-          );
-        };
-      }
+      nixpkgsFun
+        {
+          overlays = [
+            (self': super': {
+              pkgsx86_64Darwin = super';
+            })
+          ]
+          ++ overlays;
+          localSystem = {
+            config = lib.systems.parse.tripleFromSystem (
+              stdenv.hostPlatform.parsed
+              // {
+                cpu = lib.systems.parse.cpuTypes.x86_64;
+              }
+            );
+          };
+        }
     else
       throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
@@ -136,48 +138,52 @@ self: super: {
   # NOTE: Not every package set is supported on every architecture!
   # See `Using pkgsForCudaArch` in doc/languages-frameworks/cuda.section.md for more information.
   pkgsForCudaArch = lib.listToAttrs (
-    lib.map (cudaCapability: {
-      name = self._cuda.lib.mkRealArchitecture cudaCapability;
-      value = nixpkgsFun {
-        config = super.config // {
-          cudaSupport = true;
-          rocmSupport = false;
-          # Not supported by architecture-specific feature sets, so disable for all.
-          # Users can choose to build for family-specific feature sets if they wish.
-          cudaForwardCompat = false;
-          cudaCapabilities = [ cudaCapability ];
+    lib.map
+      (cudaCapability: {
+        name = self._cuda.lib.mkRealArchitecture cudaCapability;
+        value = nixpkgsFun {
+          config = super.config // {
+            cudaSupport = true;
+            rocmSupport = false;
+            # Not supported by architecture-specific feature sets, so disable for all.
+            # Users can choose to build for family-specific feature sets if they wish.
+            cudaForwardCompat = false;
+            cudaCapabilities = [ cudaCapability ];
+          };
         };
-      };
-    }) (lib.attrNames self._cuda.db.cudaCapabilityToInfo)
+      })
+      (lib.attrNames self._cuda.db.cudaCapabilityToInfo)
   );
 
   pkgsExtraHardening = nixpkgsFun {
     overlays = [
       (
         self': super':
-        {
-          pkgsExtraHardening = super';
-          stdenv = super'.withDefaultHardeningFlags (
-            super'.stdenv.cc.defaultHardeningFlags
-            ++ [
-              "strictflexarrays1"
-              "shadowstack"
-              "nostrictaliasing"
-              "pacret"
-              "glibcxxassertions"
-              "trivialautovarinit"
-            ]
-          ) super'.stdenv;
-          glibc = super'.glibc.override rec {
-            enableCET = if self'.stdenv.hostPlatform.isx86_64 then "permissive" else false;
-            enableCETRuntimeDefault = enableCET != false;
-          };
-        }
-        // lib.optionalAttrs (with super'.stdenv.hostPlatform; isx86_64 && isLinux) {
-          # causes shadowstack disablement
-          pcre = super'.pcre.override { enableJit = false; };
-          pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
-        }
+          {
+            pkgsExtraHardening = super';
+            stdenv = super'.withDefaultHardeningFlags
+              (
+                super'.stdenv.cc.defaultHardeningFlags
+                  ++ [
+                  "strictflexarrays1"
+                  "shadowstack"
+                  "nostrictaliasing"
+                  "pacret"
+                  "glibcxxassertions"
+                  "trivialautovarinit"
+                ]
+              )
+              super'.stdenv;
+            glibc = super'.glibc.override rec {
+              enableCET = if self'.stdenv.hostPlatform.isx86_64 then "permissive" else false;
+              enableCETRuntimeDefault = enableCET != false;
+            };
+          }
+          // lib.optionalAttrs (with super'.stdenv.hostPlatform; isx86_64 && isLinux) {
+            # causes shadowstack disablement
+            pcre = super'.pcre.override { enableJit = false; };
+            pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
+          }
       )
     ]
     ++ overlays;

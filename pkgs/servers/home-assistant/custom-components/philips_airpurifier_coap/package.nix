@@ -1,10 +1,9 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-
-  aioairctrl,
-  getmac,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, aioairctrl
+, getmac
+,
 }:
 
 buildHomeAssistantComponent rec {

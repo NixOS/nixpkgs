@@ -1,53 +1,48 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # Native build inputs
-  docbook-xsl-nons,
-  gi-docgen,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  buildPackages,
-
-  # Build inputs
-  expat,
-  glib,
-  libxml2,
-  python3,
-
-  # Optional dependencies
-  cfitsio,
-  cgif,
-  fftw,
-  imagemagick,
-  lcms2,
-  libarchive,
-  libexif,
-  libheif,
-  libhwy,
-  libimagequant,
-  libjpeg,
-  libjxl,
-  librsvg,
-  libpng,
-  libtiff,
-  libwebp,
-  matio,
-  openexr,
-  openjpeg,
-  openslide,
-  pango,
-  poppler,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-
-  # passthru
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # Native build inputs
+  docbook-xsl-nons
+, gi-docgen
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, buildPackages
+, # Build inputs
+  expat
+, glib
+, libxml2
+, python3
+, # Optional dependencies
+  cfitsio
+, cgif
+, fftw
+, imagemagick
+, lcms2
+, libarchive
+, libexif
+, libheif
+, libhwy
+, libimagequant
+, libjpeg
+, libjxl
+, librsvg
+, libpng
+, libtiff
+, libwebp
+, matio
+, openexr
+, openjpeg
+, openslide
+, pango
+, poppler
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, # passthru
+  testers
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

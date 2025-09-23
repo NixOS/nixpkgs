@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  qtbase,
-  qtdeclarative,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, qtbase
+, qtdeclarative
+, fetchFromGitHub
+, cmake
+, pkg-config
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

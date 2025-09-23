@@ -1,7 +1,7 @@
-{
-  fetchFromGitHub,
-  buildGoModule,
-  lib,
+{ fetchFromGitHub
+, buildGoModule
+, lib
+,
 }:
 let
   pname = "keto";

@@ -1,12 +1,12 @@
-{
-  lib,
-  qt6,
-  zlib,
-  cmake,
-  efivar,
-  pkg-config,
-  fetchFromGitHub,
-  stdenv,
+{ lib
+, qt6
+, zlib
+, cmake
+, efivar
+, pkg-config
+, fetchFromGitHub
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

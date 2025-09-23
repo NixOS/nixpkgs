@@ -1,13 +1,13 @@
-{
-  mkKdeDerivation,
-  sources,
-  pkg-config,
-  rustPlatform,
-  cargo,
-  rustc,
-  discount,
-  corrosion,
-  alpaka,
+{ mkKdeDerivation
+, sources
+, pkg-config
+, rustPlatform
+, cargo
+, rustc
+, discount
+, corrosion
+, alpaka
+,
 }:
 mkKdeDerivation rec {
   pname = "kdepim-addons";

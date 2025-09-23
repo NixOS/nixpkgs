@@ -1,61 +1,61 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  apple-sdk_15,
-  chafa,
-  cmake,
-  dbus,
-  dconf,
-  ddcutil,
-  glib,
-  hwdata,
-  imagemagick,
-  libXrandr,
-  libdrm,
-  libelf,
-  libglvnd,
-  libpulseaudio,
-  libselinux,
-  libsepol,
-  libsysprof-capture,
-  libxcb,
-  makeBinaryWrapper,
-  moltenvk,
-  nix-update-script,
-  ocl-icd,
-  opencl-headers,
-  pcre2,
-  pkg-config,
-  python3,
-  rpm,
-  sqlite,
-  util-linux,
-  versionCheckHook,
-  vulkan-loader,
-  wayland,
-  xfce,
-  xorg,
-  yyjson,
-  zlib,
-  zfs,
-  # Feature flags
-  audioSupport ? true,
-  brightnessSupport ? true,
-  dbusSupport ? true,
-  flashfetchSupport ? false,
-  terminalSupport ? true,
-  gnomeSupport ? true,
-  imageSupport ? true,
-  openclSupport ? true,
-  openglSupport ? true,
-  rpmSupport ? false,
-  sqliteSupport ? true,
-  vulkanSupport ? true,
-  waylandSupport ? true,
-  x11Support ? true,
-  xfceSupport ? true,
-  zfsSupport ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, apple-sdk_15
+, chafa
+, cmake
+, dbus
+, dconf
+, ddcutil
+, glib
+, hwdata
+, imagemagick
+, libXrandr
+, libdrm
+, libelf
+, libglvnd
+, libpulseaudio
+, libselinux
+, libsepol
+, libsysprof-capture
+, libxcb
+, makeBinaryWrapper
+, moltenvk
+, nix-update-script
+, ocl-icd
+, opencl-headers
+, pcre2
+, pkg-config
+, python3
+, rpm
+, sqlite
+, util-linux
+, versionCheckHook
+, vulkan-loader
+, wayland
+, xfce
+, xorg
+, yyjson
+, zlib
+, zfs
+, # Feature flags
+  audioSupport ? true
+, brightnessSupport ? true
+, dbusSupport ? true
+, flashfetchSupport ? false
+, terminalSupport ? true
+, gnomeSupport ? true
+, imageSupport ? true
+, openclSupport ? true
+, openglSupport ? true
+, rpmSupport ? false
+, sqliteSupport ? true
+, vulkanSupport ? true
+, waylandSupport ? true
+, x11Support ? true
+, xfceSupport ? true
+, zfsSupport ? false
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";

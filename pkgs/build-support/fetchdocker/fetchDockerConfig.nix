@@ -1,19 +1,18 @@
-pkgargs@{
-  stdenv,
-  lib,
-  haskellPackages,
-  writeText,
-  gawk,
+pkgargs@{ stdenv
+, lib
+, haskellPackages
+, writeText
+, gawk
+,
 }:
 let
   generic-fetcher = import ./generic-fetcher.nix pkgargs;
 in
 
-args@{
-  repository ? "library",
-  imageName,
-  tag,
-  ...
+args@{ repository ? "library"
+, imageName
+, tag
+, ...
 }:
 
 generic-fetcher (
@@ -22,5 +21,5 @@ generic-fetcher (
     name = "${repository}_${imageName}_${tag}-config.json";
     tag = "unused";
   }
-  // args
+    // args
 )

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  perl,
-  which,
-  coreutils,
-  zenity,
-  curl,
-  cabextract,
-  unzip,
-  p7zip,
-  gnused,
-  gnugrep,
-  bash,
-  gawk,
-  gnutar,
-  gzip,
+{ lib
+, stdenv
+, callPackage
+, perl
+, which
+, coreutils
+, zenity
+, curl
+, cabextract
+, unzip
+, p7zip
+, gnused
+, gnugrep
+, bash
+, gawk
+, gnutar
+, gzip
+,
 }:
 
 stdenv.mkDerivation rec {

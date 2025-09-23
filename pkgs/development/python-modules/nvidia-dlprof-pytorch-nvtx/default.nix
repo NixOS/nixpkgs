@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchurl,
-  pythonOlder,
-  numpy,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchurl
+, pythonOlder
+, numpy
+, torch
+,
 }:
 
 buildPythonPackage rec {

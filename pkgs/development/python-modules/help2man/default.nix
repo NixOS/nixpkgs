@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-  jinja2,
-  setuptools-scm,
-  shtab,
-  tomli,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, jinja2
+, setuptools-scm
+, shtab
+, tomli
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  numpy,
-  laszip,
-  lazrs,
-  setuptools,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, numpy
+, laszip
+, lazrs
+, setuptools
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
-  libpng,
-  libX11,
-  libXi,
-  libXtst,
-  zlib,
-  electron,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, copyDesktopItems
+, makeDesktopItem
+, makeWrapper
+, libpng
+, libX11
+, libXi
+, libXtst
+, zlib
+, electron
+,
 }:
 
 buildNpmPackage rec {

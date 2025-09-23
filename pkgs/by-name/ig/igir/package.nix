@@ -1,19 +1,17 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-
-  # for patching bundled 7z binary from the 7zip-bin node module
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, # for patching bundled 7z binary from the 7zip-bin node module
   # at lib/node_modules/igir/node_modules/7zip-bin/linux/x64/7za
-  autoPatchelfHook,
-  stdenv,
-
-  libusb1,
-  libuv,
-  libz,
-  lz4,
-  sdl2-compat,
-  systemd,
+  autoPatchelfHook
+, stdenv
+, libusb1
+, libuv
+, libz
+, lz4
+, sdl2-compat
+, systemd
+,
 }:
 
 buildNpmPackage rec {

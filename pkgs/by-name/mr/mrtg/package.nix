@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  gd,
-  rrdtool,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, gd
+, rrdtool
+,
 }:
 
 let

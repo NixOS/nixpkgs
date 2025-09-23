@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  fetchFromGitHub,
-  alsa-lib,
-  cmake,
-  libpulseaudio,
-  libmt32emu,
-  pkg-config,
-  portaudio,
-  qtbase,
-  qtmultimedia,
-  withJack ? stdenv.hostPlatform.isUnix,
-  libjack2,
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, alsa-lib
+, cmake
+, libpulseaudio
+, libmt32emu
+, pkg-config
+, portaudio
+, qtbase
+, qtmultimedia
+, withJack ? stdenv.hostPlatform.isUnix
+, libjack2
+,
 }:
 
 let

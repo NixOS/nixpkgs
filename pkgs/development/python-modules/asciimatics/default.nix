@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pillow,
-  pyfiglet,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
-  wcwidth,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pillow
+, pyfiglet
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, wcwidth
+,
 }:
 
 buildPythonPackage rec {

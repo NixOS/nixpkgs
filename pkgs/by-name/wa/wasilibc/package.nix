@@ -1,10 +1,10 @@
-{
-  stdenvNoLibc,
-  fetchFromGitHub,
-  lib,
-  firefox-unwrapped,
-  firefox-esr-unwrapped,
-  enablePosixThreads ? false,
+{ stdenvNoLibc
+, fetchFromGitHub
+, lib
+, firefox-unwrapped
+, firefox-esr-unwrapped
+, enablePosixThreads ? false
+,
 }:
 
 stdenvNoLibc.mkDerivation (finalAttrs: {

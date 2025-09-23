@@ -1,7 +1,7 @@
-{
-  stdenv,
-  lib,
-  callPackage,
+{ stdenv
+, lib
+, callPackage
+,
 }:
 let
   src = (callPackage ./sources.nix { }).stable;

@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cairo,
-  libxkbcommon,
-  pango,
-  fribidi,
-  harfbuzz,
-  pkg-config,
-  scdoc,
-  makeWrapper,
-  ncursesSupport ? true,
-  ncurses,
-  waylandSupport ? stdenv.hostPlatform.isLinux,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  x11Support ? stdenv.hostPlatform.isLinux,
-  xorg,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cairo
+, libxkbcommon
+, pango
+, fribidi
+, harfbuzz
+, pkg-config
+, scdoc
+, makeWrapper
+, ncursesSupport ? true
+, ncurses
+, waylandSupport ? stdenv.hostPlatform.isLinux
+, wayland
+, wayland-protocols
+, wayland-scanner
+, x11Support ? stdenv.hostPlatform.isLinux
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

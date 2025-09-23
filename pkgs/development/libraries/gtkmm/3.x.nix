@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  python3,
-  gtk3,
-  glibmm,
-  cairomm,
-  pangomm,
-  atkmm,
-  libepoxy,
-  gnome,
-  glib,
-  gdk-pixbuf,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, python3
+, gtk3
+, glibmm
+, cairomm
+, pangomm
+, atkmm
+, libepoxy
+, gnome
+, glib
+, gdk-pixbuf
+,
 }:
 
 stdenv.mkDerivation rec {

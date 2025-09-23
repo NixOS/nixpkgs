@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  pidgin,
-  texLive,
-  imagemagick,
-  glib,
-  gtk2,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, pidgin
+, texLive
+, imagemagick
+, glib
+, gtk2
+,
 }:
 
 let

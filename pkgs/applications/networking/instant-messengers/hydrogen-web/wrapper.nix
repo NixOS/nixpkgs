@@ -1,8 +1,8 @@
-{
-  stdenv,
-  jq,
-  hydrogen-web-unwrapped,
-  conf ? { },
+{ stdenv
+, jq
+, hydrogen-web-unwrapped
+, conf ? { }
+,
 }:
 
 if (conf == { }) then

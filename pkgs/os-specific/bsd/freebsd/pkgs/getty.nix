@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  login,
-  wrappedLogin ? null,
+{ mkDerivation
+, login
+, wrappedLogin ? null
+,
 }:
 mkDerivation {
   path = "libexec/getty";

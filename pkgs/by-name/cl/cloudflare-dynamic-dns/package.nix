@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  cloudflare-dynamic-dns,
-  fetchFromGitHub,
-  testers,
+{ lib
+, buildGoModule
+, cloudflare-dynamic-dns
+, fetchFromGitHub
+, testers
+,
 }:
 buildGoModule rec {
   pname = "cloudflare-dynamic-dns";

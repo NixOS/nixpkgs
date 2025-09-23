@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  ffmpeg,
-  fzf,
-  mpv,
-  python3,
+{ lib
+, fetchFromGitHub
+, ffmpeg
+, fzf
+, mpv
+, python3
+,
 }:
 
 let

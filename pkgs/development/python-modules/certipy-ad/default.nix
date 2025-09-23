@@ -1,22 +1,22 @@
-{
-  lib,
-  argcomplete,
-  asn1crypto,
-  beautifulsoup4,
-  buildPythonPackage,
-  cryptography,
-  dnspython,
-  dsinternals,
-  fetchFromGitHub,
-  httpx,
-  impacket,
-  ldap3,
-  pyasn1,
-  pycryptodome,
-  pyopenssl,
-  requests,
-  setuptools,
-  unicrypto,
+{ lib
+, argcomplete
+, asn1crypto
+, beautifulsoup4
+, buildPythonPackage
+, cryptography
+, dnspython
+, dsinternals
+, fetchFromGitHub
+, httpx
+, impacket
+, ldap3
+, pyasn1
+, pycryptodome
+, pyopenssl
+, requests
+, setuptools
+, unicrypto
+,
 }:
 
 buildPythonPackage rec {

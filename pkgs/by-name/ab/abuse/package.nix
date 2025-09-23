@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchFromGitHub,
-  makeDesktopItem,
-  copyDesktopItems,
-  cmake,
-  SDL2,
-  SDL2_mixer,
-  freepats,
+{ lib
+, stdenv
+, fetchzip
+, fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
+, cmake
+, SDL2
+, SDL2_mixer
+, freepats
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

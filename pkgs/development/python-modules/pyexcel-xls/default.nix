@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyexcel-io,
-  xlrd,
-  xlwt,
-  pyexcel,
-  pytestCheckHook,
-  pytest-cov-stub,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyexcel-io
+, xlrd
+, xlwt
+, pyexcel
+, pytestCheckHook
+, pytest-cov-stub
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

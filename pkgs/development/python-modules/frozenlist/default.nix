@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  expandvars,
-  fetchFromGitHub,
-  pep517,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  wheel,
+{ lib
+, buildPythonPackage
+, cython
+, expandvars
+, fetchFromGitHub
+, pep517
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, wheel
+,
 }:
 
 buildPythonPackage rec {

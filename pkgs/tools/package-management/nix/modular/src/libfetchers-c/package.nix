@@ -1,15 +1,13 @@
-{
-  lib,
-  mkMesonLibrary,
+{ lib
+, mkMesonLibrary
+, nix-store-c
+, nix-expr-c
+, nix-util-c
+, nix-fetchers
+, # Configuration Options
 
-  nix-store-c,
-  nix-expr-c,
-  nix-util-c,
-  nix-fetchers,
-
-  # Configuration Options
-
-  version,
+  version
+,
 }:
 
 mkMesonLibrary (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pywebpush,
-  py-vapid,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pywebpush
+, py-vapid
+,
 }:
 
 buildPythonPackage rec {

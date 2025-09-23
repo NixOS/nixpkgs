@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  colorama,
-  fetchFromGitHub,
-  fetchpatch,
-  poetry-core,
-  pytest7CheckHook,
-  setuptools,
-  types-colorama,
-  types-setuptools,
+{ lib
+, buildPythonPackage
+, colorama
+, fetchFromGitHub
+, fetchpatch
+, poetry-core
+, pytest7CheckHook
+, setuptools
+, types-colorama
+, types-setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,44 +1,42 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-
-  # build time
-  bison,
-  docbook_xsl,
-  docutils,
-  flex,
-  gtk-doc,
-  meson,
-  ninja,
-  pkg-config,
-  utilmacros,
-
-  # runtime
-  alsa-lib,
-  cairo,
-  curl,
-  elfutils,
-  glib,
-  gsl,
-  json_c,
-  kmod,
-  libdrm,
-  liboping,
-  libpciaccess,
-  libunwind,
-  libX11,
-  libXext,
-  libXrandr,
-  libXv,
-  openssl,
-  peg,
-  procps,
-  python3,
-  udev,
-  valgrind,
-  xmlrpc_c,
-  xorgproto,
+{ lib
+, stdenv
+, fetchFromGitLab
+, # build time
+  bison
+, docbook_xsl
+, docutils
+, flex
+, gtk-doc
+, meson
+, ninja
+, pkg-config
+, utilmacros
+, # runtime
+  alsa-lib
+, cairo
+, curl
+, elfutils
+, glib
+, gsl
+, json_c
+, kmod
+, libdrm
+, liboping
+, libpciaccess
+, libunwind
+, libX11
+, libXext
+, libXrandr
+, libXv
+, openssl
+, peg
+, procps
+, python3
+, udev
+, valgrind
+, xmlrpc_c
+, xorgproto
+,
 }:
 
 stdenv.mkDerivation rec {

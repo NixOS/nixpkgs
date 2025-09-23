@@ -1,26 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  python,
-
-  # nativeBuildInputs
-  cmake,
-  doxygen,
-  nanobind,
-
-  # propagatedBuildInputs
-  suitesparse,
-  eigen,
-  jrl-cmakemodules,
-
-  # dependencies
-  numpy,
-
-  # checkInputs
-  pytest,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nix-update-script
+, python
+, # nativeBuildInputs
+  cmake
+, doxygen
+, nanobind
+, # propagatedBuildInputs
+  suitesparse
+, eigen
+, jrl-cmakemodules
+, # dependencies
+  numpy
+, # checkInputs
+  pytest
+, scipy
+,
 }:
 
 buildPythonPackage rec {

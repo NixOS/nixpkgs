@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  colorama,
-  matplotlib,
-  numpy,
-  pynvml,
-  torch,
-  torchprofile,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, colorama
+, matplotlib
+, numpy
+, pynvml
+, torch
+, torchprofile
+,
 }:
 
 buildPythonPackage {

@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildEnv,
-  makeFontsConf,
-  gnused,
-  writeScript,
-  xorg,
-  bashInteractive,
-  xterm,
-  xcbuild,
-  makeWrapper,
-  quartz-wm,
-  fontconfig,
-  xlsfonts,
-  xfontsel,
-  ttf_bitstream_vera,
-  freefont_ttf,
-  liberation_ttf,
-  shell ? "${bashInteractive}/bin/bash",
-  unfreeFonts ? false,
-  extraFontDirs ? [ ],
+{ lib
+, stdenv
+, buildEnv
+, makeFontsConf
+, gnused
+, writeScript
+, xorg
+, bashInteractive
+, xterm
+, xcbuild
+, makeWrapper
+, quartz-wm
+, fontconfig
+, xlsfonts
+, xfontsel
+, ttf_bitstream_vera
+, freefont_ttf
+, liberation_ttf
+, shell ? "${bashInteractive}/bin/bash"
+, unfreeFonts ? false
+, extraFontDirs ? [ ]
+,
 }:
 
 # ------------

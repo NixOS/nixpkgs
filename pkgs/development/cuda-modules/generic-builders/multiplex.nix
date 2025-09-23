@@ -1,21 +1,20 @@
-{
-  lib,
-  cudaLib,
-  cudaMajorMinorVersion,
-  redistSystem,
-  stdenv,
-  # Builder-specific arguments
+{ lib
+, cudaLib
+, cudaMajorMinorVersion
+, redistSystem
+, stdenv
+, # Builder-specific arguments
   # Short package name (e.g., "cuda_cccl")
   # pname : String
-  pname,
-  # Common name (e.g., "cutensor" or "cudnn") -- used in the URL.
+  pname
+, # Common name (e.g., "cutensor" or "cudnn") -- used in the URL.
   # Also known as the Redistributable Name.
   # redistName : String,
-  redistName,
-  # releasesModule :: Path
+  redistName
+, # releasesModule :: Path
   # A path to a module which provides a `releases` attribute
-  releasesModule,
-  # shims :: Path
+  releasesModule
+, # shims :: Path
   # A path to a module which provides a `shims` attribute
   # The redistribRelease is only used in ./manifest.nix for the package version
   # and the package description (which NVIDIA's manifest calls the "name").
@@ -25,7 +24,8 @@
   # outputs of the package, and provide additional package-specific constraints (e.g., min/max supported CUDA versions,
   # required versions of other packages, etc.).
   # shimFn :: {package, redistSystem} -> AttrSet
-  shimsFn ? (throw "shimsFn must be provided"),
+  shimsFn ? (throw "shimsFn must be provided")
+,
 }:
 let
   evaluatedModules = lib.modules.evalModules {
@@ -70,33 +70,36 @@ let
   # newestPackages :: List Package
   newestPackages =
     let
-      newestForEachMajorMinorVersion = lib.foldl' (
-        newestPackages: package:
-        let
-          majorMinorVersion = lib.versions.majorMinor package.version;
-          existingPackage = newestPackages.${majorMinorVersion} or null;
-        in
-        newestPackages
-        // {
-          ${majorMinorVersion} =
-            # Only keep the existing package if it is newer than the one we are considering or it is supported on the
-            # current platform and the one we are considering is not.
-            if
-              existingPackage != null
-              && (
-                packageOlder package existingPackage
-                || (!packageSupportedPlatform package && packageSupportedPlatform existingPackage)
-              )
-            then
-              existingPackage
-            else
-              package;
-        }
-      ) { } allPackages;
+      newestForEachMajorMinorVersion = lib.foldl'
+        (
+          newestPackages: package:
+            let
+              majorMinorVersion = lib.versions.majorMinor package.version;
+              existingPackage = newestPackages.${majorMinorVersion} or null;
+            in
+            newestPackages
+            // {
+              ${majorMinorVersion} =
+                # Only keep the existing package if it is newer than the one we are considering or it is supported on the
+                # current platform and the one we are considering is not.
+                if
+                  existingPackage != null
+                  && (
+                    packageOlder package existingPackage
+                    || (!packageSupportedPlatform package && packageSupportedPlatform existingPackage)
+                  )
+                then
+                  existingPackage
+                else
+                  package;
+            }
+        )
+        { }
+        allPackages;
     in
     # Sort the packages by version so the newest is first.
-    # NOTE: builtins.sort requires a strict weak ordering, so we must use versionOlder rather than versionAtLeast.
-    # See https://github.com/NixOS/nixpkgs/commit/9fd753ea84e5035b357a275324e7fd7ccfb1fc77.
+      # NOTE: builtins.sort requires a strict weak ordering, so we must use versionOlder rather than versionAtLeast.
+      # See https://github.com/NixOS/nixpkgs/commit/9fd753ea84e5035b357a275324e7fd7ccfb1fc77.
     lib.sort (lib.flip packageOlder) (lib.attrValues newestForEachMajorMinorVersion);
 
   extension =
@@ -124,7 +127,7 @@ let
       };
     in
     # NOTE: Must condition on the length of newestPackages to avoid non-total function lib.head aborting if
-    # newestPackages is empty.
+      # newestPackages is empty.
     lib.optionalAttrs (lib.length newestPackages > 0) (versionedDerivations // defaultDerivation);
 in
 extension

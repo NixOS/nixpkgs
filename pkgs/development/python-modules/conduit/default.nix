@@ -1,13 +1,12 @@
-{
-  lib,
-  stdenv,
-  pkgs,
-  buildPythonPackage,
-  setuptools,
-  numpy,
-  pip,
-
-  mpiSupport ? false,
+{ lib
+, stdenv
+, pkgs
+, buildPythonPackage
+, setuptools
+, numpy
+, pip
+, mpiSupport ? false
+,
 }:
 let
   conduit = pkgs.conduit.override { inherit mpiSupport; };

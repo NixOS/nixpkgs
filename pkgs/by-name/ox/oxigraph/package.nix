@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+,
 }:
 
 let

@@ -1,27 +1,26 @@
-{
-  stdenv,
-  lib,
-  callPackage,
-  fetchFromGitHub,
-  rustPlatform,
-  cmake,
-  yq,
-  protobuf,
-  installShellFiles,
-  librusty_v8 ? callPackage ./librusty_v8.nix {
+{ stdenv
+, lib
+, callPackage
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, yq
+, protobuf
+, installShellFiles
+, librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
-  },
-  libffi,
-  sqlite,
-  lld,
-  writableTmpDirAsHomeHook,
-
-  # Test deps
-  curl,
-  nodejs,
-  git,
-  python3,
-  esbuild,
+  }
+, libffi
+, sqlite
+, lld
+, writableTmpDirAsHomeHook
+, # Test deps
+  curl
+, nodejs
+, git
+, python3
+, esbuild
+,
 }:
 
 let

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  flex,
-  bison,
-  bc,
-  cpio,
-  perl,
-  elfutils,
-  python3,
-  variant ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, flex
+, bison
+, bc
+, cpio
+, perl
+, elfutils
+, python3
+, variant ? null
+,
 }:
 
 assert lib.elem variant [

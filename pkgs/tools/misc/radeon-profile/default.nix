@@ -1,12 +1,12 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  qtbase,
-  qtcharts,
-  qmake,
-  libXrandr,
-  libdrm,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, qtbase
+, qtcharts
+, qmake
+, libXrandr
+, libdrm
+,
 }:
 
 mkDerivation rec {

@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  pkg-config,
-  libjack2,
-  gettext,
-  intltool,
-  guile,
-  lilypond,
-  glib,
-  libxml2,
-  librsvg,
-  libsndfile,
-  aubio,
-  gtk3,
-  gtksourceview,
-  evince,
-  fluidsynth,
-  rubberband,
-  autoreconfHook,
-  gtk-doc,
-  portaudio,
-  portmidi,
-  fftw,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchgit
+, pkg-config
+, libjack2
+, gettext
+, intltool
+, guile
+, lilypond
+, glib
+, libxml2
+, librsvg
+, libsndfile
+, aubio
+, gtk3
+, gtksourceview
+, evince
+, fluidsynth
+, rubberband
+, autoreconfHook
+, gtk-doc
+, portaudio
+, portmidi
+, fftw
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

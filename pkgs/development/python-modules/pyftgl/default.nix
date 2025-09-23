@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  stdenv,
-  setuptools,
-  boost,
-  freetype,
-  ftgl,
-  libGLU,
-  libGL,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, stdenv
+, setuptools
+, boost
+, freetype
+, ftgl
+, libGLU
+, libGL
+, python
+,
 }:
 
 let

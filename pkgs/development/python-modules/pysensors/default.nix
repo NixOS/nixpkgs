@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  unittestCheckHook,
-  fetchFromGitHub,
-  lm_sensors,
+{ lib
+, buildPythonPackage
+, unittestCheckHook
+, fetchFromGitHub
+, lm_sensors
+,
 }:
 buildPythonPackage {
   version = "2017-07-13";

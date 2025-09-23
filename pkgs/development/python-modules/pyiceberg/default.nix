@@ -1,65 +1,61 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  poetry-core,
-  setuptools,
-
-  # dependencies
-  cachetools,
-  click,
-  fsspec,
-  google-auth,
-  mmh3,
-  pydantic,
-  pyparsing,
-  pyroaring,
-  ray,
-  requests,
-  rich,
-  sortedcontainers,
-  strictyaml,
-  tenacity,
-  zstandard,
-
-  # optional-dependencies
-  adlfs,
-  google-cloud-bigquery,
-  # bodo,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, poetry-core
+, setuptools
+, # dependencies
+  cachetools
+, click
+, fsspec
+, google-auth
+, mmh3
+, pydantic
+, pyparsing
+, pyroaring
+, ray
+, requests
+, rich
+, sortedcontainers
+, strictyaml
+, tenacity
+, zstandard
+, # optional-dependencies
+  adlfs
+, google-cloud-bigquery
+, # bodo,
   # daft,
-  duckdb,
-  pyarrow,
-  pyiceberg-core,
-  boto3,
-  huggingface-hub,
-  gcsfs,
-  thrift,
-  kerberos,
-  # thrift-sasl,
-  pandas,
-  # pyiceberg-core,
-  s3fs,
-  python-snappy,
-  psycopg2-binary,
-  sqlalchemy,
-
-  # tests
-  azure-core,
-  azure-storage-blob,
-  datafusion,
-  fastavro,
-  moto,
-  pyspark,
-  pytestCheckHook,
-  pytest-lazy-fixture,
-  pytest-mock,
-  pytest-timeout,
-  requests-mock,
-  pythonAtLeast,
+  duckdb
+, pyarrow
+, pyiceberg-core
+, boto3
+, huggingface-hub
+, gcsfs
+, thrift
+, kerberos
+, # thrift-sasl,
+  pandas
+, # pyiceberg-core,
+  s3fs
+, python-snappy
+, psycopg2-binary
+, sqlalchemy
+, # tests
+  azure-core
+, azure-storage-blob
+, datafusion
+, fastavro
+, moto
+, pyspark
+, pytestCheckHook
+, pytest-lazy-fixture
+, pytest-mock
+, pytest-timeout
+, requests-mock
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

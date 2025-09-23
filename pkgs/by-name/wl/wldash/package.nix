@@ -1,16 +1,16 @@
-{
-  lib,
-  alsa-lib,
-  dbus,
-  fetchFromGitHub,
-  fontconfig,
-  libpulseaudio,
-  libxkbcommon,
-  pkg-config,
-  rustPlatform,
-  wayland,
-  enableAlsaWidget ? true,
-  enablePulseaudioWidget ? true,
+{ lib
+, alsa-lib
+, dbus
+, fetchFromGitHub
+, fontconfig
+, libpulseaudio
+, libxkbcommon
+, pkg-config
+, rustPlatform
+, wayland
+, enableAlsaWidget ? true
+, enablePulseaudioWidget ? true
+,
 }:
 
 let

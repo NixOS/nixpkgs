@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python3,
-  bdftopcf,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, python3
+, bdftopcf
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

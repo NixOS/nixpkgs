@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  nodejs,
-  yarn,
-  yarnConfigHook,
-  yarnBuildHook,
-  fetchYarnDeps,
-  go,
-  versionCheckHook,
-  runCommandWith,
-  curl,
-  lightning-terminal,
-  _experimental-update-script-combinators,
-  gitUpdater,
-  nurl,
-  nix,
-  gitMinimal,
-  writeShellScript,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, nodejs
+, yarn
+, yarnConfigHook
+, yarnBuildHook
+, fetchYarnDeps
+, go
+, versionCheckHook
+, runCommandWith
+, curl
+, lightning-terminal
+, _experimental-update-script-combinators
+, gitUpdater
+, nurl
+, nix
+, gitMinimal
+, writeShellScript
+,
 }:
 
 buildGoModule rec {

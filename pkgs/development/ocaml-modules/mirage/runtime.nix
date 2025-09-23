@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  ipaddr,
-  functoria-runtime,
-  logs,
-  lwt,
-  alcotest,
+{ lib
+, buildDunePackage
+, ipaddr
+, functoria-runtime
+, logs
+, lwt
+, alcotest
+,
 }:
 
 buildDunePackage {

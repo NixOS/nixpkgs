@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  curl,
-  libxml2,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, curl
+, libxml2
+,
 }:
 
 stdenv.mkDerivation rec {

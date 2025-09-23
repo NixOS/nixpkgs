@@ -1,11 +1,10 @@
 # This module defines a global environment configuration and
 # a common configuration for all shells.
-{
-  config,
-  lib,
-  utils,
-  pkgs,
-  ...
+{ config
+, lib
+, utils
+, pkgs
+, ...
 }:
 let
 
@@ -17,7 +16,7 @@ let
 
       suffixedVariables = lib.flip lib.mapAttrs cfg.profileRelativeEnvVars (
         envVar: listSuffixes:
-        lib.concatMap (profile: map (suffix: "${profile}${suffix}") listSuffixes) cfg.profiles
+          lib.concatMap (profile: map (suffix: "${profile}${suffix}") listSuffixes) cfg.profiles
       );
 
       allVariables = lib.zipAttrsWith (n: lib.concatLists) [
@@ -25,9 +24,11 @@ let
         suffixedVariables
       ];
 
-      exportVariables = lib.mapAttrsToList (
-        n: v: ''export ${n}="${lib.concatStringsSep ":" v}"''
-      ) allVariables;
+      exportVariables = lib.mapAttrsToList
+        (
+          n: v: ''export ${n}="${lib.concatStringsSep ":" v}"''
+        )
+        allVariables;
     in
     lib.concatStringsSep "\n" exportVariables;
 in

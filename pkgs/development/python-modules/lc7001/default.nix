@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  pythonOlder,
-  poetry-core,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, pythonOlder
+, poetry-core
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

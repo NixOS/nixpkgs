@@ -1,23 +1,23 @@
-{
-  lib,
-  aiohttp,
-  anyio,
-  buildPythonPackage,
-  dirty-equals,
-  distro,
-  fetchFromGitHub,
-  hatch-fancy-pypi-readme,
-  hatchling,
-  httpx-aiohttp,
-  httpx,
-  nest-asyncio,
-  pydantic,
-  pytest-asyncio,
-  pytest-xdist,
-  pytestCheckHook,
-  respx,
-  sniffio,
-  typing-extensions,
+{ lib
+, aiohttp
+, anyio
+, buildPythonPackage
+, dirty-equals
+, distro
+, fetchFromGitHub
+, hatch-fancy-pypi-readme
+, hatchling
+, httpx-aiohttp
+, httpx
+, nest-asyncio
+, pydantic
+, pytest-asyncio
+, pytest-xdist
+, pytestCheckHook
+, respx
+, sniffio
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

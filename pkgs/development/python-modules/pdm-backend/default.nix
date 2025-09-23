@@ -1,18 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  # propagates
-  importlib-metadata,
-
-  # tests
-  editables,
-  gitMinimal,
-  mercurial,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, # propagates
+  importlib-metadata
+, # tests
+  editables
+, gitMinimal
+, mercurial
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

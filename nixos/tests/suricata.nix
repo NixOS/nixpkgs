@@ -26,8 +26,8 @@
         settings = {
           vars.address-groups.HOME_NET = "192.168.1.0/24";
           unix-command.enabled = true;
-          outputs = [ { fast.enabled = true; } ];
-          af-packet = [ { interface = "eth1"; } ];
+          outputs = [{ fast.enabled = true; }];
+          af-packet = [{ interface = "eth1"; }];
           classification-file = "${pkgs.suricata}/etc/suricata/classification.config";
         };
       };

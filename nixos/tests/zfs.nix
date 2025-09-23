@@ -1,7 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -9,11 +9,11 @@ with import ../lib/testing-python.nix { inherit system pkgs; };
 let
 
   makeZfsTest =
-    {
-      kernelPackages,
-      enableSystemdStage1 ? false,
-      zfsPackage,
-      extraTest ? "",
+    { kernelPackages
+    , enableSystemdStage1 ? false
+    , zfsPackage
+    , extraTest ? ""
+    ,
     }:
     makeTest {
       name = zfsPackage.kernelModuleAttribute;
@@ -22,11 +22,10 @@ let
       };
 
       nodes.machine =
-        {
-          config,
-          pkgs,
-          lib,
-          ...
+        { config
+        , pkgs
+        , lib
+        , ...
         }:
         let
           usersharePath = "/var/lib/samba/usershares";

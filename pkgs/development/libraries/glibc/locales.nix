@@ -7,17 +7,17 @@
   https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED
 */
 
-{
-  lib,
-  stdenv,
-  buildPackages,
-  callPackage,
-  writeText,
-  glibc,
-  allLocales ? true,
-  locales ? [ "en_US.UTF-8/UTF-8" ],
-  linuxHeaders,
-  withLinuxHeaders ? !stdenv.cc.isGNU,
+{ lib
+, stdenv
+, buildPackages
+, callPackage
+, writeText
+, glibc
+, allLocales ? true
+, locales ? [ "en_US.UTF-8/UTF-8" ]
+, linuxHeaders
+, withLinuxHeaders ? !stdenv.cc.isGNU
+,
 }:
 
 (callPackage ./common.nix

@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  qtbase,
-  qttools,
-  qtsvg,
-  qt5compat,
-  opencascade-occt,
-  libGLU,
-  cmake,
-  wrapQtAppsHook,
-  rustPlatform,
-  cargo,
-  rustc,
+{ stdenv
+, lib
+, fetchFromGitHub
+, qtbase
+, qttools
+, qtsvg
+, qt5compat
+, opencascade-occt
+, libGLU
+, cmake
+, wrapQtAppsHook
+, rustPlatform
+, cargo
+, rustc
+,
 }:
 
 stdenv.mkDerivation rec {

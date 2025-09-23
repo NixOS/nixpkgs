@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  make,
-  bsdSetupHook,
-  freebsdSetupHook,
+{ lib
+, stdenv
+, mkDerivation
+, make
+, bsdSetupHook
+, freebsdSetupHook
+,
 }:
 
 mkDerivation {

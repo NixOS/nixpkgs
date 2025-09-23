@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gtest,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gtest
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

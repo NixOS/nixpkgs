@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  callPackage,
-  gitUpdater,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, callPackage
+, gitUpdater
+,
 }:
 
 buildGoModule rec {

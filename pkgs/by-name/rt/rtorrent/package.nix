@@ -1,22 +1,22 @@
-{
-  autoreconfHook,
-  cppunit,
-  curl,
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
-  libtool,
-  libtorrent-rakshasa,
-  lua5_4_compat,
-  ncurses,
-  nixosTests,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  stdenv,
-  versionCheckHook,
-  withLua ? false,
-  zlib,
+{ autoreconfHook
+, cppunit
+, curl
+, fetchFromGitHub
+, installShellFiles
+, lib
+, libtool
+, libtorrent-rakshasa
+, lua5_4_compat
+, ncurses
+, nixosTests
+, nix-update-script
+, openssl
+, pkg-config
+, stdenv
+, versionCheckHook
+, withLua ? false
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

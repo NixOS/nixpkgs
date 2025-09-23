@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  fmt,
-  alcotest,
-  bigstringaf,
+{ lib
+, buildDunePackage
+, fetchurl
+, fmt
+, alcotest
+, bigstringaf
+,
 }:
 
 buildDunePackage rec {

@@ -2,11 +2,10 @@
 # XXX: todo: support multiple upstream links
 # see http://yesican.chsoft.biz/lartc/MultihomedLinuxNetworking.html
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -43,12 +42,12 @@ let
   '';
 
   mkSetupNat =
-    {
-      iptables,
-      dest,
-      internalIPs,
-      forwardPorts,
-      externalIp,
+    { iptables
+    , dest
+    , internalIPs
+    , forwardPorts
+    , externalIp
+    ,
     }:
     ''
       # We can't match on incoming interface in POSTROUTING, so

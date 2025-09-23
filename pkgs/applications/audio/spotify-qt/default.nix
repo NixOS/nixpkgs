@@ -1,13 +1,13 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  cmake,
-  libxcb,
-  qtbase,
-  qtsvg,
-  wrapQtAppsHook,
-  procps,
+{ stdenv
+, fetchFromGitHub
+, lib
+, cmake
+, libxcb
+, qtbase
+, qtsvg
+, wrapQtAppsHook
+, procps
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

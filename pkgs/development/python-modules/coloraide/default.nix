@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, typing-extensions
+,
 }:
 let
   pname = "coloraide";

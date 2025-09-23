@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  cmake,
-  setuptools,
-  xrootd,
+{ lib
+, buildPythonPackage
+, cmake
+, setuptools
+, xrootd
+,
 }:
 
 buildPythonPackage rec {

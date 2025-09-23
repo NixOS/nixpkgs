@@ -1,8 +1,7 @@
-{
-  hostPkgs,
-  lib,
-  withNg,
-  ...
+{ hostPkgs
+, lib
+, withNg
+, ...
 }:
 {
   name = "nixos-rebuild-specialisations";

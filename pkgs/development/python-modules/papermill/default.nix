@@ -1,41 +1,37 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  ansicolors,
-  click,
-  entrypoints,
-  nbclient,
-  nbformat,
-  pyyaml,
-  requests,
-  tenacity,
-  tqdm,
-  pythonAtLeast,
-  aiohttp,
-
-  # optional-dependencies
-  azure-datalake-store,
-  azure-identity,
-  azure-storage-blob,
-  gcsfs,
-  pygithub,
-  pyarrow,
-  boto3,
-
-  # tests
-  ipykernel,
-  moto,
-  pytest-mock,
-  pytestCheckHook,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  ansicolors
+, click
+, entrypoints
+, nbclient
+, nbformat
+, pyyaml
+, requests
+, tenacity
+, tqdm
+, pythonAtLeast
+, aiohttp
+, # optional-dependencies
+  azure-datalake-store
+, azure-identity
+, azure-storage-blob
+, gcsfs
+, pygithub
+, pyarrow
+, boto3
+, # tests
+  ipykernel
+, moto
+, pytest-mock
+, pytestCheckHook
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

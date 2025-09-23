@@ -1,18 +1,18 @@
-{
-  lib,
-  bash,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  setuptools,
-  discordpy,
-  click,
-  braceexpand,
-  import-expression,
-  tabulate,
-  pytestCheckHook,
-  pytest-asyncio,
-  youtube-dl,
+{ lib
+, bash
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, setuptools
+, discordpy
+, click
+, braceexpand
+, import-expression
+, tabulate
+, pytestCheckHook
+, pytest-asyncio
+, youtube-dl
+,
 }:
 buildPythonPackage rec {
   pname = "jishaku";

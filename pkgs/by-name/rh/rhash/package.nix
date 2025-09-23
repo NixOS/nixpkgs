@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  which,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  gettext,
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, enableStatic ? stdenv.hostPlatform.isStatic
+, gettext
+,
 }:
 
 stdenv.mkDerivation rec {

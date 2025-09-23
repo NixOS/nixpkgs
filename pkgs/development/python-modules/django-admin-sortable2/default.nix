@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  django,
+{ lib
+, buildNpmPackage
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, django
+,
 }:
 let
   pname = "django-admin-sortable2";

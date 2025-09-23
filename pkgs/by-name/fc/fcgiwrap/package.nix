@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  systemd,
-  fcgi,
-  autoreconfHook,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, systemd
+, fcgi
+, autoreconfHook
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

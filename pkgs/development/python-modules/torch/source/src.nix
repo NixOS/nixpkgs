@@ -1,8 +1,8 @@
-{
-  version,
-  fetchFromGitLab,
-  fetchFromGitHub,
-  runCommand,
+{ version
+, fetchFromGitLab
+, fetchFromGitHub
+, runCommand
+,
 }:
 assert version == "2.8.0";
 (rec {

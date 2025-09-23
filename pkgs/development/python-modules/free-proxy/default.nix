@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  pip-chill,
-  lxml,
-  requests,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, pip-chill
+, lxml
+, requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  expat,
-  libmysqlclient,
-  enableXmlpipe2 ? false,
-  enableMysql ? true,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, expat
+, libmysqlclient
+, enableXmlpipe2 ? false
+, enableMysql ? true
+,
 }:
 
 stdenv.mkDerivation rec {

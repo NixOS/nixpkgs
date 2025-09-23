@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  libtool,
-  openssl,
-  pkg-config,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, libtool
+, openssl
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

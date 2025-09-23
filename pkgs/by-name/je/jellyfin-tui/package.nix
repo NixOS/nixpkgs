@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  mpv,
-  nix-update-script,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, mpv
+, nix-update-script
+, writableTmpDirAsHomeHook
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

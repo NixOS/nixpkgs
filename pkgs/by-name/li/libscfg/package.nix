@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromSourcehut,
-  meson,
-  ninja,
-  pkg-config,
-  wayland,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromSourcehut
+, meson
+, ninja
+, pkg-config
+, wayland
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

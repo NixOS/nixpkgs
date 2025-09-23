@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  atf,
-  autoreconfHook,
-  lutok,
-  pkg-config,
-  sqlite,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, atf
+, autoreconfHook
+, lutok
+, pkg-config
+, sqlite
+, unstableGitUpdater
+,
 }:
 
 let

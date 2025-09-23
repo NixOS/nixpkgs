@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  cargo,
-  curl,
-  fd,
-  fzf,
-  git,
-  gnumake,
-  gnused,
-  gnutar,
-  gzip,
-  lua-language-server,
-  neovim,
-  neovim-node-client,
-  nodejs,
-  ripgrep,
-  tree-sitter,
-  unzip,
-  nvimAlias ? false,
-  viAlias ? false,
-  vimAlias ? false,
-  globalConfig ? "",
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, cargo
+, curl
+, fd
+, fzf
+, git
+, gnumake
+, gnused
+, gnutar
+, gzip
+, lua-language-server
+, neovim
+, neovim-node-client
+, nodejs
+, ripgrep
+, tree-sitter
+, unzip
+, nvimAlias ? false
+, viAlias ? false
+, vimAlias ? false
+, globalConfig ? ""
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  approvaltests,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, approvaltests
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage {

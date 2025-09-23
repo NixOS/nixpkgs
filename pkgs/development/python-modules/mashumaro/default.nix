@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  ciso8601,
-  fetchFromGitHub,
-  msgpack,
-  orjson,
-  pendulum,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  tomli,
-  tomli-w,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, ciso8601
+, fetchFromGitHub
+, msgpack
+, orjson
+, pendulum
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools
+, tomli
+, tomli-w
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

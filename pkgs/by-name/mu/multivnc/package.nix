@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  wxGTK32,
-  gtk3,
-  zlib,
-  libjpeg,
-  libvncserver,
-  cmake,
-  pkg-config,
-  libsysprof-capture,
-  pcre2,
-  util-linux,
-  libselinux,
-  libsepol,
-  libthai,
-  libdatrie,
-  xorg,
-  lerc,
-  libxkbcommon,
-  libepoxy,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, wxGTK32
+, gtk3
+, zlib
+, libjpeg
+, libvncserver
+, cmake
+, pkg-config
+, libsysprof-capture
+, pcre2
+, util-linux
+, libselinux
+, libsepol
+, libthai
+, libdatrie
+, xorg
+, lerc
+, libxkbcommon
+, libepoxy
+, wrapGAppsHook3
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  electron,
-  dpkg,
-  makeWrapper,
-  commandLineArgs ? "",
+{ lib
+, stdenv
+, fetchurl
+, electron
+, dpkg
+, makeWrapper
+, commandLineArgs ? ""
+,
 }:
 let
   sources = import ./sources.nix;

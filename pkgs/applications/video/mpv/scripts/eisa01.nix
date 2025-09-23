@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  buildLua,
-  xclip,
+{ lib
+, fetchFromGitHub
+, unstableGitUpdater
+, buildLua
+, xclip
+,
 }:
 
 let

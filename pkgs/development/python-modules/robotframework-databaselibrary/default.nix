@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  robotframework,
-  robotframework-assertion-engine,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, robotframework
+, robotframework-assertion-engine
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

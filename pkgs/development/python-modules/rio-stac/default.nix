@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build system
-  flit,
-
-  # dependencies
-  pystac,
-  rasterio,
-
-  # test
-  jsonschema,
-  pytestCheckHook,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build system
+  flit
+, # dependencies
+  pystac
+, rasterio
+, # test
+  jsonschema
+, pytestCheckHook
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

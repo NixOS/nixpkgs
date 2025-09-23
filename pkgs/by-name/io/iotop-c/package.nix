@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  ncurses,
-  pkg-config,
+{ stdenv
+, fetchFromGitHub
+, lib
+, ncurses
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

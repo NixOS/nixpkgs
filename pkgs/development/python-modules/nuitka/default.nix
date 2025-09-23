@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPyPy,
-  ordered-set,
-  python,
-  setuptools,
-  zstandard,
-  wheel,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPyPy
+, ordered-set
+, python
+, setuptools
+, zstandard
+, wheel
+,
 }:
 
 buildPythonPackage rec {

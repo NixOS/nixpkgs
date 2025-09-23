@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pnpm_9,
-  nodejs,
-  go_1_24,
-  git,
-  cacert,
-  nixosTests,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pnpm_9
+, nodejs
+, go_1_24
+, git
+, cacert
+, nixosTests
+,
 }:
 let
   pname = "homebox";

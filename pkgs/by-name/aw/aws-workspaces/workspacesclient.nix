@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  dpkg,
-  makeBinaryWrapper,
-  glib-networking,
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, makeBinaryWrapper
+, glib-networking
+,
 }:
 
 let

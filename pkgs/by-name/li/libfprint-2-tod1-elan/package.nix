@@ -1,12 +1,12 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchzip,
-  libfprint-tod,
-  openssl,
-  gusb,
-  glib,
-  autoPatchelfHook,
+{ stdenvNoCC
+, lib
+, fetchzip
+, libfprint-tod
+, openssl
+, gusb
+, glib
+, autoPatchelfHook
+,
 }:
 
 stdenvNoCC.mkDerivation {

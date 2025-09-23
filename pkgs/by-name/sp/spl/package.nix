@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchgit,
-  rustPlatform,
-  nix-update-script,
+{ lib
+, fetchgit
+, rustPlatform
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "spl";

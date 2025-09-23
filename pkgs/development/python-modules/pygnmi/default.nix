@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cryptography,
-  dictdiffer,
-  grpcio,
-  protobuf,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cryptography
+, dictdiffer
+, grpcio
+, protobuf
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

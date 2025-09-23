@@ -1,24 +1,29 @@
-{
-  monolithic ? true, # build monolithic amule
-  enableDaemon ? false, # build amule daemon
-  httpServer ? false, # build web interface for the daemon
-  client ? false, # build amule remote gui
-  fetchFromGitHub,
-  fetchpatch,
-  stdenv,
-  lib,
-  cmake,
-  zlib,
-  wxGTK32,
-  perl,
-  cryptopp,
-  libupnp,
-  boost186, # Not using boost leads to crashes with gtk3
-  gettext,
-  libpng,
-  pkg-config,
-  makeWrapper,
-  libX11,
+{ monolithic ? true
+, # build monolithic amule
+  enableDaemon ? false
+, # build amule daemon
+  httpServer ? false
+, # build web interface for the daemon
+  client ? false
+, # build amule remote gui
+  fetchFromGitHub
+, fetchpatch
+, stdenv
+, lib
+, cmake
+, zlib
+, wxGTK32
+, perl
+, cryptopp
+, libupnp
+, boost186
+, # Not using boost leads to crashes with gtk3
+  gettext
+, libpng
+, pkg-config
+, makeWrapper
+, libX11
+,
 }:
 
 # daemon and client are not build monolithic

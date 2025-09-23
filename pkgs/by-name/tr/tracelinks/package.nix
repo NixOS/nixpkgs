@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  help2man,
-  lib,
-  nix-update-script,
-  stdenv,
+{ fetchFromGitHub
+, help2man
+, lib
+, nix-update-script
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

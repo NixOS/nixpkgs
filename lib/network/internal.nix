@@ -1,5 +1,5 @@
-{
-  lib ? import ../.,
+{ lib ? import ../.
+,
 }:
 let
   inherit (builtins)
@@ -105,21 +105,22 @@ let
   */
   parseExpandedIpv6 =
     addr:
-    assert lib.assertMsg (
-      length addr == ipv6Pieces
-    ) "parseExpandedIpv6: expected list of integers with ${ipv6Pieces} elements";
-    let
-      u16FromHexStr =
-        hex:
-        let
-          parsed = trivial.fromHexString hex;
-        in
-        if 0 <= parsed && parsed <= ipv6PieceMaxValue then
-          parsed
-        else
-          throw "0x${hex} is not a valid u16 integer";
-    in
-    map (piece: u16FromHexStr piece) addr;
+      assert lib.assertMsg
+        (
+          length addr == ipv6Pieces
+        ) "parseExpandedIpv6: expected list of integers with ${ipv6Pieces} elements";
+      let
+        u16FromHexStr =
+          hex:
+          let
+            parsed = trivial.fromHexString hex;
+          in
+          if 0 <= parsed && parsed <= ipv6PieceMaxValue then
+            parsed
+          else
+            throw "0x${hex} is not a valid u16 integer";
+      in
+      map (piece: u16FromHexStr piece) addr;
 in
 let
   /**

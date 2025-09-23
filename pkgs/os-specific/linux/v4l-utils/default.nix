@@ -1,28 +1,28 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  glibc,
-  clang,
-  doxygen,
-  meson,
-  ninja,
-  pkg-config,
-  perl,
-  argp-standalone,
-  libjpeg,
-  json_c,
-  libbpf,
-  libelf,
-  udev,
-  udevCheckHook,
-  withUtils ? true,
-  withGUI ? true,
-  alsa-lib,
-  libGLU,
-  qt6Packages,
-  linuxHeaders,
-  buildPackages,
+{ stdenv
+, lib
+, fetchurl
+, glibc
+, clang
+, doxygen
+, meson
+, ninja
+, pkg-config
+, perl
+, argp-standalone
+, libjpeg
+, json_c
+, libbpf
+, libelf
+, udev
+, udevCheckHook
+, withUtils ? true
+, withGUI ? true
+, alsa-lib
+, libGLU
+, qt6Packages
+, linuxHeaders
+, buildPackages
+,
 }:
 
 # See libv4l in all-packages.nix for the libs only (overrides alsa, QT)

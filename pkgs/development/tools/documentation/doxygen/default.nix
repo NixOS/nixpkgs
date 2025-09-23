@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  python3,
-  flex,
-  bison,
-  qt5,
-  libiconv,
-  spdlog,
-  sqlite,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, python3
+, flex
+, bison
+, qt5
+, libiconv
+, spdlog
+, sqlite
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

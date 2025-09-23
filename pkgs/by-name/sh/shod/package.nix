@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeText,
-  fontconfig,
-  libX11,
-  libXft,
-  libXpm,
-  libXrandr,
-  libXrender,
-  conf ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeText
+, fontconfig
+, libX11
+, libXft
+, libXpm
+, libXrandr
+, libXrender
+, conf ? null
+,
 }:
 
 stdenv.mkDerivation rec {

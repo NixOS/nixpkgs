@@ -44,8 +44,8 @@ let
     ;
 
   generateMelpa = lib.makeOverridable (
-    {
-      archiveJson ? defaultArchive,
+    { archiveJson ? defaultArchive
+    ,
     }:
     let
       inherit (import ./libgenerated.nix lib self) melpaDerivation;
@@ -60,70 +60,71 @@ let
       );
 
       overrides =
-        lib.optionalAttrs (variant == "stable") {
+        lib.optionalAttrs (variant == "stable")
+          {
 
-          # upstream issue: missing file header
-          abridge-diff =
-            if super.abridge-diff.version == "0.1" then markBroken super.abridge-diff else super.abridge-diff;
+            # upstream issue: missing file header
+            abridge-diff =
+              if super.abridge-diff.version == "0.1" then markBroken super.abridge-diff else super.abridge-diff;
 
-          # upstream issue: missing file header
-          bufshow = markBroken super.bufshow;
+            # upstream issue: missing file header
+            bufshow = markBroken super.bufshow;
 
-          # upstream issue: missing file header
-          speech-tagger = markBroken super.speech-tagger;
+            # upstream issue: missing file header
+            speech-tagger = markBroken super.speech-tagger;
 
-          # upstream issue: missing file header
-          textmate = markBroken super.textmate;
+            # upstream issue: missing file header
+            textmate = markBroken super.textmate;
 
-          # upstream issue: missing file header
-          window-numbering = markBroken super.window-numbering;
+            # upstream issue: missing file header
+            window-numbering = markBroken super.window-numbering;
 
-          # upstream issue: missing file header
-          voca-builder = markBroken super.voca-builder;
+            # upstream issue: missing file header
+            voca-builder = markBroken super.voca-builder;
 
-          # upstream issue: missing file header
-          initsplit = markBroken super.initsplit;
+            # upstream issue: missing file header
+            initsplit = markBroken super.initsplit;
 
-          # upstream issue: missing file header
-          jsfmt = markBroken super.jsfmt;
+            # upstream issue: missing file header
+            jsfmt = markBroken super.jsfmt;
 
-          # upstream issue: missing file header
-          maxframe = markBroken super.maxframe;
+            # upstream issue: missing file header
+            maxframe = markBroken super.maxframe;
 
-          # upstream issue: missing file header
-          connection = markBroken super.connection;
+            # upstream issue: missing file header
+            connection = markBroken super.connection;
 
-          # upstream issue: missing file header
-          dictionary = markBroken super.dictionary;
+            # upstream issue: missing file header
+            dictionary = markBroken super.dictionary;
 
-          # upstream issue: missing file header
-          fold-dwim =
-            if super.fold-dwim.version == "1.2" then markBroken super.fold-dwim else super.fold-dwim;
+            # upstream issue: missing file header
+            fold-dwim =
+              if super.fold-dwim.version == "1.2" then markBroken super.fold-dwim else super.fold-dwim;
 
-          # upstream issue: missing file header
-          gl-conf-mode =
-            if super.gl-conf-mode.version == "0.3" then markBroken super.gl-conf-mode else super.gl-conf-mode;
+            # upstream issue: missing file header
+            gl-conf-mode =
+              if super.gl-conf-mode.version == "0.3" then markBroken super.gl-conf-mode else super.gl-conf-mode;
 
-          # upstream issue: missing file header
-          ligo-mode =
-            if super.ligo-mode.version == "0.3" then markBroken super.ligo-mode else super.ligo-mode;
+            # upstream issue: missing file header
+            ligo-mode =
+              if super.ligo-mode.version == "0.3" then markBroken super.ligo-mode else super.ligo-mode;
 
-          # upstream issue: missing file header
-          link = markBroken super.link;
+            # upstream issue: missing file header
+            link = markBroken super.link;
 
-          # upstream issue: missing file header
-          org-dp = if super.org-dp.version == "1" then markBroken super.org-dp else super.org-dp;
+            # upstream issue: missing file header
+            org-dp = if super.org-dp.version == "1" then markBroken super.org-dp else super.org-dp;
 
-          # upstream issue: missing file header
-          revbufs = if super.revbufs.version == "1.2" then markBroken super.revbufs else super.revbufs;
+            # upstream issue: missing file header
+            revbufs = if super.revbufs.version == "1.2" then markBroken super.revbufs else super.revbufs;
 
-          # upstream issue: missing file header
-          elmine = markBroken super.elmine;
+            # upstream issue: missing file header
+            elmine = markBroken super.elmine;
 
-          # upstream issue: missing file header
-          ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
+            # upstream issue: missing file header
+            ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
 
-        }
+          }
         // {
           # Expects bash to be at /bin/bash
           ac-rtags = ignoreCompilationError (fix-rtags super.ac-rtags); # elisp error
@@ -777,20 +778,21 @@ let
           # Build a helper executable that interacts with the macOS Dictionary.app
           osx-dictionary =
             if pkgs.stdenv.hostPlatform.isDarwin then
-              super.osx-dictionary.overrideAttrs (old: {
-                postBuild = (old.postBuild or "") + ''
-                  $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
-                '';
-                postInstall =
-                  (old.postInstall or "")
-                  + "\n"
-                  + ''
-                    outd=$out/share/emacs/site-lisp/elpa/osx-dictionary-*
-                    mkdir -p $out/bin
-                    install -m444 -t $out/bin osx-dictionary-cli
-                    rm $outd/osx-dictionary.m
+              super.osx-dictionary.overrideAttrs
+                (old: {
+                  postBuild = (old.postBuild or "") + ''
+                    $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
                   '';
-              })
+                  postInstall =
+                    (old.postInstall or "")
+                    + "\n"
+                    + ''
+                      outd=$out/share/emacs/site-lisp/elpa/osx-dictionary-*
+                      mkdir -p $out/bin
+                      install -m444 -t $out/bin osx-dictionary-cli
+                      rm $outd/osx-dictionary.m
+                    '';
+                })
             else
               super.osx-dictionary;
 

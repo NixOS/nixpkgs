@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  aiodns,
-  aiohttp,
-  cryptography,
-  defusedxml,
-  emoji,
-  fetchPypi,
-  gnupg,
-  pyasn1,
-  pyasn1-modules,
-  pytestCheckHook,
-  replaceVars,
-  rustPlatform,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, aiodns
+, aiohttp
+, cryptography
+, defusedxml
+, emoji
+, fetchPypi
+, gnupg
+, pyasn1
+, pyasn1-modules
+, pytestCheckHook
+, replaceVars
+, rustPlatform
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

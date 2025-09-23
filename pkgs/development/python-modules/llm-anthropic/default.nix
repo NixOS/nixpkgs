@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  llm,
-  llm-anthropic,
-  anthropic,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-recording,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, llm
+, llm-anthropic
+, anthropic
+, pytestCheckHook
+, pytest-asyncio
+, pytest-recording
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

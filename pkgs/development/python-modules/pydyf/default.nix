@@ -1,13 +1,13 @@
-{
-  pkgs,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  pillow,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
+{ pkgs
+, lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, pillow
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

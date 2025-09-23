@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  python3Packages,
-  adwaita-icon-theme,
-  gtk3,
-  wrapGAppsHook3,
-  gtksourceview3,
-  snapper,
-  gobject-introspection,
+{ lib
+, fetchFromGitHub
+, python3
+, python3Packages
+, adwaita-icon-theme
+, gtk3
+, wrapGAppsHook3
+, gtksourceview3
+, snapper
+, gobject-introspection
+,
 }:
 
 python3Packages.buildPythonApplication {

@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pygobject3,
-  xvfb-run,
-  gobject-introspection,
-  gtk3,
-  pythonOlder,
-  pytest,
-  setuptools,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pygobject3
+, xvfb-run
+, gobject-introspection
+, gtk3
+, pythonOlder
+, pytest
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

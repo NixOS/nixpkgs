@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  six,
-  paste,
-  setuptools,
-  pastedeploy,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, six
+, paste
+, setuptools
+, pastedeploy
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

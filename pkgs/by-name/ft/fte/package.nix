@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  perl,
-  libX11,
-  libXpm,
-  gpm,
-  ncurses,
-  slang,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, perl
+, libX11
+, libXpm
+, gpm
+, ncurses
+, slang
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,51 +1,51 @@
-{
-  stdenv,
-  lib,
-  buildPackages,
-  fetchurl,
-  pkg-config,
-  gnome,
-  _experimental-update-script-combinators,
-  python3,
-  gobject-introspection,
-  gettext,
-  libsoup_3,
-  libxml2,
-  libsecret,
-  icu,
-  sqlite,
-  libcanberra-gtk3,
-  p11-kit,
-  db,
-  nspr,
-  nss,
-  libical,
-  gperf,
-  wrapGAppsHook3,
-  glib-networking,
-  gsettings-desktop-schemas,
-  vala,
-  cmake,
-  ninja,
-  libkrb5,
-  openldap,
-  enableOAuth2 ? stdenv.hostPlatform.isLinux,
-  webkitgtk_4_1,
-  webkitgtk_6_0,
-  json-glib,
-  glib,
-  gtk3,
-  gtk4,
-  withGtk3 ? true,
-  withGtk4 ? false,
-  libphonenumber,
-  libuuid,
-  gnome-online-accounts,
-  libgweather,
-  boost,
-  protobuf,
-  libiconv,
-  makeHardcodeGsettingsPatch,
+{ stdenv
+, lib
+, buildPackages
+, fetchurl
+, pkg-config
+, gnome
+, _experimental-update-script-combinators
+, python3
+, gobject-introspection
+, gettext
+, libsoup_3
+, libxml2
+, libsecret
+, icu
+, sqlite
+, libcanberra-gtk3
+, p11-kit
+, db
+, nspr
+, nss
+, libical
+, gperf
+, wrapGAppsHook3
+, glib-networking
+, gsettings-desktop-schemas
+, vala
+, cmake
+, ninja
+, libkrb5
+, openldap
+, enableOAuth2 ? stdenv.hostPlatform.isLinux
+, webkitgtk_4_1
+, webkitgtk_6_0
+, json-glib
+, glib
+, gtk3
+, gtk4
+, withGtk3 ? true
+, withGtk4 ? false
+, libphonenumber
+, libuuid
+, gnome-online-accounts
+, libgweather
+, boost
+, protobuf
+, libiconv
+, makeHardcodeGsettingsPatch
+,
 }:
 
 stdenv.mkDerivation rec {

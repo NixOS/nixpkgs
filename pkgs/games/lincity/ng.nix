@@ -1,27 +1,27 @@
-{
-  stdenv,
-  SDL2,
-  SDL2_gfx,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
-  cmake,
-  fetchFromGitHub,
-  lib,
-  libGL,
-  libGLU,
-  libwebp,
-  libtiff,
-  libX11,
-  libxml2,
-  libxmlxx5,
-  libxslt,
-  physfs,
-  pkg-config,
-  xorgproto,
-  zlib,
-  gettext,
-  include-what-you-use,
+{ stdenv
+, SDL2
+, SDL2_gfx
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, cmake
+, fetchFromGitHub
+, lib
+, libGL
+, libGLU
+, libwebp
+, libtiff
+, libX11
+, libxml2
+, libxmlxx5
+, libxslt
+, physfs
+, pkg-config
+, xorgproto
+, zlib
+, gettext
+, include-what-you-use
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

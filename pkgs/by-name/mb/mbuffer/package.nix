@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  which,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

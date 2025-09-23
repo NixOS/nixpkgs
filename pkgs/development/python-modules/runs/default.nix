@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  xmod,
-  pytestCheckHook,
-  tdir,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, xmod
+, pytestCheckHook
+, tdir
+,
 }:
 
 buildPythonPackage rec {

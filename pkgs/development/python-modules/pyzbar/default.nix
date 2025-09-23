@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numpy,
-  pillow,
-  zbar,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, pillow
+, zbar
+, pytestCheckHook
+, setuptools
+,
 }:
 
 let

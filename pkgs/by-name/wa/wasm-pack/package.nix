@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  cmake,
-  pkg-config,
-  zstd,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, pkg-config
+, zstd
+,
 }:
 
 rustPlatform.buildRustPackage rec {

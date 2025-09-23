@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  rustPlatform,
-  pytestCheckHook,
-  pytest-benchmark,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, rustPlatform
+, pytestCheckHook
+, pytest-benchmark
+, nix-update-script
+,
 }:
 let
   pname = "fastcrc";

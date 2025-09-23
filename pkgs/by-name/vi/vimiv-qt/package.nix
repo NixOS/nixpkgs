@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  qt5,
-  stdenv,
-  installShellFiles,
+{ lib
+, fetchFromGitHub
+, python3
+, qt5
+, stdenv
+, installShellFiles
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

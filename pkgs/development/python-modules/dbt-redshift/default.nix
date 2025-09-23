@@ -1,15 +1,15 @@
-{
-  lib,
-  agate,
-  boto3,
-  buildPythonPackage,
-  dbt-core,
-  dbt-postgres,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  redshift-connector,
-  setuptools,
+{ lib
+, agate
+, boto3
+, buildPythonPackage
+, dbt-core
+, dbt-postgres
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, redshift-connector
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

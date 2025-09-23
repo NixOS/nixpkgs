@@ -1,26 +1,26 @@
-{
-  config,
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  python,
-  pythonOlder,
-  pythonAtLeast,
-  zlib,
-  setuptools,
-  cudaSupport ? config.cudaSupport or false,
-  cudaPackages,
-  addDriverRunpath,
-  # runtime dependencies
-  httpx,
-  numpy,
-  protobuf,
-  pillow,
-  decorator,
-  astor,
-  opt-einsum,
-  typing-extensions,
+{ config
+, lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, python
+, pythonOlder
+, pythonAtLeast
+, zlib
+, setuptools
+, cudaSupport ? config.cudaSupport or false
+, cudaPackages
+, addDriverRunpath
+, # runtime dependencies
+  httpx
+, numpy
+, protobuf
+, pillow
+, decorator
+, astor
+, opt-einsum
+, typing-extensions
+,
 }:
 
 let

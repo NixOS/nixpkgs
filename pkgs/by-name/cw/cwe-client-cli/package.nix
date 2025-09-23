@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  glib,
-  dbus,
-  openssl_3,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, glib
+, dbus
+, openssl_3
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cwe-client-cli";

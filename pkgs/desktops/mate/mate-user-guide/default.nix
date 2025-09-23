@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  itstool,
-  libxml2,
-  yelp,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, itstool
+, libxml2
+, yelp
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

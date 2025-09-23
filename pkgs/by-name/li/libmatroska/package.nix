@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libebml,
-  nix-update-script,
-  pkg-config,
-  testers,
-  validatePkgConfig,
-  libmatroska,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libebml
+, nix-update-script
+, pkg-config
+, testers
+, validatePkgConfig
+, libmatroska
+,
 }:
 
 stdenv.mkDerivation rec {

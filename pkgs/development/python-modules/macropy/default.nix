@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  isPy27,
-  pythonAtLeast,
-  pinqSupport ? false,
-  sqlalchemy,
-  pyxlSupport ? false,
-  pyxl3,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, isPy27
+, pythonAtLeast
+, pinqSupport ? false
+, sqlalchemy
+, pyxlSupport ? false
+, pyxl3
+,
 }:
 
 buildPythonPackage rec {

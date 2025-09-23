@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  libftdi,
-  libusb1,
-  pkg-config,
+{ stdenv
+, lib
+, fetchFromGitHub
+, libftdi
+, libusb1
+, pkg-config
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
 

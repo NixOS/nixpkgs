@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  poetry-core,
-  textfsm,
-  invoke,
-  pytestCheckHook,
-  ruamel-yaml,
-  toml,
-  yamllint,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, poetry-core
+, textfsm
+, invoke
+, pytestCheckHook
+, ruamel-yaml
+, toml
+, yamllint
+,
 }:
 
 buildPythonPackage rec {

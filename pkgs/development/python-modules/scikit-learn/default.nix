@@ -1,25 +1,23 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  cython,
-  gfortran,
-  meson-python,
-  numpy,
-  scipy,
-
-  # native dependencies
-  glibcLocales,
-  llvmPackages,
-  pytestCheckHook,
-  pytest-xdist,
-  pillow,
-  joblib,
-  threadpoolctl,
-  pythonOlder,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  cython
+, gfortran
+, meson-python
+, numpy
+, scipy
+, # native dependencies
+  glibcLocales
+, llvmPackages
+, pytestCheckHook
+, pytest-xdist
+, pillow
+, joblib
+, threadpoolctl
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }@moduleArgs:
 let
   inherit (lib)
@@ -35,9 +34,11 @@ let
 
   # A list of attrnames is coerced into an attrset of bools by
   # setting the values to true.
-  attrNamesToTrue = types.coercedTo (types.listOf types.str) (
-    enabledList: lib.genAttrs enabledList (_attrName: true)
-  ) (types.attrsOf types.bool);
+  attrNamesToTrue = types.coercedTo (types.listOf types.str)
+    (
+      enabledList: lib.genAttrs enabledList (_attrName: true)
+    )
+    (types.attrsOf types.bool);
 
   addCheckDesc =
     desc: elemType: check:
@@ -50,13 +51,13 @@ let
 
   fileSystems =
     if fileSystems' ? result then
-      # use topologically sorted fileSystems everywhere
+    # use topologically sorted fileSystems everywhere
       fileSystems'.result
     else
-      # the assertion below will catch this,
-      # but we fall back to the original order
-      # anyway so that other modules could check
-      # their assertions too
+    # the assertion below will catch this,
+    # but we fall back to the original order
+    # anyway so that other modules could check
+    # their assertions too
       (attrValues config.fileSystems);
 
   specialFSTypes = [
@@ -251,9 +252,11 @@ let
   makeSpecialMounts =
     mounts:
     pkgs.writeText "mounts.sh" (
-      concatMapStringsSep "\n" (mount: ''
-        specialMount "${mount.device}" "${mount.mountPoint}" "${concatStringsSep "," mount.options}" "${mount.fsType}"
-      '') mounts
+      concatMapStringsSep "\n"
+        (mount: ''
+          specialMount "${mount.device}" "${mount.mountPoint}" "${concatStringsSep "," mount.options}" "${mount.fsType}"
+        '')
+        mounts
     );
 
   makeFstabEntries =
@@ -294,32 +297,34 @@ let
         fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
     in
     fstabFileSystems:
-    { }:
-    concatMapStrings (
-      fs:
+    {}:
+    concatMapStrings
       (
-        if fs.device != null then
-          escape fs.device
-        else
-          throw "No device specified for mount point ‘${fs.mountPoint}’."
+        fs:
+        (
+          if fs.device != null then
+            escape fs.device
+          else
+            throw "No device specified for mount point ‘${fs.mountPoint}’."
+        )
+        + " "
+        + escape fs.mountPoint
+        + " "
+        + fs.fsType
+        + " "
+        + escape (builtins.concatStringsSep "," fs.options)
+        + " 0 "
+        + (
+          if skipCheck fs then
+            "0"
+          else if fs.mountPoint == "/" then
+            "1"
+          else
+            "2"
+        )
+        + "\n"
       )
-      + " "
-      + escape fs.mountPoint
-      + " "
-      + fs.fsType
-      + " "
-      + escape (builtins.concatStringsSep "," fs.options)
-      + " 0 "
-      + (
-        if skipCheck fs then
-          "0"
-        else if fs.mountPoint == "/" then
-          "1"
-        else
-          "2"
-      )
-      + "\n"
-    ) fstabFileSystems;
+      fstabFileSystems;
 
   initrdFstab = pkgs.writeText "initrd-fstab" (
     makeFstabEntries (filter utils.fsNeededForBoot fileSystems) { }
@@ -475,15 +480,17 @@ in
           '';
         }
       ]
-      ++ lib.map (fs: {
-        assertion = fs.label != null -> fs.device == "/dev/disk/by-label/${escape fs.label}";
-        message = ''
-          The filesystem with mount point ${fs.mountPoint} has its label and device set to inconsistent values:
-            label: ${toString fs.label}
-            device: ${toString fs.device}
-          'filesystems.<name>.label' and 'filesystems.<name>.device' are mutually exclusive. Please set only one.
-        '';
-      }) fileSystems;
+      ++ lib.map
+        (fs: {
+          assertion = fs.label != null -> fs.device == "/dev/disk/by-label/${escape fs.label}";
+          message = ''
+            The filesystem with mount point ${fs.mountPoint} has its label and device set to inconsistent values:
+              label: ${toString fs.label}
+              device: ${toString fs.device}
+            'filesystems.<name>.label' and 'filesystems.<name>.device' are mutually exclusive. Please set only one.
+          '';
+        })
+        fileSystems;
 
     # Export for use in other modules
     system.build.fileSystems = fileSystems;
@@ -506,8 +513,8 @@ in
             sw.options
             ++ optional (sw.priority != null) "pri=${toString sw.priority}"
             ++
-              optional (sw.discardPolicy != null)
-                "discard${optionalString (sw.discardPolicy != "both") "=${toString sw.discardPolicy}"}"
+            optional (sw.discardPolicy != null)
+              "discard${optionalString (sw.discardPolicy != "both") "=${toString sw.discardPolicy}"}"
           );
       in
       ''

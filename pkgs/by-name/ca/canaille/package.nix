@@ -1,10 +1,10 @@
-{
-  lib,
-  python3,
-  fetchFromGitLab,
-  fetchpatch,
-  openldap,
-  nixosTests,
+{ lib
+, python3
+, fetchFromGitLab
+, fetchpatch
+, openldap
+, nixosTests
+,
 }:
 
 let

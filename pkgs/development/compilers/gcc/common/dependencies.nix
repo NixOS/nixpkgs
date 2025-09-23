@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  version,
-  buildPackages,
-  targetPackages,
-  texinfo,
-  which,
-  gettext,
-  gnused,
-  patchelf,
-  gmp,
-  mpfr,
-  libmpc,
-  libucontext ? null,
-  libxcrypt ? null,
-  isSnapshot ? false,
-  isl ? null,
-  zlib ? null,
-  gnat-bootstrap ? null,
-  flex ? null,
-  perl ? null,
-  langAda ? false,
-  langGo ? false,
-  langRust ? false,
-  cargo,
-  withoutTargetLibc ? null,
-  threadsCross ? null,
+{ lib
+, stdenv
+, version
+, buildPackages
+, targetPackages
+, texinfo
+, which
+, gettext
+, gnused
+, patchelf
+, gmp
+, mpfr
+, libmpc
+, libucontext ? null
+, libxcrypt ? null
+, isSnapshot ? false
+, isl ? null
+, zlib ? null
+, gnat-bootstrap ? null
+, flex ? null
+, perl ? null
+, langAda ? false
+, langGo ? false
+, langRust ? false
+, cargo
+, withoutTargetLibc ? null
+, threadsCross ? null
+,
 }:
 
 let
@@ -80,7 +80,8 @@ in
   ++ optionals (zlib != null) [ zlib ]
   ++ optionals (langGo && stdenv.hostPlatform.isMusl) [ libucontext ];
 
-  depsTargetTarget = optionals (
-    !withoutTargetLibc && threadsCross != { } && threadsCross.package != null
-  ) [ threadsCross.package ];
+  depsTargetTarget = optionals
+    (
+      !withoutTargetLibc && threadsCross != { } && threadsCross.package != null
+    ) [ threadsCross.package ];
 }

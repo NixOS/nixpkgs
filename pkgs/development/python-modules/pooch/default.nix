@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  isPy27,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  wheel,
-  pytestCheckHook,
-  packaging,
-  platformdirs,
-  requests,
-  tqdm,
-  paramiko,
-  xxhash,
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, setuptools
+, setuptools-scm
+, wheel
+, pytestCheckHook
+, packaging
+, platformdirs
+, requests
+, tqdm
+, paramiko
+, xxhash
+,
 }:
 
 buildPythonPackage rec {

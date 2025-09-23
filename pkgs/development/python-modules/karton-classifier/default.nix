@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  chardet,
-  fetchFromGitHub,
-  setuptools,
-  karton-core,
-  pytestCheckHook,
-  python-magic,
-  yara-python,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, chardet
+, fetchFromGitHub
+, setuptools
+, karton-core
+, pytestCheckHook
+, python-magic
+, yara-python
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

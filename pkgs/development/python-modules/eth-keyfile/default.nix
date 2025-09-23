@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  # dependencies
-  eth-keys,
-  eth-utils,
-  pycryptodome,
-  py-ecc,
-  # nativeCheckInputs
-  pytestCheckHook,
-  pydantic,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, # dependencies
+  eth-keys
+, eth-utils
+, pycryptodome
+, py-ecc
+, # nativeCheckInputs
+  pytestCheckHook
+, pydantic
+,
 }:
 
 buildPythonPackage rec {

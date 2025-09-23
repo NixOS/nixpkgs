@@ -1,16 +1,16 @@
-{
-  fetchFromGitHub,
-  nodePackages,
-  makeBinaryWrapper,
-  nodejs,
-  pnpm_10,
-  python3,
-  stdenv,
-  unixtools,
-  cctools,
-  lib,
-  nixosTests,
-  enableLocalIcons ? false,
+{ fetchFromGitHub
+, nodePackages
+, makeBinaryWrapper
+, nodejs
+, pnpm_10
+, python3
+, stdenv
+, unixtools
+, cctools
+, lib
+, nixosTests
+, enableLocalIcons ? false
+,
 }:
 let
   dashboardIcons = fetchFromGitHub {

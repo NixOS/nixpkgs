@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  freeimage,
-  libGL,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, freeimage
+, libGL
+,
 }:
 
 stdenv.mkDerivation rec {

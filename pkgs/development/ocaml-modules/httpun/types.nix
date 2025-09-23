@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  faraday,
+{ lib
+, buildDunePackage
+, fetchurl
+, faraday
+,
 }:
 
 buildDunePackage rec {

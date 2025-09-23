@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 
 let
@@ -93,7 +92,8 @@ in
       package = mkPackageOption pkgs [
         "zabbix"
         "web"
-      ] { };
+      ]
+        { };
 
       server = {
         port = mkOption {

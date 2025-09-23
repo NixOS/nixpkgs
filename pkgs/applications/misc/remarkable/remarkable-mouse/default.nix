@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchPypi,
-  libevdev,
-  paramiko,
-  pynput,
-  screeninfo,
+{ lib
+, buildPythonApplication
+, fetchPypi
+, libevdev
+, paramiko
+, pynput
+, screeninfo
+,
 }:
 
 buildPythonApplication rec {

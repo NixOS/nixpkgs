@@ -1,18 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeWrapper,
-  xar,
-  cpio,
-  callPackage,
-  nixosTests,
-  buildFHSEnv,
-
-  # Support pulseaudio by default
-  pulseaudioSupport ? true,
-
-  # Whether to support XDG portals at all
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, xar
+, cpio
+, callPackage
+, nixosTests
+, buildFHSEnv
+, # Support pulseaudio by default
+  pulseaudioSupport ? true
+, # Whether to support XDG portals at all
   xdgDesktopPortalSupport ? (
     plasma6XdgDesktopPortalSupport
     || lxqtXdgDesktopPortalSupport
@@ -20,32 +17,25 @@
     || hyprlandXdgDesktopPortalSupport
     || wlrXdgDesktopPortalSupport
     || xappXdgDesktopPortalSupport
-  ),
-
-  # This is Plasma 6 (KDE) XDG portal support
-  plasma6XdgDesktopPortalSupport ? false,
-
-  # This is LXQT XDG portal support
-  lxqtXdgDesktopPortalSupport ? false,
-
-  # This is GNOME XDG portal support
-  gnomeXdgDesktopPortalSupport ? false,
-
-  # This is Hyprland XDG portal support
-  hyprlandXdgDesktopPortalSupport ? false,
-
-  # This is `wlroots` XDG portal support
-  wlrXdgDesktopPortalSupport ? false,
-
-  # This is Xapp XDG portal support, used for GTK and various Cinnamon/MATE/Xfce4 infrastructure.
-  xappXdgDesktopPortalSupport ? false,
-
-  # This function can be overridden to add in extra packages
-  targetPkgs ? pkgs: [ ],
-
-  # This list can be overridden to add in extra packages
+  )
+, # This is Plasma 6 (KDE) XDG portal support
+  plasma6XdgDesktopPortalSupport ? false
+, # This is LXQT XDG portal support
+  lxqtXdgDesktopPortalSupport ? false
+, # This is GNOME XDG portal support
+  gnomeXdgDesktopPortalSupport ? false
+, # This is Hyprland XDG portal support
+  hyprlandXdgDesktopPortalSupport ? false
+, # This is `wlroots` XDG portal support
+  wlrXdgDesktopPortalSupport ? false
+, # This is Xapp XDG portal support, used for GTK and various Cinnamon/MATE/Xfce4 infrastructure.
+  xappXdgDesktopPortalSupport ? false
+, # This function can be overridden to add in extra packages
+  targetPkgs ? pkgs: [ ]
+, # This list can be overridden to add in extra packages
   # that are independent of the underlying package attrset
-  targetPkgsFixed ? [ ],
+  targetPkgsFixed ? [ ]
+,
 }:
 
 let
@@ -233,8 +223,8 @@ in
 if !stdenv.hostPlatform.isLinux then
   unpacked
 else
-  # We add the `unpacked` zoom archive to the FHS env and also bind-mount its `/opt` directory.
-  # This should assist Zoom in finding all its files in the places where it expects them to be.
+# We add the `unpacked` zoom archive to the FHS env and also bind-mount its `/opt` directory.
+# This should assist Zoom in finding all its files in the places where it expects them to be.
   buildFHSEnv {
     inherit (unpacked) pname version;
 

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  colorama,
-  fetchFromGitHub,
-  packaging,
-  poetry-core,
-  pydantic,
-  redis,
-  structlog,
+{ lib
+, buildPythonPackage
+, colorama
+, fetchFromGitHub
+, packaging
+, poetry-core
+, pydantic
+, redis
+, structlog
+,
 }:
 
 buildPythonPackage rec {

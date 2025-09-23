@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildGoModule,
-  cmake,
-  ncurses,
-  asio,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, cmake
+, ncurses
+, asio
+,
 }:
 
 let

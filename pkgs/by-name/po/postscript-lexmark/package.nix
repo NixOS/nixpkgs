@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  rpmextract,
+{ lib
+, stdenv
+, fetchurl
+, rpmextract
+,
 }:
 let
   version = "20160218";

@@ -1,27 +1,27 @@
-{
-  lib,
-  acme,
-  aiohttp,
-  atomicwrites-homeassistant,
-  attrs,
-  buildPythonPackage,
-  ciso8601,
-  cryptography,
-  fetchFromGitHub,
-  freezegun,
-  pycognito,
-  pyjwt,
-  pytest-aiohttp,
-  pytest-socket,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
-  sentence-stream,
-  setuptools,
-  snitun,
-  syrupy,
-  webrtc-models,
-  xmltodict,
+{ lib
+, acme
+, aiohttp
+, atomicwrites-homeassistant
+, attrs
+, buildPythonPackage
+, ciso8601
+, cryptography
+, fetchFromGitHub
+, freezegun
+, pycognito
+, pyjwt
+, pytest-aiohttp
+, pytest-socket
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, sentence-stream
+, setuptools
+, snitun
+, syrupy
+, webrtc-models
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

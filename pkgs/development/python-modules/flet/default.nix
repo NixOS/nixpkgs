@@ -1,24 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  flet-client-flutter,
-
-  # build-system
-  poetry-core,
-  pytestCheckHook,
-
-  # propagates
-  fastapi,
-  httpx,
-  oauthlib,
-  packaging,
-  qrcode,
-  repath,
-  cookiecutter,
-  uvicorn,
-  watchdog,
-  websocket-client,
-  websockets,
+{ lib
+, buildPythonPackage
+, flet-client-flutter
+, # build-system
+  poetry-core
+, pytestCheckHook
+, # propagates
+  fastapi
+, httpx
+, oauthlib
+, packaging
+, qrcode
+, repath
+, cookiecutter
+, uvicorn
+, watchdog
+, websocket-client
+, websockets
+,
 }:
 
 buildPythonPackage rec {

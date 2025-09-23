@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  prompt-toolkit,
-  pygments,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, prompt-toolkit
+, pygments
+,
 }:
 
 buildPythonPackage {

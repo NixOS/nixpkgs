@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  fixup-yarn-lock,
-  nodejs,
-  yarn,
-  textlint,
-  textlint-rule-en-max-word-count,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, fixup-yarn-lock
+, nodejs
+, yarn
+, textlint
+, textlint-rule-en-max-word-count
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

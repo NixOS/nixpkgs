@@ -1,11 +1,11 @@
-{
-  mkKdeDerivation,
-  _7zz,
-  svgcleaner,
-  qtdeclarative,
-  qtsvg,
-  openal,
-  libsndfile,
+{ mkKdeDerivation
+, _7zz
+, svgcleaner
+, qtdeclarative
+, qtsvg
+, openal
+, libsndfile
+,
 }:
 mkKdeDerivation {
   pname = "libkdegames";

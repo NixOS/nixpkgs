@@ -1,34 +1,28 @@
-{
-  buildPythonPackage,
-  lib,
-  hatchling,
-  tomli-w,
+{ buildPythonPackage
+, lib
+, hatchling
+, tomli-w
+,
 }:
-{
-  pname,
-  version,
-
-  # Editable root as string.
+{ pname
+, version
+, # Editable root as string.
   # Environment variables will be expanded at runtime using os.path.expandvars.
-  root,
-
-  # Arguments passed on verbatim to buildPythonPackage
-  derivationArgs ? { },
-
-  # Python dependencies
-  dependencies ? [ ],
-  optional-dependencies ? { },
-
-  # PEP-518 build-system https://peps.python.org/pep-518
-  build-system ? [ ],
-
-  # PEP-621 entry points https://peps.python.org/pep-0621/#entry-points
-  scripts ? { },
-  gui-scripts ? { },
-  entry-points ? { },
-
-  passthru ? { },
-  meta ? { },
+  root
+, # Arguments passed on verbatim to buildPythonPackage
+  derivationArgs ? { }
+, # Python dependencies
+  dependencies ? [ ]
+, optional-dependencies ? { }
+, # PEP-518 build-system https://peps.python.org/pep-518
+  build-system ? [ ]
+, # PEP-621 entry points https://peps.python.org/pep-0621/#entry-points
+  scripts ? { }
+, gui-scripts ? { }
+, entry-points ? { }
+, passthru ? { }
+, meta ? { }
+,
 }:
 
 # Create a PEP-660 (https://peps.python.org/pep-0660/) editable package pointing to an impure location outside the Nix store.
@@ -88,7 +82,7 @@ buildPythonPackage (
     build-system = [ hatchling ];
   }
   // derivationArgs
-  // {
+    // {
     # Note: Using formats.toml generates another intermediary derivation that needs to be built.
     # We inline the same functionality for better UX.
     nativeBuildInputs = (derivationArgs.nativeBuildInputs or [ ]) ++ [ tomli-w ];

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cargo,
-  rustPlatform,
-  rustc,
-  napi-rs-cli,
-  nodejs,
-  libiconv,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cargo
+, rustPlatform
+, rustc
+, napi-rs-cli
+, nodejs
+, libiconv
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,19 +1,19 @@
-{
-  lib,
-  aiohttp,
-  asyncio-dgram,
-  buildPythonPackage,
-  certifi,
-  fetchFromGitHub,
-  frozenlist,
-  poetry-core,
-  pytest-aiohttp,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  voluptuous,
-  typing-extensions,
-  yarl,
+{ lib
+, aiohttp
+, asyncio-dgram
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
+, frozenlist
+, poetry-core
+, pytest-aiohttp
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, voluptuous
+, typing-extensions
+, yarl
+,
 }:
 
 buildPythonPackage rec {

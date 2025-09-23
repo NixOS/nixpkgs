@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  _7zz,
+{ mkKdeDerivation
+, _7zz
+,
 }:
 mkKdeDerivation {
   pname = "katomic";

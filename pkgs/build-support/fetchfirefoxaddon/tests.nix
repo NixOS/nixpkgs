@@ -1,8 +1,7 @@
-{
-  testers,
-  fetchFirefoxAddon,
-  fetchurl,
-  ...
+{ testers
+, fetchFirefoxAddon
+, fetchurl
+, ...
 }:
 
 {

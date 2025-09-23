@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchzip,
-  fuse,
-  stdenv,
-  installShellFiles,
-  versionCheckHook,
-  callPackage,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchzip
+, fuse
+, stdenv
+, installShellFiles
+, versionCheckHook
+, callPackage
+,
 }:
 buildGoModule rec {
   pname = "alist";

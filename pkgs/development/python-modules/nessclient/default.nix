@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  justbackoff,
-  pyserial-asyncio-fast,
-  pythonOlder,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, justbackoff
+, pyserial-asyncio-fast
+, pythonOlder
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

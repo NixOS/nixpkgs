@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  ninja,
-  pkg-config,
-  ispc,
-  boost,
-  fmt,
-  hyperscan,
-  opencv,
-  tbb_2022,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, cmake
+, ninja
+, pkg-config
+, ispc
+, boost
+, fmt
+, hyperscan
+, opencv
+, tbb_2022
+, fetchFromGitHub
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "todds";

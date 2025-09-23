@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libfontenc,
-  freetype,
-  xorgproto,
-  zlib,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libfontenc
+, freetype
+, xorgproto
+, zlib
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkfontscale";

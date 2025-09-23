@@ -1,11 +1,11 @@
-{
-  hare,
-  lib,
-  makeSetupHook,
-  makeWrapper,
-  runCommand,
-  stdenv,
-  writeShellApplication,
+{ hare
+, lib
+, makeSetupHook
+, makeWrapper
+, runCommand
+, stdenv
+, writeShellApplication
+,
 }:
 let
   arch = stdenv.targetPlatform.uname.processor;
@@ -37,7 +37,8 @@ let
       --unset CC
   '';
 in
-makeSetupHook {
+makeSetupHook
+{
   name = "hare-hook";
   # The propagation of `qbe` and `harec` (harePropagationInputs) is needed for
   # build frameworks like `haredo`, which set the HAREC and QBE env vars to

@@ -1,18 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  importlib-metadata,
-  pytestCheckHook,
-
-  # large-rebuild downstream dependencies and applications
-  flask,
-  black,
-  magic-wormhole,
-  mitmproxy,
-  typer,
-  flit-core,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, importlib-metadata
+, pytestCheckHook
+, # large-rebuild downstream dependencies and applications
+  flask
+, black
+, magic-wormhole
+, mitmproxy
+, typer
+, flit-core
+,
 }:
 
 buildPythonPackage rec {

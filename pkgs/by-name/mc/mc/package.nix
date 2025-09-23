@@ -1,28 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPackages,
-  pkg-config,
-  glib,
-  gpm,
-  file,
-  e2fsprogs,
-  libICE,
-  perl,
-  zip,
-  unzip,
-  gettext,
-  slang,
-  libssh2,
-  openssl,
-  coreutils,
-  darwin,
-  x11Support ? true,
-  libX11,
-
-  # updater only
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, pkg-config
+, glib
+, gpm
+, file
+, e2fsprogs
+, libICE
+, perl
+, zip
+, unzip
+, gettext
+, slang
+, libssh2
+, openssl
+, coreutils
+, darwin
+, x11Support ? true
+, libX11
+, # updater only
+  writeScript
+,
 }:
 
 stdenv.mkDerivation rec {

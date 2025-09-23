@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  pkg-config,
-  glib,
-  libwnck,
-  libnotify,
-  libtool,
-  dbus-glib,
-  makeWrapper,
-  gnome-common,
-  gsettings-desktop-schemas,
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, glib
+, libwnck
+, libnotify
+, libtool
+, dbus-glib
+, makeWrapper
+, gnome-common
+, gsettings-desktop-schemas
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

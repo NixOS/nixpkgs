@@ -1,24 +1,24 @@
-{
-  lib,
-  astropy,
-  bottleneck,
-  buildPythonPackage,
-  cython,
-  extension-helpers,
-  fetchFromGitHub,
-  gwcs,
-  matplotlib,
-  numpy,
-  pythonOlder,
-  rasterio,
-  scikit-image,
-  scikit-learn,
-  scipy,
-  setuptools-scm,
-  setuptools,
-  shapely,
-  tqdm,
-  wheel,
+{ lib
+, astropy
+, bottleneck
+, buildPythonPackage
+, cython
+, extension-helpers
+, fetchFromGitHub
+, gwcs
+, matplotlib
+, numpy
+, pythonOlder
+, rasterio
+, scikit-image
+, scikit-learn
+, scipy
+, setuptools-scm
+, setuptools
+, shapely
+, tqdm
+, wheel
+,
 }:
 
 buildPythonPackage rec {

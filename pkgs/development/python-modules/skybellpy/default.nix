@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  colorlog,
-  fetchFromGitHub,
-  pytest-sugar,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  requests,
-  requests-mock,
-  setuptools,
+{ lib
+, buildPythonPackage
+, colorlog
+, fetchFromGitHub
+, pytest-sugar
+, pytest-timeout
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, requests
+, requests-mock
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

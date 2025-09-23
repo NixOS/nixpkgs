@@ -1,9 +1,9 @@
-{
-  lib,
-  buildLua,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  python3Packages,
+{ lib
+, buildLua
+, fetchFromGitHub
+, unstableGitUpdater
+, python3Packages
+,
 }:
 buildLua {
   pname = "mpv-autosub";

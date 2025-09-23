@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  curl,
-  openssl,
-  fuse,
-  libxml2,
-  json_c,
-  file,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, curl
+, openssl
+, fuse
+, libxml2
+, json_c
+, file
+,
 }:
 
 stdenv.mkDerivation rec {

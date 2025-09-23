@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  numpy,
-  platformdirs,
-  pytestCheckHook,
-  pythonOlder,
-  typing-extensions,
-  siphash24,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, numpy
+, platformdirs
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+, siphash24
+,
 }:
 
 buildPythonPackage rec {

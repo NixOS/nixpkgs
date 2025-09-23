@@ -1,10 +1,10 @@
-{
-  lib,
-  dotnetCorePackages,
-  buildDotnetModule,
-  fetchFromGitHub,
-  runCommand,
-  expect,
+{ lib
+, dotnetCorePackages
+, buildDotnetModule
+, fetchFromGitHub
+, runCommand
+, expect
+,
 }:
 
 let

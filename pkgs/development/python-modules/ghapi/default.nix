@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fastcore,
-  packaging,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fastcore
+, packaging
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

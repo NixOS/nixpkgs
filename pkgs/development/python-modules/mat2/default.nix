@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pytestCheckHook,
-  fetchFromGitLab,
-  fetchpatch,
-  replaceVars,
-  bubblewrap,
-  exiftool,
-  ffmpeg,
-  setuptools,
-  wrapGAppsHook3,
-  gdk-pixbuf,
-  gobject-introspection,
-  librsvg,
-  poppler_gi,
-  mutagen,
-  pygobject3,
-  pycairo,
-  dolphinIntegration ? false,
-  kdePackages,
+{ lib
+, stdenv
+, buildPythonPackage
+, pytestCheckHook
+, fetchFromGitLab
+, fetchpatch
+, replaceVars
+, bubblewrap
+, exiftool
+, ffmpeg
+, setuptools
+, wrapGAppsHook3
+, gdk-pixbuf
+, gobject-introspection
+, librsvg
+, poppler_gi
+, mutagen
+, pygobject3
+, pycairo
+, dolphinIntegration ? false
+, kdePackages
+,
 }:
 
 buildPythonPackage rec {

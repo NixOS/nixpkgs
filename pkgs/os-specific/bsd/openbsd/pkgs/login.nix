@@ -1,6 +1,6 @@
-{
-  mkDerivation,
-  libutil,
+{ mkDerivation
+, libutil
+,
 }:
 mkDerivation {
   path = "usr.bin/login";

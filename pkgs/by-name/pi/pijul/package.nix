@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchCrate,
-  rustPlatform,
-  installShellFiles,
-  pkg-config,
-  libsodium,
-  openssl,
-  xxHash,
-  gitImportSupport ? true,
-  libgit2 ? null,
+{ lib
+, stdenv
+, fetchCrate
+, rustPlatform
+, installShellFiles
+, pkg-config
+, libsodium
+, openssl
+, xxHash
+, gitImportSupport ? true
+, libgit2 ? null
+,
 }:
 
 rustPlatform.buildRustPackage rec {

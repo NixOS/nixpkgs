@@ -1,25 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  # Build-time dependencies
-  makeWrapper,
-  file,
-  makeDesktopItem,
-  imagemagick,
-  copyDesktopItems,
-
-  # Runtime dependencies
-  fontconfig,
-  freetype,
-  libX11,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libglvnd,
-  openal,
+{ lib
+, stdenv
+, fetchurl
+, # Build-time dependencies
+  makeWrapper
+, file
+, makeDesktopItem
+, imagemagick
+, copyDesktopItems
+, # Runtime dependencies
+  fontconfig
+, freetype
+, libX11
+, libXext
+, libXinerama
+, libXrandr
+, libXrender
+, libglvnd
+, openal
+,
 }:
 
 let

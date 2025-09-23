@@ -1,7 +1,7 @@
-{
-  writeScriptBin,
-  lib,
-  makeBinaryWrapper,
+{ writeScriptBin
+, lib
+, makeBinaryWrapper
+,
 }:
 
 let

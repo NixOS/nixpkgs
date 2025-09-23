@@ -1,34 +1,34 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  gitUpdater,
-  nixosTests,
-  testers,
-  cmake,
-  cmake-extras,
-  dbus-test-runner,
-  gettext,
-  glib,
-  gsettings-qt,
-  gtest,
-  libapparmor,
-  libnotify,
-  lomiri-api,
-  lomiri-app-launch,
-  lomiri-download-manager,
-  lomiri-ui-toolkit,
-  pkg-config,
-  properties-cpp,
-  qtbase,
-  qtdeclarative,
-  qtfeedback,
-  qtgraphicaleffects,
-  qttools,
-  validatePkgConfig,
-  wrapGAppsHook3,
-  xvfb-run,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, gitUpdater
+, nixosTests
+, testers
+, cmake
+, cmake-extras
+, dbus-test-runner
+, gettext
+, glib
+, gsettings-qt
+, gtest
+, libapparmor
+, libnotify
+, lomiri-api
+, lomiri-app-launch
+, lomiri-download-manager
+, lomiri-ui-toolkit
+, pkg-config
+, properties-cpp
+, qtbase
+, qtdeclarative
+, qtfeedback
+, qtgraphicaleffects
+, qttools
+, validatePkgConfig
+, wrapGAppsHook3
+, xvfb-run
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

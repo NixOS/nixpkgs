@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pymodbus,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pymodbus
+, pytestCheckHook
+, pytest-asyncio
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

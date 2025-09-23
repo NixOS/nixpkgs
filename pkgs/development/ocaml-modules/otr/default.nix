@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  digestif,
-  sexplib0,
-  mirage-crypto,
-  mirage-crypto-pk,
-  astring,
-  base64,
+{ lib
+, fetchurl
+, buildDunePackage
+, digestif
+, sexplib0
+, mirage-crypto
+, mirage-crypto-pk
+, astring
+, base64
+,
 }:
 
 buildDunePackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  hatchling,
-  hatch-jupyter-builder,
-  jupyterlab,
-  ipywidgets,
-  numpy,
-  traitlets,
-  traittypes,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, hatchling
+, hatch-jupyter-builder
+, jupyterlab
+, ipywidgets
+, numpy
+, traitlets
+, traittypes
+,
 }:
 
 buildPythonPackage rec {

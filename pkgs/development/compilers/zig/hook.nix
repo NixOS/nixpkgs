@@ -1,12 +1,13 @@
-{
-  lib,
-  makeSetupHook,
-  zig,
-  stdenv,
-  xcbuild,
+{ lib
+, makeSetupHook
+, zig
+, stdenv
+, xcbuild
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "zig-hook";
 
   propagatedBuildInputs = [

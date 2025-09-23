@@ -1,62 +1,54 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
-  makeWrapper,
-  writeText,
-  wrapGAppsHook3,
-  autoPatchelfHook,
-  patchelfUnstable, # have to use patchelfUnstable to support --no-clobber-old-sections
-  callPackage,
-
-  atk,
-  cairo,
-  dbus,
-  dbus-glib,
-  fontconfig,
-  freetype,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  libxcb,
-  libX11,
-  libXext,
-  libXrender,
-  libXt,
-  libXtst,
-  libgbm,
-  pango,
-  pciutils,
-  zlib,
-
-  libnotifySupport ? stdenv.hostPlatform.isLinux,
-  libnotify,
-
-  waylandSupport ? stdenv.hostPlatform.isLinux,
-  libxkbcommon,
-  libdrm,
-  libGL,
-
-  mediaSupport ? true,
-  ffmpeg,
-
-  audioSupport ? mediaSupport,
-
-  pipewireSupport ? audioSupport,
-  pipewire,
-
-  pulseaudioSupport ? audioSupport,
-  libpulseaudio,
-  apulse,
-  alsa-lib,
-
-  libvaSupport ? mediaSupport,
-  libva,
-
-  # Extra preferences
-  extraPrefs ? "",
+{ lib
+, stdenv
+, fetchurl
+, makeDesktopItem
+, copyDesktopItems
+, makeWrapper
+, writeText
+, wrapGAppsHook3
+, autoPatchelfHook
+, patchelfUnstable
+, # have to use patchelfUnstable to support --no-clobber-old-sections
+  callPackage
+, atk
+, cairo
+, dbus
+, dbus-glib
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gtk3
+, libxcb
+, libX11
+, libXext
+, libXrender
+, libXt
+, libXtst
+, libgbm
+, pango
+, pciutils
+, zlib
+, libnotifySupport ? stdenv.hostPlatform.isLinux
+, libnotify
+, waylandSupport ? stdenv.hostPlatform.isLinux
+, libxkbcommon
+, libdrm
+, libGL
+, mediaSupport ? true
+, ffmpeg
+, audioSupport ? mediaSupport
+, pipewireSupport ? audioSupport
+, pipewire
+, pulseaudioSupport ? audioSupport
+, libpulseaudio
+, apulse
+, alsa-lib
+, libvaSupport ? mediaSupport
+, libva
+, # Extra preferences
+  extraPrefs ? ""
+,
 }:
 
 let

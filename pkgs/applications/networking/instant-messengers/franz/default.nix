@@ -1,7 +1,7 @@
-{
-  lib,
-  mkFranzDerivation,
-  fetchurl,
+{ lib
+, mkFranzDerivation
+, fetchurl
+,
 }:
 
 mkFranzDerivation rec {

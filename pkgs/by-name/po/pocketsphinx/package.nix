@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  doxygen,
-  fetchFromGitHub,
-  gitUpdater,
-  graphviz,
-  gst_all_1,
-  perl,
-  pkg-config,
-  testers,
-  sox,
+{ lib
+, stdenv
+, cmake
+, doxygen
+, fetchFromGitHub
+, gitUpdater
+, graphviz
+, gst_all_1
+, perl
+, pkg-config
+, testers
+, sox
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

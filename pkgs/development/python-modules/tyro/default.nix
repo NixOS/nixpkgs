@@ -1,28 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  docstring-parser,
-  rich,
-  shtab,
-  typeguard,
-  typing-extensions,
-
-  # tests
-  attrs,
-  flax,
-  jax,
-  ml-collections,
-  msgspec,
-  omegaconf,
-  pydantic,
-  pytestCheckHook,
-  torch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  docstring-parser
+, rich
+, shtab
+, typeguard
+, typing-extensions
+, # tests
+  attrs
+, flax
+, jax
+, ml-collections
+, msgspec
+, omegaconf
+, pydantic
+, pytestCheckHook
+, torch
+,
 }:
 
 buildPythonPackage rec {

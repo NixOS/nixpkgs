@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  qtspeech,
-  editorconfig-core-c,
+{ mkKdeDerivation
+, qtdeclarative
+, qtspeech
+, editorconfig-core-c
+,
 }:
 mkKdeDerivation {
   pname = "ktexteditor";

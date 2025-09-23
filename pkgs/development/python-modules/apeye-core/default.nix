@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  hatchling,
-  hatch-requirements-txt,
-  domdf-python-tools,
-  idna,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, hatchling
+, hatch-requirements-txt
+, domdf-python-tools
+, idna
+,
 }:
 buildPythonPackage rec {
   pname = "apeye-core";

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  openssl,
-  openjdk11,
-  python3,
-  unixODBC,
-  withJdbc ? false,
-  withOdbc ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, openssl
+, openjdk11
+, python3
+, unixODBC
+, withJdbc ? false
+, withOdbc ? false
+,
 }:
 
 let

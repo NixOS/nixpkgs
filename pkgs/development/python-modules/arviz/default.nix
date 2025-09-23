@@ -1,40 +1,37 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  packaging,
-  setuptools,
-
-  # dependencies
-  h5netcdf,
-  matplotlib,
-  numpy,
-  pandas,
-  scipy,
-  typing-extensions,
-  xarray,
-  xarray-einstats,
-
-  # tests
-  bokeh,
-  cloudpickle,
-  emcee,
-  ffmpeg,
-  h5py,
-  jax,
-  jaxlib,
-  numba,
-  numpyro,
-  #, pymc3 (circular dependency)
-  pyro-ppl,
-  #, pystan (not packaged)
-  pytestCheckHook,
-  torchvision,
-  writableTmpDirAsHomeHook,
-  zarr,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  packaging
+, setuptools
+, # dependencies
+  h5netcdf
+, matplotlib
+, numpy
+, pandas
+, scipy
+, typing-extensions
+, xarray
+, xarray-einstats
+, # tests
+  bokeh
+, cloudpickle
+, emcee
+, ffmpeg
+, h5py
+, jax
+, jaxlib
+, numba
+, numpyro
+, #, pymc3 (circular dependency)
+  pyro-ppl
+, #, pystan (not packaged)
+  pytestCheckHook
+, torchvision
+, writableTmpDirAsHomeHook
+, zarr
+,
 }:
 
 buildPythonPackage rec {

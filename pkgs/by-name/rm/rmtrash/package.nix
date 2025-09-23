@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  trash-cli,
-  coreutils,
-  which,
-  getopt,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, trash-cli
+, coreutils
+, which
+, getopt
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

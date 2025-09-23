@@ -1,9 +1,8 @@
-{
-  supportedSystems,
-  system ? builtins.currentSystem,
-  packageSet ? (import ../..),
-  scrubJobs ? true,
-  # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+{ supportedSystems
+, system ? builtins.currentSystem
+, packageSet ? (import ../..)
+, scrubJobs ? true
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
       allowAliases = false;
@@ -11,7 +10,8 @@
       inHydra = true;
     };
     __allowFileset = false;
-  },
+  }
+,
 }:
 
 let
@@ -43,10 +43,12 @@ let
     ;
 
   pkgs = packageSet (
-    recursiveUpdate {
-      inherit system;
-      config.allowUnsupportedSystem = true;
-    } nixpkgsArgs
+    recursiveUpdate
+      {
+        inherit system;
+        config.allowUnsupportedSystem = true;
+      }
+      nixpkgsArgs
   );
 
   hydraJob' = if scrubJobs then hydraJob else id;
@@ -110,10 +112,10 @@ let
     let
       examplesByConfig = flip mapAttrs' systems.examples (
         _: crossSystem:
-        nameValuePair crossSystem.config {
-          inherit crossSystem;
-          pkgsFor = mkPkgsFor crossSystem;
-        }
+          nameValuePair crossSystem.config {
+            inherit crossSystem;
+            pkgsFor = mkPkgsFor crossSystem;
+          }
       );
       native = mkPkgsFor null;
     in
@@ -221,8 +223,8 @@ let
   # Gets the list of Hydra platforms for a derivation
   getPlatforms =
     drv:
-    drv.meta.hydraPlatforms
-      or (subtractLists (drv.meta.badPlatforms or [ ]) (drv.meta.platforms or supportedSystems));
+      drv.meta.hydraPlatforms
+        or (subtractLists (drv.meta.badPlatforms or [ ]) (drv.meta.platforms or supportedSystems));
 
   /*
     Recursively map a (nested) set of derivations to an isomorphic

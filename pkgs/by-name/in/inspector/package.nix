@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  gettext,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  gobject-introspection,
-  libadwaita,
-  python3Packages,
-  iproute2,
-  util-linux,
-  coreutils,
-  usbutils,
-  pciutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, gettext
+, wrapGAppsHook4
+, desktop-file-utils
+, gobject-introspection
+, libadwaita
+, python3Packages
+, iproute2
+, util-linux
+, coreutils
+, usbutils
+, pciutils
+,
 }:
 
 python3Packages.buildPythonApplication rec {

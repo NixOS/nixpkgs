@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libxml2,
-  freetype,
-  libGLU,
-  libGL,
-  glew,
-  qtbase,
-  wrapQtAppsHook,
-  autoPatchelfHook,
-  python3,
-  cmake,
-  libjpeg,
-  llvmPackages,
+{ lib
+, stdenv
+, fetchurl
+, libxml2
+, freetype
+, libGLU
+, libGL
+, glew
+, qtbase
+, wrapQtAppsHook
+, autoPatchelfHook
+, python3
+, cmake
+, libjpeg
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation rec {

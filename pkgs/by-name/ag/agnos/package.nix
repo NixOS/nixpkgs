@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  nixosTests,
-  rustPlatform,
-  openssl,
-  pkg-config,
+{ fetchFromGitHub
+, lib
+, nixosTests
+, rustPlatform
+, openssl
+, pkg-config
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "agnos";

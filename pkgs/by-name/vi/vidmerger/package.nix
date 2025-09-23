@@ -1,9 +1,9 @@
-{
-  lib,
-  ffmpeg,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, ffmpeg
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

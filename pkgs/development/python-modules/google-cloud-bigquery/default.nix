@@ -1,38 +1,34 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  google-api-core,
-  google-cloud-bigquery-storage,
-  google-cloud-core,
-  google-resumable-media,
-  grpcio,
-  proto-plus,
-  protobuf,
-  python-dateutil,
-  requests,
-
-  # optional-dependencies
-  pyarrow,
-  db-dtypes,
-  pandas,
-  tqdm,
-  ipython,
-
-  #  tests
-  freezegun,
-  google-cloud-datacatalog,
-  google-cloud-storage,
-  google-cloud-testutils,
-  mock,
-  psutil,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  google-api-core
+, google-cloud-bigquery-storage
+, google-cloud-core
+, google-resumable-media
+, grpcio
+, proto-plus
+, protobuf
+, python-dateutil
+, requests
+, # optional-dependencies
+  pyarrow
+, db-dtypes
+, pandas
+, tqdm
+, ipython
+, #  tests
+  freezegun
+, google-cloud-datacatalog
+, google-cloud-storage
+, google-cloud-testutils
+, mock
+, psutil
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

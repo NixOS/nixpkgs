@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  protobuf,
-  libsodium,
-  openssl,
-  xz,
-  zeromq,
-  cacert,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, protobuf
+, libsodium
+, openssl
+, xz
+, zeromq
+, cacert
+,
 }:
 
 rustPlatform.buildRustPackage rec {

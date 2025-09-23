@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  jinja2,
-  numpy,
-  scikit-learn,
-  scipy,
-
-  # tests
-  anywidget,
-  igraph,
-  ipywidgets,
-  matplotlib,
-  networkx,
-  plotly,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  jinja2
+, numpy
+, scikit-learn
+, scipy
+, # tests
+  anywidget
+, igraph
+, ipywidgets
+, matplotlib
+, networkx
+, plotly
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

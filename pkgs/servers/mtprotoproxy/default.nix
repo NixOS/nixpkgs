@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python,
-  pyaes,
-  pycrypto,
-  uvloop,
-  wrapPython,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python
+, pyaes
+, pycrypto
+, uvloop
+, wrapPython
+,
 }:
 
 stdenv.mkDerivation rec {

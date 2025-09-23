@@ -1,9 +1,9 @@
-{
-  lib,
-  mkKdeDerivation,
-  fetchurl,
-  bison,
-  flex,
+{ lib
+, mkKdeDerivation
+, fetchurl
+, bison
+, flex
+,
 }:
 mkKdeDerivation rec {
   pname = "kdevelop-pg-qt";

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  nixosTests,
-  fetchFromGitHub,
-  fetchDebianPatch,
-  pam,
-  openssl,
-  perl,
-  autoreconfHook,
+{ lib
+, stdenv
+, nixosTests
+, fetchFromGitHub
+, fetchDebianPatch
+, pam
+, openssl
+, perl
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -51,12 +51,12 @@ import ../make-test-python.nix {
 
       mkTestStep =
         num:
-        {
-          description,
-          testScript,
-          config ? { },
-          serviceName ? "test${toString num}",
-          rawUnit ? null,
+        { description
+        , testScript
+        , config ? { }
+        , serviceName ? "test${toString num}"
+        , rawUnit ? null
+        ,
         }:
         {
           systemd.packages = lib.optional (rawUnit != null) (
@@ -229,9 +229,10 @@ import ../make-test-python.nix {
           }
           (
             let
-              symlink = pkgs.runCommand "symlink" {
-                target = pkgs.writeText "symlink-target" "got me";
-              } "ln -s \"$target\" \"$out\"";
+              symlink = pkgs.runCommand "symlink"
+                {
+                  target = pkgs.writeText "symlink-target" "got me";
+                } "ln -s \"$target\" \"$out\"";
             in
             {
               description = "check if symlinks are properly bind-mounted";

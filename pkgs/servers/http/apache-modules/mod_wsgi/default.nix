@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  apacheHttpd,
-  python3,
-  ncurses,
+{ lib
+, stdenv
+, fetchFromGitHub
+, apacheHttpd
+, python3
+, ncurses
+,
 }:
 
 stdenv.mkDerivation rec {

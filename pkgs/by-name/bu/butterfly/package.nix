@@ -1,11 +1,11 @@
-{
-  lib,
-  flutter332,
-  fetchFromGitHub,
-  runCommand,
-  yq-go,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, flutter332
+, fetchFromGitHub
+, runCommand
+, yq-go
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 let

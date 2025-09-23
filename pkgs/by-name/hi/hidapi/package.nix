@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libusb1,
-  udev,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libusb1
+, udev
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

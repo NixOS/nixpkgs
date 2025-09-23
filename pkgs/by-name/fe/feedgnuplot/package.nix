@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  makeFontsConf,
-  freefont_ttf,
-  gnuplot,
-  perl,
-  perlPackages,
-  stdenv,
-  shortenPerlShebang,
-  installShellFiles,
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, makeFontsConf
+, freefont_ttf
+, gnuplot
+, perl
+, perlPackages
+, stdenv
+, shortenPerlShebang
+, installShellFiles
+,
 }:
 
 let

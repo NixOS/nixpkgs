@@ -1,20 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pythonAtLeast,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # tests
-  asttokens,
-  littleutils,
-  rich,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pythonAtLeast
+, pythonOlder
+, # build-system
+  setuptools
+, setuptools-scm
+, # tests
+  asttokens
+, littleutils
+, rich
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

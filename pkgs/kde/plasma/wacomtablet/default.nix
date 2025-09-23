@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  libwacom,
-  xf86_input_wacom,
+{ mkKdeDerivation
+, pkg-config
+, libwacom
+, xf86_input_wacom
+,
 }:
 mkKdeDerivation {
   pname = "wacomtablet";

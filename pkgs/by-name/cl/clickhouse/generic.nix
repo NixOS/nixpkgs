@@ -1,31 +1,31 @@
-{
-  lts ? false,
-  version,
-  hash,
-  nixUpdateExtraArgs ? [ ],
+{ lts ? false
+, version
+, hash
+, nixUpdateExtraArgs ? [ ]
+,
 }:
 
-{
-  lib,
-  stdenv,
-  llvmPackages_19,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  ninja,
-  python3,
-  perl,
-  nasm,
-  yasm,
-  nixosTests,
-  darwin,
-  findutils,
-  libiconv,
-  rustSupport ? true,
-  rustc,
-  cargo,
-  rustPlatform,
-  nix-update-script,
+{ lib
+, stdenv
+, llvmPackages_19
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ninja
+, python3
+, perl
+, nasm
+, yasm
+, nixosTests
+, darwin
+, findutils
+, libiconv
+, rustSupport ? true
+, rustc
+, cargo
+, rustPlatform
+, nix-update-script
+,
 }:
 
 llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
@@ -91,19 +91,20 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   dontCargoSetupPostUnpack = true;
 
   patches =
-    lib.optional (lib.versions.majorMinor version == "25.8") (fetchpatch {
-      # Disable building WASM lexer
-      url = "https://github.com/ClickHouse/ClickHouse/commit/67a42b78cdf1c793e78c1adbcc34162f67044032.patch";
-      sha256 = "7VF+JSztqTWD+aunCS3UVNxlRdwHc2W5fNqzDyeo3Fc=";
-    })
+    lib.optional (lib.versions.majorMinor version == "25.8")
+      (fetchpatch {
+        # Disable building WASM lexer
+        url = "https://github.com/ClickHouse/ClickHouse/commit/67a42b78cdf1c793e78c1adbcc34162f67044032.patch";
+        sha256 = "7VF+JSztqTWD+aunCS3UVNxlRdwHc2W5fNqzDyeo3Fc=";
+      })
     ++
 
-      lib.optional (lib.versions.majorMinor version == "25.8" && stdenv.hostPlatform.isDarwin)
-        (fetchpatch {
-          # Do not intercept memalign on darwin
-          url = "https://github.com/ClickHouse/ClickHouse/commit/0cfd2dbe981727fb650f3b9935f5e7e7e843180f.patch";
-          sha256 = "1iNYZbugX2g2dxNR1ZiUthzPnhLUR8g118aG23yhgUo=";
-        });
+    lib.optional (lib.versions.majorMinor version == "25.8" && stdenv.hostPlatform.isDarwin)
+      (fetchpatch {
+        # Do not intercept memalign on darwin
+        url = "https://github.com/ClickHouse/ClickHouse/commit/0cfd2dbe981727fb650f3b9935f5e7e7e843180f.patch";
+        sha256 = "1iNYZbugX2g2dxNR1ZiUthzPnhLUR8g118aG23yhgUo=";
+      });
 
   postPatch = ''
     patchShebangs src/ utils/
@@ -129,9 +130,10 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_DELTA_KERNEL_RS=0"
     "-DCOMPILER_CACHE=disabled"
   ]
-  ++ lib.optional (
-    stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
-  ) "-DNO_ARMV81_OR_HIGHER=1";
+  ++ lib.optional
+    (
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
+    ) "-DNO_ARMV81_OR_HIGHER=1";
 
   env = {
     CARGO_HOME = "$PWD/../.cargo/";
@@ -139,10 +141,10 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
       # undefined reference to '__sync_val_compare_and_swap_16'
       lib.optionalString stdenv.hostPlatform.isx86_64 " -mcx16"
       +
-        # Silence ``-Wimplicit-const-int-float-conversion` error in MemoryTracker.cpp and
-        # ``-Wno-unneeded-internal-declaration` TreeOptimizer.cpp.
-        lib.optionalString stdenv.hostPlatform.isDarwin
-          " -Wno-implicit-const-int-float-conversion -Wno-unneeded-internal-declaration";
+      # Silence ``-Wimplicit-const-int-float-conversion` error in MemoryTracker.cpp and
+      # ``-Wno-unneeded-internal-declaration` TreeOptimizer.cpp.
+      lib.optionalString stdenv.hostPlatform.isDarwin
+        " -Wno-implicit-const-int-float-conversion -Wno-unneeded-internal-declaration";
   };
 
   # https://github.com/ClickHouse/ClickHouse/issues/49988

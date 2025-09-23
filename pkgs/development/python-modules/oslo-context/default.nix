@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  oslotest,
-  stestr,
-  pbr,
-  setuptools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, oslotest
+, stestr
+, pbr
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

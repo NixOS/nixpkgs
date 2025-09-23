@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  makeWrapper,
-  openssh,
-  libxcrypt,
-  testers,
-  shellhub-agent,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, makeWrapper
+, openssh
+, libxcrypt
+, testers
+, shellhub-agent
+,
 }:
 
 buildGoModule rec {

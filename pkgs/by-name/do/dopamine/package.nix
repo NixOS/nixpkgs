@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  nix-update-script,
+{ lib
+, fetchurl
+, appimageTools
+, nix-update-script
+,
 }:
 appimageTools.wrapType2 rec {
   pname = "dopamine";

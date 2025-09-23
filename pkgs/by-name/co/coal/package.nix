@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  doxygen,
-  boost,
-  eigen,
-  jrl-cmakemodules,
-  assimp,
-  octomap,
-  qhull,
-  pythonSupport ? false,
-  python3Packages,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, doxygen
+, boost
+, eigen
+, jrl-cmakemodules
+, assimp
+, octomap
+, qhull
+, pythonSupport ? false
+, python3Packages
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  replaceVars,
-  fetchPypi,
-  hatchling,
+{ lib
+, buildPythonPackage
+, replaceVars
+, fetchPypi
+, hatchling
+,
 }:
 
 buildPythonPackage rec {

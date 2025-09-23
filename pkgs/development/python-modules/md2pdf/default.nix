@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  docopt,
-  fetchFromGitHub,
-  lib,
-  markdown2,
-  pytest-cov-stub,
-  pytestCheckHook,
-  setuptools,
-  weasyprint,
+{ buildPythonPackage
+, docopt
+, fetchFromGitHub
+, lib
+, markdown2
+, pytest-cov-stub
+, pytestCheckHook
+, setuptools
+, weasyprint
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fixDarwinDylibNames,
-  validatePkgConfig,
+{ lib
+, stdenv
+, fetchurl
+, fixDarwinDylibNames
+, validatePkgConfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

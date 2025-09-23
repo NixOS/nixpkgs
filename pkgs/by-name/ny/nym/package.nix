@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  darwin,
-  gitUpdater,
-  rustc,
-  fetchurl,
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, darwin
+, gitUpdater
+, rustc
+, fetchurl
+,
 }:
 
 rustPlatform.buildRustPackage rec {

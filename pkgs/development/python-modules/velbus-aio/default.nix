@@ -1,16 +1,16 @@
-{
-  lib,
-  aiofile,
-  backoff,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pyserial,
-  pyserial-asyncio-fast,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
-  writableTmpDirAsHomeHook,
+{ lib
+, aiofile
+, backoff
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pyserial
+, pyserial-asyncio-fast
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

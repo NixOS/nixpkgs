@@ -1,23 +1,23 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  cattrs,
-  click,
-  click-option-group,
-  fetchPypi,
-  hatch-vcs,
-  hatchling,
-  hypothesis,
-  jinja2,
-  pydantic,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  rich-click,
-  sybil,
-  tomli,
-  typing-extensions,
+{ lib
+, attrs
+, buildPythonPackage
+, cattrs
+, click
+, click-option-group
+, fetchPypi
+, hatch-vcs
+, hatchling
+, hypothesis
+, jinja2
+, pydantic
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, rich-click
+, sybil
+, tomli
+, typing-extensions
+,
 }:
 buildPythonPackage rec {
   pname = "typed-settings";

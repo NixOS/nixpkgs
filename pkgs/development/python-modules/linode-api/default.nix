@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  requests,
-  polling,
-  deprecated,
-  pytestCheckHook,
-  mock,
-  httpretty,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, requests
+, polling
+, deprecated
+, pytestCheckHook
+, mock
+, httpretty
+,
 }:
 
 buildPythonPackage rec {

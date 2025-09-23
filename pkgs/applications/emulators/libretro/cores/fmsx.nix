@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkLibretroCore,
+{ lib
+, fetchFromGitHub
+, mkLibretroCore
+,
 }:
 mkLibretroCore {
   core = "fmsx";

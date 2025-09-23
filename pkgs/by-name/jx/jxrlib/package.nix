@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  ninja,
-  quilt,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, ninja
+, quilt
+,
 }:
 
 stdenv.mkDerivation {

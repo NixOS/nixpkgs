@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  systemd,
-  protobuf,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, systemd
+, protobuf
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

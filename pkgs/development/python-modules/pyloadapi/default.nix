@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-regex-commit,
-  hatchling,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  python-dotenv,
-  pythonOlder,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-regex-commit
+, hatchling
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, python-dotenv
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

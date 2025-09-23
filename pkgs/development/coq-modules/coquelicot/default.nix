@@ -1,11 +1,11 @@
-{
-  lib,
-  mkCoqDerivation,
-  autoconf,
-  coq,
-  stdlib,
-  mathcomp-boot,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, autoconf
+, coq
+, stdlib
+, mathcomp-boot
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -26,7 +26,8 @@ mkCoqDerivation {
       (case (range "8.8" "8.16") "3.2.0")
       (case (range "8.8" "8.13") "3.1.0")
       (case (range "8.5" "8.9") "3.0.2")
-    ] null;
+    ]
+      null;
   release."3.4.3".sha256 = "sha256-bzzAIENU2OYTtmdBU9Xw8zyBvz9vqTiqjWSm7RnXXRA=";
   release."3.4.2".sha256 = "sha256-aBTF8ZKu67Rb3ryCqFyejUXf/65KgG8i5je/ZMFSrj4=";
   release."3.4.1".sha256 = "sha256-REhvIBl3EaL8CQqI34Gn7Xjf9NhPI3nrUAO26pSLbm0=";

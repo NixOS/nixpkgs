@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  gettext,
-  installShellFiles,
-  versionCheckHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, gettext
+, installShellFiles
+, versionCheckHook
+,
 }:
 
 let

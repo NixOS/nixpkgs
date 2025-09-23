@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gmp,
-  withEmacsSupport ? true,
-  withContrib ? true,
+{ lib
+, stdenv
+, fetchurl
+, gmp
+, withEmacsSupport ? true
+, withContrib ? true
+,
 }:
 
 let

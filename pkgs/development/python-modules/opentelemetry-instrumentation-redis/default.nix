@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-semantic-conventions,
-  wrapt,
-  redis,
-  opentelemetry-test-utils,
-  pythonOlder,
-  pytestCheckHook,
-  fakeredis,
+{ buildPythonPackage
+, hatchling
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-semantic-conventions
+, wrapt
+, redis
+, opentelemetry-test-utils
+, pythonOlder
+, pytestCheckHook
+, fakeredis
+,
 }:
 
 buildPythonPackage {

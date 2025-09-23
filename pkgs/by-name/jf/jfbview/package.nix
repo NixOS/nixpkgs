@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
-  freetype,
-  harfbuzz,
-  imlib2,
-  libjpeg,
-  ncurses,
-  openjpeg,
-  zlib,
-  xorg,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+, freetype
+, harfbuzz
+, imlib2
+, libjpeg
+, ncurses
+, openjpeg
+, zlib
+, xorg
+, cmake
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

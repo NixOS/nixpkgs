@@ -1,36 +1,35 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch2,
-  gettext,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  pkg-config,
-  asciidoc,
-  gobject-introspection,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  vala,
-  python3,
-  libxml2,
-  glib,
-  wrapGAppsNoGuiHook,
-  sqlite,
-  libstemmer,
-  gnome,
-  icu,
-  libuuid,
-  libsoup_3,
-  json-glib,
-  avahi,
-  dbus,
-  man-db,
-  writeText,
-  testers,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch2
+, gettext
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, asciidoc
+, gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, vala
+, python3
+, libxml2
+, glib
+, wrapGAppsNoGuiHook
+, sqlite
+, libstemmer
+, gnome
+, icu
+, libuuid
+, libsoup_3
+, json-glib
+, avahi
+, dbus
+, man-db
+, writeText
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

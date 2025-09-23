@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  django,
-  gettext,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, django
+, gettext
+,
 }:
 
 buildPythonPackage rec {

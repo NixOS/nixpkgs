@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib)
@@ -37,9 +36,11 @@ in
         pkg:
         pkg.override {
           databaseType = cfg.settings.DATABASE_TYPE;
-          collectApiEndpoint = optionalString (
-            cfg.settings.COLLECT_API_ENDPOINT != null
-          ) cfg.settings.COLLECT_API_ENDPOINT;
+          collectApiEndpoint = optionalString
+            (
+              cfg.settings.COLLECT_API_ENDPOINT != null
+            )
+            cfg.settings.COLLECT_API_ENDPOINT;
           trackerScriptNames = cfg.settings.TRACKER_SCRIPT_NAME;
           basePath = cfg.settings.BASE_PATH;
         };
@@ -263,12 +264,14 @@ in
       script =
         let
           loadCredentials =
-            (optional (
-              cfg.settings.APP_SECRET_FILE != null
-            ) ''export APP_SECRET="$(systemd-creds cat appSecret)"'')
-            ++ (optional (
-              cfg.settings.DATABASE_URL_FILE != null
-            ) ''export DATABASE_URL="$(systemd-creds cat databaseUrl)"'');
+            (optional
+              (
+                cfg.settings.APP_SECRET_FILE != null
+              ) ''export APP_SECRET="$(systemd-creds cat appSecret)"'')
+            ++ (optional
+              (
+                cfg.settings.DATABASE_URL_FILE != null
+              ) ''export DATABASE_URL="$(systemd-creds cat databaseUrl)"'');
         in
         ''
           ${concatStringsSep "\n" loadCredentials}
@@ -283,9 +286,10 @@ in
 
         LoadCredential =
           (optional (cfg.settings.APP_SECRET_FILE != null) "appSecret:${cfg.settings.APP_SECRET_FILE}")
-          ++ (optional (
-            cfg.settings.DATABASE_URL_FILE != null
-          ) "databaseUrl:${cfg.settings.DATABASE_URL_FILE}");
+          ++ (optional
+            (
+              cfg.settings.DATABASE_URL_FILE != null
+            ) "databaseUrl:${cfg.settings.DATABASE_URL_FILE}");
 
         # Hardening
         CapabilityBoundingSet = "";

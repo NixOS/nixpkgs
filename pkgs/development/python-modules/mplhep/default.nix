@@ -1,26 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  matplotlib,
-  mplhep-data,
-  numpy,
-  packaging,
-  uhi,
-
-  # tests
-  hist,
-  pytest-mock,
-  pytest-mpl,
-  pytestCheckHook,
-  scipy,
-  uproot,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  matplotlib
+, mplhep-data
+, numpy
+, packaging
+, uhi
+, # tests
+  hist
+, pytest-mock
+, pytest-mpl
+, pytestCheckHook
+, scipy
+, uproot
+,
 }:
 
 buildPythonPackage rec {

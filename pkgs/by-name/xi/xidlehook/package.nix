@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitLab,
-  python3,
-  xorg,
-  libpulseaudio,
-  pkg-config,
-  patchelf,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitLab
+, python3
+, xorg
+, libpulseaudio
+, pkg-config
+, patchelf
+,
 }:
 
 rustPlatform.buildRustPackage rec {

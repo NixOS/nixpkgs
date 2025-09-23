@@ -1,9 +1,9 @@
-{
-  beets,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  python3Packages,
+{ beets
+, fetchFromGitHub
+, lib
+, nix-update-script
+, python3Packages
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "beets-audible";

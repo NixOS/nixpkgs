@@ -1,8 +1,8 @@
-{
-  lib,
-  mkTclDerivation,
-  fetchzip,
-  autoreconfHook,
+{ lib
+, mkTclDerivation
+, fetchzip
+, autoreconfHook
+,
 }:
 
 mkTclDerivation {

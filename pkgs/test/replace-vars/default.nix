@@ -1,11 +1,11 @@
-{
-  replaceVars,
-  replaceVarsWith,
-  emptyDirectory,
-  emptyFile,
-  lib,
-  runCommand,
-  testers,
+{ replaceVars
+, replaceVarsWith
+, emptyDirectory
+, emptyFile
+, lib
+, runCommand
+, testers
+,
 }:
 let
   inherit (testers) testEqualContents testBuildFailure;
@@ -153,11 +153,11 @@ in
     mkTests
       (
         src: replacements:
-        replaceVarsWith {
-          inherit src replacements;
-          dir = "bin";
-          isExecutable = true;
-        }
+          replaceVarsWith {
+            inherit src replacements;
+            dir = "bin";
+            isExecutable = true;
+          }
       )
       (
         file:

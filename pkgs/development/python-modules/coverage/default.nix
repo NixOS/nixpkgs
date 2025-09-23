@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  isPy312,
-  fetchFromGitHub,
-  flaky,
-  hypothesis,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  tomli,
+{ lib
+, stdenv
+, buildPythonPackage
+, isPy312
+, fetchFromGitHub
+, flaky
+, hypothesis
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, tomli
+,
 }:
 
 buildPythonPackage rec {

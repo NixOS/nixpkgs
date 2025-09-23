@@ -1,12 +1,12 @@
-{
-  lib,
-  bash,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jupyterhub,
-  pythonOlder,
-  setuptools,
-  tornado,
+{ lib
+, bash
+, buildPythonPackage
+, fetchFromGitHub
+, jupyterhub
+, pythonOlder
+, setuptools
+, tornado
+,
 }:
 
 buildPythonPackage rec {

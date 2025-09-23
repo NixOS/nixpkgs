@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  alsa-lib,
-  freetype,
-  libjack2,
-  libglvnd,
-  libpulseaudio,
-  makeDesktopItem,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, alsa-lib
+, freetype
+, libjack2
+, libglvnd
+, libpulseaudio
+, makeDesktopItem
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,8 +34,7 @@ stdenv.mkDerivation rec {
         url = "https://github.com/TeamRizu/OutFox/releases/download/OF5.0.0-042/OutFox-alpha-0.5.0-pre042-Raspberry-Pi-Linux-14.04-arm32-arm32v7-legacy-date-20231227.tar.gz";
         hash = "sha256-PRp7kuqFBRy7nextTCB+/poc+A9AX2EiQphx6aUfT8E=";
       };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook

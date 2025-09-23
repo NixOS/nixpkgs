@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -88,10 +87,10 @@ in
         EFIArch = lib.mkOptionDefault efiArch;
       }
       //
-        lib.optionalAttrs (config.hardware.deviceTree.enable && config.hardware.deviceTree.name != null)
-          {
-            DeviceTree = lib.mkOptionDefault "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
-          };
+      lib.optionalAttrs (config.hardware.deviceTree.enable && config.hardware.deviceTree.name != null)
+        {
+          DeviceTree = lib.mkOptionDefault "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
+        };
     };
 
     boot.uki.configFile = lib.mkOptionDefault (format.generate "ukify.conf" cfg.settings);

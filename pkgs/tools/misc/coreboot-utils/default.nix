@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  pkg-config,
-  zlib,
-  pciutils,
-  openssl,
-  coreutils,
-  acpica-tools,
-  makeWrapper,
-  gnugrep,
-  gnused,
-  file,
-  buildEnv,
+{ lib
+, stdenv
+, fetchgit
+, pkg-config
+, zlib
+, pciutils
+, openssl
+, coreutils
+, acpica-tools
+, makeWrapper
+, gnugrep
+, gnused
+, file
+, buildEnv
+,
 }:
 
 let
@@ -33,10 +33,9 @@ let
   };
 
   generic =
-    {
-      pname,
-      path ? "util/${pname}",
-      ...
+    { pname
+    , path ? "util/${pname}"
+    , ...
     }@args:
     stdenv.mkDerivation (
       finalAttrs:
@@ -186,7 +185,7 @@ let
 
 in
 utils
-// {
+  // {
   coreboot-utils =
     (buildEnv {
       name = "coreboot-utils-${version}";

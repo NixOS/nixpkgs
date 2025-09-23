@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -253,9 +252,10 @@ in
 
     networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ cfg.port ];
 
-    networking.firewall.checkReversePath = mkIf (
-      cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both"
-    ) "loose";
+    networking.firewall.checkReversePath = mkIf
+      (
+        cfg.useRoutingFeatures == "client" || cfg.useRoutingFeatures == "both"
+      ) "loose";
 
     networking.dhcpcd.denyInterfaces = [ cfg.interfaceName ];
 

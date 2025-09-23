@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  keystoneauth1,
-  openssl,
-  oslo-config,
-  oslo-serialization,
-  pbr,
-  pythonOlder,
-  requests-mock,
-  setuptools,
-  stestr,
-  testresources,
-  testscenarios,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, keystoneauth1
+, openssl
+, oslo-config
+, oslo-serialization
+, pbr
+, pythonOlder
+, requests-mock
+, setuptools
+, stestr
+, testresources
+, testscenarios
+,
 }:
 
 buildPythonPackage rec {

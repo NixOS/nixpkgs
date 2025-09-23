@@ -1,15 +1,15 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  alcotest,
-  digestif,
-  fmt,
-  yojson,
-  ppxlib,
-  base64,
-  re,
-  ppx_deriving,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, alcotest
+, digestif
+, fmt
+, yojson
+, ppxlib
+, base64
+, re
+, ppx_deriving
+,
 }:
 
 buildDunePackage rec {

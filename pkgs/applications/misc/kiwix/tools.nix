@@ -1,14 +1,14 @@
-{
-  lib,
-  docopt_cpp,
-  fetchFromGitHub,
-  gitUpdater,
-  icu,
-  libkiwix,
-  meson,
-  ninja,
-  pkg-config,
-  stdenv,
+{ lib
+, docopt_cpp
+, fetchFromGitHub
+, gitUpdater
+, icu
+, libkiwix
+, meson
+, ninja
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

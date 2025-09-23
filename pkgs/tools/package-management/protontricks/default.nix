@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  replaceVars,
-  writeShellScript,
-  steam-run,
-  fetchpatch2,
-  setuptools-scm,
-  vdf,
-  pillow,
-  winetricks,
-  yad,
-  pytestCheckHook,
-  nix-update-script,
-  extraCompatPaths ? "",
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, replaceVars
+, writeShellScript
+, steam-run
+, fetchpatch2
+, setuptools-scm
+, vdf
+, pillow
+, winetricks
+, yad
+, pytestCheckHook
+, nix-update-script
+, extraCompatPaths ? ""
+,
 }:
 
 buildPythonApplication rec {

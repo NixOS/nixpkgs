@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  kclvm,
-  rustc,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, kclvm
+, rustc
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "kclvm_cli";

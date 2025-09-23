@@ -1,13 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  python-dateutil,
-  ephem,
-  pytz,
-
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python-dateutil
+, ephem
+, pytz
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

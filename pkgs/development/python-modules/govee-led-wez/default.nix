@@ -1,15 +1,15 @@
-{
-  lib,
-  aiohttp,
-  bleak,
-  bleak-retry-connector,
-  buildPythonPackage,
-  certifi,
-  fetchFromGitHub,
-  hatchling,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, aiohttp
+, bleak
+, bleak-retry-connector
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
+, hatchling
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage {

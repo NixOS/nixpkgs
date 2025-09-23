@@ -1,72 +1,65 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  fetchpatch,
-  git-unroll,
-  buildPythonPackage,
-  python,
-  runCommand,
-  writeShellScript,
-  config,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages,
-  autoAddDriverRunpath,
-  effectiveMagma ?
-    if cudaSupport then
-      magma-cuda-static
-    else if rocmSupport then
-      magma-hip
-    else
-      magma,
-  magma,
-  magma-hip,
-  magma-cuda-static,
-  # Use the system NCCL as long as we're targeting CUDA on a supported platform.
-  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport),
-  MPISupport ? false,
-  mpi,
-  buildDocs ? false,
-
-  # tests.cudaAvailable:
-  callPackage,
-
-  # Native build inputs
-  cmake,
-  symlinkJoin,
-  which,
-  pybind11,
-  pkg-config,
-  removeReferencesTo,
-
-  # Build inputs
-  apple-sdk_13,
-  openssl,
-  numactl,
-  llvmPackages,
-
-  # dependencies
-  astunparse,
-  binutils,
-  expecttest,
-  filelock,
-  fsspec,
-  hypothesis,
-  jinja2,
-  networkx,
-  packaging,
-  psutil,
-  pyyaml,
-  requests,
-  sympy,
-  types-dataclasses,
-  typing-extensions,
-  # ROCm build and `torch.compile` requires `triton`
-  tritonSupport ? (!stdenv.hostPlatform.isDarwin),
-  triton,
-
-  # TODO: 1. callPackage needs to learn to distinguish between the task
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchpatch
+, git-unroll
+, buildPythonPackage
+, python
+, runCommand
+, writeShellScript
+, config
+, cudaSupport ? config.cudaSupport
+, cudaPackages
+, autoAddDriverRunpath
+, effectiveMagma ? if cudaSupport then
+    magma-cuda-static
+  else if rocmSupport then
+    magma-hip
+  else
+    magma
+, magma
+, magma-hip
+, magma-cuda-static
+, # Use the system NCCL as long as we're targeting CUDA on a supported platform.
+  useSystemNccl ? (cudaSupport && !cudaPackages.nccl.meta.unsupported || rocmSupport)
+, MPISupport ? false
+, mpi
+, buildDocs ? false
+, # tests.cudaAvailable:
+  callPackage
+, # Native build inputs
+  cmake
+, symlinkJoin
+, which
+, pybind11
+, pkg-config
+, removeReferencesTo
+, # Build inputs
+  apple-sdk_13
+, openssl
+, numactl
+, llvmPackages
+, # dependencies
+  astunparse
+, binutils
+, expecttest
+, filelock
+, fsspec
+, hypothesis
+, jinja2
+, networkx
+, packaging
+, psutil
+, pyyaml
+, requests
+, sympy
+, types-dataclasses
+, typing-extensions
+, # ROCm build and `torch.compile` requires `triton`
+  tritonSupport ? (!stdenv.hostPlatform.isDarwin)
+, triton
+, # TODO: 1. callPackage needs to learn to distinguish between the task
   #          of "asking for an attribute from the parent scope" and
   #          the task of "exposing a formal parameter in .override".
   # TODO: 2. We should probably abandon attributes such as `torchWithCuda` (etc.)
@@ -74,35 +67,30 @@
   #          (dependencies without cuda support).
   #          Instead we should rely on overlays and nixpkgsFun.
   # (@SomeoneSerge)
-  _tritonEffective ? if cudaSupport then triton-cuda else triton,
-  triton-cuda,
-
-  # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
+  _tritonEffective ? if cudaSupport then triton-cuda else triton
+, triton-cuda
+, # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
   # this is also what official pytorch build does
-  mklDnnSupport ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
-
-  # virtual pkg that consistently instantiates blas across nixpkgs
+  mklDnnSupport ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+, # virtual pkg that consistently instantiates blas across nixpkgs
   # See https://github.com/NixOS/nixpkgs/pull/83888
-  blas,
-
-  # ninja (https://ninja-build.org) must be available to run C++ extensions tests,
-  ninja,
-
-  # dependencies for torch.utils.tensorboard
-  pillow,
-  six,
-  tensorboard,
-  protobuf,
-
-  # ROCm dependencies
-  rocmSupport ? config.rocmSupport,
-  rocmPackages,
-  gpuTargets ? [ ],
-
-  vulkanSupport ? false,
-  vulkan-headers,
-  vulkan-loader,
-  shaderc,
+  blas
+, # ninja (https://ninja-build.org) must be available to run C++ extensions tests,
+  ninja
+, # dependencies for torch.utils.tensorboard
+  pillow
+, six
+, tensorboard
+, protobuf
+, # ROCm dependencies
+  rocmSupport ? config.rocmSupport
+, rocmPackages
+, gpuTargets ? [ ]
+, vulkanSupport ? false
+, vulkan-headers
+, vulkan-loader
+, shaderc
+,
 }:
 
 let
@@ -168,15 +156,17 @@ let
   # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
   gpuArchWarner =
     supported: unsupported:
-    trivial.throwIf (supported == [ ]) (
-      "No supported GPU targets specified. Requested GPU targets: "
-      + strings.concatStringsSep ", " unsupported
-    ) supported;
+    trivial.throwIf (supported == [ ])
+      (
+        "No supported GPU targets specified. Requested GPU targets: "
+        + strings.concatStringsSep ", " unsupported
+      )
+      supported;
 
   # Create the gpuTargetString.
   gpuTargetString = strings.concatStringsSep ";" (
     if gpuTargets != [ ] then
-      # If gpuTargets is specified, it always takes priority.
+    # If gpuTargets is specified, it always takes priority.
       gpuTargets
     else if cudaSupport then
       gpuArchWarner supportedCudaCapabilities unsupportedCudaCapabilities
@@ -191,7 +181,8 @@ let
         # Strix Halo seems to be broken as well, see
         # https://github.com/NixOS/nixpkgs/pull/440359.
         "gfx1151"
-      ] (rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets)
+      ]
+        (rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets)
     else
       throw "No GPU targets specified"
   );

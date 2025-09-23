@@ -1,20 +1,20 @@
-{
-  buildDunePackage,
-  index,
-  ppx_irmin,
-  irmin,
-  optint,
-  fmt,
-  logs,
-  lwt,
-  mtime,
-  cmdliner,
-  checkseum,
-  rusage,
-  alcotest,
-  alcotest-lwt,
-  astring,
-  irmin-test,
+{ buildDunePackage
+, index
+, ppx_irmin
+, irmin
+, optint
+, fmt
+, logs
+, lwt
+, mtime
+, cmdliner
+, checkseum
+, rusage
+, alcotest
+, alcotest-lwt
+, astring
+, irmin-test
+,
 }:
 
 buildDunePackage {

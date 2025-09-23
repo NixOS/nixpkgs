@@ -1,15 +1,15 @@
-{
-  aiofiles,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isodate,
-  lib,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-dotenv,
-  setuptools,
+{ aiofiles
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, isodate
+, lib
+, pytest-asyncio
+, pytestCheckHook
+, python-dotenv
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

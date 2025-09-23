@@ -1,13 +1,13 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  gsettings-desktop-schemas,
-  adwaita-icon-theme,
-  wrapGAppsHook3,
-  gdk-pixbuf,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, wrapGAppsHook3
+, gdk-pixbuf
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 let
   version = "2.64.1";

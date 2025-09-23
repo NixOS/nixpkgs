@@ -1,13 +1,13 @@
-{
-  lib,
-  # Build fails with Go 1.25, with the following error:
+{ lib
+, # Build fails with Go 1.25, with the following error:
   # 'vendor/golang.org/x/tools/internal/tokeninternal/tokeninternal.go:64:9: invalid array length -delta * delta (constant -256 of type int64)'
   # Wait for upstream to update their vendored dependencies before unpinning.
-  buildGo124Module,
-  fetchFromGitHub,
-  coreutils,
-  bash,
-  stdenv,
+  buildGo124Module
+, fetchFromGitHub
+, coreutils
+, bash
+, stdenv
+,
 }:
 
 buildGo124Module {

@@ -1,17 +1,17 @@
-{
-  lib,
-  aenum,
-  buildPythonPackage,
-  fetchFromGitHub,
-  aiohttp,
-  aioresponses,
-  hatchling,
-  pydantic,
-  pytest-asyncio,
-  pytest-httpx,
-  pytestCheckHook,
-  pythonOlder,
-  rich,
+{ lib
+, aenum
+, buildPythonPackage
+, fetchFromGitHub
+, aiohttp
+, aioresponses
+, hatchling
+, pydantic
+, pytest-asyncio
+, pytest-httpx
+, pytestCheckHook
+, pythonOlder
+, rich
+,
 }:
 
 buildPythonPackage rec {

@@ -1,42 +1,39 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cargo,
-  extra-cmake-modules,
-  rustc,
-  rustPlatform,
-
-  # common deps
-  libzip,
-  qt6Packages,
-
-  # client deps
-  ffmpeg,
-  libsecret,
-  libwebp,
-
-  # optional client deps
-  giflib,
-  libvpx,
-  miniupnpc,
-
-  # optional server deps
-  libmicrohttpd,
-  libsodium,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd ? null,
-
-  # options
-  buildClient ? true,
-  buildServer ? true,
-  buildServerGui ? true, # if false builds a headless server
-  buildExtraTools ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cargo
+, extra-cmake-modules
+, rustc
+, rustPlatform
+, # common deps
+  libzip
+, qt6Packages
+, # client deps
+  ffmpeg
+, libsecret
+, libwebp
+, # optional client deps
+  giflib
+, libvpx
+, miniupnpc
+, # optional server deps
+  libmicrohttpd
+, libsodium
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd ? null
+, # options
+  buildClient ? true
+, buildServer ? true
+, buildServerGui ? true
+, # if false builds a headless server
+  buildExtraTools ? false
+,
 }:
 
-assert lib.assertMsg (
-  buildClient || buildServer || buildExtraTools
-) "You must specify at least one of buildClient, buildServer, or buildExtraTools.";
+assert lib.assertMsg
+  (
+    buildClient || buildServer || buildExtraTools
+  ) "You must specify at least one of buildClient, buildServer, or buildExtraTools.";
 
 let
   clientDeps = with qt6Packages; [

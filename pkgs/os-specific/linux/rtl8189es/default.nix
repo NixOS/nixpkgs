@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  kernel,
-  kernelModuleMakeFlags,
-  bc,
-  nukeReferences,
+{ stdenv
+, lib
+, fetchFromGitHub
+, kernel
+, kernelModuleMakeFlags
+, bc
+, nukeReferences
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     (
       "CONFIG_PLATFORM_I386_PC="
-      + (if (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) then "y" else "n")
+        + (if (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) then "y" else "n")
     )
     ("CONFIG_PLATFORM_ARM_RPI=" + (if stdenv.hostPlatform.isAarch then "y" else "n"))
   ];

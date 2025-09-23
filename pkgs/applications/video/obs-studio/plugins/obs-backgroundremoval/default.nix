@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  obs-studio,
-  onnxruntime,
-  opencv,
-  qt6,
-  curl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, obs-studio
+, onnxruntime
+, opencv
+, qt6
+, curl
+,
 }:
 
 stdenv.mkDerivation rec {

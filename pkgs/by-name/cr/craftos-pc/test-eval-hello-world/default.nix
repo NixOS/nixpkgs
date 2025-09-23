@@ -1,7 +1,7 @@
-{
-  stdenv,
-  craftos-pc,
-  gnugrep,
+{ stdenv
+, craftos-pc
+, gnugrep
+,
 }:
 
 stdenv.mkDerivation {

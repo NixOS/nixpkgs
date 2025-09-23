@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  editline,
-  readline,
-  historyType ? "internal",
-  predefinedBuildType ? "BSD",
+{ lib
+, stdenv
+, fetchFromGitea
+, editline
+, readline
+, historyType ? "internal"
+, predefinedBuildType ? "BSD"
+,
 }:
 
 assert lib.elem historyType [

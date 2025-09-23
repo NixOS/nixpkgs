@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  darkdetect,
-  poetry-core,
-
-  pyqt5,
-  pytest-mock,
-  pytest-qt,
-  pytestCheckHook,
-  qt5,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, darkdetect
+, poetry-core
+, pyqt5
+, pytest-mock
+, pytest-qt
+, pytestCheckHook
+, qt5
+,
 }:
 
 buildPythonPackage rec {

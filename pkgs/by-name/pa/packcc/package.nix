@@ -1,11 +1,11 @@
-{
-  bats,
-  fetchFromGitHub,
-  lib,
-  python3,
-  stdenv,
-  testers,
-  uncrustify,
+{ bats
+, fetchFromGitHub
+, lib
+, python3
+, stdenv
+, testers
+, uncrustify
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

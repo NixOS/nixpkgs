@@ -1,14 +1,14 @@
-{
-  lib,
-  newScope,
-  fetchFromGitHub,
-  atdgen,
-  buildDunePackage,
-  junit,
-  ppxlib,
-  qcheck-core,
-  re,
-  reason,
+{ lib
+, newScope
+, fetchFromGitHub
+, atdgen
+, buildDunePackage
+, junit
+, ppxlib
+, qcheck-core
+, re
+, reason
+,
 }:
 
 lib.makeScope newScope (self: {

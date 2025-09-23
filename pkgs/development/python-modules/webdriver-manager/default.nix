@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  packaging,
-  pybrowsers,
-  pytestCheckHook,
-  python-dotenv,
-  pythonOlder,
-  requests,
-  selenium,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, packaging
+, pybrowsers
+, pytestCheckHook
+, python-dotenv
+, pythonOlder
+, requests
+, selenium
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

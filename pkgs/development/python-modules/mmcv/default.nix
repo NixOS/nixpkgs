@@ -1,35 +1,31 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  ninja,
-  which,
-
-  # buildInputs
-  pybind11,
-  torch,
-
-  # dependencies
-  addict,
-  mmengine,
-  numpy,
-  packaging,
-  pillow,
-  pyyaml,
-  yapf,
-
-  # tests
-  lmdb,
-  onnx,
-  onnxruntime,
-  pytestCheckHook,
-  pyturbojpeg,
-  scipy,
-  tifffile,
-  torchvision,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # nativeBuildInputs
+  ninja
+, which
+, # buildInputs
+  pybind11
+, torch
+, # dependencies
+  addict
+, mmengine
+, numpy
+, packaging
+, pillow
+, pyyaml
+, yapf
+, # tests
+  lmdb
+, onnx
+, onnxruntime
+, pytestCheckHook
+, pyturbojpeg
+, scipy
+, tifffile
+, torchvision
+,
 }:
 
 let

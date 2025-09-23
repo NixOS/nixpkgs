@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  libiconv,
-  ncurses,
-  perl,
-  fortune,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, libiconv
+, ncurses
+, perl
+, fortune
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

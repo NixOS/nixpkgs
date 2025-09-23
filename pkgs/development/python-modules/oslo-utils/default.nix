@@ -1,38 +1,35 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  pbr,
-  setuptools,
-
-  # dependencies
-  debtcollector,
-  iso8601,
-  netaddr,
-  netifaces,
-  oslo-i18n,
-  packaging,
-  psutil,
-  pyparsing,
-  pytz,
-  tzdata,
-
-  # tests
-  ddt,
-  eventlet,
-  fixtures,
-  iana-etc,
-  libredirect,
-  libxcrypt-legacy,
-  oslotest,
-  pyyaml,
-  qemu-utils,
-  replaceVars,
-  stdenv,
-  stestr,
-  testscenarios,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  pbr
+, setuptools
+, # dependencies
+  debtcollector
+, iso8601
+, netaddr
+, netifaces
+, oslo-i18n
+, packaging
+, psutil
+, pyparsing
+, pytz
+, tzdata
+, # tests
+  ddt
+, eventlet
+, fixtures
+, iana-etc
+, libredirect
+, libxcrypt-legacy
+, oslotest
+, pyyaml
+, qemu-utils
+, replaceVars
+, stdenv
+, stestr
+, testscenarios
+,
 }:
 
 buildPythonPackage rec {

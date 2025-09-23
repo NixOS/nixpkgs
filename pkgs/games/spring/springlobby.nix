@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  wxGTK32,
-  openal,
-  pkg-config,
-  curl,
-  libtorrent-rasterbar,
-  libpng,
-  libX11,
-  gettext,
-  boost,
-  libnotify,
-  gtk3,
-  doxygen,
-  spring,
-  makeWrapper,
-  glib,
-  minizip,
-  alure,
-  pcre,
-  jsoncpp,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, wxGTK32
+, openal
+, pkg-config
+, curl
+, libtorrent-rasterbar
+, libpng
+, libX11
+, gettext
+, boost
+, libnotify
+, gtk3
+, doxygen
+, spring
+, makeWrapper
+, glib
+, minizip
+, alure
+, pcre
+, jsoncpp
+,
 }:
 
 stdenv.mkDerivation rec {

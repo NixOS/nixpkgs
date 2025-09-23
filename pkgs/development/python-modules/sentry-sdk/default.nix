@@ -1,68 +1,64 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  certifi,
-  urllib3,
-
-  # optional-dependencies
-  aiohttp,
-  anthropic,
-  apache-beam,
-  asttokens,
-  asyncpg,
-  blinker,
-  bottle,
-  celery,
-  celery-redbeat,
-  chalice,
-  clickhouse-driver,
-  django,
-  executing,
-  falcon,
-  fastapi,
-  flask,
-  grpcio,
-  httpcore,
-  httpx,
-  huey,
-  huggingface-hub,
-  langchain,
-  litestar,
-  loguru,
-  markupsafe,
-  openai,
-  protobuf,
-  pure-eval,
-  pymongo,
-  pyspark,
-  quart,
-  rq,
-  sanic,
-  sqlalchemy,
-  starlette,
-  tiktoken,
-  tornado,
-
-  # checks
-  brotli,
-  jsonschema,
-  pip,
-  pyrsistent,
-  pysocks,
-  pytest-asyncio,
-  pytestCheckHook,
-  pytest-forked,
-  pytest-localserver,
-  pytest-xdist,
-  pytest-watch,
-  responses,
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  certifi
+, urllib3
+, # optional-dependencies
+  aiohttp
+, anthropic
+, apache-beam
+, asttokens
+, asyncpg
+, blinker
+, bottle
+, celery
+, celery-redbeat
+, chalice
+, clickhouse-driver
+, django
+, executing
+, falcon
+, fastapi
+, flask
+, grpcio
+, httpcore
+, httpx
+, huey
+, huggingface-hub
+, langchain
+, litestar
+, loguru
+, markupsafe
+, openai
+, protobuf
+, pure-eval
+, pymongo
+, pyspark
+, quart
+, rq
+, sanic
+, sqlalchemy
+, starlette
+, tiktoken
+, tornado
+, # checks
+  brotli
+, jsonschema
+, pip
+, pyrsistent
+, pysocks
+, pytest-asyncio
+, pytestCheckHook
+, pytest-forked
+, pytest-localserver
+, pytest-xdist
+, pytest-watch
+, responses
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  bash-completion,
-  pkg-config,
-  libconfig,
-  asciidoc,
-  libusbgx,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, bash-completion
+, pkg-config
+, libconfig
+, asciidoc
+, libusbgx
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gt";

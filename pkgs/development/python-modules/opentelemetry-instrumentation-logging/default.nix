@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-test-utils,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, hatchling
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-test-utils
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

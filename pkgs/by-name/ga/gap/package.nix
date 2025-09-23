@@ -1,13 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeWrapper,
-  readline,
-  gmp,
-  pari,
-  zlib,
-  # one of
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, readline
+, gmp
+, pari
+, zlib
+, # one of
   # - "minimal" (~400M):
   #     Install the bare minimum of packages required by gap to start.
   #     This is likely to break a lot of stuff. Do not expect upstream support with
@@ -17,9 +16,10 @@
   #     packages are effectively considered a part of gap.
   # - "full" (~1.7G):
   #     Install all available packages. This takes a lot of space.
-  packageSet ? "standard",
-  # Kept for backwards compatibility. Overrides packageSet to "full".
-  keepAllPackages ? false,
+  packageSet ? "standard"
+, # Kept for backwards compatibility. Overrides packageSet to "full".
+  keepAllPackages ? false
+,
 }:
 let
   # packages absolutely required for gap to start

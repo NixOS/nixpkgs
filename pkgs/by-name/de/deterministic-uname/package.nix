@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  replaceVarsWith,
-  coreutils,
-  getopt,
-  runtimeShell,
-  modDirVersion ? "",
-  forPlatform ? stdenv.buildPlatform,
+{ stdenv
+, lib
+, replaceVarsWith
+, coreutils
+, getopt
+, runtimeShell
+, modDirVersion ? ""
+, forPlatform ? stdenv.buildPlatform
+,
 }:
 
 replaceVarsWith {

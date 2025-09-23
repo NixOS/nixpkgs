@@ -1,73 +1,70 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  alembic,
-  cachetools,
-  click,
-  cloudpickle,
-  cryptography,
-  databricks-sdk,
-  docker,
-  fastapi,
-  flask,
-  gitpython,
-  graphene,
-  gunicorn,
-  importlib-metadata,
-  jinja2,
-  markdown,
-  matplotlib,
-  numpy,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  packaging,
-  pandas,
-  protobuf,
-  pyarrow,
-  pyyaml,
-  requests,
-  scikit-learn,
-  scipy,
-  sqlalchemy,
-  sqlparse,
-  uvicorn,
-
-  # tests
-  aiohttp,
-  azure-core,
-  azure-storage-blob,
-  azure-storage-file,
-  boto3,
-  botocore,
-  catboost,
-  datasets,
-  google-cloud-storage,
-  httpx,
-  jwt,
-  keras,
-  langchain,
-  librosa,
-  moto,
-  opentelemetry-exporter-otlp,
-  optuna,
-  pydantic,
-  pyspark,
-  pytestCheckHook,
-  pytorch-lightning,
-  sentence-transformers,
-  shap,
-  starlette,
-  statsmodels,
-  tensorflow,
-  torch,
-  transformers,
-  xgboost,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  alembic
+, cachetools
+, click
+, cloudpickle
+, cryptography
+, databricks-sdk
+, docker
+, fastapi
+, flask
+, gitpython
+, graphene
+, gunicorn
+, importlib-metadata
+, jinja2
+, markdown
+, matplotlib
+, numpy
+, opentelemetry-api
+, opentelemetry-sdk
+, packaging
+, pandas
+, protobuf
+, pyarrow
+, pyyaml
+, requests
+, scikit-learn
+, scipy
+, sqlalchemy
+, sqlparse
+, uvicorn
+, # tests
+  aiohttp
+, azure-core
+, azure-storage-blob
+, azure-storage-file
+, boto3
+, botocore
+, catboost
+, datasets
+, google-cloud-storage
+, httpx
+, jwt
+, keras
+, langchain
+, librosa
+, moto
+, opentelemetry-exporter-otlp
+, optuna
+, pydantic
+, pyspark
+, pytestCheckHook
+, pytorch-lightning
+, sentence-transformers
+, shap
+, starlette
+, statsmodels
+, tensorflow
+, torch
+, transformers
+, xgboost
+,
 }:
 
 buildPythonPackage rec {

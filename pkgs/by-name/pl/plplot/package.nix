@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pkg-config,
-  enableWX ? false,
-  wxGTK32,
-  enableXWin ? false,
-  xorg,
-  enablePNG ? false,
-  cairo,
-  pango,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, enableWX ? false
+, wxGTK32
+, enableXWin ? false
+, xorg
+, enablePNG ? false
+, cairo
+, pango
+,
 }:
 
 stdenv.mkDerivation rec {

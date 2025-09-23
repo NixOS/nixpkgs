@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ipython,
-  numpy,
-  pandas,
-  pytestCheckHook,
-  requests,
-  responses,
-  setuptools,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, ipython
+, numpy
+, pandas
+, pytestCheckHook
+, requests
+, responses
+, setuptools
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

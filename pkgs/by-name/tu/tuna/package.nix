@@ -1,11 +1,11 @@
-{
-  lib,
-  python3,
-  fetchurl,
-  glib,
-  gobject-introspection,
-  gtk3,
-  wrapGAppsHook3,
+{ lib
+, python3
+, fetchurl
+, glib
+, gobject-introspection
+, gtk3
+, wrapGAppsHook3
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

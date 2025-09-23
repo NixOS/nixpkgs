@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  runtimeShell,
-  catch2,
-  elfutils,
-  libselinux,
-  libsepol,
-  libunwind,
-  libusb1,
-  libuuid,
-  libzip,
-  orc,
-  pcre,
-  zstd,
-  glib,
-  gobject-introspection,
-  gst_all_1,
-  wrapGAppsHook3,
-  # needs pkg_resources
-  withDoc ? false,
-  sphinx,
-  graphviz,
-  withAravis ? true,
-  aravis,
-  meson,
-  withAravisUsbVision ? withAravis,
-  withGui ? true,
-  qt5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, runtimeShell
+, catch2
+, elfutils
+, libselinux
+, libsepol
+, libunwind
+, libusb1
+, libuuid
+, libzip
+, orc
+, pcre
+, zstd
+, glib
+, gobject-introspection
+, gst_all_1
+, wrapGAppsHook3
+, # needs pkg_resources
+  withDoc ? false
+, sphinx
+, graphviz
+, withAravis ? true
+, aravis
+, meson
+, withAravisUsbVision ? withAravis
+, withGui ? true
+, qt5
+,
 }:
 
 stdenv.mkDerivation rec {

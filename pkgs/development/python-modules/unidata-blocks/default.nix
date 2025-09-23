@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pytestCheckHook,
-  nix-update-script,
-  hatchling,
-  langcodes,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+, nix-update-script
+, hatchling
+, langcodes
+,
 }:
 
 buildPythonPackage rec {

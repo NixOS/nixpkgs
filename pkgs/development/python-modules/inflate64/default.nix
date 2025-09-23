@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitea,
-  setuptools,
-  setuptools-scm,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitea
+, setuptools
+, setuptools-scm
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

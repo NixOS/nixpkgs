@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  aspell,
-  boost,
-  expat,
-  intltool,
-  pkg-config,
-  libxml2,
-  libxslt,
-  pcre2,
-  wxGTK32,
-  xercesc,
+{ lib
+, stdenv
+, fetchurl
+, aspell
+, boost
+, expat
+, intltool
+, pkg-config
+, libxml2
+, libxslt
+, pcre2
+, wxGTK32
+, xercesc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

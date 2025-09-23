@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  buildGoModule,
-  fetchFromGitHub,
-  nixosTests,
-  libcap,
-  go,
+{ lib
+, stdenv
+, fetchpatch
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+, libcap
+, go
+,
 }:
 
 let

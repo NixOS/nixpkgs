@@ -1,27 +1,27 @@
-{
-  pname,
-  version,
-  src,
-  meta,
-  stdenv,
-  binaryName,
-  desktopName,
-  lib,
-  undmg,
-  makeWrapper,
-  writeScript,
-  python3,
-  runCommand,
-  branch,
-  withOpenASAR ? false,
-  openasar,
-  withVencord ? false,
-  vencord,
-  withEquicord ? false,
-  equicord,
-  withMoonlight ? false,
-  moonlight,
-  commandLineArgs ? "",
+{ pname
+, version
+, src
+, meta
+, stdenv
+, binaryName
+, desktopName
+, lib
+, undmg
+, makeWrapper
+, writeScript
+, python3
+, runCommand
+, branch
+, withOpenASAR ? false
+, openasar
+, withVencord ? false
+, vencord
+, withEquicord ? false
+, equicord
+, withMoonlight ? false
+, moonlight
+, commandLineArgs ? ""
+,
 }:
 
 let
@@ -46,9 +46,10 @@ let
         chmod +x $out/bin/disable-breaking-updates.py
       '';
 in
-assert lib.assertMsg (
-  enabledDiscordModsCount <= 1
-) "discord: Only one of Vencord, Equicord or Moonlight can be enabled at the same time";
+assert lib.assertMsg
+  (
+    enabledDiscordModsCount <= 1
+  ) "discord: Only one of Vencord, Equicord or Moonlight can be enabled at the same time";
 stdenv.mkDerivation {
   inherit
     pname

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  fonttools,
-  lxml,
-  matplotlib,
-  pandas,
-  pillow,
-  python-barcode,
-  pythonOlder,
-  qrcode,
-  pytestCheckHook,
-  requests,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, fonttools
+, lxml
+, matplotlib
+, pandas
+, pillow
+, python-barcode
+, pythonOlder
+, qrcode
+, pytestCheckHook
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

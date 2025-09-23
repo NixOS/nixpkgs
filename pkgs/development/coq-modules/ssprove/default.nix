@@ -1,15 +1,15 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  version ? null,
-  equations,
-  mathcomp-boot,
-  mathcomp-analysis,
-  mathcomp-experimental-reals,
-  extructures,
-  deriving,
-  mathcomp-word,
+{ lib
+, mkCoqDerivation
+, coq
+, version ? null
+, equations
+, mathcomp-boot
+, mathcomp-analysis
+, mathcomp-experimental-reals
+, extructures
+, deriving
+, mathcomp-word
+,
 }:
 
 (mkCoqDerivation {

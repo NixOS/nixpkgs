@@ -1,13 +1,13 @@
-{
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  lib,
-  pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
+{ async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, lib
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

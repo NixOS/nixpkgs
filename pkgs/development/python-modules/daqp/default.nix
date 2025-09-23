@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  unittestCheckHook,
-  cython,
-  setuptools,
-  wheel,
-  numpy,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, unittestCheckHook
+, cython
+, setuptools
+, wheel
+, numpy
+,
 }:
 buildPythonPackage rec {
   pname = "daqp";

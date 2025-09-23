@@ -1,11 +1,10 @@
-{
-  lib,
-  pkgs,
-  customQemu ? null,
-  kernel ? pkgs.linux,
-  img ? pkgs.stdenv.hostPlatform.linux-kernel.target,
-  storeDir ? builtins.storeDir,
-  rootModules ? [
+{ lib
+, pkgs
+, customQemu ? null
+, kernel ? pkgs.linux
+, img ? pkgs.stdenv.hostPlatform.linux-kernel.target
+, storeDir ? builtins.storeDir
+, rootModules ? [
     "virtio_pci"
     "virtio_mmio"
     "virtio_blk"
@@ -14,7 +13,8 @@
     "ext4"
     "virtiofs"
     "crc32c_generic"
-  ],
+  ]
+,
 }:
 
 let
@@ -319,11 +319,12 @@ rec {
   createEmptyImage =
     {
       # Disk image size in MiB (1024*1024 bytes)
-      size,
-      # Name that will be written to ${destination}/nix-support/full-name
-      fullName,
-      # Where to write the image files, defaulting to $out
-      destination ? "$out",
+      size
+    , # Name that will be written to ${destination}/nix-support/full-name
+      fullName
+    , # Where to write the image files, defaulting to $out
+      destination ? "$out"
+    ,
     }:
     ''
       mkdir -p ${destination}
@@ -373,12 +374,11 @@ rec {
   runInLinuxVM =
     drv:
     lib.overrideDerivation drv (
-      {
-        memSize ? 512,
-        QEMU_OPTS ? "",
-        args,
-        builder,
-        ...
+      { memSize ? 512
+      , QEMU_OPTS ? ""
+      , args
+      , builder
+      , ...
       }:
       {
         requiredSystemFeatures = [ "kvm" ];
@@ -395,9 +395,9 @@ rec {
     );
 
   extractFs =
-    {
-      file,
-      fs ? null,
+    { file
+    , fs ? null
+    ,
     }:
     runInLinuxVM (
       stdenv.mkDerivation {
@@ -424,9 +424,9 @@ rec {
     );
 
   extractMTDfs =
-    {
-      file,
-      fs ? null,
+    { file
+    , fs ? null
+    ,
     }:
     runInLinuxVM (
       stdenv.mkDerivation {
@@ -503,18 +503,18 @@ rec {
   */
 
   fillDiskWithRPMs =
-    {
-      size ? 4096,
-      rpms,
-      name,
-      fullName,
-      preInstall ? "",
-      postInstall ? "",
-      runScripts ? true,
-      createRootFS ? defaultCreateRootFS,
-      QEMU_OPTS ? "",
-      memSize ? 512,
-      unifiedSystemDir ? false,
+    { size ? 4096
+    , rpms
+    , name
+    , fullName
+    , preInstall ? ""
+    , postInstall ? ""
+    , runScripts ? true
+    , createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? ""
+    , memSize ? 512
+    , unifiedSystemDir ? false
+    ,
     }:
 
     runInLinuxVM (
@@ -693,16 +693,15 @@ rec {
   */
 
   fillDiskWithDebs =
-    {
-      size ? 4096,
-      debs,
-      name,
-      fullName,
-      postInstall ? null,
-      createRootFS ? defaultCreateRootFS,
-      QEMU_OPTS ? "",
-      memSize ? 512,
-      ...
+    { size ? 4096
+    , debs
+    , name
+    , fullName
+    , postInstall ? null
+    , createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? ""
+    , memSize ? 512
+    , ...
     }@args:
 
     runInLinuxVM (
@@ -809,34 +808,34 @@ rec {
   */
 
   rpmClosureGenerator =
-    {
-      name,
-      packagesLists,
-      urlPrefixes,
-      packages,
-      archs ? [ ],
+    { name
+    , packagesLists
+    , urlPrefixes
+    , packages
+    , archs ? [ ]
+    ,
     }:
-    assert (builtins.length packagesLists) == (builtins.length urlPrefixes);
-    runCommand "${name}.nix"
-      {
-        nativeBuildInputs = [
-          buildPackages.perl
-          buildPackages.perlPackages.XMLSimple
-        ];
-        inherit archs;
-      }
-      ''
-        ${lib.concatImapStrings (i: pl: ''
-          gunzip < ${pl} > ./packages_${toString i}.xml
-        '') packagesLists}
-        perl -w ${rpm/rpm-closure.pl} \
-          ${
-            lib.concatImapStrings (i: pl: "./packages_${toString i}.xml ${pl.snd} ") (
-              lib.zipLists packagesLists urlPrefixes
-            )
-          } \
-          ${toString packages} > $out
-      '';
+      assert (builtins.length packagesLists) == (builtins.length urlPrefixes);
+      runCommand "${name}.nix"
+        {
+          nativeBuildInputs = [
+            buildPackages.perl
+            buildPackages.perlPackages.XMLSimple
+          ];
+          inherit archs;
+        }
+        ''
+          ${lib.concatImapStrings (i: pl: ''
+            gunzip < ${pl} > ./packages_${toString i}.xml
+          '') packagesLists}
+          perl -w ${rpm/rpm-closure.pl} \
+            ${
+              lib.concatImapStrings (i: pl: "./packages_${toString i}.xml ${pl.snd} ") (
+                lib.zipLists packagesLists urlPrefixes
+              )
+            } \
+            ${toString packages} > $out
+        '';
 
   /*
     Helper function that combines rpmClosureGenerator and
@@ -845,27 +844,27 @@ rec {
   */
 
   makeImageFromRPMDist =
-    {
-      name,
-      fullName,
-      size ? 4096,
-      urlPrefix ? "",
-      urlPrefixes ? [ urlPrefix ],
-      packagesList ? "",
-      packagesLists ? [ packagesList ],
-      packages,
-      extraPackages ? [ ],
-      preInstall ? "",
-      postInstall ? "",
-      archs ? [
+    { name
+    , fullName
+    , size ? 4096
+    , urlPrefix ? ""
+    , urlPrefixes ? [ urlPrefix ]
+    , packagesList ? ""
+    , packagesLists ? [ packagesList ]
+    , packages
+    , extraPackages ? [ ]
+    , preInstall ? ""
+    , postInstall ? ""
+    , archs ? [
         "noarch"
         "i386"
-      ],
-      runScripts ? true,
-      createRootFS ? defaultCreateRootFS,
-      QEMU_OPTS ? "",
-      memSize ? 512,
-      unifiedSystemDir ? false,
+      ]
+    , runScripts ? true
+    , createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? ""
+    , memSize ? 512
+    , unifiedSystemDir ? false
+    ,
     }:
 
     fillDiskWithRPMs {
@@ -881,15 +880,17 @@ rec {
         QEMU_OPTS
         memSize
         ;
-      rpms = import (rpmClosureGenerator {
-        inherit
-          name
-          packagesLists
-          urlPrefixes
-          archs
-          ;
-        packages = packages ++ extraPackages;
-      }) { inherit fetchurl; };
+      rpms = import
+        (rpmClosureGenerator {
+          inherit
+            name
+            packagesLists
+            urlPrefixes
+            archs
+            ;
+          packages = packages ++ extraPackages;
+        })
+        { inherit fetchurl; };
     };
 
   /*
@@ -898,11 +899,11 @@ rec {
   */
 
   debClosureGenerator =
-    {
-      name,
-      packagesLists,
-      urlPrefix,
-      packages,
+    { name
+    , packagesLists
+    , urlPrefix
+    , packages
+    ,
     }:
 
     runCommand "${name}.nix"
@@ -941,21 +942,20 @@ rec {
   */
 
   makeImageFromDebDist =
-    {
-      name,
-      fullName,
-      size ? 4096,
-      urlPrefix,
-      packagesList ? "",
-      packagesLists ? [ packagesList ],
-      packages,
-      extraPackages ? [ ],
-      postInstall ? "",
-      extraDebs ? [ ],
-      createRootFS ? defaultCreateRootFS,
-      QEMU_OPTS ? "",
-      memSize ? 512,
-      ...
+    { name
+    , fullName
+    , size ? 4096
+    , urlPrefix
+    , packagesList ? ""
+    , packagesLists ? [ packagesList ]
+    , packages
+    , extraPackages ? [ ]
+    , postInstall ? ""
+    , extraDebs ? [ ]
+    , createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? ""
+    , memSize ? 512
+    , ...
     }@args:
 
     let
@@ -1259,20 +1259,26 @@ rec {
     addition to the default packages.
   */
   diskImageFuns =
-    (lib.mapAttrs (
-      name: as: as2:
-      makeImageFromRPMDist (as // as2)
-    ) rpmDistros)
-    // (lib.mapAttrs (
-      name: as: as2:
-      makeImageFromDebDist (as // as2)
-    ) debDistros);
+    (lib.mapAttrs
+      (
+        name: as: as2:
+          makeImageFromRPMDist (as // as2)
+      )
+      rpmDistros)
+    // (lib.mapAttrs
+      (
+        name: as: as2:
+          makeImageFromDebDist (as // as2)
+      )
+      debDistros);
 
   # Shorthand for `diskImageFuns.<attr> { extraPackages = ... }'.
-  diskImageExtraFuns = lib.mapAttrs (
-    name: f: extraPackages:
-    f { inherit extraPackages; }
-  ) diskImageFuns;
+  diskImageExtraFuns = lib.mapAttrs
+    (
+      name: f: extraPackages:
+        f { inherit extraPackages; }
+    )
+    diskImageFuns;
 
   /*
     Default disk images generated from the `rpmDistros' and

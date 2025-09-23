@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  doxygen,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, doxygen
+,
 }:
 
 stdenv.mkDerivation rec {

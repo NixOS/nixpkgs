@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  autoconf,
-  automake,
-  curl,
-  fetchFromGitHub,
-  fetchMavenArtifact,
-  fetchpatch,
-  git,
-  jdk8,
-  makeWrapper,
-  net-tools,
-  python3,
+{ lib
+, stdenv
+, autoconf
+, automake
+, curl
+, fetchFromGitHub
+, fetchMavenArtifact
+, fetchpatch
+, git
+, jdk8
+, makeWrapper
+, net-tools
+, python3
+,
 }:
 
 let
@@ -336,12 +336,14 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = lib.concatStrings (
-    lib.mapAttrsToList (
-      dir:
-      lib.concatMapStrings (artifact: ''
-        cp ${artifact}/share/java/* third_party/${dir}
-      '')
-    ) artifacts
+    lib.mapAttrsToList
+      (
+        dir:
+        lib.concatMapStrings (artifact: ''
+          cp ${artifact}/share/java/* third_party/${dir}
+        '')
+      )
+      artifacts
   );
 
   postInstall = ''

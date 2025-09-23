@@ -1,24 +1,24 @@
-{
-  bc-ur,
-  boost186,
-  cmake,
-  fetchFromGitHub,
-  hidapi,
-  lib,
-  libsodium,
-  libusb1,
-  openssl,
-  pkg-config,
-  protobuf,
-  python3,
-  qrencode,
-  qt6,
-  readline,
-  stdenv,
-  testers,
-  tor,
-  unbound,
-  zxing-cpp,
+{ bc-ur
+, boost186
+, cmake
+, fetchFromGitHub
+, hidapi
+, lib
+, libsodium
+, libusb1
+, openssl
+, pkg-config
+, protobuf
+, python3
+, qrencode
+, qt6
+, readline
+, stdenv
+, testers
+, tor
+, unbound
+, zxing-cpp
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

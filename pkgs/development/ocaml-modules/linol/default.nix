@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  logs,
-  ppx_yojson_conv_lib,
-  trace,
-  uutf,
-  yojson,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, logs
+, ppx_yojson_conv_lib
+, trace
+, uutf
+, yojson
+,
 }:
 
 buildDunePackage rec {

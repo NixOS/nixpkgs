@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  makeWrapper,
-  pkg-config,
-  nasm,
-  makeDesktopItem,
-  copyDesktopItems,
-  alsa-lib,
-  flac,
-  libvorbis,
-  libvpx,
-  libGL,
-  SDL2,
-  SDL2_mixer,
-  xorg,
-  graphicsmagick,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitLab
+, makeWrapper
+, pkg-config
+, nasm
+, makeDesktopItem
+, copyDesktopItems
+, alsa-lib
+, flac
+, libvorbis
+, libvpx
+, libGL
+, SDL2
+, SDL2_mixer
+, xorg
+, graphicsmagick
+, unstableGitUpdater
+,
 }:
 
 let

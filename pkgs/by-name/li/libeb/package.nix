@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  zlib,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, zlib
+, fetchpatch
+,
 }:
 stdenv.mkDerivation rec {
   pname = "libeb";

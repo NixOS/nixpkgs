@@ -1,12 +1,12 @@
-{
-  notmuch,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  lua5_4,
-  installShellFiles,
-  nix-update-script,
+{ notmuch
+, lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, lua5_4
+, installShellFiles
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "notmuch-mailmover";

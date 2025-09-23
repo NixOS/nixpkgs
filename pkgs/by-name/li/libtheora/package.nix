@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libogg,
-  libvorbis,
-  pkg-config,
-  perl,
-  testers,
-  validatePkgConfig,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libogg
+, libvorbis
+, pkg-config
+, perl
+, testers
+, validatePkgConfig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

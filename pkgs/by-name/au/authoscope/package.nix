@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  libcap,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  zlib,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, libcap
+, nix-update-script
+, openssl
+, pkg-config
+, rustPlatform
+, zlib
+,
 }:
 
 rustPlatform.buildRustPackage rec {

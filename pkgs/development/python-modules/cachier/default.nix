@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  click,
-  watchdog,
-  portalocker,
-  pytestCheckHook,
-  pytest-cov-stub,
-  sqlalchemy,
-  pymongo,
-  dnspython,
-  pymongo-inmemory,
-  pandas,
-  birch,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, click
+, watchdog
+, portalocker
+, pytestCheckHook
+, pytest-cov-stub
+, sqlalchemy
+, pymongo
+, dnspython
+, pymongo-inmemory
+, pandas
+, birch
+,
 }:
 
 buildPythonPackage rec {

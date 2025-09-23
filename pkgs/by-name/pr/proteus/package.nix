@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  freetype,
-  libjack2,
-  libX11,
-  libXext,
-  libXcursor,
-  libXinerama,
-  libXrandr,
-  libXrender,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoPatchelfHook
+, cmake
+, pkg-config
+, alsa-lib
+, freetype
+, libjack2
+, libX11
+, libXext
+, libXcursor
+, libXinerama
+, libXrandr
+, libXrender
+,
 }:
 
 stdenv.mkDerivation rec {

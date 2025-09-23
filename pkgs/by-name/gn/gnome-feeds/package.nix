@@ -1,21 +1,18 @@
-{
-  lib,
-  python3,
-
-  fetchFromGitLab,
-  fetchpatch,
-
-  appstream,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  blueprint-compiler,
-  wrapGAppsHook4,
-
-  glib-networking,
-  libadwaita,
-  webkitgtk_6_0,
+{ lib
+, python3
+, fetchFromGitLab
+, fetchpatch
+, appstream
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, blueprint-compiler
+, wrapGAppsHook4
+, glib-networking
+, libadwaita
+, webkitgtk_6_0
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

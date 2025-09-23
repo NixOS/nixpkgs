@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  docopt-subcommands,
-  future,
-  pytestCheckHook,
-  hypothesis,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, docopt-subcommands
+, future
+, pytestCheckHook
+, hypothesis
+,
 }:
 
 buildPythonPackage {

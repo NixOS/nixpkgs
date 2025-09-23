@@ -1,38 +1,38 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  appstream,
-  desktop-file-utils,
-  gtk4,
-  glib,
-  pango,
-  gdk-pixbuf,
-  shared-mime-info,
-  itstool,
-  poppler,
-  nautilus,
-  djvulibre,
-  libarchive,
-  libsecret,
-  wrapGAppsHook4,
-  librsvg,
-  gobject-introspection,
-  yelp-tools,
-  gsettings-desktop-schemas,
-  dbus,
-  gi-docgen,
-  libsysprof-capture,
-  libspelling,
-  withLibsecret ? true,
-  supportNautilus ? (!stdenv.hostPlatform.isDarwin),
-  libadwaita,
-  exempi,
-  cargo,
-  rustPlatform,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, appstream
+, desktop-file-utils
+, gtk4
+, glib
+, pango
+, gdk-pixbuf
+, shared-mime-info
+, itstool
+, poppler
+, nautilus
+, djvulibre
+, libarchive
+, libsecret
+, wrapGAppsHook4
+, librsvg
+, gobject-introspection
+, yelp-tools
+, gsettings-desktop-schemas
+, dbus
+, gi-docgen
+, libsysprof-capture
+, libspelling
+, withLibsecret ? true
+, supportNautilus ? (!stdenv.hostPlatform.isDarwin)
+, libadwaita
+, exempi
+, cargo
+, rustPlatform
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

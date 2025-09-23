@@ -1,10 +1,10 @@
-{
-  appimageTools,
-  lib,
-  fetchurl,
-  jdk21,
-  stdenv,
-  _7zz,
+{ appimageTools
+, lib
+, fetchurl
+, jdk21
+, stdenv
+, _7zz
+,
 }:
 let
   pname = "nosql-workbench";
@@ -25,8 +25,7 @@ let
           url = "https://s3.amazonaws.com/nosql-workbench/NoSQL%20Workbench-linux-${version}.AppImage";
           hash = "sha256-ewlaaaWxPHxaOdAMbkHChzbxAB5MNdZS/p8ROD/SvcQ=";
         };
-      }
-      .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+      }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
   meta = {
     description = "Visual tool that provides data modeling, data visualization, and query development features to help you design, create, query, and manage DynamoDB tables";
@@ -42,7 +41,8 @@ let
   };
 in
 if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+  stdenv.mkDerivation
+  {
     inherit
       pname
       version

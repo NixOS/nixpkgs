@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitLab,
-  libmd,
-  coreutils,
-  lib,
-  testers,
+{ stdenv
+, fetchFromGitLab
+, libmd
+, coreutils
+, lib
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  coreutils,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, coreutils
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

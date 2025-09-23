@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  runCommand,
-  diagrams-as-code,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, runCommand
+, diagrams-as-code
+,
 }:
 
 python3Packages.buildPythonPackage rec {

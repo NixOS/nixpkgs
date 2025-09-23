@@ -1,37 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  bsd-finger,
-  perl,
-  talloc,
-  linkOpenssl ? true,
-  openssl,
-  withCap ? true,
-  libcap,
-  withCollectd ? false,
-  collectd,
-  withJson ? false,
-  json_c,
-  withLdap ? true,
-  openldap,
-  withMemcached ? false,
-  libmemcached,
-  withMysql ? false,
-  libmysqlclient,
-  withPostgresql ? false,
-  libpq,
-  withPcap ? true,
-  libpcap,
-  withRedis ? false,
-  hiredis,
-  withRest ? false,
-  curl,
-  withSqlite ? true,
-  sqlite,
-  withYubikey ? false,
-  libyubikey,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, bsd-finger
+, perl
+, talloc
+, linkOpenssl ? true
+, openssl
+, withCap ? true
+, libcap
+, withCollectd ? false
+, collectd
+, withJson ? false
+, json_c
+, withLdap ? true
+, openldap
+, withMemcached ? false
+, libmemcached
+, withMysql ? false
+, libmysqlclient
+, withPostgresql ? false
+, libpq
+, withPcap ? true
+, libpcap
+, withRedis ? false
+, hiredis
+, withRest ? false
+, curl
+, withSqlite ? true
+, sqlite
+, withYubikey ? false
+, libyubikey
+,
 }:
 
 assert withRest -> withJson;

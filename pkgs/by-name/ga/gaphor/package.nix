@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  glib,
-  gobject-introspection,
-  wrapGAppsHook4,
-  gtksourceview5,
-  libadwaita,
-  python3Packages,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, glib
+, gobject-introspection
+, wrapGAppsHook4
+, gtksourceview5
+, libadwaita
+, python3Packages
+, nix-update-script
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "gaphor";

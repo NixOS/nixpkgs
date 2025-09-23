@@ -1,8 +1,8 @@
-{
-  lib,
-  makeSetupHook,
-  mkAppleDerivation,
-  stdenv,
+{ lib
+, makeSetupHook
+, mkAppleDerivation
+, stdenv
+,
 }:
 
 mkAppleDerivation {

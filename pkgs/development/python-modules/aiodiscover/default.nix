@@ -1,19 +1,19 @@
-{
-  lib,
-  aiodns,
-  async-timeout,
-  buildPythonPackage,
-  cached-ipaddress,
-  dnspython,
-  fetchFromGitHub,
-  ifaddr,
-  netifaces,
-  poetry-core,
-  pyroute2,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, aiodns
+, async-timeout
+, buildPythonPackage
+, cached-ipaddress
+, dnspython
+, fetchFromGitHub
+, ifaddr
+, netifaces
+, poetry-core
+, pyroute2
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

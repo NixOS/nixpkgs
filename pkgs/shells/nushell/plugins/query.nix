@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  nushell,
-  nix-update-script,
-  pkg-config,
-  openssl,
-  curl,
+{ stdenv
+, lib
+, rustPlatform
+, nushell
+, nix-update-script
+, pkg-config
+, openssl
+, curl
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

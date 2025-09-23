@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  bitstruct,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
-  voluptuous,
+{ lib
+, aiohttp
+, bitstruct
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typing-extensions
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

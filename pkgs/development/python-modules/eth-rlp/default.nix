@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  eth-hash,
-  eth-utils,
-  hexbytes,
-  pytestCheckHook,
-  pythonOlder,
-  rlp,
-  pydantic,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, eth-hash
+, eth-utils
+, hexbytes
+, pytestCheckHook
+, pythonOlder
+, rlp
+, pydantic
+,
 }:
 
 buildPythonPackage rec {

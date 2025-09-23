@@ -1,11 +1,11 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  rustPlatform,
-  curl,
-  pkg-config,
-  openssl,
+{ stdenv
+, fetchFromGitHub
+, lib
+, rustPlatform
+, curl
+, pkg-config
+, openssl
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snarkos";

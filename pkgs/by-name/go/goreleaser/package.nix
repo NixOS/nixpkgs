@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  buildGo125Module,
-  fetchFromGitHub,
-  installShellFiles,
-  buildPackages,
-  testers,
-  goreleaser,
+{ stdenv
+, lib
+, buildGo125Module
+, fetchFromGitHub
+, installShellFiles
+, buildPackages
+, testers
+, goreleaser
+,
 }:
 buildGo125Module rec {
   pname = "goreleaser";

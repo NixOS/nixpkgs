@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gfortran,
-  buildType ? "meson",
-  meson,
-  ninja,
-  cmake,
-  pkg-config,
-  python3,
-  mctc-lib,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gfortran
+, buildType ? "meson"
+, meson
+, ninja
+, cmake
+, pkg-config
+, python3
+, mctc-lib
+,
 }:
 
 assert (

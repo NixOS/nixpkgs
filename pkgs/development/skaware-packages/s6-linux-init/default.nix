@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  skawarePackages,
-  skalibs,
-  execline,
-  s6,
-  targetPackages,
+{ lib
+, stdenv
+, skawarePackages
+, skalibs
+, execline
+, s6
+, targetPackages
+,
 }:
 
 skawarePackages.buildPackage {

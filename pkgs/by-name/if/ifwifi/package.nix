@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  makeWrapper,
-  networkmanager,
-  iw,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, makeWrapper
+, networkmanager
+, iw
+,
 }:
 
 rustPlatform.buildRustPackage rec {

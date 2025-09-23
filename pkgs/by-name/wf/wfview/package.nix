@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  eigen,
-  hidapi,
-  libopus,
-  libpulseaudio,
-  portaudio,
-  qt6,
-  qt6Packages,
-  rtaudio,
+{ lib
+, stdenv
+, fetchFromGitLab
+, eigen
+, hidapi
+, libopus
+, libpulseaudio
+, portaudio
+, qt6
+, qt6Packages
+, rtaudio
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

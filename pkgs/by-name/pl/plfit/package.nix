@@ -1,11 +1,11 @@
-{
-  cmake,
-  fetchFromGitHub,
-  lib,
-  llvmPackages,
-  python ? null,
-  stdenv,
-  swig,
+{ cmake
+, fetchFromGitHub
+, lib
+, llvmPackages
+, python ? null
+, stdenv
+, swig
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

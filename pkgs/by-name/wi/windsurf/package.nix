@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  vscode-generic,
-  fetchurl,
-  nixosTests,
-  commandLineArgs ? "",
-  useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
+{ lib
+, stdenv
+, callPackage
+, vscode-generic
+, fetchurl
+, nixosTests
+, commandLineArgs ? ""
+, useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin
+,
 }:
 let
   info =

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libGLU,
-  libGL,
-  SDL,
-  SDL_mixer,
-  plib,
-  libjpeg,
+{ lib
+, stdenv
+, fetchurl
+, libGLU
+, libGL
+, SDL
+, SDL_mixer
+, plib
+, libjpeg
+,
 }:
 let
   version = "0.9.13";

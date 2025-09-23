@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  installShellFiles,
-  pandoc,
-  testers,
-  lsd,
-  git,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, pandoc
+, testers
+, lsd
+, git
+,
 }:
 
 rustPlatform.buildRustPackage rec {

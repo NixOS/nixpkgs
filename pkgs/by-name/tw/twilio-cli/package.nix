@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  nodejs-slim,
-  fetchzip,
-  testers,
+{ lib
+, stdenvNoCC
+, nodejs-slim
+, fetchzip
+, testers
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  SDL,
-  SDL_net,
-  SDL_sound,
-  copyDesktopItems,
-  graphicsmagick,
-  libGL,
-  libGLU,
-  libpng,
-  binutils,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, SDL
+, SDL_net
+, SDL_sound
+, copyDesktopItems
+, graphicsmagick
+, libGL
+, libGLU
+, libpng
+, binutils
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  pythonPackages,
-  fetchPypi,
-  mopidy,
-  glibcLocales,
+{ lib
+, pythonPackages
+, fetchPypi
+, mopidy
+, glibcLocales
+,
 }:
 
 pythonPackages.buildPythonApplication rec {

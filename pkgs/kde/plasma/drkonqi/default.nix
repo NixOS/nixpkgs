@@ -1,11 +1,11 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  systemd,
-  elfutils,
-  gdb,
-  python3,
-  replaceVars,
+{ mkKdeDerivation
+, pkg-config
+, systemd
+, elfutils
+, gdb
+, python3
+, replaceVars
+,
 }:
 let
   gdb' = gdb.override {

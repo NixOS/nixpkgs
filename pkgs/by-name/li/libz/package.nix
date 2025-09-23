@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitLab
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

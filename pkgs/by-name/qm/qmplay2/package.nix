@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  alsa-lib,
-  callPackage,
-  cmake,
-  ffmpeg,
-  fribidi,
-  game-music-emu,
-  libXdmcp,
-  libXv,
-  libass,
-  libcddb,
-  libcdio,
-  libpulseaudio,
-  libsidplayfp,
-  libva,
-  libxcb,
-  ninja,
-  pkg-config,
-  qt5,
-  qt6,
-  taglib,
-  vulkan-headers,
-  vulkan-tools,
-  # Configurable options
-  qtVersion ? "6", # Can be 5 or 6
+{ lib
+, stdenv
+, alsa-lib
+, callPackage
+, cmake
+, ffmpeg
+, fribidi
+, game-music-emu
+, libXdmcp
+, libXv
+, libass
+, libcddb
+, libcdio
+, libpulseaudio
+, libsidplayfp
+, libva
+, libxcb
+, ninja
+, pkg-config
+, qt5
+, qt6
+, taglib
+, vulkan-headers
+, vulkan-tools
+, # Configurable options
+  qtVersion ? "6"
+, # Can be 5 or 6
 }:
 
 let

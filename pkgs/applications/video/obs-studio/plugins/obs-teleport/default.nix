@@ -1,10 +1,10 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  libjpeg,
-  nix-update-script,
-  obs-studio,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, libjpeg
+, nix-update-script
+, obs-studio
+,
 }:
 
 buildGoModule rec {

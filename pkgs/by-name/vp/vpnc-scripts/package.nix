@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  coreutils,
-  gawk,
-  gnugrep,
-  iproute2,
-  makeWrapper,
-  net-tools,
-  openresolv,
-  systemd,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+{ lib
+, stdenv
+, fetchgit
+, coreutils
+, gawk
+, gnugrep
+, iproute2
+, makeWrapper
+, net-tools
+, openresolv
+, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+,
 }:
 
 stdenv.mkDerivation {

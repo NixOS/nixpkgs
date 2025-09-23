@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  jupyter-packaging,
-  ipywidgets,
+{ buildPythonPackage
+, fetchPypi
+, jupyter-packaging
+, ipywidgets
+,
 }:
 
 buildPythonPackage rec {

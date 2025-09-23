@@ -1,12 +1,12 @@
-{
-  autoPatchelfHook,
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  ml-dtypes,
-  numpy,
-  python,
-  stdenv,
+{ autoPatchelfHook
+, buildPythonPackage
+, fetchPypi
+, lib
+, ml-dtypes
+, numpy
+, python
+, stdenv
+,
 }:
 
 let

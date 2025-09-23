@@ -1,13 +1,13 @@
-{
-  lib,
-  autoit-ripper,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  karton-core,
-  malduck,
-  pythonOlder,
-  regex,
+{ lib
+, autoit-ripper
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, karton-core
+, malduck
+, pythonOlder
+, regex
+,
 }:
 
 buildPythonPackage rec {

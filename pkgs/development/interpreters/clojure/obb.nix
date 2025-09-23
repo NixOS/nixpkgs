@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  babashka,
-  cacert,
-  clojure,
-  git,
-  jdk,
-  obb,
-  fetchFromGitHub,
-  makeWrapper,
-  runCommand,
+{ lib
+, stdenv
+, babashka
+, cacert
+, clojure
+, git
+, jdk
+, obb
+, fetchFromGitHub
+, makeWrapper
+, runCommand
+,
 }:
 
 stdenv.mkDerivation rec {

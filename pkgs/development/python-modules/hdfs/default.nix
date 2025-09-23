@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  docopt,
-  fastavro,
-  fetchFromGitHub,
-  lib,
-  pytestCheckHook,
-  requests,
-  setuptools,
-  six,
+{ buildPythonPackage
+, docopt
+, fastavro
+, fetchFromGitHub
+, lib
+, pytestCheckHook
+, requests
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

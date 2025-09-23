@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  replaceVars,
-  pkg-config,
-  glib,
-  shadow,
-  gobject-introspection,
-  polkit,
-  systemd,
-  coreutils,
-  meson,
-  mesonEmulatorHook,
-  dbus,
-  ninja,
-  python3,
-  vala,
-  gettext,
-  libxcrypt,
+{ lib
+, stdenv
+, fetchurl
+, replaceVars
+, pkg-config
+, glib
+, shadow
+, gobject-introspection
+, polkit
+, systemd
+, coreutils
+, meson
+, mesonEmulatorHook
+, dbus
+, ninja
+, python3
+, vala
+, gettext
+, libxcrypt
+,
 }:
 
 stdenv.mkDerivation rec {

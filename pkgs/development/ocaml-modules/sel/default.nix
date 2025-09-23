@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  ppxlib,
-  ppx_deriving,
-  buildDunePackage,
+{ lib
+, fetchurl
+, ppxlib
+, ppx_deriving
+, buildDunePackage
+,
 }:
 
 buildDunePackage rec {

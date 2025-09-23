@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  inotify-simple,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, inotify-simple
+,
 }:
 
 buildPythonPackage rec {

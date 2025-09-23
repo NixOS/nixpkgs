@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  replaceVars,
-  jq,
-  moreutils,
-  zip,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  electron,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, fetchpatch
+, replaceVars
+, jq
+, moreutils
+, zip
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, electron
+,
 }:
 
 buildNpmPackage rec {

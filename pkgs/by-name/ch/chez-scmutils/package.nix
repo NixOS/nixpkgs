@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  chez,
-  chez-srfi,
-  chez-mit,
+{ stdenv
+, lib
+, fetchFromGitHub
+, chez
+, chez-srfi
+, chez-mit
+,
 }:
 
 stdenv.mkDerivation rec {

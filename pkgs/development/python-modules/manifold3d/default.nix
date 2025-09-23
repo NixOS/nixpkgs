@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  python,
-  fetchFromGitHub,
-  scikit-build-core,
-  manifold,
-  cmake,
-  ninja,
-  nanobind,
-  pkg-config,
-  numpy,
-  clipper2,
-  tbb,
-  pytestCheckHook,
-  trimesh,
+{ lib
+, buildPythonPackage
+, python
+, fetchFromGitHub
+, scikit-build-core
+, manifold
+, cmake
+, ninja
+, nanobind
+, pkg-config
+, numpy
+, clipper2
+, tbb
+, pytestCheckHook
+, trimesh
+,
 }:
 
 buildPythonPackage rec {

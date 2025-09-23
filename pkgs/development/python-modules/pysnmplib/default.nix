@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pycryptodomex,
-  pysnmp-pyasn1,
-  pysnmp-pysmi,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pycryptodomex
+, pysnmp-pyasn1
+, pysnmp-pysmi
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

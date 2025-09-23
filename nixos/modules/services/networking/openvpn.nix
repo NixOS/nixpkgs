@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -249,9 +248,11 @@ in
 
     systemd.services =
       (listToAttrs (
-        mapAttrsToList (
-          name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)
-        ) cfg.servers
+        mapAttrsToList
+          (
+            name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)
+          )
+          cfg.servers
       ))
       // restartService;
 

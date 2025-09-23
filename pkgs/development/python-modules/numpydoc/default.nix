@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  jinja2,
-  sphinx,
-  tabulate,
-
-  # tests
-  matplotlib,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  jinja2
+, sphinx
+, tabulate
+, # tests
+  matplotlib
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

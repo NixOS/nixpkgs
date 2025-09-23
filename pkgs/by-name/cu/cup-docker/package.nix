@@ -1,12 +1,12 @@
-{
-  rustPlatform,
-  fetchFromGitHub,
-  lib,
-  stdenvNoCC,
-  bun,
-  nodejs-slim_latest,
-  nix-update-script,
-  withServer ? true,
+{ rustPlatform
+, fetchFromGitHub
+, lib
+, stdenvNoCC
+, bun
+, nodejs-slim_latest
+, nix-update-script
+, withServer ? true
+,
 }:
 let
   pname = "cup-docker";

@@ -1,24 +1,33 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  wrapGAppsHook3,
-  gobject-introspection,
-  gtk-layer-shell,
-  pango,
-  gdk-pixbuf,
-  atk,
-  # Extra packages called by various internal nwg-panel modules
-  hyprland, # hyprctl
-  sway, # swaylock, swaymsg
-  systemd, # systemctl
-  wlr-randr, # wlr-randr
-  nwg-menu, # nwg-menu
-  brightnessctl, # brightnessctl
-  pamixer, # pamixer
-  pulseaudio, # pactl
-  libdbusmenu-gtk3, # tray
-  playerctl,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, wrapGAppsHook3
+, gobject-introspection
+, gtk-layer-shell
+, pango
+, gdk-pixbuf
+, atk
+, # Extra packages called by various internal nwg-panel modules
+  hyprland
+, # hyprctl
+  sway
+, # swaylock, swaymsg
+  systemd
+, # systemctl
+  wlr-randr
+, # wlr-randr
+  nwg-menu
+, # nwg-menu
+  brightnessctl
+, # brightnessctl
+  pamixer
+, # pamixer
+  pulseaudio
+, # pactl
+  libdbusmenu-gtk3
+, # tray
+  playerctl
+,
 }:
 
 python3Packages.buildPythonApplication rec {

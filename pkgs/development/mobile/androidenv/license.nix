@@ -1,5 +1,5 @@
-{
-  config,
+{ config
+,
 }:
 
 # Accept the license in the test suite.

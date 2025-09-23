@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  autoPatchelfHook,
-  fontconfig,
-  freetype,
-  libGL,
-  glib,
-  alsa-lib,
-  pulseaudio,
-  xorg,
-  gtk3,
-  atk,
-  pango,
-  gdk-pixbuf,
-  cairo,
-  gst_all_1,
-  makeWrapper,
-  libsForQt5,
-  profiles ? {
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, autoPatchelfHook
+, fontconfig
+, freetype
+, libGL
+, glib
+, alsa-lib
+, pulseaudio
+, xorg
+, gtk3
+, atk
+, pango
+, gdk-pixbuf
+, cairo
+, gst_all_1
+, makeWrapper
+, libsForQt5
+, profiles ? {
     path = "~";
-  },
+  }
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  construct,
-  fetchFromGitHub,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  six,
+{ lib
+, buildPythonPackage
+, construct
+, fetchFromGitHub
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, six
+,
 }:
 
 buildPythonPackage rec {

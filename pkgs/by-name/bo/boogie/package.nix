@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  z3,
-  dotnetCorePackages,
-  nix-update-script,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, z3
+, dotnetCorePackages
+, nix-update-script
+,
 }:
 
 buildDotnetModule rec {

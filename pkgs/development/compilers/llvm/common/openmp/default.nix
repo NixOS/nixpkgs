@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  llvm_meta,
-  release_version,
-  monorepoSrc ? null,
-  src ? null,
-  runCommand,
-  cmake,
-  ninja,
-  llvm,
-  targetLlvm,
-  lit,
-  clang-unwrapped,
-  perl,
-  pkg-config,
-  python3,
-  version,
-  devExtraCmakeFlags ? [ ],
-  ompdSupport ? true,
-  ompdGdbSupport ? ompdSupport,
-  getVersionFile,
-  fetchpatch,
+{ lib
+, stdenv
+, llvm_meta
+, release_version
+, monorepoSrc ? null
+, src ? null
+, runCommand
+, cmake
+, ninja
+, llvm
+, targetLlvm
+, lit
+, clang-unwrapped
+, perl
+, pkg-config
+, python3
+, version
+, devExtraCmakeFlags ? [ ]
+, ompdSupport ? true
+, ompdGdbSupport ? ompdSupport
+, getVersionFile
+, fetchpatch
+,
 }:
 
 assert lib.assertMsg (ompdGdbSupport -> ompdSupport) "OMPD GDB support requires OMPD support!";
@@ -31,11 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "openmp-src-${version}" { inherit (monorepoSrc) passthru; } (''
-        mkdir -p "$out"
-        cp -r ${monorepoSrc}/cmake "$out"
-        cp -r ${monorepoSrc}/openmp "$out"
-      '')
+      runCommand "openmp-src-${version}" { inherit (monorepoSrc) passthru; }
+        (
+          ''
+            mkdir -p "$out"
+            cp -r ${monorepoSrc}/cmake "$out"
+            cp -r ${monorepoSrc}/openmp "$out"
+          ''
+        )
     else
       src;
 

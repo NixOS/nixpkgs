@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  libcapsicum,
-  libcasper,
+{ mkDerivation
+, libcapsicum
+, libcasper
+,
 }:
 mkDerivation {
   path = "usr.bin/iconv";

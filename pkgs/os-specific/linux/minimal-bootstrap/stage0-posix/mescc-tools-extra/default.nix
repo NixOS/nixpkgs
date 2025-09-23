@@ -1,13 +1,13 @@
-{
-  lib,
-  derivationWithMeta,
-  kaem-unwrapped,
-  mescc-tools,
-  src,
-  version,
-  platforms,
-  m2libcArch,
-  m2libcOS,
+{ lib
+, derivationWithMeta
+, kaem-unwrapped
+, mescc-tools
+, src
+, version
+, platforms
+, m2libcArch
+, m2libcOS
+,
 }:
 derivationWithMeta {
   inherit

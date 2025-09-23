@@ -56,11 +56,11 @@
 # nested nix/store happens immediately after the installPhase, before any other postInstall
 # hooks run, this needs to be run in an override of `mkDerivation` and not in a setup hook.
 
-{
-  lib,
-  stdenv,
-  postgresql,
-  nix-update-script,
+{ lib
+, stdenv
+, postgresql
+, nix-update-script
+,
 }:
 
 lib.extendMkDerivation {
@@ -72,9 +72,8 @@ lib.extendMkDerivation {
 
   extendDrvArgs =
     finalAttrs:
-    {
-      enableUpdateScript ? true,
-      ...
+    { enableUpdateScript ? true
+    , ...
     }@prevAttrs:
     {
       passthru =

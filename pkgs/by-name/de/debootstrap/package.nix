@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  dpkg,
-  gawk,
-  perl,
-  wget,
-  binutils,
-  bzip2,
-  coreutils,
-  util-linux,
-  gnugrep,
-  gnupg,
-  gnutar,
-  gnused,
-  gzip,
-  xz,
-  zstd,
-  makeWrapper,
-  nix-update-script,
-  testers,
-  debootstrap,
+{ lib
+, stdenv
+, fetchFromGitLab
+, dpkg
+, gawk
+, perl
+, wget
+, binutils
+, bzip2
+, coreutils
+, util-linux
+, gnugrep
+, gnupg
+, gnutar
+, gnused
+, gzip
+, xz
+, zstd
+, makeWrapper
+, nix-update-script
+, testers
+, debootstrap
+,
 }:
 
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory

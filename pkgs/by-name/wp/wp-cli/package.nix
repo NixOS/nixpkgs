@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  formats,
-  installShellFiles,
-  makeWrapper,
-  versionCheckHook,
-  php,
-  writeScript,
-  nix-update,
-  common-updater-scripts,
-  phpIniFile ? null,
+{ lib
+, stdenv
+, fetchurl
+, formats
+, installShellFiles
+, makeWrapper
+, versionCheckHook
+, php
+, writeScript
+, nix-update
+, common-updater-scripts
+, phpIniFile ? null
+,
 }:
 
 let
@@ -23,10 +23,11 @@ let
 
   ini =
     if phpIniFile == null then
-      (formats.ini { }).generate "php.ini" {
-        PHP.memory_limit = -1; # no limit as composer uses a lot of memory
-        Phar."phar.readonly" = "Off";
-      }
+      (formats.ini { }).generate "php.ini"
+        {
+          PHP.memory_limit = -1; # no limit as composer uses a lot of memory
+          Phar."phar.readonly" = "Off";
+        }
     else
       phpIniFile;
 

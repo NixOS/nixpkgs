@@ -1,22 +1,20 @@
-{
-  lib,
-  runCommand,
-
-  cacert,
-  curl,
-  git,
-  julia,
-  python3,
-  stdenv,
-
-  closureYaml,
-  extraLibs,
-  juliaCpuTarget,
-  overridesToml,
-  packageImplications,
-  project,
-  precompile,
-  registry,
+{ lib
+, runCommand
+, cacert
+, curl
+, git
+, julia
+, python3
+, stdenv
+, closureYaml
+, extraLibs
+, juliaCpuTarget
+, overridesToml
+, packageImplications
+, project
+, precompile
+, registry
+,
 }:
 
 let
@@ -36,16 +34,16 @@ let
 in
 
 runCommand "julia-depot"
-  {
-    nativeBuildInputs = [
-      curl
-      git
-      julia
-      (python3.withPackages (ps: with ps; [ pyyaml ]))
-    ]
-    ++ extraLibs;
-    inherit precompile project registry;
-  }
+{
+  nativeBuildInputs = [
+    curl
+    git
+    julia
+    (python3.withPackages (ps: with ps; [ pyyaml ]))
+  ]
+  ++ extraLibs;
+  inherit precompile project registry;
+}
   (
     ''
       export HOME=$(pwd)
@@ -76,7 +74,7 @@ runCommand "julia-depot"
     + lib.optionalString (juliaCpuTarget != null) ''
       export JULIA_CPU_TARGET="${juliaCpuTarget}"
     ''
-    + ''
+      + ''
       # Prevent a warning where Julia tries to download package server info
       export JULIA_PKG_SERVER=""
 

@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  lib,
-  bazel_8,
-  libgcc,
-  cctools,
-  stdenv,
-  jdk_headless,
-  callPackage,
-  zlib,
+{ fetchFromGitHub
+, lib
+, bazel_8
+, libgcc
+, cctools
+, stdenv
+, jdk_headless
+, callPackage
+, zlib
+,
 }:
 let
   bazelPackage = callPackage ./build-support/bazelPackage.nix { };
@@ -51,8 +51,7 @@ in
           aarch64-linux = "sha256-W8h2tCIauGnEvPpXje19bZUE/izHaCQ0Wj4nMaP3nkc=";
           x86_64-darwin = "sha256-XIrGRmYDDRN3Kkt1dFWex1bPRMeIHAR+XWLqB/PpOAM=";
           x86_64-linux = "sha256-VBckTQAK5qeyi2ublk+Dcga5O5XZg3bfHR6Yaw6vSp0=";
-        }
-        .${stdenv.hostPlatform.system};
+        }.${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
     };
   };
@@ -81,8 +80,7 @@ in
           aarch64-linux = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
           x86_64-darwin = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
           x86_64-linux = "sha256-l6qJU0zGIKl12TYYsG5b+upswUA0hGE+VtQ9QnKpBh8=";
-        }
-        .${stdenv.hostPlatform.system};
+        }.${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
     };
   };
@@ -112,8 +110,7 @@ in
           aarch64-linux = "sha256-F5X/cwtHR6sVFe1DzNDaEnGMIPR0SnXq2iIxhQeqIV8=";
           x86_64-darwin = "sha256-DXuPy68m3p6hlgEid7tpY8fGgvJWQTXth6h2kMSNFCc=";
           x86_64-linux = "sha256-oNLDccQ/XPg1Nl/9V14NdgiQsRoTvpaA6hyynMb414A=";
-        }
-        .${stdenv.hostPlatform.system};
+        }.${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
     };
   };

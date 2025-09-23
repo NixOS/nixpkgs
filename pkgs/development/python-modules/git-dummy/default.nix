@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  installShellFiles,
-  setuptools,
-  gitpython,
-  typer,
-  pydantic-settings,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, installShellFiles
+, setuptools
+, gitpython
+, typer
+, pydantic-settings
+,
 }:
 
 buildPythonPackage rec {

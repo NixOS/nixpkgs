@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  wayland-scanner,
-  wayfire,
-  alsa-lib,
-  gtkmm3,
-  gtk-layer-shell,
-  pulseaudio,
-  libdbusmenu-gtk3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wayland-scanner
+, wayfire
+, alsa-lib
+, gtkmm3
+, gtk-layer-shell
+, pulseaudio
+, libdbusmenu-gtk3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromSourcehut,
-  buildGoModule,
-  unstableGitUpdater,
+{ lib
+, fetchFromSourcehut
+, buildGoModule
+, unstableGitUpdater
+,
 }:
 
 buildGoModule {

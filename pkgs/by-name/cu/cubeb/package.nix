@@ -1,25 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  jack2,
-  libpulseaudio,
-  sndio,
-  speexdsp,
-  validatePkgConfig,
-
-  # passthru.tests
-  testers,
-
-  alsaSupport ? !stdenv.hostPlatform.isDarwin,
-  pulseSupport ? !stdenv.hostPlatform.isDarwin,
-  jackSupport ? !stdenv.hostPlatform.isDarwin,
-  sndioSupport ? !stdenv.hostPlatform.isDarwin,
-  enableShared ? !stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, cmake
+, pkg-config
+, alsa-lib
+, jack2
+, libpulseaudio
+, sndio
+, speexdsp
+, validatePkgConfig
+, # passthru.tests
+  testers
+, alsaSupport ? !stdenv.hostPlatform.isDarwin
+, pulseSupport ? !stdenv.hostPlatform.isDarwin
+, jackSupport ? !stdenv.hostPlatform.isDarwin
+, sndioSupport ? !stdenv.hostPlatform.isDarwin
+, enableShared ? !stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

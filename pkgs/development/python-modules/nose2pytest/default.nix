@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  setuptools,
-  fissix,
-  pytest,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, setuptools
+, fissix
+, pytest
+,
 }:
 
 let

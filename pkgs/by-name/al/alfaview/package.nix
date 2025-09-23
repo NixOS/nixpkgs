@@ -1,28 +1,28 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  makeWrapper,
-  wrapGAppsHook3,
-  alsa-lib,
-  dbus,
-  fontconfig,
-  freetype,
-  glib,
-  gst_all_1,
-  libGL,
-  libinput,
-  libpulseaudio,
-  libsecret,
-  libtiff,
-  libxkbcommon,
-  libgbm,
-  openssl,
-  systemd,
-  xcb-util-cursor,
-  xorg,
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, makeWrapper
+, wrapGAppsHook3
+, alsa-lib
+, dbus
+, fontconfig
+, freetype
+, glib
+, gst_all_1
+, libGL
+, libinput
+, libpulseaudio
+, libsecret
+, libtiff
+, libxkbcommon
+, libgbm
+, openssl
+, systemd
+, xcb-util-cursor
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

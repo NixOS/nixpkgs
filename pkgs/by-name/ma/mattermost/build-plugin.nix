@@ -1,40 +1,36 @@
-{
-  lib,
-  stdenv,
-  mattermost,
-  nodejs,
-  writeShellScriptBin,
-  buildGoModule,
-  golangci-lint,
-  gotestsum,
-  fetchNpmDeps,
-  npmHooks,
-  npm-lockfile-fix,
+{ lib
+, stdenv
+, mattermost
+, nodejs
+, writeShellScriptBin
+, buildGoModule
+, golangci-lint
+, gotestsum
+, fetchNpmDeps
+, npmHooks
+, npm-lockfile-fix
+,
 }:
 
 {
   # The name of the plugin.
-  pname,
-  # The plugin version.
-  version,
-  # The plugin source.
-  src,
-
-  # True to ignore golangci-lint warnings. By default set to true
+  pname
+, # The plugin version.
+  version
+, # The plugin source.
+  src
+, # True to ignore golangci-lint warnings. By default set to true
   # since plugins warn about the Mattermost interface but build fine.
-  ignoreGoLintWarnings ? true,
-
-  # The hash of the gomod vendor directory.
-  vendorHash ? lib.fakeHash,
-
-  # True to build the webapp.
-  buildWebapp ? true,
-
-  # The NPM dependency hash.
-  npmDepsHash ? lib.fakeHash,
-
-  # Any extra attributes to pass to buildGoModule.
-  extraGoModuleAttrs ? { },
+  ignoreGoLintWarnings ? true
+, # The hash of the gomod vendor directory.
+  vendorHash ? lib.fakeHash
+, # True to build the webapp.
+  buildWebapp ? true
+, # The NPM dependency hash.
+  npmDepsHash ? lib.fakeHash
+, # Any extra attributes to pass to buildGoModule.
+  extraGoModuleAttrs ? { }
+,
 }:
 
 let
@@ -72,14 +68,15 @@ buildGoModule (
 
     npmDeps =
       if buildWebapp then
-        fetchNpmDeps {
-          src = "${src}/webapp";
-          hash = npmDepsHash;
-          forceGitDeps = true;
-          postFetch = ''
-            ${lib.getExe npm-lockfile-fix} package-lock.json
-          '';
-        }
+        fetchNpmDeps
+          {
+            src = "${src}/webapp";
+            hash = npmDepsHash;
+            forceGitDeps = true;
+            postFetch = ''
+              ${lib.getExe npm-lockfile-fix} package-lock.json
+            '';
+          }
       else
         null;
 
@@ -149,5 +146,5 @@ buildGoModule (
       cp -av "$plugin" $out
     '';
   }
-  // extraGoModuleAttrs
+    // extraGoModuleAttrs
 )

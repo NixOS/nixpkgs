@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  python3,
-  gtest,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, python3
+, gtest
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "numcpp";

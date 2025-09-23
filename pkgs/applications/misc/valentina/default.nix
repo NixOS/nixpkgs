@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  installShellFiles,
-  qmake,
-  qttools,
-  qtsvg,
-  qtxmlpatterns,
-  wrapQtAppsHook,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, installShellFiles
+, qmake
+, qttools
+, qtsvg
+, qtxmlpatterns
+, wrapQtAppsHook
+, autoPatchelfHook
+,
 }:
 
 stdenv.mkDerivation rec {

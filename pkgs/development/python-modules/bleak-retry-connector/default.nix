@@ -1,14 +1,14 @@
-{
-  lib,
-  bleak,
-  bluetooth-adapters,
-  dbus-fast,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-cov-stub,
+{ lib
+, bleak
+, bluetooth-adapters
+, dbus-fast
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
+, pytest-asyncio
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

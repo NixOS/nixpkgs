@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  bleak,
-  bleak-retry-connector,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, bleak
+, bleak-retry-connector
+,
 }:
 
 buildPythonPackage rec {

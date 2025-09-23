@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  pytestCheckHook,
-  beancount-black,
-  beancount-parser,
-  beanhub-extract,
-  hatchling,
-  jinja2,
-  pydantic,
-  pytz,
-  pyyaml,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, pytestCheckHook
+, beancount-black
+, beancount-parser
+, beanhub-extract
+, hatchling
+, jinja2
+, pydantic
+, pytz
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

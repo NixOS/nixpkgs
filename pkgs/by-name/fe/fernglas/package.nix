@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  fixup-yarn-lock,
-  python3,
-  jq,
-  yarn,
-  nodejs-slim,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchYarnDeps
+, fixup-yarn-lock
+, python3
+, jq
+, yarn
+, nodejs-slim
+,
 }:
 
 rustPlatform.buildRustPackage rec {

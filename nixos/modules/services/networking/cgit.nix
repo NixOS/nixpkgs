@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfgs = config.services.cgit;
@@ -201,10 +200,12 @@ in
   };
 
   config = lib.mkIf (lib.any (cfg: cfg.enable) (lib.attrValues cfgs)) {
-    assertions = lib.mapAttrsToList (vhost: cfg: {
-      assertion = !cfg.enable || (cfg.scanPath == null) != (cfg.repos == { });
-      message = "Exactly one of services.cgit.${vhost}.scanPath or services.cgit.${vhost}.repos must be set.";
-    }) cfgs;
+    assertions = lib.mapAttrsToList
+      (vhost: cfg: {
+        assertion = !cfg.enable || (cfg.scanPath == null) != (cfg.repos == { });
+        message = "Exactly one of services.cgit.${vhost}.scanPath or services.cgit.${vhost}.repos must be set.";
+      })
+      cfgs;
 
     users = lib.mkMerge (
       lib.flip lib.mapAttrsToList cfgs (
@@ -220,67 +221,69 @@ in
 
     services.fcgiwrap.instances = lib.flip lib.mapAttrs' cfgs (
       name: cfg:
-      lib.nameValuePair "cgit-${name}" {
-        process = { inherit (cfg) user group; };
-        socket = { inherit (config.services.nginx) user group; };
-      }
+        lib.nameValuePair "cgit-${name}" {
+          process = { inherit (cfg) user group; };
+          socket = { inherit (config.services.nginx) user group; };
+        }
     );
 
     systemd.services = lib.flip lib.mapAttrs' cfgs (
       name: cfg:
-      lib.nameValuePair (fcgiwrapUnitName name) (
-        lib.mkIf (cfg.repos != { }) {
-          serviceConfig.RuntimeDirectory = fcgiwrapUnitName name;
-          preStart = ''
-            GIT_PROJECT_ROOT=${lib.escapeShellArg (gitProjectRoot name cfg)}
-            mkdir -p "$GIT_PROJECT_ROOT"
-            cd "$GIT_PROJECT_ROOT"
-            ${lib.concatLines (
-              lib.flip lib.mapAttrsToList cfg.repos (
-                name: repo: ''
-                  ln -s ${lib.escapeShellArg repo.path} ${lib.escapeShellArg name}
-                ''
-              )
-            )}
-          '';
-        }
-      )
+        lib.nameValuePair (fcgiwrapUnitName name) (
+          lib.mkIf (cfg.repos != { }) {
+            serviceConfig.RuntimeDirectory = fcgiwrapUnitName name;
+            preStart = ''
+              GIT_PROJECT_ROOT=${lib.escapeShellArg (gitProjectRoot name cfg)}
+              mkdir -p "$GIT_PROJECT_ROOT"
+              cd "$GIT_PROJECT_ROOT"
+              ${lib.concatLines (
+                lib.flip lib.mapAttrsToList cfg.repos (
+                  name: repo: ''
+                    ln -s ${lib.escapeShellArg repo.path} ${lib.escapeShellArg name}
+                  ''
+                )
+              )}
+            '';
+          }
+        )
     );
 
     services.nginx.enable = true;
 
     services.nginx.virtualHosts = lib.mkMerge (
-      lib.mapAttrsToList (name: cfg: {
-        ${cfg.nginx.virtualHost} = {
-          locations =
-            (genAttrs' [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ] (
-              fileName:
-              lib.nameValuePair "= ${stripLocation cfg}/${fileName}" {
-                alias = lib.mkDefault "${cfg.package}/cgit/${fileName}";
-              }
-            ))
-            // {
-              "~ ${regexLocation cfg}/.+/(info/refs|git-upload-pack)" = {
-                fastcgiParams = rec {
-                  SCRIPT_FILENAME = "${pkgs.git}/libexec/git-core/git-http-backend";
-                  GIT_HTTP_EXPORT_ALL = "1";
-                  GIT_PROJECT_ROOT = gitProjectRoot name cfg;
-                  HOME = GIT_PROJECT_ROOT;
+      lib.mapAttrsToList
+        (name: cfg: {
+          ${cfg.nginx.virtualHost} = {
+            locations =
+              (genAttrs' [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ] (
+                fileName:
+                lib.nameValuePair "= ${stripLocation cfg}/${fileName}" {
+                  alias = lib.mkDefault "${cfg.package}/cgit/${fileName}";
+                }
+              ))
+              // {
+                "~ ${regexLocation cfg}/.+/(info/refs|git-upload-pack)" = {
+                  fastcgiParams = rec {
+                    SCRIPT_FILENAME = "${pkgs.git}/libexec/git-core/git-http-backend";
+                    GIT_HTTP_EXPORT_ALL = "1";
+                    GIT_PROJECT_ROOT = gitProjectRoot name cfg;
+                    HOME = GIT_PROJECT_ROOT;
+                  };
+                  extraConfig = mkFastcgiPass name cfg;
                 };
-                extraConfig = mkFastcgiPass name cfg;
-              };
-              "${stripLocation cfg}/" = {
-                fastcgiParams = {
-                  SCRIPT_FILENAME = "${cfg.package}/cgit/cgit.cgi";
-                  QUERY_STRING = "$args";
-                  HTTP_HOST = "$server_name";
-                  CGIT_CONFIG = mkCgitrc cfg;
+                "${stripLocation cfg}/" = {
+                  fastcgiParams = {
+                    SCRIPT_FILENAME = "${cfg.package}/cgit/cgit.cgi";
+                    QUERY_STRING = "$args";
+                    HTTP_HOST = "$server_name";
+                    CGIT_CONFIG = mkCgitrc cfg;
+                  };
+                  extraConfig = mkFastcgiPass name cfg;
                 };
-                extraConfig = mkFastcgiPass name cfg;
               };
-            };
-        };
-      }) cfgs
+          };
+        })
+        cfgs
     );
   };
 }

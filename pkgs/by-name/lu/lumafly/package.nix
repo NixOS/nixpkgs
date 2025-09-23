@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  zlib,
-  icu,
-  openssl,
-  icoutils,
-  copyDesktopItems,
-  makeDesktopItem,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, zlib
+, icu
+, openssl
+, icoutils
+, copyDesktopItems
+, makeDesktopItem
+, nix-update-script
+,
 }:
 buildDotnetModule rec {
   pname = "lumafly";

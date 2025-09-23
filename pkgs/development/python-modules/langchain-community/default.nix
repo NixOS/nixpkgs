@@ -1,43 +1,39 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  aiohttp,
-  dataclasses-json,
-  httpx-sse,
-  langchain,
-  langchain-core,
-  langsmith,
-  numpy,
-  pydantic-settings,
-  pyyaml,
-  requests,
-  sqlalchemy,
-  tenacity,
-
-  # tests
-  blockbuster,
-  duckdb,
-  duckdb-engine,
-  httpx,
-  langchain-tests,
-  lark,
-  pandas,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  requests-mock,
-  responses,
-  syrupy,
-  toml,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pdm-backend
+, # dependencies
+  aiohttp
+, dataclasses-json
+, httpx-sse
+, langchain
+, langchain-core
+, langsmith
+, numpy
+, pydantic-settings
+, pyyaml
+, requests
+, sqlalchemy
+, tenacity
+, # tests
+  blockbuster
+, duckdb
+, duckdb-engine
+, httpx
+, langchain-tests
+, lark
+, pandas
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, requests-mock
+, responses
+, syrupy
+, toml
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

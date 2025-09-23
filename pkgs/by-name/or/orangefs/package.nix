@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  bison,
-  flex,
-  autoreconfHook,
-  openssl,
-  db,
-  attr,
-  perl,
-  tcsh,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, bison
+, flex
+, autoreconfHook
+, openssl
+, db
+, attr
+, perl
+, tcsh
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

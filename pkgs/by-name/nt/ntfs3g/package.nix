@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  gettext,
-  mount,
-  libuuid,
-  kmod,
-  macfuse-stubs,
-  crypto ? false,
-  libgcrypt,
-  gnutls,
-  fuse,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gettext
+, mount
+, libuuid
+, kmod
+, macfuse-stubs
+, crypto ? false
+, libgcrypt
+, gnutls
+, fuse
+,
 }:
 
 stdenv.mkDerivation rec {

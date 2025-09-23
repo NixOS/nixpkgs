@@ -2,13 +2,13 @@
 # Useful when packaging binaries that insist on using nss to look up
 # username/groups (like nginx).
 # /bin/sh is fine to not exist, and provided by another shim.
-{
-  lib,
-  symlinkJoin,
-  writeTextDir,
-  runCommand,
-  extraPasswdLines ? [ ],
-  extraGroupLines ? [ ],
+{ lib
+, symlinkJoin
+, writeTextDir
+, runCommand
+, extraPasswdLines ? [ ]
+, extraGroupLines ? [ ]
+,
 }:
 symlinkJoin {
   name = "fake-nss";

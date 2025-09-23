@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  file,
-  openssl,
-  mlton,
-  libmysqlclient,
-  libpq,
-  sqlite,
-  gcc,
-  icu,
+{ lib
+, stdenv
+, fetchurl
+, file
+, openssl
+, mlton
+, libmysqlclient
+, libpq
+, sqlite
+, gcc
+, icu
+,
 }:
 
 stdenv.mkDerivation rec {

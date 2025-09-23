@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  unittestCheckHook,
-  mock,
-  sphinx-testing,
-  sphinx,
-  blockdiag,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, unittestCheckHook
+, mock
+, sphinx-testing
+, sphinx
+, blockdiag
+,
 }:
 
 buildPythonPackage rec {

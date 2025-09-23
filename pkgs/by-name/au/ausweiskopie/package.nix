@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  makeDesktopItem,
-  copyDesktopItems,
-  desktopToDarwinBundle,
-  enableModern ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, makeDesktopItem
+, copyDesktopItems
+, desktopToDarwinBundle
+, enableModern ? true
+,
 }:
 
 python3Packages.buildPythonApplication rec {

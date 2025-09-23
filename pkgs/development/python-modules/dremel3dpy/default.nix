@@ -1,17 +1,17 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  decorator,
-  fetchPypi,
-  imageio,
-  imutils,
-  pythonOlder,
-  requests,
-  urllib3,
-  tqdm,
-  validators,
-  yarl,
+{ lib
+, async-timeout
+, buildPythonPackage
+, decorator
+, fetchPypi
+, imageio
+, imutils
+, pythonOlder
+, requests
+, urllib3
+, tqdm
+, validators
+, yarl
+,
 }:
 
 buildPythonPackage rec {

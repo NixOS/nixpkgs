@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  replaceVars,
-  cmake,
-  openjpeg,
-  pigz,
-  yaml-cpp,
-  batchVersion ? false,
-  withJpegLs ? true,
-  withOpenJpeg ? true,
-  withPigz ? true,
-  withCloudflareZlib ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeBinaryWrapper
+, replaceVars
+, cmake
+, openjpeg
+, pigz
+, yaml-cpp
+, batchVersion ? false
+, withJpegLs ? true
+, withOpenJpeg ? true
+, withPigz ? true
+, withCloudflareZlib ? true
+,
 }:
 
 let

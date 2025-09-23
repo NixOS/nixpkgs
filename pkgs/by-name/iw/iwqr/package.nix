@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitea,
-  nix-update-script,
-  testers,
-  iwqr,
+{ lib
+, rustPlatform
+, fetchFromGitea
+, nix-update-script
+, testers
+, iwqr
+,
 }:
 
 rustPlatform.buildRustPackage rec {

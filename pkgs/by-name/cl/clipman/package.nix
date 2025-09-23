@@ -1,10 +1,10 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  wl-clipboard,
-  makeWrapper,
-  installShellFiles,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, wl-clipboard
+, makeWrapper
+, installShellFiles
+,
 }:
 
 buildGoModule rec {

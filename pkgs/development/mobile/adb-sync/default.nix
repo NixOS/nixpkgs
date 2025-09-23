@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  platform-tools,
-  makeWrapper,
-  socat,
-  go-mtpfs,
-  adbfs-rootless,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, platform-tools
+, makeWrapper
+, socat
+, go-mtpfs
+, adbfs-rootless
+,
 }:
 
 stdenv.mkDerivation {

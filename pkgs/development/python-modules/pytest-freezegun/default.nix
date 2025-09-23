@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  freezegun,
-  pytest,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, freezegun
+, pytest
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

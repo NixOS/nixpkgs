@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  datamodeldict,
-  fetchFromGitHub,
-  matplotlib,
-  numericalunits,
-  numpy,
-  pandas,
-  phonopy,
-  potentials,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  scipy,
-  setuptools,
-  toolz,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, cython
+, datamodeldict
+, fetchFromGitHub
+, matplotlib
+, numericalunits
+, numpy
+, pandas
+, phonopy
+, potentials
+, pytestCheckHook
+, pythonOlder
+, requests
+, scipy
+, setuptools
+, toolz
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

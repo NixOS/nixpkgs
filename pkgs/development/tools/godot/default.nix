@@ -1,11 +1,11 @@
 # TODO:
 # - combine binary and source tests
 # - filter builtInputs by builtin_ flags
-{
-  callPackage,
-  lib,
-  nix-update-script,
-  fetchzip,
+{ callPackage
+, lib
+, nix-update-script
+, fetchzip
+,
 }:
 let
   mkGodotPackages =

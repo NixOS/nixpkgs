@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -29,14 +28,14 @@ let
 
     (lib.mapAttrs (
       _: v:
-      if true == v then
-        "true"
-      else if false == v then
-        "false"
-      else if lib.isInt v then
-        toString v
-      else
-        "\"${lib.escape [ "\"" ] v}\""
+        if true == v then
+          "true"
+        else if false == v then
+          "false"
+        else if lib.isInt v then
+          toString v
+        else
+          "\"${lib.escape [ "\"" ] v}\""
     ))
 
     (lib.mapAttrsToList (k: v: "${k} = ${v}"))

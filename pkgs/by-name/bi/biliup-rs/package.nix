@@ -1,11 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  nix-update-script,
-
-  python3,
-  sqlite,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, nix-update-script
+, python3
+, sqlite
+,
 }:
 
 rustPlatform.buildRustPackage rec {

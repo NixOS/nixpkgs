@@ -1,29 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-
-  # nativeBuildInputs
-  cmake,
-
-  # build-system
-  setuptools,
-
-  # buildInputs
-  mujoco,
-  pybind11,
-
-  # dependencies
-  absl-py,
-  etils,
-  glfw,
-  numpy,
-  pyopengl,
-  typing-extensions,
-
-  perl,
-  python,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, # nativeBuildInputs
+  cmake
+, # build-system
+  setuptools
+, # buildInputs
+  mujoco
+, pybind11
+, # dependencies
+  absl-py
+, etils
+, glfw
+, numpy
+, pyopengl
+, typing-extensions
+, perl
+, python
+,
 }:
 
 buildPythonPackage rec {

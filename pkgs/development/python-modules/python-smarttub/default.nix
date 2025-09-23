@@ -1,16 +1,16 @@
-{
-  lib,
-  aiohttp,
-  aresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  inflection,
-  pyjwt,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-dateutil,
+{ lib
+, aiohttp
+, aresponses
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, inflection
+, pyjwt
+, pytest-asyncio
+, pytestCheckHook
+, python-dateutil
+,
 }:
 
 buildPythonPackage rec {

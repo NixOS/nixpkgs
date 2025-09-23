@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  docbook-xsl-nons,
-  gobject-introspection,
-  gtk-doc,
-  meson,
-  ninja,
-  pkg-config,
-  mesonEmulatorHook,
-  gtk3,
-  glib,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, docbook-xsl-nons
+, gobject-introspection
+, gtk-doc
+, meson
+, ninja
+, pkg-config
+, mesonEmulatorHook
+, gtk3
+, glib
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cmake,
-  fetchFromGitHub,
-  gettext,
-  libcomps,
-  libdnf,
-  python,
-  rpm,
-  sphinx,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, cmake
+, fetchFromGitHub
+, gettext
+, libcomps
+, libdnf
+, python
+, rpm
+, sphinx
+, nix-update-script
+,
 }:
 
 let

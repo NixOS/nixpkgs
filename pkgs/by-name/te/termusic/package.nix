@@ -1,17 +1,17 @@
-{
-  alsa-lib,
-  dbus,
-  fetchFromGitHub,
-  glib,
-  gst_all_1,
-  lib,
-  mpv-unwrapped,
-  openssl,
-  pkg-config,
-  protobuf,
-  rustPlatform,
-  sqlite,
-  stdenv,
+{ alsa-lib
+, dbus
+, fetchFromGitHub
+, glib
+, gst_all_1
+, lib
+, mpv-unwrapped
+, openssl
+, pkg-config
+, protobuf
+, rustPlatform
+, sqlite
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

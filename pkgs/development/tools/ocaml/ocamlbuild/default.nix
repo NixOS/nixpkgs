@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
-  version ? if lib.versionAtLeast ocaml.version "4.08" then "0.16.1" else "0.14.3",
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocaml
+, findlib
+, version ? if lib.versionAtLeast ocaml.version "4.08" then "0.16.1" else "0.14.3"
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,8 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         "0.14.3" = "sha256-dfcNu4ugOYu/M0rRQla7lXum/g1UzncdLGmpPYo0QUM=";
         "0.16.1" = "sha256-RpHVX0o4QduN73j+omlZlycRJaGZWfwHO5kq/WsEGZE=";
-      }
-      ."${finalAttrs.version}";
+      }."${finalAttrs.version}";
   };
 
   createFindlibDestdir = true;

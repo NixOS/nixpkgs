@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -31,9 +30,10 @@ let
       ""
     else
       "gcomm://${builtins.concatStringsSep "," cfg.galeraCluster.nodeAddresses}"
-      + lib.optionalString (
-        cfg.galeraCluster.clusterPassword != ""
-      ) "?gmcast.seg=1:${cfg.galeraCluster.clusterPassword}";
+      + lib.optionalString
+        (
+          cfg.galeraCluster.clusterPassword != ""
+        ) "?gmcast.seg=1:${cfg.galeraCluster.clusterPassword}";
 in
 
 {
@@ -417,7 +417,7 @@ in
       {
         assertion =
           cfg.galeraCluster.localAddress != ""
-          && (cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "");
+            && (cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "");
         message = "mariadb galera cluster is enabled but the localAddress and (nodeAddresses or clusterAddress) are not set";
       }
       {

@@ -1,6 +1,6 @@
-{
-  runTest,
-  forgejoPackage,
+{ runTest
+, forgejoPackage
+,
 }:
 
 let
@@ -22,11 +22,10 @@ let
   metricSecret = "fakesecret";
 
   base =
-    {
-      lib,
-      pkgs,
-      type,
-      ...
+    { lib
+    , pkgs
+    , type
+    , ...
     }:
 
     {

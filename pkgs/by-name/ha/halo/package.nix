@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  # official jre size is 500MB, but temurin-jre-bin is 100MB.
-  temurin-jre-bin,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, # official jre size is 500MB, but temurin-jre-bin is 100MB.
+  temurin-jre-bin
+,
 }:
 stdenv.mkDerivation rec {
   pname = "halo";

@@ -1,7 +1,7 @@
-{
-  stdenvNoCC,
-  lib,
-  php,
+{ stdenvNoCC
+, lib
+, php
+,
 }:
 
 let
@@ -34,14 +34,16 @@ let
       lib.assertMsg (previousAttrs ? composerNoDev) "mkComposerRepository expects composerNoDev argument."
     );
     assert (
-      lib.assertMsg (
-        previousAttrs ? composerNoPlugins
-      ) "mkComposerRepository expects composerNoPlugins argument."
+      lib.assertMsg
+        (
+          previousAttrs ? composerNoPlugins
+        ) "mkComposerRepository expects composerNoPlugins argument."
     );
     assert (
-      lib.assertMsg (
-        previousAttrs ? composerNoScripts
-      ) "mkComposerRepository expects composerNoScripts argument."
+      lib.assertMsg
+        (
+          previousAttrs ? composerNoScripts
+        ) "mkComposerRepository expects composerNoScripts argument."
     );
     {
       composerNoDev = previousAttrs.composerNoDev or true;

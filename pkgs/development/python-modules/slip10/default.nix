@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  base58,
-  cryptography,
-  ecdsa,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, base58
+, cryptography
+, ecdsa
+,
 }:
 
 buildPythonPackage rec {

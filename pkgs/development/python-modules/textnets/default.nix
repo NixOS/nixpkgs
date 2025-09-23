@@ -1,30 +1,27 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython_0,
-  pdm-backend,
-  setuptools,
-
-  # dependencies
-  igraph,
-  leidenalg,
-  matplotlib,
-  pandas,
-  pyarrow,
-  scipy,
-  spacy,
-  spacy-lookups-data,
-  toolz,
-  tqdm,
-  wasabi,
-
-  # tests
-  en_core_web_sm,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython_0
+, pdm-backend
+, setuptools
+, # dependencies
+  igraph
+, leidenalg
+, matplotlib
+, pandas
+, pyarrow
+, scipy
+, spacy
+, spacy-lookups-data
+, toolz
+, tqdm
+, wasabi
+, # tests
+  en_core_web_sm
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

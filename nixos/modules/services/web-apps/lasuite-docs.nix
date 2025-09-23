@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 let
   inherit (lib)
@@ -21,17 +20,19 @@ let
 
   cfg = config.services.lasuite-docs;
 
-  pythonEnvironment = mapAttrs (
-    _: value:
-    if value == null then
-      "None"
-    else if value == true then
-      "True"
-    else if value == false then
-      "False"
-    else
-      toString value
-  ) cfg.settings;
+  pythonEnvironment = mapAttrs
+    (
+      _: value:
+        if value == null then
+          "None"
+        else if value == true then
+          "True"
+        else if value == false then
+          "False"
+        else
+          toString value
+    )
+    cfg.settings;
 
   proxySuffix = if match "unix:.*" cfg.bind != null then ":" else "";
 

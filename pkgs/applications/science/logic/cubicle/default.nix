@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  which,
-  ocamlPackages,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, which
+, ocamlPackages
+,
 }:
 
 stdenv.mkDerivation rec {

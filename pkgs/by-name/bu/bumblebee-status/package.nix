@@ -1,12 +1,12 @@
-{
-  pkgs,
-  lib,
-  glibcLocales,
-  python3,
-  fetchpatch,
-  fetchFromGitHub,
-  # Usage: bumblebee-status.override { plugins = p: [p.arandr p.bluetooth2]; };
-  plugins ? p: [ ],
+{ pkgs
+, lib
+, glibcLocales
+, python3
+, fetchpatch
+, fetchFromGitHub
+, # Usage: bumblebee-status.override { plugins = p: [p.arandr p.bluetooth2]; };
+  plugins ? p: [ ]
+,
 }:
 let
   version = "2.2.0";

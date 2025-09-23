@@ -1,10 +1,10 @@
-{
-  lib,
-  crystal,
-  fetchFromGitHub,
-  llvmPackages,
-  openssl,
-  makeWrapper,
+{ lib
+, crystal
+, fetchFromGitHub
+, llvmPackages
+, openssl
+, makeWrapper
+,
 }:
 
 let

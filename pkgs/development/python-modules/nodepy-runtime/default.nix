@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  localimport,
-  pathlib2,
-  six,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, localimport
+, pathlib2
+, six
+,
 }:
 
 buildPythonPackage rec {

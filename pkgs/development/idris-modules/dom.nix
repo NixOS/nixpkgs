@@ -1,10 +1,10 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  idrisscript,
-  html,
-  xhr,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, idrisscript
+, html
+, xhr
+, lib
+,
 }:
 build-idris-package {
   pname = "dom";

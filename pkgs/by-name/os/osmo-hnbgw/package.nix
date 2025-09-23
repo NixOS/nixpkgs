@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libosmocore,
-  lksctp-tools,
-  libosmo-netif,
-  libasn1c,
-  libosmo-sigtran,
-  osmo-iuh,
-  osmo-mgw,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libosmocore
+, lksctp-tools
+, libosmo-netif
+, libasn1c
+, libosmo-sigtran
+, osmo-iuh
+, osmo-mgw
+,
 }:
 
 let

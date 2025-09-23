@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchPypi,
-  stdenv,
-  click,
-  coloredlogs,
-  mido,
-  psutil,
-  pycyphal,
-  pysdl2,
-  python-rtmidi,
-  ruamel-yaml,
-  requests,
-  scipy,
-  simplejson,
+{ lib
+, buildPythonApplication
+, fetchPypi
+, stdenv
+, click
+, coloredlogs
+, mido
+, psutil
+, pycyphal
+, pysdl2
+, python-rtmidi
+, ruamel-yaml
+, requests
+, scipy
+, simplejson
+,
 }:
 
 buildPythonApplication rec {

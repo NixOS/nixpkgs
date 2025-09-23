@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  qttools,
-  pkg-config,
-  aspell,
-  hunspell,
+{ mkKdeDerivation
+, qtdeclarative
+, qttools
+, pkg-config
+, aspell
+, hunspell
+,
 }:
 mkKdeDerivation {
   pname = "sonnet";

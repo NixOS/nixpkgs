@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  hatchling,
-  httpx,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-util-http,
-  opentelemetry-test-utils,
-  pytestCheckHook,
-  respx,
+{ buildPythonPackage
+, hatchling
+, httpx
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-util-http
+, opentelemetry-test-utils
+, pytestCheckHook
+, respx
+,
 }:
 
 buildPythonPackage {

@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  aenum,
-  aiohttp,
-  importlib-metadata,
-  isodate,
-  nest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  mock,
-  pyhamcrest,
-  pyyaml,
-  radish-bdd,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, aenum
+, aiohttp
+, importlib-metadata
+, isodate
+, nest-asyncio
+, pytestCheckHook
+, pythonOlder
+, mock
+, pyhamcrest
+, pyyaml
+, radish-bdd
+,
 }:
 
 buildPythonPackage rec {

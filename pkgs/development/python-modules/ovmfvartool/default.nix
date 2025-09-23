@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyyaml
+,
 }:
 
 buildPythonPackage {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  decorator,
-  numpy,
-  scipy,
-  matplotlib,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mpl,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, decorator
+, numpy
+, scipy
+, matplotlib
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-mpl
+,
 }:
 
 buildPythonPackage rec {

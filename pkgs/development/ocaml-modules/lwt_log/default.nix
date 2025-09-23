@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  lwt,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, lwt
+,
 }:
 
 buildDunePackage rec {

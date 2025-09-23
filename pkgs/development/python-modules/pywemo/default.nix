@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hypothesis,
-  ifaddr,
-  lxml,
-  poetry-core,
-  pytest-vcr,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hypothesis
+, ifaddr
+, lxml
+, poetry-core
+, pytest-vcr
+, pytestCheckHook
+, pythonOlder
+, requests
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  buildGoModule,
-  avahi,
-  libusb1,
-  pkg-config,
-  lib,
-  fetchFromGitHub,
-  ronn,
+{ buildGoModule
+, avahi
+, libusb1
+, pkg-config
+, lib
+, fetchFromGitHub
+, ronn
+,
 }:
 buildGoModule rec {
   pname = "ipp-usb";

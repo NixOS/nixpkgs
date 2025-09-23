@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  glib,
-  cmake,
-  json-glib,
-  polkit,
-  gtk3,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, glib
+, cmake
+, json-glib
+, polkit
+, gtk3
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  love,
-  lua,
-  zip,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  tmx2lua,
+{ lib
+, stdenv
+, fetchFromGitHub
+, love
+, lua
+, zip
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, tmx2lua
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

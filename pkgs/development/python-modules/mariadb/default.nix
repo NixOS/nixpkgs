@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  libmysqlclient,
-  packaging,
-  lib,
-  pythonOlder,
-  setuptools,
+{ buildPythonPackage
+, fetchFromGitHub
+, libmysqlclient
+, packaging
+, lib
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  vscode-utils,
-  jq,
-  moreutils,
-  ungoogled-chromium,
+{ lib
+, vscode-utils
+, jq
+, moreutils
+, ungoogled-chromium
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

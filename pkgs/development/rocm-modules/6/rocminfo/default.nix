@@ -1,22 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  rocm-runtime,
-  busybox,
-  python3,
-  gnugrep,
-  clr, # Only for localGpuTargets
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, rocm-runtime
+, busybox
+, python3
+, gnugrep
+, clr
+, # Only for localGpuTargets
   # rocminfo requires that the calling user have a password and be in
   # the video group. If we let rocm_agent_enumerator rely upon
   # rocminfo's output, then it, too, has those requirements. Instead,
   # we can specify the GPU targets for this system (e.g. "gfx803" for
   # Polaris) such that no system call is needed for downstream
   # compilers to determine the desired target.
-  defaultTargets ? (clr.localGpuTargets or [ ]),
+  defaultTargets ? (clr.localGpuTargets or [ ])
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

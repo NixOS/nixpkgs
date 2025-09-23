@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  rustPlatform,
-  cargo,
-  rustc,
-  SDL2,
-  fltk,
-  lua5_3,
-  miniaudio,
-  rapidjson,
-  sol2,
-  gtest,
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, cmake
+, python3
+, rustPlatform
+, cargo
+, rustc
+, SDL2
+, fltk
+, lua5_3
+, miniaudio
+, rapidjson
+, sol2
+, gtest
+,
 }:
 
 let

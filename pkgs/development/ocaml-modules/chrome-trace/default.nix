@@ -1,7 +1,7 @@
-{
-  lib,
-  buildDunePackage,
-  dune_3,
+{ lib
+, buildDunePackage
+, dune_3
+,
 }:
 
 buildDunePackage {

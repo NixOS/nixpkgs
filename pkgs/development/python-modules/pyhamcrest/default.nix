@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  numpy,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, numpy
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

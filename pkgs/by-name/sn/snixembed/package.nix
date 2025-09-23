@@ -1,11 +1,11 @@
-{
-  fetchFromSourcehut,
-  gtk3,
-  lib,
-  libdbusmenu-gtk3,
-  pkg-config,
-  stdenv,
-  vala,
+{ fetchFromSourcehut
+, gtk3
+, lib
+, libdbusmenu-gtk3
+, pkg-config
+, stdenv
+, vala
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  swift,
-  swiftformat,
-  swiftpm,
-  testers,
-  versionCheckHook,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, swift
+, swiftformat
+, swiftpm
+, testers
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 swift.stdenv.mkDerivation rec {

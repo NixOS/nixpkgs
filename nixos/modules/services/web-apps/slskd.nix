@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 
 let
@@ -265,9 +264,11 @@ in
       cfg = config.services.slskd;
 
       confWithoutNullValues = (
-        lib.filterAttrsRecursive (
-          key: value: (builtins.tryEval value).success && value != null
-        ) cfg.settings
+        lib.filterAttrsRecursive
+          (
+            key: value: (builtins.tryEval value).success && value != null
+          )
+          cfg.settings
       );
 
       configurationYaml = settingsFormat.generate "slskd.yml" confWithoutNullValues;
@@ -302,9 +303,11 @@ in
           StateDirectory = "slskd"; # Creates /var/lib/slskd and manages permissions
           ExecStart = "${cfg.package}/bin/slskd --app-dir /var/lib/slskd --config ${configurationYaml}";
           Restart = "on-failure";
-          ReadOnlyPaths = map (
-            d: builtins.elemAt (builtins.split "[^/]*(/.+)" d) 1
-          ) cfg.settings.shares.directories;
+          ReadOnlyPaths = map
+            (
+              d: builtins.elemAt (builtins.split "[^/]*(/.+)" d) 1
+            )
+            cfg.settings.shares.directories;
           ReadWritePaths =
             (lib.optional (cfg.settings.directories.incomplete != null) cfg.settings.directories.incomplete)
             ++ (lib.optional (cfg.settings.directories.downloads != null) cfg.settings.directories.downloads);

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  django-redis,
-  fetchFromGitHub,
-  pymemcache,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, django
+, django-redis
+, fetchFromGitHub
+, pymemcache
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

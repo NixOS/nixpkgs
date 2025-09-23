@@ -1,32 +1,32 @@
-{
-  alsa-lib,
-  cmake,
-  copyDesktopItems,
-  curl,
-  fetchFromBitbucket,
-  fetchFromGitHub,
-  ghc_filesystem,
-  glew,
-  glfw,
-  zenity,
-  gtk3-x11,
-  imagemagick,
-  jansson,
-  jq,
-  lib,
-  libarchive,
-  libicns,
-  libjack2,
-  libpulseaudio,
-  libsamplerate,
-  makeDesktopItem,
-  makeWrapper,
-  pkg-config,
-  rtmidi,
-  speexdsp,
-  stdenv,
-  wrapGAppsHook3,
-  zstd,
+{ alsa-lib
+, cmake
+, copyDesktopItems
+, curl
+, fetchFromBitbucket
+, fetchFromGitHub
+, ghc_filesystem
+, glew
+, glfw
+, zenity
+, gtk3-x11
+, imagemagick
+, jansson
+, jq
+, lib
+, libarchive
+, libicns
+, libjack2
+, libpulseaudio
+, libsamplerate
+, makeDesktopItem
+, makeWrapper
+, pkg-config
+, rtmidi
+, speexdsp
+, stdenv
+, wrapGAppsHook3
+, zstd
+,
 }:
 
 let

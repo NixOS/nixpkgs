@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  gnum4,
-  pam,
-  fscrypt-experimental,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, gnum4
+, pam
+, fscrypt-experimental
+,
 }:
 
 # Don't use this for anything important yet!

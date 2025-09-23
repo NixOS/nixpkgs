@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildBazelPackage,
-  fetchFromGitHub,
-  bazel_7,
-  jdk,
-  bison,
-  flex,
-  python3,
-  cctools,
+{ lib
+, stdenv
+, buildBazelPackage
+, fetchFromGitHub
+, bazel_7
+, jdk
+, bison
+, flex
+, python3
+, cctools
+,
 }:
 
 let
@@ -54,8 +54,7 @@ buildBazelPackage rec {
         aarch64-linux = "sha256-jgh+wEqZba30MODmgmPoQn1ErNmm40d16jB/kE2jYPg=";
         x86_64-linux = "sha256-kiI/LX0l9ERxItsqiAyl+BP3QnLr0Ly2YVb988M4jVs=";
         aarch64-darwin = "sha256-bkw4ErWYblzr3lQhoXSBqIBHjXzhZHeTKdT0E/YsiFQ=";
-      }
-      .${system} or (throw "No hash for system: ${system}");
+      }.${system} or (throw "No hash for system: ${system}");
   };
 
   nativeBuildInputs = [

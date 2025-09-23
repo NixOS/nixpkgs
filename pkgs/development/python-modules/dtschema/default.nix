@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jsonschema,
-  pythonOlder,
-  rfc3987,
-  ruamel-yaml,
-  setuptools-scm,
-  libfdt,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, jsonschema
+, pythonOlder
+, rfc3987
+, ruamel-yaml
+, setuptools-scm
+, libfdt
+,
 }:
 
 buildPythonPackage rec {
@@ -54,8 +54,8 @@ buildPythonPackage rec {
       stdenv.hostPlatform.isDarwin
       ||
 
-        # see https://github.com/devicetree-org/dt-schema/issues/108
-        versionAtLeast jsonschema.version "4.18"
+      # see https://github.com/devicetree-org/dt-schema/issues/108
+      versionAtLeast jsonschema.version "4.18"
     );
   };
 }

@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  glib,
-  wrapGAppsHook3,
-  xorg,
-  marco,
-  mate-panel,
-  panelApplets,
-  applets ? [ ],
-  useDefaultApplets ? true,
+{ stdenv
+, lib
+, glib
+, wrapGAppsHook3
+, xorg
+, marco
+, mate-panel
+, panelApplets
+, applets ? [ ]
+, useDefaultApplets ? true
+,
 }:
 
 let

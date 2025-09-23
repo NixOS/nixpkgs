@@ -1,26 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  astropy,
-  casa-formats-io,
-  dask,
-  joblib,
-  numpy,
-  packaging,
-  radio-beam,
-  tqdm,
-
-  # tests
-  aplpy,
-  pytest-astropy,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  astropy
+, casa-formats-io
+, dask
+, joblib
+, numpy
+, packaging
+, radio-beam
+, tqdm
+, # tests
+  aplpy
+, pytest-astropy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

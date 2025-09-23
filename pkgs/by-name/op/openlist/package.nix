@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  callPackage,
-  installShellFiles,
-  versionCheckHook,
-  fuse,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, callPackage
+, installShellFiles
+, versionCheckHook
+, fuse
+,
 }:
 
 buildGoModule (finalAttrs: {

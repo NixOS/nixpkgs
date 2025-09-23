@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  bison,
-  perl,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, bison
+, perl
+,
 }:
 
 let

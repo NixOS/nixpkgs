@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  nodejs,
-  pnpm_9,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, nodejs
+, pnpm_9
+, stdenv
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "metacubexd";

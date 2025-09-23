@@ -1,15 +1,15 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  wrapQtAppsHook,
-  qtbase,
-  kwin,
-  kcmutils,
-  libepoxy,
-  libxcb,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, wrapQtAppsHook
+, qtbase
+, kwin
+, kcmutils
+, libepoxy
+, libxcb
+, lib
+,
 }:
 
 stdenv.mkDerivation rec {

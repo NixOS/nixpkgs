@@ -1,7 +1,7 @@
-{
-  replaceVarsWith,
-  runtimeShell,
-  installShellFiles,
+{ replaceVarsWith
+, runtimeShell
+, installShellFiles
+,
 }:
 replaceVarsWith {
   name = "nixos-build-vms";

@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchPypi,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  absl-py,
-  nltk,
-  numpy,
-  six,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, fetchPypi
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, absl-py
+, nltk
+, numpy
+, six
+, pytestCheckHook
+, pythonOlder
+,
 }:
 let
   testdata = fetchFromGitHub {

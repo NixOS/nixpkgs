@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bison,
-  flex,
-  zlib,
-  libxcrypt,
-  usePAM ? stdenv.hostPlatform.isLinux,
-  pam,
-  useSSL ? true,
-  openssl,
+{ lib
+, stdenv
+, fetchurl
+, bison
+, flex
+, zlib
+, libxcrypt
+, usePAM ? stdenv.hostPlatform.isLinux
+, pam
+, useSSL ? true
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

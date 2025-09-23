@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  hopcroftkarp,
-  multiset,
-  pytestCheckHook,
-  hypothesis,
-  setuptools-scm,
-  isPy27,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, hopcroftkarp
+, multiset
+, pytestCheckHook
+, hypothesis
+, setuptools-scm
+, isPy27
+,
 }:
 
 buildPythonPackage rec {

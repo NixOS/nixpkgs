@@ -1,9 +1,9 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  stdlib,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, stdlib
+, version ? null
+,
 }:
 
 let
@@ -15,7 +15,8 @@ let
     with lib.versions;
     lib.switch coq.coq-version [
       (case (isEq "8.20") "8.20.0")
-    ] null;
+    ]
+      null;
   release = {
     "8.20.0".sha256 = "sha256-jITxQT1jLyZvWCGPnmK8i3IrwsZwMPOV0aBe9r22TIQ=";
   };

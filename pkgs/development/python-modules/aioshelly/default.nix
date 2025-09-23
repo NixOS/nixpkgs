@@ -1,17 +1,17 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  bluetooth-data-tools,
-  buildPythonPackage,
-  fetchFromGitHub,
-  habluetooth,
-  orjson,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  yarl,
+{ lib
+, aiohttp
+, aioresponses
+, bluetooth-data-tools
+, buildPythonPackage
+, fetchFromGitHub
+, habluetooth
+, orjson
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, yarl
+,
 }:
 
 buildPythonPackage rec {

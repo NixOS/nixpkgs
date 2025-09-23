@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  cabextract,
+{ lib
+, stdenvNoCC
+, fetchurl
+, cabextract
+,
 }:
 
 stdenvNoCC.mkDerivation {

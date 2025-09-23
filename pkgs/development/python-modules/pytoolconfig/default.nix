@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  docutils,
-  fetchFromGitHub,
-  packaging,
-  pdm-backend,
-  platformdirs,
-  pydantic,
-  pytestCheckHook,
-  pythonOlder,
-  sphinx,
-  sphinx-autodoc-typehints,
-  sphinx-rtd-theme,
-  sphinxHook,
-  tabulate,
-  tomli,
+{ lib
+, buildPythonPackage
+, docutils
+, fetchFromGitHub
+, packaging
+, pdm-backend
+, platformdirs
+, pydantic
+, pytestCheckHook
+, pythonOlder
+, sphinx
+, sphinx-autodoc-typehints
+, sphinx-rtd-theme
+, sphinxHook
+, tabulate
+, tomli
+,
 }:
 
 buildPythonPackage rec {

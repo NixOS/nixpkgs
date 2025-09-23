@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  stu,
-  testers,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, stu
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  click,
-  dataclasses-json,
-  fetchFromGitHub,
-  htmlmin,
-  jinja2,
-  markdown2,
-  poetry-core,
-  pygments,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  pyyaml,
-  requests,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, click
+, dataclasses-json
+, fetchFromGitHub
+, htmlmin
+, jinja2
+, markdown2
+, poetry-core
+, pygments
+, pytestCheckHook
+, pythonOlder
+, pytz
+, pyyaml
+, requests
+,
 }:
 
 buildPythonPackage rec {

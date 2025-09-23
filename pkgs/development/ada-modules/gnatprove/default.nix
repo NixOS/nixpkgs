@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gnat,
-  gnatcoll-core,
-  gprbuild,
-  python3,
-  ocamlPackages,
-  makeWrapper,
-  gpr2,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gnat
+, gnatcoll-core
+, gprbuild
+, python3
+, ocamlPackages
+, makeWrapper
+, gpr2
+,
 }:
 let
   gnat_version = lib.versions.major gnat.version;

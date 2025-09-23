@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  fetchFromGitHub,
-  cmake,
-  eigen,
-  suitesparse,
-  blas,
-  lapack,
-  libGLU,
-  qtbase,
-  libqglviewer,
-  spdlog,
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, eigen
+, suitesparse
+, blas
+, lapack
+, libGLU
+, qtbase
+, libqglviewer
+, spdlog
+,
 }:
 
 mkDerivation rec {

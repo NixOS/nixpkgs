@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  dbusSupport ? stdenv.hostPlatform.isLinux,
-  dbus,
-  # rustls will be used for TLS if useOpenSSL=false
-  useOpenSSL ? stdenv.hostPlatform.isLinux,
-  openssl,
-  notificationSupport ? stdenv.hostPlatform.isLinux,
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, dbusSupport ? stdenv.hostPlatform.isLinux
+, dbus
+, # rustls will be used for TLS if useOpenSSL=false
+  useOpenSSL ? stdenv.hostPlatform.isLinux
+, openssl
+, notificationSupport ? stdenv.hostPlatform.isLinux
+,
 }:
 
 rustPlatform.buildRustPackage rec {

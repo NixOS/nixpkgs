@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -71,9 +70,11 @@ in
           rm ${localConfFilePath}
         fi
       ''
-      + (concatMapStrings (netId: ''
-        touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
-      '') cfg.joinNetworks)
+      + (concatMapStrings
+        (netId: ''
+          touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
+        '')
+        cfg.joinNetworks)
       + lib.optionalString (cfg.localConf != { }) ''
         # in case the user has applied manual changes to the local.conf, we backup the file
         if [ -f "${localConfFilePath}" ]; then

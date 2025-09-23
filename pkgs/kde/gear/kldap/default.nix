@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  cyrus_sasl,
-  openldap,
+{ mkKdeDerivation
+, cyrus_sasl
+, openldap
+,
 }:
 mkKdeDerivation {
   pname = "kldap";

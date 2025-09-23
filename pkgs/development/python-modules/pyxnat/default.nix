@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  pytest-cov-stub,
-  lxml,
-  matplotlib,
-  networkx,
-  pandas,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, pytest-cov-stub
+, lxml
+, matplotlib
+, networkx
+, pandas
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

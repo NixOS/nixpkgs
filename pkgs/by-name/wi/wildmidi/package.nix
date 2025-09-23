@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeTextFile,
-  cmake,
-  alsa-lib,
-  freepats,
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeTextFile
+, cmake
+, alsa-lib
+, freepats
+,
 }:
 
 let

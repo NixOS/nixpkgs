@@ -1,32 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  # Build depends
-  docutils,
-  meson,
-  ninja,
-  pkg-config,
-  python3Packages,
-  opusfile,
-  openssl,
-  gamemode,
-  shaderc,
-  makeWrapper,
-  # Runtime depends
-  glfw,
-  sdl3,
-  SDL2_mixer,
-  cglm,
-  freetype,
-  libpng,
-  libwebp,
-  zlib,
-  zstd,
-  spirv-cross,
-  mimalloc,
-
-  gamemodeSupport ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # Build depends
+  docutils
+, meson
+, ninja
+, pkg-config
+, python3Packages
+, opusfile
+, openssl
+, gamemode
+, shaderc
+, makeWrapper
+, # Runtime depends
+  glfw
+, sdl3
+, SDL2_mixer
+, cglm
+, freetype
+, libpng
+, libwebp
+, zlib
+, zstd
+, spirv-cross
+, mimalloc
+, gamemodeSupport ? stdenv.hostPlatform.isLinux
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taisei";

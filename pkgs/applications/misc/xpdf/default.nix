@@ -1,19 +1,19 @@
-{
-  enableGUI ? true,
-  enablePDFtoPPM ? true,
-  enablePrinting ? true,
-  lib,
-  stdenv,
-  fetchzip,
-  cmake,
-  makeDesktopItem,
-  zlib,
-  libpng,
-  cups ? null,
-  freetype ? null,
-  qtbase ? null,
-  qtsvg ? null,
-  wrapQtAppsHook,
+{ enableGUI ? true
+, enablePDFtoPPM ? true
+, enablePrinting ? true
+, lib
+, stdenv
+, fetchzip
+, cmake
+, makeDesktopItem
+, zlib
+, libpng
+, cups ? null
+, freetype ? null
+, qtbase ? null
+, qtsvg ? null
+, wrapQtAppsHook
+,
 }:
 
 assert enableGUI -> qtbase != null && qtsvg != null && freetype != null;

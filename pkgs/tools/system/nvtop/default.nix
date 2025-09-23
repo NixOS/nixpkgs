@@ -20,21 +20,25 @@ let
   ];
   defaultSupport = builtins.listToAttrs (
     # apple can only build on darwin, and it can't build everything else, and vice versa
-    builtins.map (gpu: {
-      name = gpu;
-      value =
-        (gpu == "apple" && stdenv.buildPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform)
-        || (gpu != "apple" && stdenv.buildPlatform.isLinux);
-    }) defaultGPUFamilies
+    builtins.map
+      (gpu: {
+        name = gpu;
+        value =
+          (gpu == "apple" && stdenv.buildPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform)
+          || (gpu != "apple" && stdenv.buildPlatform.isLinux);
+      })
+      defaultGPUFamilies
   );
 in
 {
   full = callPackage ./build-nvtop.nix defaultSupport; # this package supports all default GPU families
 }
-# additional packages with only one specific GPU family support
-// builtins.listToAttrs (
-  builtins.map (gpu: {
-    name = gpu;
-    value = (callPackage ./build-nvtop.nix { "${gpu}" = true; });
-  }) defaultGPUFamilies
+  # additional packages with only one specific GPU family support
+  // builtins.listToAttrs (
+  builtins.map
+    (gpu: {
+      name = gpu;
+      value = (callPackage ./build-nvtop.nix { "${gpu}" = true; });
+    })
+    defaultGPUFamilies
 )

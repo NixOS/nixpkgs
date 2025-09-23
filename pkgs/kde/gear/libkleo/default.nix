@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qt5compat,
-  boost,
-  qgpgme,
+{ mkKdeDerivation
+, qt5compat
+, boost
+, qgpgme
+,
 }:
 mkKdeDerivation {
   pname = "libkleo";

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  pyflakes,
-  pytestCheckHook,
-  pythonOlder,
-  tomli,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, pyflakes
+, pytestCheckHook
+, pythonOlder
+, tomli
+,
 }:
 buildPythonPackage rec {
   pname = "autoflake";

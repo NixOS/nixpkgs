@@ -1,26 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cargo,
-  m4,
-  pkg-config,
-  python3,
-  rustPlatform,
-
-  # buildInputs
-  expat,
-  fontconfig,
-  libXft,
-  libXinerama,
-  libxcb,
-  aspell,
-  xclip,
-  xdg-utils,
-
-  enablePlugins ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  cargo
+, m4
+, pkg-config
+, python3
+, rustPlatform
+, # buildInputs
+  expat
+, fontconfig
+, libXft
+, libXinerama
+, libxcb
+, aspell
+, xclip
+, xdg-utils
+, enablePlugins ? false
+,
 }:
 
 # The dmenu-rs package has extensive plugin support. However, only two

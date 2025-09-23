@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  gtk4,
-  libadwaita,
-  libportal,
-  meson,
-  ninja,
-  pkg-config,
-  stdenv,
-  vala,
-  wrapGAppsHook4,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, gtk4
+, libadwaita
+, libportal
+, meson
+, ninja
+, pkg-config
+, stdenv
+, vala
+, wrapGAppsHook4
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

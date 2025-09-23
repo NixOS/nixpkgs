@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  testers,
-  libiodata,
-  pkg-config,
-  qmake,
-  qtbase,
-  sailfish-access-control,
-  tzdata,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, testers
+, libiodata
+, pkg-config
+, qmake
+, qtbase
+, sailfish-access-control
+, tzdata
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

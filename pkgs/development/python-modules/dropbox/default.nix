@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  requests,
-  six,
-  stone,
-  mock,
-  pytest-mock,
-  pytestCheckHook,
-  sphinxHook,
-  sphinx-rtd-theme,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, requests
+, six
+, stone
+, mock
+, pytest-mock
+, pytestCheckHook
+, sphinxHook
+, sphinx-rtd-theme
+,
 }:
 
 buildPythonPackage rec {

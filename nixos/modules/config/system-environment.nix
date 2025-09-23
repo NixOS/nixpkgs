@@ -1,11 +1,10 @@
 # This module defines a system-wide environment that will be
 # initialised by pam_env (that is, not only in shells).
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
 
@@ -77,7 +76,7 @@ in
       let
         suffixedVariables = lib.flip lib.mapAttrs cfg.profileRelativeSessionVariables (
           envVar: suffixes:
-          lib.flip lib.concatMap cfg.profiles (profile: map (suffix: "${profile}${suffix}") suffixes)
+            lib.flip lib.concatMap cfg.profiles (profile: map (suffix: "${profile}${suffix}") suffixes)
         );
 
         # We're trying to use the same syntax for PAM variables and env variables.

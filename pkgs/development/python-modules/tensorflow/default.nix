@@ -1,87 +1,87 @@
-{
-  stdenv,
-  #bazel_5,
-  bazel,
-  buildBazelPackage,
-  lib,
-  fetchFromGitHub,
-  symlinkJoin,
-  addDriverRunpath,
-  fetchpatch,
-  fetchzip,
-  linkFarm,
-  # Python deps
-  buildPythonPackage,
-  pythonAtLeast,
-  pythonOlder,
-  python,
-  # Python libraries
-  numpy,
-  tensorboard,
-  abseil-cpp,
-  absl-py,
-  packaging,
-  setuptools,
-  wheel,
-  google-pasta,
-  opt-einsum,
-  astunparse,
-  h5py,
-  termcolor,
-  grpcio,
-  six,
-  wrapt,
-  protobuf-python,
-  tensorflow-estimator-bin,
-  dill,
-  flatbuffers-python,
-  portpicker,
-  tblib,
-  typing-extensions,
-  # Common deps
-  git,
-  pybind11,
-  which,
-  binutils,
-  glibcLocales,
-  cython,
-  perl,
-  # Common libraries
-  jemalloc,
-  mpi,
-  gast,
-  grpc,
-  sqlite,
-  boringssl,
-  jsoncpp,
-  nsync,
-  curl,
-  snappy-cpp,
-  flatbuffers-core,
-  icu,
-  double-conversion,
-  libpng,
-  libjpeg_turbo,
-  giflib,
-  protobuf-core,
-  # Upstream by default includes cuda support since tensorflow 1.15. We could do
+{ stdenv
+, #bazel_5,
+  bazel
+, buildBazelPackage
+, lib
+, fetchFromGitHub
+, symlinkJoin
+, addDriverRunpath
+, fetchpatch
+, fetchzip
+, linkFarm
+, # Python deps
+  buildPythonPackage
+, pythonAtLeast
+, pythonOlder
+, python
+, # Python libraries
+  numpy
+, tensorboard
+, abseil-cpp
+, absl-py
+, packaging
+, setuptools
+, wheel
+, google-pasta
+, opt-einsum
+, astunparse
+, h5py
+, termcolor
+, grpcio
+, six
+, wrapt
+, protobuf-python
+, tensorflow-estimator-bin
+, dill
+, flatbuffers-python
+, portpicker
+, tblib
+, typing-extensions
+, # Common deps
+  git
+, pybind11
+, which
+, binutils
+, glibcLocales
+, cython
+, perl
+, # Common libraries
+  jemalloc
+, mpi
+, gast
+, grpc
+, sqlite
+, boringssl
+, jsoncpp
+, nsync
+, curl
+, snappy-cpp
+, flatbuffers-core
+, icu
+, double-conversion
+, libpng
+, libjpeg_turbo
+, giflib
+, protobuf-core
+, # Upstream by default includes cuda support since tensorflow 1.15. We could do
   # that in nix as well. It would make some things easier and less confusing, but
   # it would also make the default tensorflow package unfree. See
   # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
-  config,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages,
-  cudaCapabilities ? cudaPackages.flags.cudaCapabilities,
-  mklSupport ? false,
-  mkl,
-  tensorboardSupport ? true,
-  # XLA without CUDA is broken
-  xlaSupport ? cudaSupport,
-  sse42Support ? stdenv.hostPlatform.sse4_2Support,
-  avx2Support ? stdenv.hostPlatform.avx2Support,
-  fmaSupport ? stdenv.hostPlatform.fmaSupport,
-  cctools,
-  llvmPackages,
+  config
+, cudaSupport ? config.cudaSupport
+, cudaPackages
+, cudaCapabilities ? cudaPackages.flags.cudaCapabilities
+, mklSupport ? false
+, mkl
+, tensorboardSupport ? true
+, # XLA without CUDA is broken
+  xlaSupport ? cudaSupport
+, sse42Support ? stdenv.hostPlatform.sse4_2Support
+, avx2Support ? stdenv.hostPlatform.avx2Support
+, fmaSupport ? stdenv.hostPlatform.fmaSupport
+, cctools
+, llvmPackages
+,
 }:
 
 let
@@ -152,12 +152,14 @@ let
 
   cudatoolkitDevMerged = symlinkJoin {
     name = "cuda-${cudaPackages.cudaMajorMinorVersion}-dev-merged";
-    paths = lib.concatMap (p: [
-      (lib.getBin p)
-      (lib.getDev p)
-      (lib.getLib p)
-      (lib.getOutput "static" p) # Makes for a very fat closure
-    ]) cudaComponents;
+    paths = lib.concatMap
+      (p: [
+        (lib.getBin p)
+        (lib.getDev p)
+        (lib.getLib p)
+        (lib.getOutput "static" p) # Makes for a very fat closure
+      ])
+      cudaComponents;
   };
 
   # Tensorflow expects bintools at hard-coded paths, e.g. /usr/bin/ar
@@ -272,15 +274,16 @@ let
   };
   bazel-build =
     if stdenv.hostPlatform.isDarwin then
-      _bazel-build.overrideAttrs (prev: {
-        bazelFlags = prev.bazelFlags ++ [
-          "--override_repository=rules_cc=${rules_cc_darwin_patched}"
-          "--override_repository=llvm-raw=${llvm-raw_darwin_patched}"
-        ];
-        preBuild = ''
-          export AR="${cctools}/bin/libtool"
-        '';
-      })
+      _bazel-build.overrideAttrs
+        (prev: {
+          bazelFlags = prev.bazelFlags ++ [
+            "--override_repository=rules_cc=${rules_cc_darwin_patched}"
+            "--override_repository=llvm-raw=${llvm-raw_darwin_patched}"
+          ];
+          preBuild = ''
+            export AR="${cctools}/bin/libtool"
+          '';
+        })
     else
       _bazel-build;
 
@@ -523,8 +526,7 @@ let
               "sha256-9btXrNHqd720oXTPDhSmFidv5iaZRLjCVX8opmrMjXk=";
           x86_64-darwin = "sha256-gqb03kB0z2pZQ6m1fyRp1/Nbt8AVVHWpOJSeZNCLc4w=";
           aarch64-darwin = "sha256-WdgAaFZU+ePwWkVBhLzjlNT7ELfGHOTaMdafcAMD5yo=";
-        }
-        .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+        }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     };
 
     buildAttrs = {
@@ -591,10 +593,10 @@ let
         # to a newer TensorFlow version will be required to fix the
         # source build.
         true
-        || stdenv.hostPlatform.isDarwin
-        || !(xlaSupport -> cudaSupport)
-        || !(cudaSupport -> builtins.hasAttr cudnnAttribute cudaPackages)
-        || !(cudaSupport -> cudaPackages ? cudatoolkit);
+          || stdenv.hostPlatform.isDarwin
+          || !(xlaSupport -> cudaSupport)
+          || !(cudaSupport -> builtins.hasAttr cudnnAttribute cudaPackages)
+          || !(cudaSupport -> cudaPackages ? cudatoolkit);
     }
     // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
       timeout = 86400; # 24 hours

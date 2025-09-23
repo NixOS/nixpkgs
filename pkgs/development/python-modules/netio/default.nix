@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pyopenssl,
-  pythonOlder,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pyopenssl
+, pythonOlder
+, requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  anyascii,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flaky,
-  google-cloud-storage,
-  legacy-cgi,
-  mock,
-  pillow,
-  pymongo,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  requests,
-  setuptools,
-  sqlalchemy,
+{ lib
+, anyascii
+, buildPythonPackage
+, fetchFromGitHub
+, flaky
+, google-cloud-storage
+, legacy-cgi
+, mock
+, pillow
+, pymongo
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, requests
+, setuptools
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

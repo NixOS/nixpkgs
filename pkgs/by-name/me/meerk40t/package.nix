@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  meerk40t-camera,
-  python3Packages,
-  gtk3,
-  wrapGAppsHook3,
+{ lib
+, fetchFromGitHub
+, meerk40t-camera
+, python3Packages
+, gtk3
+, wrapGAppsHook3
+,
 }:
 
 python3Packages.buildPythonApplication rec {

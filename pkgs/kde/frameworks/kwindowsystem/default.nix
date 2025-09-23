@@ -1,9 +1,9 @@
-{
-  mkKdeDerivation,
-  qttools,
-  qtdeclarative,
-  qtwayland,
-  pkg-config,
+{ mkKdeDerivation
+, qttools
+, qtdeclarative
+, qtwayland
+, pkg-config
+,
 }:
 mkKdeDerivation {
   pname = "kwindowsystem";

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  inflect,
-  more-itertools,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, inflect
+, more-itertools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

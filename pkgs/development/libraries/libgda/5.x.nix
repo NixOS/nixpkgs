@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  intltool,
-  itstool,
-  libxml2,
-  gtk3,
-  openssl,
-  gnome,
-  gobject-introspection,
-  vala,
-  libgee,
-  fetchpatch,
-  autoreconfHook,
-  gtk-doc,
-  autoconf-archive,
-  yelp-tools,
-  mysqlSupport ? false,
-  libmysqlclient,
-  postgresSupport ? false,
-  libpq,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, itstool
+, libxml2
+, gtk3
+, openssl
+, gnome
+, gobject-introspection
+, vala
+, libgee
+, fetchpatch
+, autoreconfHook
+, gtk-doc
+, autoconf-archive
+, yelp-tools
+, mysqlSupport ? false
+, libmysqlclient
+, postgresSupport ? false
+, libpq
+,
 }:
 
 stdenv.mkDerivation rec {

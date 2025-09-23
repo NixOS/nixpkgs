@@ -1,20 +1,20 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  gtk3,
-  bash,
-  networkmanager,
-  bluez,
-  brightnessctl,
-  power-profiles-daemon,
-  gammastep,
-  pulseaudio,
-  desktop-file-utils,
-  wrapGAppsHook3,
-  gobject-introspection,
-  upower,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, gtk3
+, bash
+, networkmanager
+, bluez
+, brightnessctl
+, power-profiles-daemon
+, gammastep
+, pulseaudio
+, desktop-file-utils
+, wrapGAppsHook3
+, gobject-introspection
+, upower
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

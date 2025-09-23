@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  makeDesktopItem,
-  copyDesktopItems,
-  fixup-yarn-lock,
-  makeWrapper,
-  autoSignDarwinBinariesHook,
-  nodejs,
-  yarn,
-  electron,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, makeDesktopItem
+, copyDesktopItems
+, fixup-yarn-lock
+, makeWrapper
+, autoSignDarwinBinariesHook
+, nodejs
+, yarn
+, electron
+,
 }:
 
 stdenv.mkDerivation rec {

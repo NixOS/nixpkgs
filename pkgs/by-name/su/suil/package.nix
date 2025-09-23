@@ -1,28 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-
-  # build time
-  pkg-config,
-  meson,
-  ninja,
-  sphinxygen,
-  doxygen,
-  sphinx,
-  python3Packages,
-
-  # runtime
-  lv2,
-
-  # options
-  withGtk2 ? false,
-  gtk2,
-  withGtk3 ? true,
-  gtk3,
-  withQt5 ? true,
-  qt5,
-  withX11 ? !stdenv.hostPlatform.isDarwin,
+{ stdenv
+, lib
+, fetchFromGitLab
+, # build time
+  pkg-config
+, meson
+, ninja
+, sphinxygen
+, doxygen
+, sphinx
+, python3Packages
+, # runtime
+  lv2
+, # options
+  withGtk2 ? false
+, gtk2
+, withGtk3 ? true
+, gtk3
+, withQt5 ? true
+, qt5
+, withX11 ? !stdenv.hostPlatform.isDarwin
+,
 }:
 
 let

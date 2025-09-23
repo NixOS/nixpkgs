@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  libiconv,
-  makeBinaryWrapper,
-  installShellFiles,
-  fortuneAlias ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, libiconv
+, makeBinaryWrapper
+, installShellFiles
+, fortuneAlias ? true
+,
 }:
 
 rustPlatform.buildRustPackage rec {

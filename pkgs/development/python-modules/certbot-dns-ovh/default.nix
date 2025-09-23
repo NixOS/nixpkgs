@@ -1,11 +1,11 @@
-{
-  acme,
-  buildPythonPackage,
-  certbot,
-  dns-lexicon,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ acme
+, buildPythonPackage
+, certbot
+, dns-lexicon
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

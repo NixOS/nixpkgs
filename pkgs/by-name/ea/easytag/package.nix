@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  intltool,
-  gtk3,
-  glib,
-  libid3tag,
-  id3lib,
-  taglib_1,
-  libvorbis,
-  libogg,
-  opusfile,
-  flac,
-  itstool,
-  libxml2,
-  gsettings-desktop-schemas,
-  gnome,
-  adwaita-icon-theme,
-  wrapGAppsHook3,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, gtk3
+, glib
+, libid3tag
+, id3lib
+, taglib_1
+, libvorbis
+, libogg
+, opusfile
+, flac
+, itstool
+, libxml2
+, gsettings-desktop-schemas
+, gnome
+, adwaita-icon-theme
+, wrapGAppsHook3
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

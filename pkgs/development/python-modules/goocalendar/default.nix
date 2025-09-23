@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  gobject-introspection,
-  goocanvas2,
-  gtk3,
-  pkg-config,
-  pygobject3,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, gobject-introspection
+, goocanvas2
+, gtk3
+, pkg-config
+, pygobject3
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

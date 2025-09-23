@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  pdm-backend,
-  acres,
-  click,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, pdm-backend
+, acres
+, click
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

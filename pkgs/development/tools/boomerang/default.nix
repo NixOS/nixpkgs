@@ -1,13 +1,13 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  qtbase,
-  capstone,
-  bison,
-  flex,
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, qtbase
+, capstone
+, bison
+, flex
+,
 }:
 
 mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildBowerComponents,
-  fetchFromSourcehut,
-  gobject-introspection,
-  gst_all_1,
-  poppler-utils,
-  python3,
-  xorg,
+{ lib
+, buildBowerComponents
+, fetchFromSourcehut
+, gobject-introspection
+, gst_all_1
+, poppler-utils
+, python3
+, xorg
+,
 }:
 
 let

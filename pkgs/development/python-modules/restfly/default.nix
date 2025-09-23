@@ -1,18 +1,18 @@
-{
-  lib,
-  arrow,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-cov-stub,
-  pytest-datafiles,
-  pytest-vcr,
-  pytestCheckHook,
-  python-box,
-  pythonOlder,
-  requests,
-  responses,
-  setuptools,
-  typing-extensions,
+{ lib
+, arrow
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-cov-stub
+, pytest-datafiles
+, pytest-vcr
+, pytestCheckHook
+, python-box
+, pythonOlder
+, requests
+, responses
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

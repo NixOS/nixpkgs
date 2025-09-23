@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  unzip,
-  jre,
-  jre8,
-  genericUpdater,
-  writeShellScript,
-  makeWrapper,
-  common-updater-scripts,
-  gnused,
+{ lib
+, stdenvNoCC
+, fetchurl
+, unzip
+, jre
+, jre8
+, genericUpdater
+, writeShellScript
+, makeWrapper
+, common-updater-scripts
+, gnused
+,
 }:
 
 let
@@ -17,16 +17,16 @@ let
   inherit (lib.strings) concatStringsSep versionAtLeast;
 
   common =
-    {
-      pname,
-      version,
-      src,
-      description,
-      java ? jre,
-      prog ? null,
-      jar ? null,
-      license ? lib.licenses.mpl20,
-      updateScript ? null,
+    { pname
+    , version
+    , src
+    , description
+    , java ? jre
+    , prog ? null
+    , jar ? null
+    , license ? lib.licenses.mpl20
+    , updateScript ? null
+    ,
     }:
     stdenvNoCC.mkDerivation (
       finalAttrs:

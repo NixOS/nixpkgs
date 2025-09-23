@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  crystal,
-  makeBinaryWrapper,
-  nix-prefetch-git,
+{ lib
+, fetchFromGitHub
+, crystal
+, makeBinaryWrapper
+, nix-prefetch-git
+,
 }:
 
 crystal.buildCrystalPackage rec {

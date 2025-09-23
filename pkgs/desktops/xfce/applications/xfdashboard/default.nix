@@ -1,26 +1,26 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  clutter,
-  gettext,
-  libXcomposite,
-  libXinerama,
-  libXdamage,
-  libX11,
-  libwnck,
-  libxfce4ui,
-  libxfce4util,
-  garcon,
-  xfconf,
-  gtk3,
-  glib,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, clutter
+, gettext
+, libXcomposite
+, libXinerama
+, libXdamage
+, libX11
+, libwnck
+, libxfce4ui
+, libxfce4util
+, garcon
+, xfconf
+, gtk3
+, glib
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

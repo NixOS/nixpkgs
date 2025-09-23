@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  mpv,
-  openssl,
-  makeWrapper,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, mpv
+, openssl
+, makeWrapper
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "jellytui";

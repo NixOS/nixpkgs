@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
-  libX11,
-  libXt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, libX11
+, libXt
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

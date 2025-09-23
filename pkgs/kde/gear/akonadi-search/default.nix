@@ -1,11 +1,11 @@
-{
-  mkKdeDerivation,
-  sources,
-  corrosion,
-  xapian,
-  rustPlatform,
-  cargo,
-  rustc,
+{ mkKdeDerivation
+, sources
+, corrosion
+, xapian
+, rustPlatform
+, cargo
+, rustc
+,
 }:
 mkKdeDerivation rec {
   pname = "akonadi-search";

@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  fetchurl,
-  cmake,
-  pkg-config,
-  openexr,
-  zlib,
-  imagemagick6,
-  libGLU,
-  libGL,
-  libglut,
-  fftwFloat,
-  fftw,
-  gsl,
-  libexif,
-  perl,
-  qtbase,
-  netpbm,
-  enableUnfree ? false,
-  opencv,
+{ lib
+, stdenv
+, mkDerivation
+, fetchurl
+, cmake
+, pkg-config
+, openexr
+, zlib
+, imagemagick6
+, libGLU
+, libGL
+, libglut
+, fftwFloat
+, fftw
+, gsl
+, libexif
+, perl
+, qtbase
+, netpbm
+, enableUnfree ? false
+, opencv
+,
 }:
 
 mkDerivation rec {

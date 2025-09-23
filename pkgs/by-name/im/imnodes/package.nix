@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  imgui,
-  SDL2,
-  xorg,
-  imnodes,
-  withExamples ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, imgui
+, SDL2
+, xorg
+, imnodes
+, withExamples ? false
+,
 }:
 
 stdenv.mkDerivation {

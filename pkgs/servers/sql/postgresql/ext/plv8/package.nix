@@ -1,15 +1,15 @@
-{
-  fetchFromGitHub,
-  lib,
-  nodejs_20,
-  perl,
-  postgresql,
-  postgresqlBuildExtension,
-  stdenv,
-  # For test
-  coreutils,
-  gnugrep,
-  runCommand,
+{ fetchFromGitHub
+, lib
+, nodejs_20
+, perl
+, postgresql
+, postgresqlBuildExtension
+, stdenv
+, # For test
+  coreutils
+, gnugrep
+, runCommand
+,
 }:
 
 let

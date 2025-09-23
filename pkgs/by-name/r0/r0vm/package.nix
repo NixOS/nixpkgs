@@ -1,11 +1,11 @@
-{
-  rustPlatform,
-  fetchFromGitHub,
-  fetchurl,
-  pkg-config,
-  perl,
-  openssl,
-  lib,
+{ rustPlatform
+, fetchFromGitHub
+, fetchurl
+, pkg-config
+, perl
+, openssl
+, lib
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "r0vm";

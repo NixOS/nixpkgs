@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  appimageTools,
-  undmg,
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, undmg
+,
 }:
 let
   pname = "insomnia";
@@ -24,8 +24,7 @@ let
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.AppImage";
           hash = "sha256-xHqRCR6D1ahqTyWA9icVK5oykABMp5qcgk35w1jzB2s=";
         };
-      }
-      .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+      }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
   meta = {
     homepage = "https://insomnia.rest";
@@ -46,7 +45,8 @@ let
   };
 in
 if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+  stdenv.mkDerivation
+  {
     inherit
       pname
       version

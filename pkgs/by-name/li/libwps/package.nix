@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  boost,
-  pkg-config,
-  librevenge,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, boost
+, pkg-config
+, librevenge
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

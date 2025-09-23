@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.ebusd;
@@ -86,19 +85,21 @@ in
         ];
       in
       lib.listToAttrs (
-        map (
-          area:
-          lib.nameValuePair area (
-            lib.mkOption {
-              type = lib.types.enum levels;
-              default = "notice";
-              example = "debug";
-              description = ''
-                Only write log for matching `AREA`s (${lib.concatStringsSep "|" areas}) below or equal to `LEVEL` (${lib.concatStringsSep "|" levels})
-              '';
-            }
+        map
+          (
+            area:
+            lib.nameValuePair area (
+              lib.mkOption {
+                type = lib.types.enum levels;
+                default = "notice";
+                example = "debug";
+                description = ''
+                  Only write log for matching `AREA`s (${lib.concatStringsSep "|" areas}) below or equal to `LEVEL` (${lib.concatStringsSep "|" levels})
+                '';
+              }
+            )
           )
-        ) areas
+          areas
       );
 
     mqtt = {

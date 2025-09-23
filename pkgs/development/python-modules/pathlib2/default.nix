@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  six,
-  pythonOlder,
-  scandir ? null,
-  typing,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, six
+, pythonOlder
+, scandir ? null
+, typing
+,
 }:
 
 buildPythonPackage rec {

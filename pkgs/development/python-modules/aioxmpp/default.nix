@@ -1,23 +1,23 @@
-{
-  lib,
-  aioopenssl,
-  aiosasl,
-  babel,
-  buildPythonPackage,
-  dnspython,
-  fetchFromGitea,
-  lxml,
-  multidict,
-  pyasn1-modules,
-  pyasn1,
-  pyopenssl,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  pytz,
-  setuptools,
-  sortedcollections,
-  tzlocal,
+{ lib
+, aioopenssl
+, aiosasl
+, babel
+, buildPythonPackage
+, dnspython
+, fetchFromGitea
+, lxml
+, multidict
+, pyasn1-modules
+, pyasn1
+, pyopenssl
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, pytz
+, setuptools
+, sortedcollections
+, tzlocal
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  python3,
-  boost,
-  curl,
-  fuse,
-  gtest,
-  openssl,
-  range-v3,
-  spdlog,
-  llvmPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, python3
+, boost
+, curl
+, fuse
+, gtest
+, openssl
+, range-v3
+, spdlog
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation rec {

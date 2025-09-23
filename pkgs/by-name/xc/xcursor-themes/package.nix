@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xcursorgen,
-  xorgproto,
-  libxcursor,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xcursorgen
+, xorgproto
+, libxcursor
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcursor-themes";

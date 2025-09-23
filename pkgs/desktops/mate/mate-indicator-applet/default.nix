@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  gtk3,
-  libayatana-indicator,
-  mate-panel,
-  hicolor-icon-theme,
-  wrapGAppsHook3,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, libayatana-indicator
+, mate-panel
+, hicolor-icon-theme
+, wrapGAppsHook3
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

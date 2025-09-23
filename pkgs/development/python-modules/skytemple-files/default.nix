@@ -1,29 +1,29 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  appdirs,
-  dungeon-eos,
-  explorerscript,
-  ndspy,
-  pillow,
-  setuptools,
-  skytemple-rust,
-  pyyaml,
-  pmdsky-debug-py,
-  range-typed-integers,
-  pythonOlder,
-  # optional dependencies for SpriteCollab
-  aiohttp,
-  lru-dict,
-  graphql-core,
-  gql,
-  armips,
-  # tests
-  pytestCheckHook,
-  parameterized,
-  xmldiff,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, appdirs
+, dungeon-eos
+, explorerscript
+, ndspy
+, pillow
+, setuptools
+, skytemple-rust
+, pyyaml
+, pmdsky-debug-py
+, range-typed-integers
+, pythonOlder
+, # optional dependencies for SpriteCollab
+  aiohttp
+, lru-dict
+, graphql-core
+, gql
+, armips
+, # tests
+  pytestCheckHook
+, parameterized
+, xmldiff
+,
 }:
 
 buildPythonPackage rec {

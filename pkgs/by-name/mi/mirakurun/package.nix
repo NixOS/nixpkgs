@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  bash,
-  buildNpmPackage,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  nodejs,
-  replaceVars,
-  v4l-utils,
-  which,
+{ lib
+, stdenv
+, bash
+, buildNpmPackage
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, nodejs
+, replaceVars
+, v4l-utils
+, which
+,
 }:
 
 buildNpmPackage rec {

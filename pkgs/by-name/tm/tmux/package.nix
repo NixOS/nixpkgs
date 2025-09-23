@@ -1,21 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  bison,
-  libevent,
-  ncurses,
-  pkg-config,
-  runCommand,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  # broken on i686-linux https://github.com/tmux/tmux/issues/4597
-  withUtf8proc ? !(stdenv.hostPlatform.is32bit),
-  utf8proc, # gets Unicode updates faster than glibc
-  withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
-  libutempter,
-  withSixel ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, bison
+, libevent
+, ncurses
+, pkg-config
+, runCommand
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, # broken on i686-linux https://github.com/tmux/tmux/issues/4597
+  withUtf8proc ? !(stdenv.hostPlatform.is32bit)
+, utf8proc
+, # gets Unicode updates faster than glibc
+  withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
+, libutempter
+, withSixel ? true
+,
 }:
 
 let

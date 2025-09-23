@@ -1,12 +1,12 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  gtk-layer-shell,
-  gtk3,
-  gobject-introspection,
-  wrapGAppsHook3,
-  wlr-randr,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, gtk-layer-shell
+, gtk3
+, gobject-introspection
+, wrapGAppsHook3
+, wlr-randr
+,
 }:
 
 python3Packages.buildPythonPackage rec {

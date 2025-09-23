@@ -1,27 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  vala,
-  pkg-config,
-  makeBinaryWrapper,
-  replaceVars,
-
-  gtk4,
-  libadwaita,
-  glib,
-  libgee,
-  pciutils,
-  wrapGAppsHook4,
-
-  mangohud,
-  mesa-demos,
-  vulkan-tools,
-  vkbasalt,
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, vala
+, pkg-config
+, makeBinaryWrapper
+, replaceVars
+, gtk4
+, libadwaita
+, glib
+, libgee
+, pciutils
+, wrapGAppsHook4
+, mangohud
+, mesa-demos
+, vulkan-tools
+, vkbasalt
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangojuice";

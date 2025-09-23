@@ -1,9 +1,9 @@
-{
-  go,
-  cacert,
-  gitMinimal,
-  lib,
-  stdenv,
+{ go
+, cacert
+, gitMinimal
+, lib
+, stdenv
+,
 }:
 
 lib.extendMkDerivation {
@@ -16,18 +16,15 @@ lib.extendMkDerivation {
   ];
   extendDrvArgs =
     finalAttrs:
-    {
-      nativeBuildInputs ? [ ], # Native build inputs used for the derivation.
-      passthru ? { },
-      patches ? [ ],
-
-      # A function to override the `goModules` derivation.
-      overrideModAttrs ? (finalAttrs: previousAttrs: { }),
-
-      # Directory to the `go.mod` and `go.sum` relative to the `src`.
-      modRoot ? "./",
-
-      # The SRI hash of the vendored dependencies.
+    { nativeBuildInputs ? [ ]
+    , # Native build inputs used for the derivation.
+      passthru ? { }
+    , patches ? [ ]
+    , # A function to override the `goModules` derivation.
+      overrideModAttrs ? (finalAttrs: previousAttrs: { })
+    , # Directory to the `go.mod` and `go.sum` relative to the `src`.
+      modRoot ? "./"
+    , # The SRI hash of the vendored dependencies.
       # If `vendorHash` is `null`, no dependencies are fetched and
       # the build relies on the vendor folder within the source.
       vendorHash ? throw (
@@ -35,42 +32,33 @@ lib.extendMkDerivation {
           "buildGoModule: Expect vendorHash instead of vendorSha256"
         else
           "buildGoModule: vendorHash is missing"
-      ),
-
-      # The go.sum file to track which can cause rebuilds.
-      goSum ? null,
-
-      # Whether to delete the vendor folder supplied with the source.
-      deleteVendor ? false,
-
-      # Whether to fetch (go mod download) and proxy the vendor directory.
+      )
+    , # The go.sum file to track which can cause rebuilds.
+      goSum ? null
+    , # Whether to delete the vendor folder supplied with the source.
+      deleteVendor ? false
+    , # Whether to fetch (go mod download) and proxy the vendor directory.
       # This is useful if your code depends on c code and go mod tidy does not
       # include the needed sources to build or if any dependency has case-insensitive
       # conflicts which will produce platform dependant `vendorHash` checksums.
-      proxyVendor ? false,
-
-      # We want parallel builds by default.
-      enableParallelBuilding ? true,
-
-      # Do not enable this without good reason
+      proxyVendor ? false
+    , # We want parallel builds by default.
+      enableParallelBuilding ? true
+    , # Do not enable this without good reason
       # IE: programs coupled with the compiler.
-      allowGoReference ? false,
-
-      # Meta data for the final derivation.
-      meta ? { },
-
-      # Go linker flags.
-      ldflags ? [ ],
-      # Go build flags.
-      GOFLAGS ? [ ],
-
-      # Instead of building binary targets with 'go install', build test binaries with 'go test'.
+      allowGoReference ? false
+    , # Meta data for the final derivation.
+      meta ? { }
+    , # Go linker flags.
+      ldflags ? [ ]
+    , # Go build flags.
+      GOFLAGS ? [ ]
+    , # Instead of building binary targets with 'go install', build test binaries with 'go test'.
       # The binaries found in $out/bin can be executed as go tests outside of the sandbox.
       # This is mostly useful outside of nixpkgs, for example to build integration/e2e tests
       # that won't run within the sandbox.
-      buildTestBinaries ? false,
-
-      ...
+      buildTestBinaries ? false
+    , ...
     }@args:
     {
       inherit
@@ -91,9 +79,10 @@ lib.extendMkDerivation {
 
                 # If "goSum" is supplied then it can cause "goModules" to rebuild.
                 # Attach the hash name of the "go.sum" file so we can rebuild when it changes.
-                suffix = lib.optionalString (
-                  finalAttrs.goSum != null
-                ) "-${(lib.removeSuffix "-go.sum" (lib.removePrefix "${builtins.storeDir}/" finalAttrs.goSum))}";
+                suffix = lib.optionalString
+                  (
+                    finalAttrs.goSum != null
+                  ) "-${(lib.removeSuffix "-go.sum" (lib.removePrefix "${builtins.storeDir}/" finalAttrs.goSum))}";
               in
               "${prefix}go-modules${suffix}";
 
@@ -214,8 +203,8 @@ lib.extendMkDerivation {
                 posString =
                   if pos == null then "unknown" else "${pos.file}:${toString pos.line}:${toString pos.column}";
               in
-              finalAttrs.passthru.overrideModAttrs
-                or (lib.warn "buildGoModule: ${finalAttrs.name or finalAttrs.pname}: passthru.overrideModAttrs missing after overrideAttrs. Last overridden at ${posString}." overrideModAttrs)
+                finalAttrs.passthru.overrideModAttrs
+                  or (lib.warn "buildGoModule: ${finalAttrs.name or finalAttrs.pname}: passthru.overrideModAttrs missing after overrideAttrs. Last overridden at ${posString}." overrideModAttrs)
             );
 
       nativeBuildInputs = [ go ] ++ nativeBuildInputs;
@@ -229,10 +218,10 @@ lib.extendMkDerivation {
         CGO_ENABLED =
           args.env.CGO_ENABLED or (
             if args ? CGO_ENABLED then
-              # Compatibility layer to the CGO_ENABLED attribute not specified as env.CGO_ENABLED
-              # TODO(@ShamrockLee): Remove and convert to
-              # CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED
-              # after the Nixpkgs 25.05 branch-off.
+            # Compatibility layer to the CGO_ENABLED attribute not specified as env.CGO_ENABLED
+            # TODO(@ShamrockLee): Remove and convert to
+            # CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED
+            # after the Nixpkgs 25.05 branch-off.
               lib.warn
                 "${finalAttrs.finalPackage.meta.position}: buildGoModule: specify CGO_ENABLED with env.CGO_ENABLED instead."
                 args.CGO_ENABLED
@@ -244,13 +233,13 @@ lib.extendMkDerivation {
       GOFLAGS =
         GOFLAGS
         ++
-          lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS)
-            "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
-            (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
+        lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS)
+          "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
+          (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
         ++
-          lib.warnIf (builtins.elem "-trimpath" GOFLAGS)
-            "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
-            (lib.optional (!allowGoReference) "-trimpath");
+        lib.warnIf (builtins.elem "-trimpath" GOFLAGS)
+          "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
+          (lib.optional (!allowGoReference) "-trimpath");
 
       inherit enableParallelBuilding;
 

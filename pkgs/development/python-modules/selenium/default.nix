@@ -1,21 +1,21 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  selenium-manager,
-  setuptools,
-  certifi,
-  pytestCheckHook,
-  pythonOlder,
-  trio,
-  trio-websocket,
-  typing-extensions,
-  websocket-client,
-  urllib3,
-  pytest-trio,
-  nixosTests,
-  stdenv,
-  python,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, selenium-manager
+, setuptools
+, certifi
+, pytestCheckHook
+, pythonOlder
+, trio
+, trio-websocket
+, typing-extensions
+, websocket-client
+, urllib3
+, pytest-trio
+, nixosTests
+, stdenv
+, python
+,
 }:
 
 buildPythonPackage rec {

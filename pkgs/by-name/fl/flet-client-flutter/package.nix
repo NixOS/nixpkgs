@@ -1,21 +1,21 @@
-{
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  flutter329,
-  gst_all_1,
-  libunwind,
-  makeWrapper,
-  mimalloc,
-  orc,
-  python3,
-  nix,
-  gitUpdater,
-  nix-prefetch-git,
-  mpv-unwrapped,
-  libplacebo,
-  _experimental-update-script-combinators,
-  fletTarget ? "linux",
+{ lib
+, fetchFromGitHub
+, pkg-config
+, flutter329
+, gst_all_1
+, libunwind
+, makeWrapper
+, mimalloc
+, orc
+, python3
+, nix
+, gitUpdater
+, nix-prefetch-git
+, mpv-unwrapped
+, libplacebo
+, _experimental-update-script-combinators
+, fletTarget ? "linux"
+,
 }:
 
 flutter329.buildFlutterApplication rec {

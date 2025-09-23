@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libpff,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libpff
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

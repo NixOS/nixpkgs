@@ -1,13 +1,11 @@
-{
-  lib,
-  mkMesonLibrary,
+{ lib
+, mkMesonLibrary
+, nix-store-c
+, nix-expr
+, # Configuration Options
 
-  nix-store-c,
-  nix-expr,
-
-  # Configuration Options
-
-  version,
+  version
+,
 }:
 
 mkMesonLibrary (finalAttrs: {

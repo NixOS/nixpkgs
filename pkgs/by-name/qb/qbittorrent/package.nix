@@ -1,22 +1,22 @@
-{
-  boost,
-  cmake,
-  dbus,
-  fetchFromGitHub,
-  guiSupport ? true,
-  lib,
-  libtorrent-rasterbar,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  python3,
-  qt6,
-  stdenv,
-  trackerSearch ? true,
-  webuiSupport ? true,
-  wrapGAppsHook3,
-  zlib,
-  nixosTests,
+{ boost
+, cmake
+, dbus
+, fetchFromGitHub
+, guiSupport ? true
+, lib
+, libtorrent-rasterbar
+, nix-update-script
+, openssl
+, pkg-config
+, python3
+, qt6
+, stdenv
+, trackerSearch ? true
+, webuiSupport ? true
+, wrapGAppsHook3
+, zlib
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,40 +1,39 @@
-{
-  lib,
-  config,
-  nixosTests,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  fetchhg,
-  runCommand,
-  stdenv,
-
-  arpa2common,
-  brotli,
-  curl,
-  expat,
-  fdk_aac,
-  ffmpeg-headless,
-  ffmpeg_6-headless,
-  geoip,
-  libbsd,
-  libiconv,
-  libjpeg,
-  libkrb5,
-  libmaxminddb,
-  libmodsecurity,
-  libuuid,
-  libxml2,
-  lmdb,
-  luajit_openresty,
-  msgpuck,
-  openssl,
-  opentracing-cpp,
-  pam,
-  psol,
-  which,
-  yajl,
-  zlib,
-  zstd,
+{ lib
+, config
+, nixosTests
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchhg
+, runCommand
+, stdenv
+, arpa2common
+, brotli
+, curl
+, expat
+, fdk_aac
+, ffmpeg-headless
+, ffmpeg_6-headless
+, geoip
+, libbsd
+, libiconv
+, libjpeg
+, libkrb5
+, libmaxminddb
+, libmodsecurity
+, libuuid
+, libxml2
+, lmdb
+, luajit_openresty
+, msgpuck
+, openssl
+, opentracing-cpp
+, pam
+, psol
+, which
+, yajl
+, zlib
+, zstd
+,
 }:
 
 let
@@ -328,13 +327,14 @@ let
     ipscrub = {
       name = "ipscrub";
       src =
-        fetchFromGitHub {
-          name = "ipscrub";
-          owner = "masonicboom";
-          repo = "ipscrub";
-          rev = "v1.0.1";
-          sha256 = "0qcx15c8wbsmyz2hkmyy5yd7qn1n84kx9amaxnfxkpqi05vzm1zz";
-        }
+        fetchFromGitHub
+          {
+            name = "ipscrub";
+            owner = "masonicboom";
+            repo = "ipscrub";
+            rev = "v1.0.1";
+            sha256 = "0qcx15c8wbsmyz2hkmyy5yd7qn1n84kx9amaxnfxkpqi05vzm1zz";
+          }
         + "/ipscrub";
 
       inputs = [ libbsd ];
@@ -507,13 +507,14 @@ let
     naxsi = {
       name = "naxsi";
       src =
-        fetchFromGitHub {
-          name = "naxsi";
-          owner = "nbs-system";
-          repo = "naxsi";
-          rev = "95ac520eed2ea04098a76305fd0ad7e9158840b7";
-          sha256 = "0b5pnqkgg18kbw5rf2ifiq7lsx5rqmpqsql6hx5ycxjzxj6acfb3";
-        }
+        fetchFromGitHub
+          {
+            name = "naxsi";
+            owner = "nbs-system";
+            repo = "naxsi";
+            rev = "95ac520eed2ea04098a76305fd0ad7e9158840b7";
+            sha256 = "0b5pnqkgg18kbw5rf2ifiq7lsx5rqmpqsql6hx5ycxjzxj6acfb3";
+          }
         + "/naxsi_src";
 
       meta = with lib; {
@@ -1110,7 +1111,7 @@ let
   };
 in
 self
-// lib.optionalAttrs config.allowAliases {
+  // lib.optionalAttrs config.allowAliases {
   # deprecated or renamed packages
   modsecurity-nginx = self.modsecurity;
   fastcgi-cache-purge = throw "fastcgi-cache-purge was renamed to cache-purge";

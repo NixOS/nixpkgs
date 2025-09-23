@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  cmake,
-  pkg-config,
-  cairo,
-  file,
-  hyprutils,
-  libjpeg,
-  libjxl,
-  libspng,
-  libwebp,
-  pixman,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, pkg-config
+, cairo
+, file
+, hyprutils
+, libjpeg
+, libjxl
+, libspng
+, libwebp
+, pixman
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

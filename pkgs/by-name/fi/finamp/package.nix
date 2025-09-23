@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  flutter332,
-  mpv-unwrapped,
-  patchelf,
-  fetchFromGitHub,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, flutter332
+, mpv-unwrapped
+, patchelf
+, fetchFromGitHub
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 let
   version = "0.9.19-beta";

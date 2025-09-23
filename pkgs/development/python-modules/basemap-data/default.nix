@@ -1,7 +1,7 @@
-{
-  lib,
-  buildPythonPackage,
-  basemap,
+{ lib
+, buildPythonPackage
+, basemap
+,
 }:
 
 buildPythonPackage rec {

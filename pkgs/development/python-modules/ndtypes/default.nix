@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  python,
-  numpy,
-  libndtypes,
-  isPy27,
+{ lib
+, stdenv
+, buildPythonPackage
+, python
+, numpy
+, libndtypes
+, isPy27
+,
 }:
 
 buildPythonPackage {

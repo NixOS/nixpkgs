@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  sassc,
-  gtk3,
-  inkscape,
-  optipng,
-  gtk-engine-murrine,
-  gdk-pixbuf,
-  librsvg,
-  python3,
-  buildPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, sassc
+, gtk3
+, inkscape
+, optipng
+, gtk-engine-murrine
+, gdk-pixbuf
+, librsvg
+, python3
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation {

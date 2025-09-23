@@ -1,17 +1,17 @@
-{
-  lib,
-  cmake,
-  ninja,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  cffi,
-  sniffio,
-  pytest,
-  trio,
-  pytest-trio,
-  pytest-asyncio,
+{ lib
+, cmake
+, ninja
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, cffi
+, sniffio
+, pytest
+, trio
+, pytest-trio
+, pytest-asyncio
+,
 }:
 let
   nng = fetchFromGitHub {

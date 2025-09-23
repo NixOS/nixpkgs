@@ -1,14 +1,14 @@
-{
-  lib,
-  astroid,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  packaging,
-  poetry-core,
-  semver,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, astroid
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, packaging
+, poetry-core
+, semver
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

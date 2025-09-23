@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-  toolz,
-  multipledispatch,
-  py,
-  pytestCheckHook,
-  pytest-html,
-  pytest-benchmark,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, toolz
+, multipledispatch
+, py
+, pytestCheckHook
+, pytest-html
+, pytest-benchmark
+,
 }:
 
 buildPythonPackage rec {

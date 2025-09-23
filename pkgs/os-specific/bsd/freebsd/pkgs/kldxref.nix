@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  compatIfNeeded,
-  libelf,
+{ lib
+, stdenv
+, mkDerivation
+, compatIfNeeded
+, libelf
+,
 }:
 mkDerivation {
   path = "usr.sbin/kldxref";

@@ -1,30 +1,26 @@
-{
-  stdenv,
-  lib,
-  callPackage,
-  fetchFromGitHub,
-  fetchPypi,
-  python313,
-  replaceVars,
-  ffmpeg-headless,
-  inetutils,
-  nixosTests,
-  home-assistant,
-  testers,
-
-  # Look up dependencies of specified components in component-packages.nix
-  extraComponents ? [ ],
-
-  # Additional packages to add to propagatedBuildInputs
-  extraPackages ? ps: [ ],
-
-  # Override Python packages using
+{ stdenv
+, lib
+, callPackage
+, fetchFromGitHub
+, fetchPypi
+, python313
+, replaceVars
+, ffmpeg-headless
+, inetutils
+, nixosTests
+, home-assistant
+, testers
+, # Look up dependencies of specified components in component-packages.nix
+  extraComponents ? [ ]
+, # Additional packages to add to propagatedBuildInputs
+  extraPackages ? ps: [ ]
+, # Override Python packages using
   # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
   # Applied after defaultOverrides
-  packageOverrides ? self: super: { },
-
-  # Skip pip install of required packages on startup
-  skipPip ? true,
+  packageOverrides ? self: super: { }
+, # Skip pip install of required packages on startup
+  skipPip ? true
+,
 }:
 
 let

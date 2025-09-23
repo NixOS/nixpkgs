@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  stog,
-  ocf_ppx,
-  omd,
+{ buildDunePackage
+, stog
+, ocf_ppx
+, omd
+,
 }:
 
 buildDunePackage {

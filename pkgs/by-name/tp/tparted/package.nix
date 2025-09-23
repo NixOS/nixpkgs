@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  makeWrapper,
-  parted,
-  util-linux,
-  dosfstools,
-  exfatprogs,
-  e2fsprogs,
-  ntfs3g,
-  btrfs-progs,
-  xfsprogs,
-  jfsutils,
-  f2fs-tools,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, makeWrapper
+, parted
+, util-linux
+, dosfstools
+, exfatprogs
+, e2fsprogs
+, ntfs3g
+, btrfs-progs
+, xfsprogs
+, jfsutils
+, f2fs-tools
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

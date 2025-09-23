@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  glibc,
-  libtiff,
-  lxml,
-  numpy,
-  openjpeg,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-image,
-  setuptools,
-  replaceVars,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, glibc
+, libtiff
+, lxml
+, numpy
+, openjpeg
+, pytestCheckHook
+, pythonOlder
+, scikit-image
+, setuptools
+, replaceVars
+,
 }:
 
 buildPythonPackage rec {

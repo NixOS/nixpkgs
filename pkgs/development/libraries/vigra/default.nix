@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost,
-  cmake,
-  fftw,
-  fftwSinglePrec,
-  hdf5,
-  libjpeg,
-  libpng,
-  libtiff,
-  openexr,
-  python3,
-  writeShellScript,
-  jq,
-  nix-update,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, cmake
+, fftw
+, fftwSinglePrec
+, hdf5
+, libjpeg
+, libpng
+, libtiff
+, openexr
+, python3
+, writeShellScript
+, jq
+, nix-update
+,
 }:
 
 let

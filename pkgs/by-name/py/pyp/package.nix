@@ -1,13 +1,12 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-
-  # tests
-  addBinToPathHook,
-  bc,
-  jq,
-  versionCheckHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, # tests
+  addBinToPathHook
+, bc
+, jq
+, versionCheckHook
+,
 }:
 
 let

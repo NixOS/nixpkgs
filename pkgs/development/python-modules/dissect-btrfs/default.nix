@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  dissect-cstruct,
-  dissect-util,
-  fetchFromGitHub,
-  google-crc32c,
-  python-lzo,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  zstandard,
+{ lib
+, buildPythonPackage
+, dissect-cstruct
+, dissect-util
+, fetchFromGitHub
+, google-crc32c
+, python-lzo
+, pythonOlder
+, setuptools
+, setuptools-scm
+, zstandard
+,
 }:
 
 buildPythonPackage rec {

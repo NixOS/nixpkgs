@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  config,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  gtest,
-  doCheck ? true,
-  cudaSupport ? config.cudaSupport or false,
-  openclSupport ? false,
-  mpiSupport ? false,
-  javaWrapper ? false,
-  hdfsSupport ? false,
-  pythonLibrary ? false,
-  rLibrary ? false,
-  cudaPackages,
-  opencl-headers,
-  ocl-icd,
-  boost,
-  llvmPackages,
-  openmpi,
-  openjdk,
-  swig,
-  hadoop,
-  R,
-  rPackages,
-  pandoc,
-  python3Packages,
+{ lib
+, stdenv
+, config
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, gtest
+, doCheck ? true
+, cudaSupport ? config.cudaSupport or false
+, openclSupport ? false
+, mpiSupport ? false
+, javaWrapper ? false
+, hdfsSupport ? false
+, pythonLibrary ? false
+, rLibrary ? false
+, cudaPackages
+, opencl-headers
+, ocl-icd
+, boost
+, llvmPackages
+, openmpi
+, openjdk
+, swig
+, hadoop
+, R
+, rPackages
+, pandoc
+, python3Packages
+,
 }:
 
 assert doCheck -> !mpiSupport;

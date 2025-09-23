@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  napalm,
-  netmiko,
-  pip,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  standard-telnetlib,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, napalm
+, netmiko
+, pip
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, standard-telnetlib
+,
 }:
 
 buildPythonPackage rec {

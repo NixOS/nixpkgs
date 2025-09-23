@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pytestCheckHook,
-  nix-update-script,
-  hatchling,
-  bdffont,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+, nix-update-script
+, hatchling
+, bdffont
+,
 }:
 
 buildPythonPackage rec {

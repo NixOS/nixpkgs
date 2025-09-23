@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  jdk8,
-  coreutils,
-  which,
-  gnumake,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, jdk8
+, coreutils
+, which
+, gnumake
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

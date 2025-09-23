@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  docopt,
-  fetchFromGitHub,
-  freezegun,
-  mock,
-  pyjwt,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-mock,
-  setuptools,
+{ lib
+, buildPythonPackage
+, docopt
+, fetchFromGitHub
+, freezegun
+, mock
+, pyjwt
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

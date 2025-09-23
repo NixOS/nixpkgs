@@ -1,8 +1,8 @@
-{
-  lib,
-  buildKodiAddon,
-  fetchFromGitHub,
-  jurialmunkey,
+{ lib
+, buildKodiAddon
+, fetchFromGitHub
+, jurialmunkey
+,
 }:
 
 buildKodiAddon rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  importlib-metadata,
-  importlib-resources,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, importlib-metadata
+, importlib-resources
+,
 }:
 
 buildPythonPackage rec {

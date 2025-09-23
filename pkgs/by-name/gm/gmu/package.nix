@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  SDL,
-  SDL_gfx,
-  SDL_image,
-  tremor,
-  flac,
-  mpg123,
-  libmikmod,
-  speex,
-  ncurses,
-  keymap ? "default",
-  conf ? "unknown",
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, SDL
+, SDL_gfx
+, SDL_image
+, tremor
+, flac
+, mpg123
+, libmikmod
+, speex
+, ncurses
+, keymap ? "default"
+, conf ? "unknown"
+,
 }:
 
 stdenv.mkDerivation rec {

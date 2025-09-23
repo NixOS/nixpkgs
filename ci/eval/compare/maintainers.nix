@@ -1,11 +1,11 @@
-{
-  lib,
+{ lib
+,
 }:
-{
-  changedattrs,
-  changedpathsjson,
-  removedattrs,
-  byName ? false,
+{ changedattrs
+, changedpathsjson
+, removedattrs
+, byName ? false
+,
 }:
 let
   pkgs = import ../../.. {
@@ -73,26 +73,34 @@ let
       )
     ));
 
-  attrsWithFilenames = builtins.map (
-    pkg: pkg // { filenames = relevantFilenames pkg.package; }
-  ) attrsWithMaintainers;
+  attrsWithFilenames = builtins.map
+    (
+      pkg: pkg // { filenames = relevantFilenames pkg.package; }
+    )
+    attrsWithMaintainers;
 
   attrsWithModifiedFiles = builtins.filter (pkg: anyMatchingFiles pkg.filenames) attrsWithFilenames;
 
-  listToPing = lib.concatMap (
-    pkg:
-    builtins.map (maintainer: {
-      id = maintainer.githubId;
-      inherit (maintainer) github;
-      packageName = pkg.name;
-      dueToFiles = pkg.filenames;
-    }) pkg.maintainers
-  ) attrsWithModifiedFiles;
+  listToPing = lib.concatMap
+    (
+      pkg:
+      builtins.map
+        (maintainer: {
+          id = maintainer.githubId;
+          inherit (maintainer) github;
+          packageName = pkg.name;
+          dueToFiles = pkg.filenames;
+        })
+        pkg.maintainers
+    )
+    attrsWithModifiedFiles;
 
   byMaintainer = lib.groupBy (ping: toString ping.${if byName then "github" else "id"}) listToPing;
 
-  packagesPerMaintainer = lib.attrsets.mapAttrs (
-    maintainer: packages: builtins.map (pkg: pkg.packageName) packages
-  ) byMaintainer;
+  packagesPerMaintainer = lib.attrsets.mapAttrs
+    (
+      maintainer: packages: builtins.map (pkg: pkg.packageName) packages
+    )
+    byMaintainer;
 in
 packagesPerMaintainer

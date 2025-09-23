@@ -1,13 +1,13 @@
-{
-  lib,
-  aiomisc,
-  aiomisc-pytest,
-  caio,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiomisc
+, aiomisc-pytest
+, caio
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

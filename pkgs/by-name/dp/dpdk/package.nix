@@ -1,34 +1,34 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  makeWrapper,
-  libbsd,
-  numactl,
-  libbpf,
-  zlib,
-  elfutils,
-  jansson,
-  openssl,
-  libpcap,
-  rdma-core,
-  doxygen,
-  python3,
-  pciutils,
-  fetchpatch,
-  withExamples ? [ ],
-  shared ? false,
-  machine ? (
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, makeWrapper
+, libbsd
+, numactl
+, libbpf
+, zlib
+, elfutils
+, jansson
+, openssl
+, libpcap
+, rdma-core
+, doxygen
+, python3
+, pciutils
+, fetchpatch
+, withExamples ? [ ]
+, shared ? false
+, machine ? (
     if stdenv.hostPlatform.isx86_64 then
       "nehalem"
     else if stdenv.hostPlatform.isAarch64 then
       "generic"
     else
       null
-  ),
+  )
+,
 }:
 
 stdenv.mkDerivation rec {

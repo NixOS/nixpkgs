@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  emacs,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, emacs
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
     gettext
   ]
   ++
-    # We don't have Emacs/GTK/etc. on {Dar,Cyg}win.
-    lib.optional (!(lib.lists.any (x: stdenv.hostPlatform.system == x) [ "i686-cygwin" ])) emacs;
+  # We don't have Emacs/GTK/etc. on {Dar,Cyg}win.
+  lib.optional (!(lib.lists.any (x: stdenv.hostPlatform.system == x) [ "i686-cygwin" ])) emacs;
 
   doCheck = true;
 

@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPyPy,
-  blas,
-  lapack,
-  setuptools-scm,
-  suitesparse,
-  unittestCheckHook,
-  glpk ? null,
-  gsl ? null,
-  fftw ? null,
-  withGlpk ? true,
-  withGsl ? true,
-  withFftw ? true,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPyPy
+, blas
+, lapack
+, setuptools-scm
+, suitesparse
+, unittestCheckHook
+, glpk ? null
+, gsl ? null
+, fftw ? null
+, withGlpk ? true
+, withGsl ? true
+, withFftw ? true
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

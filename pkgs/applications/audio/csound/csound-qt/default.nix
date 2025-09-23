@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  csound,
-  desktop-file-utils,
-  fetchFromGitHub,
-  python3,
-  python-qt,
-  qmake,
-  qtwebengine,
-  qtxmlpatterns,
-  rtmidi,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, csound
+, desktop-file-utils
+, fetchFromGitHub
+, python3
+, python-qt
+, qmake
+, qtwebengine
+, qtxmlpatterns
+, rtmidi
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

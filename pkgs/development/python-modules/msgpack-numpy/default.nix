@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cython,
-  msgpack,
-  numpy,
-  python,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cython
+, msgpack
+, numpy
+, python
+,
 }:
 
 buildPythonPackage rec {

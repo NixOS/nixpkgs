@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  pkg-config,
-  libuuid,
-  openjdk,
-  gperftools,
-  gtest,
-  uhdm,
-  antlr4,
-  capnproto,
-  nlohmann_json,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, python3
+, pkg-config
+, libuuid
+, openjdk
+, gperftools
+, gtest
+, uhdm
+, antlr4
+, capnproto
+, nlohmann_json
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

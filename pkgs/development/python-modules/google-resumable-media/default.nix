@@ -1,18 +1,18 @@
-{
-  lib,
-  aiohttp,
-  brotli,
-  buildPythonPackage,
-  fetchPypi,
-  google-auth,
-  google-cloud-testutils,
-  google-crc32c,
-  mock,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, aiohttp
+, brotli
+, buildPythonPackage
+, fetchPypi
+, google-auth
+, google-cloud-testutils
+, google-crc32c
+, mock
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

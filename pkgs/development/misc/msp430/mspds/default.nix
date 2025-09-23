@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  unzip,
-  boost,
-  pugixml,
-  hidapi,
-  libusb1 ? null,
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, boost
+, pugixml
+, hidapi
+, libusb1 ? null
+,
 }:
 
 assert stdenv.hostPlatform.isLinux -> libusb1 != null;

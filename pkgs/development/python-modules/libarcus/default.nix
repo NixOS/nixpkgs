@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  python,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  sip4,
-  protobuf,
+{ lib
+, buildPythonPackage
+, python
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, sip4
+, protobuf
+,
 }:
 
 buildPythonPackage rec {

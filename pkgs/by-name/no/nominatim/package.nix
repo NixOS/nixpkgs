@@ -1,14 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchurl,
-
-  osm2pgsql,
-  python3Packages,
-
-  nominatim, # required for testVersion
-  nixosTests,
-  testers,
+{ lib
+, fetchFromGitHub
+, fetchurl
+, osm2pgsql
+, python3Packages
+, nominatim
+, # required for testVersion
+  nixosTests
+, testers
+,
 }:
 
 let

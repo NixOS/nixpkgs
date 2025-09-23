@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  makeBinaryWrapper,
-  php,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
+{ lib
+, stdenvNoCC
+, fetchurl
+, makeBinaryWrapper
+, php
+, writableTmpDirAsHomeHook
+, versionCheckHook
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "magento-cloud";

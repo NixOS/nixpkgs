@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jinja2,
-  numpy,
-  pandas,
-  pillow,
-  prettytable,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  simplejson,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jinja2
+, numpy
+, pandas
+, pillow
+, prettytable
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, simplejson
+,
 }:
 
 buildPythonPackage rec {

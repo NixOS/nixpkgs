@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  colorama,
-  httpx,
-  sphinx,
-  starlette,
-  uvicorn,
-  watchfiles,
-  websockets,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  flit-core
+, # dependencies
+  colorama
+, httpx
+, sphinx
+, starlette
+, uvicorn
+, watchfiles
+, websockets
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  python,
-  qt5,
-  fetchFromGitHub,
-  wrapPython,
-  pyqt5,
-  pyserial,
-  dos2unix,
+{ lib
+, stdenv
+, python
+, qt5
+, fetchFromGitHub
+, wrapPython
+, pyqt5
+, pyserial
+, dos2unix
+,
 }:
 
 stdenv.mkDerivation rec {

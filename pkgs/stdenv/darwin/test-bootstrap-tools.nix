@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  apple-sdk,
-  bootstrapTools,
-  hello,
+{ lib
+, stdenv
+, apple-sdk
+, bootstrapTools
+, hello
+,
 }:
 
 builtins.derivation {

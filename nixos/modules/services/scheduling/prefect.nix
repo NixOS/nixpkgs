@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 
 let
@@ -181,51 +180,53 @@ in
         };
       };
     }
-    // lib.concatMapAttrs (poolName: poolCfg: {
-      # return a partial attr set with one key: "prefect-worker-..."
-      "prefect-worker-${poolName}" = {
-        description = "prefect worker for pool '${poolName}'";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+    // lib.concatMapAttrs
+      (poolName: poolCfg: {
+        # return a partial attr set with one key: "prefect-worker-..."
+        "prefect-worker-${poolName}" = {
+          description = "prefect worker for pool '${poolName}'";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
 
-        environment.systemPackages = cfg.package;
+          environment.systemPackages = cfg.package;
 
-        serviceConfig = {
-          DynamicUser = true;
-          StateDirectory = "prefect-worker-${poolName}";
-          Environment = [
-            "PREFECT_HOME=%S/prefect-worker-${poolName}"
-            "PREFECT_API_URL=${cfg.baseUrl}/api"
-          ];
-          ProtectSystem = "strict";
-          ProtectHome = true;
-          PrivateTmp = true;
-          NoNewPrivileges = true;
-          MemoryDenyWriteExecute = true;
-          LockPersonality = true;
-          CapabilityBoundingSet = [ ];
-          AmbientCapabilities = [ ];
-          RestrictSUIDSGID = true;
-          RestrictAddressFamilies = [
-            "AF_INET"
-            "AF_INET6"
-            "AF_UNIX"
-          ];
-          ProtectKernelTunables = true;
-          ProtectKernelModules = true;
-          ProtectKernelLogs = true;
-          ProtectControlGroups = true;
-          MemoryAccounting = true;
-          CPUAccounting = true;
-          ExecStart = ''
-            ${pkgs.prefect}/bin/prefect worker start \
-              --pool ${poolName} \
-              --type process \
-              --install-policy ${poolCfg.installPolicy}
-          '';
-          Restart = "always";
+          serviceConfig = {
+            DynamicUser = true;
+            StateDirectory = "prefect-worker-${poolName}";
+            Environment = [
+              "PREFECT_HOME=%S/prefect-worker-${poolName}"
+              "PREFECT_API_URL=${cfg.baseUrl}/api"
+            ];
+            ProtectSystem = "strict";
+            ProtectHome = true;
+            PrivateTmp = true;
+            NoNewPrivileges = true;
+            MemoryDenyWriteExecute = true;
+            LockPersonality = true;
+            CapabilityBoundingSet = [ ];
+            AmbientCapabilities = [ ];
+            RestrictSUIDSGID = true;
+            RestrictAddressFamilies = [
+              "AF_INET"
+              "AF_INET6"
+              "AF_UNIX"
+            ];
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectKernelLogs = true;
+            ProtectControlGroups = true;
+            MemoryAccounting = true;
+            CPUAccounting = true;
+            ExecStart = ''
+              ${pkgs.prefect}/bin/prefect worker start \
+                --pool ${poolName} \
+                --type process \
+                --install-policy ${poolCfg.installPolicy}
+            '';
+            Restart = "always";
+          };
         };
-      };
-    }) cfg.workerPools;
+      })
+      cfg.workerPools;
   };
 }

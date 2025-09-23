@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchpatch,
-  fetchPypi,
-  ipywidgets,
-  looseversion,
-  notebook,
-  pandas,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchpatch
+, fetchPypi
+, ipywidgets
+, looseversion
+, notebook
+, pandas
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

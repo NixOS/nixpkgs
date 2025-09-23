@@ -1,13 +1,13 @@
-{
-  lib,
-  mkHyprlandPlugin,
-  fetchFromGitHub,
-  cmake,
-  doctest,
-  meson,
-  ninja,
-  wf-touch,
-  nix-update-script,
+{ lib
+, mkHyprlandPlugin
+, fetchFromGitHub
+, cmake
+, doctest
+, meson
+, ninja
+, wf-touch
+, nix-update-script
+,
 }:
 
 mkHyprlandPlugin {

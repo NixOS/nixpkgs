@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nasm,
-  alsa-lib,
-  curl,
-  flac,
-  fluidsynth,
-  freetype,
-  libjpeg,
-  libmad,
-  libmpeg2,
-  libogg,
-  libtheora,
-  libvorbis,
-  libGLU,
-  libGL,
-  libX11,
-  SDL2,
-  zlib,
-  cctools,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nasm
+, alsa-lib
+, curl
+, flac
+, fluidsynth
+, freetype
+, libjpeg
+, libmad
+, libmpeg2
+, libogg
+, libtheora
+, libvorbis
+, libGLU
+, libGL
+, libX11
+, SDL2
+, zlib
+, cctools
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

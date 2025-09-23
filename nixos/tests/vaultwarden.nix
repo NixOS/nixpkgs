@@ -10,10 +10,10 @@
 let
   makeVaultwardenTest =
     name:
-    {
-      backend ? name,
-      withClient ? true,
-      testScript ? null,
+    { backend ? name
+    , withClient ? true
+    , testScript ? null
+    ,
     }:
     import ./make-test-python.nix (
       { lib, pkgs, ... }:
@@ -145,8 +145,7 @@ let
 
                   environment.systemPackages = [ pkgs.sqlite ];
                 };
-              }
-              .${backend}
+              }.${backend}
 
               {
                 services.vaultwarden = {

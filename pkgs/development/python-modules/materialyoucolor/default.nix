@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchurl,
-  fetchPypi,
-  setuptools,
-  pybind11,
-  requests,
-  rich,
-  pillow,
+{ lib
+, buildPythonPackage
+, fetchurl
+, fetchPypi
+, setuptools
+, pybind11
+, requests
+, rich
+, pillow
+,
 }:
 
 let

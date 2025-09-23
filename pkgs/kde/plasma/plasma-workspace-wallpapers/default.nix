@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  extra-cmake-modules,
+{ mkKdeDerivation
+, extra-cmake-modules
+,
 }:
 mkKdeDerivation {
   pname = "plasma-workspace-wallpapers";

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  kernel,
-  libcap,
+{ lib
+, stdenv
+, kernel
+, libcap
+,
 }:
 
 stdenv.mkDerivation {

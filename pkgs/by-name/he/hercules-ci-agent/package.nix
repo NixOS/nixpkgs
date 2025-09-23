@@ -1,16 +1,16 @@
-{
-  crun,
-  git,
-  gnutar,
-  gzip,
-  haskell,
-  haskellPackages,
-  lib,
-  makeBinaryWrapper,
-  nixos,
-  openssh,
-  stdenv,
-  testers,
+{ crun
+, git
+, gnutar
+, gzip
+, haskell
+, haskellPackages
+, lib
+, makeBinaryWrapper
+, nixos
+, openssh
+, stdenv
+, testers
+,
 }:
 let
   inherit (haskell.lib.compose) overrideCabal addBuildTools justStaticExecutables;
@@ -25,18 +25,20 @@ let
 
   pkg =
     # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
-    overrideCabal (o: {
-      postInstall = ''
-        ${o.postInstall or ""}
-        ${lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-          remove-references-to -t ${haskellPackages.hercules-ci-cnix-expr} $out/bin/hercules-ci-agent
-          remove-references-to -t ${haskellPackages.hercules-ci-cnix-expr} $out/bin/hercules-ci-agent-worker
-        ''}
-        mkdir -p $out/libexec
-        mv $out/bin/hercules-ci-agent $out/libexec
-        makeWrapper $out/libexec/hercules-ci-agent $out/bin/hercules-ci-agent --prefix PATH : ${lib.escapeShellArg (makeBinPath bundledBins)}
-      '';
-    }) (addBuildTools [ makeBinaryWrapper ] (justStaticExecutables haskellPackages.hercules-ci-agent));
+    overrideCabal
+      (o: {
+        postInstall = ''
+          ${o.postInstall or ""}
+          ${lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+            remove-references-to -t ${haskellPackages.hercules-ci-cnix-expr} $out/bin/hercules-ci-agent
+            remove-references-to -t ${haskellPackages.hercules-ci-cnix-expr} $out/bin/hercules-ci-agent-worker
+          ''}
+          mkdir -p $out/libexec
+          mv $out/bin/hercules-ci-agent $out/libexec
+          makeWrapper $out/libexec/hercules-ci-agent $out/bin/hercules-ci-agent --prefix PATH : ${lib.escapeShellArg (makeBinPath bundledBins)}
+        '';
+      })
+      (addBuildTools [ makeBinaryWrapper ] (justStaticExecutables haskellPackages.hercules-ci-agent));
 in
 pkg.overrideAttrs (
   finalAttrs: o: {

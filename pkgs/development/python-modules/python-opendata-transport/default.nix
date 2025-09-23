@@ -1,11 +1,11 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  urllib3,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

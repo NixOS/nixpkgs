@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pyzmq,
-  twisted,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pyzmq
+, twisted
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitea,
-  installShellFiles,
-  scdoc,
-  nixosTests,
+{ lib
+, buildGoModule
+, fetchFromGitea
+, installShellFiles
+, scdoc
+, nixosTests
+,
 }:
 
 buildGoModule rec {

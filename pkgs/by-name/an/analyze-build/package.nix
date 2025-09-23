@@ -1,7 +1,7 @@
-{
-  lib,
-  llvmPackages,
-  python3,
+{ lib
+, llvmPackages
+, python3
+,
 }:
 let
   inherit (llvmPackages) clang-unwrapped;

@@ -1,21 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  installShellFiles,
-  pkg-config,
-
-  # buildInputs
-  openssl,
-  stdenv,
-
-  buildPackages,
-  versionCheckHook,
-
-  # passthru
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, # nativeBuildInputs
+  installShellFiles
+, pkg-config
+, # buildInputs
+  openssl
+, stdenv
+, buildPackages
+, versionCheckHook
+, # passthru
+  nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

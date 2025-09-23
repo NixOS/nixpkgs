@@ -1,67 +1,56 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libsndfile,
-  libtool,
-  makeWrapper,
-  perlPackages,
-  xorg,
-  libcap,
-  alsa-lib,
-  glib,
-  dconf,
-  avahi,
-  libjack2,
-  libasyncns,
-  lirc,
-  dbus,
-  sbc,
-  bluez5,
-  udev,
-  udevCheckHook,
-  openssl,
-  fftwFloat,
-  soxr,
-  speexdsp,
-  systemd,
-  webrtc-audio-processing_1,
-  gst_all_1,
-  check,
-  libintl,
-  meson,
-  ninja,
-  m4,
-  wrapGAppsHook3,
-  fetchpatch2,
-  nixosTests,
-
-  x11Support ? false,
-
-  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-
-  # Whether to support the JACK sound system as a backend.
-  jackaudioSupport ? false,
-
-  # Whether to build the OSS wrapper ("padsp").
-  ossWrapper ? true,
-
-  airtunesSupport ? false,
-
-  bluetoothSupport ? stdenv.hostPlatform.isLinux,
-  advancedBluetoothCodecs ? false,
-
-  remoteControlSupport ? false,
-
-  zeroconfSupport ? false,
-
-  alsaSupport ? stdenv.hostPlatform.isLinux,
-  udevSupport ? stdenv.hostPlatform.isLinux,
-
-  # Whether to build only the library.
-  libOnly ? false,
-
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libsndfile
+, libtool
+, makeWrapper
+, perlPackages
+, xorg
+, libcap
+, alsa-lib
+, glib
+, dconf
+, avahi
+, libjack2
+, libasyncns
+, lirc
+, dbus
+, sbc
+, bluez5
+, udev
+, udevCheckHook
+, openssl
+, fftwFloat
+, soxr
+, speexdsp
+, systemd
+, webrtc-audio-processing_1
+, gst_all_1
+, check
+, libintl
+, meson
+, ninja
+, m4
+, wrapGAppsHook3
+, fetchpatch2
+, nixosTests
+, x11Support ? false
+, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, # Whether to support the JACK sound system as a backend.
+  jackaudioSupport ? false
+, # Whether to build the OSS wrapper ("padsp").
+  ossWrapper ? true
+, airtunesSupport ? false
+, bluetoothSupport ? stdenv.hostPlatform.isLinux
+, advancedBluetoothCodecs ? false
+, remoteControlSupport ? false
+, zeroconfSupport ? false
+, alsaSupport ? stdenv.hostPlatform.isLinux
+, udevSupport ? stdenv.hostPlatform.isLinux
+, # Whether to build only the library.
+  libOnly ? false
+,
 }:
 
 stdenv.mkDerivation rec {

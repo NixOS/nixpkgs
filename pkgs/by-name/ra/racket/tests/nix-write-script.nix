@@ -9,9 +9,9 @@ let
 in
 
 runCommandLocal "racket-test-nix-write-script"
-  {
-    nativeBuildInputs = [ racket ];
-  }
+{
+  nativeBuildInputs = [ racket ];
+}
   ''
     expectation="success"
 

@@ -1,12 +1,13 @@
-{
-  runCommand,
-  python,
-  plotly,
-  pandas,
-  kaleido,
+{ runCommand
+, python
+, plotly
+, pandas
+, kaleido
+,
 }:
 
-runCommand "${kaleido.pname}-tests" {
+runCommand "${kaleido.pname}-tests"
+{
   nativeBuildInputs = [
     python
     plotly

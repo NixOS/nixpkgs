@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  einops,
-  fetchFromGitHub,
-  jax,
-  jaxlib,
-  lib,
-  pythonOlder,
-  setuptools,
+{ buildPythonPackage
+, einops
+, fetchFromGitHub
+, jax
+, jaxlib
+, lib
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

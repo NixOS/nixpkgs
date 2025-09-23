@@ -1,19 +1,19 @@
-{
-  boost178,
-  cuda_cudart,
-  cudaAtLeast,
-  e2fsprogs,
-  gst_all_1,
-  lib,
-  nss,
-  numactl,
-  pulseaudio,
-  qt6,
-  rdma-core,
-  stdenv,
-  ucx,
-  wayland,
-  xorg,
+{ boost178
+, cuda_cudart
+, cudaAtLeast
+, e2fsprogs
+, gst_all_1
+, lib
+, nss
+, numactl
+, pulseaudio
+, qt6
+, rdma-core
+, stdenv
+, ucx
+, wayland
+, xorg
+,
 }:
 prevAttrs:
 let
@@ -24,14 +24,12 @@ let
     {
       aarch64-linux = "host-linux-armv8";
       x86_64-linux = "host-linux-x64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   targetDir =
     {
       aarch64-linux = "target-linux-sbsa-armv8";
       x86_64-linux = "target-linux-x64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 {
   outputs = [ "out" ]; # NOTE(@connorbaker): Force a single output so relative lookups work.
@@ -41,7 +39,7 @@ in
   env = prevAttrs.env or { } // {
     rmPatterns =
       prevAttrs.env.rmPatterns or ""
-      + toString [
+        + toString [
         "${hostDir}/lib{arrow,jpeg}*"
         "${hostDir}/lib{ssl,ssh,crypto}*"
         "${hostDir}/libboost*"

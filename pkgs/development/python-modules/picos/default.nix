@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  numpy,
-  cvxopt,
-  python,
-  networkx,
-  scipy,
-  pythonOlder,
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, numpy
+, cvxopt
+, python
+, networkx
+, scipy
+, pythonOlder
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  cargo-tauri_1,
-  cinny,
-  desktop-file-utils,
-  wrapGAppsHook3,
-  pkg-config,
-  openssl,
-  glib-networking,
-  webkitgtk_4_0,
-  jq,
-  moreutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cargo-tauri_1
+, cinny
+, desktop-file-utils
+, wrapGAppsHook3
+, pkg-config
+, openssl
+, glib-networking
+, webkitgtk_4_0
+, jq
+, moreutils
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -34,9 +34,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch =
     let
       cinny' =
-        assert lib.assertMsg (
-          cinny.version == finalAttrs.version
-        ) "cinny.version (${cinny.version}) != cinny-desktop.version (${finalAttrs.version})";
+        assert lib.assertMsg
+          (
+            cinny.version == finalAttrs.version
+          ) "cinny.version (${cinny.version}) != cinny-desktop.version (${finalAttrs.version})";
         cinny.override {
           conf = {
             hashRouter.enabled = true;

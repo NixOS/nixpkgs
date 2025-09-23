@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  lib,
-  bash,
-  linux-pam,
-  rustPlatform,
-  systemdMinimal,
-  versionCheckHook,
-  nixosTests,
+{ fetchFromGitHub
+, lib
+, bash
+, linux-pam
+, rustPlatform
+, systemdMinimal
+, versionCheckHook
+, nixosTests
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lemurs";

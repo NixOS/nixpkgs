@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  libcMinimal,
-  include,
-  libgcc,
-  makeMinimal,
-  bsdSetupHook,
-  freebsdSetupHook,
-  compatIfNeeded,
-  csu,
-  # this is set to true when used as the dependency of install
+{ lib
+, stdenv
+, mkDerivation
+, libcMinimal
+, include
+, libgcc
+, makeMinimal
+, bsdSetupHook
+, freebsdSetupHook
+, compatIfNeeded
+, csu
+, # this is set to true when used as the dependency of install
   # this is set to false when used as the dependency of libc
-  bootstrapInstallation ? false,
-  extraSrc ? [ ],
+  bootstrapInstallation ? false
+, extraSrc ? [ ]
+,
 }:
 
 mkDerivation (
@@ -67,7 +67,7 @@ mkDerivation (
           done
         '';
   }
-  // lib.optionalAttrs bootstrapInstallation {
+    // lib.optionalAttrs bootstrapInstallation {
     nativeBuildInputs = [
       makeMinimal
       bsdSetupHook

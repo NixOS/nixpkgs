@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  nixosTests,
-  gitUpdater,
-  static ? false,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, nixosTests
+, gitUpdater
+, static ? false
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

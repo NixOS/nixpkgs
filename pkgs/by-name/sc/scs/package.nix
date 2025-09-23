@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  blas,
-  lapack,
-  gfortran,
-  fixDarwinDylibNames,
-  nix-update-script,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, blas
+, lapack
+, gfortran
+, fixDarwinDylibNames
+, nix-update-script
+, python3Packages
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

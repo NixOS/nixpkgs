@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  trezor,
-  libagent,
-  ecdsa,
-  ed25519,
-  mnemonic,
-  keepkey,
-  semver,
-  setuptools,
-  wheel,
-  pinentry,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, trezor
+, libagent
+, ecdsa
+, ed25519
+, mnemonic
+, keepkey
+, semver
+, setuptools
+, wheel
+, pinentry
+,
 }:
 
 buildPythonPackage rec {

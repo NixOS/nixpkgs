@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gtk3,
-  pkg-config,
-  lm_sensors,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gtk3
+, pkg-config
+, lm_sensors
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

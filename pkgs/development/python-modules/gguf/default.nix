@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  numpy,
-  poetry-core,
-  pyyaml,
-  sentencepiece,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, numpy
+, poetry-core
+, pyyaml
+, sentencepiece
+, tqdm
+,
 }:
 buildPythonPackage rec {
   pname = "gguf";

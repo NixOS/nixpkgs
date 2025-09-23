@@ -1,35 +1,35 @@
-{
-  lib,
-  argcomplete,
-  bleak,
-  buildPythonPackage,
-  dash-bootstrap-components,
-  dash,
-  dotmap,
-  fetchFromGitHub,
-  hypothesis,
-  packaging,
-  pandas-stubs,
-  pandas,
-  parse,
-  platformdirs,
-  poetry-core,
-  ppk2-api,
-  print-color,
-  protobuf,
-  pyarrow,
-  pypubsub,
-  pyqrcode,
-  pyserial,
-  pytap2,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  requests,
-  riden,
-  setuptools,
-  tabulate,
-  wcwidth,
+{ lib
+, argcomplete
+, bleak
+, buildPythonPackage
+, dash-bootstrap-components
+, dash
+, dotmap
+, fetchFromGitHub
+, hypothesis
+, packaging
+, pandas-stubs
+, pandas
+, parse
+, platformdirs
+, poetry-core
+, ppk2-api
+, print-color
+, protobuf
+, pyarrow
+, pypubsub
+, pyqrcode
+, pyserial
+, pytap2
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, riden
+, setuptools
+, tabulate
+, wcwidth
+,
 }:
 
 buildPythonPackage rec {

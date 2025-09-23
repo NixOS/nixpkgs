@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  carapace,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, carapace
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

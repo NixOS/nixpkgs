@@ -4,12 +4,12 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-{
-  lib,
-  fetchurl,
-  callPackage,
-  kaem,
-  tinycc-bootstrappable,
+{ lib
+, fetchurl
+, callPackage
+, kaem
+, tinycc-bootstrappable
+,
 }:
 let
   inherit (callPackage ./common.nix { }) buildTinyccMes;

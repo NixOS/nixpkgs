@@ -11,11 +11,10 @@ let
   seed-tls-certs = import common/acme/server/snakeoil-certs.nix;
 
   commonHostConfig =
-    {
-      nodes,
-      config,
-      pkgs,
-      ...
+    { nodes
+    , config
+    , pkgs
+    , ...
     }:
     {
       environment.systemPackages = [

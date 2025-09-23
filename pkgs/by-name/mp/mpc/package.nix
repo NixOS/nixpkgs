@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  libiconv,
-  libmpdclient,
-  meson,
-  ninja,
-  pkg-config,
-  python3Packages,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, libiconv
+, libmpdclient
+, meson
+, ninja
+, pkg-config
+, python3Packages
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

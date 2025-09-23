@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  pkgsHostTarget,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, pkgsHostTarget
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  boost183,
-  qtbase,
-  qtimageformats,
-  qttools,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, boost183
+, qtbase
+, qtimageformats
+, qttools
+, wrapQtAppsHook
+,
 }:
 
 let

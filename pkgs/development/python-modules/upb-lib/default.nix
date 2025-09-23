@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pyserial-asyncio-fast,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pyserial-asyncio-fast
+, pytestCheckHook
+, pythonOlder
+, pytz
+,
 }:
 
 buildPythonPackage rec {

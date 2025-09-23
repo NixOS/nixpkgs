@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  flask,
-  python-ldap,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, flask
+, python-ldap
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

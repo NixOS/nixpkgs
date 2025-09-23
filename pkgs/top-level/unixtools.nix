@@ -1,11 +1,11 @@
-{
-  pkgs,
-  buildEnv,
-  runCommand,
-  lib,
-  stdenv,
-  freebsd,
-  binlore,
+{ pkgs
+, buildEnv
+, runCommand
+, lib
+, stdenv
+, freebsd
+, binlore
+,
 }:
 
 # These are some unix tools that are commonly included in the /usr/bin

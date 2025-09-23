@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost,
-  cmake,
-  nasm,
-  libpng,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, cmake
+, nasm
+, libpng
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

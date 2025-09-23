@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  # Update the enabled crypt scheme ids in passthru when the enabled hashes change
-  enableHashes ? "strong",
-  nixosTests,
-  runCommand,
-  python3,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, # Update the enabled crypt scheme ids in passthru when the enabled hashes change
+  enableHashes ? "strong"
+, nixosTests
+, runCommand
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

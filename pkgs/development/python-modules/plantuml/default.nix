@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  # Runtime dependencies
-  httplib2,
-  six,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, # Runtime dependencies
+  httplib2
+, six
+,
 }:
 
 buildPythonPackage {

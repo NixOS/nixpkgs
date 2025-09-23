@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  hatchling,
-  hatch-vcs,
-  pyparsing,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, hatchling
+, hatch-vcs
+, pyparsing
+,
 }:
 
 buildPythonPackage rec {

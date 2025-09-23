@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  scons,
-  pkg-config,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  libGLU,
-  libGL,
-  libpng,
-  physfs,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, scons
+, pkg-config
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, libGLU
+, libGL
+, libpng
+, physfs
+, unstableGitUpdater
+,
 }:
 
 let

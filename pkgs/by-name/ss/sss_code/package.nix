@@ -1,12 +1,12 @@
-{
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  fontconfig,
-  libiconv,
-  stdenv,
-  libxcb,
-  lib,
+{ rustPlatform
+, fetchFromGitHub
+, pkg-config
+, fontconfig
+, libiconv
+, stdenv
+, libxcb
+, lib
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python3,
-  jdk,
+{ lib
+, stdenv
+, fetchurl
+, python3
+, jdk
+,
 }:
 
 let

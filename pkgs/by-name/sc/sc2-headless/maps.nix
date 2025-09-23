@@ -1,6 +1,6 @@
-{
-  fetchzip,
-  licenseAccepted,
+{ fetchzip
+, licenseAccepted
+,
 }:
 let
   fetchzip' =

@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  requireFile,
-  runCommand,
-  rcu,
-  testers,
-  copyDesktopItems,
-  coreutils,
-  desktopToDarwinBundle,
-  gnutar,
-  libsForQt5,
-  makeDesktopItem,
-  net-tools,
-  protobuf,
-  python312Packages,
-  system-config-printer,
-  wget,
+{ stdenv
+, lib
+, requireFile
+, runCommand
+, rcu
+, testers
+, copyDesktopItems
+, coreutils
+, desktopToDarwinBundle
+, gnutar
+, libsForQt5
+, makeDesktopItem
+, net-tools
+, protobuf
+, python312Packages
+, system-config-printer
+, wget
+,
 }:
 
 let

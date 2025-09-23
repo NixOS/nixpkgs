@@ -1,16 +1,16 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  which,
-  gtk2,
-  gtk3,
-  qt5,
-  libXtst,
-  lib,
-  libchewing,
-  unixtools,
-  anthy,
+{ stdenv
+, fetchFromGitHub
+, pkg-config
+, which
+, gtk2
+, gtk3
+, qt5
+, libXtst
+, lib
+, libchewing
+, unixtools
+, anthy
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mkDerivation,
-  qtbase,
-  qmltermwidget,
-  qtquickcontrols2,
-  qtgraphicaleffects,
-  qmake,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, mkDerivation
+, qtbase
+, qmltermwidget
+, qtquickcontrols2
+, qtgraphicaleffects
+, qmake
+, nixosTests
+,
 }:
 
 mkDerivation rec {

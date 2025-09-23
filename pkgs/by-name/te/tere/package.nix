@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  ncurses,
-  stdenv,
-  python3,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, ncurses
+, stdenv
+, python3
+,
 }:
 
 rustPlatform.buildRustPackage {

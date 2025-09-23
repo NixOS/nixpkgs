@@ -1,20 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  qtbase,
-  qtdeclarative,
-  qtx11extras ? null, # qt5 only
-  kcoreaddons,
-  ki18n,
-  knotifications,
-  kpipewire,
-  kstatusnotifieritem ? null, # qt6 only
-  kwindowsystem,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, extra-cmake-modules
+, pkg-config
+, qtbase
+, qtdeclarative
+, qtx11extras ? null
+, # qt5 only
+  kcoreaddons
+, ki18n
+, knotifications
+, kpipewire
+, kstatusnotifieritem ? null
+, # qt6 only
+  kwindowsystem
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

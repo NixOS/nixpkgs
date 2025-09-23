@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  ncurses,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, ncurses
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

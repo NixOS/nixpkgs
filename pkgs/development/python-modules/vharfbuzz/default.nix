@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  fonttools,
-  uharfbuzz,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, fonttools
+, uharfbuzz
+,
 }:
 
 buildPythonPackage rec {

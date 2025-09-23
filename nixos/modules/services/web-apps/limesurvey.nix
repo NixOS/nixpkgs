@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -290,9 +289,10 @@ in
             };port=${toString cfg.database.port}"
             + optionalString mysqlLocal ";socket=${cfg.database.socket}";
           username = cfg.database.user;
-          password = mkIf (
-            cfg.database.passwordFile != null
-          ) "file_get_contents(\"${toString cfg.database.passwordFile}\");";
+          password = mkIf
+            (
+              cfg.database.passwordFile != null
+            ) "file_get_contents(\"${toString cfg.database.passwordFile}\");";
           tablePrefix = "limesurvey_";
         };
         assetManager.basePath = "${stateDir}/tmp/assets";
@@ -304,9 +304,10 @@ in
       config = {
         tempdir = "${stateDir}/tmp";
         uploaddir = "${stateDir}/upload";
-        force_ssl = mkIf (
-          cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL
-        ) "on";
+        force_ssl = mkIf
+          (
+            cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL
+          ) "on";
         config.defaultlang = "en";
       };
     };

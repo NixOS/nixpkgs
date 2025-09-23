@@ -1,10 +1,10 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  copyDesktopItems,
-  libsForQt5,
-  makeDesktopItem,
+{ lib
+, python3
+, fetchPypi
+, copyDesktopItems
+, libsForQt5
+, makeDesktopItem
+,
 }:
 
 let

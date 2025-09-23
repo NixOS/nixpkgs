@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  stress,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, stress
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

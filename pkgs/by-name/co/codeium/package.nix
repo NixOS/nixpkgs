@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  gzip,
-  autoPatchelfHook,
-  versionCheckHook,
+{ stdenv
+, lib
+, fetchurl
+, gzip
+, autoPatchelfHook
+, versionCheckHook
+,
 }:
 let
 
@@ -18,8 +18,7 @@ let
       x86_64-darwin = "macos_x64";
       aarch64-darwin = "macos_arm";
 
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   hash =
     {
@@ -27,8 +26,7 @@ let
       aarch64-linux = "sha256-bznlEnBZqF3Vfkt8y9XCgQ5O0yxzlGw9HAoByblZ2A4=";
       x86_64-darwin = "sha256-LIbFX5WUlWw+wF3Sj+v+2zDn2xzvDlW8AO/TJsvDa6c=";
       aarch64-darwin = "sha256-ANS9FFwrgmRhknpNija9DhO2Znj/RAJhq2GUMZiau6o=";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   bin = "$out/bin/codeium_language_server";
 

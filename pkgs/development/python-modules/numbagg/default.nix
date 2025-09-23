@@ -1,23 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  numba,
-  numpy,
-
-  # tests
-  pytestCheckHook,
-  bottleneck,
-  hypothesis,
-  pandas,
-  pytest-benchmark,
-  tabulate,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  numba
+, numpy
+, # tests
+  pytestCheckHook
+, bottleneck
+, hypothesis
+, pandas
+, pytest-benchmark
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

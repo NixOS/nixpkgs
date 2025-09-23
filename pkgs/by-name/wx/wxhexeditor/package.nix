@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoconf,
-  automake,
-  gettext,
-  libtool,
-  python3,
-  wxGTK32,
-  wrapGAppsHook3,
-  llvmPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoconf
+, automake
+, gettext
+, libtool
+, python3
+, wxGTK32
+, wrapGAppsHook3
+, llvmPackages
+,
 }:
 
 stdenv.mkDerivation rec {

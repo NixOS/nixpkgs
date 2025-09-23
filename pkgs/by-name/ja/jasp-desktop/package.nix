@@ -1,25 +1,21 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-  fetchpatch,
-
-  buildEnv,
-  linkFarm,
-
-  cmake,
-  ninja,
-  pkg-config,
-
-  boost,
-  freexl,
-  libarchive,
-  librdata,
-  qt6,
-  R,
-  readstat,
-  rPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, buildEnv
+, linkFarm
+, cmake
+, ninja
+, pkg-config
+, boost
+, freexl
+, libarchive
+, librdata
+, qt6
+, R
+, readstat
+, rPackages
+,
 }:
 
 let
@@ -53,10 +49,12 @@ let
   };
 
   moduleLibs = linkFarm "jasp-${version}-module-libs" (
-    lib.mapAttrsToList (name: drv: {
-      name = name;
-      path = "${drv}/library";
-    }) modules
+    lib.mapAttrsToList
+      (name: drv: {
+        name = name;
+        path = "${drv}/library";
+      })
+      modules
   );
 in
 stdenv.mkDerivation {

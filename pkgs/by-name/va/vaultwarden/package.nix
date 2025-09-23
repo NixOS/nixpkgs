@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  rustPlatform,
-  fetchFromGitHub,
-  nixosTests,
-  pkg-config,
-  openssl,
-  libiconv,
-  dbBackend ? "sqlite",
-  libmysqlclient,
-  libpq,
+{ lib
+, stdenv
+, callPackage
+, rustPlatform
+, fetchFromGitHub
+, nixosTests
+, pkg-config
+, openssl
+, libiconv
+, dbBackend ? "sqlite"
+, libmysqlclient
+, libpq
+,
 }:
 
 let

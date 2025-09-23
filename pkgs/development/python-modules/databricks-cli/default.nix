@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  configparser,
-  decorator,
-  fetchFromGitHub,
-  mock,
-  oauthlib,
-  pyjwt,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  requests-mock,
-  six,
-  tabulate,
+{ lib
+, buildPythonPackage
+, click
+, configparser
+, decorator
+, fetchFromGitHub
+, mock
+, oauthlib
+, pyjwt
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-mock
+, six
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

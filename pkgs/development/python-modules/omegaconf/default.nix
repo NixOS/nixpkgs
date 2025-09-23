@@ -1,19 +1,19 @@
-{
-  lib,
-  antlr4,
-  antlr4-python3-runtime,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  jre_minimal,
-  pydevd,
-  pytest-mock,
-  pytest7CheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  pyyaml,
-  replaceVars,
+{ lib
+, antlr4
+, antlr4-python3-runtime
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, jre_minimal
+, pydevd
+, pytest-mock
+, pytest7CheckHook
+, pythonAtLeast
+, pythonOlder
+, pyyaml
+, replaceVars
+,
 }:
 
 buildPythonPackage rec {

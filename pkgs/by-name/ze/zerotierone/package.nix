@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  buildPackages,
-  cargo,
-  lzo,
-  openssl,
-  pkg-config,
-  ronn,
-  rustc,
-  zlib,
-  libiconv,
-  fetchpatch,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, buildPackages
+, cargo
+, lzo
+, openssl
+, pkg-config
+, ronn
+, rustc
+, zlib
+, libiconv
+, fetchpatch
+,
 }:
 
 let

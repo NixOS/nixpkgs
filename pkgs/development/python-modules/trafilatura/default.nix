@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  certifi,
-  charset-normalizer,
-  courlan,
-  htmldate,
-  justext,
-  lxml,
-  urllib3,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  certifi
+, charset-normalizer
+, courlan
+, htmldate
+, justext
+, lxml
+, urllib3
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

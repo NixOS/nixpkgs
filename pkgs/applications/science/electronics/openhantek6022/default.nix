@@ -1,14 +1,14 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  cmake,
-  qtbase,
-  qttools,
-  fftw,
-  libusb1,
-  libglvnd,
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, makeWrapper
+, cmake
+, qtbase
+, qttools
+, fftw
+, libusb1
+, libglvnd
+,
 }:
 
 mkDerivation rec {

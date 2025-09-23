@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  libGL,
-  libX11,
-  setuptools,
-  glcontext,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, libGL
+, libX11
+, setuptools
+, glcontext
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

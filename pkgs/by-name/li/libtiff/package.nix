@@ -1,40 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  nix-update-script,
-
-  cmake,
-  pkg-config,
-  sphinx,
-
-  lerc,
-  libdeflate,
-  libjpeg,
-  libwebp,
-  xz,
-  zlib,
-  zstd,
-
-  # Because lerc is C++ and static libraries don't track dependencies, every downstream dependent of
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, nix-update-script
+, cmake
+, pkg-config
+, sphinx
+, lerc
+, libdeflate
+, libjpeg
+, libwebp
+, xz
+, zlib
+, zstd
+, # Because lerc is C++ and static libraries don't track dependencies, every downstream dependent of
   # libtiff has to link with a C++ compiler, or the C++ standard library won't be linked, resulting
   # in undefined symbol errors. Without systematic support for this in build systems, fixing this
   # would require modifying the build system of every libtiff user. Hopefully at some point build
   # systems will figure this out, and then we can enable this.
   #
   # See https://github.com/mesonbuild/meson/issues/14234
-  withLerc ? !stdenv.hostPlatform.isStatic,
-
-  # for passthru.tests
-  libgeotiff,
-  python3Packages,
-  imagemagick,
-  graphicsmagick,
-  gdal,
-  openimageio,
-  freeimage,
-  testers,
+  withLerc ? !stdenv.hostPlatform.isStatic
+, # for passthru.tests
+  libgeotiff
+, python3Packages
+, imagemagick
+, graphicsmagick
+, gdal
+, openimageio
+, freeimage
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

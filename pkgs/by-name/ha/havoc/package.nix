@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libxkbcommon,
-  pkg-config,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libxkbcommon
+, pkg-config
+, wayland
+, wayland-protocols
+, wayland-scanner
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

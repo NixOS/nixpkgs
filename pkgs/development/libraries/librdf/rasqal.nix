@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  librdf_raptor2,
-  gmp,
-  pkg-config,
-  libxml2,
-  perl,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, librdf_raptor2
+, gmp
+, pkg-config
+, libxml2
+, perl
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

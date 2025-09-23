@@ -1,39 +1,37 @@
-{
-  config,
-  lib,
-  stdenv,
-  autoPatchelfHook,
-  autoreconfHook,
-  fetchFromGitHub,
-  nix-update-script,
-
-  chromecastSupport ? config.chromecast or stdenv.hostPlatform.isLinux,
-  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
-
-  avahi,
-  curl,
-  bison,
-  ffmpeg,
-  flex,
-  gettext,
-  gnutls,
-  gperf,
-  json_c,
-  libconfuse,
-  libevent,
-  libgcrypt,
-  libgpg-error,
-  libplist,
-  libpulseaudio,
-  libsodium,
-  libtool,
-  libunistring,
-  libwebsockets,
-  libxml2,
-  pkg-config,
-  protobufc,
-  sqlite,
-  zlib,
+{ config
+, lib
+, stdenv
+, autoPatchelfHook
+, autoreconfHook
+, fetchFromGitHub
+, nix-update-script
+, chromecastSupport ? config.chromecast or stdenv.hostPlatform.isLinux
+, pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
+, avahi
+, curl
+, bison
+, ffmpeg
+, flex
+, gettext
+, gnutls
+, gperf
+, json_c
+, libconfuse
+, libevent
+, libgcrypt
+, libgpg-error
+, libplist
+, libpulseaudio
+, libsodium
+, libtool
+, libunistring
+, libwebsockets
+, libxml2
+, pkg-config
+, protobufc
+, sqlite
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

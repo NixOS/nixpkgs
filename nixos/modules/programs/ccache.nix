@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -72,9 +71,9 @@ in
       nixpkgs.overlays = [
         (
           self: super:
-          lib.genAttrs cfg.packageNames (
-            pn: super.${pn}.override { stdenv = builtins.trace "with ccache: ${pn}" self.ccacheStdenv; }
-          )
+            lib.genAttrs cfg.packageNames (
+              pn: super.${pn}.override { stdenv = builtins.trace "with ccache: ${pn}" self.ccacheStdenv; }
+            )
         )
 
         (self: super: {

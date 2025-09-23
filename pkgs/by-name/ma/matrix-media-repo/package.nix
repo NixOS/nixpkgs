@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  libde265,
-  libheif,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, libde265
+, libheif
+,
 }:
 let
   pname = "matrix-media-repo";

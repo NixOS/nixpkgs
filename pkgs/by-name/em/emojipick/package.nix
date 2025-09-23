@@ -1,18 +1,18 @@
-{
-  stdenvNoCC,
-  fetchFromGitHub,
-  lib,
-  python3,
-  xclip,
-  libnotify,
-  dmenu,
-  rofi,
-  emojipick-use-rofi ? false,
-  emojipick-copy-to-clipboard ? true,
-  emojipick-show-notifications ? true,
-  emojipick-print-emoji ? true,
-  emojipick-font-family ? "Noto Color Emoji",
-  emojipick-font-size ? "18",
+{ stdenvNoCC
+, fetchFromGitHub
+, lib
+, python3
+, xclip
+, libnotify
+, dmenu
+, rofi
+, emojipick-use-rofi ? false
+, emojipick-copy-to-clipboard ? true
+, emojipick-show-notifications ? true
+, emojipick-print-emoji ? true
+, emojipick-font-family ? "Noto Color Emoji"
+, emojipick-font-size ? "18"
+,
 }:
 
 let

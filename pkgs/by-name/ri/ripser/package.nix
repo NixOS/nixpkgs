@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  useCoefficients ? false,
-  indicateProgress ? false,
-  useGoogleHashmap ? false,
-  sparsehash ? null,
-  fileFormat ? "lowerTriangularCsv",
+{ lib
+, stdenv
+, fetchFromGitHub
+, useCoefficients ? false
+, indicateProgress ? false
+, useGoogleHashmap ? false
+, sparsehash ? null
+, fileFormat ? "lowerTriangularCsv"
+,
 }:
 
 assert lib.assertOneOf "fileFormat" fileFormat [

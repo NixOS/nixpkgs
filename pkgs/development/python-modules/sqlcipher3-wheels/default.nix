@@ -1,6 +1,6 @@
-{
-  mkPythonMetaPackage,
-  sqlcipher3,
+{ mkPythonMetaPackage
+, sqlcipher3
+,
 }:
 mkPythonMetaPackage {
   pname = "sqlcipher3-wheels";

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gtk3,
-  jansson,
-  luajit,
-  pkg-config,
-  unstableGitUpdater,
-  wrapGAppsHook3,
-  xxd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gtk3
+, jansson
+, luajit
+, pkg-config
+, unstableGitUpdater
+, wrapGAppsHook3
+, xxd
+,
 }:
 
 stdenv.mkDerivation {

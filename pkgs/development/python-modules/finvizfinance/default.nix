@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  beautifulsoup4,
-  datetime,
-  lxml,
-  pandas,
-  pytest-mock,
-  pytestCheckHook,
-  requests,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, beautifulsoup4
+, datetime
+, lxml
+, pandas
+, pytest-mock
+, pytestCheckHook
+, requests
+,
 }:
 
 buildPythonPackage rec {

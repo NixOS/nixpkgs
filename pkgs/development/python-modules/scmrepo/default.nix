@@ -1,20 +1,20 @@
-{
-  lib,
-  aiohttp-retry,
-  asyncssh,
-  buildPythonPackage,
-  dulwich,
-  fetchFromGitHub,
-  fsspec,
-  funcy,
-  gitpython,
-  pathspec,
-  pygit2,
-  pygtrie,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  tqdm,
+{ lib
+, aiohttp-retry
+, asyncssh
+, buildPythonPackage
+, dulwich
+, fetchFromGitHub
+, fsspec
+, funcy
+, gitpython
+, pathspec
+, pygit2
+, pygtrie
+, pythonOlder
+, setuptools
+, setuptools-scm
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

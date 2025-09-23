@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  numpy,
-  opencv-python,
-  simsimd,
-  stringzilla,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, numpy
+, opencv-python
+, simsimd
+, stringzilla
+,
 }:
 
 buildPythonPackage rec {

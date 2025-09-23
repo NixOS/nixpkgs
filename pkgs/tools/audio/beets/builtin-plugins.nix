@@ -1,16 +1,15 @@
-{
-  aacgain,
-  chromaprint,
-  ffmpeg,
-  flac,
-  imagemagick,
-  keyfinder-cli,
-  mp3gain,
-  mp3val,
-  python3Packages,
-  version,
-  lib,
-  ...
+{ aacgain
+, chromaprint
+, ffmpeg
+, flac
+, imagemagick
+, keyfinder-cli
+, mp3gain
+, mp3val
+, python3Packages
+, version
+, lib
+, ...
 }:
 {
   absubmit = {

@@ -1,9 +1,9 @@
-{
-  mkKdeDerivation,
-  qtmultimedia,
-  qttools,
-  qtwebengine,
-  libxslt,
+{ mkKdeDerivation
+, qtmultimedia
+, qttools
+, qtwebengine
+, libxslt
+,
 }:
 mkKdeDerivation {
   pname = "mailcommon";

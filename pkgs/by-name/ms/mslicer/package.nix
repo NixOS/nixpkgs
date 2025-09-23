@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  lib,
-  libglvnd,
-  libxkbcommon,
-  nix-update-script,
-  rustPlatform,
-  vulkan-loader,
-  wayland,
+{ fetchFromGitHub
+, lib
+, libglvnd
+, libxkbcommon
+, nix-update-script
+, rustPlatform
+, vulkan-loader
+, wayland
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

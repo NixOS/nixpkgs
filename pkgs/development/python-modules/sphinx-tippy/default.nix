@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  beautifulsoup4,
-  jinja2,
-  requests,
-  sphinx,
-  sphinxHook,
-  furo,
-  myst-parser,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, beautifulsoup4
+, jinja2
+, requests
+, sphinx
+, sphinxHook
+, furo
+, myst-parser
+,
 }:
 
 buildPythonPackage rec {

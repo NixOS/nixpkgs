@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  fixup-yarn-lock,
-  nodejs,
-  yarn,
-  textlint,
-  textlint-rule-common-misspellings,
+{ lib
+, stdenvNoCC
+, fetchurl
+, fetchFromGitHub
+, fetchYarnDeps
+, fixup-yarn-lock
+, nodejs
+, yarn
+, textlint
+, textlint-rule-common-misspellings
+,
 }:
 
 # there is no lock file in this package, but it is old and stable enough

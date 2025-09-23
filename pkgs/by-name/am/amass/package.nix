@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  libpostalWithData,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, libpostalWithData
+,
 }:
 buildGoModule rec {
   pname = "amass";

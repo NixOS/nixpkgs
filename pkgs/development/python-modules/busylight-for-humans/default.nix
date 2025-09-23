@@ -1,20 +1,20 @@
-{
-  lib,
-  bitvector-for-humans,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fastapi,
-  hidapi,
-  loguru,
-  poetry-core,
-  pyserial,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  typer,
-  uvicorn,
-  webcolors,
-  udevCheckHook,
+{ lib
+, bitvector-for-humans
+, buildPythonPackage
+, fetchFromGitHub
+, fastapi
+, hidapi
+, loguru
+, poetry-core
+, pyserial
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, typer
+, uvicorn
+, webcolors
+, udevCheckHook
+,
 }:
 
 buildPythonPackage rec {

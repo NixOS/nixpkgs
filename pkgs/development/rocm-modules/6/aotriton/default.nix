@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  rocm-cmake,
-  clr,
-  python3,
-  ninja,
-  xz,
-  writableTmpDirAsHomeHook,
-  pkg-config,
-  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
-  # for passthru.tests
-  aotriton,
-  hello,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, rocm-cmake
+, clr
+, python3
+, ninja
+, xz
+, writableTmpDirAsHomeHook
+, pkg-config
+, gpuTargets ? clr.localGpuTargets or clr.gpuTargets
+, # for passthru.tests
+  aotriton
+, hello
+,
 }:
 let
   supportedTargets = lib.lists.intersectLists [
@@ -28,7 +28,8 @@ let
     "gfx1150"
     "gfx1201"
     "gfx1200"
-  ] gpuTargets;
+  ]
+    gpuTargets;
   supportedTargets' = lib.concatStringsSep ";" supportedTargets;
   anySupportedTargets = supportedTargets != [ ];
 in

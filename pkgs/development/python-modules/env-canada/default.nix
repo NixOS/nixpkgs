@@ -1,22 +1,22 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  geopy,
-  imageio,
-  lxml,
-  numpy,
-  pandas,
-  pillow,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
-  syrupy,
-  voluptuous,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, geopy
+, imageio
+, lxml
+, numpy
+, pandas
+, pillow
+, pytest-asyncio
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools
+, syrupy
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

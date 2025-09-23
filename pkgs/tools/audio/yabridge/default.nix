@@ -1,16 +1,16 @@
-{
-  lib,
-  multiStdenv,
-  fetchFromGitHub,
-  replaceVars,
-  pkgsi686Linux,
-  dbus,
-  meson,
-  ninja,
-  pkg-config,
-  wine,
-  libxcb,
-  nix-update-script,
+{ lib
+, multiStdenv
+, fetchFromGitHub
+, replaceVars
+, pkgsi686Linux
+, dbus
+, meson
+, ninja
+, pkg-config
+, wine
+, libxcb
+, nix-update-script
+,
 }:
 
 let

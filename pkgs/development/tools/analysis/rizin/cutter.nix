@@ -1,25 +1,25 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  stdenv,
-  # for passthru.plugins
-  pkgs,
-  # nativeBuildInputs
-  cmake,
-  pkg-config,
-  wrapQtAppsHook,
-  # Qt
-  qt5compat,
-  qtbase,
-  qtwayland,
-  qtsvg,
-  qttools,
-  qtwebengine,
-  # buildInputs
-  graphviz,
-  python3,
-  rizin,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, stdenv
+, # for passthru.plugins
+  pkgs
+, # nativeBuildInputs
+  cmake
+, pkg-config
+, wrapQtAppsHook
+, # Qt
+  qt5compat
+, qtbase
+, qtwayland
+, qtsvg
+, qttools
+, qtwebengine
+, # buildInputs
+  graphviz
+, python3
+, rizin
+,
 }:
 
 let

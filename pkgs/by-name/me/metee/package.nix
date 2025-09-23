@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  stdenv,
-  cmake,
+{ fetchFromGitHub
+, lib
+, nix-update-script
+, stdenv
+, cmake
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "metee";

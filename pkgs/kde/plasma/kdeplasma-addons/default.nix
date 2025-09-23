@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  qtwebengine,
+{ mkKdeDerivation
+, qtwebengine
+,
 }:
 mkKdeDerivation {
   pname = "kdeplasma-addons";

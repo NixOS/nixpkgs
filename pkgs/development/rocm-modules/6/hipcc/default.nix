@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  rocm-merged-llvm,
-  cmake,
-  lsb-release,
+{ lib
+, stdenv
+, rocm-merged-llvm
+, cmake
+, lsb-release
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

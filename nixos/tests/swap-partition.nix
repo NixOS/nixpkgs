@@ -3,11 +3,10 @@
   name = "swap-partition";
 
   nodes.machine =
-    {
-      config,
-      pkgs,
-      lib,
-      ...
+    { config
+    , pkgs
+    , lib
+    , ...
     }:
     {
       virtualisation.useDefaultFilesystems = false;

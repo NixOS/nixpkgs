@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  mkMesonDerivation,
-  pkg-config,
-  perl,
-  perlPackages,
-  nix-store,
-  version,
-  curl,
-  bzip2,
-  libsodium,
+{ lib
+, stdenv
+, mkMesonDerivation
+, pkg-config
+, perl
+, perlPackages
+, nix-store
+, version
+, curl
+, bzip2
+, libsodium
+,
 }:
 
 perl.pkgs.toPerlModule (

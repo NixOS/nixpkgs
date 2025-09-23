@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  openssl,
-  zlib,
-  zstd,
-  libiconv,
-  version,
-  hash,
-  ...
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, curl
+, openssl
+, zlib
+, zstd
+, libiconv
+, version
+, hash
+, ...
 }:
 
 let

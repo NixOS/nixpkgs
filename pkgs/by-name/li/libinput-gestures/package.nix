@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  libinput,
-  wmctrl,
-  python3,
-  coreutils,
-  xdotool ? null,
-  extraUtilsPath ? lib.optional (xdotool != null) xdotool,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, libinput
+, wmctrl
+, python3
+, coreutils
+, xdotool ? null
+, extraUtilsPath ? lib.optional (xdotool != null) xdotool
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libinput-gestures";

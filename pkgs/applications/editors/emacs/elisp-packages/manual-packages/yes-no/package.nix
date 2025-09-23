@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchurl,
-  melpaBuild,
+{ lib
+, fetchurl
+, melpaBuild
+,
 }:
 
 melpaBuild {

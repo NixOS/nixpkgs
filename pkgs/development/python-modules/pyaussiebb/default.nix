@@ -1,11 +1,11 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pdm-backend,
-  pydantic,
-  requests,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, pdm-backend
+, pydantic
+, requests
+,
 }:
 
 buildPythonPackage rec {

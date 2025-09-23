@@ -1,25 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cmake,
-  doxygen,
-  graphviz,
-  pkg-config,
-  autoPatchelfHook,
-  kdePackages,
-  alkimia,
-  aqbanking,
-  gmp,
-  gwenhywfar,
-  libical,
-  libofx,
-  sqlcipher,
-
-  # Needed for running tests:
-  xvfb-run,
-
-  python3,
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, doxygen
+, graphviz
+, pkg-config
+, autoPatchelfHook
+, kdePackages
+, alkimia
+, aqbanking
+, gmp
+, gwenhywfar
+, libical
+, libofx
+, sqlcipher
+, # Needed for running tests:
+  xvfb-run
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

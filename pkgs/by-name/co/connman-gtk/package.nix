@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  gtk3,
-  connman,
-  openconnect,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, python3
+, gtk3
+, connman
+, openconnect
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation {

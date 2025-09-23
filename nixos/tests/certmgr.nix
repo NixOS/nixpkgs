@@ -2,10 +2,10 @@
 
 let
   mkSpec =
-    {
-      host,
-      service ? null,
-      action,
+    { host
+    , service ? null
+    , action
+    ,
     }:
     {
       inherit action;
@@ -53,20 +53,19 @@ let
     };
 
   mkCertmgrTest =
-    {
-      svcManager,
-      specs,
-      testScript,
+    { svcManager
+    , specs
+    , testScript
+    ,
     }:
     runTest {
       name = "certmgr-" + svcManager;
       nodes = {
         machine =
-          {
-            config,
-            lib,
-            pkgs,
-            ...
+          { config
+          , lib
+          , pkgs
+          , ...
           }:
           {
             networking.firewall.allowedTCPPorts = with config.services; [

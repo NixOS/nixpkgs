@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  runCommandLocal,
-  mbrola-voices,
+{ stdenv
+, lib
+, fetchFromGitHub
+, runCommandLocal
+, mbrola-voices
+,
 }:
 
 let
@@ -50,9 +50,9 @@ let
 
 in
 runCommandLocal "${pname}-${version}"
-  {
-    inherit pname version meta;
-  }
+{
+  inherit pname version meta;
+}
   ''
     mkdir -p "$out/share/mbrola"
     ln -s '${mbrola-voices}/data' "$out/share/mbrola/voices"

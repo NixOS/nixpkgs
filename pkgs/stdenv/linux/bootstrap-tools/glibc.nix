@@ -1,7 +1,7 @@
-{
-  system,
-  bootstrapFiles,
-  extraAttrs,
+{ system
+, bootstrapFiles
+, extraAttrs
+,
 }:
 
 derivation (
@@ -33,5 +33,5 @@ derivation (
       "zerocallusedregs"
     ];
   }
-  // extraAttrs
+    // extraAttrs
 )

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  buildPackages,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

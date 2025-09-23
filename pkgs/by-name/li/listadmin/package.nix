@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  makeWrapper,
-  perl,
-  installShellFiles,
+{ lib
+, stdenvNoCC
+, fetchurl
+, makeWrapper
+, perl
+, installShellFiles
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

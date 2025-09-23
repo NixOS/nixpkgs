@@ -1,17 +1,17 @@
-{
-  lib,
-  build,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  ipywidgets,
-  fastcore,
-  astunparse,
-  watchdog,
-  execnb,
-  ghapi,
-  pyyaml,
-  pythonOlder,
+{ lib
+, build
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, ipywidgets
+, fastcore
+, astunparse
+, watchdog
+, execnb
+, ghapi
+, pyyaml
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  docutils,
-  fetchFromGitHub,
-  mock,
-  pydantic,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+{ lib
+, stdenv
+, buildPythonPackage
+, docutils
+, fetchFromGitHub
+, mock
+, pydantic
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

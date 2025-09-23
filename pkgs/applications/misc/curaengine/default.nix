@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libarcus,
-  stb,
-  protobuf,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libarcus
+, stb
+, protobuf
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

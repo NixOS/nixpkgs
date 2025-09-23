@@ -1,13 +1,13 @@
-{
-  mkKdeDerivation,
-  sources,
-  qtsvg,
-  qtwebengine,
-  corrosion,
-  rustPlatform,
-  cargo,
-  rustc,
-  qcoro,
+{ mkKdeDerivation
+, sources
+, qtsvg
+, qtwebengine
+, corrosion
+, rustPlatform
+, cargo
+, rustc
+, qcoro
+,
 }:
 mkKdeDerivation rec {
   pname = "angelfish";

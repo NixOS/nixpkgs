@@ -1,31 +1,28 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  writableTmpDirAsHomeHook,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  pytools,
-  pymbolic,
-  genpy,
-  numpy,
-  cgen,
-  islpy,
-  codepy,
-  colorama,
-  mako,
-  constantdict,
-  typing-extensions,
-
-  # optional-dependencies
-  pyopencl,
-  fparser,
-  ply,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, writableTmpDirAsHomeHook
+, # build-system
+  hatchling
+, # dependencies
+  pytools
+, pymbolic
+, genpy
+, numpy
+, cgen
+, islpy
+, codepy
+, colorama
+, mako
+, constantdict
+, typing-extensions
+, # optional-dependencies
+  pyopencl
+, fparser
+, ply
+,
 }:
 
 buildPythonPackage rec {

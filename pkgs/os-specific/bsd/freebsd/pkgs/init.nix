@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  stdenv,
-  lib,
+{ mkDerivation
+, stdenv
+, lib
+,
 }:
 mkDerivation {
   path = "sbin/init";

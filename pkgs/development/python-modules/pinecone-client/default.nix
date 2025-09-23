@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  dnspython,
-  fetchFromGitHub,
-  loguru,
-  numpy,
-  poetry-core,
-  python-dateutil,
-  pythonOlder,
-  pyyaml,
-  requests,
-  setuptools,
-  tqdm,
-  typing-extensions,
-  pinecone-plugin-assistant,
-  pinecone-plugin-interface,
-  urllib3,
+{ lib
+, buildPythonPackage
+, dnspython
+, fetchFromGitHub
+, loguru
+, numpy
+, poetry-core
+, python-dateutil
+, pythonOlder
+, pyyaml
+, requests
+, setuptools
+, tqdm
+, typing-extensions
+, pinecone-plugin-assistant
+, pinecone-plugin-interface
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nodejs_22,
-  gitMinimal,
-  gitSetupHook,
-  pnpm_8,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nodejs_22
+, gitMinimal
+, gitSetupHook
+, pnpm_8
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

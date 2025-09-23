@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  makeWrapper,
-  runCommand,
-  callPackage,
+{ lib
+, fetchurl
+, makeWrapper
+, runCommand
+, callPackage
+,
 }:
 
 let

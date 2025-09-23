@@ -1,8 +1,8 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, version ? null
+,
 }:
 mkCoqDerivation {
   owner = "zhengpushi";
@@ -15,7 +15,8 @@ mkCoqDerivation {
         case = range "8.11" "8.18";
         out = "1.0.6";
       }
-    ] null;
+    ]
+      null;
   release = {
     "1.0.6".sha256 = "sha256-XsM3fSstvB6GE5OqT7CFro+RWiYEgJsoQ5gXd74VaK0=";
   };

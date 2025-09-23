@@ -1,19 +1,19 @@
-{
-  lib,
-  bash,
-  coreutils,
-  curl,
-  fetchFromGitHub,
-  gawk,
-  gnugrep,
-  gnused,
-  installShellFiles,
-  makeWrapper,
-  nix-update-script,
-  python3,
-  stdenv,
-  udevCheckHook,
-  util-linux,
+{ lib
+, bash
+, coreutils
+, curl
+, fetchFromGitHub
+, gawk
+, gnugrep
+, gnused
+, installShellFiles
+, makeWrapper
+, nix-update-script
+, python3
+, stdenv
+, udevCheckHook
+, util-linux
+,
 }:
 
 stdenv.mkDerivation rec {

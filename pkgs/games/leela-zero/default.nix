@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  opencl-headers,
-  ocl-icd,
-  qtbase,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, opencl-headers
+, ocl-icd
+, qtbase
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

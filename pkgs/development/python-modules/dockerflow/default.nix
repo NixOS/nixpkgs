@@ -1,31 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # optional dependencies
-  asgiref,
-  blinker,
-  django,
-  fastapi,
-  flask,
-  sanic,
-
-  # tests
-  django-redis,
-  pytest-django,
-  httpx,
-  fakeredis,
-  jsonschema,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mock,
-  redis,
-  redisTestHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # optional dependencies
+  asgiref
+, blinker
+, django
+, fastapi
+, flask
+, sanic
+, # tests
+  django-redis
+, pytest-django
+, httpx
+, fakeredis
+, jsonschema
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-mock
+, redis
+, redisTestHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,11 @@
 # This module allows the test driver to connect to the virtual machine
 # via a root shell attached to port 514.
 
-{
-  options,
-  config,
-  lib,
-  pkgs,
-  ...
+{ options
+, config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;

@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  poetry-core,
-  docopt-ng,
-  easywatch,
-  jinja2,
-  pytestCheckHook,
-  pytest-check,
-  pythonOlder,
-  markdown,
-  testers,
-  tomlkit,
-  typing-extensions,
-  staticjinja,
-  callPackage,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, poetry-core
+, docopt-ng
+, easywatch
+, jinja2
+, pytestCheckHook
+, pytest-check
+, pythonOlder
+, markdown
+, testers
+, tomlkit
+, typing-extensions
+, staticjinja
+, callPackage
+,
 }:
 
 buildPythonPackage rec {

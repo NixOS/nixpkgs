@@ -1,23 +1,21 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-
-  installShellFiles,
-  bubblewrap,
-  nix-output-monitor,
-  delta,
-  glow,
-  cacert,
-  git,
-  nix,
-  versionCheckHook,
-
-  withAutocomplete ? true,
-  withSandboxSupport ? false,
-  withNom ? false,
-  withDelta ? false,
-  withGlow ? false,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, installShellFiles
+, bubblewrap
+, nix-output-monitor
+, delta
+, glow
+, cacert
+, git
+, nix
+, versionCheckHook
+, withAutocomplete ? true
+, withSandboxSupport ? false
+, withNom ? false
+, withDelta ? false
+, withGlow ? false
+,
 }:
 
 python3Packages.buildPythonApplication rec {

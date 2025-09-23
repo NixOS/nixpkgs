@@ -1,11 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-
-  lang,
-  version,
-  src,
-  build-system,
+{ lib
+, buildPythonPackage
+, lang
+, version
+, src
+, build-system
+,
 }:
 
 buildPythonPackage rec {

@@ -1,21 +1,21 @@
-{
-  cmake,
-  fetchFromGitHub,
-  ffmpeg,
-  graphicsmagick,
-  lib,
-  libdeflate,
-  libexif,
-  libjpeg,
-  libsixel,
-  openslide,
-  poppler,
-  librsvg,
-  cairo,
-  pkg-config,
-  stb,
-  qoi,
-  stdenv,
+{ cmake
+, fetchFromGitHub
+, ffmpeg
+, graphicsmagick
+, lib
+, libdeflate
+, libexif
+, libjpeg
+, libsixel
+, openslide
+, poppler
+, librsvg
+, cairo
+, pkg-config
+, stb
+, qoi
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

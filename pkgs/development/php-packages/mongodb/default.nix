@@ -1,16 +1,16 @@
-{
-  stdenv,
-  buildPecl,
-  fetchFromGitHub,
-  lib,
-  libiconv,
-  pcre2,
-  pkg-config,
-  cyrus_sasl,
-  icu64,
-  openssl,
-  snappy,
-  zlib,
+{ stdenv
+, buildPecl
+, fetchFromGitHub
+, lib
+, libiconv
+, pcre2
+, pkg-config
+, cyrus_sasl
+, icu64
+, openssl
+, snappy
+, zlib
+,
 }:
 
 buildPecl rec {

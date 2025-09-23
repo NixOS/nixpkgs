@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoconf,
-  automake,
+{ lib
+, stdenv
+, fetchgit
+, autoconf
+, automake
+,
 }:
 
 stdenv.mkDerivation {

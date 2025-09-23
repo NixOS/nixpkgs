@@ -1,32 +1,32 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  nix-update-script,
-  cargo,
-  meson,
-  ninja,
-  rustPlatform,
-  rustc,
-  pkg-config,
-  glib,
-  grass-sass,
-  gtk4,
-  gtksourceview5,
-  lcms2,
-  libadwaita,
-  gst_all_1,
-  desktop-file-utils,
-  appstream-glib,
-  openssl,
-  pipewire,
-  libshumate,
-  wrapGAppsHook4,
-  sqlite,
-  xdg-desktop-portal,
-  libseccomp,
-  glycin-loaders,
-  libwebp,
+{ stdenv
+, lib
+, fetchFromGitLab
+, nix-update-script
+, cargo
+, meson
+, ninja
+, rustPlatform
+, rustc
+, pkg-config
+, glib
+, grass-sass
+, gtk4
+, gtksourceview5
+, lcms2
+, libadwaita
+, gst_all_1
+, desktop-file-utils
+, appstream-glib
+, openssl
+, pipewire
+, libshumate
+, wrapGAppsHook4
+, sqlite
+, xdg-desktop-portal
+, libseccomp
+, glycin-loaders
+, libwebp
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

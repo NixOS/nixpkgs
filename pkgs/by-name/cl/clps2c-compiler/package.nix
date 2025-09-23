@@ -1,9 +1,9 @@
-{
-  keystone,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  lib,
+{ keystone
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, lib
+,
 }:
 let
   version = "1.0.1";

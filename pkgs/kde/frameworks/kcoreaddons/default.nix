@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qttools,
-  shared-mime-info,
-  qtdeclarative,
+{ mkKdeDerivation
+, qttools
+, shared-mime-info
+, qtdeclarative
+,
 }:
 mkKdeDerivation {
   pname = "kcoreaddons";

@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  alsa-lib,
-  alsa-plugins,
-  autoPatchelfHook,
-  fetchFromGitHub,
-  freetype,
-  installShellFiles,
-  libGLU,
-  libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  makeWrapper,
-  openssl,
-  pkg-config,
-  scons,
-  udev,
-  yasm,
-  zlib,
+{ lib
+, stdenv
+, alsa-lib
+, alsa-plugins
+, autoPatchelfHook
+, fetchFromGitHub
+, freetype
+, installShellFiles
+, libGLU
+, libpulseaudio
+, libX11
+, libXcursor
+, libXext
+, libXfixes
+, libXi
+, libXinerama
+, libXrandr
+, libXrender
+, makeWrapper
+, openssl
+, pkg-config
+, scons
+, udev
+, yasm
+, zlib
+,
 }:
 
 stdenv.mkDerivation (self: {

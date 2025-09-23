@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  python3,
-  bison,
-  openssl,
-  readline,
-  bzip2,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, python3
+, bison
+, openssl
+, readline
+, bzip2
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

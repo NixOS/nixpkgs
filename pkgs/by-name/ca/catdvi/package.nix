@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  texlive,
-  texliveInfraOnly,
-  buildPackages,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, texlive
+, texliveInfraOnly
+, buildPackages
+,
 }:
 
 let
@@ -46,9 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   preBuild = lib.optionalString (with stdenv; !buildPlatform.canExecute hostPlatform) (
-    lib.concatMapStringsSep "\n" (tool: ''
-      cp ${lib.getDev buildPackages.catdvi}/bin/${tool} .
-    '') buildPlatformTools
+    lib.concatMapStringsSep "\n"
+      (tool: ''
+        cp ${lib.getDev buildPackages.catdvi}/bin/${tool} .
+      '')
+      buildPlatformTools
   );
 
   nativeBuildInputs = [

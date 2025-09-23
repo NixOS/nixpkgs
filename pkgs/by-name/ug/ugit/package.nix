@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  git,
-  fzf,
-  bash,
-  ncurses,
-  curl,
-  nix-update-script,
-  testers,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, git
+, fzf
+, bash
+, ncurses
+, curl
+, nix-update-script
+, testers
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

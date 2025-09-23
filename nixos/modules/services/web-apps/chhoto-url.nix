@@ -1,22 +1,23 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
   cfg = config.services.chhoto-url;
 
-  environment = lib.mapAttrs (
-    _: value:
-    if value == true then
-      "True"
-    else if value == false then
-      "False"
-    else
-      toString value
-  ) cfg.settings;
+  environment = lib.mapAttrs
+    (
+      _: value:
+        if value == true then
+          "True"
+        else if value == false then
+          "False"
+        else
+          toString value
+    )
+    cfg.settings;
 in
 
 {

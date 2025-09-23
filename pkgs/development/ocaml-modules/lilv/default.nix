@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  dune-configurator,
-  ctypes,
-  ctypes-foreign,
-  lilv,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, dune-configurator
+, ctypes
+, ctypes-foreign
+, lilv
+,
 }:
 
 buildDunePackage rec {

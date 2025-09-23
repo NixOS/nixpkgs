@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  unzip,
-  pkg-config,
-  libXpm,
-  fltk13,
-  freeimage,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, unzip
+, pkg-config
+, libXpm
+, fltk13
+, freeimage
+,
 }:
 
 stdenv.mkDerivation rec {

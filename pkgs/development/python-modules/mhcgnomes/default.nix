@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pandas,
-  pyyaml,
-  serializable,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pandas
+, pyyaml
+, serializable
+,
 }:
 
 buildPythonPackage {

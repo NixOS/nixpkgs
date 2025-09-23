@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  gettext,
-  python3,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, gettext
+, python3
+,
 }:
 
 stdenvNoCC.mkDerivation {

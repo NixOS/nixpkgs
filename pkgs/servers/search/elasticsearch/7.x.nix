@@ -1,15 +1,15 @@
-{
-  elk7Version,
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jre_headless,
-  util-linux,
-  gnugrep,
-  coreutils,
-  autoPatchelfHook,
-  zlib,
+{ elk7Version
+, lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jre_headless
+, util-linux
+, gnugrep
+, coreutils
+, autoPatchelfHook
+, zlib
+,
 }:
 
 let

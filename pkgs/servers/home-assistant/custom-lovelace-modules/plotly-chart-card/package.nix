@@ -1,8 +1,8 @@
-{
-  lib,
-  buildNpmPackage,
-  buildGoModule,
-  fetchFromGitHub,
+{ lib
+, buildNpmPackage
+, buildGoModule
+, fetchFromGitHub
+,
 }:
 
 let

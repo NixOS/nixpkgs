@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  python3,
-  libkkc,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, python3
+, libkkc
+,
 }:
 
 stdenv.mkDerivation rec {

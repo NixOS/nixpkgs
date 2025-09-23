@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  langC,
-  langAda,
-  langObjC,
-  langObjCpp,
-  langFortran,
-  langGo,
-  reproducibleBuild,
-  profiledCompiler,
-  langJit,
-  staticCompiler,
-  enableShared,
-  enableLTO,
-  version,
-  fetchpatch,
-  majorVersion,
-  targetPlatform,
-  hostPlatform,
-  noSysDirs,
-  buildPlatform,
-  fetchurl,
-  withoutTargetLibc,
-  threadsCross,
+{ lib
+, stdenv
+, langC
+, langAda
+, langObjC
+, langObjCpp
+, langFortran
+, langGo
+, reproducibleBuild
+, profiledCompiler
+, langJit
+, staticCompiler
+, enableShared
+, enableLTO
+, version
+, fetchpatch
+, majorVersion
+, targetPlatform
+, hostPlatform
+, noSysDirs
+, buildPlatform
+, fetchurl
+, withoutTargetLibc
+, threadsCross
+,
 }:
 
 let
@@ -45,12 +45,12 @@ let
 in
 
 #
-#  Patches below are organized into two general categories:
-#  1. Patches relevant on every platform
-#  2. Patches relevant on specific platforms
-#
+  #  Patches below are organized into two general categories:
+  #  1. Patches relevant on every platform
+  #  2. Patches relevant on specific platforms
+  #
 
-## 1. Patches relevant on every platform ####################################
+  ## 1. Patches relevant on every platform ####################################
 
 [ ]
 # Pass the path to a C++ compiler directly in the Makefile.in
@@ -80,8 +80,7 @@ in
         ./13/no-sys-dirs-riscv.patch
         ./13/mangle-NIX_STORE-in-__FILE__.patch
       ];
-    }
-    ."${majorVersion}" or [ ]
+    }."${majorVersion}" or [ ]
   )
 )
 # Pass CFLAGS on to gnat
@@ -90,7 +89,8 @@ in
   # Fix interaction of gfortran and libtool
   # Fixes the output of -v
   # See also https://github.com/nixOS/nixpkgs/commit/cc6f814a8f0e9b70ede5b24192558664fa1f98a2
-  ./gcc-12-gfortran-driving.patch)
+  ./gcc-12-gfortran-driving.patch
+)
 # Do not pass a default include dir on PowerPC+Musl
 # See https://github.com/NixOS/nixpkgs/pull/45340/commits/d6bb7d45162ac93e017cc9b665ae4836f6410710
 ++ [ ./ppc-musl.patch ]
@@ -163,20 +163,23 @@ in
 ## Darwin
 
 # Fixes detection of Darwin on x86_64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
-++ optional (
-  is14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-) ../patches/14/libgcc-darwin-detection.patch
-++ optional (
-  atLeast15 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-) ../patches/15/libgcc-darwin-detection.patch
+++ optional
+  (
+    is14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+  ) ../patches/14/libgcc-darwin-detection.patch
+++ optional
+  (
+    atLeast15 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+  ) ../patches/15/libgcc-darwin-detection.patch
 
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
 ++ optional (stdenv.hostPlatform.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
 
 # Remove CoreServices on Darwin, as it is only needed for macOS SDK 14+
-++ optional (
-  atLeast14 && stdenv.hostPlatform.isDarwin && langAda
-) ../patches/14/gcc-darwin-remove-coreservices.patch
+++ optional
+  (
+    atLeast14 && stdenv.hostPlatform.isDarwin && langAda
+  ) ../patches/14/gcc-darwin-remove-coreservices.patch
 
 # Use absolute path in GNAT dylib install names on Darwin
 ++ optionals (stdenv.hostPlatform.isDarwin && langAda) (
@@ -184,13 +187,12 @@ in
     "15" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
     "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
     "13" = [ ./gnat-darwin-dylib-install-name-13.patch ];
-  }
-  .${majorVersion} or [ ]
+  }.${majorVersion} or [ ]
 )
 
-# Here we apply patches by Iains (https://github.com/iains)
-# GitHub's "compare" API produces unstable diffs, so we resort to reusing
-# diffs from the Homebrew repo.
+  # Here we apply patches by Iains (https://github.com/iains)
+  # GitHub's "compare" API produces unstable diffs, so we resort to reusing
+  # diffs from the Homebrew repo.
 ++ optionals canApplyIainsDarwinPatches (
   {
     "15" = [
@@ -220,6 +222,5 @@ in
         hash = "sha256-xqkBDFYZ6fdowtqR3kV7bR8a4Cu11RDokSzGn1k3a1w=";
       })
     ];
-  }
-  .${majorVersion} or [ ]
+  }.${majorVersion} or [ ]
 )

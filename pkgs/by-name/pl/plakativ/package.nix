@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchPypi,
-  guiSupport ? true,
+{ lib
+, python3Packages
+, fetchPypi
+, guiSupport ? true
+,
 }:
 let
   pname = "plakativ";

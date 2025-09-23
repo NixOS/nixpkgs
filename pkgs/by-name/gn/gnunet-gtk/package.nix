@@ -1,16 +1,16 @@
-{
-  stdenv,
-  fetchurl,
-  glade,
-  gnunet,
-  gnutls,
-  gtk3,
-  libextractor,
-  libgcrypt,
-  libsodium,
-  libxml2,
-  pkg-config,
-  wrapGAppsHook3,
+{ stdenv
+, fetchurl
+, glade
+, gnunet
+, gnutls
+, gtk3
+, libextractor
+, libgcrypt
+, libsodium
+, libxml2
+, pkg-config
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

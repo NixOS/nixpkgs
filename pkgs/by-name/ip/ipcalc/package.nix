@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  ronn,
-  withGeo ? true,
-  geoip,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, ronn
+, withGeo ? true
+, geoip
+,
 }:
 
 # In order for the geoip part to work, you need to set up a link from

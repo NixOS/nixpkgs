@@ -1,14 +1,14 @@
-{
-  aiohttp,
-  aresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  lib,
-  poetry-core,
-  pytest-cov-stub,
-  pytestCheckHook,
-  syrupy,
+{ aiohttp
+, aresponses
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, lib
+, poetry-core
+, pytest-cov-stub
+, pytestCheckHook
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ctags,
-  perl,
-  binutils,
-  abi-dumper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ctags
+, perl
+, binutils
+, abi-dumper
+,
 }:
 
 stdenv.mkDerivation rec {

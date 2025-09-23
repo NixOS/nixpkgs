@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  pytestCheckHook,
-  fonttools,
-  poetry-core,
-  configparser,
-  biplist,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, unstableGitUpdater
+, pytestCheckHook
+, fonttools
+, poetry-core
+, configparser
+, biplist
+,
 }:
 
 buildPythonPackage {

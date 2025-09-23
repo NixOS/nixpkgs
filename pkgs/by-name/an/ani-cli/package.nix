@@ -1,24 +1,24 @@
-{
-  fetchFromGitHub,
-  makeWrapper,
-  stdenvNoCC,
-  lib,
-  gnugrep,
-  gnused,
-  curl,
-  catt,
-  syncplay,
-  ffmpeg,
-  fzf,
-  aria2,
-  mpv,
-  vlc,
-  iina,
-  withMpv ? true,
-  withVlc ? false,
-  withIina ? false,
-  chromecastSupport ? false,
-  syncSupport ? false,
+{ fetchFromGitHub
+, makeWrapper
+, stdenvNoCC
+, lib
+, gnugrep
+, gnused
+, curl
+, catt
+, syncplay
+, ffmpeg
+, fzf
+, aria2
+, mpv
+, vlc
+, iina
+, withMpv ? true
+, withVlc ? false
+, withIina ? false
+, chromecastSupport ? false
+, syncSupport ? false
+,
 }:
 
 let

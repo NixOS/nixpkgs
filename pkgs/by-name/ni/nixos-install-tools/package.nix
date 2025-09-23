@@ -1,16 +1,16 @@
-{
-  buildEnv,
-  lib,
-  man,
-  nixos,
-  # TODO: replace indirect self-reference by proper self-reference
+{ buildEnv
+, lib
+, man
+, nixos
+, # TODO: replace indirect self-reference by proper self-reference
   #       https://github.com/NixOS/nixpkgs/pull/119942
-  nixos-install-tools,
-  nixos-install,
-  nixos-enter,
-  runCommand,
-  nixosTests,
-  binlore,
+  nixos-install-tools
+, nixos-install
+, nixos-enter
+, runCommand
+, nixosTests
+, binlore
+,
 }:
 let
   inherit (nixos { }) config;
@@ -74,7 +74,7 @@ in
     execer cannot bin/nixos-generate-config
   '';
 }).overrideAttrs
-  {
-    inherit version;
-    pname = "nixos-install-tools";
-  }
+{
+  inherit version;
+  pname = "nixos-install-tools";
+}

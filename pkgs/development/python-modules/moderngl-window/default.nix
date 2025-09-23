@@ -1,30 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  moderngl,
-  numpy,
-  pillow,
-  pyglet,
-  pyglm,
-
-  # optional-dependencies
-  trimesh,
-  scipy,
-  glfw,
-  pygame,
-  pysdl2,
-  pyside2,
-  pyqt5,
-  reportlab,
-  av,
-
-  mesa,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  moderngl
+, numpy
+, pillow
+, pyglet
+, pyglm
+, # optional-dependencies
+  trimesh
+, scipy
+, glfw
+, pygame
+, pysdl2
+, pyside2
+, pyqt5
+, reportlab
+, av
+, mesa
+,
 }:
 
 buildPythonPackage rec {

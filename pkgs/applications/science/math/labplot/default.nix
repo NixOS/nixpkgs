@@ -1,45 +1,41 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  cmake,
-  extra-cmake-modules,
-  shared-mime-info,
-  wrapQtAppsHook,
-
-  qtbase,
-
-  karchive,
-  kcompletion,
-  kconfig,
-  kcoreaddons,
-  kcrash,
-  kdoctools,
-  ki18n,
-  kiconthemes,
-  kio,
-  knewstuff,
-  kparts,
-  ktextwidgets,
-  kxmlgui,
-  syntax-highlighting,
-
-  gsl,
-
-  poppler,
-  fftw,
-  hdf5,
-  netcdf,
-  cfitsio,
-  libcerf,
-  # cantor,
-  zlib,
-  lz4,
-  readstat,
-  matio,
-  qtserialport,
-  discount,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, cmake
+, extra-cmake-modules
+, shared-mime-info
+, wrapQtAppsHook
+, qtbase
+, karchive
+, kcompletion
+, kconfig
+, kcoreaddons
+, kcrash
+, kdoctools
+, ki18n
+, kiconthemes
+, kio
+, knewstuff
+, kparts
+, ktextwidgets
+, kxmlgui
+, syntax-highlighting
+, gsl
+, poppler
+, fftw
+, hdf5
+, netcdf
+, cfitsio
+, libcerf
+, # cantor,
+  zlib
+, lz4
+, readstat
+, matio
+, qtserialport
+, discount
+,
 }:
 
 stdenv.mkDerivation rec {

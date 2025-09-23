@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchPypi,
-  python3Packages,
-  util-linux,
+{ lib
+, fetchPypi
+, python3Packages
+, util-linux
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "isisdl";

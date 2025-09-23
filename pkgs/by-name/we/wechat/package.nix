@@ -1,8 +1,8 @@
-{
-  callPackage,
-  fetchurl,
-  lib,
-  stdenvNoCC,
+{ callPackage
+, fetchurl
+, lib
+, stdenvNoCC
+,
 }:
 
 let

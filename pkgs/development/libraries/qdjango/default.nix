@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  testers,
-  doxygen,
-  qmake,
+{ stdenv
+, lib
+, fetchFromGitHub
+, testers
+, doxygen
+, qmake
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

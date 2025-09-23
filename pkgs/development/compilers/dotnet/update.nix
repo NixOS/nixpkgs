@@ -1,20 +1,19 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  writeScript,
-  nix,
-  runtimeShell,
-  curl,
-  cacert,
-  jq,
-  yq,
-  gnupg,
-
-  releaseManifestFile,
-  releaseInfoFile,
-  bootstrapSdkFile,
-  allowPrerelease,
+{ stdenvNoCC
+, lib
+, fetchurl
+, writeScript
+, nix
+, runtimeShell
+, curl
+, cacert
+, jq
+, yq
+, gnupg
+, releaseManifestFile
+, releaseInfoFile
+, bootstrapSdkFile
+, allowPrerelease
+,
 }:
 
 let

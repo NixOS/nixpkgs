@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  freetype,
-  gtk2-x11,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, freetype
+, gtk2-x11
+,
 }:
 
 stdenv.mkDerivation rec {

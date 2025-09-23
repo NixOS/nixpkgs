@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  appimageTools,
-  fetchurl,
-  pname,
-  version,
-  meta,
+{ lib
+, stdenvNoCC
+, appimageTools
+, fetchurl
+, pname
+, version
+, meta
+,
 }:
 
 let
@@ -14,8 +14,7 @@ let
       aarch64-linux = "linux-armv7l";
       x86_64-linux = "linux-x86_64";
       i686-linux = "linux-i386";
-    }
-    .${stdenvNoCC.hostPlatform.system}
+    }.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 in
 appimageTools.wrapType2 rec {
@@ -28,8 +27,7 @@ appimageTools.wrapType2 rec {
         aarch64-linux = "sha256-nBW8q7LVWQz93LkTc+c36H+2ymLLwLKfxePUwEm3D2E=";
         x86_64-linux = "sha256-tplp7TADvbxkk5qBb4c4zm4mrzrVtW/WVUjiolBBJHc=";
         i686-linux = "sha256-PllxLMBsPCedKU7OUN0nqi4qtQ57l2Z+huLfkfaBfT4=";
-      }
-      .${stdenvNoCC.hostPlatform.system}
+      }.${stdenvNoCC.hostPlatform.system}
         or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
   };
 

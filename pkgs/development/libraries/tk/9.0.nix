@@ -1,13 +1,12 @@
-{
-  callPackage,
-  fetchzip,
-  tcl,
-  ...
+{ callPackage
+, fetchzip
+, tcl
+, ...
 }@args:
 
 callPackage ./generic.nix (
   args
-  // {
+    // {
 
     src = fetchzip {
       url = "mirror://sourceforge/tcl/tk${tcl.version}-src.tar.gz";

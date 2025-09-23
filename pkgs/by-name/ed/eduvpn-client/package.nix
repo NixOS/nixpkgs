@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitea,
-  gdk-pixbuf,
-  gobject-introspection,
-  gtk3,
-  libnotify,
-  libsecret,
-  networkmanager,
-  python3Packages,
-  wrapGAppsHook3,
+{ lib
+, fetchFromGitea
+, gdk-pixbuf
+, gobject-introspection
+, gtk3
+, libnotify
+, libsecret
+, networkmanager
+, python3Packages
+, wrapGAppsHook3
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,27 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  absl-py,
-  chex,
-  distrax,
-  dm-env,
-  jax,
-  jaxlib,
-  numpy,
-  tensorflow-probability,
-
-  # tests
-  dm-haiku,
-  optax,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  setuptools
+, # dependencies
+  absl-py
+, chex
+, distrax
+, dm-env
+, jax
+, jaxlib
+, numpy
+, tensorflow-probability
+, # tests
+  dm-haiku
+, optax
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitea,
-  buildGoModule,
-  tailwindcss_3,
+{ lib
+, fetchFromGitea
+, buildGoModule
+, tailwindcss_3
+,
 }:
 buildGoModule rec {
   pname = "rimgo";

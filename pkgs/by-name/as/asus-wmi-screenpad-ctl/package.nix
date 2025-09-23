@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 let
   version = "1.0.0";

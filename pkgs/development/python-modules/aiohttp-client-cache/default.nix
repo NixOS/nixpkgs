@@ -1,22 +1,22 @@
-{
-  lib,
-  aioboto3,
-  aiobotocore,
-  aiofiles,
-  aiohttp,
-  aiosqlite,
-  attrs,
-  buildPythonPackage,
-  faker,
-  fetchPypi,
-  itsdangerous,
-  motor,
-  poetry-core,
-  pytest-asyncio,
-  pytest-aiohttp,
-  pytestCheckHook,
-  redis,
-  url-normalize,
+{ lib
+, aioboto3
+, aiobotocore
+, aiofiles
+, aiohttp
+, aiosqlite
+, attrs
+, buildPythonPackage
+, faker
+, fetchPypi
+, itsdangerous
+, motor
+, poetry-core
+, pytest-asyncio
+, pytest-aiohttp
+, pytestCheckHook
+, redis
+, url-normalize
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  flac,
-  stdenv,
-  alsa-lib,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, flac
+, stdenv
+, alsa-lib
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

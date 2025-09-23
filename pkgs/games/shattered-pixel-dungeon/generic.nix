@@ -1,24 +1,22 @@
 # Generic builder for shattered pixel forks/mods
-{
-  pname,
-  version,
-  src,
-  meta,
-  desktopName,
-  patches ? [ ./disable-beryx.patch ],
-  depsPath ? null,
-
-  lib,
-  stdenv,
-  makeWrapper,
-  gradle_8,
-  perl,
-  jre,
-  libGL,
-  libpulseaudio,
-  makeDesktopItem,
-  copyDesktopItems,
-  ...
+{ pname
+, version
+, src
+, meta
+, desktopName
+, patches ? [ ./disable-beryx.patch ]
+, depsPath ? null
+, lib
+, stdenv
+, makeWrapper
+, gradle_8
+, perl
+, jre
+, libGL
+, libpulseaudio
+, makeDesktopItem
+, copyDesktopItems
+, ...
 }@attrs:
 
 let
@@ -69,7 +67,7 @@ let
 in
 stdenv.mkDerivation (
   cleanAttrs
-  // {
+    // {
     inherit
       pname
       version

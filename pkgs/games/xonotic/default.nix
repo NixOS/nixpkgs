@@ -1,38 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  makeWrapper,
-  runCommand,
-  makeDesktopItem,
-  xonotic-data,
-  copyDesktopItems,
-  # required for both
-  unzip,
-  libjpeg,
-  zlib,
-  libvorbis,
-  curl,
-  freetype,
-  libpng,
-  libtheora,
-  libX11,
-  # glx
-  libGLU,
-  libGL,
-  libXpm,
-  libXext,
-  libXxf86vm,
-  alsa-lib,
-  # sdl
-  SDL2,
-  # blind
-  gmp,
-
-  withSDL ? true,
-  withGLX ? false,
-  withDedicated ? true,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, makeWrapper
+, runCommand
+, makeDesktopItem
+, xonotic-data
+, copyDesktopItems
+, # required for both
+  unzip
+, libjpeg
+, zlib
+, libvorbis
+, curl
+, freetype
+, libpng
+, libtheora
+, libX11
+, # glx
+  libGLU
+, libGL
+, libXpm
+, libXext
+, libXxf86vm
+, alsa-lib
+, # sdl
+  SDL2
+, # blind
+  gmp
+, withSDL ? true
+, withGLX ? false
+, withDedicated ? true
+,
 }:
 
 let

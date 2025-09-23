@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  intltool,
-  glib,
-  dbus,
-  gtk3,
-  libappindicator-gtk3,
-  gst_all_1,
-  librsvg,
-  wrapGAppsHook3,
-  pulseaudioSupport ? true,
-  libpulseaudio,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, intltool
+, glib
+, dbus
+, gtk3
+, libappindicator-gtk3
+, gst_all_1
+, librsvg
+, wrapGAppsHook3
+, pulseaudioSupport ? true
+, libpulseaudio
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

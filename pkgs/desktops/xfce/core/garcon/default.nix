@@ -1,15 +1,14 @@
-{
-  stdenv,
-  lib,
-  mkXfceDerivation,
-  gtk3,
-  libxfce4ui,
-  libxfce4util,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
-  gobject-introspection,
+{ stdenv
+, lib
+, mkXfceDerivation
+, gtk3
+, libxfce4ui
+, libxfce4util
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
+,
 }:
 
 mkXfceDerivation {

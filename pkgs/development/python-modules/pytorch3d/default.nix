@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wheel,
-  torch,
-  iopath,
-  cudaPackages,
-  config,
-  cudaSupport ? config.cudaSupport,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wheel
+, torch
+, iopath
+, cudaPackages
+, config
+, cudaSupport ? config.cudaSupport
+,
 }:
 
 assert cudaSupport -> torch.cudaSupport;

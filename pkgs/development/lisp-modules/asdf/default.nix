@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  texinfo,
-  texLive,
-  perl,
+{ lib
+, stdenv
+, fetchurl
+, texinfo
+, texLive
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

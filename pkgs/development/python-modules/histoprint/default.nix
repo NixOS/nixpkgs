@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  hatchling,
-  hatch-vcs,
-  click,
-  numpy,
-  uhi,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, hatchling
+, hatch-vcs
+, click
+, numpy
+, uhi
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

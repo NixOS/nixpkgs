@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  boost,
-  libevent,
-  autoreconfHook,
-  db4,
-  miniupnpc,
-  sqlite,
-  pkg-config,
-  util-linux,
-  hexdump,
-  zeromq,
-  zlib,
-  darwin,
-  withWallet ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, boost
+, libevent
+, autoreconfHook
+, db4
+, miniupnpc
+, sqlite
+, pkg-config
+, util-linux
+, hexdump
+, zeromq
+, zlib
+, darwin
+, withWallet ? true
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  pyyaml,
-  setuptools,
+{ lib
+, attrs
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pyyaml
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

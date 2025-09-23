@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  pkg-config,
-  glib,
-  cairo,
-  fontconfig,
-  libtiff,
-  giflib,
-  libjpeg,
-  libpng,
-  libXrender,
-  libexif,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, glib
+, cairo
+, fontconfig
+, libtiff
+, giflib
+, libjpeg
+, libpng
+, libXrender
+, libexif
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

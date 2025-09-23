@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  SDL,
-  SDL_mixer,
-  SDL_ttf,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, SDL
+, SDL_mixer
+, SDL_ttf
+,
 }:
 
 stdenv.mkDerivation rec {

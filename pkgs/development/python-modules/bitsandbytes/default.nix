@@ -1,17 +1,15 @@
-{
-  lib,
-  torch,
-  symlinkJoin,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cmake,
-
-  # build-system
-  scikit-build-core,
-  setuptools,
-
-  # dependencies
-  scipy,
+{ lib
+, torch
+, symlinkJoin
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, # build-system
+  scikit-build-core
+, setuptools
+, # dependencies
+  scipy
+,
 }:
 
 let

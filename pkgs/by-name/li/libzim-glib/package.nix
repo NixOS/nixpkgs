@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  vala,
-  pkg-config,
-  gobject-introspection,
-  glib,
-  libzim,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, vala
+, pkg-config
+, gobject-introspection
+, glib
+, libzim
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

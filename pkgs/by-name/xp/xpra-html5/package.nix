@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenvNoCC,
-  python3,
-  uglify-js,
-  gitUpdater,
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, python3
+, uglify-js
+, gitUpdater
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "xpra-html5";

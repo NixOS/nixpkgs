@@ -1,50 +1,44 @@
-{
-  lib,
-  llvmPackages,
-  callPackage,
-  fetchFromGitHub,
-  cmake,
-  python3,
-  z3,
-  stp,
-  cryptominisat,
-  gperftools,
-  sqlite,
-  gtest,
-  lit,
-  nix-update-script,
-
-  # Build KLEE in debug mode. Defaults to false.
-  debug ? false,
-
-  # Include debug info in the build. Defaults to true.
-  includeDebugInfo ? true,
-
-  # Enable KLEE asserts. Defaults to true, since LLVM is built with them.
-  asserts ? false,
-
-  # Build the KLEE runtime in debug mode. Defaults to true, as this improves
+{ lib
+, llvmPackages
+, callPackage
+, fetchFromGitHub
+, cmake
+, python3
+, z3
+, stp
+, cryptominisat
+, gperftools
+, sqlite
+, gtest
+, lit
+, nix-update-script
+, # Build KLEE in debug mode. Defaults to false.
+  debug ? false
+, # Include debug info in the build. Defaults to true.
+  includeDebugInfo ? true
+, # Enable KLEE asserts. Defaults to true, since LLVM is built with them.
+  asserts ? false
+, # Build the KLEE runtime in debug mode. Defaults to true, as this improves
   # stack traces of the software under test.
-  debugRuntime ? true,
-
-  # Enable runtime asserts. Default false.
-  runtimeAsserts ? false,
-
-  # Klee uclibc. Defaults to the bundled version.
-  kleeuClibc ? null,
-
-  # Extra klee-uclibc config for the default klee-uclibc.
-  extraKleeuClibcConfig ? { },
+  debugRuntime ? true
+, # Enable runtime asserts. Default false.
+  runtimeAsserts ? false
+, # Klee uclibc. Defaults to the bundled version.
+  kleeuClibc ? null
+, # Extra klee-uclibc config for the default klee-uclibc.
+  extraKleeuClibcConfig ? { }
+,
 }:
 
 let
   # The chosen version of klee-uclibc.
   chosenKleeuClibc =
     if kleeuClibc == null then
-      callPackage ./klee-uclibc.nix {
-        llvmPackages = llvmPackages;
-        inherit extraKleeuClibcConfig debugRuntime runtimeAsserts;
-      }
+      callPackage ./klee-uclibc.nix
+        {
+          llvmPackages = llvmPackages;
+          inherit extraKleeuClibcConfig debugRuntime runtimeAsserts;
+        }
     else
       kleeuClibc;
 

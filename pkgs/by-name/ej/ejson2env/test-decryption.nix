@@ -1,8 +1,8 @@
 { ejson2env, runCommand }:
 runCommand "check-ejson2env.sh"
-  {
-    nativeBuildInputs = [ ejson2env ];
-  }
+{
+  nativeBuildInputs = [ ejson2env ];
+}
   ''
       cat > $TMP/abc.ejson <<EOF
         {

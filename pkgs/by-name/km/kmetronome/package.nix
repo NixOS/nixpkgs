@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pandoc,
-  pkg-config,
-  alsa-lib,
-  qt6Packages,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pandoc
+, pkg-config
+, alsa-lib
+, qt6Packages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

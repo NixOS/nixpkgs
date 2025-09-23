@@ -4,7 +4,7 @@
 # reasonably well are included.
 #
 # [RFC 46]: https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md
-{ }:
+{}:
 
 [
   # Tier 1

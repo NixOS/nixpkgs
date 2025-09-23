@@ -1,22 +1,21 @@
-{
-  stdenv,
-  lndir,
-  lib,
+{ stdenv
+, lndir
+, lib
+,
 }:
 
-args@{
-  bazel,
-  registry ? null,
-  bazelRepoCache ? null,
-  bazelVendorDeps ? null,
-  startupArgs ? [ ],
-  commandArgs ? [ ],
-  bazelPreBuild ? "",
-  bazelPostBuild ? "",
-  serverJavabase ? null,
-  targets,
-  command,
-  ...
+args@{ bazel
+, registry ? null
+, bazelRepoCache ? null
+, bazelVendorDeps ? null
+, startupArgs ? [ ]
+, commandArgs ? [ ]
+, bazelPreBuild ? ""
+, bazelPostBuild ? ""
+, serverJavabase ? null
+, targets
+, command
+, ...
 }:
 
 stdenv.mkDerivation (
@@ -70,5 +69,5 @@ stdenv.mkDerivation (
     '';
 
   }
-  // args
+    // args
 )

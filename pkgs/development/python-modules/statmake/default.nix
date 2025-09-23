@@ -1,20 +1,20 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  cattrs,
-  exceptiongroup,
-  fetchFromGitHub,
-  fonttools,
-  fs,
-  importlib-metadata,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  ufo2ft,
-  ufolib2,
-  hatchling,
-  hatch-vcs,
+{ lib
+, attrs
+, buildPythonPackage
+, cattrs
+, exceptiongroup
+, fetchFromGitHub
+, fonttools
+, fs
+, importlib-metadata
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, ufo2ft
+, ufolib2
+, hatchling
+, hatch-vcs
+,
 }:
 
 buildPythonPackage rec {

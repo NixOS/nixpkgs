@@ -1,15 +1,15 @@
 # Builder for Agda packages.
 
-{
-  stdenv,
-  lib,
-  self,
-  Agda,
-  runCommand,
-  makeWrapper,
-  writeText,
-  ghcWithPackages,
-  nixosTests,
+{ stdenv
+, lib
+, self
+, Agda
+, runCommand
+, makeWrapper
+, writeText
+, ghcWithPackages
+, nixosTests
+,
 }:
 
 let
@@ -39,9 +39,9 @@ let
     '';
 
   withPackages' =
-    {
-      pkgs,
-      ghc ? ghcWithPackages (p: with p; [ ieee754 ]),
+    { pkgs
+    , ghc ? ghcWithPackages (p: with p; [ ieee754 ])
+    ,
     }:
     let
       library-file = mkLibraryFile pkgs;
@@ -86,16 +86,15 @@ let
   ];
 
   defaults =
-    {
-      pname,
-      meta,
-      buildInputs ? [ ],
-      libraryName ? pname,
-      libraryFile ? "${libraryName}.agda-lib",
-      buildPhase ? null,
-      installPhase ? null,
-      extraExtensions ? [ ],
-      ...
+    { pname
+    , meta
+    , buildInputs ? [ ]
+    , libraryName ? pname
+    , libraryFile ? "${libraryName}.agda-lib"
+    , buildPhase ? null
+    , installPhase ? null
+    , extraExtensions ? [ ]
+    , ...
     }:
     let
       agdaWithPkgs = withPackages (filter (p: p ? isAgdaDerivation) buildInputs);
@@ -140,9 +139,11 @@ let
       meta = if meta.broken or false then meta // { hydraPlatforms = platforms.none; } else meta;
 
       # Retrieve all packages from the finished package set that have the current package as a dependency and build them
-      passthru.tests = filterAttrs (
-        name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)
-      ) self;
+      passthru.tests = filterAttrs
+        (
+          name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)
+        )
+        self;
     };
 in
 {

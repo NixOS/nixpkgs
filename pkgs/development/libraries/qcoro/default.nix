@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libpthreadstubs,
-  qtbase,
-  qtwebsockets,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libpthreadstubs
+, qtbase
+, qtwebsockets
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

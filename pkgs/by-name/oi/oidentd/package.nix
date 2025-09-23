@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  bison,
-  flex,
+{ lib
+, stdenv
+, fetchurl
+, bison
+, flex
+,
 }:
 
 stdenv.mkDerivation rec {

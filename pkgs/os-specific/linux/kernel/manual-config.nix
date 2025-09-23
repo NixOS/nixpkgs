@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  bc,
-  bison,
-  flex,
-  perl,
-  rsync,
-  gmp,
-  libmpc,
-  mpfr,
-  openssl,
-  cpio,
-  elfutils,
-  hexdump,
-  zstd,
-  python3Minimal,
-  zlib,
-  pahole,
-  kmod,
-  ubootTools,
-  fetchpatch,
-  rustc-unwrapped,
-  rust-bindgen-unwrapped,
-  rustPlatform,
+{ lib
+, stdenv
+, buildPackages
+, bc
+, bison
+, flex
+, perl
+, rsync
+, gmp
+, libmpc
+, mpfr
+, openssl
+, cpio
+, elfutils
+, hexdump
+, zstd
+, python3Minimal
+, zlib
+, pahole
+, kmod
+, ubootTools
+, fetchpatch
+, rustc-unwrapped
+, rust-bindgen-unwrapped
+, rustPlatform
+,
 }:
 
 let
@@ -48,44 +48,44 @@ in
 lib.makeOverridable (
   {
     # The kernel version
-    version,
-    # The kernel pname (should be set for variants)
-    pname ? "linux",
-    # Position of the Linux build expression
-    pos ? null,
-    # Additional kernel make flags
-    extraMakeFlags ? [ ],
-    # The name of the kernel module directory
+    version
+  , # The kernel pname (should be set for variants)
+    pname ? "linux"
+  , # Position of the Linux build expression
+    pos ? null
+  , # Additional kernel make flags
+    extraMakeFlags ? [ ]
+  , # The name of the kernel module directory
     # Needs to be X.Y.Z[-extra], so pad with zeros if needed.
-    modDirVersion ? null, # derive from version
+    modDirVersion ? null
+  , # derive from version
     # The kernel source (tarball, git checkout, etc.)
-    src,
-    # a list of { name=..., patch=..., extraConfig=...} patches
-    kernelPatches ? [ ],
-    # The kernel .config file
-    configfile,
-    # Manually specified nixexpr representing the config
+    src
+  , # a list of { name=..., patch=..., extraConfig=...} patches
+    kernelPatches ? [ ]
+  , # The kernel .config file
+    configfile
+  , # Manually specified nixexpr representing the config
     # If unspecified, this will be autodetected from the .config
     config ? lib.optionalAttrs (builtins.isPath configfile || allowImportFromDerivation) (
       readConfig configfile
-    ),
-    # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
+    )
+  , # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
     # automatically extended with extra per-version and per-config values.
-    randstructSeed ? "",
-    # Extra meta attributes
-    extraMeta ? { },
-
-    # for module compatibility
-    isZen ? false,
-    isLibre ? false,
-    isHardened ? false,
-
-    # Whether to utilize the controversial import-from-derivation feature to parse the config
-    allowImportFromDerivation ? false,
-    # ignored
-    features ? null,
-    lib ? lib_,
-    stdenv ? stdenv_,
+    randstructSeed ? ""
+  , # Extra meta attributes
+    extraMeta ? { }
+  , # for module compatibility
+    isZen ? false
+  , isLibre ? false
+  , isHardened ? false
+  , # Whether to utilize the controversial import-from-derivation feature to parse the config
+    allowImportFromDerivation ? false
+  , # ignored
+    features ? null
+  , lib ? lib_
+  , stdenv ? stdenv_
+  ,
   }:
 
   let
@@ -257,14 +257,14 @@ lib.makeOverridable (
           # OpenZFS; this was fixed in Linux 5.19 so we backport the fix
           # https://github.com/openzfs/zfs/pull/13367
           ++
-            optional
-              (
-                lib.versionAtLeast version "5.12" && lib.versionOlder version "5.19" && stdenv.hostPlatform.isPower
-              )
-              (fetchpatch {
-                url = "https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/patch/?id=d9e5c3e9e75162f845880535957b7fd0b4637d23";
-                hash = "sha256-bBOyJcP6jUvozFJU0SPTOf3cmnTQ6ZZ4PlHjiniHXLU=";
-              });
+          optional
+            (
+              lib.versionAtLeast version "5.12" && lib.versionOlder version "5.19" && stdenv.hostPlatform.isPower
+            )
+            (fetchpatch {
+              url = "https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/patch/?id=d9e5c3e9e75162f845880535957b7fd0b4637d23";
+              hash = "sha256-bBOyJcP6jUvozFJU0SPTOf3cmnTQ6ZZ4PlHjiniHXLU=";
+            });
 
         postPatch = ''
           # Ensure that depmod gets resolved through PATH
@@ -412,26 +412,27 @@ lib.makeOverridable (
 
         # Some image types need special install targets (e.g. uImage is installed with make uinstall on arm)
         installTargets = [
-          (kernelConf.installTarget or (
-            if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then
-              "uinstall"
-            else if
-              (
-                kernelConf.target == "zImage"
-                || kernelConf.target == "Image.gz"
-                || kernelConf.target == "vmlinuz.efi"
-              )
-              && builtins.elem stdenv.hostPlatform.linuxArch [
-                "arm"
-                "arm64"
-                "parisc"
-                "riscv"
-              ]
-            then
-              "zinstall"
-            else
-              "install"
-          )
+          (
+            kernelConf.installTarget or (
+              if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then
+                "uinstall"
+              else if
+                (
+                  kernelConf.target == "zImage"
+                  || kernelConf.target == "Image.gz"
+                  || kernelConf.target == "vmlinuz.efi"
+                )
+                && builtins.elem stdenv.hostPlatform.linuxArch [
+                  "arm"
+                  "arm64"
+                  "parisc"
+                  "riscv"
+                ]
+              then
+                "zinstall"
+              else
+                "install"
+            )
           )
         ];
 

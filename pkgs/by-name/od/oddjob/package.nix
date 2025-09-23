@@ -1,15 +1,15 @@
-{
-  autoreconfHook,
-  dbus,
-  fetchpatch,
-  fetchurl,
-  lib,
-  libxml2,
-  nixosTests,
-  pam,
-  pkg-config,
-  stdenv,
-  systemd,
+{ autoreconfHook
+, dbus
+, fetchpatch
+, fetchurl
+, lib
+, libxml2
+, nixosTests
+, pam
+, pkg-config
+, stdenv
+, systemd
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,34 +1,30 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  stdenvNoCC,
-  replaceVars,
-
-  # build
-  setuptools,
-
-  # dependencies
-  aiohttp,
-  aiorun,
-  atomicwrites,
-  coloredlogs,
-  orjson,
-  home-assistant-chip-clusters,
-
-  # optionals
-  cryptography,
-  home-assistant-chip-core,
-  zeroconf,
-
-  # tests
-  aioresponses,
-  python,
-  pytest,
-  pytest-aiohttp,
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, stdenvNoCC
+, replaceVars
+, # build
+  setuptools
+, # dependencies
+  aiohttp
+, aiorun
+, atomicwrites
+, coloredlogs
+, orjson
+, home-assistant-chip-clusters
+, # optionals
+  cryptography
+, home-assistant-chip-core
+, zeroconf
+, # tests
+  aioresponses
+, python
+, pytest
+, pytest-aiohttp
+, pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 let

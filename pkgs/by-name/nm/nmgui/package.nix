@@ -1,14 +1,14 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  wrapGAppsHook4,
-  gobject-introspection,
-  gtk4,
-  glib,
-  makeDesktopItem,
-  copyDesktopItems,
-  networkmanager,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, wrapGAppsHook4
+, gobject-introspection
+, gtk4
+, glib
+, makeDesktopItem
+, copyDesktopItems
+, networkmanager
+,
 }:
 
 python3Packages.buildPythonApplication rec {

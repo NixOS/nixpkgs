@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  # build inputs
-  numpy,
-  yacs,
-  pyyaml,
-  tqdm,
-  termcolor,
-  pillow,
-  tabulate,
-  iopath,
-  shapely,
-  # check inputs
-  torch,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build inputs
+  numpy
+, yacs
+, pyyaml
+, tqdm
+, termcolor
+, pillow
+, tabulate
+, iopath
+, shapely
+, # check inputs
+  torch
+,
 }:
 let
   pname = "fvcore";

@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -64,12 +63,13 @@ let
 
   flashbackEnabled = cfg.flashback.enableMetacity || lib.length cfg.flashback.customSessions > 0;
   flashbackWms =
-    lib.optional cfg.flashback.enableMetacity {
-      wmName = "metacity";
-      wmLabel = "Metacity";
-      wmCommand = "${pkgs.metacity}/bin/metacity";
-      enableGnomePanel = true;
-    }
+    lib.optional cfg.flashback.enableMetacity
+      {
+        wmName = "metacity";
+        wmLabel = "Metacity";
+        wmCommand = "${pkgs.metacity}/bin/metacity";
+        enableGnomePanel = true;
+      }
     ++ cfg.flashback.customSessions;
 
   notExcluded =
@@ -284,12 +284,14 @@ in
           namesAreUnique = lib.unique wmNames == wmNames;
         in
         assert (lib.assertMsg namesAreUnique "Flashback WM names must be unique.");
-        map (
-          wm:
-          pkgs.gnome-flashback.mkSessionForWm {
-            inherit (wm) wmName wmLabel wmCommand;
-          }
-        ) flashbackWms;
+        map
+          (
+            wm:
+            pkgs.gnome-flashback.mkSessionForWm {
+              inherit (wm) wmName wmLabel wmCommand;
+            }
+          )
+          flashbackWms;
 
       security.pam.services.gnome-flashback = {
         enableGnomeKeyring = true;
@@ -307,13 +309,17 @@ in
         })
       ]
       # For /share/applications/${wmName}.desktop
-      ++ (map (
-        wm: pkgs.gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }
-      ) flashbackWms)
+      ++ (map
+        (
+          wm: pkgs.gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }
+        )
+        flashbackWms)
       # For /share/pkgs.gnome-session/sessions/gnome-flashback-${wmName}.session
-      ++ (map (
-        wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }
-      ) flashbackWms);
+      ++ (map
+        (
+          wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }
+        )
+        flashbackWms);
     })
 
     (lib.mkIf serviceCfg.core-os-services.enable {
@@ -414,7 +420,8 @@ in
 
       fonts.packages = utils.removePackagesByName [
         pkgs.adwaita-fonts
-      ] config.environment.gnome.excludePackages;
+      ]
+        config.environment.gnome.excludePackages;
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-48/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages =
@@ -444,38 +451,40 @@ in
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-apps.bst
     (lib.mkIf serviceCfg.core-apps.enable {
-      environment.systemPackages = utils.removePackagesByName (
-        [
-          pkgs.baobab
-          pkgs.decibels
-          pkgs.epiphany
-          pkgs.gnome-text-editor
-          pkgs.gnome-calculator
-          pkgs.gnome-calendar
-          pkgs.gnome-characters
-          pkgs.gnome-clocks
-          pkgs.gnome-console
-          pkgs.gnome-contacts
-          pkgs.gnome-font-viewer
-          pkgs.gnome-logs
-          pkgs.gnome-maps
-          pkgs.gnome-music
-          pkgs.gnome-system-monitor
-          pkgs.gnome-weather
-          pkgs.loupe
-          pkgs.nautilus
-          pkgs.gnome-connections
-          pkgs.simple-scan
-          pkgs.snapshot
-          pkgs.totem
-          pkgs.yelp
-        ]
-        ++ lib.optionals config.services.flatpak.enable [
-          # Since PackageKit Nix support is not there yet,
-          # only install gnome-software if flatpak is enabled.
-          pkgs.gnome-software
-        ]
-      ) config.environment.gnome.excludePackages;
+      environment.systemPackages = utils.removePackagesByName
+        (
+          [
+            pkgs.baobab
+            pkgs.decibels
+            pkgs.epiphany
+            pkgs.gnome-text-editor
+            pkgs.gnome-calculator
+            pkgs.gnome-calendar
+            pkgs.gnome-characters
+            pkgs.gnome-clocks
+            pkgs.gnome-console
+            pkgs.gnome-contacts
+            pkgs.gnome-font-viewer
+            pkgs.gnome-logs
+            pkgs.gnome-maps
+            pkgs.gnome-music
+            pkgs.gnome-system-monitor
+            pkgs.gnome-weather
+            pkgs.loupe
+            pkgs.nautilus
+            pkgs.gnome-connections
+            pkgs.simple-scan
+            pkgs.snapshot
+            pkgs.totem
+            pkgs.yelp
+          ]
+          ++ lib.optionals config.services.flatpak.enable [
+            # Since PackageKit Nix support is not there yet,
+            # only install gnome-software if flatpak is enabled.
+            pkgs.gnome-software
+          ]
+        )
+        config.environment.gnome.excludePackages;
 
       # Enable default program modules
       # Since some of these have a corresponding package, we only
@@ -526,7 +535,8 @@ in
         pkgs.quadrapassel
         pkgs.swell-foop
         pkgs.tali
-      ] config.environment.gnome.excludePackages;
+      ]
+        config.environment.gnome.excludePackages;
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-developer-tools.bst
@@ -542,7 +552,8 @@ in
         # https://github.com/NixOS/nixpkgs/issues/60908
         # pkgs.gnome-boxes
         pkgs.sysprof
-      ] config.environment.gnome.excludePackages;
+      ]
+        config.environment.gnome.excludePackages;
 
       services.sysprof.enable = notExcluded pkgs.sysprof;
     })

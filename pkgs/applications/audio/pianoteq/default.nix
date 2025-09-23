@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  alsa-lib,
-  autoPatchelfHook,
-  copyDesktopItems,
-  curl,
-  freetype,
-  htmlq,
-  jq,
-  libglvnd,
-  librsvg,
-  makeDesktopItem,
-  makeWrapper,
-  p7zip,
-  writeShellScript,
+{ lib
+, stdenv
+, alsa-lib
+, autoPatchelfHook
+, copyDesktopItems
+, curl
+, freetype
+, htmlq
+, jq
+, libglvnd
+, librsvg
+, makeDesktopItem
+, makeWrapper
+, p7zip
+, writeShellScript
+,
 }:
 let
   versionForFile = v: builtins.replaceStrings [ "." ] [ "" ] v;
@@ -33,13 +33,12 @@ let
       throw "unsupported platform";
 
   mkPianoteq =
-    {
-      name,
-      mainProgram,
-      startupWMClass,
-      src,
-      version,
-      ...
+    { name
+    , mainProgram
+    , startupWMClass
+    , src
+    , version
+    , ...
     }:
     stdenv.mkDerivation rec {
       inherit src version;
@@ -117,11 +116,11 @@ let
     };
 
   fetchWithCurlScript =
-    {
-      name,
-      hash,
-      script,
-      impureEnvVars ? [ ],
+    { name
+    , hash
+    , script
+    , impureEnvVars ? [ ]
+    ,
     }:
     stdenv.mkDerivation {
       inherit name;

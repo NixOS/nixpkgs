@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  doxygen,
-  pkg-config,
-  python3,
-  python3Packages,
-  wafHook,
-  boost,
-  openssl,
-  sqlite,
+{ lib
+, stdenv
+, fetchFromGitHub
+, doxygen
+, pkg-config
+, python3
+, python3Packages
+, wafHook
+, boost
+, openssl
+, sqlite
+,
 }:
 
 stdenv.mkDerivation rec {

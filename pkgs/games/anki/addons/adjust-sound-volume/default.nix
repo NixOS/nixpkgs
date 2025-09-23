@@ -1,8 +1,8 @@
-{
-  lib,
-  anki-utils,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, anki-utils
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "adjust-sound-volume";

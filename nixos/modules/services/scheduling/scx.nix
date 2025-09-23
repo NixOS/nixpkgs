@@ -1,9 +1,8 @@
-{
-  lib,
-  pkgs,
-  config,
-  utils,
-  ...
+{ lib
+, pkgs
+, config
+, utils
+, ...
 }:
 let
   cfg = config.services.scx;

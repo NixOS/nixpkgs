@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cmake,
-  comic-neue,
-  boost,
-  catch2_3,
-  inchi,
-  cairo,
-  eigen,
-  python,
-  rapidjson,
-  maeparser,
-  coordgenlibs,
-  numpy,
-  pandas,
-  pillow,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, comic-neue
+, boost
+, catch2_3
+, inchi
+, cairo
+, eigen
+, python
+, rapidjson
+, maeparser
+, coordgenlibs
+, numpy
+, pandas
+, pillow
+,
 }:
 let
   external = {

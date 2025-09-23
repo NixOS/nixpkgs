@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  alcotest,
-  type_eq,
+{ lib
+, buildDunePackage
+, fetchurl
+, alcotest
+, type_eq
+,
 }:
 
 buildDunePackage rec {

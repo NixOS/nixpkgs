@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  writeShellApplication,
-  fetchFromGitHub,
-  cjson,
-  cmake,
-  git,
-  makeBinaryWrapper,
-  unzip,
-  curl,
-  freetype,
-  glew,
-  libjpeg,
-  libogg,
-  libpng,
-  libtheora,
-  libX11,
-  lua5_4,
-  minizip,
-  openal,
-  SDL2,
-  sqlite,
-  zlib,
+{ lib
+, stdenv
+, writeShellApplication
+, fetchFromGitHub
+, cjson
+, cmake
+, git
+, makeBinaryWrapper
+, unzip
+, curl
+, freetype
+, glew
+, libjpeg
+, libogg
+, libpng
+, libtheora
+, libX11
+, lua5_4
+, minizip
+, openal
+, SDL2
+, sqlite
+, zlib
+,
 }:
 let
   version = "2.83.2";

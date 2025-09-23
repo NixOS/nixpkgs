@@ -1,16 +1,17 @@
-{
-  lib,
-  vscode-utils,
-  jq,
-  clang-tools,
-  gdbUseFixed ? true,
-  gdb, # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
-  autoPatchelfHook,
-  makeWrapper,
-  stdenv,
-  lttng-ust,
-  libkrb5,
-  zlib,
+{ lib
+, vscode-utils
+, jq
+, clang-tools
+, gdbUseFixed ? true
+, gdb
+, # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
+  autoPatchelfHook
+, makeWrapper
+, stdenv
+, lttng-ust
+, libkrb5
+, zlib
+,
 }:
 
 /*

@@ -1,42 +1,40 @@
-{
-  lib,
-  callPackage,
-  fetchFromGitHub,
-  semgrep-core,
-  buildPythonPackage,
-
-  pytestCheckHook,
-  git,
-
-  # python packages
-  attrs,
-  boltons,
-  click,
-  click-option-group,
-  colorama,
-  defusedxml,
-  flaky,
-  glom,
-  jsonschema,
-  opentelemetry-api,
-  opentelemetry-exporter-otlp-proto-http,
-  opentelemetry-instrumentation-requests,
-  opentelemetry-sdk,
-  packaging,
-  peewee,
-  pytest-freezegun,
-  pytest-mock,
-  pytest-snapshot,
-  python-lsp-jsonrpc,
-  requests,
-  rich,
-  ruamel-yaml,
-  tomli,
-  tqdm,
-  types-freezegun,
-  typing-extensions,
-  urllib3,
-  wcmatch,
+{ lib
+, callPackage
+, fetchFromGitHub
+, semgrep-core
+, buildPythonPackage
+, pytestCheckHook
+, git
+, # python packages
+  attrs
+, boltons
+, click
+, click-option-group
+, colorama
+, defusedxml
+, flaky
+, glom
+, jsonschema
+, opentelemetry-api
+, opentelemetry-exporter-otlp-proto-http
+, opentelemetry-instrumentation-requests
+, opentelemetry-sdk
+, packaging
+, peewee
+, pytest-freezegun
+, pytest-mock
+, pytest-snapshot
+, python-lsp-jsonrpc
+, requests
+, rich
+, ruamel-yaml
+, tomli
+, tqdm
+, types-freezegun
+, typing-extensions
+, urllib3
+, wcmatch
+,
 }:
 
 # testing locally post build:
@@ -61,13 +59,15 @@ buildPythonPackage rec {
   # and there are many many submodules total
   postPatch =
     (lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (path: submodule: ''
-        # substitute ${path}
-        # remove git submodule placeholder
-        rm -r ${path}
-        # link submodule
-        ln -s ${submodule}/ ${path}
-      '') passthru.submodulesSubset
+      lib.mapAttrsToList
+        (path: submodule: ''
+          # substitute ${path}
+          # remove git submodule placeholder
+          rm -r ${path}
+          # link submodule
+          ln -s ${submodule}/ ${path}
+        '')
+        passthru.submodulesSubset
     ))
     + ''
       cd cli

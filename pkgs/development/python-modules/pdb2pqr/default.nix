@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  hatchling,
-  mmcif-pdbx,
-  numpy,
-  propka,
-  requests,
-  docutils,
-  pytestCheckHook,
-  pandas,
-  testfixtures,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, hatchling
+, mmcif-pdbx
+, numpy
+, propka
+, requests
+, docutils
+, pytestCheckHook
+, pandas
+, testfixtures
+,
 }:
 
 buildPythonPackage rec {

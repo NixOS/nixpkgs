@@ -1,12 +1,12 @@
-{
-  lib,
-  sbt,
-  makeWrapper,
-  boehmgc,
-  libunwind,
-  re2,
-  llvmPackages,
-  zlib,
+{ lib
+, sbt
+, makeWrapper
+, boehmgc
+, libunwind
+, re2
+, llvmPackages
+, zlib
+,
 }:
 
 sbt.overrideAttrs (previousAttrs: {

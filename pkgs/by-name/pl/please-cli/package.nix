@@ -1,12 +1,12 @@
-{
-  lib,
-  curl,
-  fetchFromGitHub,
-  jq,
-  makeBinaryWrapper,
-  please-cli,
-  stdenv,
-  testers,
+{ lib
+, curl
+, fetchFromGitHub
+, jq
+, makeBinaryWrapper
+, please-cli
+, stdenv
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

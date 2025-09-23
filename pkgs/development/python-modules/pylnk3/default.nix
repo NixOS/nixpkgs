@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytest,
-  invoke,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+, invoke
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

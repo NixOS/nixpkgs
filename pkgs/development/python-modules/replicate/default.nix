@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  httpx,
-  packaging,
-  pydantic,
-  typing-extensions,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-recording,
-  respx,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, httpx
+, packaging
+, pydantic
+, typing-extensions
+, pytestCheckHook
+, pytest-asyncio
+, pytest-recording
+, respx
+,
 }:
 
 buildPythonPackage rec {

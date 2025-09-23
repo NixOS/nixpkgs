@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  findlib,
-  mdx,
-  qcheck-core,
-  ppx_inline_test,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, findlib
+, mdx
+, qcheck-core
+, ppx_inline_test
+,
 }:
 
 buildDunePackage rec {

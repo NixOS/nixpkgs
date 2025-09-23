@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  ocamlPackages,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, ocamlPackages
+,
 }:
 
 stdenv.mkDerivation {

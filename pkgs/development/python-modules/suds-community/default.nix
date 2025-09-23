@@ -1,6 +1,6 @@
-{
-  mkPythonMetaPackage,
-  suds,
+{ mkPythonMetaPackage
+, suds
+,
 }:
 
 mkPythonMetaPackage {

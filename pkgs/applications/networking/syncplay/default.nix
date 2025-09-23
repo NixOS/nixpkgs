@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonApplication,
-  pem,
-  pyside6,
-  twisted,
-  certifi,
-  qt6,
-  appnope,
-  enableGUI ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonApplication
+, pem
+, pyside6
+, twisted
+, certifi
+, qt6
+, appnope
+, enableGUI ? true
+,
 }:
 
 buildPythonApplication rec {

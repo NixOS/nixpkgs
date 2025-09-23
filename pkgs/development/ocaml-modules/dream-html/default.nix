@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  dream,
-  pure-html,
-  ppxlib,
+{ lib
+, buildDunePackage
+, dream
+, pure-html
+, ppxlib
+,
 }:
 
 buildDunePackage {

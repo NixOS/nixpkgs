@@ -1,41 +1,40 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  altair,
-  cryptography,
-  jinja2,
-  jsonschema,
-  marshmallow,
-  mistune,
-  numpy,
-  packaging,
-  pandas,
-  posthog,
-  pydantic,
-  pyparsing,
-  python-dateutil,
-  requests,
-  ruamel-yaml,
-  scipy,
-  tqdm,
-  tzlocal,
-
-  # test
-  pytestCheckHook,
-  pytest-mock,
-  pytest-order,
-  pytest-random-order,
-  click,
-  flaky,
-  freezegun,
-  invoke,
-  moto,
-  psycopg2,
-  requirements-parser,
-  responses,
-  sqlalchemy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, altair
+, cryptography
+, jinja2
+, jsonschema
+, marshmallow
+, mistune
+, numpy
+, packaging
+, pandas
+, posthog
+, pydantic
+, pyparsing
+, python-dateutil
+, requests
+, ruamel-yaml
+, scipy
+, tqdm
+, tzlocal
+, # test
+  pytestCheckHook
+, pytest-mock
+, pytest-order
+, pytest-random-order
+, click
+, flaky
+, freezegun
+, invoke
+, moto
+, psycopg2
+, requirements-parser
+, responses
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

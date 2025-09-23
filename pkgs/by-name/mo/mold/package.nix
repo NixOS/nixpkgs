@@ -1,27 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-
-  cmake,
-  mimalloc,
-  ninja,
-  tbb_2022,
-  zlib,
-  zstd,
-
-  buildPackages,
-  clangStdenv,
-  gccStdenv,
-  hello,
-  mold,
-  mold-wrapped,
-  runCommandCC,
-  testers,
-  useMoldLinker,
-
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, mimalloc
+, ninja
+, tbb_2022
+, zlib
+, zstd
+, buildPackages
+, clangStdenv
+, gccStdenv
+, hello
+, mold
+, mold-wrapped
+, runCommandCC
+, testers
+, useMoldLinker
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

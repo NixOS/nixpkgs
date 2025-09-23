@@ -1,35 +1,32 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  buildEnv,
-  linkFarm,
-  makeWrapper,
-  stdenv,
-  addDriverRunpath,
-  nix-update-script,
-
-  cmake,
-  gitMinimal,
-  clblast,
-  libdrm,
-  rocmPackages,
-  rocmGpuTargets ? rocmPackages.clr.localGpuTargets or (rocmPackages.clr.gpuTargets or [ ]),
-  cudaPackages,
-  cudaArches ? cudaPackages.flags.realArches or [ ],
-  autoAddDriverRunpath,
-  apple-sdk_15,
-
-  # passthru
-  nixosTests,
-  testers,
-  ollama,
-  ollama-rocm,
-  ollama-cuda,
-
-  config,
-  # one of `[ null false "rocm" "cuda" ]`
-  acceleration ? null,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, buildEnv
+, linkFarm
+, makeWrapper
+, stdenv
+, addDriverRunpath
+, nix-update-script
+, cmake
+, gitMinimal
+, clblast
+, libdrm
+, rocmPackages
+, rocmGpuTargets ? rocmPackages.clr.localGpuTargets or (rocmPackages.clr.gpuTargets or [ ])
+, cudaPackages
+, cudaArches ? cudaPackages.flags.realArches or [ ]
+, autoAddDriverRunpath
+, apple-sdk_15
+, # passthru
+  nixosTests
+, testers
+, ollama
+, ollama-rocm
+, ollama-cuda
+, config
+, # one of `[ null false "rocm" "cuda" ]`
+  acceleration ? null
+,
 }:
 
 assert builtins.elem acceleration [
@@ -40,10 +37,12 @@ assert builtins.elem acceleration [
 ];
 
 let
-  validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport) (lib.concatStrings [
-    "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "
-    "but they are mutually exclusive; falling back to cpu"
-  ]) (!(config.rocmSupport && config.cudaSupport));
+  validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport)
+    (lib.concatStrings [
+      "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "
+      "but they are mutually exclusive; falling back to cpu"
+    ])
+    (!(config.rocmSupport && config.cudaSupport));
   shouldEnable =
     mode: fallback: (acceleration == mode) || (fallback && acceleration == null && validateFallback);
 
@@ -129,13 +128,14 @@ goBuild (finalAttrs: {
   vendorHash = "sha256-SlaDsu001TUW+t9WRp7LqxUSQSGDF1Lqu9M1bgILoX4=";
 
   env =
-    lib.optionalAttrs enableRocm {
-      ROCM_PATH = rocmPath;
-      CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
-      HIP_PATH = rocmPath;
-      CFLAGS = "-Wno-c++17-extensions -I${rocmPath}/include";
-      CXXFLAGS = "-Wno-c++17-extensions -I${rocmPath}/include";
-    }
+    lib.optionalAttrs enableRocm
+      {
+        ROCM_PATH = rocmPath;
+        CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
+        HIP_PATH = rocmPath;
+        CFLAGS = "-Wno-c++17-extensions -I${rocmPath}/include";
+        CXXFLAGS = "-Wno-c++17-extensions -I${rocmPath}/include";
+      }
     // lib.optionalAttrs enableCuda { CUDA_PATH = cudaPath; };
 
   nativeBuildInputs = [

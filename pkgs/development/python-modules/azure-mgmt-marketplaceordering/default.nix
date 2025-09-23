@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  msrest,
-  msrestazure,
-  azure-common,
-  azure-mgmt-nspkg,
-  isPy3k,
-  azure-mgmt-core,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, msrest
+, msrestazure
+, azure-common
+, azure-mgmt-nspkg
+, isPy3k
+, azure-mgmt-core
+,
 }:
 
 buildPythonPackage rec {

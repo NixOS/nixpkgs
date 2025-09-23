@@ -1,11 +1,11 @@
-{
-  pkgs,
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  pkg-config,
-  dune-configurator,
-  bigstring,
+{ pkgs
+, lib
+, fetchFromGitHub
+, buildDunePackage
+, pkg-config
+, dune-configurator
+, bigstring
+,
 }:
 
 buildDunePackage rec {

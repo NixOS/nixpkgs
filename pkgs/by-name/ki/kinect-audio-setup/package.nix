@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  requireFile,
-  pkg-config,
-  libusb1,
-  p7zip,
+{ lib
+, stdenv
+, fetchgit
+, requireFile
+, pkg-config
+, libusb1
+, p7zip
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  toPythonModule,
-  fetchpatch,
-  cmake,
-  pybind11,
-  orocos-kdl,
-  eigen,
-  python,
+{ lib
+, stdenv
+, toPythonModule
+, fetchpatch
+, cmake
+, pybind11
+, orocos-kdl
+, eigen
+, python
+,
 }:
 
 toPythonModule (

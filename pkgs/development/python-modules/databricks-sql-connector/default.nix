@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  alembic,
-  lz4,
-  numpy,
-  oauthlib,
-  openpyxl,
-  pandas,
-  poetry-core,
-  pyarrow,
-  pytestCheckHook,
-  pythonOlder,
-  sqlalchemy,
-  thrift,
-  requests,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, alembic
+, lz4
+, numpy
+, oauthlib
+, openpyxl
+, pandas
+, poetry-core
+, pyarrow
+, pytestCheckHook
+, pythonOlder
+, sqlalchemy
+, thrift
+, requests
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

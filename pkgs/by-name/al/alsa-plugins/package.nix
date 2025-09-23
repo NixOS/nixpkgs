@@ -1,15 +1,15 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  pkg-config,
-  alsa-lib,
-  ffmpeg,
-  libjack2,
-  libogg,
-  libpulseaudio,
-  speexdsp,
-  directoryListingUpdater,
+{ stdenv
+, fetchurl
+, lib
+, pkg-config
+, alsa-lib
+, ffmpeg
+, libjack2
+, libogg
+, libpulseaudio
+, speexdsp
+, directoryListingUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  rustPlatform,
-  vimPlugins,
-  vimUtils,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, rustPlatform
+, vimPlugins
+, vimUtils
+,
 }:
 let
   version = "0-unstable-2025-05-13";

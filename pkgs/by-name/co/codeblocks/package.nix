@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  file,
-  zip,
-  wxGTK32,
-  gtk3,
-  contribPlugins ? false,
-  hunspell,
-  boost,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, file
+, zip
+, wxGTK32
+, gtk3
+, contribPlugins ? false
+, hunspell
+, boost
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals contribPlugins [
     (
       "--with-contrib-plugins=all,-FileManager"
-      + lib.optionalString stdenv.hostPlatform.isDarwin ",-NassiShneiderman"
+        + lib.optionalString stdenv.hostPlatform.isDarwin ",-NassiShneiderman"
     )
     "--with-boost-libdir=${boost}/lib"
   ];

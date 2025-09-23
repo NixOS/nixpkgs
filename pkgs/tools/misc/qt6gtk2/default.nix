@@ -1,12 +1,12 @@
-{
-  fetchFromGitLab,
-  lib,
-  stdenv,
-  gtk2,
-  pkg-config,
-  qmake,
-  qtbase,
-  nix-update-script,
+{ fetchFromGitLab
+, lib
+, stdenv
+, gtk2
+, pkg-config
+, qmake
+, qtbase
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

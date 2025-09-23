@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  blessed,
-  buildPythonPackage,
-  cwcwidth,
-  fetchPypi,
-  pyte,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, stdenv
+, blessed
+, buildPythonPackage
+, cwcwidth
+, fetchPypi
+, pyte
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

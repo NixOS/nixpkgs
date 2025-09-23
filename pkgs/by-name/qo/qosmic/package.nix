@@ -1,15 +1,15 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  libsForQt5,
-  pkg-config,
-  lua,
-  flam3,
-  libxml2,
-  libpng,
-  libjpeg,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, libsForQt5
+, pkg-config
+, lua
+, flam3
+, libxml2
+, libpng
+, libjpeg
+, lib
+,
 }:
 
 stdenv.mkDerivation rec {

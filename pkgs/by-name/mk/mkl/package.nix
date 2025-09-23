@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  stdenvNoCC,
-  fetchurl,
-  rpmextract,
-  _7zz,
-  cctools,
-  validatePkgConfig,
-  enableStatic ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, callPackage
+, stdenvNoCC
+, fetchurl
+, rpmextract
+, _7zz
+, cctools
+, validatePkgConfig
+, enableStatic ? stdenv.hostPlatform.isStatic
+,
 }:
 
 /*
@@ -215,7 +215,7 @@ stdenvNoCC.mkDerivation (
       maintainers = with maintainers; [ bhipple ];
     };
   }
-  // lib.optionalAttrs stdenvNoCC.hostPlatform.isDarwin {
+    // lib.optionalAttrs stdenvNoCC.hostPlatform.isDarwin {
     src = fetchurl {
       url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/087a9190-9d96-4b8c-bd2f-79159572ed89/m_onemkl_p_${mklVersion}.${rel}_offline.dmg";
       hash = "sha256-bUaaJPSaLr60fw0DzDCjPvY/UucHlLbCSLyQxyiAi04=";

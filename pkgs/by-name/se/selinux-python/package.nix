@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python3,
-  gettext,
-  libselinux,
-  libsemanage,
-  libsepol,
-  setools,
+{ lib
+, stdenv
+, fetchurl
+, python3
+, gettext
+, libselinux
+, libsemanage
+, libsepol
+, setools
+,
 }:
 
 let

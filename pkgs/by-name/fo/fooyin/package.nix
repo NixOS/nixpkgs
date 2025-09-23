@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  ffmpeg,
-  kdePackages,
-  kdsingleapplication,
-  pipewire,
-  taglib,
-  libebur128,
-  libvgm,
-  libsndfile,
-  libarchive,
-  libopenmpt,
-  game-music-emu,
-  SDL2,
-  icu,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, alsa-lib
+, ffmpeg
+, kdePackages
+, kdsingleapplication
+, pipewire
+, taglib
+, libebur128
+, libvgm
+, libsndfile
+, libarchive
+, libopenmpt
+, game-music-emu
+, SDL2
+, icu
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,35 +1,34 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  jetbrains,
-  jdk,
-  git,
-  autoconf,
-  unzip,
-  rsync,
-  debugBuild ? false,
-  withJcef ? true,
-
-  libXdamage,
-  libXxf86vm,
-  libXrandr,
-  libXi,
-  libXcursor,
-  libXrender,
-  libX11,
-  libXext,
-  libxkbcommon,
-  libxcb,
-  nss,
-  nspr,
-  libdrm,
-  libgbm,
-  wayland,
-  udev,
-  fontconfig,
-  shaderc,
-  vulkan-headers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, jetbrains
+, jdk
+, git
+, autoconf
+, unzip
+, rsync
+, debugBuild ? false
+, withJcef ? true
+, libXdamage
+, libXxf86vm
+, libXrandr
+, libXi
+, libXcursor
+, libXrender
+, libX11
+, libXext
+, libxkbcommon
+, libxcb
+, nss
+, nspr
+, libdrm
+, libgbm
+, wayland
+, udev
+, fontconfig
+, shaderc
+, vulkan-headers
+,
 }:
 
 assert debugBuild -> withJcef;
@@ -39,8 +38,7 @@ let
     {
       "aarch64-linux" = "aarch64";
       "x86_64-linux" = "x64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   cpu = stdenv.hostPlatform.parsed.cpu.name;
 in
 jdk.overrideAttrs (oldAttrs: rec {

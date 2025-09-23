@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  cmake,
-  zlib,
-  testers,
-  cargo-semver-checks,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, zlib
+, testers
+, cargo-semver-checks
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

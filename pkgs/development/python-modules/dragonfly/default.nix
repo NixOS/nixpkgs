@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  decorator,
-  fetchFromGitHub,
-  json-rpc,
-  kaldi-active-grammar,
-  lark,
-  packaging,
-  psutil,
-  pynput,
-  pyperclip,
-  pythonOlder,
-  regex,
-  requests,
-  setuptools,
-  six,
-  sounddevice,
-  webrtcvad,
-  werkzeug,
-  wmctrl,
-  xdotool,
-  xorg,
+{ lib
+, buildPythonPackage
+, decorator
+, fetchFromGitHub
+, json-rpc
+, kaldi-active-grammar
+, lark
+, packaging
+, psutil
+, pynput
+, pyperclip
+, pythonOlder
+, regex
+, requests
+, setuptools
+, six
+, sounddevice
+, webrtcvad
+, werkzeug
+, wmctrl
+, xdotool
+, xorg
+,
 }:
 
 buildPythonPackage rec {

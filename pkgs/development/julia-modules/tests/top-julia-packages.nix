@@ -24,17 +24,17 @@ let
 in
 
 runCommand "top-julia-packages.yaml"
-  {
-    __impure = true;
-    nativeBuildInputs = [
-      (python3.withPackages (
-        ps: with ps; [
-          pyyaml
-          toml
-        ]
-      ))
-    ];
-  }
+{
+  __impure = true;
+  nativeBuildInputs = [
+    (python3.withPackages (
+      ps: with ps; [
+        pyyaml
+        toml
+      ]
+    ))
+  ];
+}
   ''
     python ${./process_top_n.py} ${package-requests} ${registry} > $out
   ''

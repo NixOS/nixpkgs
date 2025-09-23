@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  pytest,
-  pluggy,
-  typing-extensions,
-  pyqt5,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, pytest
+, pluggy
+, typing-extensions
+, pyqt5
+,
 }:
 
 buildPythonPackage rec {

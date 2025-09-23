@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  cve,
-  fetchFromGitHub,
-  jsonschema,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  testers,
+{ lib
+, buildPythonPackage
+, click
+, cve
+, fetchFromGitHub
+, jsonschema
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, testers
+,
 }:
 
 buildPythonPackage rec {

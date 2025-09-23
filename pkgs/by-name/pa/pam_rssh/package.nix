@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  coreutils,
-  pkg-config,
-  openssl,
-  pam,
-  openssh,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, coreutils
+, pkg-config
+, openssl
+, pam
+, openssh
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

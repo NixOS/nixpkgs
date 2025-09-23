@@ -1,48 +1,48 @@
-{
-  stdenv,
-  lib,
-  binutils,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  wrapGAppsHook3,
-  boost186,
-  cereal,
-  cgal_5,
-  curl,
-  dbus,
-  eigen,
-  expat,
-  glew,
-  glib,
-  glib-networking,
-  gmp,
-  gtk3,
-  hicolor-icon-theme,
-  ilmbase,
-  libpng,
-  mpfr,
-  nanosvg,
-  nlopt,
-  nlohmann_json,
-  opencascade-occt_7_6_1,
-  openvdb,
-  qhull,
-  tbb_2022,
-  wxGTK32,
-  xorg,
-  libbgcode,
-  heatshrink,
-  catch2_3,
-  webkitgtk_4_1,
-  ctestCheckHook,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  udevCheckHook,
-  z3,
-  nix-update-script,
-  wxGTK-override ? null,
-  opencascade-override ? null,
+{ stdenv
+, lib
+, binutils
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wrapGAppsHook3
+, boost186
+, cereal
+, cgal_5
+, curl
+, dbus
+, eigen
+, expat
+, glew
+, glib
+, glib-networking
+, gmp
+, gtk3
+, hicolor-icon-theme
+, ilmbase
+, libpng
+, mpfr
+, nanosvg
+, nlopt
+, nlohmann_json
+, opencascade-occt_7_6_1
+, openvdb
+, qhull
+, tbb_2022
+, wxGTK32
+, xorg
+, libbgcode
+, heatshrink
+, catch2_3
+, webkitgtk_4_1
+, ctestCheckHook
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, udevCheckHook
+, z3
+, nix-update-script
+, wxGTK-override ? null
+, opencascade-override ? null
+,
 }:
 let
   nanosvg-fltk = nanosvg.overrideAttrs (old: {

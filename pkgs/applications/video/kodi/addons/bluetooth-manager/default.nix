@@ -1,7 +1,7 @@
-{
-  buildKodiAddon,
-  fetchFromGitHub,
-  lib,
+{ buildKodiAddon
+, fetchFromGitHub
+, lib
+,
 }:
 buildKodiAddon rec {
   pname = "bluetooth-manager";

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  shared ? !stdenv.hostPlatform.isStatic,
-  static ? true,
-  # If true, a separate .static output is created and the .a is moved there.
+{ lib
+, stdenv
+, fetchurl
+, shared ? !stdenv.hostPlatform.isStatic
+, static ? true
+, # If true, a separate .static output is created and the .a is moved there.
   # In this case `pkg-config` auto detection does not currently work if the
   # .static output is given as `buildInputs` to another package (#66461), because
   # the `.pc` file lists only the main output's lib dir.
   # If false, and if `{ static = true; }`, the .a stays in the main output.
-  splitStaticOutput ? shared && static,
-  testers,
-  minizip,
+  splitStaticOutput ? shared && static
+, testers
+, minizip
+,
 }:
 
 # Without either the build will actually still succeed because the build
@@ -109,11 +109,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   env =
-    lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
-      # As zlib takes part in the stdenv building, we don't want references
-      # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-      NIX_CFLAGS_COMPILE = "-static-libgcc";
-    }
+    lib.optionalAttrs (!stdenv.hostPlatform.isDarwin)
+      {
+        # As zlib takes part in the stdenv building, we don't want references
+        # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
+        NIX_CFLAGS_COMPILE = "-static-libgcc";
+      }
     // lib.optionalAttrs (stdenv.hostPlatform.linker == "lld") {
       # lld 16 enables --no-undefined-version by default
       # This makes configure think it can't build dynamic libraries

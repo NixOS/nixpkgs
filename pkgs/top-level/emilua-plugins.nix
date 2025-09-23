@@ -1,8 +1,8 @@
-{
-  lib,
-  newScope,
-  pkgs,
-  config,
+{ lib
+, newScope
+, pkgs
+, config
+,
 }:
 
 emilua:

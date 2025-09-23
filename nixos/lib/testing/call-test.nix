@@ -1,8 +1,7 @@
-{
-  config,
-  extendModules,
-  lib,
-  ...
+{ config
+, extendModules
+, lib
+, ...
 }:
 let
   inherit (lib) mkOption types;
@@ -28,15 +27,17 @@ in
       See https://nixos.org/manual/nixos/unstable#sec-override-nixos-test
     */
     passthru.extend =
-      args@{
-        modules,
-        specialArgs ? { },
+      args@{ modules
+      , specialArgs ? { }
+      ,
       }:
       (extendModules {
         inherit specialArgs;
-        modules = map (lib.setDefaultModuleLocation (
-          unsafeGetAttrPosStringOr "<test.extend module>" "modules" args
-        )) modules;
+        modules = map
+          (lib.setDefaultModuleLocation (
+            unsafeGetAttrPosStringOr "<test.extend module>" "modules" args
+          ))
+          modules;
       }).config.test;
   };
 }

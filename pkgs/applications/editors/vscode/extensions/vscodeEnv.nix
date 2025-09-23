@@ -1,29 +1,29 @@
 #Use vscodeWithConfiguration and vscodeExts2nix to create a vscode executable. When the executable exits, it updates the mutable extension file, which is imported when evaluated by Nix later.
-{
-  lib,
-  buildEnv,
-  writeShellScriptBin,
-  extensionsFromVscodeMarketplace,
-  vscodeDefault,
-  jq,
+{ lib
+, buildEnv
+, writeShellScriptBin
+, extensionsFromVscodeMarketplace
+, vscodeDefault
+, jq
+,
 }:
 ##User input
-{
-  vscode ? vscodeDefault,
-  nixExtensions ? [ ],
-  vscodeExtsFolderName ? ".vscode-exts",
-  # will add to the command updateSettings (which will run on executing vscode) settings to override in settings.json file
-  settings ? { },
-  createSettingsIfDoesNotExists ? true,
-  launch ? { },
-  createLaunchIfDoesNotExists ? true,
-  # will add to the command updateKeybindings(which will run on executing vscode) keybindings to override in keybinding.json file
-  keybindings ? { },
-  createKeybindingsIfDoesNotExists ? true,
-  user-data-dir ? ''"''${TMP}''${name}"/vscode-data-dir'',
-  # if file exists will use it and import the extensions in it into this derivation else will use empty extensions list
+{ vscode ? vscodeDefault
+, nixExtensions ? [ ]
+, vscodeExtsFolderName ? ".vscode-exts"
+, # will add to the command updateSettings (which will run on executing vscode) settings to override in settings.json file
+  settings ? { }
+, createSettingsIfDoesNotExists ? true
+, launch ? { }
+, createLaunchIfDoesNotExists ? true
+, # will add to the command updateKeybindings(which will run on executing vscode) keybindings to override in keybinding.json file
+  keybindings ? { }
+, createKeybindingsIfDoesNotExists ? true
+, user-data-dir ? ''"''${TMP}''${name}"/vscode-data-dir''
+, # if file exists will use it and import the extensions in it into this derivation else will use empty extensions list
   # this file will be created/updated by vscodeExts2nix when vscode exists
-  mutableExtensionsFile,
+  mutableExtensionsFile
+,
 }:
 let
   mutableExtensionsFilePath = toString mutableExtensionsFile;

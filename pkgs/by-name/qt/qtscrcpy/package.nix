@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libsForQt5,
-  scrcpy,
-  android-tools,
-  ffmpeg,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libsForQt5
+, scrcpy
+, android-tools
+, ffmpeg
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 stdenv.mkDerivation rec {

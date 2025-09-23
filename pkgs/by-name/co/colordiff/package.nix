@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  docbook_xml_dtd_412,
-  docbook_xsl,
-  perl,
-  w3m-batch,
-  xmlto,
-  diffutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, docbook_xml_dtd_412
+, docbook_xsl
+, perl
+, w3m-batch
+, xmlto
+, diffutils
+,
 }:
 
 stdenv.mkDerivation rec {

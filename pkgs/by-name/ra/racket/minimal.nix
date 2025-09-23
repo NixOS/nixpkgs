@@ -1,19 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  libiconvReal,
-  libz,
-  lz4,
-  ncurses,
-  openssl,
-  sqlite,
-
-  disableDocs ? false,
-
-  callPackage,
-  writers,
+{ lib
+, stdenv
+, fetchurl
+, libiconvReal
+, libz
+, lz4
+, ncurses
+, openssl
+, sqlite
+, disableDocs ? false
+, callPackage
+, writers
+,
 }:
 
 let
@@ -112,17 +109,18 @@ stdenv.mkDerivation (finalAttrs: {
     };
     writeScript =
       nameOrPath:
-      {
-        libraries ? [ ],
-        ...
+      { libraries ? [ ]
+      , ...
       }@config:
-      assert lib.assertMsg (libraries == [ ]) "library integration for Racket has not been implemented";
-      writers.makeScriptWriter (
-        builtins.removeAttrs config [ "libraries" ]
-        // {
-          interpreter = "${lib.getExe finalAttrs.finalPackage}";
-        }
-      ) nameOrPath;
+        assert lib.assertMsg (libraries == [ ]) "library integration for Racket has not been implemented";
+        writers.makeScriptWriter
+          (
+            builtins.removeAttrs config [ "libraries" ]
+            // {
+              interpreter = "${lib.getExe finalAttrs.finalPackage}";
+            }
+          )
+          nameOrPath;
     writeScriptBin = name: finalAttrs.passthru.writeScript "/bin/${name}";
 
     # Tests #

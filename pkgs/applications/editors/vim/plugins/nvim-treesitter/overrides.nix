@@ -1,13 +1,13 @@
-{
-  lib,
-  callPackage,
-  tree-sitter,
-  neovim,
-  neovimUtils,
-  runCommand,
-  vimPlugins,
-  tree-sitter-grammars,
-  writableTmpDirAsHomeHook,
+{ lib
+, callPackage
+, tree-sitter
+, neovim
+, neovimUtils
+, runCommand
+, vimPlugins
+, tree-sitter-grammars
+, writableTmpDirAsHomeHook
+,
 }:
 
 self: super:
@@ -15,8 +15,7 @@ self: super:
 let
   inherit (neovimUtils) grammarToPlugin;
 
-  overrides = prev: {
-  };
+  overrides = prev: { };
 
   generatedGrammars =
     let
@@ -35,19 +34,21 @@ let
   #   tree-sitter-ocaml_interface
   builtGrammars =
     generatedGrammars
-    // lib.concatMapAttrs (
-      k: v:
-      let
-        replaced = lib.replaceStrings [ "_" ] [ "-" ] k;
-      in
-      {
-        "tree-sitter-${k}" = v;
-      }
-      // lib.optionalAttrs (k != replaced) {
-        ${replaced} = v;
-        "tree-sitter-${replaced}" = v;
-      }
-    ) generatedDerivations;
+    // lib.concatMapAttrs
+      (
+        k: v:
+          let
+            replaced = lib.replaceStrings [ "_" ] [ "-" ] k;
+          in
+          {
+            "tree-sitter-${k}" = v;
+          }
+          // lib.optionalAttrs (k != replaced) {
+            ${replaced} = v;
+            "tree-sitter-${replaced}" = v;
+          }
+      )
+      generatedDerivations;
 
   allGrammars = lib.attrValues generatedDerivations;
 

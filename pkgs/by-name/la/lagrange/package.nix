@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  cmake,
-  pkg-config,
-  fribidi,
-  harfbuzz,
-  libogg,
-  libwebp,
-  libX11,
-  mpg123,
-  opusfile,
-  SDL2,
-  the-foundation,
-  zip,
-  enableTUI ? false,
-  ncurses,
-  sealcurses,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, pkg-config
+, fribidi
+, harfbuzz
+, libogg
+, libwebp
+, libX11
+, mpg123
+, opusfile
+, SDL2
+, the-foundation
+, zip
+, enableTUI ? false
+, ncurses
+, sealcurses
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

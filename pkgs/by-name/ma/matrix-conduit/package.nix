@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  pkg-config,
-  sqlite,
-  stdenv,
-  nixosTests,
-  rocksdb,
-  rust-jemalloc-sys,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, pkg-config
+, sqlite
+, stdenv
+, nixosTests
+, rocksdb
+, rust-jemalloc-sys
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

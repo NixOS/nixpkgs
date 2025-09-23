@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  easel,
-  perl,
-  python3,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, easel
+, perl
+, python3
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

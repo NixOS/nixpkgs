@@ -1,14 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  pythonOlder,
-  setuptools,
-
-  # passthru tests
-  apache-beam,
-  datasets,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, pythonOlder
+, setuptools
+, # passthru tests
+  apache-beam
+, datasets
+,
 }:
 
 buildPythonPackage rec {

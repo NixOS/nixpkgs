@@ -1,22 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  perl,
-  procps,
-  bash,
-
-  # shell referenced dependencies
-  resholve,
-  binutils-unwrapped,
-  file,
-  gnugrep,
-  coreutils,
-  gnused,
-  gnutar,
-  iconv,
-  ncurses,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, perl
+, procps
+, bash
+, # shell referenced dependencies
+  resholve
+, binutils-unwrapped
+, file
+, gnugrep
+, coreutils
+, gnused
+, gnutar
+, iconv
+, ncurses
+,
 }:
 
 stdenv.mkDerivation rec {

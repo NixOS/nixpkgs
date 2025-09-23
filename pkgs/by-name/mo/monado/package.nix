@@ -1,66 +1,66 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch2,
-  writeText,
-  bluez,
-  cjson,
-  cmake,
-  config,
-  dbus,
-  doxygen,
-  eigen,
-  elfutils,
-  glslang,
-  gst-plugins-base,
-  gstreamer,
-  hidapi,
-  libbsd,
-  libdrm,
-  libffi,
-  libGL,
-  libjpeg,
-  librealsense,
-  libsurvive,
-  libunwind,
-  libusb1,
-  libuv,
-  libuvc,
-  libv4l,
-  libXau,
-  libxcb,
-  libXdmcp,
-  libXext,
-  libXrandr,
-  nix-update-script,
-  onnxruntime,
-  openhmd,
-  openvr,
-  orc,
-  pcre2,
-  pkg-config,
-  python3,
-  SDL2,
-  shaderc,
-  tracy,
-  udev,
-  vulkan-headers,
-  vulkan-loader,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  zlib,
-  zstd,
-  nixosTests,
-  cudaPackages,
-  enableCuda ? config.cudaSupport,
-  # Set as 'false' to build monado without service support, i.e. allow VR
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch2
+, writeText
+, bluez
+, cjson
+, cmake
+, config
+, dbus
+, doxygen
+, eigen
+, elfutils
+, glslang
+, gst-plugins-base
+, gstreamer
+, hidapi
+, libbsd
+, libdrm
+, libffi
+, libGL
+, libjpeg
+, librealsense
+, libsurvive
+, libunwind
+, libusb1
+, libuv
+, libuvc
+, libv4l
+, libXau
+, libxcb
+, libXdmcp
+, libXext
+, libXrandr
+, nix-update-script
+, onnxruntime
+, openhmd
+, openvr
+, orc
+, pcre2
+, pkg-config
+, python3
+, SDL2
+, shaderc
+, tracy
+, udev
+, vulkan-headers
+, vulkan-loader
+, wayland
+, wayland-protocols
+, wayland-scanner
+, zlib
+, zstd
+, nixosTests
+, cudaPackages
+, enableCuda ? config.cudaSupport
+, # Set as 'false' to build monado without service support, i.e. allow VR
   # applications linking against libopenxr_monado.so to use OpenXR standalone
   # instead of via the monado-service program. For more information see:
   # https://gitlab.freedesktop.org/monado/monado/-/blob/master/doc/targets.md#xrt_feature_service-disabled
-  serviceSupport ? true,
-  tracingSupport ? false,
+  serviceSupport ? true
+, tracingSupport ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

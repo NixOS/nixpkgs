@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pint,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  toml,
-  tomli,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pint
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, toml
+, tomli
+,
 }:
 
 buildPythonPackage rec {

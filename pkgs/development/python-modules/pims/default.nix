@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  imageio,
-  numpy,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-image,
-  slicerator,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, imageio
+, numpy
+, pytestCheckHook
+, pythonOlder
+, scikit-image
+, slicerator
+,
 }:
 
 buildPythonPackage rec {

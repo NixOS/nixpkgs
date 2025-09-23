@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
+{ lib
+, stdenv
+, fetchurl
+,
 }:
 
 let
   mkNixBackground =
-    {
-      name,
-      src,
-      description,
-      license ? lib.licenses.free,
+    { name
+    , src
+    , description
+    , license ? lib.licenses.free
+    ,
     }:
 
     let

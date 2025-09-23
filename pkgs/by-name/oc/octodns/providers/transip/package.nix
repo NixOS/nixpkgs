@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  octodns,
-  pytestCheckHook,
-  setuptools,
-  python-transip,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, octodns
+, pytestCheckHook
+, setuptools
+, python-transip
+,
 }:
 buildPythonPackage rec {
   pname = "octodns-transip";

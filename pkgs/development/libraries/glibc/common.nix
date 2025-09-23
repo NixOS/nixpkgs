@@ -7,12 +7,12 @@
    first output is `lib` so that the libraries provided by this derivation
    can be accessed directly, e.g.
 
-     "${pkgs.glibc}/lib/ld-linux-x86_64.so.2"
+   "${pkgs.glibc}/lib/ld-linux-x86_64.so.2"
 
    The executables are put into `bin` output and need to be referenced via
    the `bin` attribute of the main package, e.g.
 
-     "${pkgs.glibc.bin}/bin/ldd".
+   "${pkgs.glibc.bin}/bin/ldd".
 
   The executables provided by glibc typically include `ldd`, `locale`, `iconv`
   but the exact set depends on the library version and the configuration.
@@ -23,29 +23,28 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-{
-  stdenv,
-  lib,
-  buildPackages,
-  fetchurl,
-  linuxHeaders ? null,
-  gd ? null,
-  libpng ? null,
-  libidn2,
-  bison,
-  python3Minimal,
+{ stdenv
+, lib
+, buildPackages
+, fetchurl
+, linuxHeaders ? null
+, gd ? null
+, libpng ? null
+, libidn2
+, bison
+, python3Minimal
+,
 }:
 
-{
-  pname,
-  withLinuxHeaders ? false,
-  profilingLibraries ? false,
-  withGd ? false,
-  enableCET ? false,
-  enableCETRuntimeDefault ? false,
-  extraBuildInputs ? [ ],
-  extraNativeBuildInputs ? [ ],
-  ...
+{ pname
+, withLinuxHeaders ? false
+, profilingLibraries ? false
+, withGd ? false
+, enableCET ? false
+, enableCETRuntimeDefault ? false
+, extraBuildInputs ? [ ]
+, extraNativeBuildInputs ? [ ]
+, ...
 }@args:
 
 let
@@ -278,87 +277,87 @@ stdenv.mkDerivation (
     "postInstall"
     "makeFlags"
   ])
-  //
+    //
 
-    {
-      src = fetchurl {
-        url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
-        inherit sha256;
-      };
+  {
+    src = fetchurl {
+      url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
+      inherit sha256;
+    };
 
-      # Remove absolute paths from `configure' & co.; build out-of-tree.
-      preConfigure = ''
-        export PWD_P=$(type -tP pwd)
-        for i in configure io/ftwtest-sh; do
-            # Can't use substituteInPlace here because replace hasn't been
-            # built yet in the bootstrap.
-            sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
-        done
+    # Remove absolute paths from `configure' & co.; build out-of-tree.
+    preConfigure = ''
+      export PWD_P=$(type -tP pwd)
+      for i in configure io/ftwtest-sh; do
+          # Can't use substituteInPlace here because replace hasn't been
+          # built yet in the bootstrap.
+          sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
+      done
 
-        mkdir ../build
-        cd ../build
+      mkdir ../build
+      cd ../build
 
-        configureScript="`pwd`/../$sourceRoot/configure"
-      ''
-      + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-        sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
+      configureScript="`pwd`/../$sourceRoot/configure"
+    ''
+    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      sed -i s/-lgcc_eh//g "../$sourceRoot/Makeconfig"
 
-        cat > config.cache << "EOF"
-        libc_cv_forced_unwind=yes
-        libc_cv_c_cleanup=yes
-        libc_cv_gnu89_inline=yes
-        EOF
+      cat > config.cache << "EOF"
+      libc_cv_forced_unwind=yes
+      libc_cv_c_cleanup=yes
+      libc_cv_gnu89_inline=yes
+      EOF
 
-        # ./configure has logic like
-        #
-        #     AR=`$CC -print-prog-name=ar`
-        #
-        # This searches various directories in the gcc and its wrapper. In nixpkgs,
-        # this returns the bare string "ar", which is build ar. This can result as
-        # a build failure with the following message:
-        #
-        #     libc_pic.a: error adding symbols: archive has no index; run ranlib to add one
-        #
-        # (Observed cross compiling from aarch64-linux -> armv7l-linux).
-        #
-        # Nixpkgs passes a correct value for AR and friends, so to use the correct
-        # set of tools, we only need to delete this special handling.
-        sed -i \
-          -e '/^AR=/d' \
-          -e '/^AS=/d' \
-          -e '/^LD=/d' \
-          -e '/^OBJCOPY=/d' \
-          -e '/^OBJDUMP=/d' \
-          $configureScript
-      '';
+      # ./configure has logic like
+      #
+      #     AR=`$CC -print-prog-name=ar`
+      #
+      # This searches various directories in the gcc and its wrapper. In nixpkgs,
+      # this returns the bare string "ar", which is build ar. This can result as
+      # a build failure with the following message:
+      #
+      #     libc_pic.a: error adding symbols: archive has no index; run ranlib to add one
+      #
+      # (Observed cross compiling from aarch64-linux -> armv7l-linux).
+      #
+      # Nixpkgs passes a correct value for AR and friends, so to use the correct
+      # set of tools, we only need to delete this special handling.
+      sed -i \
+        -e '/^AR=/d' \
+        -e '/^AS=/d' \
+        -e '/^LD=/d' \
+        -e '/^OBJCOPY=/d' \
+        -e '/^OBJDUMP=/d' \
+        $configureScript
+    '';
 
-      preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
+    preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
 
-      doCheck = false; # fails
+    doCheck = false; # fails
 
-      meta =
-        with lib;
-        {
-          homepage = "https://www.gnu.org/software/libc/";
-          description = "GNU C Library";
+    meta =
+      with lib;
+      {
+        homepage = "https://www.gnu.org/software/libc/";
+        description = "GNU C Library";
 
-          longDescription = ''
-            Any Unix-like operating system needs a C library: the library which
-            defines the "system calls" and other basic facilities such as
-            open, malloc, printf, exit...
+        longDescription = ''
+          Any Unix-like operating system needs a C library: the library which
+          defines the "system calls" and other basic facilities such as
+          open, malloc, printf, exit...
 
-            The GNU C library is used as the C library in the GNU system and
-            most systems with the Linux kernel.
-          '';
+          The GNU C library is used as the C library in the GNU system and
+          most systems with the Linux kernel.
+        '';
 
-          license = licenses.lgpl2Plus;
+        license = licenses.lgpl2Plus;
 
-          maintainers = with maintainers; [
-            ma27
-            connorbaker
-          ];
-          platforms = platforms.linux;
-        }
-        // (args.meta or { });
-    }
+        maintainers = with maintainers; [
+          ma27
+          connorbaker
+        ];
+        platforms = platforms.linux;
+      }
+      // (args.meta or { });
+  }
 )

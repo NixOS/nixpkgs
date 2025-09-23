@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  extra-cmake-modules,
-  kdePackages,
-  qtbase,
-  qtdeclarative,
+{ lib
+, stdenv
+, fetchFromGitLab
+, extra-cmake-modules
+, kdePackages
+, qtbase
+, qtdeclarative
+,
 }:
 
 stdenv.mkDerivation rec {

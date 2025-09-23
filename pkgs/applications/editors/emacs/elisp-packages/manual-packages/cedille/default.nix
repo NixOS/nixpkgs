@@ -1,7 +1,7 @@
-{
-  stdenv,
-  cedille,
-  emacs,
+{ stdenv
+, cedille
+, emacs
+,
 }:
 
 stdenv.mkDerivation {

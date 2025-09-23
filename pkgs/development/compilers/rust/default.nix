@@ -1,28 +1,28 @@
-{
-  rustcVersion,
-  rustcSha256,
-  enableRustcDev ? true,
-  bootstrapVersion,
-  bootstrapHashes,
-  selectRustPackage,
-  rustcPatches ? [ ],
-  llvmShared,
-  llvmSharedForBuild,
-  llvmSharedForHost,
-  llvmSharedForTarget,
-  llvmPackages, # Exposed through rustc for LTO in Firefox
+{ rustcVersion
+, rustcSha256
+, enableRustcDev ? true
+, bootstrapVersion
+, bootstrapHashes
+, selectRustPackage
+, rustcPatches ? [ ]
+, llvmShared
+, llvmSharedForBuild
+, llvmSharedForHost
+, llvmSharedForTarget
+, llvmPackages
+, # Exposed through rustc for LTO in Firefox
 }:
-{
-  stdenv,
-  lib,
-  newScope,
-  callPackage,
-  pkgsBuildBuild,
-  pkgsBuildHost,
-  pkgsBuildTarget,
-  pkgsTargetTarget,
-  makeRustPlatform,
-  wrapRustcWith,
+{ stdenv
+, lib
+, newScope
+, callPackage
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsTargetTarget
+, makeRustPlatform
+, wrapRustcWith
+,
 }:
 
 let
@@ -82,8 +82,8 @@ in
           else
             self.buildRustPackages.overrideScope (
               _: _:
-              lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
-                (selectRustPackage pkgsBuildHost).packages.prebuilt
+                lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
+                  (selectRustPackage pkgsBuildHost).packages.prebuilt
             );
         bootRustPlatform = makeRustPlatform bootstrapRustPackages;
       in
@@ -119,10 +119,11 @@ in
         };
         cargo =
           if (!fastCross) then
-            self.callPackage ./cargo.nix {
-              # Use boot package set to break cycle
-              rustPlatform = bootRustPlatform;
-            }
+            self.callPackage ./cargo.nix
+              {
+                # Use boot package set to break cycle
+                rustPlatform = bootRustPlatform;
+              }
           else
             self.callPackage ./cargo_cross.nix { };
         cargo-auditable = self.callPackage ./cargo-auditable.nix { };

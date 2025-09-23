@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libsForQt5,
-  pkg-config,
-  bash,
-  cups,
-  libXpm,
-  libssh,
-  nx-libs,
-  openldap,
-  openssh,
+{ lib
+, stdenv
+, fetchurl
+, libsForQt5
+, pkg-config
+, bash
+, cups
+, libXpm
+, libssh
+, nx-libs
+, openldap
+, openssh
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

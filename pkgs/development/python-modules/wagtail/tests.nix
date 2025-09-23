@@ -1,18 +1,18 @@
-{
-  azure-mgmt-cdn,
-  azure-mgmt-frontdoor,
-  boto3,
-  buildPythonPackage,
-  django-pattern-library,
-  elasticsearch,
-  freezegun,
-  jinja2,
-  msrest,
-  python-dateutil,
-  python,
-  pytz,
-  wagtail,
-  wagtail-factories,
+{ azure-mgmt-cdn
+, azure-mgmt-frontdoor
+, boto3
+, buildPythonPackage
+, django-pattern-library
+, elasticsearch
+, freezegun
+, jinja2
+, msrest
+, python-dateutil
+, python
+, pytz
+, wagtail
+, wagtail-factories
+,
 }:
 
 buildPythonPackage {

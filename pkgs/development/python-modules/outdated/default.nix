@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  littleutils,
-  requests,
-  setuptools-scm,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, littleutils
+, requests
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

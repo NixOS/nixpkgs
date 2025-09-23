@@ -1,25 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # dependencies
-  numpy,
-  lightning-utilities,
-  packaging,
-
-  # buildInputs
-  torch,
-
-  # tests
-  pytestCheckHook,
-  pytest-doctestplus,
-  pytest-xdist,
-  pytorch-lightning,
-  scikit-image,
-
-  # passthru
-  torchmetrics,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # dependencies
+  numpy
+, lightning-utilities
+, packaging
+, # buildInputs
+  torch
+, # tests
+  pytestCheckHook
+, pytest-doctestplus
+, pytest-xdist
+, pytorch-lightning
+, scikit-image
+, # passthru
+  torchmetrics
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  bzip2,
-  coreutils,
-  cpio,
-  fetchurl,
-  gnutar,
-  gzip,
-  lib,
-  stdenv,
-  xz,
-  zstd,
+{ bzip2
+, coreutils
+, cpio
+, fetchurl
+, gnutar
+, gzip
+, lib
+, stdenv
+, xz
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

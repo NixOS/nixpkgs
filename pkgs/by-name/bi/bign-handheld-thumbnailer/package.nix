@@ -1,12 +1,12 @@
-{
-  lib,
-  bign-handheld-thumbnailer,
-  fetchFromGitHub,
-  glib,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  testers,
+{ lib
+, bign-handheld-thumbnailer
+, fetchFromGitHub
+, glib
+, nix-update-script
+, pkg-config
+, rustPlatform
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage rec {

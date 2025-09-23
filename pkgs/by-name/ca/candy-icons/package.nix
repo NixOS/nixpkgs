@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  gtk3,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, unstableGitUpdater
+, gtk3
+,
 }:
 
 stdenvNoCC.mkDerivation {

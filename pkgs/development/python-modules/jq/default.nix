@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
-  jq,
-  oniguruma,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, jq
+, oniguruma
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

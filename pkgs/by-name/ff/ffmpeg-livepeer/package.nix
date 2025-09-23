@@ -1,7 +1,7 @@
-{
-  ffmpeg_7-headless,
-  lib,
-  fetchFromGitHub,
+{ ffmpeg_7-headless
+, lib
+, fetchFromGitHub
+,
 }:
 
 (ffmpeg_7-headless.override {

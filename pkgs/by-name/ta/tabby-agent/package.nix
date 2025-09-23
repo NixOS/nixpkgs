@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  nodejs,
-  pnpm_9,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, nodejs
+, pnpm_9
+, wrapGAppsHook3
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tabby-agent";

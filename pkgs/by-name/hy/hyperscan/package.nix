@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ragel,
-  python3,
-  util-linux,
-  pkg-config,
-  boost,
-  pcre,
-  withStatic ? false, # build only shared libs by default, build static+shared if true
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ragel
+, python3
+, util-linux
+, pkg-config
+, boost
+, pcre
+, withStatic ? false
+, # build only shared libs by default, build static+shared if true
 }:
 
 stdenv.mkDerivation (finalAttrs: {

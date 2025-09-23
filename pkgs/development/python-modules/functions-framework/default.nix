@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  cloudevents,
-  deprecation,
-  docker,
-  fetchFromGitHub,
-  flask,
-  gunicorn,
-  httpx,
-  pretend,
-  pytest-asyncio,
-  pytestCheckHook,
-  requests,
-  setuptools,
-  starlette,
-  uvicorn,
-  uvicorn-worker,
-  watchdog,
-  werkzeug,
+{ lib
+, buildPythonPackage
+, click
+, cloudevents
+, deprecation
+, docker
+, fetchFromGitHub
+, flask
+, gunicorn
+, httpx
+, pretend
+, pytest-asyncio
+, pytestCheckHook
+, requests
+, setuptools
+, starlette
+, uvicorn
+, uvicorn-worker
+, watchdog
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

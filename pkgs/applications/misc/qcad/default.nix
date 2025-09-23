@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  qmake,
-  qttools,
-  boost,
-  libGLU,
-  muparser,
-  qtbase,
-  qtscript,
-  qtsvg,
-  qtxmlpatterns,
-  qtmacextras,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, qmake
+, qttools
+, boost
+, libGLU
+, muparser
+, qtbase
+, qtscript
+, qtsvg
+, qtxmlpatterns
+, qtmacextras
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  apple-sdk,
-  bison,
-  clang,
-  libedit,
-  libresolv,
-  libsbuf,
-  libutil,
-  libxo,
-  pkg-config,
-  mkAppleDerivation,
+{ lib
+, apple-sdk
+, bison
+, clang
+, libedit
+, libresolv
+, libsbuf
+, libutil
+, libxo
+, pkg-config
+, mkAppleDerivation
+,
 }:
 
 let

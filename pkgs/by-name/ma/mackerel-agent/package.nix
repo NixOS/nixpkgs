@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  iproute2,
-  net-tools,
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, iproute2
+, net-tools
+,
 }:
 
 buildGoModule rec {

@@ -1,17 +1,17 @@
-{
-  runCommand,
-  collectl,
-  coreutils,
+{ runCommand
+, collectl
+, coreutils
+,
 }:
 
 runCommand "collectl-test"
-  {
-    nativeBuildInputs = [
-      collectl
-      coreutils
-    ];
-    meta.timeout = 60;
-  }
+{
+  nativeBuildInputs = [
+    collectl
+    coreutils
+  ];
+  meta.timeout = 60;
+}
   ''
     # Test basic functionality - limit to 5 seconds to avoid hanging
     timeout 5s collectl -c1 >/dev/null || true

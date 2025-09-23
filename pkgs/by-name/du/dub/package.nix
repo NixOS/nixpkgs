@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  curl,
-  ldc,
-  libevent,
-  rsync,
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, ldc
+, libevent
+, rsync
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

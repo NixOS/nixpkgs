@@ -1,7 +1,7 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
+{ fetchurl
+, lib
+, stdenv
+,
 }:
 
 let

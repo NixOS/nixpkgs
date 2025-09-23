@@ -1,17 +1,17 @@
-{
-  lib,
-  appdirs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  graphviz,
-  ifaddr,
-  lxml,
-  mock,
-  pytestCheckHook,
-  requests,
-  requests-mock,
-  setuptools,
-  xmltodict,
+{ lib
+, appdirs
+, buildPythonPackage
+, fetchFromGitHub
+, graphviz
+, ifaddr
+, lxml
+, mock
+, pytestCheckHook
+, requests
+, requests-mock
+, setuptools
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

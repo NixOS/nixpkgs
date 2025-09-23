@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitea,
-  gnumake,
+{ lib
+, buildGoModule
+, fetchFromGitea
+, gnumake
+,
 }:
 let
   version = "1.2.3";

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  cmake,
-  ninja,
-  libX11,
-  libXxf86vm,
-  libXrandr,
-  samurai,
+{ lib
+, stdenv
+, fetchFromGitea
+, cmake
+, ninja
+, libX11
+, libXxf86vm
+, libXrandr
+, samurai
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

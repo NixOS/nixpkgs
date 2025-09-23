@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.boot.initrd.clevis;
@@ -56,16 +55,20 @@ in
 
     assertions = (
       lib.attrValues (
-        lib.mapAttrs (device: _: {
-          assertion =
-            (lib.any (
-              fs:
-              fs.device == device && (lib.elem fs.fsType supportedFs)
-              || (fs.fsType == "zfs" && lib.hasPrefix "${device}/" fs.device)
-            ) config.system.build.fileSystems)
-            || (lib.hasAttr device config.boot.initrd.luks.devices);
-          message = ''No filesystem or LUKS device with the name ${device} is declared in your configuration.'';
-        }) cfg.devices
+        lib.mapAttrs
+          (device: _: {
+            assertion =
+              (lib.any
+                (
+                  fs:
+                  fs.device == device && (lib.elem fs.fsType supportedFs)
+                  || (fs.fsType == "zfs" && lib.hasPrefix "${device}/" fs.device)
+                )
+                config.system.build.fileSystems)
+              || (lib.hasAttr device config.boot.initrd.luks.devices);
+            message = ''No filesystem or LUKS device with the name ${device} is declared in your configuration.'';
+          })
+          cfg.devices
       )
     );
 
@@ -101,9 +104,11 @@ in
         sed -i $out/bin/clevis-decrypt-tpm2 -e 's,tpm2_,tpm2 ,'
       '';
 
-      secrets = lib.mapAttrs' (
-        name: value: lib.nameValuePair "/etc/clevis/${name}.jwe" value.secretFile
-      ) cfg.devices;
+      secrets = lib.mapAttrs'
+        (
+          name: value: lib.nameValuePair "/etc/clevis/${name}.jwe" value.secretFile
+        )
+        cfg.devices;
 
       systemd = {
         extraBin = lib.mkIf systemd.enable {

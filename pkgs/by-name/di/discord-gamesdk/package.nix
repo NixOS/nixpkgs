@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  autoPatchelfHook,
+{ lib
+, stdenv
+, fetchzip
+, autoPatchelfHook
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildGoModule,
-  replaceVars,
-  pandoc,
-  nodejs,
-  pnpm_9,
-  electron,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, replaceVars
+, pandoc
+, nodejs
+, pnpm_9
+, electron
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, nix-update-script
+,
 }:
 
 let

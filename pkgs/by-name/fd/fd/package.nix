@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  rust-jemalloc-sys,
-  testers,
-  fd,
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, rust-jemalloc-sys
+, testers
+, fd
+,
 }:
 
 rustPlatform.buildRustPackage rec {

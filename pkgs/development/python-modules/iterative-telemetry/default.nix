@@ -1,15 +1,15 @@
-{
-  lib,
-  appdirs,
-  buildPythonPackage,
-  distro,
-  fetchFromGitHub,
-  filelock,
-  pytestCheckHook,
-  pytest-mock,
-  pythonOlder,
-  requests,
-  setuptools-scm,
+{ lib
+, appdirs
+, buildPythonPackage
+, distro
+, fetchFromGitHub
+, filelock
+, pytestCheckHook
+, pytest-mock
+, pythonOlder
+, requests
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

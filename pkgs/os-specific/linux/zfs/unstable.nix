@@ -1,7 +1,6 @@
-{
-  callPackage,
-  nixosTests,
-  ...
+{ callPackage
+, nixosTests
+, ...
 }@args:
 
 callPackage ./generic.nix args {

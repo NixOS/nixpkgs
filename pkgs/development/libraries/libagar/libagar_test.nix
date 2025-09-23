@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  bsdbuild,
-  libagar,
-  perl,
-  libjpeg,
-  libpng,
-  openssl,
+{ lib
+, stdenv
+, bsdbuild
+, libagar
+, perl
+, libjpeg
+, libpng
+, openssl
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python-dateutil,
-  python-mimeparse,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python-dateutil
+, python-mimeparse
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

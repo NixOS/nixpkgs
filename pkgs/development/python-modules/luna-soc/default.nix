@@ -1,13 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  luna-usb,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  setuptools
+, # dependencies
+  luna-usb
+,
 }:
 
 buildPythonPackage rec {

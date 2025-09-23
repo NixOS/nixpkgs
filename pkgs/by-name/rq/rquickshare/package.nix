@@ -1,28 +1,27 @@
-{
-  lib,
-  cargo-tauri,
-  cargo-tauri_1,
-  fetchFromGitHub,
-  glib-networking,
-  libayatana-appindicator,
-  libsoup_2_4,
-  libsoup_3,
-  nix-update,
-  nodejs,
-  openssl,
-  pkg-config,
-  pnpm_9,
-  protobuf,
-  rustPlatform,
-  stdenv,
-  webkitgtk_4_0,
-  webkitgtk_4_1,
-  wrapGAppsHook4,
-  writeShellScript,
-
-  # This package provides can be built using tauri v1 or v2.
+{ lib
+, cargo-tauri
+, cargo-tauri_1
+, fetchFromGitHub
+, glib-networking
+, libayatana-appindicator
+, libsoup_2_4
+, libsoup_3
+, nix-update
+, nodejs
+, openssl
+, pkg-config
+, pnpm_9
+, protobuf
+, rustPlatform
+, stdenv
+, webkitgtk_4_0
+, webkitgtk_4_1
+, wrapGAppsHook4
+, writeShellScript
+, # This package provides can be built using tauri v1 or v2.
   # Try legacy (v1) version if main (v2) doesn't work.
-  app-type ? "main", # main or legacy
+  app-type ? "main"
+, # main or legacy
 }:
 let
   app-type-either =

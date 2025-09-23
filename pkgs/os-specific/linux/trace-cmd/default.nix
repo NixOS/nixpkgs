@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  pkg-config,
-  asciidoc,
-  xmlto,
-  docbook_xsl,
-  docbook_xml_dtd_45,
-  libxslt,
-  libtraceevent,
-  libtracefs,
-  zstd,
-  sourceHighlight,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, asciidoc
+, xmlto
+, docbook_xsl
+, docbook_xml_dtd_45
+, libxslt
+, libtraceevent
+, libtracefs
+, zstd
+, sourceHighlight
+, gitUpdater
+,
 }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";

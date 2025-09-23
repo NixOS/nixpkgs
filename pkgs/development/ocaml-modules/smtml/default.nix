@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildDunePackage,
-  ocaml,
-  fetchFromGitHub,
-  menhir,
-  bos,
-  cmdliner,
-  dolmen_type,
-  fpath,
-  hc,
-  menhirLib,
-  # fix eval on legacy ocaml versions
-  ocaml_intrinsics ? null,
-  patricia-tree,
-  prelude,
-  scfg,
-  yojson,
-  z3,
-  zarith,
-  mdx,
-  ounit2,
+{ lib
+, stdenv
+, buildDunePackage
+, ocaml
+, fetchFromGitHub
+, menhir
+, bos
+, cmdliner
+, dolmen_type
+, fpath
+, hc
+, menhirLib
+, # fix eval on legacy ocaml versions
+  ocaml_intrinsics ? null
+, patricia-tree
+, prelude
+, scfg
+, yojson
+, z3
+, zarith
+, mdx
+, ounit2
+,
 }:
 
 buildDunePackage rec {

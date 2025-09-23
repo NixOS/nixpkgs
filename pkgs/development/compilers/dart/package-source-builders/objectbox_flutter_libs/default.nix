@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  replaceVars,
+{ lib
+, stdenv
+, fetchzip
+, replaceVars
+,
 }:
 
 { version, src, ... }:
@@ -10,8 +10,8 @@
 let
   selectSystem =
     attrs:
-    attrs.${stdenv.hostPlatform.system}
-      or (throw "objectbox_flutter_libs: ${stdenv.hostPlatform.system} is not supported");
+      attrs.${stdenv.hostPlatform.system}
+        or (throw "objectbox_flutter_libs: ${stdenv.hostPlatform.system} is not supported");
 
   arch = selectSystem {
     x86_64-linux = "x64";

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  llvm,
-  clang,
-  z3,
-  makeWrapper,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, ninja
+, llvm
+, clang
+, z3
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation {

@@ -6,22 +6,22 @@
   Generating the manifest for luarocks_bootstrap seemed too hackish, which is why we end up
   with two "luarocks" derivations.
 */
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  curl,
-  makeWrapper,
-  which,
-  unzip,
-  lua,
-  versionCheckHook,
-  # for 'luarocks pack'
-  zip,
-  nix-update-script,
-  # some packages need to be compiled with cmake
-  cmake,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, curl
+, makeWrapper
+, which
+, unzip
+, lua
+, versionCheckHook
+, # for 'luarocks pack'
+  zip
+, nix-update-script
+, # some packages need to be compiled with cmake
+  cmake
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

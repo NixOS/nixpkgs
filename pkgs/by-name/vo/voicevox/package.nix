@@ -1,21 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeDesktopItem,
-  replaceVars,
-
-  copyDesktopItems,
-  dart-sass,
-  jq,
-  makeWrapper,
-  moreutils,
-  nodejs,
-  pnpm_9,
-
-  _7zz,
-  electron,
-  voicevox-engine,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, replaceVars
+, copyDesktopItems
+, dart-sass
+, jq
+, makeWrapper
+, moreutils
+, nodejs
+, pnpm_9
+, _7zz
+, electron
+, voicevox-engine
+,
 }:
 
 let

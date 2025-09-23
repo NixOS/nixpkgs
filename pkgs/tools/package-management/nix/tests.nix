@@ -1,15 +1,15 @@
-{
-  runCommand,
-  version,
-  src,
-  nix,
-  lib,
-  stdenv,
-  pkgs,
-  pkgsi686Linux,
-  pkgsStatic,
-  nixosTests,
-  self_attribute_name,
+{ runCommand
+, version
+, src
+, nix
+, lib
+, stdenv
+, pkgs
+, pkgsi686Linux
+, pkgsStatic
+, nixosTests
+, self_attribute_name
+,
 }:
 {
   srcVersion =
@@ -64,6 +64,6 @@
   upgrade = nixosTests.nix-upgrade;
   simpleUefiSystemdBoot = nixosTests.installer.simpleUefiSystemdBoot;
 }
-// lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+  // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
   nixi686 = pkgsi686Linux.nixVersions.${self_attribute_name};
 }

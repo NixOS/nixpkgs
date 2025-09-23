@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ocaml,
-  findlib,
-  ocamlbuild,
-  xmlm,
-  topkg,
+{ lib
+, stdenv
+, fetchurl
+, ocaml
+, findlib
+, ocamlbuild
+, xmlm
+, topkg
+,
 }:
 
 let

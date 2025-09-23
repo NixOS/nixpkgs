@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  hspell,
+{ lib
+, stdenv
+, hspell
+,
 }:
 
 let

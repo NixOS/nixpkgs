@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  imagemagick,
-  pkg-config,
-  wayland-scanner,
-  wayland,
-  wayland-protocols,
-  unstableGitUpdater,
+{ stdenv
+, lib
+, fetchFromGitHub
+, imagemagick
+, pkg-config
+, wayland-scanner
+, wayland
+, wayland-protocols
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

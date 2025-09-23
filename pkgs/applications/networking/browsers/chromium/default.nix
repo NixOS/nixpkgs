@@ -1,41 +1,42 @@
-{
-  newScope,
-  config,
-  stdenv,
-  makeWrapper,
-  buildPackages,
-  ed,
-  gnugrep,
-  coreutils,
-  xdg-utils,
-  glib,
-  gtk3,
-  gtk4,
-  adwaita-icon-theme,
-  gsettings-desktop-schemas,
-  gn,
-  fetchgit,
-  libva,
-  pipewire,
-  wayland,
-  runCommand,
-  lib,
-  libkrb5,
-  widevine-cdm,
-  electron-source, # for warnObsoleteVersionConditional
+{ newScope
+, config
+, stdenv
+, makeWrapper
+, buildPackages
+, ed
+, gnugrep
+, coreutils
+, xdg-utils
+, glib
+, gtk3
+, gtk4
+, adwaita-icon-theme
+, gsettings-desktop-schemas
+, gn
+, fetchgit
+, libva
+, pipewire
+, wayland
+, runCommand
+, lib
+, libkrb5
+, widevine-cdm
+, electron-source
+, # for warnObsoleteVersionConditional
 
   # package customization
   # Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
-  upstream-info ?
-    (lib.importJSON ./info.json).${if !ungoogled then "chromium" else "ungoogled-chromium"},
-  proprietaryCodecs ? true,
-  enableWideVine ? false,
-  ungoogled ? false, # Whether to build chromium or ungoogled-chromium
-  cupsSupport ? true,
-  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
-  commandLineArgs ? "",
-  pkgsBuildBuild,
-  pkgs,
+  upstream-info ? (lib.importJSON ./info.json).${if !ungoogled then "chromium" else "ungoogled-chromium"}
+, proprietaryCodecs ? true
+, enableWideVine ? false
+, ungoogled ? false
+, # Whether to build chromium or ungoogled-chromium
+  cupsSupport ? true
+, pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
+, commandLineArgs ? ""
+, pkgsBuildBuild
+, pkgs
+,
 }:
 
 let

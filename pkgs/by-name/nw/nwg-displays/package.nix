@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  atk,
-  gdk-pixbuf,
-  gobject-introspection,
-  gtk-layer-shell,
-  gtk3,
-  pango,
-  python3Packages,
-  wrapGAppsHook3,
-  hyprlandSupport ? true,
-  wlr-randr,
+{ lib
+, fetchFromGitHub
+, atk
+, gdk-pixbuf
+, gobject-introspection
+, gtk-layer-shell
+, gtk3
+, pango
+, python3Packages
+, wrapGAppsHook3
+, hyprlandSupport ? true
+, wlr-randr
+,
 }:
 
 python3Packages.buildPythonApplication rec {

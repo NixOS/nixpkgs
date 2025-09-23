@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  trace,
-  mtime,
+{ buildDunePackage
+, trace
+, mtime
+,
 }:
 
 buildDunePackage {

@@ -1,12 +1,12 @@
-{
-  bison,
-  fetchFromGitHub,
-  flex,
-  lib,
-  perl,
-  postgresql,
-  postgresqlBuildExtension,
-  stdenv,
+{ bison
+, fetchFromGitHub
+, flex
+, lib
+, perl
+, postgresql
+, postgresqlBuildExtension
+, stdenv
+,
 }:
 
 let
@@ -31,7 +31,7 @@ postgresqlBuildExtension (finalAttrs: {
     }";
     hash =
       hashes.${lib.versions.major postgresql.version}
-      or (throw "Source for Age is not available for ${postgresql.version}");
+        or (throw "Source for Age is not available for ${postgresql.version}");
   };
 
   makeFlags = [

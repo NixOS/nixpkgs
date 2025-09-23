@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libsoup_3,
-  webkitgtk_4_1,
-  gtk3,
-  glib-networking,
-  gsettings-desktop-schemas,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libsoup_3
+, webkitgtk_4_1
+, gtk3
+, glib-networking
+, gsettings-desktop-schemas
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

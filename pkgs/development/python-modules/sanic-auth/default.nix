@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  sanic,
-  sanic-testing,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, sanic
+, sanic-testing
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

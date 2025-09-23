@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  writeText,
-  makeWrapper,
-  factor-lang,
-  factor-no-gui,
-  librsvg,
-  gdk-pixbuf,
+{ stdenv
+, lib
+, writeText
+, makeWrapper
+, factor-lang
+, factor-no-gui
+, librsvg
+, gdk-pixbuf
+,
 }@initAttrs:
 
 drvArgs:
@@ -16,22 +16,21 @@ let
 in
 (stdenv.mkDerivation drvArgs).overrideAttrs (
   finalAttrs:
-  {
-    name ? "${finalAttrs.pname}-${finalAttrs.version}",
-    factor-lang ? if enableUI then flang else factor-no-gui,
-    enableUI ? false,
-    # Allow overriding the path to the deployed vocabulary name.  A
+  { name ? "${finalAttrs.pname}-${finalAttrs.version}"
+  , factor-lang ? if enableUI then flang else factor-no-gui
+  , enableUI ? false
+  , # Allow overriding the path to the deployed vocabulary name.  A
     # $vocabName.factor file must exist!
-    vocabName ? finalAttrs.pname or name,
-    # Allow overriding the binary name
-    binName ? lib.last (lib.splitString "/" vocabName),
-    # Extra libraries needed
-    extraLibs ? [ ],
-    # Extra binaries in PATH
-    extraPaths ? [ ],
-    # Extra vocabularies needed by this application
-    extraVocabs ? [ ],
-    deployScriptText ? ''
+    vocabName ? finalAttrs.pname or name
+  , # Allow overriding the binary name
+    binName ? lib.last (lib.splitString "/" vocabName)
+  , # Extra libraries needed
+    extraLibs ? [ ]
+  , # Extra binaries in PATH
+    extraPaths ? [ ]
+  , # Extra vocabularies needed by this application
+    extraVocabs ? [ ]
+  , deployScriptText ? ''
       USING: command-line io io.backend io.pathnames kernel namespaces sequences
       tools.deploy tools.deploy.config tools.deploy.backend vocabs.loader ;
 
@@ -59,8 +58,8 @@ in
           ] if ;
 
       MAIN: deploy-me
-    '',
-    ...
+    ''
+  , ...
   }@attrs:
   let
     deployScript = writeText "deploy-me.factor" finalAttrs.deployScriptText;

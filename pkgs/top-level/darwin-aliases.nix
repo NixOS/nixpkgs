@@ -94,11 +94,12 @@ let
     "objc4"
     "ppp"
     "xnu"
-  ] mkThrow;
+  ]
+    mkThrow;
 in
 
 stubs
-// mapAliases ({
+  // mapAliases ({
   ### A ###
 
   apple_sdk_10_12 = throw "darwin.apple_sdk_10_12 was removed as Nixpkgs no longer supports macOS 10.12; see the 25.05 release notes"; # Added 2024-10-27

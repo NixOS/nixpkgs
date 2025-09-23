@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  setuptools,
-  wheel,
-  networkmanager,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, setuptools
+, wheel
+, networkmanager
+,
 }:
 
 buildPythonPackage rec {

@@ -1,22 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  ffmpeg-headless,
-  makeWrapper,
-  nixosTests,
-  nodejs,
-  npmHooks,
-  fetchNpmDeps,
-
-  # For the update script
-  coreutils,
-  curl,
-  nix-prefetch-git,
-  prefetch-npm-deps,
-  jq,
-  writeShellScript,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, ffmpeg-headless
+, makeWrapper
+, nixosTests
+, nodejs
+, npmHooks
+, fetchNpmDeps
+, # For the update script
+  coreutils
+, curl
+, nix-prefetch-git
+, prefetch-npm-deps
+, jq
+, writeShellScript
+,
 }:
 let
   srcJson = lib.importJSON ./src.json;

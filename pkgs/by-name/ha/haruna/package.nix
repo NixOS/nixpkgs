@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  ffmpeg-headless,
-  kdePackages,
-  pkg-config,
-  qt6,
-  yt-dlp,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, ffmpeg-headless
+, kdePackages
+, pkg-config
+, qt6
+, yt-dlp
+,
 }:
 
 stdenv.mkDerivation rec {

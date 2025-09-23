@@ -1,7 +1,7 @@
-{
-  buildRubyGem,
-  lib,
-  ruby,
+{ buildRubyGem
+, lib
+, ruby
+,
 }:
 
 buildRubyGem rec {

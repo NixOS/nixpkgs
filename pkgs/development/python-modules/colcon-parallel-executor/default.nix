@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  colcon,
-  pytestCheckHook,
-  setuptools,
-  scspell,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, colcon
+, pytestCheckHook
+, setuptools
+, scspell
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

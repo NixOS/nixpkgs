@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-rust,
-  rustPlatform,
-  cargo,
-  rustc,
-  pkg-config,
-  llvmPackages,
-  libxml2,
-  ncurses,
-  zlib,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-rust
+, rustPlatform
+, cargo
+, rustc
+, pkg-config
+, llvmPackages
+, libxml2
+, ncurses
+, zlib
+,
 }:
 
 buildPythonPackage rec {

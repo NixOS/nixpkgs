@@ -1,29 +1,26 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  nixosTests,
-
-  cmake,
-  installShellFiles,
-  makeWrapper,
-  ncurses,
-  pkg-config,
-  python3,
-  scdoc,
-
-  expat,
-  fontconfig,
-  freetype,
-  libGL,
-  xorg,
-  libxkbcommon,
-  wayland,
-  xdg-utils,
-
-  nix-update-script,
-  withGraphics ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, nixosTests
+, cmake
+, installShellFiles
+, makeWrapper
+, ncurses
+, pkg-config
+, python3
+, scdoc
+, expat
+, fontconfig
+, freetype
+, libGL
+, xorg
+, libxkbcommon
+, wayland
+, xdg-utils
+, nix-update-script
+, withGraphics ? false
+,
 }:
 let
   rpathLibs = [
@@ -49,12 +46,13 @@ rustPlatform.buildRustPackage rec {
   src =
     # by default we want the official package
     if !withGraphics then
-      fetchFromGitHub {
-        owner = "alacritty";
-        repo = "alacritty";
-        tag = "v${version}";
-        hash = "sha256-/yERMNfCFLPb1S17Y9OacVH8UobDIIZDhM2qPzf5Vds=";
-      }
+      fetchFromGitHub
+        {
+          owner = "alacritty";
+          repo = "alacritty";
+          tag = "v${version}";
+          hash = "sha256-/yERMNfCFLPb1S17Y9OacVH8UobDIIZDhM2qPzf5Vds=";
+        }
     # optionally we want to build the sixels feature fork
     else
       fetchFromGitHub {

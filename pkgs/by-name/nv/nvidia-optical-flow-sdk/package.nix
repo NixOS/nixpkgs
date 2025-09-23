@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cudaPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cudaPackages
+,
 }:
 
 stdenv.mkDerivation {

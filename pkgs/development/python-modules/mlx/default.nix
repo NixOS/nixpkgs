@@ -1,28 +1,24 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-
-  # build-system
-  setuptools,
-
-  # nativeBuildInputs
-  cmake,
-
-  # buildInputs
-  apple-sdk_14,
-  fmt_11,
-  nanobind,
-  nlohmann_json,
-  pybind11,
-
-  # tests
-  numpy,
-  pytestCheckHook,
-  python,
-  runCommand,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, # build-system
+  setuptools
+, # nativeBuildInputs
+  cmake
+, # buildInputs
+  apple-sdk_14
+, fmt_11
+, nanobind
+, nlohmann_json
+, pybind11
+, # tests
+  numpy
+, pytestCheckHook
+, python
+, runCommand
+,
 }:
 
 let

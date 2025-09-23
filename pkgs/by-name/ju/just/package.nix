@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  bashInteractive,
-  coreutils,
-  installShellFiles,
-  libiconv,
-  mdbook,
-  nix-update-script,
-  # run the compiled `just` to build the completions
-  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  # run the compiled `just` to build the man pages
-  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  # run the compiled `generate-book` utility to prepare the files for mdbook
-  withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, bashInteractive
+, coreutils
+, installShellFiles
+, libiconv
+, mdbook
+, nix-update-script
+, # run the compiled `just` to build the completions
+  installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, # run the compiled `just` to build the man pages
+  installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, # run the compiled `generate-book` utility to prepare the files for mdbook
+  withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+,
 }:
 
 rustPlatform.buildRustPackage rec {

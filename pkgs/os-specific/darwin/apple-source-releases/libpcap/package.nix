@@ -1,16 +1,16 @@
-{
-  lib,
-  apple-sdk_15,
-  bison,
-  bluez,
-  flex,
-  mkAppleDerivation,
-  stdenv,
-  stdenvNoCC,
-  unifdef,
-  # Provided for compatibility with the top-level derivation.
-  withBluez ? false,
-  withRemote ? false,
+{ lib
+, apple-sdk_15
+, bison
+, bluez
+, flex
+, mkAppleDerivation
+, stdenv
+, stdenvNoCC
+, unifdef
+, # Provided for compatibility with the top-level derivation.
+  withBluez ? false
+, withRemote ? false
+,
 }:
 
 let

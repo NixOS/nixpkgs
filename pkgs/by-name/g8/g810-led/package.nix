@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  hidapi,
-  udevCheckHook,
-  profile ? "/etc/g810-led/profile",
+{ lib
+, stdenv
+, fetchFromGitHub
+, hidapi
+, udevCheckHook
+, profile ? "/etc/g810-led/profile"
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

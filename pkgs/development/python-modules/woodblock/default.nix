@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  click,
-  multimethod,
-  numpy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, click
+, multimethod
+, numpy
+,
 }:
 buildPythonPackage rec {
   pname = "woodblock";

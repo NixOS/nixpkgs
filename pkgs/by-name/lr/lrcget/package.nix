@@ -1,23 +1,19 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-
-  fetchFromGitHub,
-  fetchNpmDeps,
-
-  cargo-tauri,
-  makeBinaryWrapper,
-  nodejs,
-  npmHooks,
-  pkg-config,
-  wrapGAppsHook3,
-
-  alsa-lib,
-  openssl,
-  webkitgtk_4_1,
-
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchNpmDeps
+, cargo-tauri
+, makeBinaryWrapper
+, nodejs
+, npmHooks
+, pkg-config
+, wrapGAppsHook3
+, alsa-lib
+, openssl
+, webkitgtk_4_1
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

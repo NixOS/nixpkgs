@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  json_c,
-  openssl,
-  check,
-  file,
-  help2man,
-  which,
-  gengetopt,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, json_c
+, openssl
+, check
+, file
+, help2man
+, which
+, gengetopt
+,
 }:
 
 stdenv.mkDerivation rec {

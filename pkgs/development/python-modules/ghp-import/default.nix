@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  python-dateutil,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python-dateutil
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

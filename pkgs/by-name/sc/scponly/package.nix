@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  openssh,
-  debugLevel ? 0,
+{ stdenv
+, lib
+, fetchFromGitHub
+, openssh
+, debugLevel ? 0
+,
 }:
 
 stdenv.mkDerivation {

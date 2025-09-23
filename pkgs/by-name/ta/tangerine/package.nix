@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  ncurses,
-  SDL2,
-  libGL,
-  libX11,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ncurses
+, SDL2
+, libGL
+, libX11
+,
 }:
 
 stdenv.mkDerivation {

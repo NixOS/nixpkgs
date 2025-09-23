@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  aiohttp,
-  paho-mqtt,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, aiohttp
+, paho-mqtt
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

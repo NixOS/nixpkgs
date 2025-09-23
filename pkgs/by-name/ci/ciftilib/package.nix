@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  libxmlxx,
-  pkg-config,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, libxmlxx
+, pkg-config
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

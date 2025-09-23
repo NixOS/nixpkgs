@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gtk2,
-  cairo,
-  glib,
-  pkg-config,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, gtk2
+, cairo
+, glib
+, pkg-config
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

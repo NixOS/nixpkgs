@@ -1,52 +1,46 @@
-{
-  lib,
-
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  nodejs,
-  fetchYarnDeps,
-  yarnConfigHook,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  imageio,
-  msgspec,
-  nodeenv,
-  numpy,
-  opencv-python,
-  plyfile,
-  psutil,
-  requests,
-  rich,
-  scikit-image,
-  scipy,
-  tqdm,
-  trimesh,
-  typing-extensions,
-  websockets,
-  yourdfpy,
-
-  # optional-dependencies
-  hypothesis,
-  pre-commit,
-  pandas,
-  pyright,
-  pytest,
-  ruff,
-  gdown,
-  matplotlib,
-  plotly,
-  # pyliblzfse,
-  robot-descriptions,
-  torch,
-  tyro,
-
-  # nativeCheckInputs
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # nativeBuildInputs
+  nodejs
+, fetchYarnDeps
+, yarnConfigHook
+, # build-system
+  hatchling
+, # dependencies
+  imageio
+, msgspec
+, nodeenv
+, numpy
+, opencv-python
+, plyfile
+, psutil
+, requests
+, rich
+, scikit-image
+, scipy
+, tqdm
+, trimesh
+, typing-extensions
+, websockets
+, yourdfpy
+, # optional-dependencies
+  hypothesis
+, pre-commit
+, pandas
+, pyright
+, pytest
+, ruff
+, gdown
+, matplotlib
+, plotly
+, # pyliblzfse,
+  robot-descriptions
+, torch
+, tyro
+, # nativeCheckInputs
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

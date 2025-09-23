@@ -1,22 +1,18 @@
-{
-  mkKdeDerivation,
-
-  perl,
-  pkg-config,
-  shared-mime-info,
-
-  qtpositioning,
-  qtsvg,
-  qttools,
-  qtwebengine,
-
-  krunner,
-  libplasma,
-  phonon,
-
-  gpsd,
-  protobuf,
-  shapelib,
+{ mkKdeDerivation
+, perl
+, pkg-config
+, shared-mime-info
+, qtpositioning
+, qtsvg
+, qttools
+, qtwebengine
+, krunner
+, libplasma
+, phonon
+, gpsd
+, protobuf
+, shapelib
+,
 }:
 mkKdeDerivation {
   pname = "marble";

@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  git,
-  lib,
-  python3,
-  rpm,
-  stdenv,
+{ fetchFromGitHub
+, git
+, lib
+, python3
+, rpm
+, stdenv
+,
 }:
 
 let

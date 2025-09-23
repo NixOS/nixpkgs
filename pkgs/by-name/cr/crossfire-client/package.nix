@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  cmake,
-  pkg-config,
-  perl,
-  vala,
-  gtk2,
-  pcre,
-  zlib,
-  libGL,
-  libGLU,
-  libpng,
-  fribidi,
-  harfbuzzFull,
-  xorg,
-  util-linux,
-  curl,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  libselinux,
-  libsepol,
+{ stdenv
+, lib
+, fetchgit
+, cmake
+, pkg-config
+, perl
+, vala
+, gtk2
+, pcre
+, zlib
+, libGL
+, libGLU
+, libpng
+, fribidi
+, harfbuzzFull
+, xorg
+, util-linux
+, curl
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, libselinux
+, libsepol
+,
 }:
 
 stdenv.mkDerivation {

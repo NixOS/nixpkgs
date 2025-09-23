@@ -1,17 +1,17 @@
-{
-  lib,
-  aiobotocore,
-  aiofiles,
-  buildPythonPackage,
-  chalice,
-  cryptography,
-  dill,
-  fetchFromGitHub,
-  moto,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
+{ lib
+, aiobotocore
+, aiofiles
+, buildPythonPackage
+, chalice
+, cryptography
+, dill
+, fetchFromGitHub
+, moto
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

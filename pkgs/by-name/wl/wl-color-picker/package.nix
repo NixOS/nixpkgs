@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  slurp,
-  grim,
-  zenity,
-  wl-clipboard,
-  imagemagick,
-  makeWrapper,
-  bash,
-  libnotify,
+{ lib
+, stdenv
+, fetchFromGitHub
+, slurp
+, grim
+, zenity
+, wl-clipboard
+, imagemagick
+, makeWrapper
+, bash
+, libnotify
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

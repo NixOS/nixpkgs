@@ -1,8 +1,8 @@
-{
-  lib,
-  autoreconfHook,
-  fetchFromGitHub,
-  stdenv,
+{ lib
+, autoreconfHook
+, fetchFromGitHub
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

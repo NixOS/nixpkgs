@@ -1,7 +1,7 @@
-{
-  lib,
-  melpaBuild,
-  fetchurl,
+{ lib
+, melpaBuild
+, fetchurl
+,
 }:
 
 let

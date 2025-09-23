@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildPackages,
-  coreutils,
-  pam,
-  groff,
-  sssd,
-  nixosTests,
-  genericUpdater,
-  writeShellScript,
-  curl,
-  sendmailPath ? "/run/wrappers/bin/sendmail",
-  withInsults ? false,
-  withSssd ? false,
+{ lib
+, stdenv
+, fetchurl
+, buildPackages
+, coreutils
+, pam
+, groff
+, sssd
+, nixosTests
+, genericUpdater
+, writeShellScript
+, curl
+, sendmailPath ? "/run/wrappers/bin/sendmail"
+, withInsults ? false
+, withSssd ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

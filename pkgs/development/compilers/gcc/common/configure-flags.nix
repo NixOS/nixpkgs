@@ -1,37 +1,33 @@
-{
-  lib,
-  stdenv,
-  targetPackages,
-
-  withoutTargetLibc,
-  libcCross,
-  threadsCross,
-  version,
-
-  apple-sdk,
-  binutils,
-  gmp,
-  mpfr,
-  libmpc,
-  isl,
-
-  enableLTO,
-  enableMultilib,
-  enablePlugin,
-  disableGdbPlugin ? !enablePlugin,
-  enableShared,
-  targetPrefix,
-
-  langC,
-  langCC,
-  langFortran,
-  langAda ? false,
-  langGo,
-  langObjC,
-  langObjCpp,
-  langJit,
-  langRust ? false,
-  disableBootstrap ? (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform),
+{ lib
+, stdenv
+, targetPackages
+, withoutTargetLibc
+, libcCross
+, threadsCross
+, version
+, apple-sdk
+, binutils
+, gmp
+, mpfr
+, libmpc
+, isl
+, enableLTO
+, enableMultilib
+, enablePlugin
+, disableGdbPlugin ? !enablePlugin
+, enableShared
+, targetPrefix
+, langC
+, langCC
+, langFortran
+, langAda ? false
+, langGo
+, langObjC
+, langObjCpp
+, langJit
+, langRust ? false
+, disableBootstrap ? (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform)
+,
 }:
 
 assert !enablePlugin -> disableGdbPlugin;
@@ -128,9 +124,10 @@ let
           # available in uclibc.
           "--disable-libsanitizer"
         ]
-        ++ lib.optional (
-          targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano"
-        ) "--with-newlib"
+        ++ lib.optional
+          (
+            targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano"
+          ) "--with-newlib"
         ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );
 
@@ -255,9 +252,10 @@ let
     ++ lib.optional disableBootstrap' "--disable-bootstrap"
 
     # Platform-specific flags
-    ++ lib.optional (
-      lib.systems.equals targetPlatform hostPlatform && targetPlatform.isx86_32
-    ) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
+    ++ lib.optional
+      (
+        lib.systems.equals targetPlatform hostPlatform && targetPlatform.isx86_32
+      ) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
     ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
       "--enable-long-long"
@@ -270,9 +268,9 @@ let
       "--without-gnu-ld"
     ]
     ++
-      lib.optional (targetPlatform.libc == "musl")
-        # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
-        "--disable-libmpx"
+    lib.optional (targetPlatform.libc == "musl")
+      # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
+      "--disable-libmpx"
     ++ lib.optionals (lib.systems.equals targetPlatform hostPlatform && targetPlatform.libc == "musl") [
       "--disable-libsanitizer"
       "--disable-symvers"

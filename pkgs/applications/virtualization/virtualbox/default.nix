@@ -1,68 +1,69 @@
-{
-  config,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  callPackage,
-  lib,
-  acpica-tools,
-  dev86,
-  pam,
-  libxslt,
-  libxml2,
-  libX11,
-  xorgproto,
-  libXext,
-  libXcursor,
-  libXfixes,
-  libXmu,
-  SDL2,
-  libcap,
-  libGL,
-  libGLU,
-  libpng,
-  glib,
-  lvm2,
-  libXrandr,
-  libXinerama,
-  libopus,
-  libtpms,
-  qt6,
-  pkg-config,
-  which,
-  docbook_xsl,
-  docbook_xml_dtd_43,
-  alsa-lib,
-  curl,
-  libvpx,
-  net-tools,
-  dbus,
-  replaceVars,
-  gsoap,
-  zlib,
-  xz,
-  yasm,
-  glslang,
-  nixosTests,
-  # If open-watcom-bin is not passed, VirtualBox will fall back to use
+{ config
+, stdenv
+, fetchurl
+, fetchpatch
+, callPackage
+, lib
+, acpica-tools
+, dev86
+, pam
+, libxslt
+, libxml2
+, libX11
+, xorgproto
+, libXext
+, libXcursor
+, libXfixes
+, libXmu
+, SDL2
+, libcap
+, libGL
+, libGLU
+, libpng
+, glib
+, lvm2
+, libXrandr
+, libXinerama
+, libopus
+, libtpms
+, qt6
+, pkg-config
+, which
+, docbook_xsl
+, docbook_xml_dtd_43
+, alsa-lib
+, curl
+, libvpx
+, net-tools
+, dbus
+, replaceVars
+, gsoap
+, zlib
+, xz
+, yasm
+, glslang
+, nixosTests
+, # If open-watcom-bin is not passed, VirtualBox will fall back to use
   # the shipped alternative sources (assembly).
-  open-watcom-bin,
-  makeself,
-  perl,
-  javaBindings ? true,
-  jdk, # Almost doesn't affect closure size
-  pythonBindings ? false,
-  python3,
-  extensionPack ? null,
-  fakeroot,
-  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  enableHardening ? false,
-  headless ? false,
-  enable32bitGuests ? true,
-  enableWebService ? false,
-  enableKvm ? false,
-  extraConfigureFlags ? "",
+  open-watcom-bin
+, makeself
+, perl
+, javaBindings ? true
+, jdk
+, # Almost doesn't affect closure size
+  pythonBindings ? false
+, python3
+, extensionPack ? null
+, fakeroot
+, pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
+, libpulseaudio
+, enableHardening ? false
+, headless ? false
+, enable32bitGuests ? true
+, enableWebService ? false
+, enableKvm ? false
+, extraConfigureFlags ? ""
+,
 }:
 
 # The web services use Java infrastructure.

@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  gymnasium,
-  numpy,
-
-  # tests
-  ale-py,
-  bsuite,
-  dm-control,
-  gym,
-  imageio,
-  pettingzoo,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  setuptools
+, # dependencies
+  gymnasium
+, numpy
+, # tests
+  ale-py
+, bsuite
+, dm-control
+, gym
+, imageio
+, pettingzoo
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

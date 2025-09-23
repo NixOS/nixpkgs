@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  expat,
-  ncurses,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, expat
+, ncurses
+, openssl
+,
 }:
 
 stdenv.mkDerivation {

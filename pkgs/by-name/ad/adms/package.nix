@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  flex,
-  bison,
-  gperf,
-  libxml2,
-  perl,
-  perlPackages,
-  gd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, flex
+, bison
+, gperf
+, libxml2
+, perl
+, perlPackages
+, gd
+,
 }:
 
 stdenv.mkDerivation rec {

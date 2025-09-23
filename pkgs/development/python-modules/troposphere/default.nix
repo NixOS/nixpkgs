@@ -1,12 +1,12 @@
-{
-  lib,
-  awacs,
-  buildPythonPackage,
-  cfn-flip,
-  fetchFromGitHub,
-  pythonOlder,
-  typing-extensions,
-  unittestCheckHook,
+{ lib
+, awacs
+, buildPythonPackage
+, cfn-flip
+, fetchFromGitHub
+, pythonOlder
+, typing-extensions
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

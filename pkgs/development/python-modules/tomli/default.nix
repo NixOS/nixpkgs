@@ -1,15 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  unittestCheckHook,
-
-  # important downstream dependencies
-  flit,
-  black,
-  mypy,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, unittestCheckHook
+, # important downstream dependencies
+  flit
+, black
+, mypy
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

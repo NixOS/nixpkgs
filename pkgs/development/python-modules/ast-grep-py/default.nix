@@ -1,10 +1,10 @@
-{
-  lib,
-  ast-grep,
-  buildPythonPackage,
-  rustPlatform,
-  pytestCheckHook,
-  nix-update-script,
+{ lib
+, ast-grep
+, buildPythonPackage
+, rustPlatform
+, pytestCheckHook
+, nix-update-script
+,
 }:
 buildPythonPackage {
   inherit (ast-grep) version src cargoDeps;

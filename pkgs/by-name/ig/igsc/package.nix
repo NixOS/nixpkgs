@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  stdenv,
-  cmake,
-  metee,
-  udev,
+{ fetchFromGitHub
+, lib
+, nix-update-script
+, stdenv
+, cmake
+, metee
+, udev
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "igsc";

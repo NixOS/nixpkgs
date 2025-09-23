@@ -1,14 +1,14 @@
-{
-  lib,
-  aiosmtpd,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hypothesis,
-  hatchling,
-  pytest-asyncio_0,
-  pytestCheckHook,
-  pythonOlder,
-  trustme,
+{ lib
+, aiosmtpd
+, buildPythonPackage
+, fetchFromGitHub
+, hypothesis
+, hatchling
+, pytest-asyncio_0
+, pytestCheckHook
+, pythonOlder
+, trustme
+,
 }:
 
 buildPythonPackage rec {

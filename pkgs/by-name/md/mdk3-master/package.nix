@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  wirelesstools,
+{ lib
+, stdenv
+, fetchFromGitHub
+, wirelesstools
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.inadyn;
@@ -18,14 +17,17 @@ let
         "custom"
       ]
     then
-      lib.concatStringsSep "\n" (
-        lib.mapAttrsToList (name: config: ''
-          ${k} ${name} {
-              ${lib.concatStringsSep "\n    " (
-                lib.mapAttrsToList renderOption (lib.filterAttrs nonEmptyValue config)
-              )}
-          }'') v
-      )
+      lib.concatStringsSep "\n"
+        (
+          lib.mapAttrsToList
+            (name: config: ''
+              ${k} ${name} {
+                  ${lib.concatStringsSep "\n    " (
+                    lib.mapAttrsToList renderOption (lib.filterAttrs nonEmptyValue config)
+                  )}
+              }'')
+            v
+        )
     else if k == "include" then
       "${k}(\"${v}\")"
     else if k == "hostname" && builtins.isList v then
@@ -89,9 +91,11 @@ in
       };
     in
     {
-      enable = lib.mkEnableOption (''
-        synchronise your machine's IP address with a dynamic DNS provider using inadyn
-      '');
+      enable = lib.mkEnableOption (
+        ''
+          synchronise your machine's IP address with a dynamic DNS provider using inadyn
+        ''
+      );
       user = lib.mkOption {
         default = "inadyn";
         type = lib.types.str;

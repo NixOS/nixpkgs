@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libuuid,
-  autoreconfHook,
-  e2fsprogs,
-  acl,
+{ lib
+, stdenv
+, fetchurl
+, libuuid
+, autoreconfHook
+, e2fsprogs
+, acl
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  libraw,
+{ mkKdeDerivation
+, pkg-config
+, libraw
+,
 }:
 mkKdeDerivation {
   pname = "libkdcraw";

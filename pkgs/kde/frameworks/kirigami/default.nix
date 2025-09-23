@@ -1,11 +1,11 @@
-{
-  stdenv,
-  mkKdeDerivation,
-  qtsvg,
-  qttools,
-  qtdeclarative,
-  qt5compat,
-  qqc2-desktop-style,
+{ stdenv
+, mkKdeDerivation
+, qtsvg
+, qttools
+, qtdeclarative
+, qt5compat
+, qqc2-desktop-style
+,
 }:
 # Kirigami has a runtime dependency on qqc2-desktop-style,
 # which has a build time dependency on Kirigami.

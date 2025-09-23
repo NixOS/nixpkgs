@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.rss2email;
@@ -118,12 +117,14 @@ in
             {
               DEFAULT = cfg.config;
             }
-            // lib.mapAttrs' (
-              name: feed:
-              lib.nameValuePair "feed.${name}" (
-                { inherit (feed) url; } // lib.optionalAttrs (feed.to != null) { inherit (feed) to; }
+            // lib.mapAttrs'
+              (
+                name: feed:
+                  lib.nameValuePair "feed.${name}" (
+                    { inherit (feed) url; } // lib.optionalAttrs (feed.to != null) { inherit (feed) to; }
+                  )
               )
-            ) cfg.feeds
+              cfg.feeds
           )
         );
       in

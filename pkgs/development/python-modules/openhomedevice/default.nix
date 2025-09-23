@@ -1,13 +1,13 @@
-{
-  lib,
-  aioresponses,
-  async-upnp-client,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lxml,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, aioresponses
+, async-upnp-client
+, buildPythonPackage
+, fetchFromGitHub
+, lxml
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

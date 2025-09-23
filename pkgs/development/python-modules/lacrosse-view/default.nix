@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  aiozoneinfo,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pydantic,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiohttp
+, aiozoneinfo
+, buildPythonPackage
+, fetchFromGitHub
+, pydantic
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

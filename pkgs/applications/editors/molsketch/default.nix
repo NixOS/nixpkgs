@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pkg-config,
-  qttools,
-  wrapQtAppsHook,
-  hicolor-icon-theme,
-  openbabel,
-  desktop-file-utils,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, qttools
+, wrapQtAppsHook
+, hicolor-icon-theme
+, openbabel
+, desktop-file-utils
+,
 }:
 
 stdenv.mkDerivation rec {

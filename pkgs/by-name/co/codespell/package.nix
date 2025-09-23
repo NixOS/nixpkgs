@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  aspellDicts,
-  python3,
+{ lib
+, fetchFromGitHub
+, aspellDicts
+, python3
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

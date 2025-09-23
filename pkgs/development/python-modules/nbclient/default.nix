@@ -1,20 +1,20 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  ipykernel,
-  ipywidgets,
-  jupyter-client,
-  jupyter-core,
-  lib,
-  nbconvert,
-  nbformat,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  testpath,
-  traitlets,
-  xmltodict,
+{ buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, ipykernel
+, ipywidgets
+, jupyter-client
+, jupyter-core
+, lib
+, nbconvert
+, nbformat
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, testpath
+, traitlets
+, xmltodict
+,
 }:
 
 let

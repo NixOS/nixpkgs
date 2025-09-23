@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchFromSourcehut,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  libdeltachat,
-  libsForQt5,
-  rustPlatform,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, fetchFromSourcehut
+, cmake
+, extra-cmake-modules
+, pkg-config
+, libdeltachat
+, libsForQt5
+, rustPlatform
+, stdenv
+,
 }:
 
 let

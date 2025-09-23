@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyserial,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyserial
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitHub,
-  nixosTests,
-  replaceVars,
-  unstableGitUpdater,
+{ lib
+, buildNimPackage
+, fetchFromGitHub
+, nixosTests
+, replaceVars
+, unstableGitUpdater
+,
 }:
 
 buildNimPackage (

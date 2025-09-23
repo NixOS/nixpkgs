@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libGLU,
-  libGL,
-  libX11,
-  xorgproto,
-  tcl,
-  libglut,
-  freetype,
-  sfml_2,
-  libXi,
-  libXmu,
-  libXext,
-  libXt,
-  libSM,
-  libICE,
-  libpng,
-  pkg-config,
-  gettext,
-  intltool,
+{ lib
+, stdenv
+, fetchurl
+, libGLU
+, libGL
+, libX11
+, xorgproto
+, tcl
+, libglut
+, freetype
+, sfml_2
+, libXi
+, libXmu
+, libXext
+, libXt
+, libSM
+, libICE
+, libpng
+, pkg-config
+, gettext
+, intltool
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

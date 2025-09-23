@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  mandown,
-  protobuf,
-  nixosTests,
-  go-md2man,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, mandown
+, protobuf
+, nixosTests
+, go-md2man
+,
 }:
 
 rustPlatform.buildRustPackage rec {

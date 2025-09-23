@@ -1,24 +1,24 @@
-{
-  lib,
-  fetchFromGitLab,
-  python3,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  desktop-file-utils,
-  shared-mime-info,
-  wrapGAppsHook4,
-  glib,
-  gtk3,
-  gtk4,
-  gtksourceview5,
-  libadwaita,
-  libhandy,
-  webkitgtk_4_1,
-  webkitgtk_6_0,
-  nix-update-script,
-  casilda,
+{ lib
+, fetchFromGitLab
+, python3
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, desktop-file-utils
+, shared-mime-info
+, wrapGAppsHook4
+, glib
+, gtk3
+, gtk4
+, gtksourceview5
+, libadwaita
+, libhandy
+, webkitgtk_4_1
+, webkitgtk_6_0
+, nix-update-script
+, casilda
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,27 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  autogen,
-  pkg-config,
-  python3,
-  flac,
-  lame,
-  libmpg123,
-  libogg,
-  libopus,
-  libvorbis,
-  alsa-lib,
-
-  # for passthru.tests
-  audacity,
-  freeswitch,
-  gst_all_1,
-  libsamplerate,
-  moc,
-  pipewire,
-  pulseaudio,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, autogen
+, pkg-config
+, python3
+, flac
+, lame
+, libmpg123
+, libogg
+, libopus
+, libvorbis
+, alsa-lib
+, # for passthru.tests
+  audacity
+, freeswitch
+, gst_all_1
+, libsamplerate
+, moc
+, pipewire
+, pulseaudio
+,
 }:
 
 stdenv.mkDerivation rec {

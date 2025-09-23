@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  zlib,
-  e2fsprogs,
-  bzip2,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, zlib
+, e2fsprogs
+, bzip2
+, installShellFiles
+,
 }:
 
 let

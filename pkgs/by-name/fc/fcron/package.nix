@@ -1,13 +1,13 @@
 # restart using 'killall -TERM fcron; fcron -b
 # use convert-fcrontab to update fcrontab files
 
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  busybox,
-  vim,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, busybox
+, vim
+,
 }:
 
 stdenv.mkDerivation rec {

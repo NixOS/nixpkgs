@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  wrapGAppsHook3,
-  pkg-config,
-  gitUpdater,
-  appstream-glib,
-  json-glib,
-  desktop-file-utils,
-  python3,
-  gtk3,
-  girara,
-  gettext,
-  gnome,
-  libheif,
-  libjxl,
-  libxml2,
-  check,
-  sqlite,
-  glib,
-  texlive,
-  libintl,
-  libseccomp,
-  file,
-  librsvg,
-  gtk-mac-integration,
-  webp-pixbuf-loader,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, wrapGAppsHook3
+, pkg-config
+, gitUpdater
+, appstream-glib
+, json-glib
+, desktop-file-utils
+, python3
+, gtk3
+, girara
+, gettext
+, gnome
+, libheif
+, libjxl
+, libxml2
+, check
+, sqlite
+, glib
+, texlive
+, libintl
+, libseccomp
+, file
+, librsvg
+, gtk-mac-integration
+, webp-pixbuf-loader
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

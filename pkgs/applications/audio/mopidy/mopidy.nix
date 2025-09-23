@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pythonPackages,
-  wrapGAppsNoGuiHook,
-  gst_all_1,
-  glib-networking,
-  gobject-introspection,
-  pipewire,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pythonPackages
+, wrapGAppsNoGuiHook
+, gst_all_1
+, glib-networking
+, gobject-introspection
+, pipewire
+, nixosTests
+,
 }:
 
 pythonPackages.buildPythonApplication rec {

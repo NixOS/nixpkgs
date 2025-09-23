@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  numpy,
-  llvmPackages,
-  wurlitzer,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, numpy
+, llvmPackages
+, wurlitzer
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

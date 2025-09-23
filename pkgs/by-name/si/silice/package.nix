@@ -1,20 +1,20 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  cmake,
-  pkg-config,
-  openjdk,
-  libuuid,
-  python3,
-  glfw,
-  yosys,
-  nextpnr,
-  verilator,
-  dfu-util,
-  icestorm,
-  trellis,
-  unstableGitUpdater,
+{ stdenv
+, fetchFromGitHub
+, lib
+, cmake
+, pkg-config
+, openjdk
+, libuuid
+, python3
+, glfw
+, yosys
+, nextpnr
+, verilator
+, dfu-util
+, icestorm
+, trellis
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

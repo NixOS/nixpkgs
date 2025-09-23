@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  bash,
-  fetchFromGitHub,
-  makeWrapper,
+{ lib
+, stdenv
+, bash
+, fetchFromGitHub
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

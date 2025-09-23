@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  dotnet-runtime,
-  zlib,
-  runtimeShell,
+{ lib
+, stdenv
+, fetchzip
+, dotnet-runtime
+, zlib
+, runtimeShell
+,
 }:
 
 stdenv.mkDerivation {

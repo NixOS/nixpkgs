@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  cstruct,
-  async_unix,
-  async,
-  core,
+{ buildDunePackage
+, cstruct
+, async_unix
+, async
+, core
+,
 }:
 
 buildDunePackage {

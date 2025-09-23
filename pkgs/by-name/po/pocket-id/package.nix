@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGo125Module,
-  stdenvNoCC,
-  nodejs,
-  pnpm_10,
-  nixosTests,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildGo125Module
+, stdenvNoCC
+, nodejs
+, pnpm_10
+, nixosTests
+, nix-update-script
+,
 }:
 
 buildGo125Module (finalAttrs: {

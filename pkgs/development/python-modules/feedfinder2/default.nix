@@ -1,13 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  setuptools,
-
-  six,
-  requests,
-  beautifulsoup4,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, six
+, requests
+, beautifulsoup4
+,
 }:
 
 buildPythonPackage rec {

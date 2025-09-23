@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  testers,
-  gh-dash,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, testers
+, gh-dash
+,
 }:
 
 buildGoModule rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonAtLeast,
-  requests,
-  stups-cli-support,
-  stups-zign,
-  pytest,
-  pytest-cov-stub,
-  isPy3k,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonAtLeast
+, requests
+, stups-cli-support
+, stups-zign
+, pytest
+, pytest-cov-stub
+, isPy3k
+,
 }:
 
 buildPythonPackage rec {

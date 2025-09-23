@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  zsh,
-  installShellFiles,
-  ncurses,
-  unstableGitUpdater,
-  testers,
-  runCommand,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, zsh
+, installShellFiles
+, ncurses
+, unstableGitUpdater
+, testers
+, runCommand
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

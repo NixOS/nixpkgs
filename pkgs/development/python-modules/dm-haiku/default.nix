@@ -1,36 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonAtLeast,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  absl-py,
-  jaxlib,
-  jmp,
-  numpy,
-  tabulate,
-
-  # optional-dependencies
-  jax,
-  flax,
-
-  # tests
-  pytest-xdist,
-  pytestCheckHook,
-  bsuite,
-  chex,
-  cloudpickle,
-  dill,
-  dm-env,
-  dm-tree,
-  optax,
-  rlax,
-  tensorflow,
+{ lib
+, buildPythonPackage
+, pythonAtLeast
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  setuptools
+, # dependencies
+  absl-py
+, jaxlib
+, jmp
+, numpy
+, tabulate
+, # optional-dependencies
+  jax
+, flax
+, # tests
+  pytest-xdist
+, pytestCheckHook
+, bsuite
+, chex
+, cloudpickle
+, dill
+, dm-env
+, dm-tree
+, optax
+, rlax
+, tensorflow
+,
 }:
 
 let

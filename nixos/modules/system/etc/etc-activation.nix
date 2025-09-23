@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 {
@@ -16,7 +15,8 @@
         "users"
         "groups"
         "specialfs"
-      ] config.system.build.etcActivationCommands;
+      ]
+        config.system.build.etcActivationCommands;
     }
 
     (lib.mkIf config.system.etc.overlay.enable {

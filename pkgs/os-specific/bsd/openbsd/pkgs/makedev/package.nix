@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  runtimeShell,
-  m4,
+{ mkDerivation
+, runtimeShell
+, m4
+,
 }:
 
 mkDerivation {

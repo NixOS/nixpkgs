@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  gfortran,
-  hdf5,
-  python3,
-  emacs,
-  swig,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, gfortran
+, hdf5
+, python3
+, emacs
+, swig
+,
 }:
 
 stdenv.mkDerivation rec {

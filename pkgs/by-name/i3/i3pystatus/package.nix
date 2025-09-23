@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  libpulseaudio,
-  libnotify,
-  gobject-introspection,
-  python3Packages,
-  unstableGitUpdater,
-  fetchpatch2,
-  extraLibs ? [ ],
+{ lib
+, fetchFromGitHub
+, libpulseaudio
+, libnotify
+, gobject-introspection
+, python3Packages
+, unstableGitUpdater
+, fetchpatch2
+, extraLibs ? [ ]
+,
 }:
 
 python3Packages.buildPythonApplication rec {

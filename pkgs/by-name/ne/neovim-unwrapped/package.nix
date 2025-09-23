@@ -1,29 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gettext,
-  libuv,
-  lua,
-  pkg-config,
-  unibilium,
-  utf8proc,
-  tree-sitter,
-  fetchurl,
-  buildPackages,
-  treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; },
-  fixDarwinDylibNames,
-  glibcLocales ? null,
-  procps ? null,
-  versionCheckHook,
-  nix-update-script,
-
-  # now defaults to false because some tests can be flaky (clipboard etc), see
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gettext
+, libuv
+, lua
+, pkg-config
+, unibilium
+, utf8proc
+, tree-sitter
+, fetchurl
+, buildPackages
+, treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
+, fixDarwinDylibNames
+, glibcLocales ? null
+, procps ? null
+, versionCheckHook
+, nix-update-script
+, # now defaults to false because some tests can be flaky (clipboard etc), see
   # also: https://github.com/neovim/neovim/issues/16233
-  nodejs ? null,
-  fish ? null,
-  python3 ? null,
+  nodejs ? null
+, fish ? null
+, python3 ? null
+,
 }:
 stdenv.mkDerivation (
   finalAttrs:
@@ -214,18 +213,20 @@ stdenv.mkDerivation (
       mkdir -p $out/lib/nvim/parser
     ''
     + lib.concatStrings (
-      lib.mapAttrsToList (language: grammar: ''
-        ln -s \
-          ${
-            tree-sitter.buildGrammar {
-              inherit (grammar) src;
-              version = "neovim-${finalAttrs.version}";
-              language = grammar.language or language;
-              location = grammar.location or null;
-            }
-          }/parser \
-          $out/lib/nvim/parser/${language}.so
-      '') finalAttrs.treesitter-parsers
+      lib.mapAttrsToList
+        (language: grammar: ''
+          ln -s \
+            ${
+              tree-sitter.buildGrammar {
+                inherit (grammar) src;
+                version = "neovim-${finalAttrs.version}";
+                language = grammar.language or language;
+                location = grammar.location or null;
+              }
+            }/parser \
+            $out/lib/nvim/parser/${language}.so
+        '')
+        finalAttrs.treesitter-parsers
     );
 
     shellHook = ''

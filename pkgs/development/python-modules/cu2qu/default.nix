@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build
-  cython,
-  setuptools-scm,
-  setuptools,
-
-  # propagates
-  defcon,
-  fonttools,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build
+  cython
+, setuptools-scm
+, setuptools
+, # propagates
+  defcon
+, fonttools
+, # tests
+  pytestCheckHook
+,
 }:
 
 let

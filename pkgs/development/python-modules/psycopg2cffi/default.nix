@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  cffi,
-  fetchFromGitHub,
-  lib,
-  libpq,
-  postgresql,
-  postgresqlTestHook,
-  pytestCheckHook,
-  setuptools,
-  six,
-  stdenv,
+{ buildPythonPackage
+, cffi
+, fetchFromGitHub
+, lib
+, libpq
+, postgresql
+, postgresqlTestHook
+, pytestCheckHook
+, setuptools
+, six
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

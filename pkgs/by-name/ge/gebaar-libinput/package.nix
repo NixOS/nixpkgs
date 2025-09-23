@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  cmake,
-  libinput,
-  zlib,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, cmake
+, libinput
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

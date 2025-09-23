@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  autoPatchelfHook,
-  fetchzip,
-  xz,
-  ncurses5,
-  ncurses,
-  readline,
-  gmp,
-  mpfr,
-  expat,
-  libipt,
-  zlib,
-  dejagnu,
-  sourceHighlight,
-  python3,
-  elfutils,
-  guile,
-  glibc,
-  zstd,
-  majorVersion,
+{ stdenv
+, lib
+, autoPatchelfHook
+, fetchzip
+, xz
+, ncurses5
+, ncurses
+, readline
+, gmp
+, mpfr
+, expat
+, libipt
+, zlib
+, dejagnu
+, sourceHighlight
+, python3
+, elfutils
+, guile
+, glibc
+, zstd
+, majorVersion
+,
 }:
 
 let
@@ -48,8 +48,7 @@ stdenv.mkDerivation (
             hash = "sha256-EPDPOOjWJnJsUM7GGxj20/PXumjfLoMIEFX1EDtvWVY=";
             upstreamTriplet = "x86_64-pc-linux-gnu";
           };
-        }
-        .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+        }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
         "13" = {
           gccVersion = "13.2.0";
           alireRevision = "2";
@@ -65,8 +64,7 @@ stdenv.mkDerivation (
             hash = "sha256-DC95udGSzRDE22ON4UpekxTYWOSBeUdJvILbSFj6MFQ=";
             upstreamTriplet = "x86_64-pc-linux-gnu";
           };
-        }
-        .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+        }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
         "14" = {
           gccVersion = "14.2.0";
           alireRevision = "1";
@@ -87,8 +85,7 @@ stdenv.mkDerivation (
             hash = "sha256-SVW/0yyj6ZH1GAjvD+unII+zSLGd3KGFt1bjjQ3SEFU=";
             upstreamTriplet = "aarch64-linux-gnu";
           };
-        }
-        .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+        }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
       };
     inherit (versionMap.${majorVersion}) gccVersion alireRevision upstreamTriplet;
   in
@@ -134,14 +131,14 @@ stdenv.mkDerivation (
       xz
     ]
     ++
-      lib.optionals
-        (
-          lib.versionAtLeast majorVersion "14" && stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux
-        )
-        [
-          # not sure why the bootstrap binaries link to zstd only on this architecture but they do
-          zstd
-        ];
+    lib.optionals
+      (
+        lib.versionAtLeast majorVersion "14" && stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux
+      )
+      [
+        # not sure why the bootstrap binaries link to zstd only on this architecture but they do
+        zstd
+      ];
 
     strictDeps = true;
 

@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  pandoc,
-  installShellFiles,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, pandoc
+, installShellFiles
+,
 }:
 
 python3Packages.buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  replaceVars,
-  file-roller,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, replaceVars
+, file-roller
+,
 }:
 
 stdenv.mkDerivation rec {

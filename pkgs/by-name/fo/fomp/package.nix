@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch2,
-  lv2,
-  lv2lint,
-  pkg-config,
-  meson,
-  ninja,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch2
+, lv2
+, lv2lint
+, pkg-config
+, meson
+, ninja
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  appimageTools,
-  buildFHSEnv,
-  makeDesktopItem,
-  extraPkgs ? pkgs: [ ],
-  appimage-run-tests ? null,
+{ lib
+, appimageTools
+, buildFHSEnv
+, makeDesktopItem
+, extraPkgs ? pkgs: [ ]
+, appimage-run-tests ? null
+,
 }:
 
 let

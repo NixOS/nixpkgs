@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 let
   inherit (lib)
@@ -202,15 +201,17 @@ in
       startLimitIntervalSec = 180;
 
       environment =
-        (mapAttrs (
-          _: value:
-          if (builtins.typeOf value == "bool") then
-            if !value then null else "true"
-          else if (builtins.typeOf value == "int") then
-            toString value
-          else
-            value
-        ) cfg.settings)
+        (mapAttrs
+          (
+            _: value:
+              if (builtins.typeOf value == "bool") then
+                if !value then null else "true"
+              else if (builtins.typeOf value == "int") then
+                toString value
+              else
+                value
+          )
+          cfg.settings)
         // {
           APP_ENV = "nixos";
           HTTP_ADDRESS = cfg.web.host + ":" + toString cfg.web.port;

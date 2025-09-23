@@ -1,12 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  flet-client-flutter,
-
-  # build-system
-  poetry-core,
-
-  flet,
+{ lib
+, buildPythonPackage
+, flet-client-flutter
+, # build-system
+  poetry-core
+, flet
+,
 }:
 
 buildPythonPackage rec {

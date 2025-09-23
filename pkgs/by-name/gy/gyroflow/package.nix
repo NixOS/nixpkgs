@@ -1,19 +1,19 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeDesktopItem,
-  clang,
-  copyDesktopItems,
-  patchelf,
-  pkg-config,
-  qt6,
-  alsa-lib,
-  bash,
-  ffmpeg,
-  mdk-sdk,
-  ocl-icd,
-  opencv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeDesktopItem
+, clang
+, copyDesktopItems
+, patchelf
+, pkg-config
+, qt6
+, alsa-lib
+, bash
+, ffmpeg
+, mdk-sdk
+, ocl-icd
+, opencv
+,
 }:
 let
   lens-profiles = fetchFromGitHub {

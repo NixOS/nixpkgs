@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  pkg-config,
-  dbus,
-  sysctl,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, dbus
+, sysctl
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

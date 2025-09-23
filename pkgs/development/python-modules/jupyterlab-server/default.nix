@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  hatchling,
-  babel,
-  importlib-metadata,
-  jinja2,
-  json5,
-  jsonschema,
-  jupyter-server,
-  packaging,
-  requests,
-  openapi-core,
-  pytest-jupyter,
-  pytestCheckHook,
-  requests-mock,
-  ruamel-yaml,
-  strict-rfc3339,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, hatchling
+, babel
+, importlib-metadata
+, jinja2
+, json5
+, jsonschema
+, jupyter-server
+, packaging
+, requests
+, openapi-core
+, pytest-jupyter
+, pytestCheckHook
+, requests-mock
+, ruamel-yaml
+, strict-rfc3339
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  eigen,
-  rapidjson,
-  spdlog,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, eigen
+, rapidjson
+, spdlog
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildKodiAddon,
-  fetchFromGitHub,
-  vfs-libarchive,
+{ lib
+, buildKodiAddon
+, fetchFromGitHub
+, vfs-libarchive
+,
 }:
 buildKodiAddon rec {
   pname = "archive_tool";

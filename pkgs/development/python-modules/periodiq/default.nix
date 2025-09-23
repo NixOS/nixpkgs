@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitLab,
-  poetry-core,
-  dramatiq,
-  pendulum,
-  setuptools,
-  pytest-mock,
-  pytestCheckHook,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitLab
+, poetry-core
+, dramatiq
+, pendulum
+, setuptools
+, pytest-mock
+, pytestCheckHook
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

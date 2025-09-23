@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  runCommand,
-  getent,
-  xcbuild,
+{ lib
+, stdenv
+, runCommand
+, getent
+, xcbuild
+,
 }:
 
 # Prints information about the state of the build environment for
 # assistance debugging Hydra. Feel free to add anything you would find
 # useful to this.
 runCommand "build-environment-info"
-  {
-    nativeBuildInputs = [ getent ] ++ lib.optionals stdenv.buildPlatform.isDarwin [ xcbuild ];
-  }
+{
+  nativeBuildInputs = [ getent ] ++ lib.optionals stdenv.buildPlatform.isDarwin [ xcbuild ];
+}
   ''
     # It’s useful to get more info even if a command fails.
     set +e

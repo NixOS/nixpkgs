@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  withLinuxHeaders ? true,
-  linuxHeaders ? null,
-  profilingLibraries ? false,
-  withGd ? false,
-  enableCET ? if stdenv.hostPlatform.isx86_64 then "permissive" else false,
-  enableCETRuntimeDefault ? false,
-  pkgsBuildBuild,
-  libgcc,
+{ lib
+, stdenv
+, callPackage
+, withLinuxHeaders ? true
+, linuxHeaders ? null
+, profilingLibraries ? false
+, withGd ? false
+, enableCET ? if stdenv.hostPlatform.isx86_64 then "permissive" else false
+, enableCETRuntimeDefault ? false
+, pkgsBuildBuild
+, libgcc
+,
 }:
 
 let
@@ -71,7 +71,7 @@ in
     env = (previousAttrs.env or { }) // {
       NIX_CFLAGS_COMPILE =
         (previousAttrs.env.NIX_CFLAGS_COMPILE or "")
-        + lib.concatStringsSep " " (
+          + lib.concatStringsSep " " (
           builtins.concatLists [
             (lib.optionals withGd gdCflags)
             # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:

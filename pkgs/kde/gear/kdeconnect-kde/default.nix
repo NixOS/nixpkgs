@@ -1,15 +1,15 @@
-{
-  lib,
-  mkKdeDerivation,
-  replaceVars,
-  sshfs,
-  qtconnectivity,
-  qtmultimedia,
-  qtwayland,
-  pkg-config,
-  wayland,
-  wayland-protocols,
-  libfakekey,
+{ lib
+, mkKdeDerivation
+, replaceVars
+, sshfs
+, qtconnectivity
+, qtmultimedia
+, qtwayland
+, pkg-config
+, wayland
+, wayland-protocols
+, libfakekey
+,
 }:
 mkKdeDerivation {
   pname = "kdeconnect-kde";

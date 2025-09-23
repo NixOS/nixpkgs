@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  libsodium,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, libsodium
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

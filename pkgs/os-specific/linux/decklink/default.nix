@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  blackmagic-desktop-video,
-  kernel,
+{ stdenv
+, lib
+, blackmagic-desktop-video
+, kernel
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "decklink";

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

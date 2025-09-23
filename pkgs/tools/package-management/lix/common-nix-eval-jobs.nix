@@ -1,23 +1,23 @@
-{
-  lib,
-  suffix ? "",
-  version,
-  src,
-  patches ? [ ],
+{ lib
+, suffix ? ""
+, version
+, src
+, patches ? [ ]
+,
 }@args:
 
-{
-  stdenv,
-  lib,
-  lix,
-  boost,
-  capnproto,
-  nlohmann_json,
-  meson,
-  pkg-config,
-  ninja,
-  cmake,
-  buildPackages,
+{ stdenv
+, lib
+, lix
+, boost
+, capnproto
+, nlohmann_json
+, meson
+, pkg-config
+, ninja
+, cmake
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation {

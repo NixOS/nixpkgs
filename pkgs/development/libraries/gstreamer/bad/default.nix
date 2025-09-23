@@ -1,116 +1,116 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  replaceVars,
-  meson,
-  ninja,
-  gettext,
-  pkg-config,
-  python3,
-  gst-plugins-base,
-  orc,
-  gstreamer,
-  gobject-introspection,
-  wayland-scanner,
-  enableZbar ? false,
-  faacSupport ? false,
-  faac,
-  opencvSupport ? false,
-  opencv4,
-  faad2,
-  # Enabling lcevcdecoder currently causes issues when attempting to decode regular h264 data
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, replaceVars
+, meson
+, ninja
+, gettext
+, pkg-config
+, python3
+, gst-plugins-base
+, orc
+, gstreamer
+, gobject-introspection
+, wayland-scanner
+, enableZbar ? false
+, faacSupport ? false
+, faac
+, opencvSupport ? false
+, opencv4
+, faad2
+, # Enabling lcevcdecoder currently causes issues when attempting to decode regular h264 data
   # warning: No decoder available for type 'video/x-h264, stream-format=(string)avc, [...], lcevc=(boolean)false, [...]
-  lcevcdecSupport ? false,
-  lcevcdec,
-  ldacbtSupport ? lib.meta.availableOn stdenv.hostPlatform ldacbt,
-  ldacbt,
-  liblc3,
-  libass,
-  lrdf,
-  ladspaH,
-  lcms2,
-  libnice,
-  webrtcAudioProcessingSupport ? lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1,
-  webrtc-audio-processing_1,
-  lilv,
-  lv2,
-  serd,
-  sord,
-  sratom,
-  libbs2b,
-  libmodplug,
-  libmpeg2,
-  libmicrodns,
-  openjpeg,
-  libopus,
-  librsvg,
-  bluez,
-  chromaprint,
-  curl,
-  fdk_aac,
-  flite,
-  gsm,
-  json-glib,
-  ajaSupport ? lib.meta.availableOn stdenv.hostPlatform libajantv2,
-  libajantv2,
-  libaom,
-  libdc1394,
-  libde265,
-  libdrm,
-  libdvdnav,
-  libdvdread,
-  libgudev,
-  qrencode,
-  libsndfile,
-  libusb1,
-  neon,
-  openal,
-  openexr,
-  openh264Support ? lib.meta.availableOn stdenv.hostPlatform openh264,
-  openh264,
-  libopenmpt,
-  pango,
-  rtmpdump,
-  sbc,
-  soundtouch,
-  spandsp,
-  srtp,
-  zbar,
-  wayland-protocols,
-  wildmidi,
-  svt-av1,
-  fluidsynth,
-  libva,
-  wayland,
-  libwebp,
-  gnutls,
-  mjpegtools,
-  libGL,
-  addDriverRunpath,
-  gtk3,
-  libintl,
-  game-music-emu,
-  openssl,
-  x265,
-  libxml2,
-  srt,
-  vo-aacenc,
-  libfreeaptx,
-  zxing-cpp,
-  usrsctp,
-  directoryListingUpdater,
-  enableGplPlugins ? true,
-  bluezSupport ? stdenv.hostPlatform.isLinux,
-  # Causes every application using GstDeviceMonitor to send mDNS queries every 2 seconds
-  microdnsSupport ? false,
-  # Checks meson.is_cross_build(), so even canExecute isn't enough.
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
-  hotdoc,
-  guiSupport ? true,
-  gst-plugins-bad,
-  apple-sdk_gstreamer,
+  lcevcdecSupport ? false
+, lcevcdec
+, ldacbtSupport ? lib.meta.availableOn stdenv.hostPlatform ldacbt
+, ldacbt
+, liblc3
+, libass
+, lrdf
+, ladspaH
+, lcms2
+, libnice
+, webrtcAudioProcessingSupport ? lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1
+, webrtc-audio-processing_1
+, lilv
+, lv2
+, serd
+, sord
+, sratom
+, libbs2b
+, libmodplug
+, libmpeg2
+, libmicrodns
+, openjpeg
+, libopus
+, librsvg
+, bluez
+, chromaprint
+, curl
+, fdk_aac
+, flite
+, gsm
+, json-glib
+, ajaSupport ? lib.meta.availableOn stdenv.hostPlatform libajantv2
+, libajantv2
+, libaom
+, libdc1394
+, libde265
+, libdrm
+, libdvdnav
+, libdvdread
+, libgudev
+, qrencode
+, libsndfile
+, libusb1
+, neon
+, openal
+, openexr
+, openh264Support ? lib.meta.availableOn stdenv.hostPlatform openh264
+, openh264
+, libopenmpt
+, pango
+, rtmpdump
+, sbc
+, soundtouch
+, spandsp
+, srtp
+, zbar
+, wayland-protocols
+, wildmidi
+, svt-av1
+, fluidsynth
+, libva
+, wayland
+, libwebp
+, gnutls
+, mjpegtools
+, libGL
+, addDriverRunpath
+, gtk3
+, libintl
+, game-music-emu
+, openssl
+, x265
+, libxml2
+, srt
+, vo-aacenc
+, libfreeaptx
+, zxing-cpp
+, usrsctp
+, directoryListingUpdater
+, enableGplPlugins ? true
+, bluezSupport ? stdenv.hostPlatform.isLinux
+, # Causes every application using GstDeviceMonitor to send mDNS queries every 2 seconds
+  microdnsSupport ? false
+, # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, hotdoc
+, guiSupport ? true
+, gst-plugins-bad
+, apple-sdk_gstreamer
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -348,11 +348,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dladspa=disabled" # requires lrdf
   ]
   ++
-    lib.optionals
-      (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isx86_64 || !gst-plugins-base.waylandEnabled)
-      [
-        "-Dqsv=disabled" # Linux (and Windows) x86 only, makes va required
-      ]
+  lib.optionals
+    (!stdenv.hostPlatform.isLinux || !stdenv.hostPlatform.isx86_64 || !gst-plugins-base.waylandEnabled)
+    [
+      "-Dqsv=disabled" # Linux (and Windows) x86 only, makes va required
+    ]
   ++ lib.optionals (!gst-plugins-base.glEnabled) [
     "-Dgl=disabled"
   ]

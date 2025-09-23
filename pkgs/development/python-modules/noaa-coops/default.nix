@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchPypi,
-  pandas,
-  poetry-core,
-  pythonOlder,
-  requests,
-  zeep,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchPypi
+, pandas
+, poetry-core
+, pythonOlder
+, requests
+, zeep
+,
 }:
 
 buildPythonPackage rec {

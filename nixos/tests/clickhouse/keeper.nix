@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  package,
-  ...
+{ lib
+, pkgs
+, package
+, ...
 }:
 rec {
   name = "clickhouse-keeper";

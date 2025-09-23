@@ -1,10 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  unstableGitUpdater,
-
-  withRoundedCorners ? false,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, unstableGitUpdater
+, withRoundedCorners ? false
+,
 }:
 stdenvNoCC.mkDerivation {
   pname = "catppuccin-fcitx5";

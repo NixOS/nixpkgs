@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  cairo,
-  obs-studio,
-  pango,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, cairo
+, obs-studio
+, pango
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

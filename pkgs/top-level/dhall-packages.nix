@@ -1,7 +1,7 @@
-{
-  lib,
-  newScope,
-  overrides ? (self: super: { }),
+{ lib
+, newScope
+, overrides ? (self: super: { })
+,
 }:
 
 let

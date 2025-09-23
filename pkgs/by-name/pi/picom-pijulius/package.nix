@@ -1,9 +1,9 @@
-{
-  picom,
-  lib,
-  writeShellScript,
-  fetchFromGitHub,
-  unstableGitUpdater,
+{ picom
+, lib
+, writeShellScript
+, fetchFromGitHub
+, unstableGitUpdater
+,
 }:
 
 picom.overrideAttrs (previousAttrs: {

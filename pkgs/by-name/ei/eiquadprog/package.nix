@@ -1,13 +1,13 @@
-{
-  boost,
-  cmake,
-  doxygen,
-  eigen,
-  fetchFromGitHub,
-  jrl-cmakemodules,
-  lib,
-  pkg-config,
-  stdenv,
+{ boost
+, cmake
+, doxygen
+, eigen
+, fetchFromGitHub
+, jrl-cmakemodules
+, lib
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

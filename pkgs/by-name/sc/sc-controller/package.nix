@@ -1,21 +1,21 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  gtk3,
-  gobject-introspection,
-  libappindicator-gtk3,
-  librsvg,
-  bluez,
-  linuxHeaders,
-  libX11,
-  libXext,
-  libXfixes,
-  libusb1,
-  udev,
-  udevCheckHook,
-  gtk-layer-shell,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, wrapGAppsHook3
+, gtk3
+, gobject-introspection
+, libappindicator-gtk3
+, librsvg
+, bluez
+, linuxHeaders
+, libX11
+, libXext
+, libXfixes
+, libusb1
+, udev
+, udevCheckHook
+, gtk-layer-shell
+,
 }:
 
 python3Packages.buildPythonApplication rec {

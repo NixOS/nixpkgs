@@ -1,13 +1,13 @@
-{
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  dbus,
-  zlib,
-  openssl,
-  readline,
-  lib,
-  perl,
+{ stdenv
+, fetchpatch
+, fetchurl
+, dbus
+, zlib
+, openssl
+, readline
+, lib
+, perl
+,
 }:
 
 stdenv.mkDerivation {

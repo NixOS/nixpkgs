@@ -1,40 +1,40 @@
-{
-  bzip2,
-  cabextract,
-  dmg2img,
-  dtc,
-  dumpifs,
-  enableUnfree ? false,
-  fetchFromGitHub,
-  fontconfig,
-  gnutar,
-  jefferson,
-  lib,
-  lzfse,
-  lzo,
-  lzop,
-  lz4,
-  openssl_3,
-  pkg-config,
-  python3,
-  rustPlatform,
-  sasquatch,
-  sleuthkit,
-  srec2bin,
-  stdenv,
-  ubi_reader,
-  ucl,
-  uefi-firmware-parser,
-  unrar,
-  unyaffs,
-  unzip,
-  versionCheckHook,
-  vmlinux-to-elf,
-  xz,
-  zlib,
-  zstd,
-  p7zip,
-  makeBinaryWrapper,
+{ bzip2
+, cabextract
+, dmg2img
+, dtc
+, dumpifs
+, enableUnfree ? false
+, fetchFromGitHub
+, fontconfig
+, gnutar
+, jefferson
+, lib
+, lzfse
+, lzo
+, lzop
+, lz4
+, openssl_3
+, pkg-config
+, python3
+, rustPlatform
+, sasquatch
+, sleuthkit
+, srec2bin
+, stdenv
+, ubi_reader
+, ucl
+, uefi-firmware-parser
+, unrar
+, unyaffs
+, unzip
+, versionCheckHook
+, vmlinux-to-elf
+, xz
+, zlib
+, zstd
+, p7zip
+, makeBinaryWrapper
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

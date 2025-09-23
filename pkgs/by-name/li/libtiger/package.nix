@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  libkate,
-  pango,
-  cairo,
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, pkg-config
+, libkate
+, pango
+, cairo
+,
 }:
 
 stdenv.mkDerivation rec {

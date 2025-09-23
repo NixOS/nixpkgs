@@ -1,12 +1,12 @@
-{
-  fetchzip,
-  gtk3,
-  jdk,
-  lib,
-  libGLU,
-  pkg-config,
-  stdenv,
-  stripJavaArchivesHook,
+{ fetchzip
+, gtk3
+, jdk
+, lib
+, libGLU
+, pkg-config
+, stdenv
+, stripJavaArchivesHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

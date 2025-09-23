@@ -1,8 +1,8 @@
-{
-  buildPythonPackage,
-  dlib,
-  pytestCheckHook,
-  more-itertools,
+{ buildPythonPackage
+, dlib
+, pytestCheckHook
+, more-itertools
+,
 }:
 
 buildPythonPackage {

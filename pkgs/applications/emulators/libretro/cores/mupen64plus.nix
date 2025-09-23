@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  libGL,
-  libGLU,
-  libpng,
-  mkLibretroCore,
-  nasm,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, libGL
+, libGLU
+, libpng
+, mkLibretroCore
+, nasm
+, xorg
+,
 }:
 mkLibretroCore {
   core = "mupen64plus-next";

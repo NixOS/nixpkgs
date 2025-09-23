@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  gtk-engine-murrine,
-  jdupes,
-  gitUpdater,
+{ lib
+, stdenvNoCC
+, fetchurl
+, gtk-engine-murrine
+, jdupes
+, gitUpdater
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

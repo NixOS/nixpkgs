@@ -1,9 +1,9 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  contrib,
-  patricia,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, contrib
+, patricia
+, lib
+,
 }:
 build-idris-package {
   pname = "semidirect";

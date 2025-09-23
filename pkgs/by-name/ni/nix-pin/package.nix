@@ -1,13 +1,13 @@
-{
-  lib,
-  pkgs,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  nix,
-  git,
-  makeWrapper,
-  runtimeShell,
+{ lib
+, pkgs
+, stdenv
+, fetchFromGitHub
+, python3
+, nix
+, git
+, makeWrapper
+, runtimeShell
+,
 }:
 let
   self = stdenv.mkDerivation rec {
@@ -38,8 +38,8 @@ let
       in
       {
         api =
-          {
-            pinConfig ? defaults.pinConfig,
+          { pinConfig ? defaults.pinConfig
+          ,
           }:
           let
             impl = import "${self}/share/nix/api.nix" { inherit pkgs pinConfig; };

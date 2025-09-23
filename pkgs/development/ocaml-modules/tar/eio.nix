@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  tar,
-  eio,
-  git,
+{ buildDunePackage
+, tar
+, eio
+, git
+,
 }:
 
 buildDunePackage {

@@ -1,9 +1,9 @@
-{
-  coq,
-  mkCoqDerivation,
-  mathcomp-boot,
-  lib,
-  version ? null,
+{ coq
+, mkCoqDerivation
+, mathcomp-boot
+, lib
+, version ? null
+,
 }:
 
 mkCoqDerivation {

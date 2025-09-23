@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  huggingface-hub,
-  numpy,
-  safetensors,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  huggingface-hub
+, numpy
+, safetensors
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

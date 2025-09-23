@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  bash,
-  just,
-  catppuccin-whiskers,
-  kdePackages,
-  flavor ? "mocha",
-  accent ? "mauve",
-  font ? "Noto Sans",
-  fontSize ? "9",
-  background ? null,
-  loginBackground ? false,
-  userIcon ? false,
-  clockEnabled ? true,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, bash
+, just
+, catppuccin-whiskers
+, kdePackages
+, flavor ? "mocha"
+, accent ? "mauve"
+, font ? "Noto Sans"
+, fontSize ? "9"
+, background ? null
+, loginBackground ? false
+, userIcon ? false
+, clockEnabled ? true
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "catppuccin-sddm";

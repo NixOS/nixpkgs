@@ -1,7 +1,7 @@
-{
-  lib,
-  systemdUtils,
-  pkgs,
+{ lib
+, systemdUtils
+, pkgs
+,
 }:
 
 let
@@ -217,19 +217,21 @@ in
   ]);
 
   initrdStorePath = listOf (
-    coercedTo (oneOf [
-      singleLineStr
-      package
-    ]) (source: { inherit source; }) (submodule initrdStorePathModule)
+    coercedTo
+      (oneOf [
+        singleLineStr
+        package
+      ])
+      (source: { inherit source; })
+      (submodule initrdStorePathModule)
   );
 
   initrdContents = attrsOf (
     submodule (
-      {
-        config,
-        options,
-        name,
-        ...
+      { config
+      , options
+      , name
+      , ...
       }:
       {
         imports = [ initrdStorePathModule ];

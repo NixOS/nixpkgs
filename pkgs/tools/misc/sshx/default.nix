@@ -1,10 +1,10 @@
-{
-  lib,
-  callPackage,
-  rustPlatform,
-  fetchFromGitHub,
-  protobuf,
-  buildNpmPackage,
+{ lib
+, callPackage
+, rustPlatform
+, fetchFromGitHub
+, protobuf
+, buildNpmPackage
+,
 }:
 let
   version = "0.4.1";

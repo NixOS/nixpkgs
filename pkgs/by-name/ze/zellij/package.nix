@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  mandown,
-  installShellFiles,
-  pkg-config,
-  curl,
-  openssl,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, mandown
+, installShellFiles
+, pkg-config
+, curl
+, openssl
+, writableTmpDirAsHomeHook
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

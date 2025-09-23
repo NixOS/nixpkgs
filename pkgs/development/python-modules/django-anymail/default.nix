@@ -1,16 +1,16 @@
-{
-  lib,
-  boto3,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  hatchling,
-  mock,
-  python,
-  pythonOlder,
-  requests,
-  responses,
-  urllib3,
+{ lib
+, boto3
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, hatchling
+, mock
+, python
+, pythonOlder
+, requests
+, responses
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

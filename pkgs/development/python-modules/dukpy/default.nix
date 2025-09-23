@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  mutf8,
-  webassets,
-  pytestCheckHook,
-  mock,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, mutf8
+, webassets
+, pytestCheckHook
+, mock
+,
 }:
 
 buildPythonPackage rec {

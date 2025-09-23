@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  coreutils,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, coreutils
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

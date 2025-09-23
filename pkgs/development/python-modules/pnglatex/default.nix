@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poppler-utils,
-  netpbm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poppler-utils
+, netpbm
+,
 }:
 
 buildPythonPackage rec {

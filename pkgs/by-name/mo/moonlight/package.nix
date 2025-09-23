@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  pnpm_10,
-  nodejs_22,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, stdenv
+, pnpm_10
+, nodejs_22
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";

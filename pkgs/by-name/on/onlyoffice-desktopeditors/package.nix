@@ -1,40 +1,40 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  buildFHSEnv,
-  # Alphabetic ordering below
-  alsa-lib,
-  at-spi2-atk,
-  atk,
-  autoPatchelfHook,
-  cairo,
-  curl,
-  dbus,
-  dconf,
-  dpkg,
-  fontconfig,
-  gcc-unwrapped,
-  gdk-pixbuf,
-  glib,
-  glibc,
-  gsettings-desktop-schemas,
-  gst_all_1,
-  gtk2,
-  gtk3,
-  libpulseaudio,
-  libudev0-shim,
-  libdrm,
-  makeWrapper,
-  libgbm,
-  noto-fonts-cjk-sans,
-  nspr,
-  nss,
-  pulseaudio,
-  qt5,
-  wrapGAppsHook3,
-  xkeyboard_config,
-  xorg,
+{ stdenv
+, lib
+, fetchurl
+, buildFHSEnv
+, # Alphabetic ordering below
+  alsa-lib
+, at-spi2-atk
+, atk
+, autoPatchelfHook
+, cairo
+, curl
+, dbus
+, dconf
+, dpkg
+, fontconfig
+, gcc-unwrapped
+, gdk-pixbuf
+, glib
+, glibc
+, gsettings-desktop-schemas
+, gst_all_1
+, gtk2
+, gtk3
+, libpulseaudio
+, libudev0-shim
+, libdrm
+, makeWrapper
+, libgbm
+, noto-fonts-cjk-sans
+, nspr
+, nss
+, pulseaudio
+, qt5
+, wrapGAppsHook3
+, xkeyboard_config
+, xorg
+,
 }:
 let
 
@@ -158,8 +158,8 @@ let
 in
 
 # In order to download plugins, OnlyOffice uses /usr/bin/curl so we have to wrap it.
-# Curl still needs to be in runtimeLibs because the library is used directly in other parts of the code.
-# Fonts are also discovered by looking in /usr/share/fonts, so adding fonts to targetPkgs will include them
+  # Curl still needs to be in runtimeLibs because the library is used directly in other parts of the code.
+  # Fonts are also discovered by looking in /usr/share/fonts, so adding fonts to targetPkgs will include them
 buildFHSEnv {
   inherit (derivation) pname version;
 

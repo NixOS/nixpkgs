@@ -1,31 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchurl,
-  protobuf,
-  pymorphy3,
-  pymorphy3-dicts-uk,
-  sentencepiece,
-  setuptools,
-  spacy,
-  spacy-pkuseg,
-  spacy-curated-transformers,
-  sudachipy,
-  sudachidict-core,
-  transformers,
-  writeScript,
-  stdenv,
-  jq,
-  nix,
-  moreutils,
+{ lib
+, buildPythonPackage
+, fetchurl
+, protobuf
+, pymorphy3
+, pymorphy3-dicts-uk
+, sentencepiece
+, setuptools
+, spacy
+, spacy-pkuseg
+, spacy-curated-transformers
+, sudachipy
+, sudachidict-core
+, transformers
+, writeScript
+, stdenv
+, jq
+, nix
+, moreutils
+,
 }:
 let
   buildModelPackage =
-    {
-      pname,
-      version,
-      sha256,
-      license,
+    { pname
+    , version
+    , sha256
+    , license
+    ,
     }:
 
     let

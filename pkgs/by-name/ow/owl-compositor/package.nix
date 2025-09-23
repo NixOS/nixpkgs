@@ -1,14 +1,14 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
-  gnustep-back,
-  wrapGNUstepAppsHook,
-  libxkbcommon,
-  makeWrapper,
-  wayland,
-  wayland-scanner,
-  darwin,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+, gnustep-back
+, wrapGNUstepAppsHook
+, libxkbcommon
+, makeWrapper
+, wayland
+, wayland-scanner
+, darwin
+,
 }:
 
 let
@@ -64,9 +64,10 @@ stdenv.mkDerivation {
   configureScript = "../configure";
 
   # error: "Your gnustep-base was configured for the objc-nonfragile-abi but you are not using it now."
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin
-  ) "-fobjc-runtime=gnustep-2.0";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      !stdenv.hostPlatform.isDarwin
+    ) "-fobjc-runtime=gnustep-2.0";
 
   installPhase = ''
     runHook preInstall

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  autoreconfHook,
-  guile,
-  pkg-config,
-  texinfo,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitea
+, autoreconfHook
+, guile
+, pkg-config
+, texinfo
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

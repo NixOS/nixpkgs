@@ -1,9 +1,8 @@
-{
-  lib,
-  pkgs,
-  config,
-  options,
-  ...
+{ lib
+, pkgs
+, config
+, options
+, ...
 }:
 
 let
@@ -87,14 +86,14 @@ let
       add_header Strict-Transport-Security 'max-age=31536000';
     ''
     +
-      lib.optionalString
-        (
-          config.services.nginx.virtualHosts.${cfg.localDomain}.quic
-          && config.services.nginx.virtualHosts.${cfg.localDomain}.http3
-        )
-        ''
-          add_header Alt-Svc 'h3=":$server_port"; ma=604800';
-        '';
+    lib.optionalString
+      (
+        config.services.nginx.virtualHosts.${cfg.localDomain}.quic
+        && config.services.nginx.virtualHosts.${cfg.localDomain}.http3
+      )
+      ''
+        add_header Alt-Svc 'h3=":$server_port"; ma=604800';
+      '';
 
   nginxCommonHeadersExtra = ''
     add_header Access-Control-Allow-Origin '*';
@@ -182,9 +181,9 @@ in
                   if config.video_transcription.enabled then
                     lib.getExe pkgs.whisper-ctranslate2
                   else
-                    # This will be in the error message when someone enables
-                    # transcription manually in the web UI and tries to run a
-                    # transcription job.
+                  # This will be in the error message when someone enables
+                  # transcription manually in the web UI and tries to run a
+                  # transcription job.
                     "Set `services.peertube.settings.video_transcription.enabled = true`.";
                 defaultText = lib.literalExpression ''
                   if config.services.peertube.settings.video_transcription.enabled then

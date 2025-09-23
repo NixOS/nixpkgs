@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  xorg,
+{ mkKdeDerivation
+, xorg
+,
 }:
 mkKdeDerivation {
   pname = "kgamma";

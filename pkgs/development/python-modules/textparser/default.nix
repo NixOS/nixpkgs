@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

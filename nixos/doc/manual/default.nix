@@ -1,14 +1,14 @@
-{
-  pkgs,
-  options,
-  config,
-  version,
-  revision,
-  extraSources ? [ ],
-  baseOptionsJSON ? null,
-  warningsAreErrors ? true,
-  prefix ? ../../..,
-  checkRedirects ? true,
+{ pkgs
+, options
+, config
+, version
+, revision
+, extraSources ? [ ]
+, baseOptionsJSON ? null
+, warningsAreErrors ? true
+, prefix ? ../../..
+, checkRedirects ? true
+,
 }:
 
 let
@@ -75,19 +75,21 @@ let
         opt
         // {
           # Clean up declaration sites to not refer to the NixOS source tree.
-          declarations = map (
-            decl:
-            if hasPrefix (toString ../../..) (toString decl) then
-              let
-                subpath = removePrefix "/" (removePrefix (toString ../../..) (toString decl));
-              in
-              {
-                url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}";
-                name = subpath;
-              }
-            else
-              decl
-          ) opt.declarations;
+          declarations = map
+            (
+              decl:
+              if hasPrefix (toString ../../..) (toString decl) then
+                let
+                  subpath = removePrefix "/" (removePrefix (toString ../../..) (toString decl));
+                in
+                {
+                  url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}";
+                  name = subpath;
+                }
+              else
+                decl
+            )
+            opt.declarations;
         };
       documentType = "none";
       variablelistId = "test-options-list";

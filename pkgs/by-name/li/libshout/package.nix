@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  openssl,
-  libvorbis,
-  libtheora,
-  speex,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, openssl
+, libvorbis
+, libtheora
+, speex
+,
 }:
 
 # need pkg-config so that libshout installs ${out}/lib/pkgconfig/shout.pc

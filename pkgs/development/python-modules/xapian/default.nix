@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchurl,
-  python,
-  sphinx,
-  xapian,
+{ lib
+, buildPythonPackage
+, fetchurl
+, python
+, sphinx
+, xapian
+,
 }:
 
 let

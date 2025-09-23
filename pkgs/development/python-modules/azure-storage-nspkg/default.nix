@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  azure-nspkg,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, azure-nspkg
+,
 }:
 
 buildPythonPackage rec {

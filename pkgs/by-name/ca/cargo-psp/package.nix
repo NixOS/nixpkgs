@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchCrate,
-  rustPlatform,
-  makeBinaryWrapper,
-  nix-update-script,
+{ lib
+, fetchCrate
+, rustPlatform
+, makeBinaryWrapper
+, nix-update-script
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-psp";

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  jmespath,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, jmespath
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

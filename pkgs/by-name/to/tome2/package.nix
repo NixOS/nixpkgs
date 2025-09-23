@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeDesktopItem,
-  ncurses,
-  libX11,
-  boost,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, ncurses
+, libX11
+, boost
+, cmake
+,
 }:
 
 let

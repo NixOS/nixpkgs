@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cargo,
-  rustPlatform,
-  rustc,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cargo
+, rustPlatform
+, rustc
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

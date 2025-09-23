@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  slurp,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, slurp
+, nix-update-script
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "swaytools";

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  python,
-  glibcLocales,
-  fetchFromGitHub,
-  pytest-cov-stub,
-  pytestCheckHook,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, python
+, glibcLocales
+, fetchFromGitHub
+, pytest-cov-stub
+, pytestCheckHook
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

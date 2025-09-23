@@ -514,12 +514,12 @@ rec {
         fPrev = f prev;
       in
       if lib.isFunction fPrev then
-        # f is (final: prev: { ... })
+      # f is (final: prev: { ... })
         f final prev
       else
-        # f is (prev: { ... })
+      # f is (prev: { ... })
         fPrev
     else
-      # f is not a function; probably { ... }
+    # f is not a function; probably { ... }
       final: prev: f;
 }

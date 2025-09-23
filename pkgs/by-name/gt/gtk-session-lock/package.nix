@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  gtk3,
-  wayland-scanner,
-  wayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gtk3
+, wayland-scanner
+, wayland
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

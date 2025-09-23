@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  rustPlatform,
-  SDL2,
+{ lib
+, python3
+, fetchFromGitHub
+, rustPlatform
+, SDL2
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

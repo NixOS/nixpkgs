@@ -1,6 +1,6 @@
-{
-  callPackage,
-  fetchurl,
+{ callPackage
+, fetchurl
+,
 }:
 
 let

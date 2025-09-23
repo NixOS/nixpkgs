@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  xorgproto,
-  libx11,
-  libxext,
-  libxt,
-  ncompress,
-  gzip,
-  writeScript,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, xorgproto
+, libx11
+, libxext
+, libxt
+, ncompress
+, gzip
+, writeScript
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxpm";

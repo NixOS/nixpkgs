@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libX11,
-  fontconfig,
-  libXft,
-  libXrender,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libX11
+, fontconfig
+, libXft
+, libXrender
+,
 }:
 
 stdenv.mkDerivation {

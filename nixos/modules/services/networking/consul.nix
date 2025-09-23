@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 let
 
@@ -205,7 +204,7 @@ in
           serviceConfig = {
             ExecStart =
               "@${lib.getExe cfg.package} consul agent -config-dir /etc/consul.d"
-              + lib.concatMapStrings (n: " -config-file ${n}") configFiles;
+                + lib.concatMapStrings (n: " -config-file ${n}") configFiles;
             ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             PermissionsStartOnly = true;
             User = if cfg.dropPrivileges then "consul" else null;
@@ -260,10 +259,10 @@ in
             + lib.concatStrings (
               lib.flip lib.mapAttrsToList cfg.interface (
                 name: i:
-                lib.optionalString (i != null) ''
-                  echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
-                  delim=","
-                ''
+                  lib.optionalString (i != null) ''
+                    echo "$delim \"${name}_addr\": \"$(getAddr "${i}")\"" >> /etc/consul-addrs.json
+                    delim=","
+                  ''
               )
             )
             + ''

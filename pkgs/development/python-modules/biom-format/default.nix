@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cython,
-  click,
-  numpy,
-  scipy,
-  pandas,
-  h5py,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cython
+, click
+, numpy
+, scipy
+, pandas
+, h5py
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

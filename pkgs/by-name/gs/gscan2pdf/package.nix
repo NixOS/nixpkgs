@@ -1,25 +1,25 @@
-{
-  lib,
-  fetchurl,
-  perlPackages,
-  wrapGAppsHook3,
-  # libs
-  librsvg,
-  sane-backends,
-  sane-frontends,
-  # runtime dependencies
-  imagemagick,
-  libtiff,
-  djvulibre,
-  poppler-utils,
-  ghostscript,
-  unpaper,
-  pdftk,
-  # test dependencies
-  xvfb-run,
-  liberation_ttf,
-  file,
-  tesseract3,
+{ lib
+, fetchurl
+, perlPackages
+, wrapGAppsHook3
+, # libs
+  librsvg
+, sane-backends
+, sane-frontends
+, # runtime dependencies
+  imagemagick
+, libtiff
+, djvulibre
+, poppler-utils
+, ghostscript
+, unpaper
+, pdftk
+, # test dependencies
+  xvfb-run
+, liberation_ttf
+, file
+, tesseract3
+,
 }:
 
 perlPackages.buildPerlPackage rec {

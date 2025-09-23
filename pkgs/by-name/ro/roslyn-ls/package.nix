@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  stdenvNoCC,
-  testers,
-  roslyn-ls,
-  jq,
-  writeText,
-  runCommand,
-  expect,
+{ lib
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, stdenvNoCC
+, testers
+, roslyn-ls
+, jq
+, writeText
+, runCommand
+, expect
+,
 }:
 let
   pname = "roslyn-ls";

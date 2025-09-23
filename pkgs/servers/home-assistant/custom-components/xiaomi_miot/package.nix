@@ -1,11 +1,11 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  construct,
-  micloud,
-  python-miio,
-  nix-update-script,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, construct
+, micloud
+, python-miio
+, nix-update-script
+,
 }:
 
 buildHomeAssistantComponent rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchzip,
-  topkg,
-  buildTopkgPackage,
-  withBrr ? true,
-  brr,
-  withBytesrw ? true,
-  bytesrw,
-  withCmdliner ? true,
-  cmdliner,
+{ lib
+, fetchzip
+, topkg
+, buildTopkgPackage
+, withBrr ? true
+, brr
+, withBytesrw ? true
+, bytesrw
+, withCmdliner ? true
+, cmdliner
+,
 }:
 
 buildTopkgPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  brotli,
-  buildPythonPackage,
-  certifi,
-  dpkt,
-  fetchFromGitHub,
-  gevent,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  stdenv,
-  urllib3,
+{ lib
+, brotli
+, buildPythonPackage
+, certifi
+, dpkt
+, fetchFromGitHub
+, gevent
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, stdenv
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

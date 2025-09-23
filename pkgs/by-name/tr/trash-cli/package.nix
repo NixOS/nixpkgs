@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  nix-update-script,
-  python3Packages,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, nix-update-script
+, python3Packages
+,
 }:
 
 python3Packages.buildPythonApplication rec {

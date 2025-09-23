@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  llm,
-  llm-command-r,
-  cohere,
-  pytestCheckHook,
-  pytest-recording,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, llm
+, llm-command-r
+, cohere
+, pytestCheckHook
+, pytest-recording
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

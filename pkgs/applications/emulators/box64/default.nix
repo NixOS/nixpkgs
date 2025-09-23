@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  cmake,
-  python3,
-  withDynarec ? (
+{ lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, cmake
+, python3
+, withDynarec ? (
     stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64
-  ),
-  runCommand,
-  hello-x86_64,
+  )
+, runCommand
+, hello-x86_64
+,
 }:
 
 # Currently only supported on specific archs
 assert
-  withDynarec
+withDynarec
   -> (
-    stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64
-  );
+  stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64
+);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box64";

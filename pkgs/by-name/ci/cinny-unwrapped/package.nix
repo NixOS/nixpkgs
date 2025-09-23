@@ -1,14 +1,14 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  giflib,
-  python3,
-  pkg-config,
-  pixman,
-  cairo,
-  pango,
-  stdenv,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, giflib
+, python3
+, pkg-config
+, pixman
+, cairo
+, pango
+, stdenv
+,
 }:
 
 buildNpmPackage rec {

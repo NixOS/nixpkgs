@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  openal,
+{ lib
+, fetchurl
+, appimageTools
+, openal
+,
 }:
 let
   version = "1.2988.0";

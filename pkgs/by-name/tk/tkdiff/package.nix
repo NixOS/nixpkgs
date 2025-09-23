@@ -1,10 +1,10 @@
-{
-  diffutils,
-  fetchzip,
-  lib,
-  makeBinaryWrapper,
-  stdenv,
-  tk,
+{ diffutils
+, fetchzip
+, lib
+, makeBinaryWrapper
+, stdenv
+, tk
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

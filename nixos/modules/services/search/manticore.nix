@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -10,9 +9,9 @@ let
   format = pkgs.formats.json { };
 
   toSphinx =
-    {
-      mkKeyValue ? lib.generators.mkKeyValueDefault { } "=",
-      listsAsDuplicateKeys ? true,
+    { mkKeyValue ? lib.generators.mkKeyValueDefault { } "="
+    , listsAsDuplicateKeys ? true
+    ,
     }:
     attrsOfAttrs:
     let
@@ -32,9 +31,11 @@ let
     mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
 
   configFile = pkgs.writeText "manticore.conf" (
-    toSphinx {
-      mkKeyValue = k: v: "  ${k} = ${v}";
-    } cfg.settings
+    toSphinx
+      {
+        mkKeyValue = k: v: "  ${k} = ${v}";
+      }
+      cfg.settings
   );
 
 in

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libprojectm,
-  libGL,
-  libX11,
-  poco,
-  utf8proc,
-  SDL2,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libprojectm
+, libGL
+, libX11
+, poco
+, utf8proc
+, SDL2
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

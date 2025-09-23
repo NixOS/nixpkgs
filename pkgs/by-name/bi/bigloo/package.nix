@@ -1,12 +1,12 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  autoconf,
-  automake,
-  libtool,
-  gmp,
-  libunistring,
+{ fetchurl
+, lib
+, stdenv
+, autoconf
+, automake
+, libtool
+, gmp
+, libunistring
+,
 }:
 
 stdenv.mkDerivation rec {

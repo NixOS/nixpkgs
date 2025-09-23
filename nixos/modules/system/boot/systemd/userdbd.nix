@@ -5,9 +5,11 @@ let
 
   # List of system users that will be incorrectly treated as regular/normal
   # users by userdb.
-  highSystemUsers = lib.filter (
-    user: user.enable && user.isSystemUser && (lib.defaultTo 0 user.uid) >= 1000 && user.uid != 65534
-  ) (lib.attrValues config.users.users);
+  highSystemUsers = lib.filter
+    (
+      user: user.enable && user.isSystemUser && (lib.defaultTo 0 user.uid) >= 1000 && user.uid != 65534
+    )
+    (lib.attrValues config.users.users);
 in
 {
   options.services.userdbd = {

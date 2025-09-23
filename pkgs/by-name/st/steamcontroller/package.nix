@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  libusb1,
-  linuxHeaders,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, libusb1
+, linuxHeaders
+,
 }:
 
 with python3Packages;

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchurl,
-  importlib-resources,
-  pytestCheckHook,
-  python,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchurl
+, importlib-resources
+, pytestCheckHook
+, python
+, pythonOlder
+, setuptools
+,
 }:
 let
   table = fetchurl {

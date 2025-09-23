@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  importlib-metadata,
-  mergedeep,
-  platformdirs,
-  pyyaml,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, importlib-metadata
+, mergedeep
+, platformdirs
+, pyyaml
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

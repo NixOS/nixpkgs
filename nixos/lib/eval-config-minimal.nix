@@ -26,10 +26,10 @@ let
       attributes. See `lib.evalModules` in the Nixpkgs library.
   */
   evalModules =
-    {
-      prefix ? [ ],
-      modules ? [ ],
-      specialArgs ? { },
+    { prefix ? [ ]
+    , modules ? [ ]
+    , specialArgs ? { }
+    ,
     }:
     # NOTE: Regular NixOS currently does use this function! Don't break it!
     #       Ideally we don't diverge, unless we learn that we should.

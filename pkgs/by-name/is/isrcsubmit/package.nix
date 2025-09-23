@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  nix-update-script,
-  withKeyring ? true,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, nix-update-script
+, withKeyring ? true
+,
 }:
 
 python3Packages.buildPythonApplication {

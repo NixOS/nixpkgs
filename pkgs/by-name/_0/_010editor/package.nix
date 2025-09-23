@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fetchurl,
-  autoPatchelfHook,
-  makeWrapper,
-  makeDesktopItem,
-  cups,
-  qt6,
-  undmg,
-  xorg,
+{ lib
+, stdenv
+, fetchzip
+, fetchurl
+, autoPatchelfHook
+, makeWrapper
+, makeDesktopItem
+, cups
+, qt6
+, undmg
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -128,10 +127,12 @@ in
         mkDefault (
           map (e: e.mountPoint) (
             uniqueDeviceList (
-              mapAttrsToList (name: fs: {
-                mountPoint = fs.mountPoint;
-                device = fs.device;
-              }) (filterAttrs (name: fs: fs.fsType == "btrfs") config.fileSystems)
+              mapAttrsToList
+                (name: fs: {
+                  mountPoint = fs.mountPoint;
+                  device = fs.device;
+                })
+                (filterAttrs (name: fs: fs.fsType == "btrfs") config.fileSystems)
             )
           )
         );

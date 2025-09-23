@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  karton-core,
-  unittestCheckHook,
-  pythonOlder,
-  yara-python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, karton-core
+, unittestCheckHook
+, pythonOlder
+, yara-python
+,
 }:
 
 buildPythonPackage rec {

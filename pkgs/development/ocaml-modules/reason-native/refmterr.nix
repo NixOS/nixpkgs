@@ -1,12 +1,12 @@
-{
-  lib,
-  buildDunePackage,
-  atdgen,
-  atdgen-runtime,
-  re,
-  reason,
-  pastel,
-  src,
+{ lib
+, buildDunePackage
+, atdgen
+, atdgen-runtime
+, re
+, reason
+, pastel
+, src
+,
 }:
 
 buildDunePackage {

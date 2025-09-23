@@ -1,16 +1,16 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  rocksdb,
-  boost,
-  fuse3,
-  lib45d,
-  tbb_2022,
-  liburing,
-  installShellFiles,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, rocksdb
+, boost
+, fuse3
+, lib45d
+, tbb_2022
+, liburing
+, installShellFiles
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "autotier";

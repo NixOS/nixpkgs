@@ -1,17 +1,17 @@
-{
-  autoreconfHook,
-  fetchFromGitHub,
-  lib,
-  libtraceevent,
-  nix-update-script,
-  nixosTests,
-  perl,
-  pkg-config,
-  sqlite,
-  stdenv,
-  # Options
-  enableDmidecode ? stdenv.hostPlatform.isx86_64,
-  dmidecode,
+{ autoreconfHook
+, fetchFromGitHub
+, lib
+, libtraceevent
+, nix-update-script
+, nixosTests
+, perl
+, pkg-config
+, sqlite
+, stdenv
+, # Options
+  enableDmidecode ? stdenv.hostPlatform.isx86_64
+, dmidecode
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

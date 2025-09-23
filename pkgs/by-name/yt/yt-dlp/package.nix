@@ -1,17 +1,18 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  ffmpeg-headless,
-  rtmpdump,
-  atomicparsley,
-  pandoc,
-  installShellFiles,
-  atomicparsleySupport ? true,
-  ffmpegSupport ? true,
-  rtmpSupport ? true,
-  withAlias ? false, # Provides bin/youtube-dl for backcompat
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, ffmpeg-headless
+, rtmpdump
+, atomicparsley
+, pandoc
+, installShellFiles
+, atomicparsleySupport ? true
+, ffmpegSupport ? true
+, rtmpSupport ? true
+, withAlias ? false
+, # Provides bin/youtube-dl for backcompat
+  nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  multiprocess,
-  pandas-stubs,
-  pandas,
-  poetry-core,
-  pydantic,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, multiprocess
+, pandas-stubs
+, pandas
+, poetry-core
+, pydantic
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

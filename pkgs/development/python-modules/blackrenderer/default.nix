@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  setuptools-scm,
-  fonttools,
-  uharfbuzz,
-  pycairo,
-  pillow,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, fonttools
+, uharfbuzz
+, pycairo
+, pillow
+,
 }:
 
 buildPythonPackage rec {

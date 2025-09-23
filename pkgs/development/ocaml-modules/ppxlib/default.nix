@@ -1,25 +1,24 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  ocaml,
-  version ?
-    if lib.versionAtLeast ocaml.version "4.07" then
-      if lib.versionAtLeast ocaml.version "4.08" then
-        if lib.versionAtLeast ocaml.version "4.11" then
-          if lib.versionAtLeast ocaml.version "5.03" then "0.36.0" else "0.33.0"
-        else
-          "0.24.0"
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, version ? if lib.versionAtLeast ocaml.version "4.07" then
+    if lib.versionAtLeast ocaml.version "4.08" then
+      if lib.versionAtLeast ocaml.version "4.11" then
+        if lib.versionAtLeast ocaml.version "5.03" then "0.36.0" else "0.33.0"
       else
-        "0.15.0"
+        "0.24.0"
     else
-      "0.13.0",
-  ocaml-compiler-libs,
-  ocaml-migrate-parsetree,
-  ppx_derivers,
-  stdio,
-  stdlib-shims,
-  ocaml-migrate-parsetree-2,
+      "0.15.0"
+  else
+    "0.13.0"
+, ocaml-compiler-libs
+, ocaml-migrate-parsetree
+, ppx_derivers
+, stdio
+, stdlib-shims
+, ocaml-migrate-parsetree-2
+,
 }:
 
 let
@@ -91,13 +90,12 @@ let
         sha256 = "sha256-WrobzhTFMQhhQTARDIQ9AEv5O9LPOgd4/XCGuFOQpDQ=";
         min_version = "4.08";
       };
-    }
-    ."${version}";
+    }."${version}";
 in
 
 if
   param ? max_version && lib.versionAtLeast ocaml.version param.max_version
-  || param ? min_version && lib.versionOlder ocaml.version param.min_version
+    || param ? min_version && lib.versionOlder ocaml.version param.min_version
 then
   throw "ppxlib-${version} is not available for OCaml ${ocaml.version}"
 else

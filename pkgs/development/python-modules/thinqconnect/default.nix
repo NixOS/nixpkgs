@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  awsiotsdk,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyopenssl,
-  pythonOlder,
-  setuptools,
+{ lib
+, aiohttp
+, awsiotsdk
+, buildPythonPackage
+, fetchFromGitHub
+, pyopenssl
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

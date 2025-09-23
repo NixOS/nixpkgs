@@ -1,9 +1,9 @@
 # Derived from https://github.com/colemickens/nixpkgs-kubernetes
-{
-  fetchzip,
-  lib,
-  stdenv,
-  version,
+{ fetchzip
+, lib
+, stdenv
+, version
+,
 }:
 
 let
@@ -11,15 +11,13 @@ let
     {
       "x86_64-linux" = "amd64";
       "aarch64-linux" = "arm64";
-    }
-    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   imageHash =
     {
       "x86_64-linux" = "sha256-7xDc5Rr3rP36zS3kpM2QEqOCtmka3EAnts4Z1h8MNWY=";
       "aarch64-linux" = "sha256-8nLHTPetEfIrdtrpiT9Czcpf0NhL97TZ2DXyeBL04LA=";
-    }
-    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
 in
 fetchzip {

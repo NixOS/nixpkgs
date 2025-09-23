@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libxcb,
-  libXau,
-  libXdmcp,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libxcb
+, libXau
+, libXdmcp
+, lib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

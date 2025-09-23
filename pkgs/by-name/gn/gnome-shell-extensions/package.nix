@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  gettext,
-  pkg-config,
-  libgtop,
-  glib,
-  gnome,
-  gnome-menus,
-  replaceVars,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, gettext
+, pkg-config
+, libgtop
+, glib
+, gnome
+, gnome-menus
+, replaceVars
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

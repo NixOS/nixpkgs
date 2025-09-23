@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  cgen,
-  numpy,
-  platformdirs,
-  pytools,
-  typing-extensions,
-  boost,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, cgen
+, numpy
+, platformdirs
+, pytools
+, typing-extensions
+, boost
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

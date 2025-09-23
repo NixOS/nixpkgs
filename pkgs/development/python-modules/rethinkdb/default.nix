@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  looseversion,
-  six,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, looseversion
+, six
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

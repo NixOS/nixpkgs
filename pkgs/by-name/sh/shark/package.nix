@@ -1,11 +1,11 @@
-{
-  lib,
-  boost,
-  cmake,
-  fetchFromGitHub,
-  openssl,
-  stdenv,
-  enableOpenMP ? false,
+{ lib
+, boost
+, cmake
+, fetchFromGitHub
+, openssl
+, stdenv
+, enableOpenMP ? false
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "shark";

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchFromGitLab,
-  lib,
-  extra-cmake-modules,
-  kdePackages,
-  taglib,
-  exiv2,
-  podofo_0_10,
+{ stdenv
+, fetchFromGitLab
+, lib
+, extra-cmake-modules
+, kdePackages
+, taglib
+, exiv2
+, podofo_0_10
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

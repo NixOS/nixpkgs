@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  puredata,
+{ lib
+, stdenv
+, fetchurl
+, puredata
+,
 }:
 
 stdenv.mkDerivation {

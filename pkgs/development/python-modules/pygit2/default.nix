@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  cacert,
-  cached-property,
-  cffi,
-  fetchPypi,
-  isPyPy,
-  libgit2,
-  pycparser,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, cacert
+, cached-property
+, cffi
+, fetchPypi
+, isPyPy
+, libgit2
+, pycparser
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

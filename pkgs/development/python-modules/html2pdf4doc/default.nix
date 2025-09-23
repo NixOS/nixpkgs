@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  requests,
-  selenium,
-  versionCheckHook,
-  webdriver-manager,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, requests
+, selenium
+, versionCheckHook
+, webdriver-manager
+,
 }:
 
 buildPythonPackage rec {

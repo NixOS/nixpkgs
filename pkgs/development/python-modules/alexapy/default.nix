@@ -1,20 +1,20 @@
-{
-  lib,
-  aiofiles,
-  aiohttp,
-  authcaptureproxy,
-  backoff,
-  beautifulsoup4,
-  buildPythonPackage,
-  certifi,
-  cryptography,
-  fetchFromGitLab,
-  poetry-core,
-  pyotp,
-  pythonOlder,
-  requests,
-  simplejson,
-  yarl,
+{ lib
+, aiofiles
+, aiohttp
+, authcaptureproxy
+, backoff
+, beautifulsoup4
+, buildPythonPackage
+, certifi
+, cryptography
+, fetchFromGitLab
+, poetry-core
+, pyotp
+, pythonOlder
+, requests
+, simplejson
+, yarl
+,
 }:
 
 buildPythonPackage rec {

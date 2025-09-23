@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  podman,
-  fetchPypi,
-  ansible-lint,
+{ lib
+, python3Packages
+, podman
+, fetchPypi
+, ansible-lint
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "ansible-navigator";

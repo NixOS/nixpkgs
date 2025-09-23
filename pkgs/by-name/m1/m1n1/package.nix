@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  imagemagick,
-  source-code-pro,
-  python3Packages,
-  nix-update-script,
-  nixos-icons,
-  withBranding ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, imagemagick
+, source-code-pro
+, python3Packages
+, nix-update-script
+, nixos-icons
+, withBranding ? true
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "m1n1";

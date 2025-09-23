@@ -1,17 +1,17 @@
-{
-  cmake,
-  fetchFromGitLab,
-  lib,
-  libnotify,
-  mkDerivation,
-  pkg-config,
-  qtbase,
-  qtdeclarative,
-  qtgraphicaleffects,
-  qtquickcontrols2,
-  qttools,
-  qtwebengine,
-  stdenv,
+{ cmake
+, fetchFromGitLab
+, lib
+, libnotify
+, mkDerivation
+, pkg-config
+, qtbase
+, qtdeclarative
+, qtgraphicaleffects
+, qtquickcontrols2
+, qttools
+, qtwebengine
+, stdenv
+,
 }:
 
 mkDerivation rec {
@@ -55,15 +55,17 @@ mkDerivation rec {
   # TODO: The tests are failing because it can't locate QT plugins. Is there a better way to do this?
   + (builtins.concatStringsSep "\n" (
     lib.lists.flatten (
-      builtins.map (pkg: [
-        (lib.optionalString (pkg ? qtPluginPrefix) ''
-          export QT_PLUGIN_PATH="${pkg}/${pkg.qtPluginPrefix}"''${QT_PLUGIN_PATH:+':'}$QT_PLUGIN_PATH
-        '')
+      builtins.map
+        (pkg: [
+          (lib.optionalString (pkg ? qtPluginPrefix) ''
+            export QT_PLUGIN_PATH="${pkg}/${pkg.qtPluginPrefix}"''${QT_PLUGIN_PATH:+':'}$QT_PLUGIN_PATH
+          '')
 
-        (lib.optionalString (pkg ? qtQmlPrefix) ''
-          export QML2_IMPORT_PATH="${pkg}/${pkg.qtQmlPrefix}"''${QML2_IMPORT_PATH:+':'}$QML2_IMPORT_PATH
-        '')
-      ]) buildInputs
+          (lib.optionalString (pkg ? qtQmlPrefix) ''
+            export QML2_IMPORT_PATH="${pkg}/${pkg.qtQmlPrefix}"''${QML2_IMPORT_PATH:+':'}$QML2_IMPORT_PATH
+          '')
+        ])
+        buildInputs
     )
   ));
 

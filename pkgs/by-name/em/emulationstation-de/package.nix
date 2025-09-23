@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  bluez,
-  curl,
-  ffmpeg,
-  freeimage,
-  freetype,
-  gettext,
-  harfbuzz,
-  icu,
-  libgit2,
-  poppler,
-  pugixml,
-  SDL2,
-  libGL,
+{ lib
+, stdenv
+, fetchzip
+, cmake
+, pkg-config
+, alsa-lib
+, bluez
+, curl
+, ffmpeg
+, freeimage
+, freetype
+, gettext
+, harfbuzz
+, icu
+, libgit2
+, poppler
+, pugixml
+, SDL2
+, libGL
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchurl,
-  stdenvNoCC,
+{ lib
+, fetchurl
+, stdenvNoCC
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fcitx5-pinyin-zhwiki";

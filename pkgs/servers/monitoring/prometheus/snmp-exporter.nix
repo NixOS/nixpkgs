@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  net-snmp,
-  nixosTests,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, net-snmp
+, nixosTests
+,
 }:
 
 buildGoModule rec {

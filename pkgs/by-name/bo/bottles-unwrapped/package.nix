@@ -1,33 +1,33 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  blueprint-compiler,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  appstream-glib,
-  desktop-file-utils,
-  librsvg,
-  gtk4,
-  gtksourceview5,
-  libadwaita,
-  cabextract,
-  p7zip,
-  xdpyinfo,
-  imagemagick,
-  lsb-release,
-  pciutils,
-  procps,
-  gamemode,
-  gamescope,
-  mangohud,
-  vkbasalt-cli,
-  vmtouch,
-  libportal,
-  nix-update-script,
-  removeWarningPopup ? false,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, blueprint-compiler
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, appstream-glib
+, desktop-file-utils
+, librsvg
+, gtk4
+, gtksourceview5
+, libadwaita
+, cabextract
+, p7zip
+, xdpyinfo
+, imagemagick
+, lsb-release
+, pciutils
+, procps
+, gamemode
+, gamescope
+, mangohud
+, vkbasalt-cli
+, vmtouch
+, libportal
+, nix-update-script
+, removeWarningPopup ? false
+,
 }:
 
 python3Packages.buildPythonApplication rec {

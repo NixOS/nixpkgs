@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchFromBitbucket,
+{ lib
+, stdenv
+, fetchFromBitbucket
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

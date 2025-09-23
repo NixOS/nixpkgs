@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  python-dotenv,
-  pyyaml,
-  setuptools,
-  pypaBuildHook,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, python-dotenv
+, pyyaml
+, setuptools
+, pypaBuildHook
+,
 }:
 
 buildPythonApplication rec {

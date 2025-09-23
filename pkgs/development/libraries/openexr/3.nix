@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  imath,
-  libdeflate,
-  pkg-config,
-  libjxl,
-  pkgsCross,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, imath
+, libdeflate
+, pkg-config
+, libjxl
+, pkgsCross
+,
 }:
 
 stdenv.mkDerivation rec {

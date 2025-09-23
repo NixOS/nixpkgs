@@ -1,8 +1,8 @@
-{
-  buildEnv,
-  perl,
-  postgresql,
-  postgresqlTestExtension,
+{ buildEnv
+, perl
+, postgresql
+, postgresqlTestExtension
+,
 }:
 
 let

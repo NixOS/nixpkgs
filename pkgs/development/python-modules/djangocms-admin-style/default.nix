@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  pythonOlder,
-  pytestCheckHook,
-  setuptools,
-  pytest-django,
-  django-cms,
-  djangocms-admin-style,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, pythonOlder
+, pytestCheckHook
+, setuptools
+, pytest-django
+, django-cms
+, djangocms-admin-style
+,
 }:
 
 buildPythonPackage rec {

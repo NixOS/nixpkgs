@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  removeReferencesTo,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, removeReferencesTo
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  stdenv,
-  fetchurl,
-  zstd,
-  lib,
+{ stdenv
+, fetchurl
+, zstd
+, lib
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "docker-init";

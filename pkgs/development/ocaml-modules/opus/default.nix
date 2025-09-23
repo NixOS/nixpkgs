@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  dune-configurator,
-  pkg-config,
-  ogg,
-  libopus,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, dune-configurator
+, pkg-config
+, ogg
+, libopus
+,
 }:
 
 buildDunePackage {

@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  gitpython,
-  giturlparse,
-  lib,
-  nix-update-script,
-  requests,
-  setuptools-scm,
+{ buildPythonPackage
+, click
+, fetchFromGitHub
+, gitpython
+, giturlparse
+, lib
+, nix-update-script
+, requests
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

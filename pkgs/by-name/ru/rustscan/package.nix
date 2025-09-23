@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  nmap,
-  perl,
-  python3,
-  rustPlatform,
+{ lib
+, fetchFromGitHub
+, nmap
+, perl
+, python3
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage rec {

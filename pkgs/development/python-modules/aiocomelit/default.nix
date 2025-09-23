@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  colorlog,
-  fetchFromGitHub,
-  pint,
-  poetry-core,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, aiohttp
+, buildPythonPackage
+, colorlog
+, fetchFromGitHub
+, pint
+, poetry-core
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

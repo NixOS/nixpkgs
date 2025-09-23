@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  olm,
-  libsignal-ffi,
-  versionCheckHook,
-  # This option enables the use of an experimental pure-Go implementation of
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, olm
+, libsignal-ffi
+, versionCheckHook
+, # This option enables the use of an experimental pure-Go implementation of
   # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
   # is not recommended by the mautrix developers, but they are interested in
   # people trying it out in non-production-critical environments and reporting
   # any issues they run into.
-  withGoolm ? false,
+  withGoolm ? false
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libpulseaudio,
-  alsa-lib,
-  withPulseaudio ? true,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libpulseaudio
+, alsa-lib
+, withPulseaudio ? true
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scope-tui";

@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  google-api-core,
-  opencensus-context,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, google-api-core
+, opencensus-context
+,
 }:
 
 buildPythonPackage rec {

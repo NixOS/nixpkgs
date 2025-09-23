@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  makeDesktopItem,
-  cmake,
-  python3Packages,
-  netcdf,
-  glew,
-  glm,
-  libpng,
-  libxml2,
-  freetype,
-  mmtf-cpp,
-  msgpack,
-  qt5,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, makeDesktopItem
+, cmake
+, python3Packages
+, netcdf
+, glew
+, glm
+, libpng
+, libxml2
+, freetype
+, mmtf-cpp
+, msgpack
+, qt5
+,
 }:
 let
   pname = "pymol";

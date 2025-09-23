@@ -1,8 +1,7 @@
-{
-  lib,
-
-  beamPackages,
-  fetchFromGitHub,
+{ lib
+, beamPackages
+, fetchFromGitHub
+,
 }:
 
 beamPackages.mixRelease rec {

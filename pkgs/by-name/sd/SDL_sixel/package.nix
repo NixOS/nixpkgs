@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  libsixel,
-  pkg-config,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, libsixel
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation {

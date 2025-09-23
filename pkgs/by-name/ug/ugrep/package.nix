@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost,
-  brotli,
-  bzip2,
-  bzip3,
-  lz4,
-  makeWrapper,
-  pcre2,
-  testers,
-  xz,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, brotli
+, bzip2
+, bzip3
+, lz4
+, makeWrapper
+, pcre2
+, testers
+, xz
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,11 +1,11 @@
-{
-  lib,
-  mkCoqDerivation,
-  which,
-  coq,
-  stdlib,
-  version ? null,
-  elpi-version ? null,
+{ lib
+, mkCoqDerivation
+, which
+, coq
+, stdlib
+, version ? null
+, elpi-version ? null
+,
 }:
 
 let
@@ -27,7 +27,8 @@ let
           (case (range "8.13" "8.14") "1.13.7")
           (case "8.12" "1.12.0")
           (case "8.11" "1.11.4")
-        ] { }
+        ]
+          { }
       );
   elpi = coq.ocamlPackages.elpi.override { version = default-elpi-version; };
   propagatedBuildInputs_wo_elpi = [
@@ -55,7 +56,8 @@ let
         (case "8.13" "1.11.1")
         (case "8.12" "1.8.3_8.12")
         (case "8.11" "1.6.3_8.11")
-      ] null;
+      ]
+        null;
     release."2.6.0".sha256 = "sha256-23BHq1NFUkI3ayXnGUwiGFySLyY3EuH4RyMgAhQqI4g=";
     release."2.5.2".sha256 = "sha256-lLzjPrbVB3rrqox528YiheUb0u89R84Xmrgkn0oplOs=";
     release."2.5.0".sha256 = "sha256-Z5xjO83X/ZoTQlWnVupGXPH3HuJefr57Kv128I0dltg=";
@@ -156,7 +158,8 @@ let
 in
 # this is just a wrapper for rocqPackages.stdlib for Rocq >= 9.0
 if coq.rocqPackages ? rocq-elpi then
-  coq.rocqPackages.rocq-elpi.override {
+  coq.rocqPackages.rocq-elpi.override
+  {
     inherit version elpi-version;
     inherit (coq.rocqPackages) rocq-core;
   }

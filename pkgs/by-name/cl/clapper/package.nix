@@ -1,10 +1,10 @@
-{
-  stdenvNoCC,
-  clapper-unwrapped,
-  wrapGAppsHook4,
-  gobject-introspection,
-  xorg,
-  clapper-enhancers,
+{ stdenvNoCC
+, clapper-unwrapped
+, wrapGAppsHook4
+, gobject-introspection
+, xorg
+, clapper-enhancers
+,
 }:
 
 stdenvNoCC.mkDerivation {

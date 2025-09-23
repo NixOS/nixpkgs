@@ -1,10 +1,10 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  contrib,
-  effects,
-  lightyear,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, contrib
+, effects
+, lightyear
+, lib
+,
 }:
 build-idris-package {
   pname = "ipkgparser";

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  glib,
-  gettext,
-  replaceVars,
-  gnome-menus,
+{ lib
+, stdenv
+, fetchFromGitLab
+, glib
+, gettext
+, replaceVars
+, gnome-menus
+,
 }:
 
 stdenv.mkDerivation rec {

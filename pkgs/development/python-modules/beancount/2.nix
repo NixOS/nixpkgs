@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPy3k,
-  beautifulsoup4,
-  bottle,
-  chardet,
-  python-dateutil,
-  google-api-python-client,
-  google-auth-oauthlib,
-  lxml,
-  oauth2client,
-  ply,
-  pytest,
-  python-magic,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, beautifulsoup4
+, bottle
+, chardet
+, python-dateutil
+, google-api-python-client
+, google-auth-oauthlib
+, lxml
+, oauth2client
+, ply
+, pytest
+, python-magic
+, requests
+,
 }:
 
 buildPythonPackage rec {

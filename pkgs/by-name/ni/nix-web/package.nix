@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitea,
-  pkg-config,
-  openssl,
-  nixVersions,
-  nixPackage ? nixVersions.stable,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitea
+, pkg-config
+, openssl
+, nixVersions
+, nixPackage ? nixVersions.stable
+,
 }:
 
 let

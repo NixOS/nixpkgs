@@ -5,10 +5,10 @@
       nix-build -A tests.trivial-builders.writeShellScriptBin
 */
 
-{
-  lib,
-  writeScriptBin,
-  runCommand,
+{ lib
+, writeScriptBin
+, runCommand
+,
 }:
 let
   output = "hello";

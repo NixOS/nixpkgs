@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  faust2jack,
-  faust2lv2,
-  helmholtz,
-  mrpeach,
-  puredata-with-plugins,
-  jack-example-tools,
+{ lib
+, stdenv
+, fetchFromGitHub
+, faust2jack
+, faust2lv2
+, helmholtz
+, mrpeach
+, puredata-with-plugins
+, jack-example-tools
+,
 }:
 stdenv.mkDerivation rec {
   pname = "VoiceOfFaust";

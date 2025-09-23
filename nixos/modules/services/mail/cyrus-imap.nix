@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
+{ pkgs
+, lib
+, config
+, ...
 }:
 let
   cfg = config.services.cyrus-imap;
@@ -34,42 +33,49 @@ let
     let
       mkCyrusOptionsList =
         v:
-        mapAttrsToList (
-          p: q:
-          if (q != null) then
-            if builtins.isInt q then
-              "${p}=${builtins.toString q}"
+        mapAttrsToList
+          (
+            p: q:
+            if (q != null) then
+              if builtins.isInt q then
+                "${p}=${builtins.toString q}"
+              else
+                "${p}=\"${if builtins.isList q then (concatStringsSep " " q) else q}\""
             else
-              "${p}=\"${if builtins.isList q then (concatStringsSep " " q) else q}\""
-          else
-            ""
-        ) v;
+              ""
+          )
+          v;
       mkCyrusOptionsString = v: concatStringsSep " " (mkCyrusOptionsList v);
     in
     concatStringsSep "\n  " (mapAttrsToList (n: v: n + " " + (mkCyrusOptionsString v)) settings);
 
   cyrusConfig = lib.concatStringsSep "\n" (
-    lib.mapAttrsToList (n: v: ''
-      ${n} {
-        ${mkCyrusConfig v}
-      }
-    '') cfg.cyrusSettings
+    lib.mapAttrsToList
+      (n: v: ''
+        ${n} {
+          ${mkCyrusConfig v}
+        }
+      '')
+      cfg.cyrusSettings
   );
 
   imapdConfig =
     with generators;
-    toKeyValue {
-      mkKeyValue = mkKeyValueDefault {
-        mkValueString =
-          v:
-          if builtins.isBool v then
-            if v then "yes" else "no"
-          else if builtins.isList v then
-            concatStringsSep " " v
-          else
-            mkValueStringDefault { } v;
-      } ": ";
-    } cfg.imapdSettings;
+    toKeyValue
+      {
+        mkKeyValue = mkKeyValueDefault
+          {
+            mkValueString =
+              v:
+              if builtins.isBool v then
+                if v then "yes" else "no"
+              else if builtins.isList v then
+                concatStringsSep " " v
+              else
+                mkValueStringDefault { } v;
+          } ": ";
+      }
+      cfg.imapdSettings;
 in
 {
   imports = [

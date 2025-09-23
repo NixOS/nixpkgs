@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pnpm_9,
-  nodejs_22,
-  nix-update-script,
-  electron,
-  pipewire,
-  libpulseaudio,
-  makeShellWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pnpm_9
+, nodejs_22
+, nix-update-script
+, electron
+, pipewire
+, libpulseaudio
+, makeShellWrapper
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
-  lib,
-  nix-update-script,
-  pythonOlder,
-  flit-core,
+{ buildPythonPackage
+, fetchPypi
+, fetchpatch
+, lib
+, nix-update-script
+, pythonOlder
+, flit-core
+,
 }:
 buildPythonPackage rec {
   pname = "pkgutil-resolve-name";

@@ -1,10 +1,10 @@
-{
-  blas,
-  blasfeo,
-  cmake,
-  fetchFromGitHub,
-  lib,
-  stdenv,
+{ blas
+, blasfeo
+, cmake
+, fetchFromGitHub
+, lib
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

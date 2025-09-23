@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  fftw,
-  withFftw3 ? (!stdenv.hostPlatform.isMinGW),
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, fftw
+, withFftw3 ? (!stdenv.hostPlatform.isMinGW)
+,
 }:
 
 stdenv.mkDerivation rec {

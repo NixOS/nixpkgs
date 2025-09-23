@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  cython,
-  numpy,
-  setuptools,
-
-  # native dependencies
-  openmp,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  cython
+, numpy
+, setuptools
+, # native dependencies
+  openmp
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonAtLeast,
-  unittestCheckHook,
-  rustPlatform,
-  fetchFromGitHub,
-  rustc,
-  cargo,
-  libiconv,
-  setuptools,
-  setuptools-rust,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonAtLeast
+, unittestCheckHook
+, rustPlatform
+, fetchFromGitHub
+, rustc
+, cargo
+, libiconv
+, setuptools
+, setuptools-rust
+,
 }:
 
 buildPythonPackage rec {

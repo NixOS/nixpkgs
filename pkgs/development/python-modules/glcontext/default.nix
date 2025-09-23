@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  libGL,
-  libX11,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, libGL
+, libX11
+,
 }:
 
 buildPythonPackage rec {

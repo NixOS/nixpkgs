@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  perl,
-  nixosTests,
-  withDebug ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, perl
+, nixosTests
+, withDebug ? false
+,
 }:
 
 stdenv.mkDerivation rec {

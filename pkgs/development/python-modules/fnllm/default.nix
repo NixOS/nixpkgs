@@ -1,23 +1,23 @@
-{
-  lib,
-  aiolimiter,
-  azure-identity,
-  azure-storage-blob,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  httpx,
-  json-repair,
-  openai,
-  polyfactory,
-  pydantic,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  tenacity,
-  tiktoken,
-  uv-dynamic-versioning,
+{ lib
+, aiolimiter
+, azure-identity
+, azure-storage-blob
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, httpx
+, json-repair
+, openai
+, polyfactory
+, pydantic
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, tenacity
+, tiktoken
+, uv-dynamic-versioning
+,
 }:
 
 buildPythonPackage rec {

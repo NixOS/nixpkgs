@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  qgpgme,
+{ mkKdeDerivation
+, qgpgme
+,
 }:
 mkKdeDerivation {
   pname = "isoimagewriter";

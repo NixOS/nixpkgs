@@ -1,14 +1,14 @@
-{
-  lib,
-  arrow,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytest-flakes,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  tatsu,
+{ lib
+, arrow
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-flakes
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, tatsu
+,
 }:
 
 buildPythonPackage rec {

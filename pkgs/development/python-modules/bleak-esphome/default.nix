@@ -1,20 +1,20 @@
-{
-  lib,
-  aioesphomeapi,
-  bleak,
-  bleak-retry-connector,
-  bluetooth-data-tools,
-  buildPythonPackage,
-  cython,
-  fetchFromGitHub,
-  habluetooth,
-  lru-dict,
-  poetry-core,
-  pytest-asyncio,
-  pytest-codspeed,
-  pytest-cov-stub,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, aioesphomeapi
+, bleak
+, bleak-retry-connector
+, bluetooth-data-tools
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, habluetooth
+, lru-dict
+, poetry-core
+, pytest-asyncio
+, pytest-codspeed
+, pytest-cov-stub
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  qtModule,
-  qtbase,
-  qtdeclarative,
-  protobuf,
-  grpc,
+{ qtModule
+, qtbase
+, qtdeclarative
+, protobuf
+, grpc
+,
 }:
 
 qtModule {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  numpy,
-  astropy,
-  astropy-extension-helpers,
-  setuptools,
-  setuptools-scm,
-  pytestCheckHook,
-  pytest-doctestplus,
-  hypothesis,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, numpy
+, astropy
+, astropy-extension-helpers
+, setuptools
+, setuptools-scm
+, pytestCheckHook
+, pytest-doctestplus
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

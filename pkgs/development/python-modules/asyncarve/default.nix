@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mashumaro,
-  orjson,
-  aiohttp,
-  yarl,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mashumaro
+, orjson
+, aiohttp
+, yarl
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,7 @@
-{
-  pkgs,
-  # bool: whether to use networkd in the tests
-  networkd ? false,
-  ...
+{ pkgs
+, # bool: whether to use networkd in the tests
+  networkd ? false
+, ...
 }:
 
 # Test whether `avahi-daemon' and `libnss-mdns' work as expected.

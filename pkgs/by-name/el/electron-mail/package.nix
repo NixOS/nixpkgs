@@ -1,8 +1,8 @@
-{
-  appimageTools,
-  lib,
-  fetchurl,
-  nix-update-script,
+{ appimageTools
+, lib
+, fetchurl
+, nix-update-script
+,
 }:
 
 let

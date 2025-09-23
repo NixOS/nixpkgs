@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  powershell,
-  autoSignDarwinBinariesHook,
-  glibcLocales,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, powershell
+, autoSignDarwinBinariesHook
+, glibcLocales
+,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "ilspycmd";

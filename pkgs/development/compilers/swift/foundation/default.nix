@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  callPackage,
-  cmake,
-  ninja,
-  swift,
-  Dispatch,
-  icu,
-  libxml2,
-  curl,
+{ lib
+, stdenv
+, fetchpatch
+, callPackage
+, cmake
+, ninja
+, swift
+, Dispatch
+, icu
+, libxml2
+, curl
+,
 }:
 
 let

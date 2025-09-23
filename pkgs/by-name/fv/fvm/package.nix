@@ -1,11 +1,11 @@
-{
-  lib,
-  buildDartApplication,
-  fetchFromGitHub,
-  runCommand,
-  yq-go,
-  _experimental-update-script-combinators,
-  gitUpdater,
+{ lib
+, buildDartApplication
+, fetchFromGitHub
+, runCommand
+, yq-go
+, _experimental-update-script-combinators
+, gitUpdater
+,
 }:
 
 let

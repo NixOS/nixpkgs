@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  libuuid,
-  openssl,
-  libossp_uuid,
-  freeswitch,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, libuuid
+, openssl
+, libossp_uuid
+, freeswitch
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

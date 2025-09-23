@@ -1,14 +1,14 @@
-{
-  lib,
-  buildNpmPackage,
-  copyDesktopItems,
-  electron_35,
-  fetchFromGitHub,
-  jq,
-  makeDesktopItem,
-  makeWrapper,
-  nodejs_22,
-  stdenv,
+{ lib
+, buildNpmPackage
+, copyDesktopItems
+, electron_35
+, fetchFromGitHub
+, jq
+, makeDesktopItem
+, makeWrapper
+, nodejs_22
+, stdenv
+,
 }:
 
 let

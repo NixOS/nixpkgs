@@ -1,11 +1,11 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  itree-io,
-  json,
-  QuickChick,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, itree-io
+, json
+, QuickChick
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -23,7 +23,8 @@ mkCoqDerivation {
         case = range "8.12" "8.19";
         out = "0.1.0";
       }
-    ] null;
+    ]
+      null;
   release = {
     "0.1.0".sha256 = "sha256-0DBUS20337tpBi64mlJIWTQvIAdUvWbFCM9Sat7MEA8=";
   };

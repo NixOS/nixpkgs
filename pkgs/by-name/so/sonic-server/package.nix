@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  nixosTests,
-  rustPlatform,
-  sonic-server,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, nixosTests
+, rustPlatform
+, sonic-server
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage rec {

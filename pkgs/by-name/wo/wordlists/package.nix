@@ -1,18 +1,18 @@
-{
-  lib,
-  symlinkJoin,
-  nmap,
-  rockyou,
-  seclists,
-  wfuzz,
-  lists ? [
+{ lib
+, symlinkJoin
+, nmap
+, rockyou
+, seclists
+, wfuzz
+, lists ? [
     nmap
     rockyou
     seclists
     wfuzz
-  ],
-  writeShellScriptBin,
-  tree,
+  ]
+, writeShellScriptBin
+, tree
+,
 }:
 let
   wordlistsCollection = symlinkJoin {

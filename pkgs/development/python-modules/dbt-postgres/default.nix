@@ -1,14 +1,14 @@
-{
-  lib,
-  agate,
-  buildPythonPackage,
-  fetchFromGitHub,
-  dbt-adapters,
-  dbt-common,
-  dbt-core,
-  hatchling,
-  psycopg2,
-  pythonOlder,
+{ lib
+, agate
+, buildPythonPackage
+, fetchFromGitHub
+, dbt-adapters
+, dbt-common
+, dbt-core
+, hatchling
+, psycopg2
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

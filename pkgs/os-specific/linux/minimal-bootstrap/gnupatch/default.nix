@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  kaem,
-  tinycc,
+{ lib
+, fetchurl
+, kaem
+, tinycc
+,
 }:
 let
   pname = "gnupatch";
@@ -69,20 +69,20 @@ let
   objects = map (x: lib.replaceStrings [ ".c" ] [ ".o" ] (builtins.baseNameOf x)) sources;
 in
 kaem.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [ tinycc.compiler ];
+  nativeBuildInputs = [ tinycc.compiler ];
 
-    meta = with lib; {
-      description = "GNU Patch, a program to apply differences to files";
-      homepage = "https://www.gnu.org/software/patch";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      mainProgram = "patch";
-      platforms = platforms.unix;
-    };
-  }
+  meta = with lib; {
+    description = "GNU Patch, a program to apply differences to files";
+    homepage = "https://www.gnu.org/software/patch";
+    license = licenses.gpl3Plus;
+    teams = [ teams.minimal-bootstrap ];
+    mainProgram = "patch";
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     ungz --file ${src} --output patch.tar

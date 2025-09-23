@@ -1,10 +1,10 @@
-{
-  callPackage,
-  fetchFromGitHub,
-  lib,
-  nixosTests,
-  stdenv,
-  symlinkJoin,
+{ callPackage
+, fetchFromGitHub
+, lib
+, nixosTests
+, stdenv
+, symlinkJoin
+,
 }:
 
 let

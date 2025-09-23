@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromBitbucket,
-  asciidoc,
+{ lib
+, stdenv
+, fetchFromBitbucket
+, asciidoc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

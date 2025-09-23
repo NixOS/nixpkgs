@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  zlib,
-  ncurses,
-  libiconv,
+{ lib
+, fetchurl
+, stdenv
+, zlib
+, ncurses
+, libiconv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

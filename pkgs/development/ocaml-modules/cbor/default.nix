@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  ocplib-endian,
-  yojson,
+{ lib
+, buildDunePackage
+, fetchurl
+, ocplib-endian
+, yojson
+,
 }:
 
 buildDunePackage rec {

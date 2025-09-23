@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools-scm,
-  hatchling,
-  hatch-vcs,
-  nipreps-versions,
-  pybids,
-  requests,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools-scm
+, hatchling
+, hatch-vcs
+, nipreps-versions
+, pybids
+, requests
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

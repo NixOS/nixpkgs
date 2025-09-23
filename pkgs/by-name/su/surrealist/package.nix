@@ -1,27 +1,27 @@
-{
-  buildGoModule,
-  cairo,
-  cargo-tauri,
-  cargo,
-  esbuild,
-  fetchFromGitHub,
-  gdk-pixbuf,
-  glib-networking,
-  gobject-introspection,
-  jq,
-  lib,
-  libsoup_3,
-  makeBinaryWrapper,
-  moreutils,
-  nodejs,
-  openssl,
-  pango,
-  pkg-config,
-  pnpm_9,
-  rustc,
-  rustPlatform,
-  stdenv,
-  webkitgtk_4_1,
+{ buildGoModule
+, cairo
+, cargo-tauri
+, cargo
+, esbuild
+, fetchFromGitHub
+, gdk-pixbuf
+, glib-networking
+, gobject-introspection
+, jq
+, lib
+, libsoup_3
+, makeBinaryWrapper
+, moreutils
+, nodejs
+, openssl
+, pango
+, pkg-config
+, pnpm_9
+, rustc
+, rustPlatform
+, stdenv
+, webkitgtk_4_1
+,
 }:
 
 let

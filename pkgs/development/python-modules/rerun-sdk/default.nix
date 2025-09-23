@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  rerun,
-  python,
-
-  # nativeBuildInputs
-  rustPlatform,
-
-  # dependencies
-  attrs,
-  numpy,
-  opencv4,
-  pillow,
-  pyarrow,
-  semver,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  torch,
+{ lib
+, stdenv
+, buildPythonPackage
+, rerun
+, python
+, # nativeBuildInputs
+  rustPlatform
+, # dependencies
+  attrs
+, numpy
+, opencv4
+, pillow
+, pyarrow
+, semver
+, typing-extensions
+, # tests
+  pytestCheckHook
+, torch
+,
 }:
 
 buildPythonPackage {

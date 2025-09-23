@@ -1,6 +1,6 @@
-{
-  lib,
-  stdenv,
+{ lib
+, stdenv
+,
 }:
 
 { version, src, ... }:

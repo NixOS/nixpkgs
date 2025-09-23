@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitiles,
-  libcap,
-  installShellFiles,
+{ stdenv
+, lib
+, fetchFromGitiles
+, libcap
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation rec {

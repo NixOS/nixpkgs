@@ -1,17 +1,17 @@
-{
-  fetchurl,
-  fetchpatch,
-  lib,
-  stdenv,
-  pkg-config,
-  clutter,
-  gtk3,
-  glib,
-  cogl,
-  gnome,
-  gdk-pixbuf,
-  gobject-introspection,
-  gst_all_1,
+{ fetchurl
+, fetchpatch
+, lib
+, stdenv
+, pkg-config
+, clutter
+, gtk3
+, glib
+, cogl
+, gnome
+, gdk-pixbuf
+, gobject-introspection
+, gst_all_1
+,
 }:
 
 stdenv.mkDerivation rec {

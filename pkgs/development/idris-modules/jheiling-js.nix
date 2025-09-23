@@ -1,9 +1,9 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  contrib,
-  jheiling-extras,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, contrib
+, jheiling-extras
+, lib
+,
 }:
 build-idris-package {
   pname = "jheiling-js";

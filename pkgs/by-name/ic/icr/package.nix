@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  crystal,
-  shards,
-  makeWrapper,
-  pkg-config,
-  which,
-  openssl,
-  readline,
-  libyaml,
-  zlib,
+{ lib
+, fetchFromGitHub
+, crystal
+, shards
+, makeWrapper
+, pkg-config
+, which
+, openssl
+, readline
+, libyaml
+, zlib
+,
 }:
 
 crystal.buildCrystalPackage rec {

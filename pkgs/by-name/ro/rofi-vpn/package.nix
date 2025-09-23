@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  makeWrapper,
-  networkmanager,
-  rofi-unwrapped,
+{ stdenv
+, lib
+, fetchFromGitLab
+, makeWrapper
+, networkmanager
+, rofi-unwrapped
+,
 }:
 
 stdenv.mkDerivation rec {

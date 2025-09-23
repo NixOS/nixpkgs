@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  guile,
-  guile-fibers,
-  guile-gcrypt,
-  guile-gnutls,
-  guile-websocket,
-  texinfo,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, guile
+, guile-fibers
+, guile-gcrypt
+, guile-gnutls
+, guile-websocket
+, texinfo
+, pkg-config
+,
 }:
 stdenv.mkDerivation rec {
   pname = "guile-goblins";

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

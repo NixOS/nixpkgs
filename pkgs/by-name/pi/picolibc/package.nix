@@ -1,93 +1,82 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  meson,
-  ninja,
-  nix-update-script,
-  pkgsCross,
-
-  # General Build Options
+{ stdenv
+, fetchFromGitHub
+, lib
+, meson
+, ninja
+, nix-update-script
+, pkgsCross
+, # General Build Options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L40-L57
-  multilib ? true,
-  sanitize-bounds ? false,
-  sanitize-trap-on-error ? false,
-  profile ? false,
-  analyzer ? false,
-  assert-verbose ? true,
-  fast-strcmp ? true,
-
-  # Testing options
+  multilib ? true
+, sanitize-bounds ? false
+, sanitize-trap-on-error ? false
+, profile ? false
+, analyzer ? false
+, assert-verbose ? true
+, fast-strcmp ? true
+, # Testing options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L75
-  picolib ? stdenv.hostPlatform.isNone,
-  semihost ? stdenv.hostPlatform.isNone,
-
-  # Stdio Options
+  picolib ? stdenv.hostPlatform.isNone
+, semihost ? stdenv.hostPlatform.isNone
+, # Stdio Options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L114
-  tinystdio ? true,
-  io-c99-formats ? true,
-  io-long-long ? false,
-  io-pos-args ? false,
-  io-long-double ? false,
-
-  # Tinystdio options
+  tinystdio ? true
+, io-c99-formats ? true
+, io-long-long ? false
+, io-pos-args ? false
+, io-long-double ? false
+, # Tinystdio options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L129
-  io-float-exact ? true,
-  atomic-ungetc ? true,
-  posix-console ? !stdenv.hostPlatform.isNone,
-  format-default ? "double",
-  printf-aliases ? true,
-  io-percent-b ? false,
-  printf-small-ultoa ? true,
-  printf-percent-n ? false,
-  minimal-io-long-long ? false,
-  fast-bufio ? false,
-  io-wchar ? false,
-
-  # Internaltionalization options
+  io-float-exact ? true
+, atomic-ungetc ? true
+, posix-console ? !stdenv.hostPlatform.isNone
+, format-default ? "double"
+, printf-aliases ? true
+, io-percent-b ? false
+, printf-small-ultoa ? true
+, printf-percent-n ? false
+, minimal-io-long-long ? false
+, fast-bufio ? false
+, io-wchar ? false
+, # Internaltionalization options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L181
-  mb-capable ? false,
-  mb-extended-charsets ? false,
-  mb-ucs-charsets ? "auto",
-  mb-iso-charsets ? "auto",
-  mb-jis-charsets ? "auto",
-  mb-windows-charsets ? "auto",
-
-  # Startup/shutdown options
+  mb-capable ? false
+, mb-extended-charsets ? false
+, mb-ucs-charsets ? "auto"
+, mb-iso-charsets ? "auto"
+, mb-jis-charsets ? "auto"
+, mb-windows-charsets ? "auto"
+, # Startup/shutdown options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L198
-  picocrt ? stdenv.hostPlatform.isNone,
-  picocrt-enable-mmu ? true,
-  picocrt-lib ? true,
-  picoexit ? true,
-  initfini-array ? true,
-  crt-runtime-size ? false,
-
-  # Legacy (non-picoexit) startup/shutdown options
+  picocrt ? stdenv.hostPlatform.isNone
+, picocrt-enable-mmu ? true
+, picocrt-lib ? true
+, picoexit ? true
+, initfini-array ? true
+, crt-runtime-size ? false
+, # Legacy (non-picoexit) startup/shutdown options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L217
-  newlib-atexit-dynamic-alloc ? false,
-  newlib-global-atexit ? !stdenv.hostPlatform.isNone,
-  newlib-register-fini ? false,
-
-  # Malloc options
+  newlib-atexit-dynamic-alloc ? false
+, newlib-global-atexit ? !stdenv.hostPlatform.isNone
+, newlib-register-fini ? false
+, # Malloc options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L228
-  newlib-nano-malloc ? true,
-  nano-malloc-clear-freed ? false,
-
-  # Locking options
+  newlib-nano-malloc ? true
+, nano-malloc-clear-freed ? false
+, # Locking options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L237
-  single-thread ? false,
-
-  # TLS storage options
+  single-thread ? false
+, # TLS storage options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L244
-  thread-local-storage ? "picolibc",
-  tls-model ? if stdenv.hostPlatform.isNone then "local-exec" else "global-dynamic",
-  newlib-global-errno ? false,
-  errno-function ? if stdenv.hostPlatform.isNone then "false" else "auto",
-  tls-rp2040 ? false,
-
-  # Math options
+  thread-local-storage ? "picolibc"
+, tls-model ? if stdenv.hostPlatform.isNone then "local-exec" else "global-dynamic"
+, newlib-global-errno ? false
+, errno-function ? if stdenv.hostPlatform.isNone then "false" else "auto"
+, tls-rp2040 ? false
+, # Math options
   # https://github.com/picolibc/picolibc/blob/e57b766cb5d80f23c20d05ab067001d85910f927/meson_options.txt#L261
-  want-math-errno ? false,
+  want-math-errno ? false
+,
 }:
 let
   inherit (lib.strings) mesonBool mesonOption;

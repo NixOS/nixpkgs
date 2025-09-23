@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  nixosTests,
-  fetchYarnDeps,
-  applyPatches,
-  php,
-  yarnConfigHook,
-  yarnBuildHook,
-  yarnInstallHook,
-  nodePackages,
-  fetchzip,
+{ lib
+, fetchFromGitHub
+, nixosTests
+, fetchYarnDeps
+, applyPatches
+, php
+, yarnConfigHook
+, yarnBuildHook
+, yarnInstallHook
+, nodePackages
+, fetchzip
+,
 }:
 let
   version = "1.6.3";

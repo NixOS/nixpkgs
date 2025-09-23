@@ -1,21 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-
-  perlPackages,
-
-  cdparanoia,
-  coreutils,
-  eject,
-  flac,
-  gnugrep,
-  nano,
-  sox,
-  vorbis-tools,
-  vorbisgain,
-  which,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, perlPackages
+, cdparanoia
+, coreutils
+, eject
+, flac
+, gnugrep
+, nano
+, sox
+, vorbis-tools
+, vorbisgain
+, which
+,
 }:
 
 stdenv.mkDerivation rec {

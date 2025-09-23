@@ -1,9 +1,9 @@
-{
-  lib,
-  repoRevToNameMaybe,
-  fetchgit,
-  fetchhg,
-  fetchzip,
+{ lib
+, repoRevToNameMaybe
+, fetchgit
+, fetchhg
+, fetchzip
+,
 }:
 
 let
@@ -15,22 +15,22 @@ let
 in
 
 makeOverridable (
-  {
-    owner,
-    repo,
-    rev ? null,
-    tag ? null,
-    name ? repoRevToNameMaybe repo (lib.revOrTag rev tag) "sourcehut",
-    domain ? "sr.ht",
-    vc ? "git",
-    fetchSubmodules ? false,
-    ... # For hash agility
+  { owner
+  , repo
+  , rev ? null
+  , tag ? null
+  , name ? repoRevToNameMaybe repo (lib.revOrTag rev tag) "sourcehut"
+  , domain ? "sr.ht"
+  , vc ? "git"
+  , fetchSubmodules ? false
+  , ... # For hash agility
   }@args:
 
   assert (
-    lib.assertMsg (lib.xor (tag == null) (
-      rev == null
-    )) "fetchFromSourcehut requires one of either `rev` or `tag` to be provided (not both)."
+    lib.assertMsg
+      (lib.xor (tag == null) (
+        rev == null
+      )) "fetchFromSourcehut requires one of either `rev` or `tag` to be provided (not both)."
   );
 
   assert (
@@ -90,7 +90,7 @@ makeOverridable (
     };
   in
   cases.${fetcher}.fetch cases.${fetcher}.arguments
-  // {
+    // {
     rev = rev';
     meta.homepage = "${baseUrl}";
   }

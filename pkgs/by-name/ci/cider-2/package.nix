@@ -1,20 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  autoPatchelfHook,
-  makeWrapper,
-
-  # Required dependencies for autoPatchelfHook
-  alsa-lib,
-  asar,
-  gtk3,
-  libgbm,
-  libGL,
-  nspr,
-  nss,
-  widevine-cdm,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, autoPatchelfHook
+, makeWrapper
+, # Required dependencies for autoPatchelfHook
+  alsa-lib
+, asar
+, gtk3
+, libgbm
+, libGL
+, nspr
+, nss
+, widevine-cdm
+,
 }:
 stdenv.mkDerivation rec {
   pname = "cider-2";

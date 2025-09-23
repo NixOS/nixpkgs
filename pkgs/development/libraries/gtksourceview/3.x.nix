@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  atk,
-  cairo,
-  glib,
-  gtk3,
-  pango,
-  vala,
-  libxml2,
-  perl,
-  intltool,
-  gettext,
-  gobject-introspection,
-  dbus,
-  xvfb-run,
-  shared-mime-info,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, atk
+, cairo
+, glib
+, gtk3
+, pango
+, vala
+, libxml2
+, perl
+, intltool
+, gettext
+, gobject-introspection
+, dbus
+, xvfb-run
+, shared-mime-info
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

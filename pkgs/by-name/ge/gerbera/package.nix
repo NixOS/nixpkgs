@@ -1,45 +1,45 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  nixosTests,
-  # required
-  libiconv,
-  libupnp,
-  libuuid,
-  pugixml,
-  spdlog,
-  sqlite,
-  zlib,
-  fmt_11,
-  # options
-  enableMysql ? false,
-  libmysqlclient,
-  enableDuktape ? true,
-  duktape,
-  enableCurl ? true,
-  curl,
-  enableTaglib ? true,
-  taglib,
-  enableLibmagic ? true,
-  file,
-  enableLibmatroska ? true,
-  libmatroska,
-  libebml,
-  enableAvcodec ? false,
-  ffmpeg,
-  enableLibexif ? true,
-  libexif,
-  enableExiv2 ? false,
-  exiv2,
-  enableFFmpegThumbnailer ? false,
-  ffmpegthumbnailer,
-  enableInotifyTools ? true,
-  inotify-tools,
-  wavpack,
-  enableWavPack ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, nixosTests
+, # required
+  libiconv
+, libupnp
+, libuuid
+, pugixml
+, spdlog
+, sqlite
+, zlib
+, fmt_11
+, # options
+  enableMysql ? false
+, libmysqlclient
+, enableDuktape ? true
+, duktape
+, enableCurl ? true
+, curl
+, enableTaglib ? true
+, taglib
+, enableLibmagic ? true
+, file
+, enableLibmatroska ? true
+, libmatroska
+, libebml
+, enableAvcodec ? false
+, ffmpeg
+, enableLibexif ? true
+, libexif
+, enableExiv2 ? false
+, exiv2
+, enableFFmpegThumbnailer ? false
+, ffmpegthumbnailer
+, enableInotifyTools ? true
+, inotify-tools
+, wavpack
+, enableWavPack ? false
+,
 }:
 
 let

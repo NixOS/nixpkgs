@@ -1,77 +1,79 @@
-{
-  stdenv,
-  pkgs,
-  lib,
-  fetchurl,
-  gfortran,
-  ncurses,
-  perl,
-  flex,
-  texinfo,
-  qhull,
-  libsndfile,
-  portaudio,
-  libX11,
-  graphicsmagick,
-  pcre2,
-  pkg-config,
-  libGL,
-  libGLU,
-  fltk,
-  # Both are needed for discrete Fourier transform
-  fftw,
-  fftwSinglePrec,
-  zlib,
-  curl,
-  rapidjson,
-  blas,
-  lapack,
-  # These 3 should use the same lapack and blas as the above, see code prepending
-  qrupdate,
-  arpack,
-  suitesparse,
-  # If set to true, the above 5 deps are overridden to use the blas and lapack
+{ stdenv
+, pkgs
+, lib
+, fetchurl
+, gfortran
+, ncurses
+, perl
+, flex
+, texinfo
+, qhull
+, libsndfile
+, portaudio
+, libX11
+, graphicsmagick
+, pcre2
+, pkg-config
+, libGL
+, libGLU
+, fltk
+, # Both are needed for discrete Fourier transform
+  fftw
+, fftwSinglePrec
+, zlib
+, curl
+, rapidjson
+, blas
+, lapack
+, # These 3 should use the same lapack and blas as the above, see code prepending
+  qrupdate
+, arpack
+, suitesparse
+, # If set to true, the above 5 deps are overridden to use the blas and lapack
   # with 64 bit indexes support. If all are not compatible, the build will fail.
-  use64BitIdx ? false,
-  libwebp,
-  gl2ps,
-  ghostscript,
-  hdf5,
-  glpk,
-  gnuplot,
-  # - Include support for GNU readline:
-  enableReadline ? true,
-  readline,
-  # - Build Java interface:
-  enableJava ? true,
-  jdk,
-  python3,
-  sundials,
-  # - Packages required for building extra packages.
-  newScope,
-  callPackage,
-  makeSetupHook,
-  makeWrapper,
-  # - Build Octave Qt GUI:
-  enableQt ? false,
-  libsForQt5,
-  libiconv,
+  use64BitIdx ? false
+, libwebp
+, gl2ps
+, ghostscript
+, hdf5
+, glpk
+, gnuplot
+, # - Include support for GNU readline:
+  enableReadline ? true
+, readline
+, # - Build Java interface:
+  enableJava ? true
+, jdk
+, python3
+, sundials
+, # - Packages required for building extra packages.
+  newScope
+, callPackage
+, makeSetupHook
+, makeWrapper
+, # - Build Octave Qt GUI:
+  enableQt ? false
+, libsForQt5
+, libiconv
+,
 }:
 
 let
   # Not always evaluated
   blas' =
     if use64BitIdx then
-      blas.override {
-        isILP64 = true;
-      }
+      blas.override
+        {
+          isILP64 = true;
+        }
     else
       blas;
   lapack' =
     if use64BitIdx then
-      lapack.override {
-        isILP64 = true;
-      }
+      lapack.override
+        {
+          isILP64 = true;
+        }
     else
       lapack;
   qrupdate' = qrupdate.override {
@@ -87,10 +89,11 @@ let
   # We keep the option to not enable suitesparse support by putting it null
   suitesparse' =
     if suitesparse != null then
-      suitesparse.override {
-        blas = blas';
-        lapack = lapack';
-      }
+      suitesparse.override
+        {
+          blas = blas';
+          lapack = lapack';
+        }
     else
       null;
   # To avoid confusion later in passthru

@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  docopt,
-  fetchFromGitHub,
-  hypothesis,
-  passlib,
-  poetry-core,
-  pytest-logdog,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  pyyaml,
-  setuptools,
-  transitions,
-  websockets,
+{ lib
+, buildPythonPackage
+, docopt
+, fetchFromGitHub
+, hypothesis
+, passlib
+, poetry-core
+, pytest-logdog
+, pytest-asyncio
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, pyyaml
+, setuptools
+, transitions
+, websockets
+,
 }:
 
 buildPythonPackage {

@@ -1,9 +1,8 @@
-{
-  stdenv,
-  lib,
-  ghcWithPackages,
-  haskellPackages,
-  ...
+{ stdenv
+, lib
+, ghcWithPackages
+, haskellPackages
+, ...
 }:
 
 let

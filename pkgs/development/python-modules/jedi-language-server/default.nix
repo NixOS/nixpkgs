@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  docstring-to-markdown,
-  jedi,
-  lsprotocol,
-  pydantic,
-  pygls,
-
-  # tests
-  pytestCheckHook,
-  pyhamcrest,
-  python-lsp-jsonrpc,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  poetry-core
+, # dependencies
+  docstring-to-markdown
+, jedi
+, lsprotocol
+, pydantic
+, pygls
+, # tests
+  pytestCheckHook
+, pyhamcrest
+, python-lsp-jsonrpc
+,
 }:
 
 buildPythonPackage rec {

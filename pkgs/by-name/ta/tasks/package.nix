@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  libcosmicAppHook,
-  just,
-  libsecret,
-  openssl,
-  sqlite,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, libcosmicAppHook
+, just
+, libsecret
+, openssl
+, sqlite
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

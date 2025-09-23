@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  h5py,
-  nibabel,
-  numpy,
-  scipy,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, h5py
+, nibabel
+, numpy
+, scipy
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

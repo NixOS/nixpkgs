@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  buildNpmPackage,
-  lib,
-  chromium,
+{ fetchFromGitHub
+, buildNpmPackage
+, lib
+, chromium
+,
 }:
 buildNpmPackage rec {
   name = "decktape";

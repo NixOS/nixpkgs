@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  hddtemp,
-  hdparm,
-  sdparm,
-  smartmontools,
-  makeWrapper,
-  installShellFiles,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, hddtemp
+, hdparm
+, sdparm
+, smartmontools
+, makeWrapper
+, installShellFiles
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hddfancontrol";

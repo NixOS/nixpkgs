@@ -1,7 +1,7 @@
-{
-  lib,
-  ruby,
-  bundlerApp,
+{ lib
+, ruby
+, bundlerApp
+,
 }:
 
 bundlerApp {

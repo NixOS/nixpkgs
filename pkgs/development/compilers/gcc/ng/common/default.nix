@@ -1,29 +1,29 @@
-{
-  lib,
-  newScope,
-  stdenv,
-  overrideCC,
-  fetchgit,
-  fetchurl,
-  gitRelease ? null,
-  officialRelease ? null,
-  monorepoSrc ? null,
-  version ? null,
-  patchesFn ? lib.id,
-  wrapCCWith,
-  binutilsNoLibc,
-  binutils,
-  buildGccPackages,
-  targetGccPackages,
-  makeScopeWithSplicing',
-  otherSplices,
-  ...
+{ lib
+, newScope
+, stdenv
+, overrideCC
+, fetchgit
+, fetchurl
+, gitRelease ? null
+, officialRelease ? null
+, monorepoSrc ? null
+, version ? null
+, patchesFn ? lib.id
+, wrapCCWith
+, binutilsNoLibc
+, binutils
+, buildGccPackages
+, targetGccPackages
+, makeScopeWithSplicing'
+, otherSplices
+, ...
 }@args:
 
-assert lib.assertMsg (lib.xor (gitRelease != null) (officialRelease != null)) (
-  "must specify `gitRelease` or `officialRelease`"
-  + (lib.optionalString (gitRelease != null) " — not both")
-);
+assert lib.assertMsg (lib.xor (gitRelease != null) (officialRelease != null))
+  (
+    "must specify `gitRelease` or `officialRelease`"
+      + (lib.optionalString (gitRelease != null) " — not both")
+  );
 
 let
   monorepoSrc' = monorepoSrc;
@@ -71,10 +71,10 @@ let
 
             constraints = patches."${p}" or null;
             matchConstraint =
-              {
-                before ? null,
-                after ? null,
-                path,
+              { before ? null
+              , after ? null
+              , path
+              ,
               }:
               let
                 check = fn: value: if value == null then true else fn release_version value;

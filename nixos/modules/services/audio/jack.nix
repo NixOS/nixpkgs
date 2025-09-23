@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.jack;
@@ -25,9 +24,10 @@ in
         '';
 
         package =
-          lib.mkPackageOption pkgs "jack2" {
-            example = "jack1";
-          }
+          lib.mkPackageOption pkgs "jack2"
+            {
+              example = "jack1";
+            }
           // {
             # until jack1 promiscuous mode is fixed
             internal = true;
@@ -256,9 +256,10 @@ in
         description = "JACK Audio Connection Kit";
         serviceConfig = {
           User = "jackaudio";
-          SupplementaryGroups = lib.optional (
-            config.services.pulseaudio.enable && !config.services.pulseaudio.systemWide
-          ) "users";
+          SupplementaryGroups = lib.optional
+            (
+              config.services.pulseaudio.enable && !config.services.pulseaudio.systemWide
+            ) "users";
           ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
           LimitRTPRIO = 99;
           LimitMEMLOCK = "infinity";

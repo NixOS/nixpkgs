@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  rustPlatform,
-  libiconv,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, rustPlatform
+, libiconv
+, fetchFromGitHub
+,
 }:
 let
   pname = "nh3";

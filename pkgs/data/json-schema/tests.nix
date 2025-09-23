@@ -1,8 +1,8 @@
-{
-  json-schema,
-  lib,
-  json-schema-catalog-rs,
-  runCommand,
+{ json-schema
+, lib
+, json-schema-catalog-rs
+, runCommand
+,
 }:
 
 lib.recurseIntoAttrs {

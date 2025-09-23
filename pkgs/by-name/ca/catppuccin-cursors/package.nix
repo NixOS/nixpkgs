@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  inkscape,
-  just,
-  xcursorgen,
-  catppuccin-whiskers,
-  python3,
-  python3Packages,
-  zip,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, inkscape
+, just
+, xcursorgen
+, catppuccin-whiskers
+, python3
+, python3Packages
+, zip
+,
 }:
 let
   dimensions = {

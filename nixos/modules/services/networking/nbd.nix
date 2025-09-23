@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -45,21 +44,23 @@ let
       })
     );
   };
-  exportSections = lib.mapAttrs (
-    _:
-    {
-      path,
-      allowAddresses,
-      extraOptions,
-    }:
-    extraOptions
-    // {
-      exportname = path;
-    }
-    // (optionalAttrs (allowAddresses != null) {
-      authfile = pkgs.writeText "authfile" (lib.concatStringsSep "\n" allowAddresses);
-    })
-  ) cfg.server.exports;
+  exportSections = lib.mapAttrs
+    (
+      _:
+      { path
+      , allowAddresses
+      , extraOptions
+      ,
+      }:
+      extraOptions
+      // {
+        exportname = path;
+      }
+      // (optionalAttrs (allowAddresses != null) {
+        authfile = pkgs.writeText "authfile" (lib.concatStringsSep "\n" allowAddresses);
+      })
+    )
+    cfg.server.exports;
   serverConfig = pkgs.writeText "nbd-server-config" ''
     ${lib.generators.toINI { } genericSection}
     ${lib.generators.toINI { } exportSections}

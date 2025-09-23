@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  ecdsa,
-  hidapi,
-  fetchPypi,
-  pyaes,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, click
+, ecdsa
+, hidapi
+, fetchPypi
+, pyaes
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

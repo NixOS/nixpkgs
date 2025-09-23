@@ -1,24 +1,24 @@
-{
-  mkDerivation,
-  aeson,
-  ansi-wl-pprint,
-  avh4-lib,
-  base,
-  bytestring,
-  elm-format-lib,
-  elm-format-test-lib,
-  fetchgit,
-  hspec,
-  lib,
-  optparse-applicative,
-  QuickCheck,
-  quickcheck-io,
-  relude,
-  tasty,
-  tasty-hspec,
-  tasty-hunit,
-  tasty-quickcheck,
-  text,
+{ mkDerivation
+, aeson
+, ansi-wl-pprint
+, avh4-lib
+, base
+, bytestring
+, elm-format-lib
+, elm-format-test-lib
+, fetchgit
+, hspec
+, lib
+, optparse-applicative
+, QuickCheck
+, quickcheck-io
+, relude
+, tasty
+, tasty-hspec
+, tasty-hunit
+, tasty-quickcheck
+, text
+,
 }:
 mkDerivation {
   pname = "elm-format";

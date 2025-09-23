@@ -1,11 +1,11 @@
-{
-  fetchFromGitHub,
-  fetchurl,
-  lib,
-  makeWrapper,
-  rPackages,
-  rWrapper,
-  stdenv,
+{ fetchFromGitHub
+, fetchurl
+, lib
+, makeWrapper
+, rPackages
+, rWrapper
+, stdenv
+,
 }:
 
 let

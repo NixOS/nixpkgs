@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  kernel,
-  udev,
-  autoconf,
-  automake,
-  libtool,
-  hwdata,
-  kernelOlder,
+{ lib
+, stdenv
+, kernel
+, udev
+, autoconf
+, automake
+, libtool
+, hwdata
+, kernelOlder
+,
 }:
 
 stdenv.mkDerivation {

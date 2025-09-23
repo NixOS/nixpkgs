@@ -1,7 +1,7 @@
-{
-  lib,
-  flutter,
-  fetchFromGitHub,
+{ lib
+, flutter
+, fetchFromGitHub
+,
 }:
 flutter.buildFlutterApplication rec {
   pname = "expidus-file-manager";

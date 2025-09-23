@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  dtc,
-  pkgsCross,
+{ lib
+, stdenv
+, fetchFromGitHub
+, dtc
+, pkgsCross
+,
 }:
 
 stdenv.mkDerivation {

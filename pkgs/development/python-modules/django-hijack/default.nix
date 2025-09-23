@@ -1,20 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  nix-update-script,
-
-  # build-system
-  flit-gettext,
-  flit-scm,
-
-  # dependencies
-  django,
-
-  # tests
-  pytest-cov-stub,
-  pytest-django,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, nix-update-script
+, # build-system
+  flit-gettext
+, flit-scm
+, # dependencies
+  django
+, # tests
+  pytest-cov-stub
+, pytest-django
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

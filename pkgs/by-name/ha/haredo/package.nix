@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromSourcehut,
-  hareHook,
-  scdoc,
-  nix-update-script,
-  makeWrapper,
-  bash,
-  replaceVars,
+{ stdenv
+, lib
+, fetchFromSourcehut
+, hareHook
+, scdoc
+, nix-update-script
+, makeWrapper
+, bash
+, replaceVars
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "haredo";

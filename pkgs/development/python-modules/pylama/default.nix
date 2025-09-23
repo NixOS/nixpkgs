@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  git,
-  eradicate,
-  mccabe,
-  mypy,
-  pycodestyle,
-  pydocstyle,
-  pyflakes,
-  vulture,
-  setuptools,
-  pylint,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, git
+, eradicate
+, mccabe
+, mypy
+, pycodestyle
+, pydocstyle
+, pyflakes
+, vulture
+, setuptools
+, pylint
+, pytestCheckHook
+,
 }:
 
 let

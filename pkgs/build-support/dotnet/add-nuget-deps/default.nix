@@ -1,14 +1,14 @@
-{
-  writeShellScript,
-  runtimeShell,
-  nix,
-  lib,
-  replaceVarsWith,
-  nixfmt,
-  nuget-to-json,
-  cacert,
-  fetchNupkg,
-  callPackage,
+{ writeShellScript
+, runtimeShell
+, nix
+, lib
+, replaceVarsWith
+, nixfmt
+, nuget-to-json
+, cacert
+, fetchNupkg
+, callPackage
+,
 }:
 
 {
@@ -31,8 +31,9 @@
 
     Or a derivation (or list of derivations) containing nuget packages.
   */
-  nugetDeps,
-  overrideFetchAttrs ? x: { },
+  nugetDeps
+, overrideFetchAttrs ? x: { }
+,
 }:
 fnOrAttrs: finalAttrs:
 let
@@ -55,7 +56,7 @@ let
 
 in
 attrs
-// {
+  // {
   buildInputs = attrs.buildInputs or [ ] ++ deps;
 
   passthru =

@@ -1,51 +1,51 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  pkg-config,
-  meson,
-  ninja,
-  gettext,
-  python3,
-  gstreamer,
-  graphene,
-  orc,
-  pango,
-  libtheora,
-  libintl,
-  libopus,
-  isocodes,
-  libjpeg,
-  libpng,
-  tremor, # provides 'virbisidec'
-  libGL,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  buildPackages,
-  gobject-introspection,
-  enableX11 ? stdenv.hostPlatform.isLinux,
-  libXext,
-  libXi,
-  libXv,
-  libdrm,
-  enableWayland ? stdenv.hostPlatform.isLinux,
-  wayland-scanner,
-  wayland,
-  wayland-protocols,
-  enableAlsa ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  enableCocoa ? stdenv.hostPlatform.isDarwin,
-  enableGl ? (enableX11 || enableWayland || enableCocoa),
-  enableCdparanoia ? (!stdenv.hostPlatform.isDarwin),
-  cdparanoia,
-  glib,
-  testers,
-  # Checks meson.is_cross_build(), so even canExecute isn't enough.
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
-  hotdoc,
-  directoryListingUpdater,
-  apple-sdk_gstreamer,
+{ stdenv
+, fetchurl
+, lib
+, pkg-config
+, meson
+, ninja
+, gettext
+, python3
+, gstreamer
+, graphene
+, orc
+, pango
+, libtheora
+, libintl
+, libopus
+, isocodes
+, libjpeg
+, libpng
+, tremor
+, # provides 'virbisidec'
+  libGL
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
+, gobject-introspection
+, enableX11 ? stdenv.hostPlatform.isLinux
+, libXext
+, libXi
+, libXv
+, libdrm
+, enableWayland ? stdenv.hostPlatform.isLinux
+, wayland-scanner
+, wayland
+, wayland-protocols
+, enableAlsa ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, enableCocoa ? stdenv.hostPlatform.isDarwin
+, enableGl ? (enableX11 || enableWayland || enableCocoa)
+, enableCdparanoia ? (!stdenv.hostPlatform.isDarwin)
+, cdparanoia
+, glib
+, testers
+, # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, hotdoc
+, directoryListingUpdater
+, apple-sdk_gstreamer
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

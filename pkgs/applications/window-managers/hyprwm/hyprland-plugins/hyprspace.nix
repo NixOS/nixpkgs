@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkHyprlandPlugin,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, mkHyprlandPlugin
+, nix-update-script
+,
 }:
 
 mkHyprlandPlugin {

@@ -1,26 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  ansible-core,
-  boto3,
-  commentjson,
-  configobj,
-  django,
-  django-debug-toolbar,
-  flask,
-  hvac,
-  ipython,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
-  python-dotenv,
-  radon,
-  toml,
-  tox,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, ansible-core
+, boto3
+, commentjson
+, configobj
+, django
+, django-debug-toolbar
+, flask
+, hvac
+, ipython
+, pytest-cov-stub
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, python-dotenv
+, radon
+, toml
+, tox
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

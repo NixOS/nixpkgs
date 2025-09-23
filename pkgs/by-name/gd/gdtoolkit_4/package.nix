@@ -1,9 +1,9 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  addBinToPathHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, python3
+, fetchFromGitHub
+, addBinToPathHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

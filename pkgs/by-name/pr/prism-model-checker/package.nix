@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  gccStdenv,
-  coreutils,
-  fetchFromGitHub,
-  openjdk,
-  jre,
-  cctools,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
+{ lib
+, stdenv
+, gccStdenv
+, coreutils
+, fetchFromGitHub
+, openjdk
+, jre
+, cctools
+, copyDesktopItems
+, makeDesktopItem
+, makeWrapper
+,
 }:
 
 let

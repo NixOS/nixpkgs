@@ -1,52 +1,52 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  curl,
-  fuse3,
-  desktopToDarwinBundle,
-  glib,
-  gtk3,
-  gettext,
-  libxkbfile,
-  libX11,
-  python3,
-  freerdp,
-  libssh,
-  libgcrypt,
-  gnutls,
-  pcre2,
-  libdbusmenu-gtk3,
-  libappindicator-gtk3,
-  libvncserver,
-  libpthreadstubs,
-  libXdmcp,
-  libxkbcommon,
-  libsecret,
-  libsoup_3,
-  spice-protocol,
-  spice-gtk,
-  libepoxy,
-  at-spi2-core,
-  openssl,
-  gsettings-desktop-schemas,
-  json-glib,
-  libsodium,
-  harfbuzz,
-  wayland,
-  # The themes here are soft dependencies; only icons are missing without them.
-  adwaita-icon-theme,
-  withKf5Wallet ? stdenv.hostPlatform.isLinux,
-  libsForQt5,
-  withLibsecret ? stdenv.hostPlatform.isLinux,
-  withWebkitGtk ? false,
-  webkitgtk_4_1,
-  withVte ? true,
-  vte,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, curl
+, fuse3
+, desktopToDarwinBundle
+, glib
+, gtk3
+, gettext
+, libxkbfile
+, libX11
+, python3
+, freerdp
+, libssh
+, libgcrypt
+, gnutls
+, pcre2
+, libdbusmenu-gtk3
+, libappindicator-gtk3
+, libvncserver
+, libpthreadstubs
+, libXdmcp
+, libxkbcommon
+, libsecret
+, libsoup_3
+, spice-protocol
+, spice-gtk
+, libepoxy
+, at-spi2-core
+, openssl
+, gsettings-desktop-schemas
+, json-glib
+, libsodium
+, harfbuzz
+, wayland
+, # The themes here are soft dependencies; only icons are missing without them.
+  adwaita-icon-theme
+, withKf5Wallet ? stdenv.hostPlatform.isLinux
+, libsForQt5
+, withLibsecret ? stdenv.hostPlatform.isLinux
+, withWebkitGtk ? false
+, webkitgtk_4_1
+, withVte ? true
+, vte
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  secureBuild ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, secureBuild ? false
+,
 }:
 
 let

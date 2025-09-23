@@ -1,12 +1,12 @@
-{
-  lib,
-  replaceVarsWith,
-  runtimeShell,
-  installShellFiles,
-  jq,
-  nixos-enter,
-  util-linuxMinimal,
-  nixosTests,
+{ lib
+, replaceVarsWith
+, runtimeShell
+, installShellFiles
+, jq
+, nixos-enter
+, util-linuxMinimal
+, nixosTests
+,
 }:
 replaceVarsWith {
   name = "nixos-install";

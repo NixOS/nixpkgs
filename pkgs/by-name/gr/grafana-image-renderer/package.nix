@@ -1,10 +1,10 @@
-{
-  lib,
-  mkYarnPackage,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nodejs,
-  runtimeShell,
+{ lib
+, mkYarnPackage
+, fetchFromGitHub
+, fetchYarnDeps
+, nodejs
+, runtimeShell
+,
 }:
 
 # Notes for the upgrade:

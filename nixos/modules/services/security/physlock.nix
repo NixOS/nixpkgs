@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.physlock;
@@ -125,9 +124,10 @@ in
           before =
             lib.optional cfg.lockOn.suspend "systemd-suspend.service"
             ++ lib.optional cfg.lockOn.hibernate "systemd-hibernate.service"
-            ++ lib.optional (
-              cfg.lockOn.hibernate || cfg.lockOn.suspend
-            ) "systemd-suspend-then-hibernate.service"
+            ++ lib.optional
+              (
+                cfg.lockOn.hibernate || cfg.lockOn.suspend
+              ) "systemd-suspend-then-hibernate.service"
             ++ cfg.lockOn.extraTargets;
           serviceConfig = {
             Type = "forking";

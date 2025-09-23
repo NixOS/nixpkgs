@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libressl,
-  libbsd,
-  libevent,
-  libuuid,
-  libossp_uuid,
-  libmd,
-  zlib,
-  ncurses,
-  bison,
-  autoPatchelfHook,
-  testers,
-  signify,
-  apple-sdk_15,
-  nix-update-script,
-  withSsh ? true,
-  openssh,
-  # Default editor to use when neither VISUAL nor EDITOR are defined
-  defaultEditor ? null,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libressl
+, libbsd
+, libevent
+, libuuid
+, libossp_uuid
+, libmd
+, zlib
+, ncurses
+, bison
+, autoPatchelfHook
+, testers
+, signify
+, apple-sdk_15
+, nix-update-script
+, withSsh ? true
+, openssh
+, # Default editor to use when neither VISUAL nor EDITOR are defined
+  defaultEditor ? null
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

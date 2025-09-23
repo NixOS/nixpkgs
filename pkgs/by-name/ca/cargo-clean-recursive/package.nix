@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  cargo,
-  makeWrapper,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cargo
+, makeWrapper
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-clean-recursive";

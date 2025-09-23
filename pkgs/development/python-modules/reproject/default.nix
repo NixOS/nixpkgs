@@ -1,27 +1,27 @@
-{
-  lib,
-  asdf,
-  astropy,
-  astropy-healpix,
-  buildPythonPackage,
-  cython,
-  dask,
-  extension-helpers,
-  fetchFromGitHub,
-  fsspec,
-  gwcs,
-  numpy,
-  pillow,
-  pyavm,
-  pytest-astropy,
-  pytest-xdist,
-  pytestCheckHook,
-  scipy,
-  setuptools,
-  setuptools-scm,
-  shapely,
-  tqdm,
-  zarr,
+{ lib
+, asdf
+, astropy
+, astropy-healpix
+, buildPythonPackage
+, cython
+, dask
+, extension-helpers
+, fetchFromGitHub
+, fsspec
+, gwcs
+, numpy
+, pillow
+, pyavm
+, pytest-astropy
+, pytest-xdist
+, pytestCheckHook
+, scipy
+, setuptools
+, setuptools-scm
+, shapely
+, tqdm
+, zarr
+,
 }:
 
 buildPythonPackage rec {

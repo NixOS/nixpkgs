@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  cairo,
-  gtk3,
-  ninja,
-  pkg-config,
-  libxml2,
-  gettext,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, cairo
+, gtk3
+, ninja
+, pkg-config
+, libxml2
+, gettext
+,
 }:
 
 stdenv.mkDerivation {

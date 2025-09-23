@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nixosTests,
-  makeWrapper,
-  freeipmi,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+, makeWrapper
+, freeipmi
+,
 }:
 
 buildGoModule rec {

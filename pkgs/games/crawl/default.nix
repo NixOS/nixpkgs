@@ -1,28 +1,28 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  which,
-  sqlite,
-  lua5_1,
-  perl,
-  python3,
-  zlib,
-  pkg-config,
-  ncurses,
-  dejavu_fonts,
-  libpng,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  libGLU,
-  libGL,
-  freetype,
-  pngcrush,
-  advancecomp,
-  tileMode ? false,
-  enableSound ? tileMode,
-  buildPackages,
+{ stdenv
+, lib
+, fetchFromGitHub
+, which
+, sqlite
+, lua5_1
+, perl
+, python3
+, zlib
+, pkg-config
+, ncurses
+, dejavu_fonts
+, libpng
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, libGLU
+, libGL
+, freetype
+, pngcrush
+, advancecomp
+, tileMode ? false
+, enableSound ? tileMode
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

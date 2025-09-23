@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  cmake,
-  pkg-config,
-  alsa-lib,
-  nix-update-script,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
-  withRadio ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, pkg-config
+, alsa-lib
+, nix-update-script
+, writableTmpDirAsHomeHook
+, versionCheckHook
+, withRadio ? false
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

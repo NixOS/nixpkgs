@@ -1,10 +1,10 @@
-{
-  lib,
-  codeium,
-  fetchFromGitHub,
-  melpaBuild,
-  replaceVars,
-  gitUpdater,
+{ lib
+, codeium
+, fetchFromGitHub
+, melpaBuild
+, replaceVars
+, gitUpdater
+,
 }:
 
 melpaBuild {

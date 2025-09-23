@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  aiohttp,
-  aioitertools,
-  botocore,
-  python-dateutil,
-  jmespath,
-  multidict,
-  urllib3,
-  wrapt,
-  dill,
-  moto,
-  pytest-asyncio,
-  time-machine,
-  werkzeug,
-  awscli,
-  boto3,
-  httpx,
-  setuptools,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, aiohttp
+, aioitertools
+, botocore
+, python-dateutil
+, jmespath
+, multidict
+, urllib3
+, wrapt
+, dill
+, moto
+, pytest-asyncio
+, time-machine
+, werkzeug
+, awscli
+, boto3
+, httpx
+, setuptools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  setuptools,
-  numpy,
-  pytestCheckHook,
-  stdenv,
-  darwin,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, setuptools
+, numpy
+, pytestCheckHook
+, stdenv
+, darwin
+,
 }:
 
 buildPythonPackage rec {

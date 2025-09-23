@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  testers,
-  television,
-  nix-update-script,
-  extraPackages ? [ ],
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, testers
+, television
+, nix-update-script
+, extraPackages ? [ ]
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "television";

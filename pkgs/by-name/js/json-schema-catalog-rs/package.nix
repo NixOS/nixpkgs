@@ -1,11 +1,11 @@
-{
-  callPackage,
-  fetchFromGitHub,
-  jsonSchemaCatalogs,
-  lib,
-  nix-update-script,
-  rustPlatform,
-  versionCheckHook,
+{ callPackage
+, fetchFromGitHub
+, jsonSchemaCatalogs
+, lib
+, nix-update-script
+, rustPlatform
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

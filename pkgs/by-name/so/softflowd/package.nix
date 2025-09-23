@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libpcap,
-  versionCheckHook,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libpcap
+, versionCheckHook
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  build,
-  coverage,
-  git,
-  packaging,
-  pytestCheckHook,
-  pytest-rerunfailures,
-  pythonOlder,
-  setuptools,
-  toml,
-  tomli,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, build
+, coverage
+, git
+, packaging
+, pytestCheckHook
+, pytest-rerunfailures
+, pythonOlder
+, setuptools
+, toml
+, tomli
+,
 }:
 
 buildPythonPackage rec {

@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  glib,
-  itstool,
-  libxml2,
-  mate-desktop,
-  mate-panel,
-  libnotify,
-  libcanberra-gtk3,
-  libsecret,
-  dbus-glib,
-  upower,
-  gtk3,
-  libtool,
-  polkit,
-  wrapGAppsHook3,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, itstool
+, libxml2
+, mate-desktop
+, mate-panel
+, libnotify
+, libcanberra-gtk3
+, libsecret
+, dbus-glib
+, upower
+, gtk3
+, libtool
+, polkit
+, wrapGAppsHook3
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

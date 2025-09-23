@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ctags,
-  perl,
-  elfutils,
-  vtable-dumper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ctags
+, perl
+, elfutils
+, vtable-dumper
+,
 }:
 
 stdenv.mkDerivation rec {

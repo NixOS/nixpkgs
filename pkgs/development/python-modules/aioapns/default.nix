@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  h2,
-  pyjwt,
-  pyopenssl,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, h2
+, pyjwt
+, pyopenssl
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

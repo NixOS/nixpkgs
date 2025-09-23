@@ -1,16 +1,16 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitUpdater,
-  google-api-core,
-  google-auth,
-  google-geo-type,
-  lib,
-  proto-plus,
-  protobuf,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
+{ buildPythonPackage
+, fetchFromGitHub
+, gitUpdater
+, google-api-core
+, google-auth
+, google-geo-type
+, lib
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

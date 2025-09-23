@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  flit-core,
-
-  # tests
-  pytestCheckHook,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  flit-core
+, # tests
+  pytestCheckHook
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

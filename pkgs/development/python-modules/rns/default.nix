@@ -1,15 +1,15 @@
-{
-  lib,
-  bleak,
-  buildPythonPackage,
-  cryptography,
-  esptool,
-  fetchFromGitHub,
-  netifaces,
-  pyserial,
-  replaceVars,
-  setuptools,
-  versionCheckHook,
+{ lib
+, bleak
+, buildPythonPackage
+, cryptography
+, esptool
+, fetchFromGitHub
+, netifaces
+, pyserial
+, replaceVars
+, setuptools
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  docbook-xsl-nons,
-  fetchurl,
-  glib,
-  gobject-introspection,
-  gtk-doc,
-  libgudev,
-  libpcap,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  pkg-config,
-  python3,
-  replaceVars,
-  systemdMinimal,
-  usbutils,
-  vala,
-  which,
+{ stdenv
+, lib
+, docbook-xsl-nons
+, fetchurl
+, glib
+, gobject-introspection
+, gtk-doc
+, libgudev
+, libpcap
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, python3
+, replaceVars
+, systemdMinimal
+, usbutils
+, vala
+, which
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

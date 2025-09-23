@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  python3,
-  libopus,
-  macdylibbundler,
-  makeWrapper,
-  darwin,
-  codec2,
-  libpulseaudio,
-  libsamplerate,
-  libsndfile,
-  lpcnet,
-  portaudio,
-  speexdsp,
-  hamlib_4,
-  wxGTK32,
-  sioclient,
-  dbus,
-  apple-sdk_15,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, python3
+, libopus
+, macdylibbundler
+, makeWrapper
+, darwin
+, codec2
+, libpulseaudio
+, libsamplerate
+, libsndfile
+, lpcnet
+, portaudio
+, speexdsp
+, hamlib_4
+, wxGTK32
+, sioclient
+, dbus
+, apple-sdk_15
+, nix-update-script
+,
 }:
 
 let

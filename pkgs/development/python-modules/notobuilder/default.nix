@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  setuptools,
-  setuptools-scm,
-  fonttools,
-  ufomerge,
-  fontmake,
-  glyphslib,
-  ttfautohint-py,
-  ufo2ft,
-  gftools,
-  fontbakery,
-  diffenator2,
-  chevron,
-  sh,
-  ninja,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, unstableGitUpdater
+, setuptools
+, setuptools-scm
+, fonttools
+, ufomerge
+, fontmake
+, glyphslib
+, ttfautohint-py
+, ufo2ft
+, gftools
+, fontbakery
+, diffenator2
+, chevron
+, sh
+, ninja
+,
 }:
 
 buildPythonPackage {

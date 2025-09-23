@@ -1,8 +1,8 @@
-{
-  lib,
-  appimageTools,
-  fetchurl,
-  gitUpdater,
+{ lib
+, appimageTools
+, fetchurl
+, gitUpdater
+,
 }:
 
 let

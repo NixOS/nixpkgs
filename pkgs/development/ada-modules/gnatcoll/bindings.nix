@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gnat,
-  gprbuild,
-  gnatcoll-core,
-  component,
-  # component dependencies
-  gmp,
-  libiconv,
-  xz,
-  readline,
-  zlib,
-  python3,
-  ncurses,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gnat
+, gprbuild
+, gnatcoll-core
+, component
+, # component dependencies
+  gmp
+, libiconv
+, xz
+, readline
+, zlib
+, python3
+, ncurses
+,
 }:
 
 let

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  pkg-config,
-  nss,
-  efivar,
-  util-linux,
-  popt,
-  nspr,
-  mandoc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, pkg-config
+, nss
+, efivar
+, util-linux
+, popt
+, nspr
+, mandoc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,32 +1,31 @@
 # Arguments that this derivation gets when it is created with `callPackage`
-{
-  stdenv,
-  buildEnv,
-  lib,
-  makeWrapper,
-  mpvScripts,
-  symlinkJoin,
-  writeTextDir,
-  yt-dlp,
-# the unwrapped mpv derivation
+{ stdenv
+, buildEnv
+, lib
+, makeWrapper
+, mpvScripts
+, symlinkJoin
+, writeTextDir
+, yt-dlp
+, # the unwrapped mpv derivation
 }:
 
 let
   # arguments to the function (exposed as `mpv-unwrapped.wrapper` in top-level)
   wrapper =
-    {
-      mpv,
-      extraMakeWrapperArgs ? [ ],
-      youtubeSupport ? true,
-      # a set of derivations (probably from `mpvScripts`) where each is expected
+    { mpv
+    , extraMakeWrapperArgs ? [ ]
+    , youtubeSupport ? true
+    , # a set of derivations (probably from `mpvScripts`) where each is expected
       # to have a `scriptName` passthru attribute that points to the name of the
       # script that would reside in the script's derivation's
       # `$out/share/mpv/scripts/`.
       #
       # A script can optionally also provide `passthru.extraWrapperArgs`
       # attribute.
-      scripts ? [ ],
-      extraUmpvWrapperArgs ? [ ],
+      scripts ? [ ]
+    , extraUmpvWrapperArgs ? [ ]
+    ,
     }:
     let
       binPath = lib.makeBinPath (
@@ -114,10 +113,10 @@ let
           # replaces unfree and meta.broken scripts with decent placeholders
           (lib.mapAttrsToList (
             key: script:
-            if (builtins.tryEval script.outPath).success then
-              script
-            else
-              writeTextDir "share/mpv/scripts/${script.scriptName}" "placeholder of ${script.name}"
+              if (builtins.tryEval script.outPath).success then
+                script
+              else
+                writeTextDir "share/mpv/scripts/${script.scriptName}" "placeholder of ${script.name}"
           ))
         ];
       };

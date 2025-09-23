@@ -1,11 +1,11 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  rich,
-  setuptools,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, rich
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

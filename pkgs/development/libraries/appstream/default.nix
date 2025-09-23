@@ -1,43 +1,42 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  replaceVars,
-  fetchFromGitHub,
-  fetchpatch,
-  meson,
-  mesonEmulatorHook,
-  appstream,
-  ninja,
-  pkg-config,
-  cmake,
-  gettext,
-  xmlto,
-  docbook-xsl-nons,
-  docbook_xml_dtd_45,
-  libxslt,
-  libstemmer,
-  glib,
-  xapian,
-  libxml2,
-  libxmlb,
-  libyaml,
-  gobject-introspection,
-  itstool,
-  gperf,
-  vala,
-  curl,
-  cairo,
-  gdk-pixbuf,
-  pango,
-  librsvg,
-  systemd,
-  nixosTests,
-  testers,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+{ lib
+, stdenv
+, buildPackages
+, replaceVars
+, fetchFromGitHub
+, fetchpatch
+, meson
+, mesonEmulatorHook
+, appstream
+, ninja
+, pkg-config
+, cmake
+, gettext
+, xmlto
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+, libxslt
+, libstemmer
+, glib
+, xapian
+, libxml2
+, libxmlb
+, libyaml
+, gobject-introspection
+, itstool
+, gperf
+, vala
+, curl
+, cairo
+, gdk-pixbuf
+, pango
+, librsvg
+, systemd
+, nixosTests
+, testers
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

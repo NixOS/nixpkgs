@@ -1,9 +1,9 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  effects,
-  lightyear,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, effects
+, lightyear
+, lib
+,
 }:
 build-idris-package {
   pname = "idrishighlighter";

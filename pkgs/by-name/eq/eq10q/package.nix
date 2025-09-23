@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  cmake,
-  fftw,
-  gtkmm2,
-  libxcb,
-  lv2,
-  pkg-config,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, fftw
+, gtkmm2
+, libxcb
+, lv2
+, pkg-config
+, xorg
+,
 }:
 stdenv.mkDerivation rec {
   pname = "eq10q";

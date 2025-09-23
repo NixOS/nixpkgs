@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  zlib,
-  fetchFromGitHub,
-  re2,
-  abseil-cpp,
-  protobuf,
-  capstone,
-  gtest,
-  pkg-config,
-  lit,
-  llvmPackages,
+{ lib
+, stdenv
+, cmake
+, zlib
+, fetchFromGitHub
+, re2
+, abseil-cpp
+, protobuf
+, capstone
+, gtest
+, pkg-config
+, lit
+, llvmPackages
+,
 }:
 let
   # Old vendored package which has no other use than here, so not packaged in nixpkgs.

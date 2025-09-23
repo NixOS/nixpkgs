@@ -1,12 +1,12 @@
-{
-  lib,
-  base58,
-  buildPythonPackage,
-  fetchFromGitHub,
-  morphys,
-  pytestCheckHook,
-  six,
-  varint,
+{ lib
+, base58
+, buildPythonPackage
+, fetchFromGitHub
+, morphys
+, pytestCheckHook
+, six
+, varint
+,
 }:
 
 buildPythonPackage rec {

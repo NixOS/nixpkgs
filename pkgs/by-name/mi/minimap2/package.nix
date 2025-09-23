@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  versionCheckHook,
-  zlib,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, versionCheckHook
+, zlib
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

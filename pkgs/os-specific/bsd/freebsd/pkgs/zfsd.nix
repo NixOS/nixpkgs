@@ -1,11 +1,11 @@
-{
-  mkDerivation,
-  lib,
-  libgeom,
-  libzfs,
-  libdevdctl,
-  libsbuf,
-  libbsdxml,
+{ mkDerivation
+, lib
+, libgeom
+, libzfs
+, libdevdctl
+, libsbuf
+, libbsdxml
+,
 }:
 mkDerivation {
   path = "cddl/usr.sbin/zfsd";

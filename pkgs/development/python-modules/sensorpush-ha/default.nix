@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pydantic,
-  sensorpush-api,
-  setuptools,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pydantic
+, sensorpush-api
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

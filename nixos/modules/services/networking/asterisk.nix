@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.asterisk;
@@ -207,9 +206,11 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc = lib.mapAttrs' (
-      name: value: lib.nameValuePair "asterisk/${name}" value
-    ) allConfFiles;
+    environment.etc = lib.mapAttrs'
+      (
+        name: value: lib.nameValuePair "asterisk/${name}" value
+      )
+      allConfFiles;
 
     users.users.asterisk = {
       name = asteriskUser;

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  versionCheckHook,
-  unstableGitUpdater,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, versionCheckHook
+, unstableGitUpdater
+,
 }:
 buildGoModule rec {
   pname = "chirpstack-fuota-server";

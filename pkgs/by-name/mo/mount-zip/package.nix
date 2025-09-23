@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fuse3,
-  boost,
-  icu,
-  libzip,
-  pandoc,
-  pkg-config,
-  versionCheckHook,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fuse3
+, boost
+, icu
+, libzip
+, pandoc
+, pkg-config
+, versionCheckHook
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

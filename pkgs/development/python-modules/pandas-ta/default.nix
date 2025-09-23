@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  numpy,
-  pandas,
-  python-dateutil,
-  pythonOlder,
-  pytz,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nix-update-script
+, numpy
+, pandas
+, python-dateutil
+, pythonOlder
+, pytz
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

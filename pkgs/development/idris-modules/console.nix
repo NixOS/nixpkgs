@@ -1,10 +1,10 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  idrisscript,
-  hrtime,
-  webgl,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, idrisscript
+, hrtime
+, webgl
+, lib
+,
 }:
 build-idris-package {
   pname = "console";

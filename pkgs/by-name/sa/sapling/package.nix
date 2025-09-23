@@ -1,23 +1,22 @@
-{
-  lib,
-  stdenv,
-  python311Packages,
-  fetchFromGitHub,
-  fetchurl,
-  cargo,
-  curl,
-  pkg-config,
-  openssl,
-  rustPlatform,
-  rustc,
-  fetchYarnDeps,
-  yarn,
-  nodejs,
-  fixup-yarn-lock,
-  glibcLocales,
-  libiconv,
-
-  enableMinimal ? false,
+{ lib
+, stdenv
+, python311Packages
+, fetchFromGitHub
+, fetchurl
+, cargo
+, curl
+, pkg-config
+, openssl
+, rustPlatform
+, rustc
+, fetchYarnDeps
+, yarn
+, nodejs
+, fixup-yarn-lock
+, glibcLocales
+, libiconv
+, enableMinimal ? false
+,
 }:
 
 let

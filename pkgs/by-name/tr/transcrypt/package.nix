@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  git,
-  makeWrapper,
-  openssl,
-  coreutils,
-  util-linux,
-  gnugrep,
-  gnused,
-  gawk,
-  testers,
-  transcrypt,
+{ lib
+, stdenv
+, fetchFromGitHub
+, git
+, makeWrapper
+, openssl
+, coreutils
+, util-linux
+, gnugrep
+, gnused
+, gawk
+, testers
+, transcrypt
+,
 }:
 
 stdenv.mkDerivation rec {

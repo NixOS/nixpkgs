@@ -1,14 +1,14 @@
-{
-  lib,
-  argcomplete,
-  jinja2,
-  meraki,
-  rich,
-  fetchPypi,
-  buildPythonApplication,
-  pytestCheckHook,
-  requests-mock,
-  setuptools,
+{ lib
+, argcomplete
+, jinja2
+, meraki
+, rich
+, fetchPypi
+, buildPythonApplication
+, pytestCheckHook
+, requests-mock
+, setuptools
+,
 }:
 
 buildPythonApplication rec {

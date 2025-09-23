@@ -1,34 +1,35 @@
-{
-  lib,
-  runCommand,
-  zig,
-  stdenv,
-  makeWrapper,
-  coreutils,
+{ lib
+, runCommand
+, zig
+, stdenv
+, makeWrapper
+, coreutils
+,
 }:
 let
-  targetPrefix = lib.optionalString (
-    stdenv.hostPlatform != stdenv.targetPlatform
-  ) "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString
+    (
+      stdenv.hostPlatform != stdenv.targetPlatform
+    ) "${stdenv.targetPlatform.config}-";
 in
 runCommand "zig-cc-${zig.version}"
-  {
-    pname = "zig-cc";
-    inherit (zig) version;
+{
+  pname = "zig-cc";
+  inherit (zig) version;
 
-    nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-    passthru = {
-      isZig = true;
-      inherit targetPrefix;
-    };
+  passthru = {
+    isZig = true;
+    inherit targetPrefix;
+  };
 
-    inherit zig;
+  inherit zig;
 
-    meta = zig.meta // {
-      mainProgram = "${targetPrefix}clang";
-    };
-  }
+  meta = zig.meta // {
+    mainProgram = "${targetPrefix}clang";
+  };
+}
   ''
     mkdir -p $out/bin
     for tool in cc c++ ld.lld; do

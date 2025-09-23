@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  docutils,
-  installShellFiles,
-  udevCheckHook,
+{ lib
+, rustPlatform
+, fetchCrate
+, docutils
+, installShellFiles
+, udevCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  hatch-fancy-pypi-readme,
-  hatch-vcs,
-  hatchling,
-  pydantic,
-  freezegun,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
+, pydantic
+, freezegun
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

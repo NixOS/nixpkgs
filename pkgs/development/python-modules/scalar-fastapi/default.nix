@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # python dependencies
-  annotated-types,
-  anyio,
-  fastapi,
-  idna,
-  pydantic,
-  sniffio,
-  starlette,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  httpx,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # python dependencies
+  annotated-types
+, anyio
+, fastapi
+, idna
+, pydantic
+, sniffio
+, starlette
+, typing-extensions
+, # tests
+  pytestCheckHook
+, httpx
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gnome-shell,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gnome-shell
+,
 }:
 
 stdenv.mkDerivation {

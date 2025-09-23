@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchurl,
-  callPackage,
-  bash,
-  tinycc-bootstrappable,
-  musl,
-  gnupatch,
-  gnutar,
-  gzip,
+{ lib
+, fetchurl
+, callPackage
+, bash
+, tinycc-bootstrappable
+, musl
+, gnupatch
+, gnutar
+, gzip
+,
 }:
 let
   pname = "tinycc-musl";
@@ -130,24 +130,25 @@ let
       '';
 in
 {
-  compiler = bash.runCommand "${pname}-${version}-compiler" {
-    inherit pname version meta;
-    passthru.tests.hello-world =
-      result:
-      bash.runCommand "${pname}-simple-program-${version}" { } ''
-        cat <<EOF >> test.c
-        #include <stdio.h>
-        int main() {
-          printf("Hello World!\n");
-          return 0;
-        }
-        EOF
-        ${result}/bin/tcc -v -static -B${musl}/lib -o test test.c
-        ./test
-        mkdir $out
-      '';
-    passthru.tinycc-musl = tinycc-musl;
-  } "install -D ${tinycc-musl}/bin/tcc $out/bin/tcc";
+  compiler = bash.runCommand "${pname}-${version}-compiler"
+    {
+      inherit pname version meta;
+      passthru.tests.hello-world =
+        result:
+        bash.runCommand "${pname}-simple-program-${version}" { } ''
+          cat <<EOF >> test.c
+          #include <stdio.h>
+          int main() {
+            printf("Hello World!\n");
+            return 0;
+          }
+          EOF
+          ${result}/bin/tcc -v -static -B${musl}/lib -o test test.c
+          ./test
+          mkdir $out
+        '';
+      passthru.tinycc-musl = tinycc-musl;
+    } "install -D ${tinycc-musl}/bin/tcc $out/bin/tcc";
 
   libs =
     bash.runCommand "${pname}-${version}-libs"

@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  souffle,
-  runCommand,
+{ stdenv
+, lib
+, souffle
+, runCommand
+,
 }:
 let
   simpleTest =

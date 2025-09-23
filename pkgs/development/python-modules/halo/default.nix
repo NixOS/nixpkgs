@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  colorama,
-  fetchPypi,
-  isPy27,
-  lib,
-  log-symbols,
-  six,
-  spinners,
-  termcolor,
+{ buildPythonPackage
+, colorama
+, fetchPypi
+, isPy27
+, lib
+, log-symbols
+, six
+, spinners
+, termcolor
+,
 }:
 
 buildPythonPackage rec {

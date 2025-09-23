@@ -1,16 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-  anyio,
-
-  # tests
-  dirty-equals,
-  pytest-mock,
-  pytest-timeout,
-  pytestCheckHook,
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, anyio
+, # tests
+  dirty-equals
+, pytest-mock
+, pytest-timeout
+, pytestCheckHook
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

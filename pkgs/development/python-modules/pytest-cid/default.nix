@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  flit-core,
-  py-cid,
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, flit-core
+, py-cid
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

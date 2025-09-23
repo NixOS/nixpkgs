@@ -580,20 +580,23 @@ rec {
       # - if index >= 0 then pred (elemAt list index) and all elements before (elemAt list index) didn't satisfy pred
       #
       # We start with index -1 and the 0'th element of the list, which satisfies the invariant
-      resultIndex = foldl' (
-        index: el:
-        if index < 0 then
-          # No match yet before the current index, we need to check the element
-          if pred el then
-            # We have a match! Turn it into the actual index to prevent future iterations from modifying it
-            -index - 1
-          else
-            # Still no match, update the index to the next element (we're counting down, so minus one)
-            index - 1
-        else
-          # There's already a match, propagate the index without evaluating anything
-          index
-      ) (-1) list;
+      resultIndex = foldl'
+        (
+          index: el:
+            if index < 0 then
+            # No match yet before the current index, we need to check the element
+              if pred el then
+              # We have a match! Turn it into the actual index to prevent future iterations from modifying it
+                -index - 1
+              else
+              # Still no match, update the index to the next element (we're counting down, so minus one)
+                index - 1
+            else
+            # There's already a match, propagate the index without evaluating anything
+              index
+        )
+        (-1)
+        list;
     in
     if resultIndex < 0 then default else resultIndex;
 
@@ -991,13 +994,15 @@ rec {
   groupBy =
     builtins.groupBy or (
       pred:
-      foldl' (
-        r: e:
-        let
-          key = pred e;
-        in
-        r // { ${key} = (r.${key} or [ ]) ++ [ e ]; }
-      ) { }
+      foldl'
+        (
+          r: e:
+            let
+              key = pred e;
+            in
+            r // { ${key} = (r.${key} or [ ]) ++ [ e ]; }
+        )
+        { }
     );
 
   /**
@@ -1162,13 +1167,13 @@ rec {
             inherit visited rest;
           }
         else if length b.right == 0 then
-          # nothing is before us
+        # nothing is before us
           {
             minimal = us;
             inherit visited rest;
           }
         else
-          # grab the first one before us and continue
+        # grab the first one before us and continue
           dfs' (head b.right) ([ us ] ++ visited) (tail b.right ++ b.wrong);
     in
     dfs' (head list) [ ] (tail list);
@@ -1218,20 +1223,20 @@ rec {
       toporest = toposort before (dfsthis.visited ++ dfsthis.rest);
     in
     if length list < 2 then
-      # finish
+    # finish
       { result = list; }
     else if dfsthis ? cycle then
-      # there's a cycle, starting from the current vertex, return it
+    # there's a cycle, starting from the current vertex, return it
       {
         cycle = reverseList ([ dfsthis.cycle ] ++ dfsthis.visited);
         inherit (dfsthis) loops;
       }
     else if toporest ? cycle then
-      # there's a cycle somewhere else in the graph, return it
+    # there's a cycle somewhere else in the graph, return it
       toporest
     # Slow, but short. Can be made a bit faster with an explicit stack.
     else
-      # there are no cycles
+    # there are no cycles
       { result = [ dfsthis.minimal ] ++ toporest.result; };
 
   /**
@@ -1319,10 +1324,12 @@ rec {
     f: list:
     let
       # Heterogenous list as pair may be ugly, but requires minimal allocations.
-      pairs = map (x: [
-        (f x)
-        x
-      ]) list;
+      pairs = map
+        (x: [
+          (f x)
+          x
+        ])
+        list;
     in
     map (x: builtins.elemAt x 1) (
       sort
@@ -1420,10 +1427,12 @@ rec {
     lst:
     let
       vectorise = s: map (x: if isList x then toInt (head x) else x) (builtins.split "(0|[1-9][0-9]*)" s);
-      prepared = map (x: [
-        (vectorise x)
-        x
-      ]) lst; # remember vectorised version for O(n) regex splits
+      prepared = map
+        (x: [
+          (vectorise x)
+          x
+        ])
+        lst; # remember vectorised version for O(n) regex splits
       less = a: b: (compareLists compare (head a) (head b)) < 0;
     in
     map (x: elemAt x 1) (sort less prepared);
@@ -1766,8 +1775,8 @@ rec {
   */
   last =
     list:
-    assert lib.assertMsg (list != [ ]) "lists.last: list must not be empty!";
-    elemAt list (length list - 1);
+      assert lib.assertMsg (list != [ ]) "lists.last: list must not be empty!";
+      elemAt list (length list - 1);
 
   /**
     Return all elements but the last.
@@ -1799,8 +1808,8 @@ rec {
   */
   init =
     list:
-    assert lib.assertMsg (list != [ ]) "lists.init: list must not be empty!";
-    take (length list - 1) list;
+      assert lib.assertMsg (list != [ ]) "lists.init: list must not be empty!";
+      take (length list - 1) list;
 
   /**
     Return the image of the cross product of some lists by a function.
@@ -1834,7 +1843,8 @@ rec {
 
     nix-repl> lib.mapCartesianProduct ({x,y}: x+y) { x = [1 2]; y = [3 4]; }
     [ 4 5 5 6 ]
-  '' (f: foldl (fs: args: concatMap (f: map f args) fs) [ f ]);
+  ''
+    (f: foldl (fs: args: concatMap (f: map f args) fs) [ f ]);
 
   /**
     Remove duplicate elements from the `list`. O(n^2) complexity.

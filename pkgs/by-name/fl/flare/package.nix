@@ -1,8 +1,8 @@
-{
-  lib,
-  buildEnv,
-  callPackage,
-  makeWrapper,
+{ lib
+, buildEnv
+, callPackage
+, makeWrapper
+,
 }:
 
 buildEnv {

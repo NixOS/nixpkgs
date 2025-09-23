@@ -1,16 +1,16 @@
-{
-  mkDerivation,
-  bsdSetupHook,
-  netbsdSetupHook,
-  makeMinimal,
-  install,
-  tsort,
-  lorder,
-  mandoc,
-  statHook,
-  nbperf,
-  tic,
-  compatIfNeeded,
+{ mkDerivation
+, bsdSetupHook
+, netbsdSetupHook
+, makeMinimal
+, install
+, tsort
+, lorder
+, mandoc
+, statHook
+, nbperf
+, tic
+, compatIfNeeded
+,
 }:
 
 mkDerivation {

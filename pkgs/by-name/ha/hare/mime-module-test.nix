@@ -1,7 +1,7 @@
-{
-  hare,
-  runCommandNoCC,
-  writeText,
+{ hare
+, runCommandNoCC
+, writeText
+,
 }:
 let
   mainDotHare = writeText "main.ha" ''

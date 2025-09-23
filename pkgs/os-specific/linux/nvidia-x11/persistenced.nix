@@ -1,13 +1,13 @@
 nvidia_x11: sha256:
 
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  m4,
-  glibc,
-  libtirpc,
-  pkg-config,
+{ stdenv
+, lib
+, fetchFromGitHub
+, m4
+, glibc
+, libtirpc
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation {

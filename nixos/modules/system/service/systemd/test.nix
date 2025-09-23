@@ -1,11 +1,10 @@
 # Run:
 #   nix-build -A nixosTests.modularService
 
-{
-  evalSystem,
-  runCommand,
-  hello,
-  ...
+{ evalSystem
+, runCommand
+, hello
+, ...
 }:
 
 let
@@ -62,14 +61,14 @@ let
   inherit (machine.config.system.build) toplevel;
 in
 runCommand "test-modular-service-systemd-units"
-  {
-    passthru = {
-      inherit
-        machine
-        toplevel
-        ;
-    };
-  }
+{
+  passthru = {
+    inherit
+      machine
+      toplevel
+      ;
+  };
+}
   ''
     echo ${toplevel}/etc/systemd/system/foo.service:
     cat -n ${toplevel}/etc/systemd/system/foo.service

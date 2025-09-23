@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  colorlog,
-  importlab,
-  online-judge-tools,
-  pyyaml,
-  setuptools,
-  toml,
-
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, colorlog
+, importlab
+, online-judge-tools
+, pyyaml
+, setuptools
+, toml
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

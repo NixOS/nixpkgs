@@ -1,24 +1,24 @@
-{
-  cairo,
-  fetchFromGitHub,
-  gdk-pixbuf,
-  lib,
-  libxcrypt,
-  libxkbcommon,
-  makeWrapper,
-  meson,
-  ninja,
-  nix-update-script,
-  pam,
-  pkg-config,
-  scdoc,
-  stdenv,
-  swaybg,
-  systemd,
-  versionCheckHook,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
+{ cairo
+, fetchFromGitHub
+, gdk-pixbuf
+, lib
+, libxcrypt
+, libxkbcommon
+, makeWrapper
+, meson
+, ninja
+, nix-update-script
+, pam
+, pkg-config
+, scdoc
+, stdenv
+, swaybg
+, systemd
+, versionCheckHook
+, wayland
+, wayland-protocols
+, wayland-scanner
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

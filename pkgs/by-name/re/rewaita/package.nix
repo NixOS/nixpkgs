@@ -1,18 +1,18 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  ninja,
-  meson,
-  pkg-config,
-  wrapGAppsHook4,
-  glib,
-  gtk4,
-  desktop-file-utils,
-  appstream-glib,
-  blueprint-compiler,
-  libadwaita,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, ninja
+, meson
+, pkg-config
+, wrapGAppsHook4
+, glib
+, gtk4
+, desktop-file-utils
+, appstream-glib
+, blueprint-compiler
+, libadwaita
+, nix-update-script
+,
 }:
 let
   version = "1.0.1";

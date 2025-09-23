@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  alsa-utils,
-  copyDesktopItems,
-  electron_37,
-  makeDesktopItem,
-  makeWrapper,
-  nix-update-script,
-  versionCheckHook,
-  vulkan-loader,
-  which,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, alsa-utils
+, copyDesktopItems
+, electron_37
+, makeDesktopItem
+, makeWrapper
+, nix-update-script
+, versionCheckHook
+, vulkan-loader
+, which
+,
 }:
 
 buildNpmPackage rec {

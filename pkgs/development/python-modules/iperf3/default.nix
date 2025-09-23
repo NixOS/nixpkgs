@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  iperf3,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, iperf3
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

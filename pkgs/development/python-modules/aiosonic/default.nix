@@ -1,24 +1,24 @@
-{
-  nodejs,
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  poetry-core,
-  # install_requires
-  charset-normalizer,
-  h2,
-  onecache,
-  # test dependencies
-  httpx,
-  pytest-aiohttp,
-  pytest-cov-stub,
-  pytest-mock,
-  uvicorn,
-  requests,
-  aiohttp,
-  pytestCheckHook,
-  stdenv,
+{ nodejs
+, lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, # install_requires
+  charset-normalizer
+, h2
+, onecache
+, # test dependencies
+  httpx
+, pytest-aiohttp
+, pytest-cov-stub
+, pytest-mock
+, uvicorn
+, requests
+, aiohttp
+, pytestCheckHook
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

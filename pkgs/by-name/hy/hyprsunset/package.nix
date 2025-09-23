@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  pkg-config,
-  hyprland-protocols,
-  hyprlang,
-  hyprutils,
-  hyprwayland-scanner,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  nix-update-script,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, pkg-config
+, hyprland-protocols
+, hyprlang
+, hyprutils
+, hyprwayland-scanner
+, wayland
+, wayland-protocols
+, wayland-scanner
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprsunset";

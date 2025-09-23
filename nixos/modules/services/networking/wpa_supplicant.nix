@@ -1,10 +1,9 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, utils
+, ...
 }:
 
 with lib;
@@ -108,9 +107,10 @@ let
   mkUnit =
     iface:
     let
-      deviceUnit = optional (
-        iface != null
-      ) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
+      deviceUnit = optional
+        (
+          iface != null
+        ) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
       configStr =
         (
           if cfg.allowAuxiliaryImperativeNetworks then
@@ -584,18 +584,19 @@ in
 
   config = mkIf cfg.enable {
     assertions =
-      flip mapAttrsToList cfg.networks (
-        name: cfg: {
-          assertion =
-            with cfg;
-            count (x: x != null) [
-              psk
-              pskRaw
-              auth
-            ] <= 1;
-          message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';
-        }
-      )
+      flip mapAttrsToList cfg.networks
+        (
+          name: cfg: {
+            assertion =
+              with cfg;
+              count (x: x != null) [
+                psk
+                pskRaw
+                auth
+              ] <= 1;
+            message = ''options networking.wireless."${name}".{psk,pskRaw,auth} are mutually exclusive'';
+          }
+        )
       ++ [
         {
           assertion = length cfg.interfaces > 1 -> !cfg.dbusControlled;

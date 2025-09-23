@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  makeWrapper,
-  nix-update-script,
-  prefetch-yarn-deps,
-  fixup-yarn-lock,
-  nodejs,
-  yarn,
-  nixosTests,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchYarnDeps
+, makeWrapper
+, nix-update-script
+, prefetch-yarn-deps
+, fixup-yarn-lock
+, nodejs
+, yarn
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

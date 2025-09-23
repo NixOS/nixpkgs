@@ -1,94 +1,94 @@
-{
-  lib,
-  SDL2,
-  addDriverRunpath,
-  alsa-lib,
-  bash,
-  buildPackages,
-  callPackage,
-  config,
-  docutils,
-  fetchFromGitHub,
-  ffmpeg,
-  freefont_ttf,
-  freetype,
-  lcms2,
-  libGL,
-  libX11,
-  libXScrnSaver,
-  libXext,
-  libXpresent,
-  libXrandr,
-  libarchive,
-  libass,
-  libbluray,
-  libbs2b,
-  libcaca,
-  libcdio,
-  libcdio-paranoia,
-  libdrm,
-  libdisplay-info,
-  libdvdnav,
-  libjack2,
-  libplacebo,
-  libpthreadstubs,
-  libpulseaudio,
-  libsixel,
-  libuchardet,
-  libva,
-  libvdpau,
-  libxkbcommon,
-  lua,
-  makeWrapper,
-  libgbm,
-  meson,
-  mujs,
-  ninja,
-  nixosTests,
-  nv-codec-headers-11,
-  openalSoft,
-  pipewire,
-  pkg-config,
-  python3,
-  rubberband,
-  shaderc, # instead of spirv-cross
-  stdenv,
-  swift,
-  testers,
-  vapoursynth,
-  vulkan-headers,
-  vulkan-loader,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  zimg,
-
-  # Boolean
-  alsaSupport ? stdenv.hostPlatform.isLinux,
-  archiveSupport ? true,
-  bluraySupport ? true,
-  bs2bSupport ? true,
-  cacaSupport ? true,
-  cddaSupport ? false,
-  cmsSupport ? true,
-  drmSupport ? stdenv.hostPlatform.isLinux,
-  dvbinSupport ? stdenv.hostPlatform.isLinux,
-  dvdnavSupport ? true,
-  jackaudioSupport ? false,
-  javascriptSupport ? true,
-  openalSupport ? true,
-  pipewireSupport ? !stdenv.hostPlatform.isDarwin,
-  pulseSupport ? config.pulseaudio or (!stdenv.hostPlatform.isDarwin),
-  rubberbandSupport ? true,
-  sdl2Support ? false,
-  sixelSupport ? false,
-  vaapiSupport ? !stdenv.hostPlatform.isDarwin && (x11Support || waylandSupport),
-  vapoursynthSupport ? false,
-  vdpauSupport ? true,
-  vulkanSupport ? true,
-  waylandSupport ? !stdenv.hostPlatform.isDarwin,
-  x11Support ? !stdenv.hostPlatform.isDarwin,
-  zimgSupport ? true,
+{ lib
+, SDL2
+, addDriverRunpath
+, alsa-lib
+, bash
+, buildPackages
+, callPackage
+, config
+, docutils
+, fetchFromGitHub
+, ffmpeg
+, freefont_ttf
+, freetype
+, lcms2
+, libGL
+, libX11
+, libXScrnSaver
+, libXext
+, libXpresent
+, libXrandr
+, libarchive
+, libass
+, libbluray
+, libbs2b
+, libcaca
+, libcdio
+, libcdio-paranoia
+, libdrm
+, libdisplay-info
+, libdvdnav
+, libjack2
+, libplacebo
+, libpthreadstubs
+, libpulseaudio
+, libsixel
+, libuchardet
+, libva
+, libvdpau
+, libxkbcommon
+, lua
+, makeWrapper
+, libgbm
+, meson
+, mujs
+, ninja
+, nixosTests
+, nv-codec-headers-11
+, openalSoft
+, pipewire
+, pkg-config
+, python3
+, rubberband
+, shaderc
+, # instead of spirv-cross
+  stdenv
+, swift
+, testers
+, vapoursynth
+, vulkan-headers
+, vulkan-loader
+, wayland
+, wayland-protocols
+, wayland-scanner
+, zimg
+, # Boolean
+  alsaSupport ? stdenv.hostPlatform.isLinux
+, archiveSupport ? true
+, bluraySupport ? true
+, bs2bSupport ? true
+, cacaSupport ? true
+, cddaSupport ? false
+, cmsSupport ? true
+, drmSupport ? stdenv.hostPlatform.isLinux
+, dvbinSupport ? stdenv.hostPlatform.isLinux
+, dvdnavSupport ? true
+, jackaudioSupport ? false
+, javascriptSupport ? true
+, openalSupport ? true
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin
+, pulseSupport ? config.pulseaudio or (!stdenv.hostPlatform.isDarwin)
+, rubberbandSupport ? true
+, sdl2Support ? false
+, sixelSupport ? false
+, vaapiSupport ? !stdenv.hostPlatform.isDarwin && (x11Support || waylandSupport)
+, vapoursynthSupport ? false
+, vdpauSupport ? true
+, vulkanSupport ? true
+, waylandSupport ? !stdenv.hostPlatform.isDarwin
+, x11Support ? !stdenv.hostPlatform.isDarwin
+, zimgSupport ? true
+,
 }:
 
 let

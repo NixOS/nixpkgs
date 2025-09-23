@@ -1,10 +1,10 @@
-{
-  enableX11 ? true,
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xorg,
+{ enableX11 ? true
+, lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

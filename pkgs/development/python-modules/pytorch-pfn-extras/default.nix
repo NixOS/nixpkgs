@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  numpy,
-  packaging,
-  torch,
-  typing-extensions,
-
-  # tests
-  onnx,
-  pytestCheckHook,
-  torchvision,
-  pythonAtLeast,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  numpy
+, packaging
+, torch
+, typing-extensions
+, # tests
+  onnx
+, pytestCheckHook
+, torchvision
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

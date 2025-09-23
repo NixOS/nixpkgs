@@ -1,23 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  autoPatchelfHook,
-  dpkg,
-  makeBinaryWrapper,
-  makeWrapper,
-  undmg,
-  wrapGAppsHook3,
-
-  glib-networking,
-  gtk3,
-  libappindicator,
-  libnotify,
-  libsoup_3,
-  mpv-unwrapped,
-  xdg-user-dirs,
-  webkitgtk_4_1,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, dpkg
+, makeBinaryWrapper
+, makeWrapper
+, undmg
+, wrapGAppsHook3
+, glib-networking
+, gtk3
+, libappindicator
+, libnotify
+, libsoup_3
+, mpv-unwrapped
+, xdg-user-dirs
+, webkitgtk_4_1
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

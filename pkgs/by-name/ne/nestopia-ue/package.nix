@@ -1,23 +1,23 @@
-{
-  lib,
-  SDL2,
-  alsa-lib,
-  autoconf-archive,
-  autoreconfHook,
-  fetchFromGitHub,
-  fltk,
-  libGL,
-  libGLU,
-  libao,
-  libarchive,
-  libepoxy,
-  makeWrapper,
-  pkg-config,
-  libsamplerate,
-  stdenv,
-  unzip,
-  wrapGAppsHook3,
-  xdg-utils,
+{ lib
+, SDL2
+, alsa-lib
+, autoconf-archive
+, autoreconfHook
+, fetchFromGitHub
+, fltk
+, libGL
+, libGLU
+, libao
+, libarchive
+, libepoxy
+, makeWrapper
+, pkg-config
+, libsamplerate
+, stdenv
+, unzip
+, wrapGAppsHook3
+, xdg-utils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

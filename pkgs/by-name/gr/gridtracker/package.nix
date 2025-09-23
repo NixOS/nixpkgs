@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  nix-update-script,
-  nwjs,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitLab
+, nix-update-script
+, nwjs
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

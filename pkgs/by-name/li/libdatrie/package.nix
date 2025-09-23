@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  autoconf-archive,
-  installShellFiles,
-  libiconv,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, autoconf-archive
+, installShellFiles
+, libiconv
+,
 }:
 
 stdenv.mkDerivation rec {

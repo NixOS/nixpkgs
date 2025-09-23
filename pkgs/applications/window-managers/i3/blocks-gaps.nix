@@ -1,14 +1,13 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  perl,
-  makeWrapper,
-  iproute2,
-  acpi,
-  sysstat,
-  alsa-utils,
-  scripts ? [
+{ fetchFromGitHub
+, lib
+, stdenv
+, perl
+, makeWrapper
+, iproute2
+, acpi
+, sysstat
+, alsa-utils
+, scripts ? [
     "bandwidth"
     "battery"
     "cpu_usage"
@@ -18,7 +17,8 @@
     "memory"
     "volume"
     "wifi"
-  ],
+  ]
+,
 }:
 
 let

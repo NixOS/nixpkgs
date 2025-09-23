@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  typioca,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, typioca
+,
 }:
 
 buildGoModule rec {

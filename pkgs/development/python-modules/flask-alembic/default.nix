@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-  flit-core,
-  alembic,
-  flask,
-  sqlalchemy,
-  pytestCheckHook,
-  flask-sqlalchemy,
-  flask-sqlalchemy-lite,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, flit-core
+, alembic
+, flask
+, sqlalchemy
+, pytestCheckHook
+, flask-sqlalchemy
+, flask-sqlalchemy-lite
+,
 }:
 
 buildPythonPackage rec {

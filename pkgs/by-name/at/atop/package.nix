@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  glib,
-  zlib,
-  ncurses,
-  pkg-config,
-  findutils,
-  systemd,
-  python3,
-  nixosTests,
-  # makes the package unfree via pynvml
-  withAtopgpu ? false,
+{ lib
+, stdenv
+, fetchurl
+, glib
+, zlib
+, ncurses
+, pkg-config
+, findutils
+, systemd
+, python3
+, nixosTests
+, # makes the package unfree via pynvml
+  withAtopgpu ? false
+,
 }:
 
 stdenv.mkDerivation rec {

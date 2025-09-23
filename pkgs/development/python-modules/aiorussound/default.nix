@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  mashumaro,
-  orjson,
-  pyserial-asyncio-fast,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  poetry-core
+, # dependencies
+  mashumaro
+, orjson
+, pyserial-asyncio-fast
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

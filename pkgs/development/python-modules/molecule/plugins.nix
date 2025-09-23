@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
-  python-vagrant,
-  docker,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, python-vagrant
+, docker
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  watchman,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, watchman
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  doxygen,
-  fontconfig,
-  graphviz-nox,
-  libxml2,
-  pkg-config,
-  which,
-  systemd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, doxygen
+, fontconfig
+, graphviz-nox
+, libxml2
+, pkg-config
+, which
+, systemd
+,
 }:
 
 stdenv.mkDerivation {

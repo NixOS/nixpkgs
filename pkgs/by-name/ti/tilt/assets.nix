@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  nodejs,
-  yarn-berry,
-  cacert,
-  version,
-  src,
+{ lib
+, stdenvNoCC
+, nodejs
+, yarn-berry
+, cacert
+, version
+, src
+,
 }:
 
 stdenvNoCC.mkDerivation {

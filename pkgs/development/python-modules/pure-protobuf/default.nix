@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
-  typing-extensions,
-  pytestCheckHook,
-  pytest-benchmark,
-  pytest-cov-stub,
-  pydantic,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, poetry-dynamic-versioning
+, typing-extensions
+, pytestCheckHook
+, pytest-benchmark
+, pytest-cov-stub
+, pydantic
+,
 }:
 
 buildPythonPackage rec {

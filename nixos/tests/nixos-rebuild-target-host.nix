@@ -1,8 +1,7 @@
-{
-  hostPkgs,
-  lib,
-  withNg,
-  ...
+{ hostPkgs
+, lib
+, withNg
+, ...
 }:
 {
   name = "nixos-rebuild-target-host";
@@ -61,7 +60,7 @@
           security.sudo.extraRules = lib.mkForce [
             {
               groups = [ "wheel" ];
-              commands = [ { command = "ALL"; } ];
+              commands = [{ command = "ALL"; }];
             }
             {
               users = [ "alice" ];

@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  arpack,
-  bison,
-  blas,
-  cmake,
-  flex,
-  fop,
-  glpk,
-  gmp,
-  lapack,
-  libxml2,
-  libxslt,
-  llvmPackages,
-  pkg-config,
-  plfit,
-  python3,
-  sourceHighlight,
-  xmlto,
+{ stdenv
+, lib
+, fetchFromGitHub
+, arpack
+, bison
+, blas
+, cmake
+, flex
+, fop
+, glpk
+, gmp
+, lapack
+, libxml2
+, libxslt
+, llvmPackages
+, pkg-config
+, plfit
+, python3
+, sourceHighlight
+, xmlto
+,
 }:
 
 assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !blas.isILP64);

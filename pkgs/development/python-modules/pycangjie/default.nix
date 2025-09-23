@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitLab,
-  pkg-config,
-  libcangjie,
-  sqlite,
-  buildPythonPackage,
-  cython,
-  meson,
-  ninja,
-  cmake,
+{ lib
+, fetchFromGitLab
+, pkg-config
+, libcangjie
+, sqlite
+, buildPythonPackage
+, cython
+, meson
+, ninja
+, cmake
+,
 }:
 
 buildPythonPackage rec {

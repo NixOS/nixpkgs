@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  which,
-  enableHO ? false,
+{ lib
+, stdenv
+, fetchurl
+, which
+, enableHO ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  dparse,
-  packaging,
-  pydantic,
-  ruamel-yaml,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, dparse
+, packaging
+, pydantic
+, ruamel-yaml
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

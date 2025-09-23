@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  buildPerlPackage,
-  shortenPerlShebang,
-  LWP,
-  LWPProtocolHttps,
-  DataDump,
-  JSON,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildPerlPackage
+, shortenPerlShebang
+, LWP
+, LWPProtocolHttps
+, DataDump
+, JSON
+, gitUpdater
+,
 }:
 
 buildPerlPackage rec {

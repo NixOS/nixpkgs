@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gnupg,
-  gtk3,
-  libxml2,
-  intltool,
-  nettle,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gnupg
+, gtk3
+, libxml2
+, intltool
+, nettle
+,
 }:
 
 stdenv.mkDerivation rec {

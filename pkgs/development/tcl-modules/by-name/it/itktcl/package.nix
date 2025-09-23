@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  mkTclDerivation,
-  tk,
-  incrtcl,
+{ lib
+, stdenv
+, fetchurl
+, mkTclDerivation
+, tk
+, incrtcl
+,
 }:
 
 mkTclDerivation rec {

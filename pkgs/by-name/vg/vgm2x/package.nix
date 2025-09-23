@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  libarchive,
-  libzip,
-  pkg-config,
+{ stdenv
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+, libarchive
+, libzip
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

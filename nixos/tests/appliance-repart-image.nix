@@ -17,11 +17,10 @@ in
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
   nodes.machine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
 

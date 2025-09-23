@@ -1,31 +1,31 @@
-{
-  ruby,
-  lib,
-  callPackage,
-  defaultGemConfig,
-  buildEnv,
-  runCommand,
-  buildPackages,
-  bundler,
+{ ruby
+, lib
+, callPackage
+, defaultGemConfig
+, buildEnv
+, runCommand
+, buildPackages
+, bundler
+,
 }@defs:
 
-{
-  name ? null,
-  pname ? null,
-  gemdir ? null,
-  gemfile ? null,
-  lockfile ? null,
-  gemset ? null,
-  groups ? [ "default" ],
-  ruby ? defs.ruby,
-  copyGemFiles ? false, # Copy gem files instead of symlinking
-  gemConfig ? defaultGemConfig,
-  postBuild ? null,
-  document ? [ ],
-  meta ? { },
-  ignoreCollisions ? false,
-  passthru ? { },
-  ...
+{ name ? null
+, pname ? null
+, gemdir ? null
+, gemfile ? null
+, lockfile ? null
+, gemset ? null
+, groups ? [ "default" ]
+, ruby ? defs.ruby
+, copyGemFiles ? false
+, # Copy gem files instead of symlinking
+  gemConfig ? defaultGemConfig
+, postBuild ? null
+, document ? [ ]
+, meta ? { }
+, ignoreCollisions ? false
+, passthru ? { }
+, ...
 }@args:
 
 let
@@ -75,17 +75,18 @@ else
       pathsToLink = [ "/lib" ];
 
       postBuild =
-        genStubsScript {
-          inherit
-            lib
-            runCommand
-            ruby
-            bundler
-            groups
-            ;
-          confFiles = basicEnv.confFiles;
-          binPaths = [ basicEnv.gems.${pname} ];
-        }
+        genStubsScript
+          {
+            inherit
+              lib
+              runCommand
+              ruby
+              bundler
+              groups
+              ;
+            confFiles = basicEnv.confFiles;
+            binPaths = [ basicEnv.gems.${pname} ];
+          }
         + lib.optionalString (postBuild != null) postBuild;
 
       meta = {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  unstableGitUpdater,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, unstableGitUpdater
+,
 }:
 
 # NOTE:

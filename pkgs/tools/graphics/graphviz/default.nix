@@ -1,30 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  pkg-config,
-  cairo,
-  expat,
-  flex,
-  fontconfig,
-  gd,
-  gts,
-  libjpeg,
-  libpng,
-  libtool,
-  makeWrapper,
-  pango,
-  bash,
-  bison,
-  xorg,
-  python3,
-  withXorg ? true,
-
-  # for passthru.tests
-  exiv2,
-  fltk,
-  graphicsmagick,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, cairo
+, expat
+, flex
+, fontconfig
+, gd
+, gts
+, libjpeg
+, libpng
+, libtool
+, makeWrapper
+, pango
+, bash
+, bison
+, xorg
+, python3
+, withXorg ? true
+, # for passthru.tests
+  exiv2
+, fltk
+, graphicsmagick
+,
 }:
 
 let

@@ -1,17 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  packaging,
-  tomli,
-
-  # tests
-  poppler-qt5,
-  qgis,
-  qgis-ltr,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, setuptools-scm
+, packaging
+, tomli
+, # tests
+  poppler-qt5
+, qgis
+, qgis-ltr
+,
 }:
 
 buildPythonPackage rec {

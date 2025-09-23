@@ -1,23 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python311Packages,
-  makeWrapper,
-  gawk,
-  bash,
-  getopt,
-  procps,
-  which,
-  jre,
-  nixosTests,
-  # generation is the attribute version suffix such as 4 in pkgs.cassandra_4
-  generation,
-  version,
-  sha256,
-  extraMeta ? { },
-  callPackage,
-  ...
+{ lib
+, stdenv
+, fetchurl
+, python311Packages
+, makeWrapper
+, gawk
+, bash
+, getopt
+, procps
+, which
+, jre
+, nixosTests
+, # generation is the attribute version suffix such as 4 in pkgs.cassandra_4
+  generation
+, version
+, sha256
+, extraMeta ? { }
+, callPackage
+, ...
 }:
 
 let

@@ -3,7 +3,7 @@
 callPackage ./generic.nix (
   args
   // lib.importJSON ./4.json
-  // {
+    // {
     generation = "4";
   }
 )

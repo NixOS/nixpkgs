@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  gnuplot,
+{ stdenv
+, lib
+, fetchurl
+, gnuplot
+,
 }:
 
 let

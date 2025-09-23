@@ -1,5 +1,5 @@
-{
-  lib ? import ../.,
+{ lib ? import ../.
+,
 }:
 let
 
@@ -70,9 +70,9 @@ let
     ;
 in
 # Rare case of justified usage of rec:
-# - This file is internal, so the return value doesn't matter, no need to make things overridable
-# - The functions depend on each other
-# - We want to expose all of these functions for easy testing
+  # - This file is internal, so the return value doesn't matter, no need to make things overridable
+  # - The functions depend on each other
+  # - We want to expose all of these functions for easy testing
 rec {
 
   # If you change the internal representation, make sure to:
@@ -180,9 +180,11 @@ rec {
       else if value._internalVersion < _currentVersion then
         let
           # Get all the migration functions necessary to convert from the old to the current version
-          migrationsToApply = sublist value._internalVersion (
-            _currentVersion - value._internalVersion
-          ) migrations;
+          migrationsToApply = sublist value._internalVersion
+            (
+              _currentVersion - value._internalVersion
+            )
+            migrations;
         in
         foldl' (value: migration: migration value) value migrationsToApply
       else
@@ -220,11 +222,14 @@ rec {
       firstBaseRoot = firstWithBase._internalBaseRoot;
 
       # Finds the first element with a filesystem root different than the first element, if any
-      differentIndex = findFirstIndex (
-        fileset:
-        # The empty value without a base doesn't have a base path
-        !fileset._internalIsEmptyWithoutBase && firstBaseRoot != fileset._internalBaseRoot
-      ) null filesets;
+      differentIndex = findFirstIndex
+        (
+          fileset:
+          # The empty value without a base doesn't have a base path
+          !fileset._internalIsEmptyWithoutBase && firstBaseRoot != fileset._internalBaseRoot
+        )
+        null
+        filesets;
     in
     # Only evaluates `differentIndex` if there are any elements with a base
     if firstWithBase != null && differentIndex != null then
@@ -246,12 +251,12 @@ rec {
     if type == "directory" then
       _create path type
     else
-      # This turns a file path ./default.nix into a fileset with
-      # - _internalBase: ./.
-      # - _internalTree: {
-      #     "default.nix" = <type>;
-      #   }
-      # See ./README.md#single-files
+    # This turns a file path ./default.nix into a fileset with
+    # - _internalBase: ./.
+    # - _internalTree: {
+    #     "default.nix" = <type>;
+    #   }
+    # See ./README.md#single-files
       _create (dirOf path) {
         ${baseNameOf path} = type;
       };
@@ -264,7 +269,7 @@ rec {
     if value == "directory" then
       readDir path
     else
-      # Set all entries not present to null
+    # Set all entries not present to null
       mapAttrs (name: value: null) (readDir path) // value;
 
   /**
@@ -301,7 +306,7 @@ rec {
         subtreeValues = attrValues normalisedSubtrees;
       in
       # This triggers either when all files in a directory are filtered out
-      # Or when the directory doesn't contain any files at all
+        # Or when the directory doesn't contain any files at all
       if all isNull subtreeValues then
         null
       # Triggers when we have the same as a `readDir path`, so we can turn it back into an equivalent "directory".
@@ -346,7 +351,7 @@ rec {
         subtreeValues = attrValues normalisedSubtrees;
       in
       # If there are no entries, or all entries are empty directories, return "emptyDir".
-      # After this branch we know that there's at least one file
+        # After this branch we know that there's at least one file
       if all (value: value == "emptyDir") subtreeValues then
         "emptyDir"
 
@@ -381,35 +386,38 @@ rec {
         else if tree == "directory" then
           " (all files in directory)"
         else
-          # This does "leak" the file type strings of the internal representation,
-          # but this is the main reason these file type strings even are in the representation!
-          # TODO: Consider removing that information from the internal representation for performance.
-          # The file types can still be printed by querying them only during tracing
+        # This does "leak" the file type strings of the internal representation,
+        # but this is the main reason these file type strings even are in the representation!
+        # TODO: Consider removing that information from the internal representation for performance.
+        # The file types can still be printed by querying them only during tracing
           " (${tree})";
 
       # Only for attribute set trees
       traceTreeAttrs =
         prevLine: indent: tree:
-        foldl' (
-          prevLine: name:
-          let
-            subtree = tree.${name};
+        foldl'
+          (
+            prevLine: name:
+            let
+              subtree = tree.${name};
 
-            # Evaluating this prints the line for this subtree
-            thisLine = trace "${indent}- ${name}${treeSuffix subtree}" prevLine;
-          in
-          if subtree == null || subtree == "emptyDir" then
+              # Evaluating this prints the line for this subtree
+              thisLine = trace "${indent}- ${name}${treeSuffix subtree}" prevLine;
+            in
+            if subtree == null || subtree == "emptyDir" then
             # Don't print anything at all if this subtree is empty
-            prevLine
-          else if isAttrs subtree then
+              prevLine
+            else if isAttrs subtree then
             # A directory with explicit entries
             # Do print this node, but also recurse
-            traceTreeAttrs thisLine "${indent}  " subtree
-          else
+              traceTreeAttrs thisLine "${indent}  " subtree
+            else
             # Either a file, or a recursively included directory
             # Do print this node but no further recursion needed
-            thisLine
-        ) prevLine (attrNames tree);
+              thisLine
+          )
+          prevLine
+          (attrNames tree);
 
       # Evaluating this will print the first line
       firstLine =
@@ -444,7 +452,7 @@ rec {
       # The base path as a string with a single trailing slash
       baseString =
         if fileset._internalBaseComponents == [ ] then
-          # Need to handle the filesystem root specially
+        # Need to handle the filesystem root specially
           "/"
         else
           "/" + concatStringsSep "/" fileset._internalBaseComponents + "/";
@@ -460,18 +468,18 @@ rec {
           recurse =
             index: localTree:
             if isAttrs localTree then
-              # We have an attribute set, meaning this is a directory with at least one file
+            # We have an attribute set, meaning this is a directory with at least one file
               if index >= length components then
-                # The path may have no more components though, meaning the filter is running on the directory itself,
-                # so we always include it, again because there's at least one file in it.
+              # The path may have no more components though, meaning the filter is running on the directory itself,
+              # so we always include it, again because there's at least one file in it.
                 true
               else
-                # If we do have more components, the filter runs on some entry inside this directory, so we need to recurse
-                # We do +2 because builtins.split is an interleaved list of the inbetweens and the matches
+              # If we do have more components, the filter runs on some entry inside this directory, so we need to recurse
+              # We do +2 because builtins.split is an interleaved list of the inbetweens and the matches
                 recurse (index + 2) localTree.${elemAt components index}
             else
-              # If it's not an attribute set it can only be either null (in which case it's not included)
-              # or a string ("directory" or "regular", etc.) in which case it's included
+            # If it's not an attribute set it can only be either null (in which case it's not included)
+            # or a string ("directory" or "regular", etc.) in which case it's included
               localTree != null;
         in
         recurse 0 tree;
@@ -503,13 +511,13 @@ rec {
           else if substring 0 baseLength pathSlash != baseString then
             false
           else
-            # Same as `removePrefix baseString path`, but more efficient.
-            # From the above code we know that hasPrefix baseString pathSlash holds, so this is safe.
-            # We don't use pathSlash here because we only needed the trailing slash for the prefix matching.
-            # With base /foo and path /foo/bar/baz this gives
-            # inTree (split "/" (removePrefix "/foo/" "/foo/bar/baz"))
-            # == inTree (split "/" "bar/baz")
-            # == inTree [ "bar" "baz" ]
+          # Same as `removePrefix baseString path`, but more efficient.
+          # From the above code we know that hasPrefix baseString pathSlash holds, so this is safe.
+          # We don't use pathSlash here because we only needed the trailing slash for the prefix matching.
+          # With base /foo and path /foo/bar/baz this gives
+          # inTree (split "/" (removePrefix "/foo/" "/foo/bar/baz"))
+          # == inTree (split "/" "bar/baz")
+          # == inTree [ "bar" "baz" ]
             inTree (split "/" (substring baseLength (-1) path))
         )
         # This is a way have an additional check in case the above is true without any significant performance cost
@@ -524,8 +532,8 @@ rec {
         );
     in
     # Special case because the code below assumes that the _internalBase is always included in the result
-    # which shouldn't be done when we have no files at all in the base
-    # This also forces the tree before returning the filter, leads to earlier error messages
+      # which shouldn't be done when we have no files at all in the base
+      # This also forces the tree before returning the filter, leads to earlier error messages
     if fileset._internalIsEmptyWithoutBase || tree == null then empty else nonEmpty;
 
   # Turn a builtins.filterSource-based source filter on a root path into a file set
@@ -574,11 +582,11 @@ rec {
       rootString = "/" + concatStringsSep "/" (components (splitRoot root).subpath);
     in
     if rootPathType == "directory" then
-      # We imitate builtins.path not calling the filter on the root path
+    # We imitate builtins.path not calling the filter on the root path
       _create root (fromDir root rootString)
     else
-      # Direct files are always included by builtins.path without calling the filter
-      # But we need to lift up the base path to its parent to satisfy the base path invariant
+    # Direct files are always included by builtins.path without calling the filter
+    # But we need to lift up the base path to its parent to satisfy the base path invariant
       _create (dirOf root) {
         ${baseNameOf root} = rootPathType;
       };
@@ -614,10 +622,10 @@ rec {
         index:
         # If we haven't reached the required depth yet
         if index < length fileset._internalBaseComponents then
-          # Create an attribute set and recurse as the value, this can be lazily evaluated this way
+        # Create an attribute set and recurse as the value, this can be lazily evaluated this way
           { ${elemAt fileset._internalBaseComponents index} = recurse (index + 1); }
         else
-          # Otherwise we reached the appropriate depth, here's the original tree
+        # Otherwise we reached the appropriate depth, here's the original tree
           fileset._internalTree;
     in
     recurse (length targetBaseComponents);
@@ -632,15 +640,15 @@ rec {
         index: tree:
         # If the filesetTree is an attribute set and we haven't reached the required depth yet
         if isAttrs tree && index < length targetBaseComponents then
-          # Recurse with the tree under the right component (which might not exist)
+        # Recurse with the tree under the right component (which might not exist)
           recurse (index + 1) (tree.${elemAt targetBaseComponents index} or null)
         else
-          # For all values here we can just return the tree itself:
-          # tree == null -> the result is also null, everything is excluded
-          # tree == "directory" -> the result is also "directory",
-          #   because the base path is always a directory and everything is included
-          # isAttrs tree -> the result is `tree`
-          #   because we don't need to recurse any more since `index == length longestBaseComponents`
+        # For all values here we can just return the tree itself:
+        # tree == null -> the result is also null, everything is excluded
+        # tree == "directory" -> the result is also "directory",
+        #   because the base path is always a directory and everything is included
+        # isAttrs tree -> the result is `tree`
+        #   because we don't need to recurse any more since `index == length longestBaseComponents`
           tree;
     in
     recurse (length fileset._internalBaseComponents) fileset._internalTree;
@@ -702,15 +710,15 @@ rec {
       withoutNull = filter (tree: tree != null) trees;
     in
     if stringIndex != null then
-      # If there's a string, it's always a fully included tree (dir or file),
-      # no need to look at other elements
+    # If there's a string, it's always a fully included tree (dir or file),
+    # no need to look at other elements
       elemAt trees stringIndex
     else if withoutNull == [ ] then
-      # If all trees are null, then the resulting tree is also null
+    # If all trees are null, then the resulting tree is also null
       null
     else
-      # The non-null elements have to be attribute sets representing partial trees
-      # We need to recurse into those
+    # The non-null elements have to be attribute sets representing partial trees
+    # We need to recurse into those
       zipAttrsWith (name: _unionTrees) withoutNull;
 
   # Computes the intersection of a list of filesets.
@@ -734,14 +742,14 @@ rec {
       # (/foo/bar, /foo/baz) -> null
       longestBaseFileset =
         if commonBaseComponentsLength == length fileset1._internalBaseComponents then
-          # The common prefix is the same as the first path, so the second path is equal or longer
+        # The common prefix is the same as the first path, so the second path is equal or longer
           fileset2
         else if commonBaseComponentsLength == length fileset2._internalBaseComponents then
-          # The common prefix is the same as the second path, so the first path is longer
+        # The common prefix is the same as the second path, so the first path is longer
           fileset1
         else
-          # The common prefix is neither the first nor the second path
-          # This means there's no overlap between the two sets
+        # The common prefix is neither the first nor the second path
+        # This means there's no overlap between the two sets
           null;
 
       # Whether the result should be the empty value without a base
@@ -770,15 +778,15 @@ rec {
   _intersectTree =
     lhs: rhs:
     if isAttrs lhs && isAttrs rhs then
-      # Both sides are attribute sets, we can recurse for the attributes existing on both sides
+    # Both sides are attribute sets, we can recurse for the attributes existing on both sides
       mapAttrs (name: _intersectTree lhs.${name}) (builtins.intersectAttrs lhs rhs)
     else if lhs == null || isString rhs then
-      # If the lhs is null, the result should also be null
-      # And if the rhs is the identity element
-      # (a string, aka it includes everything), then it's also the lhs
+    # If the lhs is null, the result should also be null
+    # And if the rhs is the identity element
+    # (a string, aka it includes everything), then it's also the lhs
       lhs
     else
-      # In all other cases it's the rhs
+    # In all other cases it's the rhs
       rhs;
 
   # Compute the set difference between two file sets.
@@ -805,22 +813,22 @@ rec {
       #   because under the base path of `/foo`, nothing from the negative file set is included
       negativeTreeWithPositiveBase =
         if commonBaseComponentsLength == length positive._internalBaseComponents then
-          # The common prefix is the same as the positive base path, so the second path is equal or longer.
-          # We need to _shorten_ the negative filesetTree to the same base path as the positive one
-          # E.g. for `difference /foo /foo/bar` the common prefix is /foo, equal to the positive file set's base
-          # So we need to shorten the base of the tree for the negative argument from /foo/bar to just /foo
+        # The common prefix is the same as the positive base path, so the second path is equal or longer.
+        # We need to _shorten_ the negative filesetTree to the same base path as the positive one
+        # E.g. for `difference /foo /foo/bar` the common prefix is /foo, equal to the positive file set's base
+        # So we need to shorten the base of the tree for the negative argument from /foo/bar to just /foo
           _shortenTreeBase positive._internalBaseComponents negative
         else if commonBaseComponentsLength == length negative._internalBaseComponents then
-          # The common prefix is the same as the negative base path, so the first path is longer.
-          # We need to lengthen the negative filesetTree to the same base path as the positive one.
-          # E.g. for `difference /foo/bar /foo` the common prefix is /foo, equal to the negative file set's base
-          # So we need to lengthen the base of the tree for the negative argument from /foo to /foo/bar
+        # The common prefix is the same as the negative base path, so the first path is longer.
+        # We need to lengthen the negative filesetTree to the same base path as the positive one.
+        # E.g. for `difference /foo/bar /foo` the common prefix is /foo, equal to the negative file set's base
+        # So we need to lengthen the base of the tree for the negative argument from /foo to /foo/bar
           _lengthenTreeBase positive._internalBaseComponents negative
         else
-          # The common prefix is neither the first nor the second path.
-          # This means there's no overlap between the two file sets,
-          # and nothing from the negative argument should get removed from the positive one
-          # E.g for `difference /foo /bar`, we remove nothing to get the same as `/foo`
+        # The common prefix is neither the first nor the second path.
+        # This means there's no overlap between the two file sets,
+        # and nothing from the negative argument should get removed from the positive one
+        # E.g for `difference /foo /bar`, we remove nothing to get the same as `/foo`
           null;
 
       resultingTree =
@@ -834,9 +842,9 @@ rec {
     else if negative._internalIsEmptyWithoutBase then
       positive
     else
-      # We use the positive file set base for the result,
-      # because only files from the positive side may be included,
-      # which is what base path is for
+    # We use the positive file set base for the result,
+    # because only files from the positive side may be included,
+    # which is what base path is for
       _create positive._internalBase resultingTree;
 
   # Computes the set difference of two filesetTree's
@@ -845,14 +853,14 @@ rec {
     path: lhs: rhs:
     # If the lhs doesn't have any files, or the right hand side includes all files
     if lhs == null || isString rhs then
-      # The result will always be empty
+    # The result will always be empty
       null
     # If the right hand side has no files
     else if rhs == null then
-      # The result is always the left hand side, because nothing gets removed
+    # The result is always the left hand side, because nothing gets removed
       lhs
     else
-      # Otherwise we always have two attribute sets to recurse into
+    # Otherwise we always have two attribute sets to recurse into
       mapAttrs (name: lhsValue: _differenceTree (path + "/${name}") lhsValue (rhs.${name} or null)) (
         _directoryEntries path lhs
       );
@@ -867,15 +875,16 @@ rec {
       fromFile =
         name: type:
         if
-          predicate {
-            inherit name type;
-            hasExt = ext: hasSuffix ".${ext}" name;
+          predicate
+            {
+              inherit name type;
+              hasExt = ext: hasSuffix ".${ext}" name;
 
-            # To ensure forwards compatibility with more arguments being added in the future,
-            # adding an attribute which can't be deconstructed :)
-            "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file, hasExt }:`, use `{ name, file, hasExt, ... }:` instead." =
-              null;
-          }
+              # To ensure forwards compatibility with more arguments being added in the future,
+              # adding an attribute which can't be deconstructed :)
+              "lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you're using `{ name, file, hasExt }:`, use `{ name, file, hasExt, ... }:` instead." =
+                null;
+            }
         then
           type
         else
@@ -885,16 +894,18 @@ rec {
       # Type: Path -> filesetTree
       fromDir =
         path:
-        mapAttrs (
-          name: type: if type == "directory" then fromDir (path + "/${name}") else fromFile name type
-        ) (readDir path);
+        mapAttrs
+          (
+            name: type: if type == "directory" then fromDir (path + "/${name}") else fromFile name type
+          )
+          (readDir path);
 
       rootType = pathType root;
     in
     if rootType == "directory" then
       _create root (fromDir root)
     else
-      # Single files are turned into a directory containing that file or nothing.
+    # Single files are turned into a directory containing that file or nothing.
       _create (dirOf root) {
         ${baseNameOf root} = fromFile (baseNameOf root) rootType;
       };
@@ -910,9 +921,11 @@ rec {
     let
       recurse =
         focusedStorePath:
-        mapAttrs (
-          name: type: if type == "directory" then recurse (focusedStorePath + "/${name}") else type
-        ) (builtins.readDir focusedStorePath);
+        mapAttrs
+          (
+            name: type: if type == "directory" then recurse (focusedStorePath + "/${name}") else type
+          )
+          (builtins.readDir focusedStorePath);
     in
     _create localPath (recurse storePath);
 
@@ -924,11 +937,11 @@ rec {
       # The code path for when isStorePath is true
       tryStorePath =
         if pathExists (path + "/.git") then
-          # If there is a `.git` directory in the path,
-          # it means that the path was imported unfiltered into the Nix store.
-          # This function should throw in such a case, because
-          # - `fetchGit` doesn't generally work with `.git` directories in store paths
-          # - Importing the entire path could include Git-tracked files
+        # If there is a `.git` directory in the path,
+        # it means that the path was imported unfiltered into the Nix store.
+        # This function should throw in such a case, because
+        # - `fetchGit` doesn't generally work with `.git` directories in store paths
+        # - Importing the entire path could include Git-tracked files
           throw ''
             lib.fileset.${function}: The ${argument} (${toString path}) is a store path within a working tree of a Git repository.
                 This indicates that a source directory was imported into the store using a method such as `import "''${./.}"` or `path:.`.
@@ -936,10 +949,10 @@ rec {
                 You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
                 If you can't avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.''
         else
-          # Otherwise we're going to assume that the path was a Git directory originally,
-          # but it was fetched using a method that already removed files not tracked by Git,
-          # such as `builtins.fetchGit`, `pkgs.fetchgit` or others.
-          # So we can just import the path in its entirety.
+        # Otherwise we're going to assume that the path was a Git directory originally,
+        # but it was fetched using a method that already removed files not tracked by Git,
+        # such as `builtins.fetchGit`, `pkgs.fetchgit` or others.
+        # So we can just import the path in its entirety.
           _singleton path;
 
       # The code path for when isStorePath is false
@@ -959,9 +972,9 @@ rec {
           );
         in
         # We can identify local working directories by checking for .git,
-        # see https://git-scm.com/docs/gitrepository-layout#_description.
-        # Note that `builtins.fetchGit` _does_ work for bare repositories (where there's no `.git`),
-        # even though `git ls-files` wouldn't return any files in that case.
+          # see https://git-scm.com/docs/gitrepository-layout#_description.
+          # Note that `builtins.fetchGit` _does_ work for bare repositories (where there's no `.git`),
+          # even though `git ls-files` wouldn't return any files in that case.
         if !pathExists (path + "/.git") then
           throw "lib.fileset.${function}: Expected the ${argument} (${toString path}) to point to a local working tree of a Git repository, but it's not."
         else

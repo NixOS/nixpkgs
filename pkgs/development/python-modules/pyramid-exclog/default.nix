@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pyramid,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pyramid
+,
 }:
 
 buildPythonPackage rec {

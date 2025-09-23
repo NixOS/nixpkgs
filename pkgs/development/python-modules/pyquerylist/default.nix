@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wheel,
-  tabulate,
-  coverage,
-  flake8,
-  pytest,
-  pytestCheckHook,
-  fetchpatch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wheel
+, tabulate
+, coverage
+, flake8
+, pytest
+, pytestCheckHook
+, fetchpatch
+,
 }:
 buildPythonPackage rec {
   pname = "pyquerylist";

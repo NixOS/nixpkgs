@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  aiohttp,
-  click,
-  construct,
-  pycryptodomex,
-  pytestCheckHook,
-  pytest-asyncio,
-  asynctest,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, aiohttp
+, click
+, construct
+, pycryptodomex
+, pytestCheckHook
+, pytest-asyncio
+, asynctest
+,
 }:
 
 buildPythonPackage rec {

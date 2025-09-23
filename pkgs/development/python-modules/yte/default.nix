@@ -1,14 +1,14 @@
-{
-  lib,
-  argparse-dataclass,
-  buildPythonPackage,
-  dpath,
-  fetchFromGitHub,
-  numpy,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  uv-build,
+{ lib
+, argparse-dataclass
+, buildPythonPackage
+, dpath
+, fetchFromGitHub
+, numpy
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, uv-build
+,
 }:
 
 buildPythonPackage rec {

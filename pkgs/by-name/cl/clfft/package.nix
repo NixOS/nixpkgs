@@ -1,13 +1,13 @@
-{
-  lib,
-  gccStdenv,
-  fetchFromGitHub,
-  cmake,
-  fftw,
-  fftwFloat,
-  boost,
-  opencl-clhpp,
-  ocl-icd,
+{ lib
+, gccStdenv
+, fetchFromGitHub
+, cmake
+, fftw
+, fftwFloat
+, boost
+, opencl-clhpp
+, ocl-icd
+,
 }:
 
 let

@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  click,
-  construct,
-  construct-classes,
-  cryptography,
-  ecdsa,
-  libusb1,
-  mnemonic,
-  requests,
-  setuptools,
-  shamir-mnemonic,
-  slip10,
-  typing-extensions,
-  trezor-udev-rules,
-  pytestCheckHook,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, click
+, construct
+, construct-classes
+, cryptography
+, ecdsa
+, libusb1
+, mnemonic
+, requests
+, setuptools
+, shamir-mnemonic
+, slip10
+, typing-extensions
+, trezor-udev-rules
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

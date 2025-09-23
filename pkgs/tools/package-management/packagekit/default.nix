@@ -1,31 +1,31 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  gettext,
-  glib,
-  pkg-config,
-  polkit,
-  python3,
-  sqlite,
-  gobject-introspection,
-  vala,
-  gtk-doc,
-  boost,
-  meson,
-  ninja,
-  libxslt,
-  docbook-xsl-nons,
-  docbook_xml_dtd_42,
-  libxml2,
-  gst_all_1,
-  gtk3,
-  enableCommandNotFound ? false,
-  enableBashCompletion ? false,
-  bash-completion ? null,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  nixosTests,
+{ stdenv
+, fetchFromGitHub
+, lib
+, gettext
+, glib
+, pkg-config
+, polkit
+, python3
+, sqlite
+, gobject-introspection
+, vala
+, gtk-doc
+, boost
+, meson
+, ninja
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, libxml2
+, gst_all_1
+, gtk3
+, enableCommandNotFound ? false
+, enableBashCompletion ? false
+, bash-completion ? null
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

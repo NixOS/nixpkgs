@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  flit-core,
-  pygments,
-  pytestCheckHook,
-  uvloop,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, flit-core
+, pygments
+, pytestCheckHook
+, uvloop
+,
 }:
 
 buildPythonPackage rec {

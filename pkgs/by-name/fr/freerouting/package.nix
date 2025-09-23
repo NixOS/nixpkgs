@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  makeDesktopItem,
-  jdk,
-  gradle,
-  copyDesktopItems,
-  jre,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeBinaryWrapper
+, makeDesktopItem
+, jdk
+, gradle
+, copyDesktopItems
+, jre
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerouting";

@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qtwayland,
-  pkg-config,
+{ mkKdeDerivation
+, qtwayland
+, pkg-config
+,
 }:
 mkKdeDerivation {
   pname = "kguiaddons";

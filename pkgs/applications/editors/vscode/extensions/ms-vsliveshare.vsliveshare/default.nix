@@ -1,7 +1,7 @@
-{
-  lib,
-  vscode-utils,
-  xsel,
+{ lib
+, vscode-utils
+, xsel
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

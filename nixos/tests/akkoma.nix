@@ -1,9 +1,8 @@
 # end‐to‐end test for Akkoma
-{
-  lib,
-  pkgs,
-  confined ? false,
-  ...
+{ lib
+, pkgs
+, confined ? false
+, ...
 }:
 let
   inherit ((pkgs.formats.elixirConf { }).lib) mkRaw;

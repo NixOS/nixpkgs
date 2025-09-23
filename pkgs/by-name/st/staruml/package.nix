@@ -1,29 +1,29 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  dpkg,
-  wrapGAppsHook3,
-  hicolor-icon-theme,
-  gtk3,
-  glib,
-  systemd,
-  xorg,
-  nss,
-  nspr,
-  atk,
-  at-spi2-atk,
-  dbus,
-  gdk-pixbuf,
-  pango,
-  cairo,
-  expat,
-  libdrm,
-  libgbm,
-  alsa-lib,
-  at-spi2-core,
-  cups,
-  libxkbcommon,
+{ stdenv
+, lib
+, fetchurl
+, dpkg
+, wrapGAppsHook3
+, hicolor-icon-theme
+, gtk3
+, glib
+, systemd
+, xorg
+, nss
+, nspr
+, atk
+, at-spi2-atk
+, dbus
+, gdk-pixbuf
+, pango
+, cairo
+, expat
+, libdrm
+, libgbm
+, alsa-lib
+, at-spi2-core
+, cups
+, libxkbcommon
+,
 }:
 
 let

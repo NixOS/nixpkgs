@@ -1,30 +1,30 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  attrs,
-  buildPythonPackage,
-  defusedxml,
-  fetchFromGitHub,
-  freezegun,
-  httpx,
-  isodate,
-  lxml,
-  mock,
-  packaging,
-  platformdirs,
-  pretend,
-  pytest-asyncio,
-  pytest-httpx,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  requests,
-  requests-toolbelt,
-  requests-file,
-  requests-mock,
-  setuptools,
-  xmlsec,
+{ lib
+, aiohttp
+, aioresponses
+, attrs
+, buildPythonPackage
+, defusedxml
+, fetchFromGitHub
+, freezegun
+, httpx
+, isodate
+, lxml
+, mock
+, packaging
+, platformdirs
+, pretend
+, pytest-asyncio
+, pytest-httpx
+, pytestCheckHook
+, pythonOlder
+, pytz
+, requests
+, requests-toolbelt
+, requests-file
+, requests-mock
+, setuptools
+, xmlsec
+,
 }:
 
 buildPythonPackage rec {

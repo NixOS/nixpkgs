@@ -1,17 +1,17 @@
-{
-  lib,
-  asn1crypto,
-  attrs,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  pyserial,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  setuptools,
-  structlog,
-  typing-extensions,
+{ lib
+, asn1crypto
+, attrs
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, pyserial
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, setuptools
+, structlog
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

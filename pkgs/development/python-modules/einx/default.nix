@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wheel,
-  numpy,
-  sympy,
-  frozendict,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wheel
+, numpy
+, sympy
+, frozendict
+,
 }:
 
 buildPythonPackage rec {

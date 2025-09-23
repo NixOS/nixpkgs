@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  cargo,
-  rustPlatform,
-  rustc,
-  setuptools,
-  setuptools-rust,
-  numpy,
-  fixtures,
-  networkx,
-  testtools,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, cargo
+, rustPlatform
+, rustc
+, setuptools
+, setuptools-rust
+, numpy
+, fixtures
+, networkx
+, testtools
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

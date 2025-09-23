@@ -1,18 +1,18 @@
-{
-  lib,
-  pythonOlder,
-  aiofiles,
-  async-timeout,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  isPy3k,
-  libusb1,
-  mock,
-  pyasn1,
-  pycryptodome,
-  pytestCheckHook,
-  rsa,
+{ lib
+, pythonOlder
+, aiofiles
+, async-timeout
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, isPy3k
+, libusb1
+, mock
+, pyasn1
+, pycryptodome
+, pytestCheckHook
+, rsa
+,
 }:
 
 buildPythonPackage rec {

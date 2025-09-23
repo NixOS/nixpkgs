@@ -1,9 +1,9 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  autoreconfHook,
-  curl,
+{ fetchurl
+, lib
+, stdenv
+, autoreconfHook
+, curl
+,
 }:
 
 let

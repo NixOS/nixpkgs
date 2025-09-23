@@ -1,9 +1,9 @@
 # Start this shell with:
 # nix-shell path/to/root/of/nixpkgs -A flattenReferencesGraph.dev-shell
-{
-  mkShell,
-  callPackage,
-  python3Packages,
+{ mkShell
+, callPackage
+, python3Packages
+,
 }:
 let
   helpers = callPackage (import ./helpers.nix) { };

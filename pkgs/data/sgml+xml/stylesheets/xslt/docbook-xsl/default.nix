@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  fetchurl,
-  fetchpatch,
-  findXMLCatalogs,
-  writeScriptBin,
-  ruby,
-  bash,
-  withManOptDedupPatch ? false,
+{ lib
+, stdenv
+, replaceVars
+, fetchurl
+, fetchpatch
+, findXMLCatalogs
+, writeScriptBin
+, ruby
+, bash
+, withManOptDedupPatch ? false
+,
 }:
 
 let
 
   common =
-    {
-      pname,
-      sha256,
-      suffix ? "",
+    { pname
+    , sha256
+    , suffix ? ""
+    ,
     }:
     let
       legacySuffix = lib.optionalString (suffix != "-nons") "-ns";

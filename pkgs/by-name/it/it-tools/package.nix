@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nodejs,
-  pnpm_8,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nodejs
+, pnpm_8
+,
 }:
 stdenv.mkDerivation rec {
   pname = "it-tools";

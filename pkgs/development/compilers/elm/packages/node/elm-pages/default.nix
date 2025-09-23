@@ -1,8 +1,8 @@
-{
-  nodePkgs,
-  pkgs,
-  lib,
-  makeWrapper,
+{ nodePkgs
+, pkgs
+, lib
+, makeWrapper
+,
 }:
 
 let

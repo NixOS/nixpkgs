@@ -1,107 +1,104 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  python3Packages,
-  zlib,
-  pkg-config,
-  glib,
-  buildPackages,
-  pixman,
-  vde2,
-  alsa-lib,
-  flex,
-  bison,
-  lzo,
-  snappy,
-  libaio,
-  libtasn1,
-  gnutls,
-  curl,
-  dtc,
-  ninja,
-  meson,
-  perl,
-  sigtool,
-  makeWrapper,
-  removeReferencesTo,
-  attr,
-  libcap,
-  libcap_ng,
-  socat,
-  libslirp,
-  libcbor,
-  apple-sdk_13,
-  darwinMinVersionHook,
-  guestAgentSupport ?
-    (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal,
-  numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal,
-  numactl,
-  seccompSupport ? stdenv.hostPlatform.isLinux && !minimal,
-  libseccomp,
-  alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner && !minimal,
-  pulseSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal,
-  libpulseaudio,
-  pipewireSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal,
-  pipewire,
-  sdlSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal,
-  SDL2,
-  SDL2_image,
-  jackSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal,
-  libjack2,
-  gtkSupport ? !stdenv.hostPlatform.isDarwin && !xenSupport && !nixosTestRunner && !minimal,
-  gtk3,
-  gettext,
-  vte,
-  wrapGAppsHook3,
-  vncSupport ? !nixosTestRunner && !minimal,
-  libjpeg,
-  libpng,
-  smartcardSupport ? !nixosTestRunner && !minimal,
-  libcacard,
-  spiceSupport ? true && !nixosTestRunner && !minimal,
-  spice,
-  spice-protocol,
-  ncursesSupport ? !nixosTestRunner && !minimal,
-  ncurses,
-  usbredirSupport ? spiceSupport,
-  usbredir,
-  xenSupport ? false,
-  xen,
-  cephSupport ? false,
-  ceph,
-  glusterfsSupport ? false,
-  glusterfs,
-  libuuid,
-  openGLSupport ? sdlSupport,
-  libgbm,
-  libepoxy,
-  libdrm,
-  rutabagaSupport ?
-    openGLSupport && !minimal && lib.meta.availableOn stdenv.hostPlatform rutabaga_gfx,
-  rutabaga_gfx,
-  virglSupport ? openGLSupport,
-  virglrenderer,
-  libiscsiSupport ? !minimal,
-  libiscsi,
-  smbdSupport ? false,
-  samba,
-  tpmSupport ? !minimal,
-  uringSupport ? stdenv.hostPlatform.isLinux && !userOnly,
-  liburing,
-  canokeySupport ? !minimal,
-  canokey-qemu,
-  capstoneSupport ? !minimal,
-  capstone,
-  valgrindSupport ? false,
-  valgrind-light,
-  pluginsSupport ? !stdenv.hostPlatform.isStatic,
-  enableDocs ? !minimal || toolsOnly,
-  enableTools ? !minimal || toolsOnly,
-  enableBlobs ? !minimal || toolsOnly,
-  hostCpuOnly ? false,
-  hostCpuTargets ? (
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, python3Packages
+, zlib
+, pkg-config
+, glib
+, buildPackages
+, pixman
+, vde2
+, alsa-lib
+, flex
+, bison
+, lzo
+, snappy
+, libaio
+, libtasn1
+, gnutls
+, curl
+, dtc
+, ninja
+, meson
+, perl
+, sigtool
+, makeWrapper
+, removeReferencesTo
+, attr
+, libcap
+, libcap_ng
+, socat
+, libslirp
+, libcbor
+, apple-sdk_13
+, darwinMinVersionHook
+, guestAgentSupport ? (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal
+, numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal
+, numactl
+, seccompSupport ? stdenv.hostPlatform.isLinux && !minimal
+, libseccomp
+, alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner && !minimal
+, pulseSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal
+, libpulseaudio
+, pipewireSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal
+, pipewire
+, sdlSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal
+, SDL2
+, SDL2_image
+, jackSupport ? !stdenv.hostPlatform.isDarwin && !nixosTestRunner && !minimal
+, libjack2
+, gtkSupport ? !stdenv.hostPlatform.isDarwin && !xenSupport && !nixosTestRunner && !minimal
+, gtk3
+, gettext
+, vte
+, wrapGAppsHook3
+, vncSupport ? !nixosTestRunner && !minimal
+, libjpeg
+, libpng
+, smartcardSupport ? !nixosTestRunner && !minimal
+, libcacard
+, spiceSupport ? true && !nixosTestRunner && !minimal
+, spice
+, spice-protocol
+, ncursesSupport ? !nixosTestRunner && !minimal
+, ncurses
+, usbredirSupport ? spiceSupport
+, usbredir
+, xenSupport ? false
+, xen
+, cephSupport ? false
+, ceph
+, glusterfsSupport ? false
+, glusterfs
+, libuuid
+, openGLSupport ? sdlSupport
+, libgbm
+, libepoxy
+, libdrm
+, rutabagaSupport ? openGLSupport && !minimal && lib.meta.availableOn stdenv.hostPlatform rutabaga_gfx
+, rutabaga_gfx
+, virglSupport ? openGLSupport
+, virglrenderer
+, libiscsiSupport ? !minimal
+, libiscsi
+, smbdSupport ? false
+, samba
+, tpmSupport ? !minimal
+, uringSupport ? stdenv.hostPlatform.isLinux && !userOnly
+, liburing
+, canokeySupport ? !minimal
+, canokey-qemu
+, capstoneSupport ? !minimal
+, capstone
+, valgrindSupport ? false
+, valgrind-light
+, pluginsSupport ? !stdenv.hostPlatform.isStatic
+, enableDocs ? !minimal || toolsOnly
+, enableTools ? !minimal || toolsOnly
+, enableBlobs ? !minimal || toolsOnly
+, hostCpuOnly ? false
+, hostCpuTargets ? (
     if toolsOnly then
       [ ]
     else if xenSupport then
@@ -113,18 +110,20 @@
       )
     else
       null
-  ),
-  nixosTestRunner ? false,
-  toolsOnly ? false,
-  userOnly ? false,
-  minimal ? toolsOnly || userOnly,
-  gitUpdater,
-  qemu-utils, # for tests attribute
+  )
+, nixosTestRunner ? false
+, toolsOnly ? false
+, userOnly ? false
+, minimal ? toolsOnly || userOnly
+, gitUpdater
+, qemu-utils
+, # for tests attribute
 }:
 
-assert lib.assertMsg (
-  xenSupport -> hostCpuTargets == [ "i386-softmmu" ]
-) "Xen should not use any other QEMU architecture other than i386.";
+assert lib.assertMsg
+  (
+    xenSupport -> hostCpuTargets == [ "i386-softmmu" ]
+  ) "Xen should not use any other QEMU architecture other than i386.";
 
 let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;

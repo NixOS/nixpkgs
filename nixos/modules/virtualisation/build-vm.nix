@@ -1,8 +1,7 @@
-{
-  config,
-  extendModules,
-  lib,
-  ...
+{ config
+, extendModules
+, lib
+, ...
 }:
 let
 

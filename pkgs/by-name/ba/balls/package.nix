@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitHub,
-  nim,
-  makeWrapper,
+{ lib
+, buildNimPackage
+, fetchFromGitHub
+, nim
+, makeWrapper
+,
 }:
 
 buildNimPackage (finalAttrs: {

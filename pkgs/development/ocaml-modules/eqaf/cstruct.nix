@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  eqaf,
-  cstruct,
+{ buildDunePackage
+, eqaf
+, cstruct
+,
 }:
 
 buildDunePackage {

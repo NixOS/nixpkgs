@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  makeWrapper,
-  unzip,
-  jre,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, unzip
+, jre
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation {

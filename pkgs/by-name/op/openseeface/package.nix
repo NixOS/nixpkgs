@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  python3,
-  fetchFromGitHub,
-  makeWrapper,
-  enableVisualization ? false,
+{ lib
+, stdenvNoCC
+, python3
+, fetchFromGitHub
+, makeWrapper
+, enableVisualization ? false
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  lib,
-  mkKdeDerivation,
-  fetchurl,
-  qtdeclarative,
-  qt5compat,
-  qttools,
+{ lib
+, mkKdeDerivation
+, fetchurl
+, qtdeclarative
+, qt5compat
+, qttools
+,
 }:
 mkKdeDerivation rec {
   pname = "kirigami-addons";

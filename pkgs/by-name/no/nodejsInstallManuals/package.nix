@@ -1,10 +1,11 @@
-{
-  makeSetupHook,
-  installShellFiles,
-  jq,
+{ makeSetupHook
+, installShellFiles
+, jq
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "nodejs-install-manuals";
   propagatedBuildInputs = [ installShellFiles ];
   substitutions = {

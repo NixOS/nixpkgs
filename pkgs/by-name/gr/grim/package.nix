@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitLab,
-  libjpeg,
-  libpng,
-  meson,
-  ninja,
-  pixman,
-  pkg-config,
-  scdoc,
-  stdenv,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
+{ lib
+, fetchFromGitLab
+, libjpeg
+, libpng
+, meson
+, ninja
+, pixman
+, pkg-config
+, scdoc
+, stdenv
+, wayland
+, wayland-protocols
+, wayland-scanner
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

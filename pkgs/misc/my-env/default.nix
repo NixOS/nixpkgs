@@ -3,13 +3,13 @@
   #### examples of use: ####
   # Add this to your ~/.config/nixpkgs/config.nix:
   {
-    packageOverrides = pkgs : with pkgs; {
+  packageOverrides = pkgs : with pkgs; {
       sdlEnv = pkgs.myEnvFun {
           name = "sdl";
           nativeBuildInputs = [ cmake pkg-config ];
           buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx SDL_net];
       };
-    };
+  };
   }
 
   # Then you can install it by:
@@ -24,8 +24,8 @@
   # be extracted from TAG_FILES) from every source package. Here would be a
   # full ~/.config/nixpkgs/config.nix
   {
-    packageOverrides = pkgs : with pkgs; with sourceAndTags;
-    let complicatedMyEnv = { name, buildInputs ? [], cTags ? [], extraCmds ? ""}:
+  packageOverrides = pkgs : with pkgs; with sourceAndTags;
+  let complicatedMyEnv = { name, buildInputs ? [], cTags ? [], extraCmds ? ""}:
             pkgs.myEnvFun {
               inherit name;
             buildInputs = buildInputs
@@ -37,13 +37,13 @@
               . ~/.bashrc
             '';
           };
-    in rec {
+  in rec {
       # this is the example we will be using
       nixEnv = complicatedMyEnv {
         name = "nix";
         buildInputs = [ libtool stdenv perl curl bzip2 openssl db5 autoconf automake zlib ];
       };
-    };
+  };
   }
 
   # Now we should build our newly defined custom environment using this command on a shell, so type:
@@ -56,19 +56,19 @@
   and show you a shell with a prefixed prompt.
 */
 
-{
-  mkDerivation,
-  replaceVars,
-  pkgs,
+{ mkDerivation
+, replaceVars
+, pkgs
+,
 }:
-{
-  stdenv ? pkgs.stdenv,
-  name,
-  buildInputs ? [ ],
-  propagatedBuildInputs ? [ ],
-  extraCmds ? "",
-  cleanupCmds ? "",
-  shell ? "${pkgs.bashInteractive}/bin/bash --norc",
+{ stdenv ? pkgs.stdenv
+, name
+, buildInputs ? [ ]
+, propagatedBuildInputs ? [ ]
+, extraCmds ? ""
+, cleanupCmds ? ""
+, shell ? "${pkgs.bashInteractive}/bin/bash --norc"
+,
 }:
 
 mkDerivation {

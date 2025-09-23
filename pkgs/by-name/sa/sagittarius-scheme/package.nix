@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pkg-config,
-  libffi,
-  boehmgc,
-  openssl,
-  zlib,
-  odbcSupport ? !stdenv.hostPlatform.isDarwin,
-  libiodbc,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, libffi
+, boehmgc
+, openssl
+, zlib
+, odbcSupport ? !stdenv.hostPlatform.isDarwin
+, libiodbc
+,
 }:
 
 let

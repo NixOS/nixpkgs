@@ -1,21 +1,21 @@
-{
-  lib,
-  buildNpmPackage,
-  electron,
-  fetchFromGitHub,
-  buildPackages,
-  python3,
-  pkg-config,
-  libsecret,
-  nodejs_22,
+{ lib
+, buildNpmPackage
+, electron
+, fetchFromGitHub
+, buildPackages
+, python3
+, pkg-config
+, libsecret
+, nodejs_22
+,
 }:
 
 let
   common =
-    {
-      name,
-      npmBuildScript,
-      installPhase,
+    { name
+    , npmBuildScript
+    , installPhase
+    ,
     }:
     buildNpmPackage rec {
       pname = name;

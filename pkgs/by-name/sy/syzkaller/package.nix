@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  go,
-  ncurses,
+{ lib
+, stdenv
+, fetchFromGitHub
+, go
+, ncurses
+,
 }:
 let
   cpus = {

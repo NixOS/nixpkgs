@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  zlib,
-  ilmbase,
-  fetchpatch,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, zlib
+, ilmbase
+, fetchpatch
+, cmake
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  pythonOlder,
-  setuptools,
-  django-classy-tags,
-  django-formtools,
-  django-treebeard,
-  django-sekizai,
-  djangocms-admin-style,
-  python,
-  dj-database-url,
-  djangocms-text-ckeditor,
-  fetchpatch,
-  django-cms,
-  gettext,
-  iptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, pythonOlder
+, setuptools
+, django-classy-tags
+, django-formtools
+, django-treebeard
+, django-sekizai
+, djangocms-admin-style
+, python
+, dj-database-url
+, djangocms-text-ckeditor
+, fetchpatch
+, django-cms
+, gettext
+, iptools
+,
 }:
 
 buildPythonPackage rec {

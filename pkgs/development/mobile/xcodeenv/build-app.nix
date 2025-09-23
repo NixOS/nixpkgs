@@ -1,40 +1,39 @@
-{
-  stdenv,
-  lib,
-  composeXcodeWrapper,
+{ stdenv
+, lib
+, composeXcodeWrapper
+,
 }:
-{
-  name,
-  src,
-  sdkVersion ? "13.1",
-  target ? null,
-  configuration ? null,
-  scheme ? null,
-  sdk ? null,
-  xcodeFlags ? "",
-  release ? false,
-  certificateFile ? null,
-  certificatePassword ? null,
-  provisioningProfile ? null,
-  codeSignIdentity ? null,
-  signMethod ? null,
-  generateIPA ? false,
-  generateXCArchive ? false,
-  enableWirelessDistribution ? false,
-  installURL ? null,
-  bundleId ? null,
-  appVersion ? null,
-  ...
+{ name
+, src
+, sdkVersion ? "13.1"
+, target ? null
+, configuration ? null
+, scheme ? null
+, sdk ? null
+, xcodeFlags ? ""
+, release ? false
+, certificateFile ? null
+, certificatePassword ? null
+, provisioningProfile ? null
+, codeSignIdentity ? null
+, signMethod ? null
+, generateIPA ? false
+, generateXCArchive ? false
+, enableWirelessDistribution ? false
+, installURL ? null
+, bundleId ? null
+, appVersion ? null
+, ...
 }@args:
 
 assert
-  release
+release
   ->
-    certificateFile != null
-    && certificatePassword != null
-    && provisioningProfile != null
-    && signMethod != null
-    && codeSignIdentity != null;
+certificateFile != null
+&& certificatePassword != null
+&& provisioningProfile != null
+&& signMethod != null
+&& codeSignIdentity != null;
 assert enableWirelessDistribution -> installURL != null && bundleId != null && appVersion != null;
 
 let
@@ -182,5 +181,5 @@ stdenv.mkDerivation (
 
     installPhase = "true";
   }
-  // extraArgs
+    // extraArgs
 )

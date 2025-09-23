@@ -1,12 +1,12 @@
-{
-  lib,
-  python-bitcoinlib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitpython,
-  pycryptodomex,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, python-bitcoinlib
+, buildPythonPackage
+, fetchFromGitHub
+, gitpython
+, pycryptodomex
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

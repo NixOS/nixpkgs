@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  doxygen,
-  graphviz-nox,
-  pkg-config,
-  qttools,
-  wrapQtAppsHook,
-  alsa-lib,
-  fluidsynth,
-  libpulseaudio,
-  qtbase,
-  qtsvg,
-  qtwayland,
-  sonivox,
-  qt5compat ? null,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, docbook_xml_dtd_45
+, docbook_xsl
+, doxygen
+, graphviz-nox
+, pkg-config
+, qttools
+, wrapQtAppsHook
+, alsa-lib
+, fluidsynth
+, libpulseaudio
+, qtbase
+, qtsvg
+, qtwayland
+, sonivox
+, qt5compat ? null
+,
 }:
 
 let

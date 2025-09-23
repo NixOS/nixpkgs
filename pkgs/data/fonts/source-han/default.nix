@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  unzip,
+{ lib
+, stdenvNoCC
+, fetchurl
+, unzip
+,
 }:
 
 let
   makeSuperOTC =
-    {
-      family,
-      description,
-      rev,
-      hash,
-      zip ? "",
-      prefix ? "",
+    { family
+    , description
+    , rev
+    , hash
+    , zip ? ""
+    , prefix ? ""
+    ,
     }:
     let
       Family = lib.toUpper (lib.substring 0 1 family) + lib.substring 1 (lib.stringLength family) family;
@@ -57,11 +57,11 @@ let
     };
 
   makeVariable =
-    {
-      family,
-      version,
-      hash,
-      format,
+    { family
+    , version
+    , hash
+    , format
+    ,
     }:
     let
       Family = lib.toUpper (lib.substring 0 1 family) + lib.substring 1 (lib.stringLength family) family;

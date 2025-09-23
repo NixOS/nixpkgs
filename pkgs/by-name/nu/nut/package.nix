@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  avahi,
-  coreutils,
-  fetchurl,
-  freeipmi,
-  gd,
-  i2c-tools,
-  libgpiod_1,
-  libmodbus,
-  libtool,
-  libusb1,
-  makeWrapper,
-  neon,
-  net-snmp,
-  openssl,
-  pkg-config,
-  replaceVars,
-  systemd,
-  udev,
-  gnused,
-  withApcModbus ? false,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, autoreconfHook
+, avahi
+, coreutils
+, fetchurl
+, freeipmi
+, gd
+, i2c-tools
+, libgpiod_1
+, libmodbus
+, libtool
+, libusb1
+, makeWrapper
+, neon
+, net-snmp
+, openssl
+, pkg-config
+, replaceVars
+, systemd
+, udev
+, gnused
+, withApcModbus ? false
+, fetchFromGitHub
+,
 }:
 let
   # rebuild libmodbus with downstream usb patches from

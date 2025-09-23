@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  ed25519,
-  freezegun,
-  fetchFromGitHub,
-  hatchling,
-  pytestCheckHook,
-  flit-core,
-  requests,
-  securesystemslib,
+{ lib
+, buildPythonPackage
+, ed25519
+, freezegun
+, fetchFromGitHub
+, hatchling
+, pytestCheckHook
+, flit-core
+, requests
+, securesystemslib
+,
 }:
 
 buildPythonPackage rec {

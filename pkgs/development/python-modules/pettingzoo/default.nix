@@ -1,34 +1,30 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  gymnasium,
-  numpy,
-
-  # optional-dependencies
-  pygame,
-  pymunk,
-  chess,
-  rlcard,
-  shimmy,
-  pillow,
-  pybox2d,
-  scipy,
-  pre-commit,
-  pynput,
-  pytest,
-  pytest-cov-stub,
-  pytest-markdown-docs,
-  pytest-xdist,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  gymnasium
+, numpy
+, # optional-dependencies
+  pygame
+, pymunk
+, chess
+, rlcard
+, shimmy
+, pillow
+, pybox2d
+, scipy
+, pre-commit
+, pynput
+, pytest
+, pytest-cov-stub
+, pytest-markdown-docs
+, pytest-xdist
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

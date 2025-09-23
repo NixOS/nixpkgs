@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  gtk3,
-  libayatana-appindicator,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, gtk3
+, libayatana-appindicator
+,
 }:
 buildGoModule {
   pname = "tailscale-systray";

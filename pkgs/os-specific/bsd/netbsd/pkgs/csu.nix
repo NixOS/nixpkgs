@@ -1,22 +1,22 @@
-{
-  lib,
-  mkDerivation,
-  bsdSetupHook,
-  netbsdSetupHook,
-  makeMinimal,
-  install,
-  mandoc,
-  groff,
-  flex,
-  byacc,
-  genassym,
-  gencat,
-  lorder,
-  tsort,
-  statHook,
-  headers,
-  sys-headers,
-  ld_elf_so,
+{ lib
+, mkDerivation
+, bsdSetupHook
+, netbsdSetupHook
+, makeMinimal
+, install
+, mandoc
+, groff
+, flex
+, byacc
+, genassym
+, gencat
+, lorder
+, tsort
+, statHook
+, headers
+, sys-headers
+, ld_elf_so
+,
 }:
 
 mkDerivation {

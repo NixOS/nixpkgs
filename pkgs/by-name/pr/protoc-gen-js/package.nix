@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  buildBazelPackage,
-  bazel_7,
-  fetchFromGitHub,
-  cctools,
+{ stdenv
+, lib
+, buildBazelPackage
+, bazel_7
+, fetchFromGitHub
+, cctools
+,
 }:
 
 buildBazelPackage rec {

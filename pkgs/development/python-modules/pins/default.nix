@@ -1,31 +1,31 @@
-{
-  lib,
-  adlfs,
-  appdirs,
-  buildPythonPackage,
-  databackend,
-  fastparquet,
-  fetchFromGitHub,
-  fsspec,
-  gcsfs,
-  humanize,
-  importlib-metadata,
-  importlib-resources,
-  jinja2,
-  joblib,
-  pandas,
-  pyarrow,
-  pytest-cases,
-  pytest-parallel,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  requests,
-  s3fs,
-  setuptools-scm,
-  setuptools,
-  typing-extensions,
-  xxhash,
+{ lib
+, adlfs
+, appdirs
+, buildPythonPackage
+, databackend
+, fastparquet
+, fetchFromGitHub
+, fsspec
+, gcsfs
+, humanize
+, importlib-metadata
+, importlib-resources
+, jinja2
+, joblib
+, pandas
+, pyarrow
+, pytest-cases
+, pytest-parallel
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, s3fs
+, setuptools-scm
+, setuptools
+, typing-extensions
+, xxhash
+,
 }:
 
 buildPythonPackage rec {

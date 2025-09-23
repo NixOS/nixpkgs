@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perlPackages,
-  makeWrapper,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perlPackages
+, makeWrapper
+, installShellFiles
+,
 }:
 
 let

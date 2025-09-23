@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  lua,
-  luaPackages,
-  pandoc,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, lua
+, luaPackages
+, pandoc
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fennel-ls";

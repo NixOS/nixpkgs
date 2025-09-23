@@ -1,24 +1,24 @@
-{
-  stdenv,
-  fetchurl,
-  alsa-lib,
-  cairo,
-  dpkg,
-  freetype,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  lib,
-  xorg,
-  libglvnd,
-  libjack2,
-  ffmpeg,
-  libxkbcommon,
-  xdg-utils,
-  zlib,
-  pulseaudio,
-  wrapGAppsHook3,
-  makeWrapper,
+{ stdenv
+, fetchurl
+, alsa-lib
+, cairo
+, dpkg
+, freetype
+, gdk-pixbuf
+, glib
+, gtk3
+, lib
+, xorg
+, libglvnd
+, libjack2
+, ffmpeg
+, libxkbcommon
+, xdg-utils
+, zlib
+, pulseaudio
+, wrapGAppsHook3
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

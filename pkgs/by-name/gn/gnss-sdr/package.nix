@@ -1,25 +1,25 @@
-{
-  lib,
-  fetchFromGitHub,
-  armadillo,
-  cmake,
-  gmp,
-  glog,
-  gtest,
-  openssl,
-  gflags,
-  gnuradio,
-  thrift,
-  enableRawUdp ? true,
-  libpcap,
-  orc,
-  pkg-config,
-  blas,
-  lapack,
-  matio,
-  pugixml,
-  protobuf,
-  enableOsmosdr ? true,
+{ lib
+, fetchFromGitHub
+, armadillo
+, cmake
+, gmp
+, glog
+, gtest
+, openssl
+, gflags
+, gnuradio
+, thrift
+, enableRawUdp ? true
+, libpcap
+, orc
+, pkg-config
+, blas
+, lapack
+, matio
+, pugixml
+, protobuf
+, enableOsmosdr ? true
+,
 }:
 
 gnuradio.pkgs.mkDerivation rec {

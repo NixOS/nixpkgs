@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  qtwayland,
+{ mkKdeDerivation
+, pkg-config
+, qtwayland
+,
 }:
 mkKdeDerivation {
   pname = "kwayland";

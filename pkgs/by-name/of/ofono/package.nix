@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  testers,
-  autoreconfHook,
-  pkg-config,
-  glib,
-  dbus,
-  ell,
-  systemd,
-  bluez,
-  mobile-broadband-provider-info,
-  python3,
+{ lib
+, stdenv
+, fetchzip
+, testers
+, autoreconfHook
+, pkg-config
+, glib
+, dbus
+, ell
+, systemd
+, bluez
+, mobile-broadband-provider-info
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

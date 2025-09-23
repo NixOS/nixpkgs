@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  callPackage,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, nix-update-script
+, callPackage
+,
 }:
 buildGoModule (finalAttrs: {
   pname = "reddit-tui";

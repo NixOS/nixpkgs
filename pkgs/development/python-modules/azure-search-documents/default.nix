@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  azure-common,
-  azure-core,
-  isodate,
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, azure-common
+, azure-core
+, isodate
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  flex,
-  bison,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, flex
+, bison
+,
 }:
 
 buildDunePackage rec {

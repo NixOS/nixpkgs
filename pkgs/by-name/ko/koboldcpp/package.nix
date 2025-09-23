@@ -1,33 +1,27 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  makeWrapper,
-  python3Packages,
-  tk,
-  addDriverRunpath,
-
-  apple-sdk_12,
-
-  koboldLiteSupport ? true,
-
-  config,
-  cudaPackages ? { },
-
-  cublasSupport ? config.cudaSupport,
-  # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
+{ lib
+, fetchFromGitHub
+, stdenv
+, makeWrapper
+, python3Packages
+, tk
+, addDriverRunpath
+, apple-sdk_12
+, koboldLiteSupport ? true
+, config
+, cudaPackages ? { }
+, cublasSupport ? config.cudaSupport
+, # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
   # For example if you're on an RTX 3060 that means you're using "Ampere" and you need to pass "sm_86"
-  cudaArches ? cudaPackages.flags.realArches or [ ],
-
-  clblastSupport ? stdenv.hostPlatform.isLinux,
-  clblast,
-  ocl-icd,
-
-  vulkanSupport ? true,
-  vulkan-loader,
-  shaderc,
-  metalSupport ? stdenv.hostPlatform.isDarwin,
-  nix-update-script,
+  cudaArches ? cudaPackages.flags.realArches or [ ]
+, clblastSupport ? stdenv.hostPlatform.isLinux
+, clblast
+, ocl-icd
+, vulkanSupport ? true
+, vulkan-loader
+, shaderc
+, metalSupport ? stdenv.hostPlatform.isDarwin
+, nix-update-script
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  sniffio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, setuptools-scm
+, sniffio
+,
 }:
 
 buildPythonPackage rec {

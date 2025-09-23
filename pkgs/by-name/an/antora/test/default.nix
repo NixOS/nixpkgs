@@ -1,11 +1,11 @@
-{
-  antora,
-  antora-lunr-extension,
-  antora-lunr-extension-test ? false,
-  antora-ui-default,
-  gitMinimal,
-  lib,
-  stdenvNoCC,
+{ antora
+, antora-lunr-extension
+, antora-lunr-extension-test ? false
+, antora-ui-default
+, gitMinimal
+, lib
+, stdenvNoCC
+,
 }:
 stdenvNoCC.mkDerivation {
   name = "${antora.pname}${lib.optionalString antora-lunr-extension-test "-${antora-lunr-extension.pname}"}-test";
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation {
     let
       playbook = builtins.toFile "antora-playbook.json" (
         builtins.toJSON {
-          content.sources = [ { url = "~+"; } ];
+          content.sources = [{ url = "~+"; }];
           runtime.log.failure_level = "warn";
         }
       );

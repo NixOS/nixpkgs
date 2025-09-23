@@ -1,32 +1,29 @@
-{
-  lib,
-  stdenv,
-  pythonAtLeast,
-  pythonOlder,
-  fetchFromGitHub,
-  fetchpatch2,
-  python,
-  buildPythonPackage,
-  setuptools,
-  numpy,
-  numpy_1,
-  llvmlite,
-  replaceVars,
-  writers,
-  numba,
-  pytestCheckHook,
-
-  config,
-
-  # CUDA-only dependencies:
-  addDriverRunpath,
-  autoAddDriverRunpath,
-  cudaPackages,
-
-  # CUDA flags:
-  cudaSupport ? config.cudaSupport,
-  testsWithoutSandbox ? false,
-  doFullCheck ? false,
+{ lib
+, stdenv
+, pythonAtLeast
+, pythonOlder
+, fetchFromGitHub
+, fetchpatch2
+, python
+, buildPythonPackage
+, setuptools
+, numpy
+, numpy_1
+, llvmlite
+, replaceVars
+, writers
+, numba
+, pytestCheckHook
+, config
+, # CUDA-only dependencies:
+  addDriverRunpath
+, autoAddDriverRunpath
+, cudaPackages
+, # CUDA flags:
+  cudaSupport ? config.cudaSupport
+, testsWithoutSandbox ? false
+, doFullCheck ? false
+,
 }:
 
 let

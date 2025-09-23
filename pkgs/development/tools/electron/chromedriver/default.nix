@@ -7,9 +7,11 @@ in
 let
   mkElectronChromedriver = callPackage ./generic.nix { };
 in
-lib.mapAttrs' (
-  majorVersion: info:
-  lib.nameValuePair "electron-chromedriver_${majorVersion}" (
-    mkElectronChromedriver info.version info.hashes
+lib.mapAttrs'
+  (
+    majorVersion: info:
+    lib.nameValuePair "electron-chromedriver_${majorVersion}" (
+      mkElectronChromedriver info.version info.hashes
+    )
   )
-) infoJson
+  infoJson

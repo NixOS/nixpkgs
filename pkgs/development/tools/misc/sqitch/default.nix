@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  perlPackages,
-  makeWrapper,
-  shortenPerlShebang,
-  mysqlSupport ? false,
-  postgresqlSupport ? false,
-  sqliteSupport ? false,
-  templateToolkitSupport ? false,
+{ stdenv
+, lib
+, perlPackages
+, makeWrapper
+, shortenPerlShebang
+, mysqlSupport ? false
+, postgresqlSupport ? false
+, sqliteSupport ? false
+, templateToolkitSupport ? false
+,
 }:
 
 let

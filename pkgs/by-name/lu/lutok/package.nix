@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  atf,
-  autoreconfHook,
-  kyua,
-  lua,
-  pkg-config,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, atf
+, autoreconfHook
+, kyua
+, lua
+, pkg-config
+, gitUpdater
+,
 }:
 
 lib.fix (

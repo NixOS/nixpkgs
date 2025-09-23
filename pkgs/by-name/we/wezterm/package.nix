@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fontconfig,
-  installShellFiles,
-  libGL,
-  libX11,
-  libxcb,
-  libxkbcommon,
-  ncurses,
-  nixosTests,
-  openssl,
-  perl,
-  pkg-config,
-  python3,
-  runCommand,
-  rustPlatform,
-  vulkan-loader,
-  wayland,
-  wezterm,
-  xcbutil,
-  xcbutilimage,
-  xcbutilkeysyms,
-  xcbutilwm,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fontconfig
+, installShellFiles
+, libGL
+, libX11
+, libxcb
+, libxkbcommon
+, ncurses
+, nixosTests
+, openssl
+, perl
+, pkg-config
+, python3
+, runCommand
+, rustPlatform
+, vulkan-loader
+, wayland
+, wezterm
+, xcbutil
+, xcbutilimage
+, xcbutilkeysyms
+, xcbutilwm
+, zlib
+,
 }:
 
 rustPlatform.buildRustPackage rec {

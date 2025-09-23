@@ -1,36 +1,33 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  numpy,
-  types-pytz,
-
-  # tests
-  pytestCheckHook,
-  beautifulsoup4,
-  html5lib,
-  jinja2,
-  lxml,
-  matplotlib,
-  odfpy,
-  openpyxl,
-  pandas,
-  pyarrow,
-  pyreadstat,
-  python-calamine,
-  scipy,
-  sqlalchemy,
-  tables,
-  tabulate,
-  typing-extensions,
-  xarray,
-  xlsxwriter,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  numpy
+, types-pytz
+, # tests
+  pytestCheckHook
+, beautifulsoup4
+, html5lib
+, jinja2
+, lxml
+, matplotlib
+, odfpy
+, openpyxl
+, pandas
+, pyarrow
+, pyreadstat
+, python-calamine
+, scipy
+, sqlalchemy
+, tables
+, tabulate
+, typing-extensions
+, xarray
+, xlsxwriter
+,
 }:
 
 buildPythonPackage rec {

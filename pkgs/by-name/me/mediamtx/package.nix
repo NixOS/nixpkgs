@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchurl,
-  nixosTests,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchurl
+, nixosTests
+,
 }:
 
 let

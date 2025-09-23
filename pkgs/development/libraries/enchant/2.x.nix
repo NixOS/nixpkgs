@@ -1,24 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  aspell,
-  groff,
-  pkg-config,
-  glib,
-  hunspell,
-  hspell,
-  nuspell,
-  libvoikko,
-  unittest-cpp,
-
-  withHspell ? true,
-  withAspell ? true,
-  withHunspell ? true,
-  withNuspell ? true,
-  withVoikko ? true,
-  withAppleSpell ? stdenv.hostPlatform.isDarwin,
-
+{ stdenv
+, lib
+, fetchurl
+, aspell
+, groff
+, pkg-config
+, glib
+, hunspell
+, hspell
+, nuspell
+, libvoikko
+, unittest-cpp
+, withHspell ? true
+, withAspell ? true
+, withHunspell ? true
+, withNuspell ? true
+, withVoikko ? true
+, withAppleSpell ? stdenv.hostPlatform.isDarwin
+,
 }:
 
 assert withAppleSpell -> stdenv.hostPlatform.isDarwin;

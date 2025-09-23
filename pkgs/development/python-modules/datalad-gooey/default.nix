@@ -1,17 +1,17 @@
-{
-  buildPythonPackage,
-  lib,
-  git,
-  fetchFromGitHub,
-  setuptools,
-  git-annex,
-  pyside6,
-  pyqtdarktheme,
-  datalad-next,
-  outdated,
-  datalad,
-  pytestCheckHook,
-  pytest-qt,
+{ buildPythonPackage
+, lib
+, git
+, fetchFromGitHub
+, setuptools
+, git-annex
+, pyside6
+, pyqtdarktheme
+, datalad-next
+, outdated
+, datalad
+, pytestCheckHook
+, pytest-qt
+,
 }:
 
 buildPythonPackage {

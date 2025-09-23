@@ -1,16 +1,16 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitea,
-  makeWrapper,
-  pkg-config,
-  glib,
-  libopus,
-  vips,
-  ffmpeg,
-  callPackage,
-  testers,
-  faircamp,
+{ lib
+, rustPlatform
+, fetchFromGitea
+, makeWrapper
+, pkg-config
+, glib
+, libopus
+, vips
+, ffmpeg
+, callPackage
+, testers
+, faircamp
+,
 }:
 
 rustPlatform.buildRustPackage rec {

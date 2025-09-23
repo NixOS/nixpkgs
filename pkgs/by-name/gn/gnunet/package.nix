@@ -1,40 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  # build-time deps
-  libtool,
-  makeWrapper,
-  meson,
-  ninja,
-  pkg-config,
-
-  # runtime deps
-  adns,
-  bashNonInteractive,
-  curl,
-  gettext,
-  gmp,
-  gnutls,
-  jansson,
-  libextractor,
-  libgcrypt,
-  libgnurl,
-  libidn,
-  libmicrohttpd,
-  libogg,
-  libopus,
-  libpulseaudio,
-  libsodium,
-  libunistring,
-  libxml2,
-  ncurses,
-  sqlite,
-  zlib,
-
-  postgresqlSupport ? true,
-  libpq,
+{ lib
+, stdenv
+, fetchurl
+, # build-time deps
+  libtool
+, makeWrapper
+, meson
+, ninja
+, pkg-config
+, # runtime deps
+  adns
+, bashNonInteractive
+, curl
+, gettext
+, gmp
+, gnutls
+, jansson
+, libextractor
+, libgcrypt
+, libgnurl
+, libidn
+, libmicrohttpd
+, libogg
+, libopus
+, libpulseaudio
+, libsodium
+, libunistring
+, libxml2
+, ncurses
+, sqlite
+, zlib
+, postgresqlSupport ? true
+, libpq
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

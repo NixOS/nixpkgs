@@ -1,30 +1,30 @@
-{
-  qtModule,
-  lib,
-  stdenv,
-  qtbase,
-  qtdeclarative,
-  qtquick3d,
-  qtshadertools,
-  qtsvg,
-  pkg-config,
-  alsa-lib,
-  gstreamer,
-  gst-plugins-bad,
-  gst-plugins-base,
-  gst-plugins-good,
-  gst-libav,
-  gst-vaapi,
-  ffmpeg,
-  libva,
-  libpulseaudio,
-  pipewire,
-  wayland,
-  libXrandr,
-  elfutils,
-  libunwind,
-  orc,
-  pkgsBuildBuild,
+{ qtModule
+, lib
+, stdenv
+, qtbase
+, qtdeclarative
+, qtquick3d
+, qtshadertools
+, qtsvg
+, pkg-config
+, alsa-lib
+, gstreamer
+, gst-plugins-bad
+, gst-plugins-base
+, gst-plugins-good
+, gst-libav
+, gst-vaapi
+, ffmpeg
+, libva
+, libpulseaudio
+, pipewire
+, wayland
+, libXrandr
+, elfutils
+, libunwind
+, orc
+, pkgsBuildBuild
+,
 }:
 
 qtModule {

@@ -1,8 +1,7 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }:
 
 let
@@ -16,9 +15,11 @@ let
 
   artisan = "${cfg.package}/artisan";
 
-  env-file-values = lib.attrsets.mapAttrs' (
-    n: v: lib.attrsets.nameValuePair (lib.strings.removeSuffix "_FILE" n) v
-  ) (lib.attrsets.filterAttrs (n: v: lib.strings.hasSuffix "_FILE" n) cfg.settings);
+  env-file-values = lib.attrsets.mapAttrs'
+    (
+      n: v: lib.attrsets.nameValuePair (lib.strings.removeSuffix "_FILE" n) v
+    )
+    (lib.attrsets.filterAttrs (n: v: lib.strings.hasSuffix "_FILE" n) cfg.settings);
   env-nonfile-values = lib.attrsets.filterAttrs (n: v: !lib.strings.hasSuffix "_FILE" n) cfg.settings;
 
   firefly-iii-maintenance = pkgs.writeShellScript "firefly-iii-maintenance.sh" ''

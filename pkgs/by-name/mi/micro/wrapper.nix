@@ -1,10 +1,10 @@
-{
-  lib,
-  micro,
-  makeWrapper,
-  symlinkJoin,
-  # configurable options
-  extraPackages ? [ ],
+{ lib
+, micro
+, makeWrapper
+, symlinkJoin
+, # configurable options
+  extraPackages ? [ ]
+,
 }:
 
 symlinkJoin {

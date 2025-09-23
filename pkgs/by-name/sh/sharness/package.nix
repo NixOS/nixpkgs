@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  perl,
-  perlPackages,
-  sharnessExtensions ? { },
+{ stdenv
+, lib
+, fetchFromGitHub
+, perl
+, perlPackages
+, sharnessExtensions ? { }
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

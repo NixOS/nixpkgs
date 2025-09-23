@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchFromGitea,
-  rustPlatform,
-  makeDesktopItem,
-  pkg-config,
-  libxkbcommon,
-  alsa-lib,
-  libGL,
-  vulkan-loader,
-  wayland,
-  libXrandr,
-  libXcursor,
-  libX11,
-  libXi,
+{ lib
+, fetchFromGitea
+, rustPlatform
+, makeDesktopItem
+, pkg-config
+, libxkbcommon
+, alsa-lib
+, libGL
+, vulkan-loader
+, wayland
+, libXrandr
+, libXcursor
+, libX11
+, libXi
+,
 }:
 
 rustPlatform.buildRustPackage rec {

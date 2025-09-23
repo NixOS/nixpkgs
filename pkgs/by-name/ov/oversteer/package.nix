@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  gettext,
-  python3,
-  python3Packages,
-  meson,
-  ninja,
-  udev,
-  appstream,
-  appstream-glib,
-  desktop-file-utils,
-  gtk3,
-  wrapGAppsHook3,
-  gobject-introspection,
-  bash,
-  linuxConsoleTools,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, gettext
+, python3
+, python3Packages
+, meson
+, ninja
+, udev
+, appstream
+, appstream-glib
+, desktop-file-utils
+, gtk3
+, wrapGAppsHook3
+, gobject-introspection
+, bash
+, linuxConsoleTools
+, udevCheckHook
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  lsp-plugins,
-  bankstown-lv2,
-  triforce-lv2,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, lsp-plugins
+, bankstown-lv2
+, triforce-lv2
+, nix-update-script
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "asahi-audio";

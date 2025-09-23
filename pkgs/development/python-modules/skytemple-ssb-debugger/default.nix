@@ -1,25 +1,25 @@
-{
-  buildPythonPackage,
-  explorerscript,
-  fetchFromGitHub,
-  setuptools,
-  gobject-introspection,
-  gtk3,
-  gtksourceview4,
-  importlib-metadata,
-  lib,
-  ndspy,
-  nest-asyncio,
-  pmdsky-debug-py,
-  pycairo,
-  pygobject3,
-  pygtkspellcheck,
-  pythonOlder,
-  range-typed-integers,
-  skytemple-files,
-  skytemple-icons,
-  skytemple-ssb-emulator,
-  wrapGAppsHook3,
+{ buildPythonPackage
+, explorerscript
+, fetchFromGitHub
+, setuptools
+, gobject-introspection
+, gtk3
+, gtksourceview4
+, importlib-metadata
+, lib
+, ndspy
+, nest-asyncio
+, pmdsky-debug-py
+, pycairo
+, pygobject3
+, pygtkspellcheck
+, pythonOlder
+, range-typed-integers
+, skytemple-files
+, skytemple-icons
+, skytemple-ssb-emulator
+, wrapGAppsHook3
+,
 }:
 
 buildPythonPackage rec {

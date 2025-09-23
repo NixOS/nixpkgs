@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchFromGitLab,
-  replaceVars,
-  qt5,
-  SDL2,
-  discord-rpc,
-  libgcrypt,
-  sqlite,
-  findutils,
-  xdg-utils,
-  coreutils,
-  dosfstools,
-  vulkan-loader,
-  wrapRetroArch,
-  retroarch-assets,
-  parallel-launcher,
-  # Allow overrides for the RetroArch core and declarative settings
-  parallel-n64-core ? parallel-launcher.passthru.parallel-n64-core,
-  extraRetroArchSettings ? { },
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitLab
+, replaceVars
+, qt5
+, SDL2
+, discord-rpc
+, libgcrypt
+, sqlite
+, findutils
+, xdg-utils
+, coreutils
+, dosfstools
+, vulkan-loader
+, wrapRetroArch
+, retroarch-assets
+, parallel-launcher
+, # Allow overrides for the RetroArch core and declarative settings
+  parallel-n64-core ? parallel-launcher.passthru.parallel-n64-core
+, extraRetroArchSettings ? { }
+,
 }:
 let
   # Converts a version string like x.y.z to vx.y-z

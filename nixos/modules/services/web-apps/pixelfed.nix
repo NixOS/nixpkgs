@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -51,14 +50,12 @@ let
     {
       "pgsql" = "/run/postgresql";
       "mysql" = "/run/mysqld/mysqld.sock";
-    }
-    .${cfg.database.type};
+    }.${cfg.database.type};
   dbUnit =
     {
       "pgsql" = "postgresql.target";
       "mysql" = "mysql.service";
-    }
-    .${cfg.database.type};
+    }.${cfg.database.type};
   redisService = "redis-pixelfed.service";
 in
 {

@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromSourcehut,
-  autoPatchelfHook,
-  gcc-unwrapped,
-  wayland,
-  libxkbcommon,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromSourcehut
+, autoPatchelfHook
+, gcc-unwrapped
+, wayland
+, libxkbcommon
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

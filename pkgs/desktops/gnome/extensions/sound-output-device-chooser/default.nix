@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  fetchFromGitHub,
-  libpulseaudio,
-  python3,
+{ lib
+, stdenv
+, replaceVars
+, fetchFromGitHub
+, libpulseaudio
+, python3
+,
 }:
 
 stdenv.mkDerivation {

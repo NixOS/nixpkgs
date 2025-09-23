@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python-lsp-server,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python-lsp-server
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

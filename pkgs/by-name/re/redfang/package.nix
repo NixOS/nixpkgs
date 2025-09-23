@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  bluez,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, bluez
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

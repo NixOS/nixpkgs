@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  pkg-config,
-  dbus,
-  vulkan-loader,
-  libGL,
-  fetchFromGitHub,
-  rustPlatform,
-  libxkbcommon,
-  wayland,
-  enableX11 ? true,
-  xorg,
+{ lib
+, stdenv
+, pkg-config
+, dbus
+, vulkan-loader
+, libGL
+, fetchFromGitHub
+, rustPlatform
+, libxkbcommon
+, wayland
+, enableX11 ? true
+, xorg
+,
 }:
 
 rustPlatform.buildRustPackage rec {

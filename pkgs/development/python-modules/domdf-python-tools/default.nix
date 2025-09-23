@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  lib,
-  hatch-requirements-txt,
-  natsort,
-  typing-extensions,
+{ buildPythonPackage
+, fetchPypi
+, lib
+, hatch-requirements-txt
+, natsort
+, typing-extensions
+,
 }:
 buildPythonPackage rec {
   pname = "domdf-python-tools";

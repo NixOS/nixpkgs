@@ -1,24 +1,24 @@
-{
-  lib,
-  writeShellScriptBin,
-  rss-bridge,
-  php,
+{ lib
+, writeShellScriptBin
+, rss-bridge
+, php
+,
 }:
 
 let
   phpWithExts = (
     php.withExtensions (
       { all, ... }:
-      with all;
-      [
-        curl
-        filter
-        iconv
-        mbstring
-        openssl
-        simplexml
-        sqlite3
-      ]
+        with all;
+        [
+          curl
+          filter
+          iconv
+          mbstring
+          openssl
+          simplexml
+          sqlite3
+        ]
     )
   );
   phpBin = "${phpWithExts}/bin/php";

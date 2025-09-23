@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  rustPlatform,
-  cmake,
-  cpm-cmake,
-  fontconfig,
-  libGL,
-  libxkbcommon,
-  libgbm,
-  openxr-loader,
-  pkg-config,
-  xorg,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, rustPlatform
+, cmake
+, cpm-cmake
+, fontconfig
+, libGL
+, libxkbcommon
+, libgbm
+, openxr-loader
+, pkg-config
+, xorg
+,
 }:
 
 rustPlatform.buildRustPackage rec {

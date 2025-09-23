@@ -10,7 +10,7 @@
 { url, ... }@args:
 fetchurl (
   (removeAttrs args [ "url" ])
-  // {
+    // {
     urls = [
       url
       (url + ".lz")

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  pkg-config,
-  cairo,
-  poppler,
-  wxGTK,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, pkg-config
+, cairo
+, poppler
+, wxGTK
+,
 }:
 
 stdenv.mkDerivation rec {

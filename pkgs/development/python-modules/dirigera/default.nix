@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pydantic,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  websocket-client,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pydantic
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  updateAutotoolsGnuConfigScriptsHook,
-  ncurses,
-  termcap,
-  curses-library ? if stdenv.hostPlatform.isWindows then termcap else ncurses,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, updateAutotoolsGnuConfigScriptsHook
+, ncurses
+, termcap
+, curses-library ? if stdenv.hostPlatform.isWindows then termcap else ncurses
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

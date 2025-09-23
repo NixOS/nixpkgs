@@ -1,15 +1,15 @@
-{
-  lib,
-  anyio,
-  buildPythonPackage,
-  dirty-equals,
-  fetchFromGitHub,
-  hatch-fancy-pypi-readme,
-  hatch-vcs,
-  hatchling,
-  pytestCheckHook,
-  tenacity,
-  typing-extensions,
+{ lib
+, anyio
+, buildPythonPackage
+, dirty-equals
+, fetchFromGitHub
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
+, pytestCheckHook
+, tenacity
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

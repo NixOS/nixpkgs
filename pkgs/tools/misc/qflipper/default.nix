@@ -1,27 +1,26 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  zlib,
-  libusb1,
-  libGL,
-  qmake,
-  wrapGAppsHook3,
-  wrapQtAppsHook,
-  mkDerivation,
-
-  qttools,
-  qtbase,
-  qt3d,
-  qtsvg,
-  qtserialport,
-  qtdeclarative,
-  qtquickcontrols,
-  qtquickcontrols2,
-  qtgraphicaleffects,
-  qtwayland,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, zlib
+, libusb1
+, libGL
+, qmake
+, wrapGAppsHook3
+, wrapQtAppsHook
+, mkDerivation
+, qttools
+, qtbase
+, qt3d
+, qtsvg
+, qtserialport
+, qtdeclarative
+, qtquickcontrols
+, qtquickcontrols2
+, qtgraphicaleffects
+, qtwayland
+, nix-update-script
+,
 }:
 let
   pname = "qFlipper";

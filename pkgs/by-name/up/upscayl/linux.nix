@@ -1,11 +1,10 @@
-{
-  appimageTools,
-  makeWrapper,
-
-  pname,
-  version,
-  meta,
-  src,
+{ appimageTools
+, makeWrapper
+, pname
+, version
+, meta
+, src
+,
 }:
 
 let

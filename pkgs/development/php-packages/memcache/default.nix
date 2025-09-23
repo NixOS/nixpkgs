@@ -1,10 +1,10 @@
-{
-  buildPecl,
-  lib,
-  fetchFromGitHub,
-  php,
-  zlib,
-  pkg-config,
+{ buildPecl
+, lib
+, fetchFromGitHub
+, php
+, zlib
+, pkg-config
+,
 }:
 
 buildPecl rec {

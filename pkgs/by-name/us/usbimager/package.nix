@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
-  wrapGAppsHook3,
-  withLibui ? true,
-  gtk3,
-  withUdisks ? stdenv.hostPlatform.isLinux,
-  udisks,
-  glib,
-  libX11,
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, wrapGAppsHook3
+, withLibui ? true
+, gtk3
+, withUdisks ? stdenv.hostPlatform.isLinux
+, udisks
+, glib
+, libX11
+,
 }:
 
 stdenv.mkDerivation rec {

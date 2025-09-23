@@ -1,17 +1,15 @@
-{
-  lib,
-  callPackage,
-  stdenvNoCC,
-  buildGoModule,
-  fetchFromGitHub,
-  buildNpmPackage,
-  nix-update-script,
-  npm-lockfile-fix,
-  fetchNpmDeps,
-  jq,
-  nixosTests,
-
-  versionInfo ? {
+{ lib
+, callPackage
+, stdenvNoCC
+, buildGoModule
+, fetchFromGitHub
+, buildNpmPackage
+, nix-update-script
+, npm-lockfile-fix
+, fetchNpmDeps
+, jq
+, nixosTests
+, versionInfo ? {
     # ESR releases only.
     # See https://docs.mattermost.com/upgrade/extended-support-release.html
     # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
@@ -26,7 +24,8 @@
     lockfileOverlay = ''
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
     '';
-  },
+  }
+,
 }:
 
 let

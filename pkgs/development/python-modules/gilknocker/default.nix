@@ -1,18 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pkg-config,
-  rustc,
-  rustPlatform,
-
-  # tests
-  numpy,
-  pytestCheckHook,
-  pytest-benchmark,
-  pytest-rerunfailures,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pkg-config
+, rustc
+, rustPlatform
+, # tests
+  numpy
+, pytestCheckHook
+, pytest-benchmark
+, pytest-rerunfailures
+,
 }:
 
 buildPythonPackage rec {

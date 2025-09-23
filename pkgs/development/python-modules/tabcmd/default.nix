@@ -1,26 +1,26 @@
-{
-  lib,
-  appdirs,
-  argparse,
-  buildPythonPackage,
-  doit,
-  fetchPypi,
-  ftfy,
-  mock,
-  pyinstaller-versionfile,
-  pytest-order,
-  pytestCheckHook,
-  python,
-  pythonOlder,
-  requests,
-  setuptools,
-  setuptools-scm,
-  tableauserverclient,
-  types-appdirs,
-  types-mock,
-  types-requests,
-  types-setuptools,
-  urllib3,
+{ lib
+, appdirs
+, argparse
+, buildPythonPackage
+, doit
+, fetchPypi
+, ftfy
+, mock
+, pyinstaller-versionfile
+, pytest-order
+, pytestCheckHook
+, python
+, pythonOlder
+, requests
+, setuptools
+, setuptools-scm
+, tableauserverclient
+, types-appdirs
+, types-mock
+, types-requests
+, types-setuptools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

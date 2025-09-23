@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch2,
-  setuptools,
-  atpublic,
-  zope-interface,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fetchpatch2
+, setuptools
+, atpublic
+, zope-interface
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

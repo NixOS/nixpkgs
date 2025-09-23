@@ -1,9 +1,9 @@
 # Run tests: nix-build -A tests.nixosOptionsDoc
 
-{
-  lib,
-  nixosOptionsDoc,
-  runCommand,
+{ lib
+, nixosOptionsDoc
+, runCommand
+,
 }:
 let
   inherit (lib) mkOption types;

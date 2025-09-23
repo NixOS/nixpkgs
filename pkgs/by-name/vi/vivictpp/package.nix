@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  cmake,
-  ninja,
-  pkg-config,
-  python3,
-  git,
-  SDL2,
-  SDL2_ttf,
-  libX11,
-  freetype,
-  harfbuzz,
-  ffmpeg,
-  cacert,
-  zlib,
-  writeShellScript,
-  nix-update,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, cmake
+, ninja
+, pkg-config
+, python3
+, git
+, SDL2
+, SDL2_ttf
+, libX11
+, freetype
+, harfbuzz
+, ffmpeg
+, cacert
+, zlib
+, writeShellScript
+, nix-update
+,
 }:
 
 let

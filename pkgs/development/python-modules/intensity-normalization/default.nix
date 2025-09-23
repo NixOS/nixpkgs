@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pytestCheckHook,
-  pytest-cov-stub,
-  hatchling,
-  nibabel,
-  numpy,
-  scikit-fuzzy,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+, pytest-cov-stub
+, hatchling
+, nibabel
+, numpy
+, scikit-fuzzy
+, scipy
+,
 }:
 
 buildPythonPackage rec {

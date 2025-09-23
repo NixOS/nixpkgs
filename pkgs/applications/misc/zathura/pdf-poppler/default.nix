@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  zathura_core,
-  girara,
-  poppler,
-  desktop-file-utils,
-  appstream-glib,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, zathura_core
+, girara
+, poppler
+, desktop-file-utils
+, appstream-glib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

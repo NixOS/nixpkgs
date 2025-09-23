@@ -1,10 +1,10 @@
-{
-  mkKdeDerivation,
-  docbook_xml_dtd_45,
-  docbook-xsl-nons,
-  perl,
-  perlPackages,
-  libxml2,
+{ mkKdeDerivation
+, docbook_xml_dtd_45
+, docbook-xsl-nons
+, perl
+, perlPackages
+, libxml2
+,
 }:
 mkKdeDerivation {
   pname = "kdoctools";

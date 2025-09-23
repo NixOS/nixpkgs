@@ -1,27 +1,25 @@
-{
-  cmake,
-  lib,
-  fetchFromGitHub,
-  ninja,
-  sdl3,
-  stdenv,
-  testers,
-  libX11,
-  libGL,
-  nix-update-script,
-
-  # passthru tests
-  SDL2_ttf,
-  SDL2_net,
-  SDL2_gfx,
-  SDL2_sound,
-  SDL2_mixer,
-  SDL2_image,
-  SDL_compat,
-  ffmpeg,
-  qemu,
-
-  x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
+{ cmake
+, lib
+, fetchFromGitHub
+, ninja
+, sdl3
+, stdenv
+, testers
+, libX11
+, libGL
+, nix-update-script
+, # passthru tests
+  SDL2_ttf
+, SDL2_net
+, SDL2_gfx
+, SDL2_sound
+, SDL2_mixer
+, SDL2_image
+, SDL_compat
+, ffmpeg
+, qemu
+, x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows
+,
 }:
 let
   # tray support on sdl3 pulls in gtk3, which is quite an expensive dependency.

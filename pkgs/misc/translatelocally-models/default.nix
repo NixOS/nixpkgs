@@ -2,21 +2,21 @@ let
   modelSpecs = (builtins.fromJSON (builtins.readFile ./models.json));
 in
 
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
+{ lib
+, stdenvNoCC
+, fetchurl
+,
 }:
 
 let
   withCodeAsKey = f: { code, ... }@attrs: lib.nameValuePair code (f attrs);
   mkModelPackage =
-    {
-      name,
-      code,
-      version,
-      url,
-      checksum,
+    { name
+    , code
+    , version
+    , url
+    , checksum
+    ,
     }:
     stdenvNoCC.mkDerivation {
       pname = "translatelocally-model-${code}";
@@ -48,6 +48,6 @@ let
 
 in
 allModelPkgs
-// {
+  // {
   passthru.updateScript = ./update.sh;
 }

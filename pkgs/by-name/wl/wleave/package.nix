@@ -1,21 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  nix-update-script,
-
-  # Deps
-  installShellFiles,
-  pkg-config,
-  scdoc,
-  wrapGAppsHook4,
-  at-spi2-atk,
-  glib,
-  gtk4,
-  gtk4-layer-shell,
-  libadwaita,
-  librsvg,
-  libxml2,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, nix-update-script
+, # Deps
+  installShellFiles
+, pkg-config
+, scdoc
+, wrapGAppsHook4
+, at-spi2-atk
+, glib
+, gtk4
+, gtk4-layer-shell
+, libadwaita
+, librsvg
+, libxml2
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "wleave";

@@ -1,19 +1,19 @@
-{
-  lib,
-  aiohttp,
-  aresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  mashumaro,
-  orjson,
-  poetry-core,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  syrupy,
-  yarl,
+{ lib
+, aiohttp
+, aresponses
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, mashumaro
+, orjson
+, poetry-core
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, syrupy
+, yarl
+,
 }:
 
 buildPythonPackage rec {

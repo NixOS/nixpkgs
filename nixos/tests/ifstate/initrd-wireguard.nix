@@ -1,11 +1,11 @@
 let
   mkNodeIfStateConfig =
-    {
-      pkgs,
-      id,
-      wgPriv,
-      wgPeerPubKey,
-      wgPeerId,
+    { pkgs
+    , id
+    , wgPriv
+    , wgPeerPubKey
+    , wgPeerId
+    ,
     }:
     {
       enable = true;
@@ -65,13 +65,14 @@ in
           network = {
             enable = true;
             ifstate =
-              mkNodeIfStateConfig {
-                inherit pkgs;
-                id = 1;
-                wgPriv = "6KmLyTyrN9OZIOCkdpiAwoVoeSiwvyI+mtn1wooKSEU=";
-                wgPeerPubKey = "olFuE7u5pVwSeWLFtrXSvD8+aCDBiKNKCLjLb/dgXiA=";
-                wgPeerId = 2;
-              }
+              mkNodeIfStateConfig
+                {
+                  inherit pkgs;
+                  id = 1;
+                  wgPriv = "6KmLyTyrN9OZIOCkdpiAwoVoeSiwvyI+mtn1wooKSEU=";
+                  wgPeerPubKey = "olFuE7u5pVwSeWLFtrXSvD8+aCDBiKNKCLjLb/dgXiA=";
+                  wgPeerId = 2;
+                }
               // {
                 package = pkgs.ifstate.override {
                   withConfigValidation = false;

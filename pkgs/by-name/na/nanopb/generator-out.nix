@@ -1,11 +1,11 @@
-{
-  stdenv,
-  cmake,
-  python3,
-  writeTextFile,
-  protobuf,
-  src,
-  version,
+{ stdenv
+, cmake
+, python3
+, writeTextFile
+, protobuf
+, src
+, version
+,
 }:
 
 let

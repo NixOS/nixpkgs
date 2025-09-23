@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf-archive,
-  autoreconfHook,
-  makeWrapper,
-  pkg-config,
-  replaceVarsWith,
-  curl,
-  gtk3,
-  libassuan,
-  libbsd,
-  libproxy,
-  libxml2,
-  nssTools,
-  openssl,
-  p11-kit,
-  pcsclite,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf-archive
+, autoreconfHook
+, makeWrapper
+, pkg-config
+, replaceVarsWith
+, curl
+, gtk3
+, libassuan
+, libbsd
+, libproxy
+, libxml2
+, nssTools
+, openssl
+, p11-kit
+, pcsclite
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

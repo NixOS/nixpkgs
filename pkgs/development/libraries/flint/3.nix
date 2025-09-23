@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gmp,
-  mpfr,
-  ntl,
-  windows,
-  autoconf,
-  automake,
-  gettext,
-  libtool,
-  openblas ? null,
-  blas,
-  lapack,
-  withBlas ? true,
-  withNtl ? !ntl.meta.broken,
+{ lib
+, stdenv
+, fetchurl
+, gmp
+, mpfr
+, ntl
+, windows
+, autoconf
+, automake
+, gettext
+, libtool
+, openblas ? null
+, blas
+, lapack
+, withBlas ? true
+, withNtl ? !ntl.meta.broken
+,
 }:
 
 assert
-  withBlas
+withBlas
   -> openblas != null && blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 stdenv.mkDerivation rec {

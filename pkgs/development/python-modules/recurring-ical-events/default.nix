@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  git,
-  hatch-vcs,
-  hatchling,
-  icalendar,
-  python-dateutil,
-  tzdata,
-  x-wr-timezone,
-  pytestCheckHook,
-  pytz,
-  restructuredtext-lint,
-  pygments,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, git
+, hatch-vcs
+, hatchling
+, icalendar
+, python-dateutil
+, tzdata
+, x-wr-timezone
+, pytestCheckHook
+, pytz
+, restructuredtext-lint
+, pygments
+,
 }:
 
 buildPythonPackage rec {

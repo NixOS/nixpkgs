@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  nvdlib,
-  poetry-core,
-  pydantic,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, nvdlib
+, poetry-core
+, pydantic
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

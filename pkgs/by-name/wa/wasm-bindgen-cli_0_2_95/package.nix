@@ -1,7 +1,7 @@
-{
-  buildWasmBindgenCli,
-  fetchCrate,
-  rustPlatform,
+{ buildWasmBindgenCli
+, fetchCrate
+, rustPlatform
+,
 }:
 
 buildWasmBindgenCli rec {

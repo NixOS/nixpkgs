@@ -1,9 +1,9 @@
-{
-  runCommand,
-  concatText,
-  writeText,
-  hello,
-  emptyFile,
+{ runCommand
+, concatText
+, writeText
+, hello
+, emptyFile
+,
 }:
 let
   stri = writeText "pathToTest";

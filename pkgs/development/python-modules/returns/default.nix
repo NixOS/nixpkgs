@@ -1,18 +1,18 @@
-{
-  lib,
-  anyio,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  hypothesis,
-  poetry-core,
-  pytest-aio,
-  pytest-subtests,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  trio,
-  typing-extensions,
+{ lib
+, anyio
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, hypothesis
+, poetry-core
+, pytest-aio
+, pytest-subtests
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, trio
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

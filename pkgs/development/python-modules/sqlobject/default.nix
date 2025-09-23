@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  setuptools,
-  formencode,
-  pastedeploy,
-  paste,
-  pydispatcher,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, setuptools
+, formencode
+, pastedeploy
+, paste
+, pydispatcher
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

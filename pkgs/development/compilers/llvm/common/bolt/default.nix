@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  llvm_meta,
-  monorepoSrc,
-  release_version,
-  runCommand,
-  cmake,
-  libxml2,
-  libllvm,
-  ninja,
-  libclang,
-  version,
-  python3,
-  buildLlvmTools,
-  patches ? [ ],
-  devExtraCmakeFlags ? [ ],
-  fetchpatch,
+{ lib
+, stdenv
+, llvm_meta
+, monorepoSrc
+, release_version
+, runCommand
+, cmake
+, libxml2
+, libllvm
+, ninja
+, libclang
+, version
+, python3
+, buildLlvmTools
+, patches ? [ ]
+, devExtraCmakeFlags ? [ ]
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,16 +23,18 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "bolt-src-${finalAttrs.version}" { inherit (monorepoSrc) passthru; } (''
-    mkdir $out
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
-    cp -r ${monorepoSrc}/third-party "$out"
+  src = runCommand "bolt-src-${finalAttrs.version}" { inherit (monorepoSrc) passthru; } (
+    ''
+      mkdir $out
+      cp -r ${monorepoSrc}/cmake "$out"
+      cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
+      cp -r ${monorepoSrc}/third-party "$out"
 
-    # BOLT re-runs tablegen against LLVM sources, so needs them available.
-    cp -r ${monorepoSrc}/llvm/ "$out"
-    chmod -R +w $out/llvm
-  '');
+      # BOLT re-runs tablegen against LLVM sources, so needs them available.
+      cp -r ${monorepoSrc}/llvm/ "$out"
+      chmod -R +w $out/llvm
+    ''
+  );
 
   sourceRoot = "${finalAttrs.src.name}/bolt";
 

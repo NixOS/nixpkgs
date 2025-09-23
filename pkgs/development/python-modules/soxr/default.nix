@@ -1,26 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  cmake,
-  nanobind,
-  ninja,
-  scikit-build-core,
-  setuptools,
-  setuptools-scm,
-  typing-extensions,
-
-  # native dependencies
-  libsoxr,
-
-  # dependencies
-  numpy,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  cmake
+, nanobind
+, ninja
+, scikit-build-core
+, setuptools
+, setuptools-scm
+, typing-extensions
+, # native dependencies
+  libsoxr
+, # dependencies
+  numpy
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

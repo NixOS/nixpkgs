@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  wrapQtAppsHook,
-  glm,
-  eigen,
-  qtbase,
-  stellarium,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, wrapQtAppsHook
+, glm
+, eigen
+, qtbase
+, stellarium
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  flex,
-  bison,
-  libmhash,
-  zlib,
-  acl,
-  attr,
-  libselinux,
-  pcre2,
-  pkg-config,
-  libgcrypt,
+{ lib
+, stdenv
+, fetchurl
+, flex
+, bison
+, libmhash
+, zlib
+, acl
+, attr
+, libselinux
+, pcre2
+, pkg-config
+, libgcrypt
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

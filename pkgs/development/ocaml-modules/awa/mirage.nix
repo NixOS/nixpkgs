@@ -1,14 +1,14 @@
-{
-  buildDunePackage,
-  awa,
-  cstruct,
-  mtime,
-  lwt,
-  mirage-flow,
-  mirage-sleep,
-  logs,
-  duration,
-  mirage-mtime,
+{ buildDunePackage
+, awa
+, cstruct
+, mtime
+, lwt
+, mirage-flow
+, mirage-sleep
+, logs
+, duration
+, mirage-mtime
+,
 }:
 
 buildDunePackage {

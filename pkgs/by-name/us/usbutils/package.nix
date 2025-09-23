@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  replaceVars,
-  fetchpatch,
-  meson,
-  ninja,
-  pkg-config,
-  libusb1,
-  hwdata,
-  python3,
+{ lib
+, stdenv
+, fetchurl
+, replaceVars
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, libusb1
+, hwdata
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

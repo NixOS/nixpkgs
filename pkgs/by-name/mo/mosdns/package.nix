@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  mosdns,
-  stdenv,
-  installShellFiles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, mosdns
+, stdenv
+, installShellFiles
+,
 }:
 
 buildGoModule rec {

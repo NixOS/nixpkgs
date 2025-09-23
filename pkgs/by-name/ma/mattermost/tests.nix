@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  mattermost,
-  gotestsum,
-  which,
-  postgresql,
-  mariadb,
-  redis,
-  curl,
-  net-tools,
-  runtimeShell,
+{ lib
+, stdenv
+, mattermost
+, gotestsum
+, which
+, postgresql
+, mariadb
+, redis
+, curl
+, net-tools
+, runtimeShell
+,
 }:
 
 let

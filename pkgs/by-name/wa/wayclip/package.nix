@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  gitUpdater,
-  wayland,
-  wayland-scanner,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, gitUpdater
+, wayland
+, wayland-scanner
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

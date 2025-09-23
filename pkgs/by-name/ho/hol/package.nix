@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  pkgs,
-  fetchurl,
-  graphviz,
-  fontconfig,
-  liberation_ttf,
-  experimentalKernel ? true,
+{ lib
+, stdenv
+, pkgs
+, fetchurl
+, graphviz
+, fontconfig
+, liberation_ttf
+, experimentalKernel ? true
+,
 }:
 
 let

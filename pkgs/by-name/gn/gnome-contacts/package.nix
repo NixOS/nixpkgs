@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  gettext,
-  fetchurl,
-  evolution-data-server-gtk4,
-  pkg-config,
-  libxslt,
-  docbook-xsl-nons,
-  docbook_xml_dtd_42,
-  desktop-file-utils,
-  gtk4,
-  glib,
-  libportal-gtk4,
-  gnome-online-accounts,
-  qrencode,
-  wrapGAppsHook4,
-  folks,
-  libxml2,
-  gnome,
-  vala,
-  meson,
-  ninja,
-  libadwaita,
-  gsettings-desktop-schemas,
-  gst_all_1,
-  pipewire,
+{ lib
+, stdenv
+, gettext
+, fetchurl
+, evolution-data-server-gtk4
+, pkg-config
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_42
+, desktop-file-utils
+, gtk4
+, glib
+, libportal-gtk4
+, gnome-online-accounts
+, qrencode
+, wrapGAppsHook4
+, folks
+, libxml2
+, gnome
+, vala
+, meson
+, ninja
+, libadwaita
+, gsettings-desktop-schemas
+, gst_all_1
+, pipewire
+,
 }:
 
 stdenv.mkDerivation rec {

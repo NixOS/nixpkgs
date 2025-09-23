@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  rpmextract,
-  ncurses5,
-  patchelf,
-  fetchurl,
-  unzip,
+{ lib
+, stdenv
+, rpmextract
+, ncurses5
+, patchelf
+, fetchurl
+, unzip
+,
 }:
 
 stdenv.mkDerivation rec {

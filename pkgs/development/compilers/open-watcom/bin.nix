@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  qemu,
-  writeScript,
-  writeScriptBin,
-  ncurses,
-  bash,
-  coreutils,
-  unixtools,
+{ lib
+, stdenvNoCC
+, fetchurl
+, qemu
+, writeScript
+, writeScriptBin
+, ncurses
+, bash
+, coreutils
+, unixtools
+,
 }:
 
 let

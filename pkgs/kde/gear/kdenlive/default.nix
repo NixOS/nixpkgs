@@ -1,18 +1,18 @@
-{
-  mkKdeDerivation,
-  replaceVars,
-  mlt,
-  glaxnimate,
-  ffmpeg-full,
-  pkg-config,
-  shared-mime-info,
-  qtsvg,
-  qtmultimedia,
-  qtnetworkauth,
-  qqc2-desktop-style,
-  libv4l,
-  opentimelineio,
-  frei0r,
+{ mkKdeDerivation
+, replaceVars
+, mlt
+, glaxnimate
+, ffmpeg-full
+, pkg-config
+, shared-mime-info
+, qtsvg
+, qtmultimedia
+, qtnetworkauth
+, qqc2-desktop-style
+, libv4l
+, opentimelineio
+, frei0r
+,
 }:
 mkKdeDerivation {
   pname = "kdenlive";

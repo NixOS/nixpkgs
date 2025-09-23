@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  stdenv,
+{ lib
+, fetchurl
+, appimageTools
+, stdenv
+,
 }:
 
 let

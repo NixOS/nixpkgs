@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  decorator,
-  fetchPypi,
-  numpy,
-  pythonOlder,
-  scipy,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, cython
+, decorator
+, fetchPypi
+, numpy
+, pythonOlder
+, scipy
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

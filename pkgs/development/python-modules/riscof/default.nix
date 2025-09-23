@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jinja2,
-  pythonOlder,
-  riscv-config,
-  riscv-isac,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jinja2
+, pythonOlder
+, riscv-config
+, riscv-isac
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  async-timeout,
-  bitstring,
-  buildPythonPackage,
-  click,
-  fetchPypi,
-  ifaddr,
-  inquirerpy,
-  pythonOlder,
-  setuptools,
+{ lib
+, async-timeout
+, bitstring
+, buildPythonPackage
+, click
+, fetchPypi
+, ifaddr
+, inquirerpy
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

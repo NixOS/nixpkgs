@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  kqtquickcharts,
+{ mkKdeDerivation
+, kqtquickcharts
+,
 }:
 mkKdeDerivation {
   pname = "ktouch";

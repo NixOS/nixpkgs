@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  cmake,
-  libtirpc,
-  rpcsvc-proto,
-  avahi,
-  libxml2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, cmake
+, libtirpc
+, rpcsvc-proto
+, avahi
+, libxml2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

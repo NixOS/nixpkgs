@@ -1,8 +1,8 @@
-{
-  stdenv,
-  blender,
-  makeWrapper,
-  extraModules ? [ ],
+{ stdenv
+, blender
+, makeWrapper
+, extraModules ? [ ]
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = blender.pname + "-wrapped";

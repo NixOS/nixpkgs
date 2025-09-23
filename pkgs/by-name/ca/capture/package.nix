@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  slop,
-  ffmpeg,
-  fetchFromGitHub,
-  makeWrapper,
+{ lib
+, stdenv
+, slop
+, ffmpeg
+, fetchFromGitHub
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation {

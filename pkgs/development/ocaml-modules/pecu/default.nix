@@ -1,12 +1,12 @@
-{
-  lib,
-  buildDunePackage,
-  ocaml,
-  fetchurl,
-  fmt,
-  alcotest,
-  crowbar,
-  astring,
+{ lib
+, buildDunePackage
+, ocaml
+, fetchurl
+, fmt
+, alcotest
+, crowbar
+, astring
+,
 }:
 
 buildDunePackage rec {

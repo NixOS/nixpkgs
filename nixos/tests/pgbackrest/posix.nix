@@ -11,9 +11,8 @@ in
   };
 
   nodes.primary =
-    {
-      pkgs,
-      ...
+    { pkgs
+    , ...
     }:
     {
       services.openssh.enable = true;
@@ -47,9 +46,8 @@ in
     };
 
   nodes.backup =
-    {
-      nodes,
-      ...
+    { nodes
+    , ...
     }:
     {
       services.openssh.enable = true;

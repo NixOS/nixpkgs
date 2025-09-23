@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libgcrypt,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libgcrypt
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

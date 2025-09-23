@@ -1,8 +1,8 @@
-{
-  interpreter,
-  gdb,
-  writeText,
-  runCommand,
+{ interpreter
+, gdb
+, writeText
+, runCommand
+,
 }:
 
 let

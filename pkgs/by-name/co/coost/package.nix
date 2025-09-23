@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  curl,
-  openssl,
-  gitUpdater,
-  withCurl ? true,
-  withOpenSSL ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, curl
+, openssl
+, gitUpdater
+, withCurl ? true
+, withOpenSSL ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

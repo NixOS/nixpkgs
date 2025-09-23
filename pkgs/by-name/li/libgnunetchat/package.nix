@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  meson,
-  ninja,
-  pkg-config,
-  validatePkgConfig,
-  testers,
-  check,
-  gnunet,
-  libsodium,
-  libgcrypt,
-  libextractor,
+{ lib
+, stdenv
+, fetchgit
+, meson
+, ninja
+, pkg-config
+, validatePkgConfig
+, testers
+, check
+, gnunet
+, libsodium
+, libgcrypt
+, libextractor
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

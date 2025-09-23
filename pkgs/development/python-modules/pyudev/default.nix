@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  six,
-  udev,
-  pytest,
-  mock,
-  hypothesis,
-  docutils,
-  stdenvNoCC,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, six
+, udev
+, pytest
+, mock
+, hypothesis
+, docutils
+, stdenvNoCC
+,
 }:
 
 buildPythonPackage rec {

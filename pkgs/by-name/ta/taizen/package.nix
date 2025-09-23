@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchpatch2,
-  pkg-config,
-  ncurses,
-  openssl,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch2
+, pkg-config
+, ncurses
+, openssl
+,
 }:
 
 rustPlatform.buildRustPackage {

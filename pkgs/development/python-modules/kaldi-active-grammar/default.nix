@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  scikit-build,
-  cmake,
-  ush,
-  requests,
-  six,
-  numpy,
-  cffi,
-  openfst,
-  replaceVars,
-  callPackage,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, scikit-build
+, cmake
+, ush
+, requests
+, six
+, numpy
+, cffi
+, openfst
+, replaceVars
+, callPackage
+,
 }:
 
 #

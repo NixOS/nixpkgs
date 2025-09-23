@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  pkg-config,
-  ninja,
-  glib,
-  gtk3,
-  cjs,
-  gtksourceview4,
-  gobject-introspection,
-  libmusicbrainz,
-  webkitgtk_4_1,
-  clutter-gtk,
-  clutter-gst,
-  wrapGAppsHook3,
-  nemo,
-  xreader,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, glib
+, gtk3
+, cjs
+, gtksourceview4
+, gobject-introspection
+, libmusicbrainz
+, webkitgtk_4_1
+, clutter-gtk
+, clutter-gst
+, wrapGAppsHook3
+, nemo
+, xreader
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  gettext,
-  python3,
-  rsync,
-  cron,
-  openssh,
-  sshfs-fuse,
-  encfs,
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, gettext
+, python3
+, rsync
+, cron
+, openssh
+, sshfs-fuse
+, encfs
+,
 }:
 
 let

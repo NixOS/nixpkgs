@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  alsa-lib,
-  gpsd,
-  gpsdSupport ? false,
-  hamlib,
-  hamlibSupport ? true,
-  perl,
-  portaudio,
-  python3,
-  espeak,
-  udev,
-  udevCheckHook,
-  extraScripts ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, alsa-lib
+, gpsd
+, gpsdSupport ? false
+, hamlib
+, hamlibSupport ? true
+, perl
+, portaudio
+, python3
+, espeak
+, udev
+, udevCheckHook
+, extraScripts ? false
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  libnotify,
-  gpgme,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  scdoc,
+{ lib
+, libnotify
+, gpgme
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, scdoc
+,
 }:
 
 buildGoModule rec {

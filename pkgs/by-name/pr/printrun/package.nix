@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  glib,
-  wrapGAppsHook3,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, glib
+, wrapGAppsHook3
+,
 }:
 
 python3Packages.buildPythonApplication rec {

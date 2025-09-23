@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  blas,
-  lapack,
-  openfst,
-  icu,
-  pkg-config,
-  fetchFromGitHub,
-  python,
-  openblas,
-  zlib,
-  gfortran,
+{ lib
+, stdenv
+, blas
+, lapack
+, openfst
+, icu
+, pkg-config
+, fetchFromGitHub
+, python
+, openblas
+, zlib
+, gfortran
+,
 }:
 
 let

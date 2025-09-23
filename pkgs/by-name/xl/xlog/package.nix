@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  glib,
-  gtk2,
-  pkg-config,
-  hamlib,
+{ lib
+, stdenv
+, fetchurl
+, glib
+, gtk2
+, pkg-config
+, hamlib
+,
 }:
 stdenv.mkDerivation rec {
   pname = "xlog";

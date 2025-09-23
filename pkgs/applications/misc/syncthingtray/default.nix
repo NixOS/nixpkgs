@@ -1,40 +1,40 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qtbase,
-  qtsvg,
-  qtwayland,
-  qtwebengine,
-  qtdeclarative,
-  extra-cmake-modules,
-  cpp-utilities,
-  qtutilities,
-  qtforkawesome,
-  boost,
-  wrapQtAppsHook,
-  cmake,
-  kio,
-  plasma-framework,
-  qttools,
-  iconv,
-  cppunit,
-  syncthing,
-  xdg-utils,
-  webviewSupport ? true,
-  jsSupport ? true,
-  kioPluginSupport ? stdenv.hostPlatform.isLinux,
-  plasmoidSupport ? stdenv.hostPlatform.isLinux,
-  systemdSupport ? stdenv.hostPlatform.isLinux,
-  /*
-    It is possible to set via this option an absolute exec path that will be
-    written to the `~/.config/autostart/syncthingtray.desktop` file generated
-    during runtime. Alternatively, one can edit the desktop file themselves after
-    it is generated See:
-    https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382
+{ lib
+, stdenv
+, fetchFromGitHub
+, qtbase
+, qtsvg
+, qtwayland
+, qtwebengine
+, qtdeclarative
+, extra-cmake-modules
+, cpp-utilities
+, qtutilities
+, qtforkawesome
+, boost
+, wrapQtAppsHook
+, cmake
+, kio
+, plasma-framework
+, qttools
+, iconv
+, cppunit
+, syncthing
+, xdg-utils
+, webviewSupport ? true
+, jsSupport ? true
+, kioPluginSupport ? stdenv.hostPlatform.isLinux
+, plasmoidSupport ? stdenv.hostPlatform.isLinux
+, systemdSupport ? stdenv.hostPlatform.isLinux
+, /*
+  It is possible to set via this option an absolute exec path that will be
+  written to the `~/.config/autostart/syncthingtray.desktop` file generated
+  during runtime. Alternatively, one can edit the desktop file themselves after
+  it is generated See:
+  https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382
   */
-  autostartExecPath ? "syncthingtray",
-  versionCheckHook,
+  autostartExecPath ? "syncthingtray"
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

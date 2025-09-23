@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  patchelf,
+{ lib
+, stdenv
+, fetchurl
+, patchelf
+,
 }:
 stdenv.mkDerivation rec {
   pname = "mlc";

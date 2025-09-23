@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  readline,
-  autoreconfHook,
-  autoconf-archive,
-  gcc,
-  gmp,
-  flex,
-  bison,
-  libffi,
-  makeWrapper,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, readline
+, autoreconfHook
+, autoconf-archive
+, gcc
+, gmp
+, flex
+, bison
+, libffi
+, makeWrapper
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,15 @@
 # This package provides `tectonic.passthru.tests`.
 # It requires internet access to fetch tectonic's resource bundle on demand.
 
-{
-  lib,
-  fetchFromGitHub,
-  writeText,
-  runCommand,
-  tectonic,
-  curl,
-  cacert,
-  emptyFile,
+{ lib
+, fetchFromGitHub
+, writeText
+, runCommand
+, tectonic
+, curl
+, cacert
+, emptyFile
+,
 }:
 
 let

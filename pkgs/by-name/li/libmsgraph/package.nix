@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  gi-docgen,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  uhttpmock_1_0,
-  libxml2,
-  glib,
-  gnome-online-accounts,
-  json-glib,
-  libsoup_3,
-  gnome,
+{ stdenv
+, lib
+, fetchurl
+, gi-docgen
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, uhttpmock_1_0
+, libxml2
+, glib
+, gnome-online-accounts
+, json-glib
+, libsoup_3
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

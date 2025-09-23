@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  qmake,
-  qtdeclarative,
-  qtquickcontrols2,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, qmake
+, qtdeclarative
+, qtquickcontrols2
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

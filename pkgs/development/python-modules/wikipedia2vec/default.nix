@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  cython,
-  fetchFromGitHub,
-  jieba,
-  joblib,
-  lmdb,
-  marisa-trie,
-  mwparserfromhell,
-  numpy,
-  pythonOlder,
-  scipy,
-  setuptools,
-  tqdm,
+{ lib
+, buildPythonPackage
+, click
+, cython
+, fetchFromGitHub
+, jieba
+, joblib
+, lmdb
+, marisa-trie
+, mwparserfromhell
+, numpy
+, pythonOlder
+, scipy
+, setuptools
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

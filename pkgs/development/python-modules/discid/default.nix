@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  libdiscid,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
+{ lib
+, stdenv
+, libdiscid
+, buildPythonPackage
+, fetchPypi
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

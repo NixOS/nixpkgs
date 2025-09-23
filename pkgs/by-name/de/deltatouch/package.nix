@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  cmake,
-  intltool,
-  libdeltachat,
-  lomiri,
-  qt5,
-  quirc,
+{ lib
+, stdenv
+, fetchFromGitea
+, cmake
+, intltool
+, libdeltachat
+, lomiri
+, qt5
+, quirc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

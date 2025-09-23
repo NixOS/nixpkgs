@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  pythonOlder,
-  rich,
-  setuptools,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, pythonOlder
+, rich
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

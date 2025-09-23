@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib)
@@ -16,16 +15,15 @@ let
 
   makeBinfmtLine =
     name:
-    {
-      recognitionType,
-      offset,
-      magicOrExtension,
-      mask,
-      preserveArgvZero,
-      openBinary,
-      matchCredentials,
-      fixBinary,
-      ...
+    { recognitionType
+    , offset
+    , magicOrExtension
+    , mask
+    , preserveArgvZero
+    , openBinary
+    , matchCredentials
+    , fixBinary
+    , ...
     }:
     let
       type = if recognitionType == "magic" then "M" else "E";
@@ -343,47 +341,51 @@ in
   };
 
   config = {
-    assertions = lib.mapAttrsToList (name: reg: {
-      assertion = reg.fixBinary -> !reg.wrapInterpreterInShell;
-      message = "boot.binfmt.registrations.\"${name}\" cannot have fixBinary when the interpreter is invoked through a shell.";
-    }) cfg.registrations;
+    assertions = lib.mapAttrsToList
+      (name: reg: {
+        assertion = reg.fixBinary -> !reg.wrapInterpreterInShell;
+        message = "boot.binfmt.registrations.\"${name}\" cannot have fixBinary when the interpreter is invoked through a shell.";
+      })
+      cfg.registrations;
 
     boot.binfmt.registrations = builtins.listToAttrs (
-      map (
-        system:
-        assert system != pkgs.stdenv.hostPlatform.system;
-        {
-          name = system;
-          value =
-            { config, ... }:
-            let
-              elaborated = lib.systems.elaborate { inherit system; };
-              useStaticEmulator = cfg.preferStaticEmulators && elaborated.staticEmulatorAvailable pkgs;
-              interpreter = elaborated.emulator (if useStaticEmulator then pkgs.pkgsStatic else pkgs);
-
-              inherit (elaborated) qemuArch;
-              isQemu = "qemu-${qemuArch}" == baseNameOf interpreter;
-
-              interpreterReg =
+      map
+        (
+          system:
+            assert system != pkgs.stdenv.hostPlatform.system;
+            {
+              name = system;
+              value =
+                { config, ... }:
                 let
-                  wrapperName = "qemu-${qemuArch}-binfmt-P";
-                  wrapper = pkgs.wrapQemuBinfmtP wrapperName interpreter;
-                in
-                if isQemu && !useStaticEmulator then "${wrapper}/bin/${wrapperName}" else interpreter;
-            in
-            (
-              {
-                preserveArgvZero = mkDefault isQemu;
+                  elaborated = lib.systems.elaborate { inherit system; };
+                  useStaticEmulator = cfg.preferStaticEmulators && elaborated.staticEmulatorAvailable pkgs;
+                  interpreter = elaborated.emulator (if useStaticEmulator then pkgs.pkgsStatic else pkgs);
 
-                interpreter = mkDefault interpreterReg;
-                fixBinary = mkDefault useStaticEmulator;
-                wrapInterpreterInShell = mkDefault (!config.preserveArgvZero && !config.fixBinary);
-                interpreterSandboxPath = mkDefault (dirOf (dirOf config.interpreter));
-              }
-              // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}"))
-            );
-        }
-      ) cfg.emulatedSystems
+                  inherit (elaborated) qemuArch;
+                  isQemu = "qemu-${qemuArch}" == baseNameOf interpreter;
+
+                  interpreterReg =
+                    let
+                      wrapperName = "qemu-${qemuArch}-binfmt-P";
+                      wrapper = pkgs.wrapQemuBinfmtP wrapperName interpreter;
+                    in
+                    if isQemu && !useStaticEmulator then "${wrapper}/bin/${wrapperName}" else interpreter;
+                in
+                (
+                  {
+                    preserveArgvZero = mkDefault isQemu;
+
+                    interpreter = mkDefault interpreterReg;
+                    fixBinary = mkDefault useStaticEmulator;
+                    wrapInterpreterInShell = mkDefault (!config.preserveArgvZero && !config.fixBinary);
+                    interpreterSandboxPath = mkDefault (dirOf (dirOf config.interpreter));
+                  }
+                  // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}"))
+                );
+            }
+        )
+        cfg.emulatedSystems
     );
     nix.settings = lib.mkIf (cfg.addEmulatedSystemsToNixSandbox && cfg.emulatedSystems != [ ]) {
       extra-platforms =

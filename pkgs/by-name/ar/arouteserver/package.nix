@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  bgpq4,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, bgpq4
+,
 }:
 
 python3Packages.buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  setuptools,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  libopus,
-  pynacl,
-  pythonOlder,
-  withVoice ? true,
-  ffmpeg,
+{ lib
+, setuptools
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, libopus
+, pynacl
+, pythonOlder
+, withVoice ? true
+, ffmpeg
+,
 }:
 
 buildPythonPackage rec {

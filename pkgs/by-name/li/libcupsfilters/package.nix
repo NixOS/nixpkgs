@@ -1,23 +1,23 @@
-{
-  autoreconfHook,
-  cups,
-  dbus,
-  dejavu_fonts,
-  fetchFromGitHub,
-  fontconfig,
-  ghostscript,
-  lcms2,
-  lib,
-  libexif,
-  libjpeg,
-  libpng,
-  libtiff,
-  mupdf,
-  pkg-config,
-  poppler,
-  poppler-utils,
-  qpdf,
-  stdenv,
+{ autoreconfHook
+, cups
+, dbus
+, dejavu_fonts
+, fetchFromGitHub
+, fontconfig
+, ghostscript
+, lcms2
+, lib
+, libexif
+, libjpeg
+, libpng
+, libtiff
+, mupdf
+, pkg-config
+, poppler
+, poppler-utils
+, qpdf
+, stdenv
+,
 }:
 
 stdenv.mkDerivation {

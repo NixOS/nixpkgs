@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  writeTextFile,
-  writeScript,
-  fetchurl,
-  unzip,
-  autoconf,
-  automake,
-  libtool_1_5,
-  makeWrapper,
-  cups,
-  jbigkit,
-  libjpeg,
-  libgcrypt,
-  glib,
-  gtk3,
-  gdk-pixbuf,
-  pango,
-  cairo,
-  atk,
-  pkg-config,
-  libxml2,
-  libredirect,
-  ghostscript,
-  pkgs,
-  zlib,
+{ lib
+, stdenv
+, writeTextFile
+, writeScript
+, fetchurl
+, unzip
+, autoconf
+, automake
+, libtool_1_5
+, makeWrapper
+, cups
+, jbigkit
+, libjpeg
+, libgcrypt
+, glib
+, gtk3
+, gdk-pixbuf
+, pango
+, cairo
+, atk
+, pkg-config
+, libxml2
+, libredirect
+, ghostscript
+, pkgs
+, zlib
+,
 }:
 
 let

@@ -1,12 +1,12 @@
 # callPackage args
-{
-  lib,
-  stdenv,
-  go,
-  xcaddy,
-  cacert,
-  git,
-  caddy,
+{ lib
+, stdenv
+, go
+, xcaddy
+, cacert
+, git
+, caddy
+,
 }:
 
 let
@@ -26,10 +26,10 @@ let
 in
 
 # pkgs.caddy.withPlugins args
-{
-  plugins,
-  hash ? fakeHash,
-  doInstallCheck ? true,
+{ plugins
+, hash ? fakeHash
+, doInstallCheck ? true
+,
 }:
 
 let
@@ -40,12 +40,13 @@ let
 in
 
 # eval barrier: user provided plugins must have tags
-# the go module must either be tagged in upstream repo
-# or user must provide commit sha or a pseudo-version number
-# https://go.dev/doc/modules/version-numbers#pseudo-version-number
-assert assertMsg (
-  length pluginsWithoutVersion == 0
-) "Plugins must have tags present (e.g. ${elemAt pluginsWithoutVersion 0}@x.y.z)!";
+  # the go module must either be tagged in upstream repo
+  # or user must provide commit sha or a pseudo-version number
+  # https://go.dev/doc/modules/version-numbers#pseudo-version-number
+assert assertMsg
+  (
+    length pluginsWithoutVersion == 0
+  ) "Plugins must have tags present (e.g. ${elemAt pluginsWithoutVersion 0}@x.y.z)!";
 
 caddy.overrideAttrs (
   finalAttrs: prevAttrs: {

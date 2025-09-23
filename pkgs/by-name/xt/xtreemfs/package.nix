@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  makeWrapper,
-  stripJavaArchivesHook,
-  ant,
-  attr,
-  boost186,
-  cmake,
-  file,
-  fuse,
-  jdk8,
-  openssl,
-  python3,
-  valgrind,
-  which,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, stripJavaArchivesHook
+, ant
+, attr
+, boost186
+, cmake
+, file
+, fuse
+, jdk8
+, openssl
+, python3
+, valgrind
+, which
+,
 }:
 
 let

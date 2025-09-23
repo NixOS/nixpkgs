@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  pytestCheckHook,
-  linux-gpib,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, pytestCheckHook
+, linux-gpib
+,
 }:
 
 buildPythonPackage rec {

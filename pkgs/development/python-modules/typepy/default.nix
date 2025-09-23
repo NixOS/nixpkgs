@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools-scm,
-  mbstrdecoder,
-  python-dateutil,
-  pytz,
-  packaging,
-  pytestCheckHook,
-  pythonOlder,
-  tcolorpy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, mbstrdecoder
+, python-dateutil
+, pytz
+, packaging
+, pytestCheckHook
+, pythonOlder
+, tcolorpy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  flask,
-  python3-openid,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, flask
+, python3-openid
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  stdenv,
-  fetchurl,
-  libxml2,
-  gnutls,
-  libxslt,
-  pkg-config,
-  libgcrypt,
-  libtool,
-  openssl,
-  nss,
-  lib,
-  runCommandCC,
-  writeText,
+{ stdenv
+, fetchurl
+, libxml2
+, gnutls
+, libxslt
+, pkg-config
+, libgcrypt
+, libtool
+, openssl
+, nss
+, lib
+, runCommandCC
+, writeText
+,
 }:
 
 lib.fix (

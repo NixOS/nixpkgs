@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  unzip,
-  joker,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchurl
+, unzip
+, joker
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -13,10 +13,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src =
     if stdenvNoCC.hostPlatform.isAarch64 then
-      fetchurl {
-        url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${finalAttrs.version}/goku-arm.zip";
-        hash = "sha256-yRLxUfAQZ+rE7/42wnjls6UnT+vb/b5Y3lVWujZGEAg=";
-      }
+      fetchurl
+        {
+          url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${finalAttrs.version}/goku-arm.zip";
+          hash = "sha256-yRLxUfAQZ+rE7/42wnjls6UnT+vb/b5Y3lVWujZGEAg=";
+        }
     else
       fetchurl {
         url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${finalAttrs.version}/goku.zip";

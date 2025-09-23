@@ -1,21 +1,21 @@
-{
-  lib,
-  SDL,
-  SDL_image,
-  expat,
-  fetchpatch,
-  fetchurl,
-  libGL,
-  libGLU,
-  libvorbis,
-  libX11,
-  lua,
-  pkg-config,
-  scons,
-  smpeg,
-  stdenv,
-  zip,
-  zlib,
+{ lib
+, SDL
+, SDL_image
+, expat
+, fetchpatch
+, fetchurl
+, libGL
+, libGLU
+, libvorbis
+, libX11
+, lua
+, pkg-config
+, scons
+, smpeg
+, stdenv
+, zip
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

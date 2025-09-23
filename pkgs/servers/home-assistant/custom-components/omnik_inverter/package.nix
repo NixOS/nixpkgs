@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildHomeAssistantComponent,
-  omnikinverter,
+{ lib
+, fetchFromGitHub
+, buildHomeAssistantComponent
+, omnikinverter
+,
 }:
 
 buildHomeAssistantComponent rec {

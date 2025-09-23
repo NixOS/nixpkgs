@@ -1,8 +1,8 @@
-{
-  stdenv,
-  pkgs,
-  lib,
-  chickenEggs,
+{ stdenv
+, pkgs
+, lib
+, chickenEggs
+,
 }:
 let
   inherit (lib) addMetaAttrs;
@@ -35,10 +35,12 @@ in
   cairo =
     old:
     (addToBuildInputsWithPkgConfig pkgs.cairo old)
-    // (addToPropagatedBuildInputs (with chickenEggs; [
-      srfi-1
-      srfi-13
-    ]) old);
+    // (addToPropagatedBuildInputs
+      (with chickenEggs; [
+        srfi-1
+        srfi-13
+      ])
+      old);
   cmark = addToBuildInputs pkgs.cmark;
   epoxy =
     old:
@@ -95,7 +97,8 @@ in
         "-I${(lib.getDev pkgs.libglut)}/include"
         "-I${(lib.getDev pkgs.libGL)}/include"
         "-I${(lib.getDev pkgs.libGLU)}/include"
-      ] old
+      ]
+        old
     )
     // (addToBuildInputs pkgs.libglut old);
   iconv = addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv);
@@ -153,32 +156,32 @@ in
     (
       (addToPropagatedBuildInputsWithPkgConfig pkgs.SDL old)
       //
-        # needed for sdl-config to be in PATH
-        (addToNativeBuildInputs pkgs.SDL old)
+      # needed for sdl-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL old)
     );
   sdl2 =
     old:
     (
       (addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2 old)
       //
-        # needed for sdl2-config to be in PATH
-        (addToNativeBuildInputs pkgs.SDL2 old)
+      # needed for sdl2-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL2 old)
     );
   sdl2-image =
     old:
     (
       (addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2_image old)
       //
-        # needed for sdl2-config to be in PATH
-        (addToNativeBuildInputs pkgs.SDL2 old)
+      # needed for sdl2-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL2 old)
     );
   sdl2-ttf =
     old:
     (
       (addToPropagatedBuildInputsWithPkgConfig pkgs.SDL2_ttf old)
       //
-        # needed for sdl2-config to be in PATH
-        (addToNativeBuildInputs pkgs.SDL2 old)
+      # needed for sdl2-config to be in PATH
+      (addToNativeBuildInputs pkgs.SDL2 old)
     );
   soil = addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy;
   sqlite3 = addToBuildInputs pkgs.sqlite;
@@ -223,10 +226,12 @@ in
   opengl =
     old:
     (brokenOnDarwin old)
-    // (addToBuildInputsWithPkgConfig (lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      pkgs.libGL
-      pkgs.libGLU
-    ]) old)
+    // (addToBuildInputsWithPkgConfig
+      (lib.optionals (!stdenv.hostPlatform.isDarwin) [
+        pkgs.libGL
+        pkgs.libGLU
+      ])
+      old)
     // {
       postPatch = ''
         substituteInPlace opengl.egg \

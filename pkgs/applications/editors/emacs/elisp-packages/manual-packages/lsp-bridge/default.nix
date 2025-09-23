@@ -1,18 +1,18 @@
-{
-  lib,
-  python3,
-  melpaBuild,
-  fetchFromGitHub,
-  replaceVars,
-  acm,
-  markdown-mode,
-  basedpyright,
-  git,
-  go,
-  gopls,
-  tempel,
-  unstableGitUpdater,
-  writableTmpDirAsHomeHook,
+{ lib
+, python3
+, melpaBuild
+, fetchFromGitHub
+, replaceVars
+, acm
+, markdown-mode
+, basedpyright
+, git
+, go
+, gopls
+, tempel
+, unstableGitUpdater
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

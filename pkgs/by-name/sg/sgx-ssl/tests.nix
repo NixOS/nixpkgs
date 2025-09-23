@@ -13,16 +13,16 @@
 # These tests are split out from the parent pkg since recompiling the parent
 # takes like 30 min : )
 
-{
-  lib,
-  openssl,
-  sgx-psw,
-  sgx-sdk,
-  sgx-ssl,
-  stdenv,
-  which,
-  opensslVersion ? throw "required parameter",
-  sgxMode ? throw "required parameter", # "SIM" or "HW"
+{ lib
+, openssl
+, sgx-psw
+, sgx-sdk
+, sgx-ssl
+, stdenv
+, which
+, opensslVersion ? throw "required parameter"
+, sgxMode ? throw "required parameter"
+, # "SIM" or "HW"
 }:
 stdenv.mkDerivation {
   inherit (sgx-ssl) postPatch src version;

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook4,
-  tailscale,
-  gtk4,
-  gobject-introspection,
-  libadwaita,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook4
+, tailscale
+, gtk4
+, gobject-introspection
+, libadwaita
+,
 }:
 
 buildGoModule rec {

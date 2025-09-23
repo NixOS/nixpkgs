@@ -1,11 +1,11 @@
-{
-  fetchurl,
-  stdenv,
-  makeWrapper,
-  undmg,
-  pname,
-  commonMeta,
-  version,
+{ fetchurl
+, stdenv
+, makeWrapper
+, undmg
+, pname
+, commonMeta
+, version
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  xxd,
-  meson,
-  ninja,
-  ncurses,
-  argtable,
-  versionCheckHook,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, xxd
+, meson
+, ninja
+, ncurses
+, argtable
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

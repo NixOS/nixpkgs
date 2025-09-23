@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  numba,
-  numpy,
-  optuna,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  scipy,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, numba
+, numpy
+, optuna
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, scipy
+,
 }:
 
 buildPythonPackage rec {

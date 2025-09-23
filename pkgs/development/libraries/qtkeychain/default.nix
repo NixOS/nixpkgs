@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  qtbase,
-  qttools,
-  libsecret,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qtbase
+, qttools
+, libsecret
+,
 }:
 
 stdenv.mkDerivation rec {

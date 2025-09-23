@@ -1,10 +1,9 @@
-{
-  buildNpmPackage,
-
-  pname,
-  version,
-  src,
-  npmDepsHash,
+{ buildNpmPackage
+, pname
+, version
+, src
+, npmDepsHash
+,
 }:
 
 buildNpmPackage {

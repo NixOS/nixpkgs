@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  rustPlatform,
-  pkg-config,
-  openssl,
+{ fetchFromGitHub
+, lib
+, stdenv
+, rustPlatform
+, pkg-config
+, openssl
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";

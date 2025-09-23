@@ -1,62 +1,58 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  versioningit,
-
-  # dependencies
-  broadbean,
-  cf-xarray,
-  dask,
-  h5netcdf,
-  h5py,
-  ipykernel,
-  ipython,
-  ipywidgets,
-  jsonschema,
-  libcst,
-  matplotlib,
-  numpy,
-  opentelemetry-api,
-  packaging,
-  pandas,
-  pillow,
-  pyarrow,
-  pyvisa,
-  ruamel-yaml,
-  tabulate,
-  tqdm,
-  typing-extensions,
-  uncertainties,
-  websockets,
-  wrapt,
-  xarray,
-
-  # optional-dependencies
-  furo,
-  jinja2,
-  nbsphinx,
-  pyvisa-sim,
-  scipy,
-  sphinx,
-  sphinx-issues,
-  towncrier,
-
-  # tests
-  deepdiff,
-  hypothesis,
-  lxml,
-  pip,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-rerunfailures,
-  pytest-xdist,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, versioningit
+, # dependencies
+  broadbean
+, cf-xarray
+, dask
+, h5netcdf
+, h5py
+, ipykernel
+, ipython
+, ipywidgets
+, jsonschema
+, libcst
+, matplotlib
+, numpy
+, opentelemetry-api
+, packaging
+, pandas
+, pillow
+, pyarrow
+, pyvisa
+, ruamel-yaml
+, tabulate
+, tqdm
+, typing-extensions
+, uncertainties
+, websockets
+, wrapt
+, xarray
+, # optional-dependencies
+  furo
+, jinja2
+, nbsphinx
+, pyvisa-sim
+, scipy
+, sphinx
+, sphinx-issues
+, towncrier
+, # tests
+  deepdiff
+, hypothesis
+, lxml
+, pip
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-mock
+, pytest-rerunfailures
+, pytest-xdist
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

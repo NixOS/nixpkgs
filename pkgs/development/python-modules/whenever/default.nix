@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pythonOlder,
-  rustPlatform,
-  cargo,
-  rustc,
-  libiconv,
-  buildPythonPackage,
-  setuptools,
-  setuptools-rust,
-  pytestCheckHook,
-  pytest-mypy-plugins,
-  hypothesis,
-  freezegun,
-  time-machine,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pythonOlder
+, rustPlatform
+, cargo
+, rustc
+, libiconv
+, buildPythonPackage
+, setuptools
+, setuptools-rust
+, pytestCheckHook
+, pytest-mypy-plugins
+, hypothesis
+, freezegun
+, time-machine
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

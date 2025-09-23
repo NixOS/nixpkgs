@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ncurses,
-  perl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ncurses
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

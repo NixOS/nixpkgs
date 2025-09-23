@@ -14,77 +14,77 @@ rec {
     lib.foldl
       (
         a: version:
-        let
-          package = config.node.pkgs."wordpress_${version}";
-        in
-        a
-        // {
-          "wp${version}_httpd" = _: {
-            services.httpd.adminAddr = "webmaster@site.local";
-            services.httpd.logPerVirtualHost = true;
+          let
+            package = config.node.pkgs."wordpress_${version}";
+          in
+          a
+          // {
+            "wp${version}_httpd" = _: {
+              services.httpd.adminAddr = "webmaster@site.local";
+              services.httpd.logPerVirtualHost = true;
 
-            services.wordpress.webserver = "httpd";
-            services.wordpress.sites = {
-              "site1.local" = {
-                database.tablePrefix = "site1_";
-                inherit package;
+              services.wordpress.webserver = "httpd";
+              services.wordpress.sites = {
+                "site1.local" = {
+                  database.tablePrefix = "site1_";
+                  inherit package;
+                };
+                "site2.local" = {
+                  database.tablePrefix = "site2_";
+                  inherit package;
+                };
               };
-              "site2.local" = {
-                database.tablePrefix = "site2_";
-                inherit package;
-              };
+
+              networking.firewall.allowedTCPPorts = [ 80 ];
+              networking.hosts."127.0.0.1" = [
+                "site1.local"
+                "site2.local"
+              ];
             };
 
-            networking.firewall.allowedTCPPorts = [ 80 ];
-            networking.hosts."127.0.0.1" = [
-              "site1.local"
-              "site2.local"
-            ];
-          };
+            "wp${version}_nginx" = _: {
+              services.wordpress.webserver = "nginx";
+              services.wordpress.sites = {
+                "site1.local" = {
+                  database.tablePrefix = "site1_";
+                  inherit package;
+                };
+                "site2.local" = {
+                  database.tablePrefix = "site2_";
+                  inherit package;
+                };
+              };
 
-          "wp${version}_nginx" = _: {
-            services.wordpress.webserver = "nginx";
-            services.wordpress.sites = {
-              "site1.local" = {
-                database.tablePrefix = "site1_";
-                inherit package;
-              };
-              "site2.local" = {
-                database.tablePrefix = "site2_";
-                inherit package;
-              };
+              networking.firewall.allowedTCPPorts = [ 80 ];
+              networking.hosts."127.0.0.1" = [
+                "site1.local"
+                "site2.local"
+              ];
             };
 
-            networking.firewall.allowedTCPPorts = [ 80 ];
-            networking.hosts."127.0.0.1" = [
-              "site1.local"
-              "site2.local"
-            ];
-          };
+            "wp${version}_caddy" = _: {
+              services.wordpress.webserver = "caddy";
+              services.wordpress.sites = {
+                "site1.local" = {
+                  database.tablePrefix = "site1_";
+                  inherit package;
+                };
+                "site2.local" = {
+                  database.tablePrefix = "site2_";
+                  inherit package;
+                };
+              };
 
-          "wp${version}_caddy" = _: {
-            services.wordpress.webserver = "caddy";
-            services.wordpress.sites = {
-              "site1.local" = {
-                database.tablePrefix = "site1_";
-                inherit package;
-              };
-              "site2.local" = {
-                database.tablePrefix = "site2_";
-                inherit package;
-              };
+              networking.firewall.allowedTCPPorts = [
+                80
+                443
+              ];
+              networking.hosts."127.0.0.1" = [
+                "site1.local"
+                "site2.local"
+              ];
             };
-
-            networking.firewall.allowedTCPPorts = [
-              80
-              443
-            ];
-            networking.hosts."127.0.0.1" = [
-              "site1.local"
-              "site2.local"
-            ];
-          };
-        }
+          }
       )
       { }
       [

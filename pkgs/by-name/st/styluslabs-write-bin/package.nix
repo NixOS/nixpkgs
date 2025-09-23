@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  libsForQt5,
-  libglvnd,
-  libX11,
-  libXi,
-  fetchurl,
-  makeDesktopItem,
+{ stdenv
+, lib
+, libsForQt5
+, libglvnd
+, libX11
+, libXi
+, fetchurl
+, makeDesktopItem
+,
 }:
 let
   desktopItem = makeDesktopItem {

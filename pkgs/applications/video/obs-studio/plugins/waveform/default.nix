@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  obs-studio,
-  pkg-config,
-  fftwFloat,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, obs-studio
+, pkg-config
+, fftwFloat
+,
 }:
 
 stdenv.mkDerivation rec {

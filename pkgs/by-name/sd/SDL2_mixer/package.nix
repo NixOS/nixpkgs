@@ -1,22 +1,22 @@
-{
-  lib,
-  SDL2,
-  fetchFromGitHub,
-  flac,
-  fluidsynth,
-  libogg,
-  libvorbis,
-  mpg123,
-  opusfile,
-  pkg-config,
-  smpeg2,
-  stdenv,
-  timidity,
-  wavpack,
-  libxmp,
-  game-music-emu,
-  # Boolean flags
-  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+{ lib
+, SDL2
+, fetchFromGitHub
+, flac
+, fluidsynth
+, libogg
+, libvorbis
+, mpg123
+, opusfile
+, pkg-config
+, smpeg2
+, stdenv
+, timidity
+, wavpack
+, libxmp
+, game-music-emu
+, # Boolean flags
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin)
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  docbook_xml_dtd_412,
-  docbook_xsl,
-  intltool,
-  libxml2,
-  libxslt,
-  pkg-config,
-  wrapGAppsHook3,
-  gtk2-x11,
-  libX11,
-  polkit,
-  vala,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, docbook_xml_dtd_412
+, docbook_xsl
+, intltool
+, libxml2
+, libxslt
+, pkg-config
+, wrapGAppsHook3
+, gtk2-x11
+, libX11
+, polkit
+, vala
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

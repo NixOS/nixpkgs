@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  astropy,
-  qtpy,
-  pyqt6,
-  pyqt-builder,
-  setuptools,
-  setuptools-scm,
-  scipy,
-  matplotlib,
-  spectral-cube,
-  pytestCheckHook,
-  pytest-astropy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, astropy
+, qtpy
+, pyqt6
+, pyqt-builder
+, setuptools
+, setuptools-scm
+, scipy
+, matplotlib
+, spectral-cube
+, pytestCheckHook
+, pytest-astropy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,9 @@
 # GNOME Sushi daemon.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 {

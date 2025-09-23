@@ -1,6 +1,6 @@
-{
-  callPackage,
-  lowPrio,
+{ callPackage
+, lowPrio
+,
 }:
 
 let

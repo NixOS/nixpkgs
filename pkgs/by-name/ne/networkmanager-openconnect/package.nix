@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  replaceVars,
-  glib,
-  libxml2,
-  openconnect,
-  intltool,
-  pkg-config,
-  networkmanager,
-  gcr,
-  libsecret,
-  file,
-  gtk3,
-  webkitgtk_4_1,
-  libnma,
-  libnma-gtk4,
-  gtk4,
-  withGnome ? true,
-  gnome,
-  kmod,
+{ stdenv
+, lib
+, fetchurl
+, replaceVars
+, glib
+, libxml2
+, openconnect
+, intltool
+, pkg-config
+, networkmanager
+, gcr
+, libsecret
+, file
+, gtk3
+, webkitgtk_4_1
+, libnma
+, libnma-gtk4
+, gtk4
+, withGnome ? true
+, gnome
+, kmod
+,
 }:
 
 stdenv.mkDerivation rec {

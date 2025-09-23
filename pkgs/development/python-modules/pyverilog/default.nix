@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  jinja2,
-  ply,
-  iverilog,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, jinja2
+, ply
+, iverilog
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

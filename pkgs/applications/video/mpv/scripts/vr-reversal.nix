@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gitUpdater,
-  ffmpeg,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gitUpdater
+, ffmpeg
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

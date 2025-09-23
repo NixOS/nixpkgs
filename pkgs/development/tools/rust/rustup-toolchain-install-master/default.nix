@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  stdenv,
-  patchelf,
-  zlib,
-  pkg-config,
-  openssl,
-  xz,
-  replaceVars,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, patchelf
+, zlib
+, pkg-config
+, openssl
+, xz
+, replaceVars
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

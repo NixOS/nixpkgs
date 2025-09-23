@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
-  inflow,
-  diffutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, inflow
+, diffutils
+,
 }:
 
 stdenv.mkDerivation rec {

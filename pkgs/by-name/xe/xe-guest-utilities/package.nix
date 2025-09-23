@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  runtimeShell,
-  udevCheckHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, runtimeShell
+, udevCheckHook
+,
 }:
 
 buildGoModule rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  pixman,
-  pkg-config,
-  util-macros,
-  libXinerama,
-  libAppleWM,
-  xorgproto,
-  libXrandr,
-  libXext,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pixman
+, pkg-config
+, util-macros
+, libXinerama
+, libAppleWM
+, xorgproto
+, libXrandr
+, libXext
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

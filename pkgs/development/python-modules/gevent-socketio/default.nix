@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  gevent,
-  gevent-websocket,
-  versiontools,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, gevent
+, gevent-websocket
+, versiontools
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

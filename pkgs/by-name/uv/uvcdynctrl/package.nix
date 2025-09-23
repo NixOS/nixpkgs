@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libxml2,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libxml2
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation {

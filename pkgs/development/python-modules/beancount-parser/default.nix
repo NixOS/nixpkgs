@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  lark,
-  poetry-core,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, lark
+, poetry-core
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

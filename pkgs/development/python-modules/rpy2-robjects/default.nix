@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchurl,
-  fetchpatch2,
-  isPyPy,
-  R,
-  rpy2-rinterface,
-  ipython,
-  jinja2,
-  numpy,
-  pandas,
-  tzlocal,
-  pytestCheckHook,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchurl
+, fetchpatch2
+, isPyPy
+, R
+, rpy2-rinterface
+, ipython
+, jinja2
+, numpy
+, pandas
+, tzlocal
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

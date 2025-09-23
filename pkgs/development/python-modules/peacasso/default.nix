@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  accelerate,
-  diffusers,
-  fastapi,
-  ftfy,
-  pydantic,
-  scipy,
-  torch,
-  transformers,
-  typer,
-  uvicorn,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, accelerate
+, diffusers
+, fastapi
+, ftfy
+, pydantic
+, scipy
+, torch
+, transformers
+, typer
+, uvicorn
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

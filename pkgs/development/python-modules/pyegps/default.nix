@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pytestCheckHook,
-  pyusb,
-  setuptools,
-  setuptools-scm,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytestCheckHook
+, pyusb
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

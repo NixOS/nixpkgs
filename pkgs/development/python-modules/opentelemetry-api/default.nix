@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  deprecated,
-  hatchling,
-  importlib-metadata,
-  typing-extensions,
-  opentelemetry-test-utils,
-  pytestCheckHook,
-  writeScript,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, deprecated
+, hatchling
+, importlib-metadata
+, typing-extensions
+, opentelemetry-test-utils
+, pytestCheckHook
+, writeScript
+,
 }:
 
 let

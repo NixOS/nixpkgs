@@ -1,6 +1,6 @@
-{
-  runTest,
-  package,
+{ runTest
+, package
+,
 }:
 
 {

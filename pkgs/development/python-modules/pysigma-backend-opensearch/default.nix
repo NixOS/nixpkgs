@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pysigma,
-  pysigma-backend-elasticsearch,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pysigma
+, pysigma-backend-elasticsearch
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchFromGitHub,
-  fzf,
-  kubectl,
+{ stdenvNoCC
+, lib
+, fetchFromGitHub
+, fzf
+, kubectl
+,
 }:
 stdenvNoCC.mkDerivation {
   pname = "kns";

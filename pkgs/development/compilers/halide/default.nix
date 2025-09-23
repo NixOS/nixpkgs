@@ -1,28 +1,28 @@
-{
-  stdenv,
-  llvmPackages,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  fetchpatch2,
-  flatbuffers,
-  libffi,
-  libpng,
-  libjpeg,
-  libgbm,
-  libGL,
-  eigen,
-  openblas,
-  blas,
-  lapack,
-  removeReferencesTo,
-  ninja,
-  pythonSupport ? false,
-  python3Packages,
-  wasmSupport ? false,
-  wabt,
-  doCheck ? true,
-  ctestCheckHook,
+{ stdenv
+, llvmPackages
+, lib
+, fetchFromGitHub
+, cmake
+, fetchpatch2
+, flatbuffers
+, libffi
+, libpng
+, libjpeg
+, libgbm
+, libGL
+, eigen
+, openblas
+, blas
+, lapack
+, removeReferencesTo
+, ninja
+, pythonSupport ? false
+, python3Packages
+, wasmSupport ? false
+, wabt
+, doCheck ? true
+, ctestCheckHook
+,
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";

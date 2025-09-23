@@ -1,12 +1,12 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  copyDesktopItems,
-  python3,
-  xdg-utils,
-  electron_36,
-  makeDesktopItem,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, copyDesktopItems
+, python3
+, xdg-utils
+, electron_36
+, makeDesktopItem
+,
 }:
 
 buildNpmPackage rec {

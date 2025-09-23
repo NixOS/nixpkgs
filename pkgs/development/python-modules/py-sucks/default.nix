@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  click,
-  pycountry-convert,
-  pycryptodome,
-  requests,
-  sleekxmppfs,
-  requests-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, click
+, pycountry-convert
+, pycryptodome
+, requests
+, sleekxmppfs
+, requests-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

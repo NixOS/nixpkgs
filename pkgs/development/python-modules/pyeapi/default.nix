@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  mock,
-  netaddr,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, mock
+, netaddr
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

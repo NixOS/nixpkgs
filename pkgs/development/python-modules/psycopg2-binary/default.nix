@@ -1,6 +1,6 @@
-{
-  mkPythonMetaPackage,
-  psycopg2,
+{ mkPythonMetaPackage
+, psycopg2
+,
 }:
 mkPythonMetaPackage {
   pname = "psycopg2-binary";

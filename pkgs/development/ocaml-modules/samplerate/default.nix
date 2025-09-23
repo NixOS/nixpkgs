@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDunePackage,
-  fetchFromGitHub,
-  dune-configurator,
-  libsamplerate,
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, dune-configurator
+, libsamplerate
+,
 }:
 
 buildDunePackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gfortran,
-  tk,
-  hdf5,
-  xorg,
-  libGLU,
-  withTools ? false,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gfortran
+, tk
+, hdf5
+, xorg
+, libGLU
+, withTools ? false
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgns";

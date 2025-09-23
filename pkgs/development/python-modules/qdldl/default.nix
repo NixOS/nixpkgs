@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cmake,
-  numpy,
-  pybind11,
-  setuptools,
-  scipy,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cmake
+, numpy
+, pybind11
+, setuptools
+, scipy
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

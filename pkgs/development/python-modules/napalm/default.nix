@@ -1,36 +1,33 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-  cffi,
-
-  # dependencies
-  jinja2,
-  junos-eznc,
-  lxml,
-  ncclient,
-  netaddr,
-  netmiko,
-  netutils,
-  paramiko,
-  pyeapi,
-  pyyaml,
-  requests,
-  scp,
-  textfsm,
-  ttp,
-  ttp-templates,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  ddt,
-  mock,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pythonOlder
+, # build-system
+  setuptools
+, cffi
+, # dependencies
+  jinja2
+, junos-eznc
+, lxml
+, ncclient
+, netaddr
+, netmiko
+, netutils
+, paramiko
+, pyeapi
+, pyyaml
+, requests
+, scp
+, textfsm
+, ttp
+, ttp-templates
+, typing-extensions
+, # tests
+  pytestCheckHook
+, ddt
+, mock
+,
 }:
 
 buildPythonPackage rec {

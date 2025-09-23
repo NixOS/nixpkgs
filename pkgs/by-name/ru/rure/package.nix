@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchCrate,
-  fixDarwinDylibNames,
-  haskellPackages,
+{ lib
+, stdenv
+, rustPlatform
+, fetchCrate
+, fixDarwinDylibNames
+, haskellPackages
+,
 }:
 
 let

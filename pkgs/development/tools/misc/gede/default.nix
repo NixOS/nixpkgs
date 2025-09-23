@@ -1,14 +1,14 @@
-{
-  mkDerivation,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  python3,
-  qtbase,
-  qmake,
-  qtserialport,
-  ctags,
-  gdb,
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, makeWrapper
+, python3
+, qtbase
+, qmake
+, qtserialport
+, ctags
+, gdb
+,
 }:
 
 mkDerivation rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  boost,
-  lv2,
-  python3,
-  wafHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, lv2
+, python3
+, wafHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

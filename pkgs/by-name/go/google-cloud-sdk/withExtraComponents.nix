@@ -1,8 +1,8 @@
-{
-  lib,
-  google-cloud-sdk,
-  symlinkJoin,
-  components,
+{ lib
+, google-cloud-sdk
+, symlinkJoin
+, components
+,
 }:
 
 comps_:
@@ -67,8 +67,8 @@ let
     '';
 in
 # The `gcloud` entrypoint script has some custom logic to determine the "real" cloud sdk
-# root. In order to not trip up this logic and still have the symlink joined root we copy
-# over this file. Since this file also has a Python wrapper, we need to copy that as well.
+  # root. In order to not trip up this logic and still have the symlink joined root we copy
+  # over this file. Since this file also has a Python wrapper, we need to copy that as well.
 symlinkJoin {
   name = "google-cloud-sdk-${google-cloud-sdk.version}";
   inherit (google-cloud-sdk) meta;

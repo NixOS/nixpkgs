@@ -1,22 +1,22 @@
-{
-  lib,
-  resholve,
-  fetchurl,
-  gawk,
-  bash,
-  binutils,
-  coreutils,
-  file,
-  findutils,
-  glibc,
-  gnugrep,
-  gnused,
-  net-tools,
-  openssh,
-  postgresql,
-  ps,
-  util-linux,
-  which,
+{ lib
+, resholve
+, fetchurl
+, gawk
+, bash
+, binutils
+, coreutils
+, file
+, findutils
+, glibc
+, gnugrep
+, gnused
+, net-tools
+, openssh
+, postgresql
+, ps
+, util-linux
+, which
+,
 }:
 
 # resholve does not yet support `finalAttrs` call pattern hence `rec`

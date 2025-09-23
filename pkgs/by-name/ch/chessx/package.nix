@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  pkg-config,
-  zlib,
-  fetchpatch,
-  fetchurl,
-  libsForQt5,
+{ stdenv
+, lib
+, pkg-config
+, zlib
+, fetchpatch
+, fetchurl
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

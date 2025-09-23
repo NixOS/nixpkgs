@@ -11,9 +11,9 @@
 #
 #     nix-shell --arg nixpkgs ./.
 #
-{
-  system ? builtins.currentSystem,
-  nixpkgs ? null,
+{ system ? builtins.currentSystem
+, nixpkgs ? null
+,
 }:
 let
   inherit (import ./ci { inherit nixpkgs system; }) pkgs fmt;
@@ -27,7 +27,7 @@ let
   ];
 in
 curPkgs
-// pkgs.mkShellNoCC {
+  // pkgs.mkShellNoCC {
   inputsFrom = [
     fmt.shell
   ];

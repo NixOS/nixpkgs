@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  replaceVars,
-  perlPackages,
-  # Flags to enable processors
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, replaceVars
+, perlPackages
+, # Flags to enable processors
   # Currently, Markdown.pl does not work
-  usePandoc ? true,
-  pandoc,
+  usePandoc ? true
+, pandoc
+,
 }:
 
 let

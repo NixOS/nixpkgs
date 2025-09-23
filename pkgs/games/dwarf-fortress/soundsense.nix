@@ -1,9 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  dos2unix,
-  soundPack ? stdenv.mkDerivation {
+{ lib
+, stdenv
+, fetchzip
+, dos2unix
+, soundPack ? stdenv.mkDerivation {
     name = "soundsense-soundpack";
     src = fetchzip {
       url = "https://df.zweistein.cz/soundsense/soundpack.zip";
@@ -12,7 +11,8 @@
     installPhase = ''
       cp -r . $out
     '';
-  },
+  }
+,
 }:
 
 stdenv.mkDerivation rec {

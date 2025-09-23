@@ -1,17 +1,17 @@
-{
-  fetchFromGitHub,
-  automake,
-  autoconf,
-  which,
-  pkg-config,
-  libtool,
-  lib,
-  stdenv,
-  gnutls,
-  asciidoc,
-  doxygen,
-  withTLS ? true,
-  withDocs ? true,
+{ fetchFromGitHub
+, automake
+, autoconf
+, which
+, pkg-config
+, libtool
+, lib
+, stdenv
+, gnutls
+, asciidoc
+, doxygen
+, withTLS ? true
+, withDocs ? true
+,
 }:
 stdenv.mkDerivation rec {
   pname = "libcoap";

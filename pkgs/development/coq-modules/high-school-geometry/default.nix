@@ -1,8 +1,8 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -28,7 +28,8 @@ mkCoqDerivation {
         case = "8.11";
         out = "8.11";
       }
-    ] null;
+    ]
+      null;
 
   release = {
     "8.16".sha256 = "sha256-HvUrZ6l7wCshuKUZs8rvfMkTEv+oXuogI5LICcD8Bn8=";

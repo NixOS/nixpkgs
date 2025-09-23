@@ -3,17 +3,16 @@
   the load on Hydra when testing the `stdenv-updates' branch.
 */
 
-{
-  nixpkgs ? {
+{ nixpkgs ? {
     outPath = (import ../../lib).cleanSource ../..;
     revCount = 1234;
     shortRev = "abcdef";
-  },
-  supportedSystems ? [
+  }
+, supportedSystems ? [
     "x86_64-linux"
     "x86_64-darwin"
-  ],
-  # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+  ]
+, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
   nixpkgsArgs ? {
     config = {
       allowAliases = false;
@@ -22,7 +21,8 @@
     };
 
     __allowFileset = false;
-  },
+  }
+,
 }:
 
 let
@@ -47,7 +47,7 @@ in
   };
 
 }
-// (mapTestOn ({
+  // (mapTestOn ({
 
   aspell = all;
   at = linux;

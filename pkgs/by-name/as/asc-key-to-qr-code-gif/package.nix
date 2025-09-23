@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  imagemagick,
-  qrencode,
-  testQR ? false,
-  zbar ? null,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, imagemagick
+, qrencode
+, testQR ? false
+, zbar ? null
+,
 }:
 assert testQR -> zbar != false;
 stdenvNoCC.mkDerivation {

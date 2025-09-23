@@ -1,16 +1,16 @@
-{
-  coq,
-  mkCoqDerivation,
-  mathcomp,
-  bignums,
-  flocq,
-  coquelicot,
-  interval,
-  mathcomp-reals-stdlib,
-  multinomials,
-  coqeal,
-  lib,
-  version ? null,
+{ coq
+, mkCoqDerivation
+, mathcomp
+, bignums
+, flocq
+, coquelicot
+, interval
+, mathcomp-reals-stdlib
+, multinomials
+, coqeal
+, lib
+, version ? null
+,
 }:
 
 let
@@ -78,7 +78,8 @@ let
           case = "validsdp";
           out = ".";
         }
-      ] package;
+      ]
+        package;
       pname = package;
 
       derivation = mkCoqDerivation ({

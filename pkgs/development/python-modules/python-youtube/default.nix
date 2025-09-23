@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  dataclasses-json,
-  isodate,
-  requests,
-  requests-oauthlib,
-  pytest-cov-stub,
-  pytestCheckHook,
-  responses,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, dataclasses-json
+, isodate
+, requests
+, requests-oauthlib
+, pytest-cov-stub
+, pytestCheckHook
+, responses
+,
 }:
 
 buildPythonPackage rec {

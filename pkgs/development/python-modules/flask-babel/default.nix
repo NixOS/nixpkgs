@@ -1,25 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  poetry-core,
-
-  # docs
-  furo,
-  sphinxHook,
-
-  # runtime
-  babel,
-  flask,
-  jinja2,
-  pytz,
-
-  # tests
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  poetry-core
+, # docs
+  furo
+, sphinxHook
+, # runtime
+  babel
+, flask
+, jinja2
+, pytz
+, # tests
+  pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

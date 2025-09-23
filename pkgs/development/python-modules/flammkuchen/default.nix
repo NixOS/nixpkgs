@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchpatch2,
-  fetchPypi,
-  numpy,
-  pandas,
-  pytestCheckHook,
-  scipy,
-  setuptools,
-  tables,
+{ lib
+, buildPythonPackage
+, fetchpatch2
+, fetchPypi
+, numpy
+, pandas
+, pytestCheckHook
+, scipy
+, setuptools
+, tables
+,
 }:
 
 buildPythonPackage rec {

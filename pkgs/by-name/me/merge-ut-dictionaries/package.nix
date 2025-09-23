@@ -1,23 +1,21 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenvNoCC,
-  nix-update-script,
-  python3,
-  jawiki-all-titles-in-ns0,
-  ibus-engines,
-
-  mozcdic-ut-jawiki,
-  mozcdic-ut-personal-names,
-  mozcdic-ut-place-names,
-  mozcdic-ut-sudachidict,
-
-  dictionaries ? [
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, nix-update-script
+, python3
+, jawiki-all-titles-in-ns0
+, ibus-engines
+, mozcdic-ut-jawiki
+, mozcdic-ut-personal-names
+, mozcdic-ut-place-names
+, mozcdic-ut-sudachidict
+, dictionaries ? [
     mozcdic-ut-jawiki
     mozcdic-ut-personal-names
     mozcdic-ut-place-names
     mozcdic-ut-sudachidict
-  ],
+  ]
+,
 }:
 
 assert lib.assertMsg (dictionaries != [ ]) "merge-ut-dictionaries needs at least one dictionary.";

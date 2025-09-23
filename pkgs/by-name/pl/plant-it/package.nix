@@ -1,9 +1,9 @@
-{
-  maven,
-  jdk21_headless,
-  makeBinaryWrapper,
-  lib,
-  fetchFromGitHub,
+{ maven
+, jdk21_headless
+, makeBinaryWrapper
+, lib
+, fetchFromGitHub
+,
 }:
 let
   version = "0.10.0";

@@ -1,10 +1,10 @@
-{
-  lib,
-  rel,
-  buildKodiAddon,
-  fetchzip,
-  fetchpatch,
-  addonUpdateScript,
+{ lib
+, rel
+, buildKodiAddon
+, fetchzip
+, fetchpatch
+, addonUpdateScript
+,
 }:
 buildKodiAddon rec {
   pname = "inputstreamhelper";

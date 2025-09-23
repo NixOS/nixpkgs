@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  cscope,
-  fetchFromGitHub,
-  fetchpatch,
-  git,
-  libevent,
-  libopus,
-  libsodium,
-  libtoxcore,
-  libvpx,
-  msgpack,
-  pkg-config,
-  python3,
-  python3Packages,
+{ lib
+, stdenv
+, cscope
+, fetchFromGitHub
+, fetchpatch
+, git
+, libevent
+, libopus
+, libsodium
+, libtoxcore
+, libvpx
+, msgpack
+, pkg-config
+, python3
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation rec {

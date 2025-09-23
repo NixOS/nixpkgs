@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  robotframework,
-  approvaltests,
-  pytest-mockito,
-  pytestCheckHook,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, robotframework
+, approvaltests
+, pytest-mockito
+, pytestCheckHook
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

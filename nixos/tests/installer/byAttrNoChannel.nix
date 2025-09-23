@@ -4,8 +4,8 @@ let
   nixpkgs = "@nixpkgs@";
 in
 
-{
-  evalConfig ? import "${nixpkgs}/nixos/lib/eval-config.nix",
+{ evalConfig ? import "${nixpkgs}/nixos/lib/eval-config.nix"
+,
 }:
 
 evalConfig {

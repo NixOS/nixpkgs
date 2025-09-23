@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  python3Packages,
-  stdenv,
+{ lib
+, fetchFromGitLab
+, gitUpdater
+, python3Packages
+, stdenv
+,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -67,12 +67,12 @@ python3Packages.buildPythonApplication rec {
     "test_godot_plugin"
   ]
   ++
-    # There are no docker images available for the aarch64 architecture
-    # which are required for tests.
-    lib.optionals stdenv.hostPlatform.isAarch64 [
-      "test_arch"
-      "test_restricted_arch"
-    ];
+  # There are no docker images available for the aarch64 architecture
+  # which are required for tests.
+  lib.optionals stdenv.hostPlatform.isAarch64 [
+    "test_arch"
+    "test_restricted_arch"
+  ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

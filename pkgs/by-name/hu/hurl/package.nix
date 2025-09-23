@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  installShellFiles,
-  libxml2,
-  openssl,
-  curl,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
+, libxml2
+, openssl
+, curl
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

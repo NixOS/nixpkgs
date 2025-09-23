@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  qt5,
-  qtbase,
-  qtx11extras,
-  qttools,
-  zlib,
-  gnumake,
+{ stdenv
+, lib
+, fetchgit
+, qt5
+, qtbase
+, qtx11extras
+, qttools
+, zlib
+, gnumake
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

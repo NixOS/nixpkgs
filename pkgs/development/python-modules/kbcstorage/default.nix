@@ -1,19 +1,19 @@
-{
-  lib,
-  azure-storage-blob,
-  boto3,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python-dotenv,
-  pythonOlder,
-  requests,
-  responses,
-  setuptools,
-  setuptools-git-versioning,
-  setuptools-scm,
-  urllib3,
-  google-auth,
-  google-cloud-storage,
+{ lib
+, azure-storage-blob
+, boto3
+, buildPythonPackage
+, fetchFromGitHub
+, python-dotenv
+, pythonOlder
+, requests
+, responses
+, setuptools
+, setuptools-git-versioning
+, setuptools-scm
+, urllib3
+, google-auth
+, google-cloud-storage
+,
 }:
 
 buildPythonPackage rec {

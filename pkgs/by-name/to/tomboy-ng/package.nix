@@ -1,21 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fpc,
-  lazarus,
-  autoPatchelfHook,
-
-  glib,
-  cairo,
-  pango,
-  gtk2,
-  gdk-pixbuf,
-  at-spi2-atk,
-  xorg,
-  libnotify,
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fpc
+, lazarus
+, autoPatchelfHook
+, glib
+, cairo
+, pango
+, gtk2
+, gdk-pixbuf
+, at-spi2-atk
+, xorg
+, libnotify
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tomboy-ng";

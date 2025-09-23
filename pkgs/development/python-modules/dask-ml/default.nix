@@ -1,27 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  dask-glm,
-  distributed,
-  multipledispatch,
-  numba,
-  numpy,
-  packaging,
-  pandas,
-  scikit-learn,
-  scipy,
-  dask,
-
-  # tests
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  dask-glm
+, distributed
+, multipledispatch
+, numba
+, numpy
+, packaging
+, pandas
+, scikit-learn
+, scipy
+, dask
+, # tests
+  pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

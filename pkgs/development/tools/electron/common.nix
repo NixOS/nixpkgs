@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  chromium,
-  nodejs,
-  fetchYarnDeps,
-  fetchNpmDeps,
-  fetchpatch,
-  fixup-yarn-lock,
-  npmHooks,
-  yarn,
-  libnotify,
-  unzip,
-  pkgsBuildHost,
-  pipewire,
-  libsecret,
-  libpulseaudio,
-  speechd-minimal,
-  info,
-  gclient2nix,
+{ lib
+, stdenv
+, chromium
+, nodejs
+, fetchYarnDeps
+, fetchNpmDeps
+, fetchpatch
+, fixup-yarn-lock
+, npmHooks
+, yarn
+, libnotify
+, unzip
+, pkgsBuildHost
+, pipewire
+, libsecret
+, libpulseaudio
+, speechd-minimal
+, info
+, gclient2nix
+,
 }:
 
 let

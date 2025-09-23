@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  callPackage,
-  setuptools,
-  bcrypt,
-  certifi,
-  cffi,
-  cryptography-vectors ? (callPackage ./vectors.nix { }),
-  fetchFromGitHub,
-  isPyPy,
-  libiconv,
-  openssl,
-  pkg-config,
-  pretend,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  rustPlatform,
+{ lib
+, stdenv
+, buildPythonPackage
+, callPackage
+, setuptools
+, bcrypt
+, certifi
+, cffi
+, cryptography-vectors ? (callPackage ./vectors.nix { })
+, fetchFromGitHub
+, isPyPy
+, libiconv
+, openssl
+, pkg-config
+, pretend
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, rustPlatform
+,
 }:
 
 buildPythonPackage rec {

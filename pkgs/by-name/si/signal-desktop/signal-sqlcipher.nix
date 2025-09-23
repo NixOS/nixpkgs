@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pnpm,
-  nodejs,
-  rustPlatform,
-  cargo,
-  dump_syms,
-  python3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pnpm
+, nodejs
+, rustPlatform
+, cargo
+, dump_syms
+, python3
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-sqlcipher";

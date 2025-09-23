@@ -1,20 +1,20 @@
-{
-  beautifulsoup4,
-  buildPythonPackage,
-  comicon,
-  feedparser,
-  fetchFromGitHub,
-  filetype,
-  lib,
-  lxml,
-  natsort,
-  nix-update-script,
-  pillow,
-  poetry-core,
-  pyside6,
-  python-slugify,
-  requests,
-  typer,
+{ beautifulsoup4
+, buildPythonPackage
+, comicon
+, feedparser
+, fetchFromGitHub
+, filetype
+, lib
+, lxml
+, natsort
+, nix-update-script
+, pillow
+, poetry-core
+, pyside6
+, python-slugify
+, requests
+, typer
+,
 }:
 
 buildPythonPackage rec {

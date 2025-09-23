@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  callPackage,
-  qt6Packages,
+{ stdenv
+, fetchurl
+, lib
+, callPackage
+, qt6Packages
+,
 }:
 
 let

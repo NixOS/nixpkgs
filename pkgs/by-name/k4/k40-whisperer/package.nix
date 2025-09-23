@@ -1,13 +1,13 @@
-{
-  stdenv,
-  makeWrapper,
-  writeText,
-  python3,
-  fetchzip,
-  inkscape,
-  lib,
-  udevCheckHook,
-  udevGroup ? "k40",
+{ stdenv
+, makeWrapper
+, writeText
+, python3
+, fetchzip
+, inkscape
+, lib
+, udevCheckHook
+, udevGroup ? "k40"
+,
 }:
 
 let

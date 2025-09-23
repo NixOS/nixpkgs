@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeDesktopItem,
-  makeWrapper,
-  unzip,
-  mono,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, unzip
+, mono
+, gitUpdater
+,
 }:
 
 let

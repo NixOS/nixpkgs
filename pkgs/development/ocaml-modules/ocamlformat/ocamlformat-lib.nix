@@ -1,10 +1,9 @@
 # Version can be selected with the 'version' argument, see generic.nix.
-{
-  lib,
-  callPackage,
-  buildDunePackage,
-  menhir,
-  ...
+{ lib
+, callPackage
+, buildDunePackage
+, menhir
+, ...
 }@args:
 
 let

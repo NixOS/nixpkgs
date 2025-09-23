@@ -1,7 +1,7 @@
-{
-  pkgs,
-  makeTest,
-  genTests,
+{ pkgs
+, makeTest
+, genTests
+,
 }:
 
 let
@@ -15,30 +15,32 @@ let
       postgresql-clauses = makeEnsureTestFor package;
     };
 
-  test-sql = pkgs.writeText "postgresql-test" (''
-    CREATE EXTENSION pgcrypto; -- just to check if lib loading works
-    CREATE TABLE sth (
-      id int
-    );
-    INSERT INTO sth (id) VALUES (1);
-    INSERT INTO sth (id) VALUES (1);
-    INSERT INTO sth (id) VALUES (1);
-    INSERT INTO sth (id) VALUES (1);
-    INSERT INTO sth (id) VALUES (1);
-    CREATE TABLE xmltest ( doc xml );
-    INSERT INTO xmltest (doc) VALUES ('<test>ok</test>'); -- check if libxml2 enabled
+  test-sql = pkgs.writeText "postgresql-test" (
+    ''
+      CREATE EXTENSION pgcrypto; -- just to check if lib loading works
+      CREATE TABLE sth (
+        id int
+      );
+      INSERT INTO sth (id) VALUES (1);
+      INSERT INTO sth (id) VALUES (1);
+      INSERT INTO sth (id) VALUES (1);
+      INSERT INTO sth (id) VALUES (1);
+      INSERT INTO sth (id) VALUES (1);
+      CREATE TABLE xmltest ( doc xml );
+      INSERT INTO xmltest (doc) VALUES ('<test>ok</test>'); -- check if libxml2 enabled
 
-    -- check if hardening gets relaxed
-    CREATE EXTENSION plv8;
-    -- try to trigger the V8 JIT, which requires MemoryDenyWriteExecute
-    DO $$
-      let xs = [];
-      for (let i = 0, n = 400000; i < n; i++) {
-          xs.push(Math.round(Math.random() * n))
-      }
-      console.log(xs.reduce((acc, x) => acc + x, 0));
-    $$ LANGUAGE plv8;
-  '');
+      -- check if hardening gets relaxed
+      CREATE EXTENSION plv8;
+      -- try to trigger the V8 JIT, which requires MemoryDenyWriteExecute
+      DO $$
+        let xs = [];
+        for (let i = 0, n = 400000; i < n; i++) {
+            xs.push(Math.round(Math.random() * n))
+        }
+        console.log(xs.reduce((acc, x) => acc + x, 0));
+      $$ LANGUAGE plv8;
+    ''
+  );
 
   makeTestForWithBackupAll =
     package: backupAll:

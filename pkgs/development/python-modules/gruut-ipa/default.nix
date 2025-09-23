@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  espeak,
-  numpy,
-  python,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, espeak
+, numpy
+, python
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

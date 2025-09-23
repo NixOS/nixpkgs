@@ -1,31 +1,31 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  erlang,
-  makeWrapper,
-  nix-update-script,
-  coreutils,
-  curl,
-  bash,
-  debugInfo ? false,
+{ config
+, lib
+, stdenv
+, fetchFromGitHub
+, erlang
+, makeWrapper
+, nix-update-script
+, coreutils
+, curl
+, bash
+, debugInfo ? false
+,
 }@inputs:
 
-{
-  baseName ? "elixir",
-  version,
-  erlang ? inputs.erlang,
-  minimumOTPVersion,
-  maximumOTPVersion ? null,
-  sha256 ? null,
-  rev ? "v${version}",
-  src ? fetchFromGitHub {
+{ baseName ? "elixir"
+, version
+, erlang ? inputs.erlang
+, minimumOTPVersion
+, maximumOTPVersion ? null
+, sha256 ? null
+, rev ? "v${version}"
+, src ? fetchFromGitHub {
     inherit rev sha256;
     owner = "elixir-lang";
     repo = "elixir";
-  },
-  escriptPath ? "lib/elixir/generate_app.escript",
+  }
+, escriptPath ? "lib/elixir/generate_app.escript"
+,
 }@args:
 
 let
@@ -63,10 +63,10 @@ let
 
   elixirShebang =
     if stdenv.hostPlatform.isDarwin then
-      # Darwin disallows shebang scripts from using other scripts as their
-      # command. Use env as an intermediary instead of calling elixir directly
-      # (another shebang script).
-      # See https://github.com/NixOS/nixpkgs/pull/9671
+    # Darwin disallows shebang scripts from using other scripts as their
+    # command. Use env as an intermediary instead of calling elixir directly
+    # (another shebang script).
+    # See https://github.com/NixOS/nixpkgs/pull/9671
       "${coreutils}/bin/env $out/bin/elixir"
     else
       "$out/bin/elixir";
@@ -74,7 +74,7 @@ let
   erlc_opts = [ "deterministic" ] ++ optionals debugInfo [ "debug_info" ];
 in
 if !config.allowAliases && !bothAssert then
-  # Don't throw without aliases to not break CI.
+# Don't throw without aliases to not break CI.
   null
 else
   assert assertMsg bothAssert compatibilityMsg;

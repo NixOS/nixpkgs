@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fixtures,
-  jsonpatch,
-  netaddr,
-  prettytable,
-  python-dateutil,
-  pytestCheckHook,
-  requests,
-  requests-mock,
-  six,
-  testtools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fixtures
+, jsonpatch
+, netaddr
+, prettytable
+, python-dateutil
+, pytestCheckHook
+, requests
+, requests-mock
+, six
+, testtools
+,
 }:
 
 buildPythonPackage rec {

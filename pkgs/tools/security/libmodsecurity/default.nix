@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  bison,
-  flex,
-  pkg-config,
-  curl,
-  geoip,
-  libmaxminddb,
-  libxml2,
-  lmdb,
-  lua,
-  pcre,
-  pcre2,
-  ssdeep,
-  yajl,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, bison
+, flex
+, pkg-config
+, curl
+, geoip
+, libmaxminddb
+, libxml2
+, lmdb
+, lua
+, pcre
+, pcre2
+, ssdeep
+, yajl
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

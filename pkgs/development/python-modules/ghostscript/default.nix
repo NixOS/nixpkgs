@@ -1,13 +1,11 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  pytestCheckHook,
-
-  setuptools,
-
-  ghostscript_headless,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitLab
+, pytestCheckHook
+, setuptools
+, ghostscript_headless
+,
 }:
 
 buildPythonPackage rec {

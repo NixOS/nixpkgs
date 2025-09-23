@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeShellScriptBin,
-  gcc-arm-embedded,
-  pynitrokey,
-  python3,
-
-  # The make target to run
-  makeTarget ? "release-buildv",
-  # Whether the firmware should include the production public key for the bootloader
-  release ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeShellScriptBin
+, gcc-arm-embedded
+, pynitrokey
+, python3
+, # The make target to run
+  makeTarget ? "release-buildv"
+, # Whether the firmware should include the production public key for the bootloader
+  release ? true
+,
 }:
 
 let

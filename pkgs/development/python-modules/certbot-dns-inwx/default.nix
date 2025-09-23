@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  acme,
-  certbot,
-  inwx-domrobot,
-  idna,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, acme
+, certbot
+, inwx-domrobot
+, idna
+,
 }:
 
 buildPythonPackage rec {

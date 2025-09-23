@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unzip,
-  txt2tags,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unzip
+, txt2tags
+,
 }:
 
 stdenv.mkDerivation {

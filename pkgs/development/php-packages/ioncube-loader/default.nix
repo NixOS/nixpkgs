@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  php,
+{ stdenv
+, lib
+, fetchurl
+, php
+,
 }:
 
 let
@@ -20,8 +20,7 @@ let
         url = "https://web.archive.org/web/20250614103238/https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz";
         sha256 = "sha256-W8AXulfQx2nkT9nznCCx2lrayKA3R+n2TyhU1ScNjMg=";
       };
-    }
-    .${stdenv.hostPlatform.system};
+    }.${stdenv.hostPlatform.system};
 
   phpVersion = lib.versions.majorMinor php.version;
   systemPrefix = lib.substring 0 3 stdenv.hostPlatform.parsed.kernel.name; # lin, dar, fre

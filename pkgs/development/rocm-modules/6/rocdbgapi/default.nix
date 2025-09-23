@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  git,
-  rocm-comgr,
-  rocm-runtime,
-  hwdata,
-  texliveSmall,
-  doxygen,
-  graphviz,
-  buildDocs ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, git
+, rocm-comgr
+, rocm-runtime
+, hwdata
+, texliveSmall
+, doxygen
+, graphviz
+, buildDocs ? true
+,
 }:
 
 let

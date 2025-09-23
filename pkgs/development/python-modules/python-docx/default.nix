@@ -1,15 +1,15 @@
-{
-  lib,
-  behave,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lxml,
-  mock,
-  pyparsing,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
+{ lib
+, behave
+, buildPythonPackage
+, fetchFromGitHub
+, lxml
+, mock
+, pyparsing
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

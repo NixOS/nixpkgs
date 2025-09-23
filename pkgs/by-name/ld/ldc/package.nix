@@ -1,24 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  callPackage,
-  makeWrapper,
-  removeReferencesTo,
-  runCommand,
-  writeText,
-  targetPackages,
-  cmake,
-  ninja,
-  llvm_18,
-  curl,
-  tzdata,
-  lit,
-  gdb,
-  unzip,
-
-  ldcBootstrap ? callPackage ./bootstrap.nix { },
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, callPackage
+, makeWrapper
+, removeReferencesTo
+, runCommand
+, writeText
+, targetPackages
+, cmake
+, ninja
+, llvm_18
+, curl
+, tzdata
+, lit
+, gdb
+, unzip
+, ldcBootstrap ? callPackage ./bootstrap.nix { }
+,
 }:
 
 let

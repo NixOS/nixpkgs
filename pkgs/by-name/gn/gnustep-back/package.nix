@@ -1,15 +1,15 @@
-{
-  lib,
-  clangStdenv,
-  fetchzip,
-  cairo,
-  fontconfig,
-  freetype,
-  gnustep-gui,
-  libXft,
-  libXmu,
-  pkg-config,
-  wrapGNUstepAppsHook,
+{ lib
+, clangStdenv
+, fetchzip
+, cairo
+, fontconfig
+, freetype
+, gnustep-gui
+, libXft
+, libXmu
+, pkg-config
+, wrapGNUstepAppsHook
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

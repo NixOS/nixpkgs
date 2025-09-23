@@ -1,10 +1,10 @@
-{
-  lib,
-  symlinkJoin,
-  R,
-  makeWrapper,
-  recommendedPackages,
-  packages,
+{ lib
+, symlinkJoin
+, R
+, makeWrapper
+, recommendedPackages
+, packages
+,
 }:
 symlinkJoin {
   name = R.name + "-wrapper";

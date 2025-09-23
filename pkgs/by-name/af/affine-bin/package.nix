@@ -1,15 +1,15 @@
-{
-  copyDesktopItems,
-  electron,
-  fetchFromGitHub,
-  fetchurl,
-  lib,
-  makeDesktopItem,
-  makeWrapper,
-  stdenvNoCC,
-  unzip,
-  buildType ? "stable",
-  commandLineArgs ? "",
+{ copyDesktopItems
+, electron
+, fetchFromGitHub
+, fetchurl
+, lib
+, makeDesktopItem
+, makeWrapper
+, stdenvNoCC
+, unzip
+, buildType ? "stable"
+, commandLineArgs ? ""
+,
 }:
 let
   hostPlatform = stdenvNoCC.hostPlatform;
@@ -113,7 +113,7 @@ stdenvNoCC.mkDerivation (
             runHook postInstall
           '';
     }
-    // lib.optionalAttrs hostPlatform.isLinux {
+      // lib.optionalAttrs hostPlatform.isLinux {
       desktopItems =
         let
           inherit (finalAttrs) binName productName;

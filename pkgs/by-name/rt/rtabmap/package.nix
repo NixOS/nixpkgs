@@ -1,39 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # nativeBuildInputs
-  cmake,
-  qt6,
-  pkg-config,
-  wrapGAppsHook3,
-
-  # buildInputs
-  opencv,
-  pcl,
-  liblapack,
-  xorg,
-  libusb1,
-  yaml-cpp,
-  libnabo,
-  libpointmatcher,
-  eigen,
-  g2o,
-  ceres-solver,
-  octomap,
-  freenect,
-  libdc1394,
-  libGL,
-  libGLU,
-  librealsense,
-  vtkWithQt6,
-  zed-open-capture,
-  hidapi,
-
-  # passthru
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, # nativeBuildInputs
+  cmake
+, qt6
+, pkg-config
+, wrapGAppsHook3
+, # buildInputs
+  opencv
+, pcl
+, liblapack
+, xorg
+, libusb1
+, yaml-cpp
+, libnabo
+, libpointmatcher
+, eigen
+, g2o
+, ceres-solver
+, octomap
+, freenect
+, libdc1394
+, libGL
+, libGLU
+, librealsense
+, vtkWithQt6
+, zed-open-capture
+, hidapi
+, # passthru
+  gitUpdater
+,
 }:
 let
   pcl' = pcl.override { vtk = vtkWithQt6; };

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  gtkmm3,
-  gtk3,
-  spdlog,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gtkmm3
+, gtk3
+, spdlog
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

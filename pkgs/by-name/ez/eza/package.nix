@@ -1,16 +1,16 @@
-{
-  lib,
-  gitSupport ? true,
-  fetchFromGitHub,
-  rustPlatform,
-  cmake,
-  pandoc,
-  pkg-config,
-  zlib,
-  installShellFiles,
-  # once eza upstream gets support for setting up a compatibility symlink for exa, we should change
+{ lib
+, gitSupport ? true
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, pandoc
+, pkg-config
+, zlib
+, installShellFiles
+, # once eza upstream gets support for setting up a compatibility symlink for exa, we should change
   # the handling here from postInstall to passing the required argument to the builder.
-  exaAlias ? true,
+  exaAlias ? true
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

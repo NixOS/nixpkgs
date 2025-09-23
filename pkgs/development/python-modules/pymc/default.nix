@@ -1,24 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-
-  # build-system
-  setuptools,
-  versioneer,
-
-  # dependencies
-  arviz,
-  cachetools,
-  cloudpickle,
-  numpy,
-  pandas,
-  pytensor,
-  rich,
-  scipy,
-  threadpoolctl,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, # build-system
+  setuptools
+, versioneer
+, # dependencies
+  arviz
+, cachetools
+, cloudpickle
+, numpy
+, pandas
+, pytensor
+, rich
+, scipy
+, threadpoolctl
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

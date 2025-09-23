@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  cryptography,
-  django,
-  fetchPypi,
-  lib,
-  poetry-core,
-  pythonOlder,
+{ buildPythonPackage
+, cryptography
+, django
+, fetchPypi
+, lib
+, poetry-core
+, pythonOlder
+,
 }:
 buildPythonPackage rec {
   pname = "django-encrypted-model-fields";

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  editorconfig,
-  fetchPypi,
-  jsbeautifier,
-  pythonOlder,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, editorconfig
+, fetchPypi
+, jsbeautifier
+, pythonOlder
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

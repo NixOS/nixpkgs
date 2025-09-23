@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fontforge,
-  bdftopcf,
-  xorg,
+{ lib
+, stdenv
+, fetchzip
+, fontforge
+, bdftopcf
+, xorg
+,
 }:
 
 stdenv.mkDerivation {

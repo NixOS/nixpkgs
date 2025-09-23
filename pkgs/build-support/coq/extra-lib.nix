@@ -2,7 +2,7 @@
 
 lib.recursiveUpdate lib (
   import ../rocq/extra-lib-common.nix { inherit lib; }
-  // {
+    // {
 
     /*
       Override arguments to mkCoqDerivation for a Coq library.

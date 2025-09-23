@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  runtimeShell,
-  jre_headless,
+{ lib
+, stdenv
+, fetchurl
+, runtimeShell
+, jre_headless
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  bash,
-  makeWrapper,
-  pciutils,
-  x11Support ? stdenvNoCC.hostPlatform.isLinux,
-  ueberzug,
-  fetchpatch,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, bash
+, makeWrapper
+, pciutils
+, x11Support ? stdenvNoCC.hostPlatform.isLinux
+, ueberzug
+, fetchpatch
+,
 }:
 
 stdenvNoCC.mkDerivation {

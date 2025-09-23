@@ -1,22 +1,22 @@
-{
-  atk,
-  autoPatchelfHook,
-  cairo,
-  copyDesktopItems,
-  freetype,
-  fontconfig,
-  lib,
-  stdenv,
-  fetchurl,
-  gtk2,
-  glib,
-  gdk-pixbuf,
-  makeWrapper,
-  makeDesktopItem,
-  pango,
-  unzip,
-  xorg,
-  zlib,
+{ atk
+, autoPatchelfHook
+, cairo
+, copyDesktopItems
+, freetype
+, fontconfig
+, lib
+, stdenv
+, fetchurl
+, gtk2
+, glib
+, gdk-pixbuf
+, makeWrapper
+, makeDesktopItem
+, pango
+, unzip
+, xorg
+, zlib
+,
 }:
 stdenv.mkDerivation rec {
 

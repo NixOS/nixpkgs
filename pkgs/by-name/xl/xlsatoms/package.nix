@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libxcb,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libxcb
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xlsatoms";

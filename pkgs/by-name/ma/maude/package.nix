@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  bison,
-  flex,
-  makeWrapper,
-  buddy,
-  cln,
-  cvc4,
-  gmpxx,
-  libsigsegv,
-  tecla,
-  yices,
-  # passthru.tests
-  tamarin-prover,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, bison
+, flex
+, makeWrapper
+, buddy
+, cln
+, cvc4
+, gmpxx
+, libsigsegv
+, tecla
+, yices
+, # passthru.tests
+  tamarin-prover
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

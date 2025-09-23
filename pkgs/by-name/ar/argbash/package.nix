@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  makeWrapper,
-  python3Packages,
-  runtimeShell,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, makeWrapper
+, python3Packages
+, runtimeShell
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

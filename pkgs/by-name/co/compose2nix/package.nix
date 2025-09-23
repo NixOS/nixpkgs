@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  compose2nix,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, compose2nix
+,
 }:
 
 buildGoModule rec {

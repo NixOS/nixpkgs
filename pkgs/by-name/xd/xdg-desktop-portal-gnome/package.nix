@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fontconfig,
-  glib,
-  gnome,
-  gnome-desktop,
-  gsettings-desktop-schemas,
-  gtk4,
-  libadwaita,
-  libjxl,
-  librsvg,
-  meson,
-  ninja,
-  pkg-config,
-  wayland,
-  wayland-scanner,
-  webp-pixbuf-loader,
-  wrapGAppsHook4,
-  xdg-desktop-portal,
+{ stdenv
+, lib
+, fetchurl
+, fontconfig
+, glib
+, gnome
+, gnome-desktop
+, gsettings-desktop-schemas
+, gtk4
+, libadwaita
+, libjxl
+, librsvg
+, meson
+, ninja
+, pkg-config
+, wayland
+, wayland-scanner
+, webp-pixbuf-loader
+, wrapGAppsHook4
+, xdg-desktop-portal
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

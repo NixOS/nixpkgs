@@ -1,18 +1,18 @@
-{
-  lib,
-  python3Packages,
-  enableOCR ? false,
-  qemu_pkg ? qemu_test,
-  coreutils,
-  imagemagick_light,
-  netpbm,
-  qemu_test,
-  socat,
-  ruff,
-  tesseract4,
-  vde2,
-  extraPythonPackages ? (_: [ ]),
-  nixosTests,
+{ lib
+, python3Packages
+, enableOCR ? false
+, qemu_pkg ? qemu_test
+, coreutils
+, imagemagick_light
+, netpbm
+, qemu_test
+, socat
+, ruff
+, tesseract4
+, vde2
+, extraPythonPackages ? (_: [ ])
+, nixosTests
+,
 }:
 
 python3Packages.buildPythonApplication {

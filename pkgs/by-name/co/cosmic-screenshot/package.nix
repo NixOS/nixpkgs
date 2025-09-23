@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  just,
-  pkg-config,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, just
+, pkg-config
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

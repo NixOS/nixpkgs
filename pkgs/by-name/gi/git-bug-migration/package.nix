@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  gitMinimal,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, gitMinimal
+,
 }:
 buildGoModule rec {
   pname = "git-bug-migration";

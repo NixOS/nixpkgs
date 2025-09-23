@@ -1,104 +1,85 @@
-{
-  version,
-  sha256,
-  url ? "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz",
+{ version
+, sha256
+, url ? "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
+,
 }:
 
-{
-  lib,
-  stdenv,
-  pkgsBuildTarget,
-  pkgsHostTarget,
-  buildPackages,
-  targetPackages,
-
-  # build-tools
-  bootPkgs,
-  autoconf,
-  automake,
-  coreutils,
-  fetchpatch,
-  fetchurl,
-  perl,
-  python3,
-  m4,
-  sphinx,
-  xattr,
-  autoSignDarwinBinariesHook,
-  bash,
-
-  libiconv ? null,
-  ncurses,
-
-  # GHC can be built with system libffi or a bundled one.
-  libffi ? null,
-
-  useLLVM ? !(import ./common-have-ncg.nix { inherit lib stdenv version; }),
-
-  # LLVM is conceptually a run-time-only dependency, but for
+{ lib
+, stdenv
+, pkgsBuildTarget
+, pkgsHostTarget
+, buildPackages
+, targetPackages
+, # build-tools
+  bootPkgs
+, autoconf
+, automake
+, coreutils
+, fetchpatch
+, fetchurl
+, perl
+, python3
+, m4
+, sphinx
+, xattr
+, autoSignDarwinBinariesHook
+, bash
+, libiconv ? null
+, ncurses
+, # GHC can be built with system libffi or a bundled one.
+  libffi ? null
+, useLLVM ? !(import ./common-have-ncg.nix { inherit lib stdenv version; })
+, # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
-  buildTargetLlvmPackages,
-  llvmPackages,
-
-  # If enabled, GHC will be built with the GPL-free but slightly slower native
+  buildTargetLlvmPackages
+, llvmPackages
+, # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
-  enableNativeBignum ?
-    !(lib.meta.availableOn stdenv.hostPlatform gmp && lib.meta.availableOn stdenv.targetPlatform gmp),
-  gmp,
-
-  # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform,
-
-  # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
+  enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp && lib.meta.availableOn stdenv.targetPlatform gmp)
+, gmp
+, # If enabled, use -fPIC when compiling static libs.
+  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
+, # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
   # A riscv64 cross-compiler fits into the limit comfortably.
-  enableProfiledLibs ? !stdenv.hostPlatform.isRiscV64,
-
-  # Whether to build dynamic libs for the standard library (on the target
+  enableProfiledLibs ? !stdenv.hostPlatform.isRiscV64
+, # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic,
-
-  # Whether to build terminfo.
-  enableTerminfo ?
-    !(
-      stdenv.targetPlatform.isWindows
-      # terminfo can't be built for cross
-      || (stdenv.buildPlatform != stdenv.hostPlatform)
-      || (stdenv.hostPlatform != stdenv.targetPlatform)
-    ),
-
-  # Enable NUMA support in RTS
-  enableNuma ? lib.meta.availableOn stdenv.targetPlatform numactl,
-  numactl,
-
-  # What flavour to build. An empty string indicates no
+  enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic
+, # Whether to build terminfo.
+  enableTerminfo ? !(
+    stdenv.targetPlatform.isWindows
+    # terminfo can't be built for cross
+    || (stdenv.buildPlatform != stdenv.hostPlatform)
+    || (stdenv.hostPlatform != stdenv.targetPlatform)
+  )
+, # Enable NUMA support in RTS
+  enableNuma ? lib.meta.availableOn stdenv.targetPlatform numactl
+, numactl
+, # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) (
     if useLLVM then "perf-cross" else "perf-cross-ncg"
-  ),
-
-  #  Whether to build sphinx documentation.
+  )
+, #  Whether to build sphinx documentation.
   enableDocs ? (
     # Docs disabled if we are building on musl because it's a large task to keep
     # all `sphinx` dependencies building in this environment.
     !stdenv.buildPlatform.isMusl
-  ),
-
-  enableHaddockProgram ?
-    # Disabled for cross; see note [HADDOCK_DOCS].
-    (stdenv.buildPlatform == stdenv.hostPlatform && stdenv.targetPlatform == stdenv.hostPlatform),
-
-  # Whether to disable the large address space allocator
+  )
+, enableHaddockProgram ? # Disabled for cross; see note [HADDOCK_DOCS].
+  (stdenv.buildPlatform == stdenv.hostPlatform && stdenv.targetPlatform == stdenv.hostPlatform)
+, # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-  disableLargeAddressSpace ? stdenv.targetPlatform.isiOS,
-
-  # Whether to build an unregisterised version of GHC.
+  disableLargeAddressSpace ? stdenv.targetPlatform.isiOS
+, # Whether to build an unregisterised version of GHC.
   # GHC will normally auto-detect whether it can do a registered build, but this
   # option will force it to do an unregistered build when set to true.
   # See https://gitlab.haskell.org/ghc/ghc/-/wikis/building/unregisterised
   # Registerised RV64 compiler produces programs that segfault
   # See https://gitlab.haskell.org/ghc/ghc/-/issues/23957
-  enableUnregisterised ? stdenv.hostPlatform.isRiscV64 || stdenv.targetPlatform.isRiscV64,
+  enableUnregisterised ? stdenv.hostPlatform.isRiscV64 || stdenv.targetPlatform.isRiscV64
+,
 }:
 
 assert !enableNativeBignum -> gmp != null;
@@ -106,7 +87,7 @@ assert !enableNativeBignum -> gmp != null;
 # Cross cannot currently build the `haddock` program for silly reasons,
 # see note [HADDOCK_DOCS].
 assert
-  (stdenv.buildPlatform != stdenv.hostPlatform || stdenv.targetPlatform != stdenv.hostPlatform)
+(stdenv.buildPlatform != stdenv.hostPlatform || stdenv.targetPlatform != stdenv.hostPlatform)
   -> !enableHaddockProgram;
 
 # GHC does not support building when all 3 platforms are different.
@@ -129,24 +110,24 @@ let
     WITH_TERMINFO = ${if enableTerminfo then "YES" else "NO"}
   ''
   +
-    # Note [HADDOCK_DOCS]:
-    # Unfortunately currently `HADDOCK_DOCS` controls both whether the `haddock`
-    # program is built (which we generally always want to have a complete GHC install)
-    # and whether it is run on the GHC sources to generate hyperlinked source code
-    # (which is impossible for cross-compilation); see:
-    # https://gitlab.haskell.org/ghc/ghc/-/issues/20077
-    # This implies that currently a cross-compiled GHC will never have a `haddock`
-    # program, so it can never generate haddocks for any packages.
-    # If this is solved in the future, we'd like to unconditionally
-    # build the haddock program (removing the `enableHaddockProgram` option).
-    ''
-      HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
-      # Build haddocks for boot packages with hyperlinking
-      EXTRA_HADDOCK_OPTS += --hyperlinked-source --quickjump
+  # Note [HADDOCK_DOCS]:
+  # Unfortunately currently `HADDOCK_DOCS` controls both whether the `haddock`
+  # program is built (which we generally always want to have a complete GHC install)
+  # and whether it is run on the GHC sources to generate hyperlinked source code
+  # (which is impossible for cross-compilation); see:
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/20077
+  # This implies that currently a cross-compiled GHC will never have a `haddock`
+  # program, so it can never generate haddocks for any packages.
+  # If this is solved in the future, we'd like to unconditionally
+  # build the haddock program (removing the `enableHaddockProgram` option).
+  ''
+    HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
+    # Build haddocks for boot packages with hyperlinking
+    EXTRA_HADDOCK_OPTS += --hyperlinked-source --quickjump
 
-      DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
-      BIGNUM_BACKEND = ${if enableNativeBignum then "native" else "gmp"}
-    ''
+    DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
+    BIGNUM_BACKEND = ${if enableNativeBignum then "native" else "gmp"}
+  ''
   + lib.optionalString (targetPlatform != hostPlatform) ''
     Stage1Only = ${if targetPlatform.system == hostPlatform.system then "NO" else "YES"}
     CrossCompilePrefix = ${targetPrefix}
@@ -155,13 +136,13 @@ let
     BUILD_PROF_LIBS = NO
   ''
   +
-    # -fexternal-dynamic-refs apparently (because it's not clear from the documentation)
-    # makes the GHC RTS able to load static libraries, which may be needed for TemplateHaskell.
-    # This solution was described in https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
-    lib.optionalString enableRelocatedStaticLibs ''
-      GhcLibHcOpts += -fPIC -fexternal-dynamic-refs
-      GhcRtsHcOpts += -fPIC -fexternal-dynamic-refs
-    ''
+  # -fexternal-dynamic-refs apparently (because it's not clear from the documentation)
+  # makes the GHC RTS able to load static libraries, which may be needed for TemplateHaskell.
+  # This solution was described in https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
+  lib.optionalString enableRelocatedStaticLibs ''
+    GhcLibHcOpts += -fPIC -fexternal-dynamic-refs
+    GhcRtsHcOpts += -fPIC -fexternal-dynamic-refs
+  ''
   + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     EXTRA_CC_OPTS += -std=gnu99
   '';
@@ -222,8 +203,7 @@ let
 
           # clang is used as an assembler on darwin with the LLVM backend
           clang = cc;
-        }
-        .${name};
+        }.${name};
     in
     getToolExe tools name;
 
@@ -500,12 +480,12 @@ stdenv.mkDerivation (
       "--with-gmp-libraries=${targetLibs.gmp.out}/lib"
     ]
     ++
-      lib.optionals
-        (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows)
-        [
-          "--with-iconv-includes=${libiconv}/include"
-          "--with-iconv-libraries=${libiconv}/lib"
-        ]
+    lib.optionals
+      (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows)
+      [
+        "--with-iconv-includes=${libiconv}/include"
+        "--with-iconv-libraries=${libiconv}/lib"
+      ]
     ++ lib.optionals (targetPlatform != hostPlatform) [
       "--enable-bootstrap-with-devel-snapshot"
     ]
@@ -674,7 +654,7 @@ stdenv.mkDerivation (
     };
 
   }
-  // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
+    // lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
     dontStrip = true;
     dontPatchELF = true;
     noAuditTmpdir = true;

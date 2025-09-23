@@ -1,10 +1,10 @@
-{
-  lib,
-  callPackage,
-  llvmPackages_18,
-  llvmPackages_19,
-  llvmPackages_20,
-  zigVersions ? { },
+{ lib
+, callPackage
+, llvmPackages_18
+, llvmPackages_19
+, llvmPackages_20
+, zigVersions ? { }
+,
 }:
 let
   versions = {
@@ -24,16 +24,18 @@ let
   // zigVersions;
 
   mkPackage =
-    {
-      version,
-      hash,
-      llvmPackages,
+    { version
+    , hash
+    , llvmPackages
+    ,
     }@args:
     callPackage ./generic.nix args;
 
-  zigPackages = lib.mapAttrs' (
-    version: args:
-    lib.nameValuePair (lib.versions.majorMinor version) (mkPackage (args // { inherit version; }))
-  ) versions;
+  zigPackages = lib.mapAttrs'
+    (
+      version: args:
+        lib.nameValuePair (lib.versions.majorMinor version) (mkPackage (args // { inherit version; }))
+    )
+    versions;
 in
 zigPackages

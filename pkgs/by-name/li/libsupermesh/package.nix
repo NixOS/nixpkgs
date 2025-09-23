@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  validatePkgConfig,
-  gfortran,
-  mpi,
-  cmake,
-  ninja,
-  libspatialindex,
-  mpiCheckPhaseHook,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, validatePkgConfig
+, gfortran
+, mpi
+, cmake
+, ninja
+, libspatialindex
+, mpiCheckPhaseHook
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

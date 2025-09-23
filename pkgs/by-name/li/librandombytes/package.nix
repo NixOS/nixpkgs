@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  python3,
-  openssl,
-  fetchzip,
+{ stdenv
+, lib
+, python3
+, openssl
+, fetchzip
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "librandombytes";

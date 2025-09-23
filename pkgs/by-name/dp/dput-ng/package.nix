@@ -1,8 +1,8 @@
-{
-  lib,
-  python3,
-  fetchFromGitLab,
-  nix-update-script,
+{ lib
+, python3
+, fetchFromGitLab
+, nix-update-script
+,
 }:
 let
   version = "1.43";

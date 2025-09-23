@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  perl,
-  libtool,
-  pkg-config,
-  gettext,
-  mandoc,
-  ed,
+{ lib
+, stdenv
+, fetchurl
+, perl
+, libtool
+, pkg-config
+, gettext
+, mandoc
+, ed
+,
 }:
 
 stdenv.mkDerivation rec {

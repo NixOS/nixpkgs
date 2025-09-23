@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  filterpy,
-  importlib-metadata,
-  numpy,
-  rich,
-  scipy,
-  motmetrics,
-  opencv4,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, filterpy
+, importlib-metadata
+, numpy
+, rich
+, scipy
+, motmetrics
+, opencv4
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flask,
-  httpx,
-  lxml,
-  pyparsing,
-  pytestCheckHook,
-  pythonOlder,
-  quixote,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flask
+, httpx
+, lxml
+, pyparsing
+, pytestCheckHook
+, pythonOlder
+, quixote
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

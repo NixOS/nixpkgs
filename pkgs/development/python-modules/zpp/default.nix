@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  testers,
-  zpp,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, testers
+, zpp
+,
 }:
 buildPythonPackage rec {
   pname = "zpp";

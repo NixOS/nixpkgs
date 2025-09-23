@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  puredata,
-  libGL,
-  libGLU,
-  glew,
-  libglut,
-  libv4l,
-  libX11,
-  file,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, puredata
+, libGL
+, libGLU
+, glew
+, libglut
+, libv4l
+, libX11
+, file
+,
 }:
 
 stdenv.mkDerivation {

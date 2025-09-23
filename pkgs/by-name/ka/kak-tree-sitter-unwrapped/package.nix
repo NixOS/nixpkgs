@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromSourcehut,
-  nix-update-script,
-  testers,
-  kak-tree-sitter-unwrapped,
+{ lib
+, rustPlatform
+, fetchFromSourcehut
+, nix-update-script
+, testers
+, kak-tree-sitter-unwrapped
+,
 }:
 
 rustPlatform.buildRustPackage rec {

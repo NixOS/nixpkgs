@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  packaging,
-  setuptools,
-  torch,
-  kornia-rs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, packaging
+, setuptools
+, torch
+, kornia-rs
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  buildGhidraExtension,
-  fetchFromGitHub,
-  lib,
+{ buildGhidraExtension
+, fetchFromGitHub
+, lib
+,
 }:
 buildGhidraExtension (finalAttrs: {
   pname = "ghidra-firmware-utils";

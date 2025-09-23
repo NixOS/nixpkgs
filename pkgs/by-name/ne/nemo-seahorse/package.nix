@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  meson,
-  pkg-config,
-  ninja,
-  glib,
-  gtk3,
-  nemo,
-  dbus-glib,
-  libcryptui,
-  gcr,
-  libnotify,
-  gnupg,
-  gpgme,
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, glib
+, gtk3
+, nemo
+, dbus-glib
+, libcryptui
+, gcr
+, libnotify
+, gnupg
+, gpgme
+,
 }:
 
 stdenv.mkDerivation rec {

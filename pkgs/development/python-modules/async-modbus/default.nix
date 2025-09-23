@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  connio,
-  fetchFromGitHub,
-  fetchpatch,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  umodbus,
+{ lib
+, buildPythonPackage
+, connio
+, fetchFromGitHub
+, fetchpatch
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, umodbus
+,
 }:
 
 buildPythonPackage rec {

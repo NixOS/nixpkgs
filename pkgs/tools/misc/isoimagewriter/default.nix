@@ -1,17 +1,17 @@
-{
-  lib,
-  mkDerivation,
-  fetchurl,
-  cmake,
-  extra-cmake-modules,
-  wrapQtAppsHook,
-  karchive,
-  kcoreaddons,
-  kcrash,
-  kiconthemes,
-  kwidgetsaddons,
-  solid,
-  qgpgme,
+{ lib
+, mkDerivation
+, fetchurl
+, cmake
+, extra-cmake-modules
+, wrapQtAppsHook
+, karchive
+, kcoreaddons
+, kcrash
+, kiconthemes
+, kwidgetsaddons
+, solid
+, qgpgme
+,
 }:
 mkDerivation rec {
   pname = "isoimagewriter";

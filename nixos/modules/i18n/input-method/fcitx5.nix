@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   imcfg = config.i18n.inputMethod;
@@ -108,17 +107,21 @@ in
       lib.optionals (cfg.quickPhrase != { }) [
         (pkgs.writeTextDir "share/fcitx5/data/QuickPhrase.mb" (
           lib.concatStringsSep "\n" (
-            lib.mapAttrsToList (
-              name: value: "${name} ${builtins.replaceStrings [ "\\" "\n" ] [ "\\\\" "\\n" ] value}"
-            ) cfg.quickPhrase
+            lib.mapAttrsToList
+              (
+                name: value: "${name} ${builtins.replaceStrings [ "\\" "\n" ] [ "\\\\" "\\n" ] value}"
+              )
+              cfg.quickPhrase
           )
         ))
       ]
       ++ lib.optionals (cfg.quickPhraseFiles != { }) [
         (pkgs.linkFarm "quickPhraseFiles" (
-          lib.mapAttrs' (
-            name: value: lib.nameValuePair ("share/fcitx5/data/quickphrase.d/${name}.mb") value
-          ) cfg.quickPhraseFiles
+          lib.mapAttrs'
+            (
+              name: value: lib.nameValuePair ("share/fcitx5/data/quickphrase.d/${name}.mb") value
+            )
+            cfg.quickPhraseFiles
         ))
       ];
     environment.etc =
@@ -132,9 +135,11 @@ in
       lib.attrsets.mergeAttrsList [
         (optionalFile "config" (lib.generators.toINI { }) cfg.settings.globalOptions)
         (optionalFile "profile" (lib.generators.toINI { }) cfg.settings.inputMethod)
-        (lib.concatMapAttrs (
-          name: value: optionalFile "conf/${name}.conf" (lib.generators.toINIWithGlobalSection { }) value
-        ) cfg.settings.addons)
+        (lib.concatMapAttrs
+          (
+            name: value: optionalFile "conf/${name}.conf" (lib.generators.toINIWithGlobalSection { }) value
+          )
+          cfg.settings.addons)
       ];
 
     environment.variables = {

@@ -1,28 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  accelerate,
-  cut-cross-entropy,
-  datasets,
-  hf-transfer,
-  huggingface-hub,
-  msgspec,
-  packaging,
-  peft,
-  psutil,
-  sentencepiece,
-  torch,
-  tqdm,
-  transformers,
-  trl,
-  tyro,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  accelerate
+, cut-cross-entropy
+, datasets
+, hf-transfer
+, huggingface-hub
+, msgspec
+, packaging
+, peft
+, psutil
+, sentencepiece
+, torch
+, tqdm
+, transformers
+, trl
+, tyro
+,
 }:
 
 buildPythonPackage rec {

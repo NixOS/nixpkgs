@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  SDL2,
-  SDL2_net,
-  glew,
-  lua5_4,
-  desktopToDarwinBundle,
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, SDL2_net
+, glew
+, lua5_4
+, desktopToDarwinBundle
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  buildPackages,
-  # libkcapi offers multiple tools. They can be disabled for minimization.
-  kcapi-test ? true,
-  kcapi-speed ? true,
-  kcapi-hasher ? true,
-  kcapi-rngapp ? true,
-  kcapi-encapp ? true,
-  kcapi-dgstapp ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, buildPackages
+, # libkcapi offers multiple tools. They can be disabled for minimization.
+  kcapi-test ? true
+, kcapi-speed ? true
+, kcapi-hasher ? true
+, kcapi-rngapp ? true
+, kcapi-encapp ? true
+, kcapi-dgstapp ? true
+,
 }:
 
 stdenv.mkDerivation rec {

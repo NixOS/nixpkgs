@@ -3,11 +3,10 @@
   name = "swap-random-encryption";
 
   nodes.machine =
-    {
-      config,
-      pkgs,
-      lib,
-      ...
+    { config
+    , pkgs
+    , lib
+    , ...
     }:
     {
       environment.systemPackages = [ pkgs.cryptsetup ];

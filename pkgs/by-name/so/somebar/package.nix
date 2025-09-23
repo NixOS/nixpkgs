@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromSourcehut,
-  meson,
-  ninja,
-  pkg-config,
-  wayland,
-  pango,
-  wayland-protocols,
-  wayland-scanner,
-  conf ? null,
+{ lib
+, stdenv
+, fetchFromSourcehut
+, meson
+, ninja
+, pkg-config
+, wayland
+, pango
+, wayland-protocols
+, wayland-scanner
+, conf ? null
+,
 }:
 
 let

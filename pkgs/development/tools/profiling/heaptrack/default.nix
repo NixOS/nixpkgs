@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  extra-cmake-modules,
-  makeBinaryWrapper,
-  zlib,
-  boost,
-  libunwind,
-  elfutils,
-  sparsehash,
-  zstd,
-  qtbase,
-  wrapQtAppsHook,
-  kio,
-  kitemmodels,
-  threadweaver,
-  kconfigwidgets,
-  kcoreaddons,
-  kdiagram,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, extra-cmake-modules
+, makeBinaryWrapper
+, zlib
+, boost
+, libunwind
+, elfutils
+, sparsehash
+, zstd
+, qtbase
+, wrapQtAppsHook
+, kio
+, kitemmodels
+, threadweaver
+, kconfigwidgets
+, kcoreaddons
+, kdiagram
+,
 }:
 
 stdenv.mkDerivation {

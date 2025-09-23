@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  SDL2,
-  libGLU,
-  libGL,
-  zlib,
-  libjpeg,
-  libogg,
-  libvorbis,
-  libX11,
-  openal,
-  curl,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, SDL2
+, libGLU
+, libGL
+, zlib
+, libjpeg
+, libogg
+, libvorbis
+, libX11
+, openal
+, curl
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {

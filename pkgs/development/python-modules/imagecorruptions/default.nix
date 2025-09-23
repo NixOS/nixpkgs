@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  numpy,
-  scikit-image,
-  lib,
-  opencv-python,
+{ buildPythonPackage
+, fetchPypi
+, setuptools
+, numpy
+, scikit-image
+, lib
+, opencv-python
+,
 }:
 
 buildPythonPackage rec {

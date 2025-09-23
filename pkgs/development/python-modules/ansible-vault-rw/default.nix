@@ -1,16 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  ansible-core,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  ansible-core
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  makeBinaryWrapper,
-  coreutils,
-  gawk,
-  which,
-  gnugrep,
-  findutils,
-  jre,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, makeBinaryWrapper
+, coreutils
+, gawk
+, which
+, gnugrep
+, findutils
+, jre
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

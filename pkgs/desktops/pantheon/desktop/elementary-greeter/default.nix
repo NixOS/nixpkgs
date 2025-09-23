@@ -1,35 +1,35 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  linkFarm,
-  replaceVars,
-  elementary-greeter,
-  pkg-config,
-  meson,
-  ninja,
-  vala,
-  desktop-file-utils,
-  gtk3,
-  granite,
-  libgee,
-  libhandy,
-  gala,
-  gnome-desktop,
-  gnome-settings-daemon,
-  mutter,
-  elementary-icon-theme,
-  elementary-settings-daemon,
-  wingpanel-with-indicators,
-  elementary-gtk-theme,
-  nixos-artwork,
-  lightdm,
-  gdk-pixbuf,
-  dbus,
-  accountsservice,
-  wayland-scanner,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, linkFarm
+, replaceVars
+, elementary-greeter
+, pkg-config
+, meson
+, ninja
+, vala
+, desktop-file-utils
+, gtk3
+, granite
+, libgee
+, libhandy
+, gala
+, gnome-desktop
+, gnome-settings-daemon
+, mutter
+, elementary-icon-theme
+, elementary-settings-daemon
+, wingpanel-with-indicators
+, elementary-gtk-theme
+, nixos-artwork
+, lightdm
+, gdk-pixbuf
+, dbus
+, accountsservice
+, wayland-scanner
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

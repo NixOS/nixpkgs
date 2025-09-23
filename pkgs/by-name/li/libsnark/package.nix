@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  openssl,
-  boost,
-  gmp,
-  withProcps ? false,
-  procps,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, openssl
+, boost
+, gmp
+, withProcps ? false
+, procps
+,
 }:
 
 stdenv.mkDerivation {

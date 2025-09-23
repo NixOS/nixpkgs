@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  networkmanager,
-  libnotify,
-  coreutils,
-  gnused,
-  gawk,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, networkmanager
+, libnotify
+, coreutils
+, gnused
+, gawk
+,
 }:
 
 let

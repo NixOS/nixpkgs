@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  esbuild,
-  nix-update-script,
-  versionCheckHook,
-  rescript-editor-analysis,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, esbuild
+, nix-update-script
+, versionCheckHook
+, rescript-editor-analysis
+,
 }:
 let
   platformDir =

@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+,
 }:
 let
   pname = "xremap";
@@ -18,33 +18,33 @@ let
   cargoHash = "sha256-F1ao5YJv9UiU53Hg3UunE2gZc6iiB95zmCWjiHSkmHk=";
 
   buildXremap =
-    {
-      suffix ? "",
-      features ? [ ],
-      descriptionSuffix ? "",
+    { suffix ? ""
+    , features ? [ ]
+    , descriptionSuffix ? ""
+    ,
     }:
-    assert descriptionSuffix != "" && features != [ ];
-    rustPlatform.buildRustPackage {
-      pname = "${pname}${suffix}";
-      inherit version src cargoHash;
+      assert descriptionSuffix != "" && features != [ ];
+      rustPlatform.buildRustPackage {
+        pname = "${pname}${suffix}";
+        inherit version src cargoHash;
 
-      nativeBuildInputs = [ pkg-config ];
+        nativeBuildInputs = [ pkg-config ];
 
-      buildNoDefaultFeatures = true;
-      buildFeatures = features;
+        buildNoDefaultFeatures = true;
+        buildFeatures = features;
 
-      meta = {
-        description =
-          "Key remapper for X11 and Wayland"
-          + lib.optionalString (descriptionSuffix != "") " (${descriptionSuffix} support)";
-        homepage = "https://github.com/xremap/xremap";
-        changelog = "https://github.com/xremap/xremap/blob/${src.tag}/CHANGELOG.md";
-        license = lib.licenses.mit;
-        mainProgram = "xremap";
-        maintainers = [ lib.maintainers.hakan-demirli ];
-        platforms = lib.platforms.linux;
+        meta = {
+          description =
+            "Key remapper for X11 and Wayland"
+            + lib.optionalString (descriptionSuffix != "") " (${descriptionSuffix} support)";
+          homepage = "https://github.com/xremap/xremap";
+          changelog = "https://github.com/xremap/xremap/blob/${src.tag}/CHANGELOG.md";
+          license = lib.licenses.mit;
+          mainProgram = "xremap";
+          maintainers = [ lib.maintainers.hakan-demirli ];
+          platforms = lib.platforms.linux;
+        };
       };
-    };
 
   variants = {
     x11 = buildXremap {

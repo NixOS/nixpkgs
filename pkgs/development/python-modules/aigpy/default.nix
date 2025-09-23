@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mutagen,
-  requests,
-  colorama,
-  prettytable,
-  pycrypto,
-  pydub,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mutagen
+, requests
+, colorama
+, prettytable
+, pycrypto
+, pydub
+,
 }:
 
 buildPythonPackage rec {

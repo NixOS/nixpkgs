@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  marisa-cpp,
-  cython,
-  setuptools,
-  pytestCheckHook,
-  hypothesis,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, marisa-cpp
+, cython
+, setuptools
+, pytestCheckHook
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

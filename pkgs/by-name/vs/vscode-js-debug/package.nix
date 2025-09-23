@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  buildPackages,
-  libsecret,
-  xcbuild,
-  pkg-config,
-  node-gyp,
-  runCommand,
-  vscode-js-debug,
-  nix-update-script,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, buildPackages
+, libsecret
+, xcbuild
+, pkg-config
+, node-gyp
+, runCommand
+, vscode-js-debug
+, nix-update-script
+,
 }:
 
 buildNpmPackage rec {

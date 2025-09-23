@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  libarchive,
-  glibcLocales,
-  mock,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, libarchive
+, glibcLocales
+, mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

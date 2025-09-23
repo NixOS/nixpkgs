@@ -1,7 +1,7 @@
-{
-  lib,
-  multiStdenv,
-  fetchurl,
+{ lib
+, multiStdenv
+, fetchurl
+,
 }:
 
 multiStdenv.mkDerivation rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  typing-extensions,
-  numpy,
-  beartype,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, typing-extensions
+, numpy
+, beartype
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

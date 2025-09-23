@@ -1,9 +1,8 @@
 import ../make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    lts ? true,
-    ...
+  { pkgs
+  , lib
+  , lts ? true
+  , ...
   }:
   {
     name = "incus-ui";

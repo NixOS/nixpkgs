@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  hatchling,
-  hatch-vcs,
-  pytest,
-  pytest-localserver,
-  pytest-metadata,
-  requests,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, hatchling
+, hatch-vcs
+, pytest
+, pytest-localserver
+, pytest-metadata
+, requests
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

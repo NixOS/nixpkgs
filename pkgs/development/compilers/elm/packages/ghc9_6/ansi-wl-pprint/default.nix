@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  ansi-terminal,
-  base,
-  fetchgit,
-  lib,
+{ mkDerivation
+, ansi-terminal
+, base
+, fetchgit
+, lib
+,
 }:
 mkDerivation {
   pname = "ansi-wl-pprint";

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  triton,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, installShellFiles
+, testers
+, triton
+,
 }:
 
 buildNpmPackage rec {

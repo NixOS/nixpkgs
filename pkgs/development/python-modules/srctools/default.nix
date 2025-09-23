@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  meson,
-  meson-python,
-  cython,
-  attrs,
-  useful-types,
-  pytestCheckHook,
-  pillow,
-  pytest-regressions,
-  dirty-equals,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, meson
+, meson-python
+, cython
+, attrs
+, useful-types
+, pytestCheckHook
+, pillow
+, pytest-regressions
+, dirty-equals
+,
 }:
 let
   pname = "srctools";

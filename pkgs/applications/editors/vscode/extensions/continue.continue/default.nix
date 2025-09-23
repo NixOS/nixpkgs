@@ -1,8 +1,8 @@
-{
-  autoPatchelfHook,
-  lib,
-  stdenv,
-  vscode-utils,
+{ autoPatchelfHook
+, lib
+, stdenv
+, vscode-utils
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

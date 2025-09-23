@@ -1,8 +1,7 @@
-{
-  config,
-  hostPkgs,
-  lib,
-  ...
+{ config
+, hostPkgs
+, lib
+, ...
 }:
 let
   sitePkg = hostPkgs.runCommand "site" { } ''

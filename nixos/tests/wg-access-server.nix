@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  kernelPackages ? null,
-  ...
+{ pkgs
+, lib
+, kernelPackages ? null
+, ...
 }:
 {
   name = "wg-access-server";

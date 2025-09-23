@@ -1,9 +1,9 @@
-{
-  lib,
-  factorPackages,
-  fetchFromGitHub,
-  curl,
-  gnutls,
+{ lib
+, factorPackages
+, fetchFromGitHub
+, curl
+, gnutls
+,
 }:
 
 factorPackages.buildFactorVocab {

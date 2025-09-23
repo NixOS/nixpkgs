@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  dpkt,
-
-  # tests
-  mock,
-  pytestCheckHook,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  dpkt
+, # tests
+  mock
+, pytestCheckHook
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

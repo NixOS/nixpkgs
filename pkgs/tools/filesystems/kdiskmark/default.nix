@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  wrapQtAppsHook,
-  qtbase,
-  qttools,
-  fio,
-  cmake,
-  polkit-qt-1,
-  extra-cmake-modules,
-  fetchFromGitHub,
+{ stdenv
+, lib
+, wrapQtAppsHook
+, qtbase
+, qttools
+, fio
+, cmake
+, polkit-qt-1
+, extra-cmake-modules
+, fetchFromGitHub
+,
 }:
 stdenv.mkDerivation rec {
   pname = "kdiskmark";

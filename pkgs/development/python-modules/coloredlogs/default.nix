@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  setuptools,
-  humanfriendly,
-  verboselogs,
-  capturer,
-  pytestCheckHook,
-  mock,
-  util-linux,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, setuptools
+, humanfriendly
+, verboselogs
+, capturer
+, pytestCheckHook
+, mock
+, util-linux
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  qtbase,
-  pkg-config,
-  python3Packages,
-  dbus-glib,
-  dbus,
-  telepathy-farstream,
-  telepathy-glib,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, qtbase
+, pkg-config
+, python3Packages
+, dbus-glib
+, dbus
+, telepathy-farstream
+, telepathy-glib
+,
 }:
 
 let

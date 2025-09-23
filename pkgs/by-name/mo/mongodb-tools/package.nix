@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  openssl,
-  pkg-config,
-  libpcap,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, openssl
+, pkg-config
+, libpcap
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

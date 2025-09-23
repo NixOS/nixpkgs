@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
-  torch,
-  torchvision,
-  pytestCheckHook,
-  transformers,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pythonOlder
+, torch
+, torchvision
+, pytestCheckHook
+, transformers
+,
 }:
 
 buildPythonPackage rec {

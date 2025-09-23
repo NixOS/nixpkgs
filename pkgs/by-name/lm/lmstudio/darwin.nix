@@ -1,13 +1,13 @@
-{
-  stdenv,
-  fetchurl,
-  undmg,
-  meta,
-  pname,
-  version,
-  url,
-  hash,
-  passthru,
+{ stdenv
+, fetchurl
+, undmg
+, meta
+, pname
+, version
+, url
+, hash
+, passthru
+,
 }:
 stdenv.mkDerivation {
   inherit meta pname version;

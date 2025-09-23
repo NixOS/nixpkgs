@@ -1,22 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  django,
-  funcy,
-  redis,
-  redisTestHook,
-  six,
-  pytestCheckHook,
-  pytest-django,
-  mock,
-  dill,
-  jinja2,
-  before-after,
-  pythonOlder,
-  net-tools,
-  pkgs,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django
+, funcy
+, redis
+, redisTestHook
+, six
+, pytestCheckHook
+, pytest-django
+, mock
+, dill
+, jinja2
+, before-after
+, pythonOlder
+, net-tools
+, pkgs
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

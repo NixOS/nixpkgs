@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  django,
-  djangorestframework,
-  orjson,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, django
+, djangorestframework
+, orjson
+,
 }:
 
 buildPythonPackage {

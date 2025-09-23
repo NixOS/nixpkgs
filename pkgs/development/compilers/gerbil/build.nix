@@ -1,18 +1,18 @@
-{
-  gccStdenv,
-  lib,
-  coreutils,
-  openssl,
-  zlib,
-  sqlite,
-  version,
-  git-version,
-  src,
-  gambit-support,
-  gambit-git-version,
-  gambit-stampYmd,
-  gambit-stampHms,
-  gambit-params,
+{ gccStdenv
+, lib
+, coreutils
+, openssl
+, zlib
+, sqlite
+, version
+, git-version
+, src
+, gambit-support
+, gambit-git-version
+, gambit-stampYmd
+, gambit-stampHms
+, gambit-params
+,
 }:
 
 # We use Gambit, that works 10x better with GCC than Clang. See ../gambit/build.nix

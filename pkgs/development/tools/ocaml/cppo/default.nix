@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
-  ocamlbuild,
-  buildDunePackage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocaml
+, findlib
+, ocamlbuild
+, buildDunePackage
+,
 }:
 
 let
@@ -26,7 +26,8 @@ in
 
 if lib.versionAtLeast ocaml.version "4.02" then
 
-  buildDunePackage rec {
+  buildDunePackage
+  rec {
     inherit pname;
     version = "1.8.0";
 

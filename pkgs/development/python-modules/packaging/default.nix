@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  flit-core,
-
-  # tests
-  pretend,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  flit-core
+, # tests
+  pretend
+, pytestCheckHook
+,
 }:
 
 let

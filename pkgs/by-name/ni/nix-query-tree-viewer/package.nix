@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  glib,
-  gtk3,
-  wrapGAppsHook3,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, glib
+, gtk3
+, wrapGAppsHook3
+,
 }:
 
 rustPlatform.buildRustPackage rec {

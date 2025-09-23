@@ -1,8 +1,8 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  py3dns,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, py3dns
+,
 }:
 
 buildPythonPackage rec {

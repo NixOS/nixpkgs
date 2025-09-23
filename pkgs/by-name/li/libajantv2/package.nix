@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  pkg-config,
-  mbedtls,
-  udev,
-  linuxPackages,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, mbedtls
+, udev
+, linuxPackages
+,
 }:
 
 stdenv.mkDerivation rec {

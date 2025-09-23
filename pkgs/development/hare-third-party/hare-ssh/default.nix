@@ -1,8 +1,8 @@
-{
-  fetchFromSourcehut,
-  hareHook,
-  lib,
-  stdenv,
+{ fetchFromSourcehut
+, hareHook
+, lib
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

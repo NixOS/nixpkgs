@@ -1,7 +1,7 @@
-{
-  fetchurl,
-  renode-bin,
-  writeScript,
+{ fetchurl
+, renode-bin
+, writeScript
+,
 }:
 
 renode-bin.overrideAttrs (

@@ -1,19 +1,19 @@
-{
-  config,
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  makeWrapper,
-  alsa-lib,
-  alsa-plugins,
-  libtool,
-  icu,
-  pcre2,
-  pulseaudioSupport ? config.pulseaudio or false,
-  libpulseaudio,
+{ config
+, lib
+, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, makeWrapper
+, alsa-lib
+, alsa-plugins
+, libtool
+, icu
+, pcre2
+, pulseaudioSupport ? config.pulseaudio or false
+, libpulseaudio
+,
 }:
 
 stdenv.mkDerivation rec {

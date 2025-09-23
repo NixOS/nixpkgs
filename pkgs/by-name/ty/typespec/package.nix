@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  nix-update-script,
-  nodejs,
-  pnpm,
-  testers,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, nix-update-script
+, nodejs
+, pnpm
+, testers
+,
 }:
 
 let

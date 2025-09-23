@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  qt5,
-  ffmpeg,
-  gtest,
-  libva,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qt5
+, ffmpeg
+, gtest
+, libva
+,
 }:
 
 stdenv.mkDerivation {

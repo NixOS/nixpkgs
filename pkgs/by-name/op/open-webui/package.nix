@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  python3Packages,
-  nixosTests,
-  fetchurl,
-  ffmpeg-headless,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, python3Packages
+, nixosTests
+, fetchurl
+, ffmpeg-headless
+,
 }:
 let
   pname = "open-webui";

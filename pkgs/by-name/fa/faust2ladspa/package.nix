@@ -1,7 +1,7 @@
-{
-  boost,
-  faust,
-  ladspaH,
+{ boost
+, faust
+, ladspaH
+,
 }:
 
 faust.wrapWithBuildEnv {

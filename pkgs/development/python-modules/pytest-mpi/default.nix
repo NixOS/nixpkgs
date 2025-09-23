@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  sybil,
-  pytest,
-  pytestCheckHook,
-  mpi,
-  mpi4py,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, sybil
+, pytest
+, pytestCheckHook
+, mpi
+, mpi4py
+,
 }:
 
 buildPythonPackage rec {

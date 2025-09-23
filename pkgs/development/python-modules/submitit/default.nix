@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cloudpickle,
-  flit-core,
-  typing-extensions,
-  pytestCheckHook,
-  pytest-asyncio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cloudpickle
+, flit-core
+, typing-extensions
+, pytestCheckHook
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

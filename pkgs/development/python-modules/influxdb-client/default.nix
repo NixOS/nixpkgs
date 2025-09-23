@@ -1,18 +1,18 @@
-{
-  lib,
-  aiohttp,
-  aiocsv,
-  buildPythonPackage,
-  certifi,
-  ciso8601,
-  fetchFromGitHub,
-  numpy,
-  pandas,
-  python-dateutil,
-  pythonOlder,
-  reactivex,
-  setuptools,
-  urllib3,
+{ lib
+, aiohttp
+, aiocsv
+, buildPythonPackage
+, certifi
+, ciso8601
+, fetchFromGitHub
+, numpy
+, pandas
+, python-dateutil
+, pythonOlder
+, reactivex
+, setuptools
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

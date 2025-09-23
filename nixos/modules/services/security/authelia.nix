@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  config,
-  ...
+{ lib
+, pkgs
+, config
+, ...
 }:
 
 let
@@ -272,7 +271,8 @@ let
         path = lib.init pathList;
         update = old: lib.filterAttrs (n: v: n != (lib.last pathList)) old;
       }
-    ] set;
+    ]
+      set;
 in
 {
   options.services.authelia.instances =
@@ -332,8 +332,8 @@ in
                 || instance.settings.server ? path
               )
             then
-              # Old settings are used: display a warning and remove the default value of server.address
-              # as authelia does not allow both old and new settings to be set
+            # Old settings are used: display a warning and remove the default value of server.address
+            # as authelia does not allow both old and new settings to be set
               lib.warn
                 "Please replace services.authelia.instances.${instance.name}.settings.{host,port,path} with services.authelia.instances.${instance.name}.settings.address, before release 5.0.0"
                 (
@@ -465,12 +465,14 @@ in
       );
 
       systemd.services = lib.mkMerge (
-        map (
-          instance:
-          lib.mkIf instance.enable {
-            "authelia-${instance.name}" = mkInstanceServiceConfig instance;
-          }
-        ) instances
+        map
+          (
+            instance:
+            lib.mkIf instance.enable {
+              "authelia-${instance.name}" = mkInstanceServiceConfig instance;
+            }
+          )
+          instances
       );
       users = lib.mkMerge (
         map (instance: lib.mkIf instance.enable (mkInstanceUsersConfig instance)) instances

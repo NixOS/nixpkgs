@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  animdl,
-  frece,
-  fzf,
-  mpv,
-  perl,
-  trackma,
-  ueberzug,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, animdl
+, frece
+, fzf
+, mpv
+, perl
+, trackma
+, ueberzug
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "adl";

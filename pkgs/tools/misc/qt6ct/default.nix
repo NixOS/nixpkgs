@@ -1,13 +1,13 @@
-{
-  cmake,
-  fetchFromGitLab,
-  lib,
-  qtbase,
-  qtsvg,
-  qttools,
-  qtwayland,
-  stdenv,
-  wrapQtAppsHook,
+{ cmake
+, fetchFromGitLab
+, lib
+, qtbase
+, qtsvg
+, qttools
+, qtwayland
+, stdenv
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

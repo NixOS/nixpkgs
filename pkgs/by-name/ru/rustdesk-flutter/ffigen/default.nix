@@ -1,8 +1,8 @@
-{
-  buildDartApplication,
-  fetchFromGitHub,
-  lib,
-  flutter,
+{ buildDartApplication
+, fetchFromGitHub
+, lib
+, flutter
+,
 }:
 
 buildDartApplication rec {

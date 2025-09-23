@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  filelock,
-  pytest,
-  typing-extensions,
-  polars,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, filelock
+, pytest
+, typing-extensions
+, polars
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

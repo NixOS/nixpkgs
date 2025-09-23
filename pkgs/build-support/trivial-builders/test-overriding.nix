@@ -4,15 +4,15 @@
 # to disable extglob in `writeShellScript`.
 #
 # Run using `nix-build -A tests.trivial-builders.overriding`.
-{
-  lib,
-  stdenv,
-  runtimeShell,
-  runCommand,
-  callPackage,
-  writeShellScript,
-  writeTextFile,
-  writeShellScriptBin,
+{ lib
+, stdenv
+, runtimeShell
+, runCommand
+, callPackage
+, writeShellScript
+, writeTextFile
+, writeShellScriptBin
+,
 }:
 
 let
@@ -27,9 +27,11 @@ let
 
   callPackageCase =
     case:
-    callPackage (
-      { writeShellScript }: writeShellScript "test-trivial-callpackage-overriding-${case}" extglobScript
-    ) { };
+    callPackage
+      (
+        { writeShellScript }: writeShellScript "test-trivial-callpackage-overriding-${case}" extglobScript
+      )
+      { };
 
   binCase = case: writeShellScriptBin "test-trivial-overriding-bin-${case}" extglobScript;
 
@@ -115,9 +117,9 @@ let
 in
 
 runCommand "test-writeShellScript-overriding"
-  {
-    passthru = { inherit writeTextOverrides; };
-  }
+{
+  passthru = { inherit writeTextOverrides; };
+}
   ''
     ${lib.concatMapStrings (test: ''
       ${runTest test}

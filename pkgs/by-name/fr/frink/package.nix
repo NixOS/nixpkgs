@@ -1,11 +1,11 @@
-{
-  fetchurl,
-  frink,
-  jdk,
-  lib,
-  rlwrap,
-  stdenv,
-  testers,
+{ fetchurl
+, frink
+, jdk
+, lib
+, rlwrap
+, stdenv
+, testers
+,
 }:
 stdenv.mkDerivation rec {
   pname = "frink";

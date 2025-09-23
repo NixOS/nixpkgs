@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  geopy,
-  hatchling,
-  httpx,
-  numpy,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  rapidfuzz,
-  scipy,
-  shapely,
-  time-machine,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, geopy
+, hatchling
+, httpx
+, numpy
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, rapidfuzz
+, scipy
+, shapely
+, time-machine
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

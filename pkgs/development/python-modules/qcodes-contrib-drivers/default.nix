@@ -1,26 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  versioningit,
-
-  # dependencies
-  autobahn,
-  cffi,
-  packaging,
-  pandas,
-  qcodes,
-  python-dotenv,
-
-  # tests
-  pytest-mock,
-  pytestCheckHook,
-  pyvisa-sim,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, versioningit
+, # dependencies
+  autobahn
+, cffi
+, packaging
+, pandas
+, qcodes
+, python-dotenv
+, # tests
+  pytest-mock
+, pytestCheckHook
+, pyvisa-sim
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

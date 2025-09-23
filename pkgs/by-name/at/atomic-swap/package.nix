@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  makeWrapper,
-  monero-cli,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, makeWrapper
+, monero-cli
+,
 }:
 
 let

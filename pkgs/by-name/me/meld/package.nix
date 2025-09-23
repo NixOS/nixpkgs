@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  itstool,
-  python3,
-  meson,
-  ninja,
-  wrapGAppsHook3,
-  libxml2,
-  pkg-config,
-  desktop-file-utils,
-  gobject-introspection,
-  gtk3,
-  gtksourceview4,
-  gnome,
-  adwaita-icon-theme,
-  gsettings-desktop-schemas,
-  desktopToDarwinBundle,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, itstool
+, python3
+, meson
+, ninja
+, wrapGAppsHook3
+, libxml2
+, pkg-config
+, desktop-file-utils
+, gobject-introspection
+, gtk3
+, gtksourceview4
+, gnome
+, adwaita-icon-theme
+, gsettings-desktop-schemas
+, desktopToDarwinBundle
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

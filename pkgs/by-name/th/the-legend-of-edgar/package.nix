@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  buildPackages,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  SDL2_ttf,
-  gettext,
-  libpng,
-  pkg-config,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, buildPackages
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_ttf
+, gettext
+, libpng
+, pkg-config
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

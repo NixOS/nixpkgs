@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  stdenv,
-  curl,
-  openssl,
-  buildPackages,
-  installShellFiles,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, pkg-config
+, stdenv
+, curl
+, openssl
+, buildPackages
+, installShellFiles
+,
 }:
 
 let

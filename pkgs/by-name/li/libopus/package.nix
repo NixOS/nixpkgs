@@ -1,19 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gitUpdater,
-  meson,
-  python3,
-  ninja,
-  fixedPoint ? false,
-  withCustomModes ? true,
-  withIntrinsics ? stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isx86,
-  withAsm ? false,
-
-  # tests
-  ffmpeg-headless,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, gitUpdater
+, meson
+, python3
+, ninja
+, fixedPoint ? false
+, withCustomModes ? true
+, withIntrinsics ? stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isx86
+, withAsm ? false
+, # tests
+  ffmpeg-headless
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

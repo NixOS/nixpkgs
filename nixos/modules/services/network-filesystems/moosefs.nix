@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.moosefs;
@@ -33,12 +32,13 @@ let
         with lib.types;
         let
           valueType =
-            oneOf (
-              [
-                (listOf valueType)
-              ]
-              ++ allowedTypes
-            )
+            oneOf
+              (
+                [
+                  (listOf valueType)
+                ]
+                ++ allowedTypes
+              )
             // {
               description = "Flat key-value file";
             };
@@ -326,12 +326,14 @@ in
           (lib.mkIf cfg.master.enable {
             mfs-master = (
               lib.mkMerge [
-                (systemdService "master" {
-                  TimeoutStartSec = 1800;
-                  TimeoutStopSec = 1800;
-                  Restart = "on-failure";
-                  User = mfsUser;
-                } masterCfg)
+                (systemdService "master"
+                  {
+                    TimeoutStartSec = 1800;
+                    TimeoutStopSec = 1800;
+                    Restart = "on-failure";
+                    User = mfsUser;
+                  }
+                  masterCfg)
                 {
                   preStart = lib.mkIf cfg.master.autoInit "${initTool}/bin/mfsmaster-init";
                 }
@@ -340,17 +342,21 @@ in
           })
 
           (lib.mkIf cfg.metalogger.enable {
-            mfs-metalogger = systemdService "metalogger" {
-              Restart = "on-abnormal";
-              User = mfsUser;
-            } metaloggerCfg;
+            mfs-metalogger = systemdService "metalogger"
+              {
+                Restart = "on-abnormal";
+                User = mfsUser;
+              }
+              metaloggerCfg;
           })
 
           (lib.mkIf cfg.chunkserver.enable {
-            mfs-chunkserver = systemdService "chunkserver" {
-              Restart = "on-abnormal";
-              User = mfsUser;
-            } chunkserverCfg;
+            mfs-chunkserver = systemdService "chunkserver"
+              {
+                Restart = "on-abnormal";
+                User = mfsUser;
+              }
+              chunkserverCfg;
           })
 
           (lib.mkIf cfg.cgiserver.enable {

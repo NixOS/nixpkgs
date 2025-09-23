@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  ffmpeg,
-  libjpeg,
-  libmicrohttpd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, ffmpeg
+, libjpeg
+, libmicrohttpd
+,
 }:
 
 stdenv.mkDerivation rec {

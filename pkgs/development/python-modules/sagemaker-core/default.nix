@@ -1,29 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  boto3,
-  importlib-metadata,
-  jsonschema,
-  mock,
-  platformdirs,
-  pydantic,
-  pyyaml,
-  rich,
-
-  # optional-dependencies
-  black,
-  pandas,
-  pylint,
-  pytest,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  boto3
+, importlib-metadata
+, jsonschema
+, mock
+, platformdirs
+, pydantic
+, pyyaml
+, rich
+, # optional-dependencies
+  black
+, pandas
+, pylint
+, pytest
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

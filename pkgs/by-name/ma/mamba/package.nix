@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  xxd,
-  cairo,
-  fluidsynth,
-  libX11,
-  libjack2,
-  alsa-lib,
-  liblo,
-  libsigcxx,
-  libsmf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, xxd
+, cairo
+, fluidsynth
+, libX11
+, libjack2
+, alsa-lib
+, liblo
+, libsigcxx
+, libsmf
+,
 }:
 
 stdenv.mkDerivation rec {

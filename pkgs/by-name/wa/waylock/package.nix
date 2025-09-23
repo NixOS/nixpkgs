@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchFromGitea,
-  libxkbcommon,
-  pam,
-  pkg-config,
-  scdoc,
-  wayland,
-  wayland-scanner,
-  wayland-protocols,
-  zig_0_15,
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitea
+, libxkbcommon
+, pam
+, pkg-config
+, scdoc
+, wayland
+, wayland-scanner
+, wayland-protocols
+, zig_0_15
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

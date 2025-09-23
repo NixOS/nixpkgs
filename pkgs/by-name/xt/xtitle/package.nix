@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libxcb,
-  xcbutil,
-  xcbutilwm,
-  git,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libxcb
+, xcbutil
+, xcbutilwm
+, git
+,
 }:
 
 stdenv.mkDerivation rec {

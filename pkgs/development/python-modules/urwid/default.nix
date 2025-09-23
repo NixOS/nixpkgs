@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  exceptiongroup,
-  fetchFromGitHub,
-  glibcLocales,
-  pygobject3,
-  pyserial,
-  pytestCheckHook,
-  pythonOlder,
-  pyzmq,
-  setuptools,
-  setuptools-scm,
-  tornado,
-  trio,
-  twisted,
-  typing-extensions,
-  wcwidth,
+{ lib
+, buildPythonPackage
+, exceptiongroup
+, fetchFromGitHub
+, glibcLocales
+, pygobject3
+, pyserial
+, pytestCheckHook
+, pythonOlder
+, pyzmq
+, setuptools
+, setuptools-scm
+, tornado
+, trio
+, twisted
+, typing-extensions
+, wcwidth
+,
 }:
 
 buildPythonPackage rec {

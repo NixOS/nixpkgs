@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gumbo,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gumbo
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,10 +1,10 @@
 # Checks derivation meta and attrs for problems (like brokenness,
 # licenses, etc).
 
-{
-  lib,
-  config,
-  hostPlatform,
+{ lib
+, config
+, hostPlatform
+,
 }:
 
 let
@@ -78,14 +78,14 @@ let
   hasListedLicense =
     assert areLicenseListsValid;
     list: attrs:
-    length list > 0
-    && hasLicense attrs
-    && (
-      if isList attrs.meta.license then
-        any (l: elem l list) attrs.meta.license
-      else
-        elem attrs.meta.license list
-    );
+      length list > 0
+      && hasLicense attrs
+      && (
+        if isList attrs.meta.license then
+          any (l: elem l list) attrs.meta.license
+        else
+          elem attrs.meta.license list
+      );
 
   hasAllowlistedLicense = attrs: hasListedLicense allowlist attrs;
 
@@ -214,8 +214,7 @@ let
       Broken = "NIXPKGS_ALLOW_BROKEN";
       UnsupportedSystem = "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM";
       NonSource = "NIXPKGS_ALLOW_NONSOURCE";
-    }
-    .${allow_attr};
+    }.${allow_attr};
   remediation_phrase =
     allow_attr:
     {
@@ -223,8 +222,7 @@ let
       Broken = "broken packages";
       UnsupportedSystem = "packages that are unsupported for this system";
       NonSource = "packages not built from source";
-    }
-    .${allow_attr};
+    }.${allow_attr};
   remediate_predicate = predicateConfigAttr: attrs: ''
 
     Alternatively you can configure a predicate to allow specific packages:
@@ -313,9 +311,9 @@ let
 
   handleEvalIssue =
     { meta, attrs }:
-    {
-      reason,
-      errormsg ? "",
+    { reason
+    , errormsg ? ""
+    ,
     }:
     let
       msg =
@@ -334,9 +332,9 @@ let
 
   handleEvalWarning =
     { meta, attrs }:
-    {
-      reason,
-      errormsg ? "",
+    { reason
+    , errormsg ? ""
+    ,
     }:
     let
       remediationMsg = (builtins.getAttr reason remediation) attrs;
@@ -412,8 +410,8 @@ let
           x:
           x == { }
           ||
-            # Accept {} for tests that are unsupported
-            (isDerivation x && x ? meta.timeout);
+          # Accept {} for tests that are unsupported
+          (isDerivation x && x ? meta.timeout);
       };
       timeout = int;
       knownVulnerabilities = listOf str;
@@ -451,21 +449,21 @@ let
       metaTypes' = mapAttrs (_: t: t.verify) metaTypes;
     in
     k: v:
-    if metaTypes ? ${k} then
-      if metaTypes'.${k} v then
-        [ ]
-      else
-        [
-          "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.name}, got\n    ${
+      if metaTypes ? ${k} then
+        if metaTypes'.${k} v then
+          [ ]
+        else
+          [
+            "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.name}, got\n    ${
             toPretty { indent = "    "; } v
           }"
-        ]
-    else
-      [
-        "key 'meta.${k}' is unrecognized; expected one of: \n  [${
+          ]
+      else
+        [
+          "key 'meta.${k}' is unrecognized; expected one of: \n  [${
           concatMapStringsSep ", " (x: "'${x}'") (attrNames metaTypes)
         }]"
-      ];
+        ];
   checkMeta =
     meta:
     optionals config.checkMeta (concatMap (attr: checkMetaAttr attr meta.${attr}) (attrNames meta));
@@ -584,18 +582,18 @@ let
     in
     (length values == 11) && !any isNull values;
   makeCPE =
-    {
-      part,
-      vendor,
-      product,
-      version,
-      update,
-      edition,
-      sw_edition,
-      target_sw,
-      target_hw,
-      language,
-      other,
+    { part
+    , vendor
+    , product
+    , version
+    , update
+    , edition
+    , sw_edition
+    , target_sw
+    , target_hw
+    , language
+    , other
+    ,
     }:
     "cpe:2.3:${part}:${vendor}:${product}:${version}:${update}:${edition}:${sw_edition}:${target_sw}:${target_hw}:${language}:${other}";
   possibleCPEPartsFuns = [
@@ -614,11 +612,11 @@ let
   #   meta = checkMeta.commonMeta { inherit validity attrs pos references; };
   #   validity = checkMeta.assertValidity { inherit meta attrs; };
   commonMeta =
-    {
-      validity,
-      attrs,
-      pos ? null,
-      references ? [ ],
+    { validity
+    , attrs
+    , pos ? null
+    , references ? [ ]
+    ,
     }:
     let
       outputs = attrs.outputs or [ "out" ];
@@ -693,23 +691,25 @@ let
 
           possibleCPEs =
             if cpe != null then
-              [ { inherit cpeParts cpe; } ]
+              [{ inherit cpeParts cpe; }]
             else if attrs.meta.identifiers.cpeParts.vendor or null == null || attrs.version or null == null then
               [ ]
             else
-              concatMap (
-                f:
-                let
-                  result = f attrs.meta.identifiers.cpeParts.vendor attrs.version;
-                  # Note that attrs.meta.identifiers.cpeParts at this point can include defaults with user overrides.
-                  # Since we can't split them apart, user overrides don't apply to possibleCPEs.
-                  guessedParts = cpeParts // result.value;
-                in
-                optional (result.success && hasAllCPEParts guessedParts) {
-                  cpeParts = guessedParts;
-                  cpe = makeCPE guessedParts;
-                }
-              ) possibleCPEPartsFuns;
+              concatMap
+                (
+                  f:
+                  let
+                    result = f attrs.meta.identifiers.cpeParts.vendor attrs.version;
+                    # Note that attrs.meta.identifiers.cpeParts at this point can include defaults with user overrides.
+                    # Since we can't split them apart, user overrides don't apply to possibleCPEs.
+                    guessedParts = cpeParts // result.value;
+                  in
+                  optional (result.success && hasAllCPEParts guessedParts) {
+                    cpeParts = guessedParts;
+                    cpe = makeCPE guessedParts;
+                  }
+                )
+                possibleCPEPartsFuns;
           v1 = {
             inherit cpeParts possibleCPEs;
             ${if cpe != null then "cpe" else null} = cpe;

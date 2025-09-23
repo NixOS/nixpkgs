@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  cargo,
-  fetchFromGitHub,
-  poetry-core,
-  pytestCheckHook,
-  rustc,
-  rustPlatform,
+{ lib
+, buildPythonPackage
+, cargo
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
+, rustc
+, rustPlatform
+,
 }:
 
 buildPythonPackage rec {

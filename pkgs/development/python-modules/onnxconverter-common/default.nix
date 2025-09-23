@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  numpy,
-  packaging,
-  protobuf,
-  onnx,
-  unittestCheckHook,
-  onnxruntime,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, numpy
+, packaging
+, protobuf
+, onnx
+, unittestCheckHook
+, onnxruntime
+,
 }:
 
 buildPythonPackage rec {

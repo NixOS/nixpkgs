@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  temurin-jre-bin-17,
-  fetchurl,
-  makeWrapper,
+{ lib
+, stdenv
+, temurin-jre-bin-17
+, fetchurl
+, makeWrapper
+,
 }:
 stdenv.mkDerivation {
   pname = "cgoban";

@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ffmpeg-python,
-  numpy,
-  pillow,
-  pypaInstallHook,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptoolsBuildHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, ffmpeg-python
+, numpy
+, pillow
+, pypaInstallHook
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptoolsBuildHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nodejs_20,
-  runtimeShell,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nodejs_20
+, runtimeShell
+,
 }:
 
 let

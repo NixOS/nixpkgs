@@ -1,8 +1,8 @@
-{
-  php,
-  fetchFromGitHub,
-  lib,
-  versionCheckHook,
+{ php
+, fetchFromGitHub
+, lib
+, versionCheckHook
+,
 }:
 
 (php.withExtensions ({ enabled, all }: enabled ++ [ all.pcov ])).buildComposerProject2

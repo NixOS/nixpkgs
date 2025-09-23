@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libftdi1,
-  libusb-compat-0_1,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libftdi1
+, libusb-compat-0_1
+,
 }:
 
 stdenv.mkDerivation rec {

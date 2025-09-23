@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  smartypants,
-  hatchling,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, smartypants
+, hatchling
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

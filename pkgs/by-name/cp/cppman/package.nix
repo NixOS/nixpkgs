@@ -1,11 +1,11 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  groff,
-  nix-update-script,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, groff
+, nix-update-script
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "cppman";

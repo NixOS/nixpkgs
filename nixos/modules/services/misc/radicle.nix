@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.radicle;
@@ -338,8 +337,7 @@ in
             home = env.HOME;
             isSystemUser = true;
           };
-          groups.radicle = {
-          };
+          groups.radicle = { };
         };
       }
 
@@ -358,11 +356,13 @@ in
                       "--listen=${cfg.httpd.listenAddress}:${toString cfg.httpd.listenPort}"
                     ]
                     ++ lib.flatten (
-                      lib.mapAttrsToList (alias: rid: [
-                        "--alias"
-                        alias
-                        rid
-                      ]) cfg.httpd.aliases
+                      lib.mapAttrsToList
+                        (alias: rid: [
+                          "--alias"
+                          alias
+                          rid
+                        ])
+                        cfg.httpd.aliases
                     )
                     ++ cfg.httpd.extraArgs
                   );

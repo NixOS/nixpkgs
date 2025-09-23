@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  dconf,
-  telepathy-glib,
-  python3,
-  libxslt,
-  makeWrapper,
-  autoreconfHook,
-  gtk-doc,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, dconf
+, telepathy-glib
+, python3
+, libxslt
+, makeWrapper
+, autoreconfHook
+, gtk-doc
+,
 }:
 
 stdenv.mkDerivation rec {

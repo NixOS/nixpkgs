@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  json-glib,
-  feedbackd,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, json-glib
+, feedbackd
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

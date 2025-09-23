@@ -1,22 +1,22 @@
-{
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  cmake,
-  fmt_11,
-  spdlog,
-  tl-expected,
-  nlohmann_json,
-  yaml-cpp,
-  simdjson,
-  reproc,
-  libsolv,
-  curl,
-  libarchive,
-  zstd,
-  nix-update-script,
-  bzip2,
-  python3,
+{ fetchFromGitHub
+, lib
+, stdenv
+, cmake
+, fmt_11
+, spdlog
+, tl-expected
+, nlohmann_json
+, yaml-cpp
+, simdjson
+, reproc
+, libsolv
+, curl
+, libarchive
+, zstd
+, nix-update-script
+, bzip2
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

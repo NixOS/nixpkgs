@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  google-auth,
-  google-auth-httplib2,
-  google-api-core,
-  httplib2,
-  uritemplate,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, google-auth
+, google-auth-httplib2
+, google-api-core
+, httplib2
+, uritemplate
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

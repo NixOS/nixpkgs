@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  binutils,
-  callPackage,
-  cmake,
-  file,
-  gdb,
-  git,
-  libtool,
-  linkFarmFromDrvs,
-  ocaml,
-  ocamlPackages,
-  openssl,
-  perl,
-  python3,
-  texinfo,
-  validatePkgConfig,
-  writeShellApplication,
-  writeShellScript,
-  writeText,
-  debug ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, binutils
+, callPackage
+, cmake
+, file
+, gdb
+, git
+, libtool
+, linkFarmFromDrvs
+, ocaml
+, ocamlPackages
+, openssl
+, perl
+, python3
+, texinfo
+, validatePkgConfig
+, writeShellApplication
+, writeShellScript
+, writeText
+, debug ? false
+,
 }:
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";

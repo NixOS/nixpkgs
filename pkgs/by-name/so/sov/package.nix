@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch2,
-  freetype,
-  gitUpdater,
-  libglvnd,
-  libxkbcommon,
-  meson,
-  ninja,
-  pkg-config,
-  stdenv,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
+{ lib
+, fetchFromGitHub
+, fetchpatch2
+, freetype
+, gitUpdater
+, libglvnd
+, libxkbcommon
+, meson
+, ninja
+, pkg-config
+, stdenv
+, wayland
+, wayland-protocols
+, wayland-scanner
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,26 +1,26 @@
-{
-  lib,
-  autoreconfHook,
-  curl,
-  fetchhg,
-  libXext,
-  libXft,
-  libXi,
-  libXinerama,
-  libXtst,
-  libXv,
-  libXxf86vm,
-  libjpeg,
-  libpng,
-  lirc,
-  ncurses,
-  perl,
-  pkg-config,
-  readline,
-  shared-mime-info,
-  stdenv,
-  xine-lib,
-  xorgproto,
+{ lib
+, autoreconfHook
+, curl
+, fetchhg
+, libXext
+, libXft
+, libXi
+, libXinerama
+, libXtst
+, libXv
+, libXxf86vm
+, libjpeg
+, libpng
+, lirc
+, ncurses
+, perl
+, pkg-config
+, readline
+, shared-mime-info
+, stdenv
+, xine-lib
+, xorgproto
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

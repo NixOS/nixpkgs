@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  python3Packages,
-  gnupg,
-  pass,
+{ lib
+, fetchurl
+, python3Packages
+, gnupg
+, pass
+,
 }:
 
 python3Packages.buildPythonApplication rec {

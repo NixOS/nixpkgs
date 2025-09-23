@@ -1,10 +1,9 @@
 # Systemd services for openvswitch
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;

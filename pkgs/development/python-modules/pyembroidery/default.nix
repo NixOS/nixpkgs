@@ -1,10 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+,
 }:
 let
   pname = "pyembroidery";

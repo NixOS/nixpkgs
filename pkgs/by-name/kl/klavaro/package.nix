@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  curl,
-  espeak,
-  file,
-  gtk3,
-  gtkdatabox,
-  intltool,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, curl
+, espeak
+, file
+, gtk3
+, gtkdatabox
+, intltool
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchMavenArtifact,
-  jre_minimal,
+{ lib
+, stdenvNoCC
+, fetchMavenArtifact
+, jre_minimal
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

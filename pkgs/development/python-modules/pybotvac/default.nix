@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  requests,
-  requests-oauthlib,
-  voluptuous,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, requests
+, requests-oauthlib
+, voluptuous
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

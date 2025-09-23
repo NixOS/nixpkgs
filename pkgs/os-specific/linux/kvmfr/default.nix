@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  kernel,
-  kernelModuleMakeFlags,
-  looking-glass-client,
+{ lib
+, stdenv
+, kernel
+, kernelModuleMakeFlags
+, looking-glass-client
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  asio,
-  obs-studio,
-  qtbase,
-  websocketpp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, asio
+, obs-studio
+, qtbase
+, websocketpp
+,
 }:
 
 stdenv.mkDerivation rec {

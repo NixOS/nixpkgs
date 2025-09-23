@@ -1,8 +1,8 @@
-{
-  lib,
-  nixosTests,
-  buildNpmPackage,
-  fetchFromGitHub,
+{ lib
+, nixosTests
+, buildNpmPackage
+, fetchFromGitHub
+,
 }:
 
 buildNpmPackage {

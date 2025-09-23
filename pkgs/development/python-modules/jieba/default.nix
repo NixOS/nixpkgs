@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  isPy3k,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, isPy3k
+,
 }:
 
 buildPythonPackage rec {

@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  bleak,
-  buildPythonPackage,
-  ecpy,
-  fetchPypi,
-  future,
-  hidapi,
-  nfcpy,
-  pillow,
-  protobuf,
-  pycrypto,
-  pycryptodomex,
-  pyelftools,
-  python-gnupg,
-  python-u2flib-host,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  websocket-client,
+{ lib
+, stdenv
+, bleak
+, buildPythonPackage
+, ecpy
+, fetchPypi
+, future
+, hidapi
+, nfcpy
+, pillow
+, protobuf
+, pycrypto
+, pycryptodomex
+, pyelftools
+, python-gnupg
+, python-u2flib-host
+, pythonOlder
+, setuptools
+, setuptools-scm
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

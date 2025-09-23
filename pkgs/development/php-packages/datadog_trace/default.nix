@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPecl,
-  cargo,
-  rustc,
-  fetchFromGitHub,
-  rustPlatform,
-  curl,
-  pcre2,
-  libiconv,
-  php,
+{ lib
+, stdenv
+, buildPecl
+, cargo
+, rustc
+, fetchFromGitHub
+, rustPlatform
+, curl
+, pcre2
+, libiconv
+, php
+,
 }:
 
 buildPecl rec {

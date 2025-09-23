@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-requirements-txt,
-  mockupdb,
-  pymongo,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-requirements-txt
+, mockupdb
+, pymongo
+,
 }:
 
 buildPythonPackage rec {

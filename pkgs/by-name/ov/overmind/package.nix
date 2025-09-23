@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  tmux,
-  which,
-  makeWrapper,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, tmux
+, which
+, makeWrapper
+,
 }:
 
 buildGoModule rec {

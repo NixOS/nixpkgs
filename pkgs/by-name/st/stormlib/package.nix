@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  bzip2,
-  cmake,
-  fetchFromGitHub,
-  libtomcrypt,
-  zlib,
-  pkg-config,
+{ lib
+, stdenv
+, bzip2
+, cmake
+, fetchFromGitHub
+, libtomcrypt
+, zlib
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

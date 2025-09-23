@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  llm,
-  llm-tools-datasette,
-  llm-echo,
-  pytestCheckHook,
-  pytest-httpx,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, llm
+, llm-tools-datasette
+, llm-echo
+, pytestCheckHook
+, pytest-httpx
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

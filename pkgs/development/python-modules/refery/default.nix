@@ -1,13 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  poetry-core,
-  pyyaml,
-  colorama,
-  junit-xml,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, poetry-core
+, pyyaml
+, colorama
+, junit-xml
+,
 }:
 
 buildPythonPackage rec {

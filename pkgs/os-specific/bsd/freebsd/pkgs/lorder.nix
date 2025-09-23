@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  bsdSetupHook,
-  freebsdSetupHook,
+{ mkDerivation
+, bsdSetupHook
+, freebsdSetupHook
+,
 }:
 mkDerivation {
   path = "usr.bin/lorder";

@@ -1,20 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  rocm-smi,
-  clr,
-  openmp,
-  gtest,
-  rocblas,
-  buildTests ? false, # Will likely fail building because wavefront shifts are not supported for certain archs
-  buildExtendedTests ? false,
-  buildBenchmarks ? false,
-  buildSamples ? false,
-  gpuTargets ? [ ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, rocm-smi
+, clr
+, openmp
+, gtest
+, rocblas
+, buildTests ? false
+, # Will likely fail building because wavefront shifts are not supported for certain archs
+  buildExtendedTests ? false
+, buildBenchmarks ? false
+, buildSamples ? false
+, gpuTargets ? [ ]
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

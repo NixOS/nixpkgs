@@ -1,21 +1,20 @@
-{
-  lib,
-  cmake,
-  darwin,
-  fetchFromGitHub,
-  libpng,
-  libxml2,
-  makeBinaryWrapper,
-  ninja,
-  stdenv,
-  zlib,
-
-  # These are deprecated and do nothing. They’re needed for compatibility and will
+{ lib
+, cmake
+, darwin
+, fetchFromGitHub
+, libpng
+, libxml2
+, makeBinaryWrapper
+, ninja
+, stdenv
+, zlib
+, # These are deprecated and do nothing. They’re needed for compatibility and will
   # warn eventually once in-tree uses are cleaned up.
-  xcodePlatform ? null,
-  xcodeVer ? null,
-  sdkVer ? null,
-  productBuildVer ? null,
+  xcodePlatform ? null
+, xcodeVer ? null
+, sdkVer ? null
+, productBuildVer ? null
+,
 }:
 
 # TODO(@reckenrode) enable this warning after uses in nixpkgs have been fixed

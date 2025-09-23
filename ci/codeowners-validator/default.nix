@@ -1,7 +1,7 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  fetchpatch,
+{ buildGoModule
+, fetchFromGitHub
+, fetchpatch
+,
 }:
 buildGoModule {
   name = "codeowners-validator";

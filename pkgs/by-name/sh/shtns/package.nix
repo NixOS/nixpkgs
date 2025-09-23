@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  fftw,
+{ lib
+, stdenv
+, fetchgit
+, fftw
+,
 }:
 
 stdenv.mkDerivation rec {

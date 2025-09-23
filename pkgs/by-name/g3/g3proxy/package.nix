@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  c-ares,
-  python3,
-  lua5_4,
-  capnproto,
-  openssl,
-  rust-bindgen,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, c-ares
+, python3
+, lua5_4
+, capnproto
+, openssl
+, rust-bindgen
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

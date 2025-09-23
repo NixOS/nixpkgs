@@ -1,21 +1,18 @@
-{
-  lib,
-  fetchFromGitHub,
-  pythonOlder,
-  buildPythonPackage,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  django,
-  sqlparse,
-
-  # tests
-  django-csp,
-  html5lib,
-  jinja2,
-  pygments,
+{ lib
+, fetchFromGitHub
+, pythonOlder
+, buildPythonPackage
+, # build-system
+  hatchling
+, # dependencies
+  django
+, sqlparse
+, # tests
+  django-csp
+, html5lib
+, jinja2
+, pygments
+,
 }:
 
 buildPythonPackage rec {

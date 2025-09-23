@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  pkg-config,
-  glfw,
-  libvgm,
-  libX11,
-  libXau,
-  libXdmcp,
-  cppunit,
+{ stdenv
+, lib
+, fetchFromGitHub
+, unstableGitUpdater
+, pkg-config
+, glfw
+, libvgm
+, libX11
+, libXau
+, libXdmcp
+, cppunit
+,
 }:
 
 stdenv.mkDerivation {

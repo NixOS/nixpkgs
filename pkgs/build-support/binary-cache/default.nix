@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  coreutils,
-  jq,
-  python3,
-  nix,
-  xz,
-  zstd,
+{ lib
+, stdenv
+, coreutils
+, jq
+, python3
+, nix
+, xz
+, zstd
+,
 }:
 
 # This function is for creating a flat-file binary cache, i.e. the kind created by
@@ -15,10 +15,11 @@
 # For example, in the Nixpkgs repo:
 # nix-build -E 'with import ./. {}; mkBinaryCache { rootPaths = [hello]; }'
 
-{
-  name ? "binary-cache",
-  compression ? "zstd", # one of ["none" "xz" "zstd"]
-  rootPaths,
+{ name ? "binary-cache"
+, compression ? "zstd"
+, # one of ["none" "xz" "zstd"]
+  rootPaths
+,
 }:
 
 assert lib.elem compression [

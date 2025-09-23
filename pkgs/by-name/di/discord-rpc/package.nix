@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  rapidjson,
-  buildExamples ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, rapidjson
+, buildExamples ? false
+,
 }:
 
 stdenv.mkDerivation rec {

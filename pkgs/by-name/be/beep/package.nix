@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
+{ lib
+, stdenv
+, fetchFromGitHub
+,
 }:
 
 # this package is working only as root

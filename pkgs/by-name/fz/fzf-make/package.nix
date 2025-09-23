@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  runtimeShell,
-  bat,
-  gnugrep,
-  gnumake,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, makeBinaryWrapper
+, runtimeShell
+, bat
+, gnugrep
+, gnumake
+,
 }:
 
 rustPlatform.buildRustPackage rec {

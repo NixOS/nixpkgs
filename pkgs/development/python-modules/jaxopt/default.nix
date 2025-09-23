@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  absl-py,
-  jax,
-  matplotlib,
-  numpy,
-  scipy,
-
-  # tests
-  cvxpy,
-  optax,
-  pytest-xdist,
-  pytestCheckHook,
-  scikit-learn,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  absl-py
+, jax
+, matplotlib
+, numpy
+, scipy
+, # tests
+  cvxpy
+, optax
+, pytest-xdist
+, pytestCheckHook
+, scikit-learn
+,
 }:
 
 buildPythonPackage rec {

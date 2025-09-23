@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  pythonOlder,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-sdk,
-  opentelemetry-test-utils,
-  prometheus-client,
-  pytestCheckHook,
+{ buildPythonPackage
+, pythonOlder
+, hatchling
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-sdk
+, opentelemetry-test-utils
+, prometheus-client
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

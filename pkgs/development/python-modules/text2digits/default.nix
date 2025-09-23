@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pypaInstallHook,
-  setuptoolsBuildHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pypaInstallHook
+, setuptoolsBuildHook
+,
 }:
 
 buildPythonPackage rec {

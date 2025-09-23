@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  curl,
-  cython,
-  expat,
-  libpng,
-  setuptools,
-  stdenv,
-  fixDarwinDylibNames,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, curl
+, cython
+, expat
+, libpng
+, setuptools
+, stdenv
+, fixDarwinDylibNames
+,
 }:
 
 buildPythonPackage rec {

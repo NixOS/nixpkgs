@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -15,13 +14,18 @@ let
         inherit (lib.strings) replicate;
       in
       "${replicate depth "["}${k}${replicate depth "]"}\n"
-      + lib.generators.toINIWithGlobalSection {
-        mkKeyValue = mkSubSectionKeyValue (depth + 1);
-      } { globalSection = v; }
+      + lib.generators.toINIWithGlobalSection
+        {
+          mkKeyValue = mkSubSectionKeyValue (depth + 1);
+        }
+        { globalSection = v; }
     else
-      lib.generators.mkKeyValueDefault {
-        mkValueString = v: if lib.isString v then ''"${v}"'' else lib.generators.mkValueStringDefault { } v;
-      } " = " k v;
+      lib.generators.mkKeyValueDefault
+        {
+          mkValueString = v: if lib.isString v then ''"${v}"'' else lib.generators.mkValueStringDefault { } v;
+        } " = "
+        k
+        v;
 
   iniFormat = pkgs.formats.ini { };
 

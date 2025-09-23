@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-  pytestCheckHook,
-  geoarrow-types,
-  pyarrow,
-  numpy,
-  pandas,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, pytestCheckHook
+, geoarrow-types
+, pyarrow
+, numpy
+, pandas
+,
 }:
 let
   version = "0.5.1";
@@ -33,12 +33,12 @@ let
   };
 
   buildArro3Package =
-    {
-      pname,
-      subdir,
-      description,
-      pythonImportsCheck,
-      dependencies ? [ ],
+    { pname
+    , subdir
+    , description
+    , pythonImportsCheck
+    , dependencies ? [ ]
+    ,
     }:
     buildPythonPackage rec {
       inherit

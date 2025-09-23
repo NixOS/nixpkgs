@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  protobuf,
-  pytest-asyncio_0,
-  pytest-httpx,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  segno,
-  setuptools-scm,
-  syrupy,
-  tenacity,
-  zeroconf,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, protobuf
+, pytest-asyncio_0
+, pytest-httpx
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, segno
+, setuptools-scm
+, syrupy
+, tenacity
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

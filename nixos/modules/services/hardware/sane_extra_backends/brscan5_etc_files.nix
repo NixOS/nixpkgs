@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  brscan5,
-  netDevices ? [ ],
+{ stdenv
+, lib
+, brscan5
+, netDevices ? [ ]
+,
 }:
 
 /*

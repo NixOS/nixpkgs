@@ -1,12 +1,12 @@
-{
-  lib,
-  copyPkgconfigItems,
-  fetchFromRepoOrCz,
-  makePkgconfigItem,
-  perl,
-  stdenv,
-  texinfo,
-  which,
+{ lib
+, copyPkgconfigItems
+, fetchFromRepoOrCz
+, makePkgconfigItem
+, perl
+, stdenv
+, texinfo
+, which
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tcc";

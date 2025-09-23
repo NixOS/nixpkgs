@@ -1,21 +1,21 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  shared-mime-info,
-  installShellFiles,
-  scdoc,
-  bzip2,
-  openssl,
-  sqlite,
-  xz,
-  zstd,
-  stdenv,
-  buildPackages,
-  versionCheckHook,
-  nixosTests,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, shared-mime-info
+, installShellFiles
+, scdoc
+, bzip2
+, openssl
+, sqlite
+, xz
+, zstd
+, stdenv
+, buildPackages
+, versionCheckHook
+, nixosTests
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

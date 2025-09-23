@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  textlint,
-  textlint-plugin-org,
-  textlint-rule-max-comma,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, textlint
+, textlint-plugin-org
+, textlint-rule-max-comma
+,
 }:
 
 buildNpmPackage rec {

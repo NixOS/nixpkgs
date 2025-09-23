@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  copyDesktopItems,
-  jdk11,
-  makeDesktopItem,
-  makeWrapper,
-  unzip,
-  xdg-utils,
-  writeScript,
+{ lib
+, stdenvNoCC
+, fetchzip
+, copyDesktopItems
+, jdk11
+, makeDesktopItem
+, makeWrapper
+, unzip
+, xdg-utils
+, writeScript
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

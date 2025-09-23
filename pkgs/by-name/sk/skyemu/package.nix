@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  pkg-config,
-  curl,
-  openssl,
-  SDL2,
-  alsa-lib,
-  libGL,
-  libGLU,
-  libX11,
-  libXi,
-  libXcursor,
-  lua,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, curl
+, openssl
+, SDL2
+, alsa-lib
+, libGL
+, libGLU
+, libX11
+, libXi
+, libXcursor
+, lua
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchFromGitHub,
-  pkg-config,
-  popt,
-  mandoc,
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, pkg-config
+, popt
+, mandoc
+,
 }:
 
 stdenv.mkDerivation rec {

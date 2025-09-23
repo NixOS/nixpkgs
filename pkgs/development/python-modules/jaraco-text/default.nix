@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  autocommand,
-  importlib-resources,
-  jaraco-functools,
-  jaraco-context,
-  inflect,
-  pathlib2,
-  pytestCheckHook,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, autocommand
+, importlib-resources
+, jaraco-functools
+, jaraco-context
+, inflect
+, pathlib2
+, pytestCheckHook
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

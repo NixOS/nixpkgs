@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  zlib,
-  bzip2,
-  sqlite,
-  pkg-config,
-  glib,
-  gnutls,
-  perl,
-  libmaxminddb,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, zlib
+, bzip2
+, sqlite
+, pkg-config
+, glib
+, gnutls
+, perl
+, libmaxminddb
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

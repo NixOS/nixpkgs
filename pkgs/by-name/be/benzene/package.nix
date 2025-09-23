@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  boost,
-  cmake,
-  db,
+{ stdenv
+, lib
+, fetchFromGitHub
+, boost
+, cmake
+, db
+,
 }:
 stdenv.mkDerivation {
   pname = "benzene";

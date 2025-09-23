@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ivsc-driver,
-  kernel,
-  kernelModuleMakeFlags,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ivsc-driver
+, kernel
+, kernelModuleMakeFlags
+,
 }:
 
 stdenv.mkDerivation rec {

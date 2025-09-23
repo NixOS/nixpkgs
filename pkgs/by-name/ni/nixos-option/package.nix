@@ -1,15 +1,15 @@
-{
-  lib,
-  coreutils,
-  installShellFiles,
-  jq,
-  makeWrapper,
-  man-db,
-  nix,
-  nixosTests,
-  shellcheck,
-  runCommand,
-  stdenvNoCC,
+{ lib
+, coreutils
+, installShellFiles
+, jq
+, makeWrapper
+, man-db
+, nix
+, nixosTests
+, shellcheck
+, runCommand
+, stdenvNoCC
+,
 }:
 
 stdenvNoCC.mkDerivation {

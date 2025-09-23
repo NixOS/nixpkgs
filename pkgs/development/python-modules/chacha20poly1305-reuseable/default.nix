@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  cython,
-  poetry-core,
-  setuptools,
-
-  # propagates
-  cryptography,
-
-  # tests
-  pytest-cov-stub,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  cython
+, poetry-core
+, setuptools
+, # propagates
+  cryptography
+, # tests
+  pytest-cov-stub
+, pytestCheckHook
+,
 }:
 
 let

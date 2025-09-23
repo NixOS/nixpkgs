@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pnpm_9,
-  nodejs_22,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pnpm_9
+, nodejs_22
+, versionCheckHook
+,
 }:
 stdenv.mkDerivation rec {
   pname = "tsx";

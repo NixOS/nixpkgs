@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  scsh,
-  sox,
-  libnotify,
+{ lib
+, stdenv
+, fetchFromGitHub
+, scsh
+, sox
+, libnotify
+,
 }:
 
 stdenv.mkDerivation {

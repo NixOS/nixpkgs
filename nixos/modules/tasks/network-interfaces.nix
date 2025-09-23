@@ -1,10 +1,9 @@
-{
-  config,
-  options,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, options
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 with lib;
@@ -25,12 +24,14 @@ let
   slaves =
     concatMap (i: i.interfaces) (attrValues cfg.bonds)
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
-    ++ concatMap (
-      i:
-      attrNames (
-        filterAttrs (name: config: !(config.type == "internal" || hasAttr name cfg.interfaces)) i.interfaces
+    ++ concatMap
+      (
+        i:
+        attrNames (
+          filterAttrs (name: config: !(config.type == "internal" || hasAttr name cfg.interfaces)) i.interfaces
+        )
       )
-    ) (attrValues cfg.vswitches);
+      (attrValues cfg.vswitches);
 
   slaveIfs = map (i: cfg.interfaces.${i}) (filter (i: cfg.interfaces ? ${i}) slaves);
 
@@ -70,26 +71,26 @@ let
 
   addrOpts =
     v:
-    assert v == 4 || v == 6;
-    {
-      options = {
-        address = mkOption {
-          type = types.str;
-          description = ''
-            IPv${toString v} address of the interface. Leave empty to configure the
-            interface using DHCP.
-          '';
-        };
+      assert v == 4 || v == 6;
+      {
+        options = {
+          address = mkOption {
+            type = types.str;
+            description = ''
+              IPv${toString v} address of the interface. Leave empty to configure the
+              interface using DHCP.
+            '';
+          };
 
-        prefixLength = mkOption {
-          type = types.ints.between 0 (if v == 4 then 32 else 128);
-          description = ''
-            Subnet mask of the interface, specified as the number of
-            bits in the prefix (`${if v == 4 then "24" else "64"}`).
-          '';
+          prefixLength = mkOption {
+            type = types.ints.between 0 (if v == 4 then 32 else 128);
+            description = ''
+              Subnet mask of the interface, specified as the number of
+              bits in the prefix (`${if v == 4 then "24" else "64"}`).
+            '';
+          };
         };
       };
-    };
 
   routeOpts = v: {
     options = {
@@ -453,11 +454,11 @@ let
             [ "ipv4" "addresses" ]
             (
               cfg:
-              with cfg;
-              optional (defined ipAddress && defined prefixLength) {
-                address = ipAddress;
-                prefixLength = prefixLength;
-              }
+                with cfg;
+                optional (defined ipAddress && defined prefixLength) {
+                  address = ipAddress;
+                  prefixLength = prefixLength;
+                }
             )
           )
           (mkMergedOptionModule
@@ -468,11 +469,11 @@ let
             [ "ipv6" "addresses" ]
             (
               cfg:
-              with cfg;
-              optional (defined ipv6Address && defined ipv6PrefixLength) {
-                address = ipv6Address;
-                prefixLength = ipv6PrefixLength;
-              }
+                with cfg;
+                optional (defined ipv6Address && defined ipv6PrefixLength) {
+                  address = ipv6Address;
+                  prefixLength = ipv6PrefixLength;
+                }
             )
           )
 
@@ -1462,8 +1463,7 @@ in
                   tap = "gretap";
                   tun6 = "ip6gre";
                   tap6 = "ip6gretap";
-                }
-                .${v};
+                }.${v};
               description = ''
                 Whether the tunnel routes layer 2 (tap) or layer 3 (tun) traffic.
               '';
@@ -1830,20 +1830,22 @@ in
         (pkgs.writeTextFile rec {
           name = "ipv6-privacy-extensions.rules";
           destination = "/etc/udev/rules.d/99-${name}";
-          text = concatMapStrings (
-            i:
-            let
-              opt = i.tempAddress;
-              val = tempaddrValues.${opt}.sysctl;
-              msg = tempaddrValues.${opt}.description;
-            in
-            ''
-              # override to ${msg} for ${i.name}
-              ACTION=="add", SUBSYSTEM=="net", NAME=="${i.name}", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${
-                replaceStrings [ "." ] [ "/" ] i.name
-              }.use_tempaddr=${val}"
-            ''
-          ) (filter (i: i.tempAddress != cfg.tempAddresses) interfaces);
+          text = concatMapStrings
+            (
+              i:
+              let
+                opt = i.tempAddress;
+                val = tempaddrValues.${opt}.sysctl;
+                msg = tempaddrValues.${opt}.description;
+              in
+              ''
+                # override to ${msg} for ${i.name}
+                ACTION=="add", SUBSYSTEM=="net", NAME=="${i.name}", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${
+                  replaceStrings [ "." ] [ "/" ] i.name
+                }.use_tempaddr=${val}"
+              ''
+            )
+            (filter (i: i.tempAddress != cfg.tempAddresses) interfaces);
         })
       ]
       ++ lib.optional (cfg.wlanInterfaces != { }) (

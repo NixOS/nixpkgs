@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.bluemap;
@@ -13,15 +12,19 @@ let
   webserverConfig = format.generate "webserver.conf" cfg.webserverSettings;
 
   mapsFolder = pkgs.linkFarm "maps" (
-    lib.attrsets.mapAttrs' (
-      name: value: lib.nameValuePair "${name}.conf" (format.generate "${name}.conf" value)
-    ) cfg.maps
+    lib.attrsets.mapAttrs'
+      (
+        name: value: lib.nameValuePair "${name}.conf" (format.generate "${name}.conf" value)
+      )
+      cfg.maps
   );
 
   storageFolder = pkgs.linkFarm "storage" (
-    lib.attrsets.mapAttrs' (
-      name: value: lib.nameValuePair "${name}.conf" (format.generate "${name}.conf" value)
-    ) cfg.storage
+    lib.attrsets.mapAttrs'
+      (
+        name: value: lib.nameValuePair "${name}.conf" (format.generate "${name}.conf" value)
+      )
+      cfg.storage
   );
 
   configFolder = pkgs.linkFarm "bluemap-config" {

@@ -1,29 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  numpy,
-
-  # tests
-  asyncpg,
-  django,
-  peewee,
-  pg8000,
-  postgresql,
-  postgresqlTestHook,
-  psycopg-pool,
-  psycopg,
-  psycopg2,
-  pytest-asyncio,
-  pytestCheckHook,
-  scipy,
-  sqlalchemy,
-  sqlmodel,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  numpy
+, # tests
+  asyncpg
+, django
+, peewee
+, pg8000
+, postgresql
+, postgresqlTestHook
+, psycopg-pool
+, psycopg
+, psycopg2
+, pytest-asyncio
+, pytestCheckHook
+, scipy
+, sqlalchemy
+, sqlmodel
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchzip,
-  lib,
-  autoPatchelfHook,
-  libz,
+{ stdenv
+, fetchzip
+, lib
+, autoPatchelfHook
+, libz
+,
 }:
 let
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
@@ -11,14 +11,12 @@ let
     {
       x86_64-linux = "lin64_standalone";
       x86_64-darwin = "mac64_standalone";
-    }
-    .${stdenv.hostPlatform.system} or throwSystem;
+    }.${stdenv.hostPlatform.system} or throwSystem;
   hash =
     {
       x86_64-linux = "sha256-ucG6oR4gBRUjMmHRr9QNenc04ENvwLvyCzSAqIoAiwM=";
       x86_64-darwin = "sha256-BObRSSGUra1y/oo3ZFfIGi2PdHDX2gZy315x7R9DQPk=";
-    }
-    .${stdenv.hostPlatform.system} or throwSystem;
+    }.${stdenv.hostPlatform.system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "volatility2-bin";

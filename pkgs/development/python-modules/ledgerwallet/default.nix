@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  cryptography,
-  click,
-  construct,
-  ecdsa,
-  hidapi,
-  intelhex,
-  pillow,
-  protobuf,
-  requests,
-  setuptools,
-  setuptools-scm,
-  tabulate,
-  toml,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, cryptography
+, click
+, construct
+, ecdsa
+, hidapi
+, intelhex
+, pillow
+, protobuf
+, requests
+, setuptools
+, setuptools-scm
+, tabulate
+, toml
+,
 }:
 
 buildPythonPackage rec {

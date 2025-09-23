@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  mono,
-  mkNugetDeps,
-  makeWrapper,
-  makeFontsConf,
-  gtk2,
-  cups,
-  timidity,
+{ lib
+, stdenv
+, fetchurl
+, mono
+, mkNugetDeps
+, makeWrapper
+, makeFontsConf
+, gtk2
+, cups
+, timidity
+,
 }:
 
 let

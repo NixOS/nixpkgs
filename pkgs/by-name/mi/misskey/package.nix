@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  nixosTests,
-  fetchFromGitHub,
-  nodejs,
-  pnpm_9,
-  makeWrapper,
-  python3,
-  bash,
-  jemalloc,
-  ffmpeg-headless,
-  writeShellScript,
-  xcbuild,
-  nix-update-script,
+{ stdenv
+, lib
+, nixosTests
+, fetchFromGitHub
+, nodejs
+, pnpm_9
+, makeWrapper
+, python3
+, bash
+, jemalloc
+, ffmpeg-headless
+, writeShellScript
+, xcbuild
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,11 @@
-{
-  runCommand,
-  lib,
-  npiet,
-
-  testName,
-  programPath,
-  programInput ? "",
-  expectedOutput,
+{ runCommand
+, lib
+, npiet
+, testName
+, programPath
+, programInput ? ""
+, expectedOutput
+,
 }:
 runCommand "npiet-test-${testName}" { } ''
   actual_output="$(echo '${programInput}' | '${lib.getExe npiet}' -q -w -e 100000 '${programPath}')"

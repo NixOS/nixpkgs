@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libgcrypt,
-  libgpg-error,
-  libtasn1,
-
-  # Optional Dependencies
-  pam ? null,
-  libidn ? null,
-  gnutls ? null,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libgcrypt
+, libgpg-error
+, libtasn1
+, # Optional Dependencies
+  pam ? null
+, libidn ? null
+, gnutls ? null
+,
 }:
 
 let

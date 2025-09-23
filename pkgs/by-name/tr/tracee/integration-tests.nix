@@ -1,7 +1,7 @@
-{
-  lib,
-  tracee,
-  makeWrapper,
+{ lib
+, tracee
+, makeWrapper
+,
 }:
 tracee.overrideAttrs (oa: {
   pname = oa.pname + "-integration";

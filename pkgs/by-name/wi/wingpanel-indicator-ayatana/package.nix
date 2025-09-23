@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  replaceVars,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  gtk3,
-  libindicator-gtk3,
-  pantheon,
-  indicator-application-gtk3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, replaceVars
+, meson
+, ninja
+, pkg-config
+, vala
+, gtk3
+, libindicator-gtk3
+, pantheon
+, indicator-application-gtk3
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchurl,
-  nixosTests,
-  callPackage,
+{ lib
+, buildGoModule
+, fetchurl
+, nixosTests
+, callPackage
+,
 }:
 
 buildGoModule rec {

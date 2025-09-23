@@ -1,27 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nodejs,
-  yarn-berry_3,
-  hatch-jupyter-builder,
-  hatchling,
-  async-lru,
-  httpx,
-  importlib-metadata,
-  ipykernel,
-  jinja2,
-  jupyter-core,
-  jupyter-lsp,
-  jupyter-server,
-  jupyterlab-server,
-  notebook-shim,
-  packaging,
-  setuptools,
-  tomli,
-  tornado,
-  traitlets,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nodejs
+, yarn-berry_3
+, hatch-jupyter-builder
+, hatchling
+, async-lru
+, httpx
+, importlib-metadata
+, ipykernel
+, jinja2
+, jupyter-core
+, jupyter-lsp
+, jupyter-server
+, jupyterlab-server
+, notebook-shim
+, packaging
+, setuptools
+, tomli
+, tornado
+, traitlets
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

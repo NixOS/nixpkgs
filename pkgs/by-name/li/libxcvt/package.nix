@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxcvt";

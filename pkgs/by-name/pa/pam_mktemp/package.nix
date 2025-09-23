@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pam,
-  e2fsprogs,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pam
+, e2fsprogs
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,7 +1,7 @@
-{
-  lib,
-  python312Packages,
-  nixosTests,
+{ lib
+, python312Packages
+, nixosTests
+,
 }:
 
 let

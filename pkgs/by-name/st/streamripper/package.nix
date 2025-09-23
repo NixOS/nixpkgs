@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchDebianPatch,
-  glib,
-  pkg-config,
-  libogg,
-  libvorbis,
-  libmad,
+{ lib
+, stdenv
+, fetchurl
+, fetchDebianPatch
+, glib
+, pkg-config
+, libogg
+, libvorbis
+, libmad
+,
 }:
 
 stdenv.mkDerivation rec {

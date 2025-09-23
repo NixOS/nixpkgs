@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  headsetcontrol,
-  wrapGAppsHook3,
-  python3,
-  gtk3,
-  gobject-introspection,
-  libayatana-appindicator,
+{ lib
+, stdenv
+, fetchFromGitHub
+, headsetcontrol
+, wrapGAppsHook3
+, python3
+, gtk3
+, gobject-introspection
+, libayatana-appindicator
+,
 }:
 
 stdenv.mkDerivation rec {

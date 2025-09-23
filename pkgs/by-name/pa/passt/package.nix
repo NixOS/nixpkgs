@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  getconf,
-  gitUpdater,
-  testers,
-  unixtools,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, getconf
+, gitUpdater
+, testers
+, unixtools
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

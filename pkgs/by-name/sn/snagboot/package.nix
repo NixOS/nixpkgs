@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  snagboot,
-  testers,
-  gitUpdater,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, snagboot
+, testers
+, gitUpdater
+, udevCheckHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

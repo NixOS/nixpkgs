@@ -1,14 +1,14 @@
-{
-  lib,
-  cmake,
-  rustPlatform,
-  pkg-config,
-  fetchFromGitHub,
-  atk,
-  gtk3,
-  glib,
-  openssl,
-  nix-update-script,
+{ lib
+, cmake
+, rustPlatform
+, pkg-config
+, fetchFromGitHub
+, atk
+, gtk3
+, glib
+, openssl
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

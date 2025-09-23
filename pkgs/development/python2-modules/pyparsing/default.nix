@@ -1,12 +1,11 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-
-  # since this is a dependency of pytest, we need to avoid
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, # since this is a dependency of pytest, we need to avoid
   # circular dependencies
-  jinja2,
-  railroad-diagrams,
+  jinja2
+, railroad-diagrams
+,
 }:
 
 let

@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-  pytestCheckHook,
-  libiconv,
-  numpy,
-  protobuf,
-  protoc,
-  pyarrow,
-  typing-extensions,
-  pythonOlder,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, pytestCheckHook
+, libiconv
+, numpy
+, protobuf
+, protoc
+, pyarrow
+, typing-extensions
+, pythonOlder
+,
 }:
 
 let

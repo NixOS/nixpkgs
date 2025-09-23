@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  astropy,
-  boto3,
-  requests,
-  keyring,
-  beautifulsoup4,
-  html5lib,
-  matplotlib,
-  pillow,
-  pytest,
-  pytest-astropy,
-  pytest-dependency,
-  pytest-rerunfailures,
-  pytestCheckHook,
-  pyvo,
-  astropy-helpers,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, astropy
+, boto3
+, requests
+, keyring
+, beautifulsoup4
+, html5lib
+, matplotlib
+, pillow
+, pytest
+, pytest-astropy
+, pytest-dependency
+, pytest-rerunfailures
+, pytestCheckHook
+, pyvo
+, astropy-helpers
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

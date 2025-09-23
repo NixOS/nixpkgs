@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildHomeAssistantComponent,
-  ulid-transform,
+{ lib
+, fetchFromGitHub
+, buildHomeAssistantComponent
+, ulid-transform
+,
 }:
 
 buildHomeAssistantComponent rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  kdePackages,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, kdePackages
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

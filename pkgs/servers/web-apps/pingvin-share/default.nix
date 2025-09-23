@@ -1,7 +1,7 @@
-{
-  callPackage,
-  fetchFromGitHub,
-  recurseIntoAttrs,
+{ callPackage
+, fetchFromGitHub
+, recurseIntoAttrs
+,
 }:
 
 let

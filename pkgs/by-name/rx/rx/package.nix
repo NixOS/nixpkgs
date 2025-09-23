@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  cmake,
-  pkg-config,
-  xorg ? null,
-  libGL ? null,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, cmake
+, pkg-config
+, xorg ? null
+, libGL ? null
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  stdlib-shims,
+{ lib
+, buildDunePackage
+, fetchurl
+, stdlib-shims
+,
 }:
 
 buildDunePackage rec {

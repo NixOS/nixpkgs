@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qtbase,
-  zlib,
-  freetype,
-  libjpeg,
-  libtiff,
-  libpng,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qtbase
+, zlib
+, freetype
+, libjpeg
+, libtiff
+, libpng
+,
 }:
 
 stdenv.mkDerivation rec {

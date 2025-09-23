@@ -1,10 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-
-  ffmpeg,
-  makeWrapper,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, ffmpeg
+, makeWrapper
+,
 }:
 
 rustPlatform.buildRustPackage rec {

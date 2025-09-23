@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  vimPlugins,
-  vimUtils,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, openssl
+, pkg-config
+, rustPlatform
+, vimPlugins
+, vimUtils
+,
 }:
 let
   version = "1.1.0-unstable-2025-01-21";

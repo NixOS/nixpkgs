@@ -1,32 +1,29 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  httpx,
-  orjson,
-  pydantic,
-  requests,
-  requests-toolbelt,
-  zstandard,
-
-  # tests
-  anthropic,
-  dataclasses-json,
-  fastapi,
-  freezegun,
-  instructor,
-  opentelemetry-sdk,
-  pytest-asyncio,
-  pytest-vcr,
-  pytestCheckHook,
-  uvicorn,
-  attr,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  httpx
+, orjson
+, pydantic
+, requests
+, requests-toolbelt
+, zstandard
+, # tests
+  anthropic
+, dataclasses-json
+, fastapi
+, freezegun
+, instructor
+, opentelemetry-sdk
+, pytest-asyncio
+, pytest-vcr
+, pytestCheckHook
+, uvicorn
+, attr
+,
 }:
 
 buildPythonPackage rec {

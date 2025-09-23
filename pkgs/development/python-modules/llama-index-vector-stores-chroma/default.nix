@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  chromadb,
-  fetchPypi,
-  hatchling,
-  llama-index-core,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, chromadb
+, fetchPypi
+, hatchling
+, llama-index-core
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

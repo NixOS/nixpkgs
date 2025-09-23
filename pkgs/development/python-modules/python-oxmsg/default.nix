@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  lib,
-  olefile,
-  pytestCheckHook,
-  setuptools,
-  typing-extensions,
+{ buildPythonPackage
+, click
+, fetchFromGitHub
+, lib
+, olefile
+, pytestCheckHook
+, setuptools
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

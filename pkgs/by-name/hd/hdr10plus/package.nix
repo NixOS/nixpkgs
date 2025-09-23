@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  rust,
-  rustPlatform,
-  hdr10plus_tool,
-  cargo-c,
-  fontconfig,
+{ lib
+, stdenv
+, rust
+, rustPlatform
+, hdr10plus_tool
+, cargo-c
+, fontconfig
+,
 }:
 
 let

@@ -1,36 +1,35 @@
-{
-  stdenv,
-  writeText,
-  elixir,
-  erlang,
-  hex,
-  lib,
+{ stdenv
+, writeText
+, elixir
+, erlang
+, hex
+, lib
+,
 }:
 
-{
-  name,
-  version,
-  src,
-  buildInputs ? [ ],
-  nativeBuildInputs ? [ ],
-  erlangCompilerOptions ? [ ],
-  # Deterministic Erlang builds remove full system paths from debug information
+{ name
+, version
+, src
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, erlangCompilerOptions ? [ ]
+, # Deterministic Erlang builds remove full system paths from debug information
   # among other things to keep builds more reproducible. See their docs for more:
   # https://www.erlang.org/doc/man/compile
-  erlangDeterministicBuilds ? true,
-  beamDeps ? [ ],
-  propagatedBuildInputs ? [ ],
-  postPatch ? "",
-  compilePorts ? false,
-  meta ? { },
-  enableDebugInfo ? false,
-  mixEnv ? "prod",
-  mixTarget ? "host",
-  removeConfig ? true,
-  # A config directory that is considered for all the dependencies of an app, typically in $src/config/
+  erlangDeterministicBuilds ? true
+, beamDeps ? [ ]
+, propagatedBuildInputs ? [ ]
+, postPatch ? ""
+, compilePorts ? false
+, meta ? { }
+, enableDebugInfo ? false
+, mixEnv ? "prod"
+, mixTarget ? "host"
+, removeConfig ? true
+, # A config directory that is considered for all the dependencies of an app, typically in $src/config/
   # This was initially added, as some of Mobilizon's dependencies need to access the config at build time.
-  appConfigPath ? null,
-  ...
+  appConfigPath ? null
+, ...
 }@attrs:
 
 assert appConfigPath != null -> removeConfig;

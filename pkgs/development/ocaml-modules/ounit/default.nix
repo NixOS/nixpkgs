@@ -1,8 +1,8 @@
-{
-  stdenv,
-  ocaml,
-  findlib,
-  ounit2,
+{ stdenv
+, ocaml
+, findlib
+, ounit2
+,
 }:
 
 stdenv.mkDerivation {

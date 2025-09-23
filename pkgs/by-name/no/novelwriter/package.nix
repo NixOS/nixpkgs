@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  python3,
-  fetchFromGitHub,
-  qt6,
-  nix-update-script,
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+, qt6
+, nix-update-script
+,
 }:
 let
   version = "2.7.5";

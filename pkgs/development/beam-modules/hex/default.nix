@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeText,
-  elixir,
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeText
+, elixir
+,
 }:
 
 let

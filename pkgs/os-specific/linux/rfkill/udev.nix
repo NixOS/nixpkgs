@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  replaceVarsWith,
-  udevCheckHook,
+{ lib
+, stdenv
+, replaceVarsWith
+, udevCheckHook
+,
 }:
 
 # Provides a facility to hook into rfkill changes.

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  libsForQt5,
-  poppler,
-  gnuplot,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, libsForQt5
+, poppler
+, gnuplot
+,
 }:
 
 # This package only builds ktikz without KDE integration because KDE4 is

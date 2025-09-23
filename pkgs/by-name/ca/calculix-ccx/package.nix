@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gfortran,
-  arpack,
-  spooles,
-  blas,
-  lapack,
+{ lib
+, stdenv
+, fetchurl
+, gfortran
+, arpack
+, spooles
+, blas
+, lapack
+,
 }:
 
 assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !blas.isILP64);

@@ -1,26 +1,23 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  requests,
-  pycryptodomex,
-  pydantic-settings,
-  pyjwkest,
-  mako,
-  cryptography,
-  defusedxml,
-
-  # tests
-  pytestCheckHook,
-  freezegun,
-  responses,
-  testfixtures,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  requests
+, pycryptodomex
+, pydantic-settings
+, pyjwkest
+, mako
+, cryptography
+, defusedxml
+, # tests
+  pytestCheckHook
+, freezegun
+, responses
+, testfixtures
+,
 }:
 
 buildPythonPackage rec {

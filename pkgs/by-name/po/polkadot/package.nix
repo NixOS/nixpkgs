@@ -1,15 +1,15 @@
-{
-  cacert,
-  fetchFromGitHub,
-  lib,
-  openssl,
-  pkg-config,
-  protobuf,
-  rocksdb_8_3,
-  rust-jemalloc-sys-unprefixed,
-  rustPlatform,
-  rustc,
-  stdenv,
+{ cacert
+, fetchFromGitHub
+, lib
+, openssl
+, pkg-config
+, protobuf
+, rocksdb_8_3
+, rust-jemalloc-sys-unprefixed
+, rustPlatform
+, rustc
+, stdenv
+,
 }:
 
 let

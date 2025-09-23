@@ -1,7 +1,7 @@
-{
-  config,
-  lib,
-  callPackages,
+{ config
+, lib
+, callPackages
+,
 }:
 
 # If you are reading this, you can test these writers by running: nix-build . -A tests.writers

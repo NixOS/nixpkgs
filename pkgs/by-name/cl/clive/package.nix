@@ -1,12 +1,12 @@
-{
-  lib,
-  ttyd,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, ttyd
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, versionCheckHook
+, nix-update-script
+,
 }:
 buildGoModule rec {
   pname = "clive";

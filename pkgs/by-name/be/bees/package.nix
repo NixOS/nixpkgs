@@ -1,17 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeWrapper,
-  nixosTests,
-
-  stdenv,
-  # Build inputs
-  btrfs-progs,
-  util-linux,
-  python3Packages,
-  # bees-service-wrapper
-  bash,
-  coreutils,
+{ lib
+, fetchFromGitHub
+, makeWrapper
+, nixosTests
+, stdenv
+, # Build inputs
+  btrfs-progs
+, util-linux
+, python3Packages
+, # bees-service-wrapper
+  bash
+, coreutils
+,
 }:
 
 stdenv.mkDerivation rec {

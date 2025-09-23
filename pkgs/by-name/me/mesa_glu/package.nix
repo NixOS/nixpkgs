@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  libGLX,
-  testers,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, libGLX
+, testers
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

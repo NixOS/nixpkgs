@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  nodejs,
-  pnpm,
-  buildGoModule,
-  mage,
-  writeShellScriptBin,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, stdenv
+, nodejs
+, pnpm
+, buildGoModule
+, mage
+, writeShellScriptBin
+, nixosTests
+,
 }:
 
 let

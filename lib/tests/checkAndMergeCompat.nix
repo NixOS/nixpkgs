@@ -1,7 +1,6 @@
-{
-  pkgs ? import ../.. { },
-  currLibPath ? ../.,
-  prevLibPath ? "${
+{ pkgs ? import ../.. { }
+, currLibPath ? ../.
+, prevLibPath ? "${
     pkgs.fetchFromGitHub {
       owner = "nixos";
       repo = "nixpkgs";
@@ -10,7 +9,8 @@
       rev = "bcf94dd3f07189b7475d823c8d67d08b58289905";
       hash = "sha256-MuMiIY3MX5pFSOCvutmmRhV6RD0R3CG0Hmazkg8cMFI=";
     }
-  }/lib",
+  }/lib"
+,
 }:
 let
   lib = import currLibPath;
@@ -19,14 +19,14 @@ let
   lib_with_merge_v1 = import prevLibPath;
 
   getMatrix =
-    {
-      getType ? null,
-      # If getType is set this is only used as test prefix
+    { getType ? null
+    , # If getType is set this is only used as test prefix
       # And the type from getType is used
-      outerTypeName,
-      innerTypeName,
-      value,
-      testAttrs,
+      outerTypeName
+    , innerTypeName
+    , value
+    , testAttrs
+    ,
     }:
     let
       evalModules.call_v1 = lib_with_merge_v1.evalModules;
@@ -36,31 +36,37 @@ let
       innerTypes.inner_v1 = lib_with_merge_v1.types;
       innerTypes.inner_v2 = lib_with_merge_v2.types;
     in
-    lib.mapAttrs (
-      _: evalModules:
-      lib.mapAttrs (
-        _: outerTypes:
-        lib.mapAttrs (_: innerTypes: {
-          "test_${outerTypeName}_${innerTypeName}" = testAttrs // {
-            expr =
-              (evalModules {
-                modules = [
-                  (m: {
-                    options.foo = m.lib.mkOption {
-                      type =
-                        if getType != null then
-                          getType outerTypes innerTypes
-                        else
-                          outerTypes.${outerTypeName} innerTypes.${innerTypeName};
-                      default = value;
-                    };
-                  })
-                ];
-              }).config.foo;
-          };
-        }) innerTypes
-      ) outerTypes
-    ) evalModules;
+    lib.mapAttrs
+      (
+        _: evalModules:
+        lib.mapAttrs
+          (
+            _: outerTypes:
+            lib.mapAttrs
+              (_: innerTypes: {
+                "test_${outerTypeName}_${innerTypeName}" = testAttrs // {
+                  expr =
+                    (evalModules {
+                      modules = [
+                        (m: {
+                          options.foo = m.lib.mkOption {
+                            type =
+                              if getType != null then
+                                getType outerTypes innerTypes
+                              else
+                                outerTypes.${outerTypeName} innerTypes.${innerTypeName};
+                            default = value;
+                          };
+                        })
+                      ];
+                    }).config.foo;
+                };
+              })
+              innerTypes
+          )
+          outerTypes
+      )
+      evalModules;
 in
 {
   # AttrsOf string

@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  gettext,
-  libxml2,
-  gobject-introspection,
-  wrapGAppsHook3,
-  python3,
-  glib,
-  gssdp,
-  gupnp,
-  gupnp-av,
-  gupnp-dlna,
-  gst_all_1,
-  libgee,
-  libsoup_2_4,
-  gtk3,
-  libmediaart,
-  sqlite,
-  systemd,
-  tinysparql,
-  shared-mime-info,
-  gnome,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, vala
+, gettext
+, libxml2
+, gobject-introspection
+, wrapGAppsHook3
+, python3
+, glib
+, gssdp
+, gupnp
+, gupnp-av
+, gupnp-dlna
+, gst_all_1
+, libgee
+, libsoup_2_4
+, gtk3
+, libmediaart
+, sqlite
+, systemd
+, tinysparql
+, shared-mime-info
+, gnome
+,
 }:
 
 stdenv.mkDerivation rec {

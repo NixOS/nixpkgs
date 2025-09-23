@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libsodium,
-  liboprf,
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libsodium
+, liboprf
+, testers
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

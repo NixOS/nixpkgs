@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPy27,
-  pytestCheckHook,
-  autoconf,
-  automake,
-  cmake,
-  gcc,
-  libtool,
-  parameterized,
-  perl,
-  setuptools,
-  simplejson,
-  snapshot-restore-py,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, pytestCheckHook
+, autoconf
+, automake
+, cmake
+, gcc
+, libtool
+, parameterized
+, perl
+, setuptools
+, simplejson
+, snapshot-restore-py
+,
 }:
 buildPythonPackage rec {
   pname = "awslambdaric";

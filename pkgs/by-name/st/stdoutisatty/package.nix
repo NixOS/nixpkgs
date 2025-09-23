@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  makeBinaryWrapper,
-  nix-update-script,
-  runCommand,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeBinaryWrapper
+, nix-update-script
+, runCommand
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

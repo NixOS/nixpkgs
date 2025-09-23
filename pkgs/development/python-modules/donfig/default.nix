@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  versioneer,
-  pyyaml,
-  cloudpickle,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, versioneer
+, pyyaml
+, cloudpickle
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

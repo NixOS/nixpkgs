@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  callPackage,
-  autoreconfHook,
-  texinfo,
-  libffi,
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, autoreconfHook
+, texinfo
+, libffi
+,
 }:
 
 let

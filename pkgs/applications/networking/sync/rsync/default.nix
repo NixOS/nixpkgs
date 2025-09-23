@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  updateAutotoolsGnuConfigScriptsHook,
-  perl,
-  libiconv,
-  zlib,
-  popt,
-  enableACLs ? lib.meta.availableOn stdenv.hostPlatform acl,
-  acl,
-  enableLZ4 ? true,
-  lz4,
-  enableOpenSSL ? true,
-  openssl,
-  enableXXHash ? true,
-  xxHash,
-  enableZstd ? true,
-  zstd,
-  nixosTests,
-  fakeroot,
+{ lib
+, stdenv
+, fetchurl
+, updateAutotoolsGnuConfigScriptsHook
+, perl
+, libiconv
+, zlib
+, popt
+, enableACLs ? lib.meta.availableOn stdenv.hostPlatform acl
+, acl
+, enableLZ4 ? true
+, lz4
+, enableOpenSSL ? true
+, openssl
+, enableXXHash ? true
+, xxHash
+, enableZstd ? true
+, zstd
+, nixosTests
+, fakeroot
+,
 }:
 
 stdenv.mkDerivation rec {

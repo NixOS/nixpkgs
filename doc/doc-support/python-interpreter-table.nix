@@ -1,9 +1,9 @@
 # To build this derivation, run `nix-build -A nixpkgs-manual.pythonInterpreterTable`
-{
-  lib,
-  writeText,
-  pkgs,
-  pythonInterpreters,
+{ lib
+, writeText
+, pkgs
+, pythonInterpreters
+,
 }:
 let
   isPythonInterpreter =
@@ -35,20 +35,24 @@ let
   aliases =
     pname:
     lib.attrNames (
-      lib.filterAttrs (
-        name: value:
-        # use tryEval to handle entries in aliases.nix
-        (builtins.tryEval (
-          isPythonInterpreter name && name != pname && interpreterName name == interpreterName pname
-        )).value
-      ) pkgs
+      lib.filterAttrs
+        (
+          name: value:
+          # use tryEval to handle entries in aliases.nix
+          (builtins.tryEval (
+            isPythonInterpreter name && name != pname && interpreterName name == interpreterName pname
+          )).value
+        )
+        pkgs
     );
 
-  result = map (pname: {
-    inherit pname;
-    aliases = aliases pname;
-    interpreter = interpreterName pname;
-  }) interpreters;
+  result = map
+    (pname: {
+      inherit pname;
+      aliases = aliases pname;
+      interpreter = interpreterName pname;
+    })
+    interpreters;
 
   toMarkdown =
     data:

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  asn1crypto,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  openssl,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, stdenv
+, asn1crypto
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, openssl
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

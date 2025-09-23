@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  replaceVars,
-  setuptools,
-  setuptools-scm,
-  freetype,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, replaceVars
+, setuptools
+, setuptools-scm
+, freetype
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

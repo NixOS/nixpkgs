@@ -1,38 +1,35 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  agate,
-  click,
-  daff,
-  dbt-adapters,
-  dbt-common,
-  dbt-extractor,
-  dbt-protos,
-  dbt-semantic-interfaces,
-  jinja2,
-  logbook,
-  mashumaro,
-  networkx,
-  packaging,
-  pathspec,
-  protobuf,
-  pydantic,
-  pydantic-settings,
-  pytz,
-  pyyaml,
-  requests,
-  snowplow-tracker,
-  sqlparse,
-  typing-extensions,
-
-  # passthru
-  callPackage,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  agate
+, click
+, daff
+, dbt-adapters
+, dbt-common
+, dbt-extractor
+, dbt-protos
+, dbt-semantic-interfaces
+, jinja2
+, logbook
+, mashumaro
+, networkx
+, packaging
+, pathspec
+, protobuf
+, pydantic
+, pydantic-settings
+, pytz
+, pyyaml
+, requests
+, snowplow-tracker
+, sqlparse
+, typing-extensions
+, # passthru
+  callPackage
+,
 }:
 
 buildPythonPackage rec {

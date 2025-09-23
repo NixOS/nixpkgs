@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bundlerEnv,
-  ruby_3_4,
-  withMongo ? false,
-  withRchardet ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bundlerEnv
+, ruby_3_4
+, withMongo ? false
+, withRchardet ? false
+,
 }:
 
 let

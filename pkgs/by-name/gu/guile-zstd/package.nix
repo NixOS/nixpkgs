@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  autoreconfHook,
-  pkg-config,
-  guile,
-  texinfo,
-  zstd,
+{ stdenv
+, lib
+, fetchFromGitea
+, autoreconfHook
+, pkg-config
+, guile
+, texinfo
+, zstd
+,
 }:
 
 stdenv.mkDerivation rec {

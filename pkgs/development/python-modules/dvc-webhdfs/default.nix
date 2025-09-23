@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  dvc-objects,
-  fetchPypi,
-  fsspec,
-  pythonOlder,
-  requests-kerberos,
-  setuptools-scm,
-  setuptools,
+{ lib
+, buildPythonPackage
+, dvc-objects
+, fetchPypi
+, fsspec
+, pythonOlder
+, requests-kerberos
+, setuptools-scm
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

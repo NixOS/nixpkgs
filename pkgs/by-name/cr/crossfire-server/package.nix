@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  pkgs,
-  fetchgit,
-  autoconf,
-  automake,
-  libtool,
-  flex,
-  perl,
-  check,
-  pkg-config,
-  python3,
-  # Included here so that hosts using custom maps/archetypes can easily override.
-  maps ? pkgs.crossfire-maps,
-  arch ? pkgs.crossfire-arch,
+{ stdenv
+, lib
+, pkgs
+, fetchgit
+, autoconf
+, automake
+, libtool
+, flex
+, perl
+, check
+, pkg-config
+, python3
+, # Included here so that hosts using custom maps/archetypes can easily override.
+  maps ? pkgs.crossfire-maps
+, arch ? pkgs.crossfire-arch
+,
 }:
 
 stdenv.mkDerivation {

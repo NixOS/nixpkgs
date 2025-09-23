@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  libGL,
-  libGLU,
-  libpng,
-  libjpeg_turbo,
-  libuv,
-  libvorbis,
-  mbedtls_2,
-  openal,
-  pcre,
-  SDL2,
-  sqlite,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, ninja
+, libGL
+, libGLU
+, libpng
+, libjpeg_turbo
+, libuv
+, libvorbis
+, mbedtls_2
+, openal
+, pcre
+, SDL2
+, sqlite
+,
 }:
 
 stdenv.mkDerivation rec {

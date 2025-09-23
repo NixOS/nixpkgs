@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
 
@@ -688,24 +687,26 @@ in
 
       mailman-uwsgi = lib.mkIf cfg.serve.enable (
         let
-          uwsgiConfig = lib.recursiveUpdate {
-            uwsgi = {
-              type = "normal";
-              plugins = [ "python3" ];
-              home = webEnv;
-              http = "127.0.0.1:18507";
-              buffer-size = 8192;
+          uwsgiConfig = lib.recursiveUpdate
+            {
+              uwsgi = {
+                type = "normal";
+                plugins = [ "python3" ];
+                home = webEnv;
+                http = "127.0.0.1:18507";
+                buffer-size = 8192;
+              }
+              // (
+                if cfg.serve.virtualRoot == "/" then
+                  { module = "mailman_web.wsgi:application"; }
+                else
+                  {
+                    mount = "${cfg.serve.virtualRoot}=mailman_web.wsgi:application";
+                    manage-script-name = true;
+                  }
+              );
             }
-            // (
-              if cfg.serve.virtualRoot == "/" then
-                { module = "mailman_web.wsgi:application"; }
-              else
-                {
-                  mount = "${cfg.serve.virtualRoot}=mailman_web.wsgi:application";
-                  manage-script-name = true;
-                }
-            );
-          } cfg.serve.uwsgiSettings;
+            cfg.serve.uwsgiSettings;
           uwsgiConfigFile = pkgs.writeText "uwsgi-mailman.json" (builtins.toJSON uwsgiConfig);
         in
         {
@@ -764,17 +765,17 @@ in
       };
     }
     //
-      lib.flip lib.mapAttrs'
-        {
-          "minutely" = "minutely";
-          "quarter_hourly" = "*:00/15";
-          "hourly" = "hourly";
-          "daily" = "daily";
-          "weekly" = "weekly";
-          "yearly" = "yearly";
-        }
-        (
-          name: startAt:
+    lib.flip lib.mapAttrs'
+      {
+        "minutely" = "minutely";
+        "quarter_hourly" = "*:00/15";
+        "hourly" = "hourly";
+        "daily" = "daily";
+        "weekly" = "weekly";
+        "yearly" = "yearly";
+      }
+      (
+        name: startAt:
           lib.nameValuePair "hyperkitty-${name}" (
             lib.mkIf cfg.hyperkitty.enable {
               description = "Trigger ${name} Hyperkitty events";
@@ -788,7 +789,7 @@ in
               };
             }
           )
-        );
+      );
   };
 
   meta = {

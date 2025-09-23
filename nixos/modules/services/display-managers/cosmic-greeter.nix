@@ -3,11 +3,10 @@
 # Portions of this code are adapted from nixos-cosmic
 # https://github.com/lilyinstarlight/nixos-cosmic
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let

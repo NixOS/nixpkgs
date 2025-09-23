@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  dvc-objects,
-  fetchPypi,
-  ossfs,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, dvc-objects
+, fetchPypi
+, ossfs
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

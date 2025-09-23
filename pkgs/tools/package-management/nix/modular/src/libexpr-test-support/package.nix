@@ -1,16 +1,13 @@
-{
-  lib,
-  mkMesonLibrary,
+{ lib
+, mkMesonLibrary
+, nix-store-test-support
+, nix-expr
+, nix-expr-c
+, rapidcheck
+, # Configuration Options
 
-  nix-store-test-support,
-  nix-expr,
-  nix-expr-c,
-
-  rapidcheck,
-
-  # Configuration Options
-
-  version,
+  version
+,
 }:
 
 mkMesonLibrary (finalAttrs: {

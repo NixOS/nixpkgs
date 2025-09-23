@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libtool,
-  cfitsio,
-  curl,
-  ghostscript,
-  gsl,
-  libgit2,
-  libjpeg,
-  libtiff,
-  lzlib,
-  wcslib,
+{ lib
+, stdenv
+, fetchurl
+, libtool
+, cfitsio
+, curl
+, ghostscript
+, gsl
+, libgit2
+, libjpeg
+, libtiff
+, lzlib
+, wcslib
+,
 }:
 
 stdenv.mkDerivation rec {

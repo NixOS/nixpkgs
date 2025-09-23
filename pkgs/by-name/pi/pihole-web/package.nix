@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pihole,
-  pihole-ftl,
-  procps,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pihole
+, pihole-ftl
+, procps
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,11 +1,11 @@
-{
-  fetchurl,
-  gitUpdater,
-  jre,
-  lib,
-  makeWrapper,
-  stdenvNoCC,
-  testers,
+{ fetchurl
+, gitUpdater
+, jre
+, lib
+, makeWrapper
+, stdenvNoCC
+, testers
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

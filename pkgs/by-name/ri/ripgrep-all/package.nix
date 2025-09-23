@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  makeWrapper,
-  ffmpeg,
-  pandoc,
-  poppler-utils,
-  ripgrep,
-  zip,
-  fzf,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, makeWrapper
+, ffmpeg
+, pandoc
+, poppler-utils
+, ripgrep
+, zip
+, fzf
+,
 }:
 
 let

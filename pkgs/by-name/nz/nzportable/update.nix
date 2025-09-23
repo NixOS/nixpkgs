@@ -1,10 +1,10 @@
-{
-  lib,
-  writeShellApplication,
-  jq,
-  curl,
-  nix-prefetch-git,
-  common-updater-scripts,
+{ lib
+, writeShellApplication
+, jq
+, curl
+, nix-prefetch-git
+, common-updater-scripts
+,
 }:
 
 lib.getExe (writeShellApplication {

@@ -1,13 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
-  curl,
-  lua,
-  openssl,
-  features ? {
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, autoreconfHook
+, curl
+, lua
+, openssl
+, features ? {
     urls = false;
     # Upstream enables regex by default
     regex = true;
@@ -15,7 +14,8 @@
     signatures = false;
     lua = false;
     utils = false;
-  },
+  }
+,
 }:
 
 let
@@ -47,9 +47,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = lib.mapAttrsToList (
-    feat: enabled: lib.strings.enableFeature enabled feat
-  ) features;
+  configureFlags = lib.mapAttrsToList
+    (
+      feat: enabled: lib.strings.enableFeature enabled feat
+    )
+    features;
 
   meta = with lib; {
     description = "Universal configuration library parser";

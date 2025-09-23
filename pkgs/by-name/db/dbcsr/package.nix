@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  mpiCheckPhaseHook,
-  pkg-config,
-  fypp,
-  gfortran,
-  blas,
-  lapack,
-  python3,
-  libxsmm,
-  mpi,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, mpiCheckPhaseHook
+, pkg-config
+, fypp
+, gfortran
+, blas
+, lapack
+, python3
+, libxsmm
+, mpi
+,
 }:
 
 stdenv.mkDerivation rec {

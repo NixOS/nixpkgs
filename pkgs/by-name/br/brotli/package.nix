@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  staticOnly ? stdenv.hostPlatform.isStatic,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, staticOnly ? stdenv.hostPlatform.isStatic
+, testers
+,
 }:
 
 # ?TODO: there's also python lib in there

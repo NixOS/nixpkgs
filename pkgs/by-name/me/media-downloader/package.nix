@@ -1,17 +1,17 @@
-{
-  aria2,
-  cmake,
-  extraPackages ? [
+{ aria2
+, cmake
+, extraPackages ? [
     aria2
     ffmpeg
     python3
-  ],
-  fetchFromGitHub,
-  ffmpeg,
-  lib,
-  python3,
-  qt6,
-  stdenv,
+  ]
+, fetchFromGitHub
+, ffmpeg
+, lib
+, python3
+, qt6
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

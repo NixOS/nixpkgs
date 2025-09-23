@@ -1,10 +1,10 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  unzip,
-  nix-update-script,
-  versionCheckHook,
+{ stdenvNoCC
+, lib
+, fetchurl
+, unzip
+, nix-update-script
+, versionCheckHook
+,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "swiftlint";

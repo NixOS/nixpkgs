@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -29,7 +28,8 @@ in
       plasmaBrowserIntegrationPackage = lib.mkPackageOption pkgs [
         "kdePackages"
         "plasma-browser-integration"
-      ] { };
+      ]
+        { };
 
       extensions = lib.mkOption {
         type = with lib.types; nullOr (listOf str);

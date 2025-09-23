@@ -1,10 +1,10 @@
-{
-  lib,
-  glibc,
-  fetchFromGitHub,
-  makeWrapper,
-  buildGoModule,
-  autoAddDriverRunpath,
+{ lib
+, glibc
+, fetchFromGitHub
+, makeWrapper
+, buildGoModule
+, autoAddDriverRunpath
+,
 }:
 
 let

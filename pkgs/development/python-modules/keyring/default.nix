@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  installShellFiles,
-  setuptools-scm,
-  shtab,
-  importlib-metadata,
-  jaraco-classes,
-  jaraco-context,
-  jaraco-functools,
-  jeepney,
-  secretstorage,
-  pyfakefs,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, installShellFiles
+, setuptools-scm
+, shtab
+, importlib-metadata
+, jaraco-classes
+, jaraco-context
+, jaraco-functools
+, jeepney
+, secretstorage
+, pyfakefs
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

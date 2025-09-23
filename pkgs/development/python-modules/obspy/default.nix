@@ -1,19 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  decorator,
-  lxml,
-  matplotlib,
-  numpy,
-  requests,
-  scipy,
-  sqlalchemy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  decorator
+, lxml
+, matplotlib
+, numpy
+, requests
+, scipy
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

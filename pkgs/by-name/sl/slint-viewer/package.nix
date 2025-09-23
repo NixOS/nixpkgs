@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  qt6,
-  libGL,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchCrate
+, qt6
+, libGL
+, nix-update-script
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slint-viewer";

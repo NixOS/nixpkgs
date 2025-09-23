@@ -1,15 +1,15 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  filelock,
-  lxml,
-  pythonOlder,
-  pytz,
-  requests,
-  setuptools-scm,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, filelock
+, lxml
+, pythonOlder
+, pytz
+, requests
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

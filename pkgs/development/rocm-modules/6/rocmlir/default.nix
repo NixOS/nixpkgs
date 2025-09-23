@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
-  cmake,
-  rocm-cmake,
-  rocminfo,
-  clr,
-  git,
-  libxml2,
-  libedit,
-  zstd,
-  zlib,
-  ncurses,
-  python3Packages,
-  buildRockCompiler ? false,
-  buildTests ? false, # `argument of type 'NoneType' is not iterable`
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+, rocm-cmake
+, rocminfo
+, clr
+, git
+, libxml2
+, libedit
+, zstd
+, zlib
+, ncurses
+, python3Packages
+, buildRockCompiler ? false
+, buildTests ? false
+, # `argument of type 'NoneType' is not iterable`
 }:
 
 # FIXME: rocmlir has an entire separate LLVM build in a subdirectory this is silly

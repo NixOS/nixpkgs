@@ -1,11 +1,11 @@
-{
-  mkKdeDerivation,
-  qtquick3d,
-  pkg-config,
-  pipewire,
-  ffmpeg,
-  libgbm,
-  libva,
+{ mkKdeDerivation
+, qtquick3d
+, pkg-config
+, pipewire
+, ffmpeg
+, libgbm
+, libva
+,
 }:
 mkKdeDerivation {
   pname = "kpipewire";

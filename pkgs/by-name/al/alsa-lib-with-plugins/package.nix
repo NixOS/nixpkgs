@@ -1,11 +1,11 @@
-{
-  lib,
-  pkgs,
-  alsa-lib,
-  plugins ? [ pkgs.alsa-plugins ],
-  lndir,
-  symlinkJoin,
-  runCommand,
+{ lib
+, pkgs
+, alsa-lib
+, plugins ? [ pkgs.alsa-plugins ]
+, lndir
+, symlinkJoin
+, runCommand
+,
 }:
 let
   merged = symlinkJoin {
@@ -14,21 +14,23 @@ let
   };
 in
 runCommand "${alsa-lib.pname}-${alsa-lib.version}"
-  {
-    meta = with lib; {
-      description = "Wrapper to ease access to ALSA plugins";
-      mainProgram = "aserver";
-      platforms = platforms.linux;
-    };
-    outputs = alsa-lib.outputs;
-  }
+{
+  meta = with lib; {
+    description = "Wrapper to ease access to ALSA plugins";
+    mainProgram = "aserver";
+    platforms = platforms.linux;
+  };
+  outputs = alsa-lib.outputs;
+}
   (
-    (lib.concatMapStringsSep "\n" (output: ''
-      mkdir ${builtins.placeholder output}
-      ${lndir}/bin/lndir ${lib.attrByPath [ output ] null alsa-lib} \
-        ${builtins.placeholder output}
-    '') alsa-lib.outputs)
-    + ''
+    (lib.concatMapStringsSep "\n"
+      (output: ''
+        mkdir ${builtins.placeholder output}
+        ${lndir}/bin/lndir ${lib.attrByPath [ output ] null alsa-lib} \
+          ${builtins.placeholder output}
+      '')
+      alsa-lib.outputs)
+      + ''
       cp -r ${merged}/lib/alsa-lib $out/lib
       (
         echo $out | wc -c

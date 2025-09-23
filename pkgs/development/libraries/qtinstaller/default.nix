@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchurl,
-  qtdeclarative,
-  qttools,
-  qtbase,
-  qmake,
+{ stdenv
+, fetchurl
+, qtdeclarative
+, qttools
+, qtbase
+, qmake
+,
 }:
 
 stdenv.mkDerivation rec {

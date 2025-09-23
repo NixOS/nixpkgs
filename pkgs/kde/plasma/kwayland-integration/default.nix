@@ -1,15 +1,13 @@
-{
-  stdenv,
-  sources,
-
-  cmake,
-  pkg-config,
-  libsForQt5,
-  wayland-scanner,
-
-  plasma-wayland-protocols,
-  wayland,
-  wayland-protocols,
+{ stdenv
+, sources
+, cmake
+, pkg-config
+, libsForQt5
+, wayland-scanner
+, plasma-wayland-protocols
+, wayland
+, wayland-protocols
+,
 }:
 # not mkKdeDerivation because this is Qt5 land
 stdenv.mkDerivation rec {

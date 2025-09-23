@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libuuid,
-  gnutls,
-  python3,
-  xdg-utils,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libuuid
+, gnutls
+, python3
+, xdg-utils
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation rec {

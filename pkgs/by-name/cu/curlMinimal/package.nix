@@ -1,73 +1,71 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  perl,
-  nixosTests,
-  autoreconfHook,
-  brotliSupport ? false,
-  brotli,
-  c-aresSupport ? false,
-  c-aresMinimal,
-  gnutlsSupport ? false,
-  gnutls,
-  gsaslSupport ? false,
-  gsasl,
-  gssSupport ?
-    with stdenv.hostPlatform;
-    (
-      !isWindows
-      &&
-        # disable gss because of: undefined reference to `k5_bcmp'
-        # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
-        !isStatic
-      &&
-        # the "mig" tool does not configure its compiler correctly. This could be
-        # fixed in mig, but losing gss support on cross compilation to darwin is
-        # not worth the effort.
-        !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
-    ),
-  libkrb5,
-  http2Support ? true,
-  nghttp2,
-  http3Support ? false,
-  nghttp3,
-  ngtcp2,
-  quictls,
-  websocketSupport ? false,
-  idnSupport ? false,
-  libidn2,
-  ldapSupport ? false,
-  openldap,
-  opensslSupport ? zlibSupport,
-  openssl,
-  pslSupport ? false,
-  libpsl,
-  rtmpSupport ? false,
-  rtmpdump,
-  scpSupport ? zlibSupport && !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin,
-  libssh2,
-  wolfsslSupport ? false,
-  wolfssl,
-  rustlsSupport ? false,
-  rustls-ffi,
-  zlibSupport ? true,
-  zlib,
-  zstdSupport ? false,
-  zstd,
-
-  # for passthru.tests
-  coeurl,
-  curlpp,
-  haskellPackages,
-  ocamlPackages,
-  phpExtensions,
-  pkgsStatic,
-  python3,
-  tests,
-  testers,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, perl
+, nixosTests
+, autoreconfHook
+, brotliSupport ? false
+, brotli
+, c-aresSupport ? false
+, c-aresMinimal
+, gnutlsSupport ? false
+, gnutls
+, gsaslSupport ? false
+, gsasl
+, gssSupport ? with stdenv.hostPlatform;
+  (
+    !isWindows
+    &&
+    # disable gss because of: undefined reference to `k5_bcmp'
+    # a very sad story re static: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=439039
+    !isStatic
+    &&
+    # the "mig" tool does not configure its compiler correctly. This could be
+    # fixed in mig, but losing gss support on cross compilation to darwin is
+    # not worth the effort.
+    !(isDarwin && (stdenv.buildPlatform != stdenv.hostPlatform))
+  )
+, libkrb5
+, http2Support ? true
+, nghttp2
+, http3Support ? false
+, nghttp3
+, ngtcp2
+, quictls
+, websocketSupport ? false
+, idnSupport ? false
+, libidn2
+, ldapSupport ? false
+, openldap
+, opensslSupport ? zlibSupport
+, openssl
+, pslSupport ? false
+, libpsl
+, rtmpSupport ? false
+, rtmpdump
+, scpSupport ? zlibSupport && !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin
+, libssh2
+, wolfsslSupport ? false
+, wolfssl
+, rustlsSupport ? false
+, rustls-ffi
+, zlibSupport ? true
+, zlib
+, zstdSupport ? false
+, zstd
+, # for passthru.tests
+  coeurl
+, curlpp
+, haskellPackages
+, ocamlPackages
+, phpExtensions
+, pkgsStatic
+, python3
+, tests
+, testers
+, fetchpatch
+,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -76,14 +74,14 @@
 # files.
 
 assert
-  !(
-    (lib.count (x: x) [
-      gnutlsSupport
-      opensslSupport
-      wolfsslSupport
-      rustlsSupport
-    ]) > 1
-  );
+!(
+  (lib.count (x: x) [
+    gnutlsSupport
+    opensslSupport
+    wolfsslSupport
+    rustlsSupport
+  ]) > 1
+);
 
 let
   openssl' = if http3Support then quictls else openssl;

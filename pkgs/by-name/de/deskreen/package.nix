@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  appimageTools,
+{ lib
+, stdenvNoCC
+, fetchurl
+, appimageTools
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

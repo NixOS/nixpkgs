@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  pkg-config,
-  dbus,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, pkg-config
+, dbus
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

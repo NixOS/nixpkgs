@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pybind11,
-  setuptools,
-
-  # dependencies
-  ase,
-  joblib,
-  numpy,
-  scikit-learn,
-  scipy,
-  sparse,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pybind11
+, setuptools
+, # dependencies
+  ase
+, joblib
+, numpy
+, scikit-learn
+, scipy
+, sparse
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {
@@ -67,12 +64,12 @@ buildPythonPackage rec {
     "test_extended_system"
   ]
   ++
-    lib.optionals
-      ((stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin)
-      [
-        # AssertionError on a numerical test
-        "test_cell_list"
-      ]
+  lib.optionals
+    ((stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin)
+    [
+      # AssertionError on a numerical test
+      "test_cell_list"
+    ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fatal Python error: Aborted
     # matplotlib/backend_bases.py", line 2654 in create_with_canvas

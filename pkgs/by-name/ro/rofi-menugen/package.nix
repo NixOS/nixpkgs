@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rofi,
-  gnused,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rofi
+, gnused
+,
 }:
 
 stdenv.mkDerivation {

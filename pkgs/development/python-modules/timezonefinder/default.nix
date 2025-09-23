@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cffi,
-  flatbuffers,
-  h3,
-  numba,
-  numpy,
-  poetry-core,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cffi
+, flatbuffers
+, h3
+, numba
+, numpy
+, poetry-core
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

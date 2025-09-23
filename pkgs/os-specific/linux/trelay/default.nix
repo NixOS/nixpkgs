@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  kernel,
-  kernelModuleMakeFlags,
-  kmod,
+{ stdenv
+, lib
+, fetchgit
+, kernel
+, kernelModuleMakeFlags
+, kmod
+,
 }:
 let
   version = "22.03.5";

@@ -3,13 +3,12 @@
 # the modules necessary to mount the root file system, then calls the
 # init in the root file system to start the second boot stage.
 
-{
-  config,
-  options,
-  lib,
-  utils,
-  pkgs,
-  ...
+{ config
+, options
+, lib
+, utils
+, pkgs
+, ...
 }:
 
 with lib;
@@ -354,13 +353,15 @@ let
         ;
 
       resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}") (
-        filter (
-          sd:
-          hasPrefix "/dev/" sd.device
-          && !sd.randomEncryption.enable
-          # Don't include zram devices
-          && !(hasPrefix "/dev/zram" sd.device)
-        ) config.swapDevices
+        filter
+          (
+            sd:
+            hasPrefix "/dev/" sd.device
+            && !sd.randomEncryption.enable
+            # Don't include zram devices
+            && !(hasPrefix "/dev/zram" sd.device)
+          )
+          config.swapDevices
       );
 
       fsInfo =
@@ -435,10 +436,12 @@ let
         symlink = "/etc/multipath.conf";
       }
     ]
-    ++ (lib.mapAttrsToList (symlink: options: {
-      inherit symlink;
-      object = options.source;
-    }) config.boot.initrd.extraFiles);
+    ++ (lib.mapAttrsToList
+      (symlink: options: {
+        inherit symlink;
+        object = options.source;
+      })
+      config.boot.initrd.extraFiles);
   };
 
   # Script to add secret files to the initrd at bootloader update time
@@ -763,9 +766,11 @@ in
       {
         assertion =
           !config.boot.loader.supportsInitrdSecrets
-          -> all (
-            source: builtins.isPath source || (builtins.isString source && hasPrefix builtins.storeDir source)
-          ) (attrValues config.boot.initrd.secrets);
+          -> all
+            (
+              source: builtins.isPath source || (builtins.isString source && hasPrefix builtins.storeDir source)
+            )
+            (attrValues config.boot.initrd.secrets);
         message = ''
           boot.initrd.secrets values must be unquoted paths when
           using a bootloader that doesn't natively support initrd

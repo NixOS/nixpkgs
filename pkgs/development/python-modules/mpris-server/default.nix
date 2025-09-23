@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  emoji,
-  pydbus,
-  pygobject3,
-  unidecode,
-  setuptools,
-  strenum,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, emoji
+, pydbus
+, pygobject3
+, unidecode
+, setuptools
+, strenum
+,
 }:
 buildPythonPackage rec {
   pname = "mpris-server";

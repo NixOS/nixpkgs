@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  fontconfig,
-  libX11,
-  libXinerama,
-  libXft,
-  writeText,
-  # customization
-  config,
-  conf ? config.dmenu.conf or null,
-  extraLibs ? config.dmenu.extraLibs or [ ],
-  patches ? config.dmenu.patches or [ ],
-  # update script dependencies
-  gitUpdater,
+{ lib
+, stdenv
+, fetchzip
+, fontconfig
+, libX11
+, libXinerama
+, libXft
+, writeText
+, # customization
+  config
+, conf ? config.dmenu.conf or null
+, extraLibs ? config.dmenu.extraLibs or [ ]
+, patches ? config.dmenu.patches or [ ]
+, # update script dependencies
+  gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

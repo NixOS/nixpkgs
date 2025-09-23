@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchurl,
-  fetchgit,
-  ffmpeg,
-  libGL,
-  libX11,
-  libcap,
-  libdrm,
-  libinput,
-  libpng,
-  libxcb,
-  libxkbcommon,
-  libgbm,
-  meson,
-  ninja,
-  pandoc,
-  pixman,
-  pkg-config,
-  unzip,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  xcbutilerrors,
-  xcbutilimage,
-  xcbutilwm,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchurl
+, fetchgit
+, ffmpeg
+, libGL
+, libX11
+, libcap
+, libdrm
+, libinput
+, libpng
+, libxcb
+, libxkbcommon
+, libgbm
+, meson
+, ninja
+, pandoc
+, pixman
+, pkg-config
+, unzip
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xcbutilerrors
+, xcbutilimage
+, xcbutilwm
+,
 }:
 
 let

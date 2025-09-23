@@ -1,68 +1,67 @@
-{
-  version,
-  url ? null,
-  sha256_32bit ? null,
-  sha256_64bit,
-  sha256_aarch64 ? null,
-  openSha256 ? null,
-  settingsSha256 ? null,
-  settingsVersion ? null,
-  persistencedSha256 ? null,
-  persistencedVersion ? null,
-  fabricmanagerSha256 ? null,
-  fabricmanagerVersion ? null,
-  useGLVND ? true,
-  useProfiles ? true,
-  preferGtk2 ? false,
-  settings32Bit ? false,
-  useSettings ? true,
-  usePersistenced ? true,
-  useFabricmanager ? false,
-  ibtSupport ? false,
-
-  prePatch ? null,
-  postPatch ? null,
-  patchFlags ? null,
-  patches ? [ ],
-  patchesOpen ? [ ],
-  preInstall ? null,
-  postInstall ? null,
-  broken ? false,
-  brokenOpen ? broken,
+{ version
+, url ? null
+, sha256_32bit ? null
+, sha256_64bit
+, sha256_aarch64 ? null
+, openSha256 ? null
+, settingsSha256 ? null
+, settingsVersion ? null
+, persistencedSha256 ? null
+, persistencedVersion ? null
+, fabricmanagerSha256 ? null
+, fabricmanagerVersion ? null
+, useGLVND ? true
+, useProfiles ? true
+, preferGtk2 ? false
+, settings32Bit ? false
+, useSettings ? true
+, usePersistenced ? true
+, useFabricmanager ? false
+, ibtSupport ? false
+, prePatch ? null
+, postPatch ? null
+, patchFlags ? null
+, patches ? [ ]
+, patchesOpen ? [ ]
+, preInstall ? null
+, postInstall ? null
+, broken ? false
+, brokenOpen ? broken
+,
 }@args:
 
-{
-  lib,
-  stdenv,
-  runCommandLocal,
-  patchutils,
-  callPackage,
-  pkgs,
-  pkgsi686Linux,
-  fetchurl,
-  fetchzip,
-  kernel ? null,
-  kernelModuleMakeFlags ? [ ],
-  perl,
-  nukeReferences,
-  which,
-  libarchive,
-  jq,
-  # Whether to build the libraries only (i.e. not the kernel module or
+{ lib
+, stdenv
+, runCommandLocal
+, patchutils
+, callPackage
+, pkgs
+, pkgsi686Linux
+, fetchurl
+, fetchzip
+, kernel ? null
+, kernelModuleMakeFlags ? [ ]
+, perl
+, nukeReferences
+, which
+, libarchive
+, jq
+, # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
-  libsOnly ? false,
-  # don't include the bundled 32-bit libraries on 64-bit platforms,
+  libsOnly ? false
+, # don't include the bundled 32-bit libraries on 64-bit platforms,
   # even if it’s in downloaded binary
-  disable32Bit ? stdenv.hostPlatform.system == "aarch64-linux",
-  # 32 bit libs only version of this package
-  lib32 ? null,
-  # Whether to extract the GSP firmware, datacenter drivers needs to extract the
+  disable32Bit ? stdenv.hostPlatform.system == "aarch64-linux"
+, # 32 bit libs only version of this package
+  lib32 ? null
+, # Whether to extract the GSP firmware, datacenter drivers needs to extract the
   # firmware
-  firmware ? openSha256 != null || useFabricmanager,
-  # Whether the user accepts the NVIDIA Software License
-  config,
-  acceptLicense ? config.nvidia.acceptLicense or false,
+  firmware ? openSha256 != null || useFabricmanager
+, # Whether the user accepts the NVIDIA Software License
+  config
+, acceptLicense ? config.nvidia.acceptLicense or false
+,
 }:
 
 assert !libsOnly -> kernel != null;
@@ -151,41 +150,44 @@ stdenv.mkDerivation (finalAttrs: {
     if !acceptLicense && (openSha256 == null) then
       throwLicense
     else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        urls =
-          if args ? url then
-            [ args.url ]
-          else
-            [
-              "https://us.download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run"
-              "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run"
-            ];
-        sha256 = sha256_64bit;
-      }
+      fetchurl
+        {
+          urls =
+            if args ? url then
+              [ args.url ]
+            else
+              [
+                "https://us.download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run"
+                "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run"
+              ];
+          sha256 = sha256_64bit;
+        }
     else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        urls =
-          if args ? url then
-            [ args.url ]
-          else
-            [
-              "https://us.download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run"
-              "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run"
-            ];
-        sha256 = sha256_32bit;
-      }
+      fetchurl
+        {
+          urls =
+            if args ? url then
+              [ args.url ]
+            else
+              [
+                "https://us.download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run"
+                "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run"
+              ];
+          sha256 = sha256_32bit;
+        }
     else if stdenv.hostPlatform.system == "aarch64-linux" && sha256_aarch64 != null then
-      fetchurl {
-        urls =
-          if args ? url then
-            [ args.url ]
-          else
-            [
-              "https://us.download.nvidia.com/XFree86/aarch64/${version}/NVIDIA-Linux-aarch64-${version}${pkgSuffix}.run"
-              "https://download.nvidia.com/XFree86/Linux-aarch64/${version}/NVIDIA-Linux-aarch64-${version}${pkgSuffix}.run"
-            ];
-        sha256 = sha256_aarch64;
-      }
+      fetchurl
+        {
+          urls =
+            if args ? url then
+              [ args.url ]
+            else
+              [
+                "https://us.download.nvidia.com/XFree86/aarch64/${version}/NVIDIA-Linux-aarch64-${version}${pkgSuffix}.run"
+                "https://download.nvidia.com/XFree86/Linux-aarch64/${version}/NVIDIA-Linux-aarch64-${version}${pkgSuffix}.run"
+              ];
+          sha256 = sha256_aarch64;
+        }
     else
       throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
@@ -242,11 +244,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru =
     let
       fetchFromGithubOrNvidia =
-        {
-          owner,
-          repo,
-          rev,
-          ...
+        { owner
+        , repo
+        , rev
+        , ...
         }@args:
         let
           args' = builtins.removeAttrs args [
@@ -270,20 +271,24 @@ stdenv.mkDerivation (finalAttrs: {
         );
     in
     {
-      open = lib.mapNullable (
-        hash:
-        callPackage ./open.nix {
-          inherit hash;
-          nvidia_x11 = finalAttrs.finalPackage;
-          patches =
-            (builtins.map (rewritePatch {
-              from = "kernel";
-              to = "kernel-open";
-            }) patches)
-            ++ patchesOpen;
-          broken = brokenOpen;
-        }
-      ) openSha256;
+      open = lib.mapNullable
+        (
+          hash:
+          callPackage ./open.nix {
+            inherit hash;
+            nvidia_x11 = finalAttrs.finalPackage;
+            patches =
+              (builtins.map
+                (rewritePatch {
+                  from = "kernel";
+                  to = "kernel-open";
+                })
+                patches)
+              ++ patchesOpen;
+            broken = brokenOpen;
+          }
+        )
+        openSha256;
       settings =
         if useSettings then
           (if settings32Bit then pkgsi686Linux.callPackage else callPackage)
@@ -297,19 +302,23 @@ stdenv.mkDerivation (finalAttrs: {
           { };
       persistenced =
         if usePersistenced then
-          lib.mapNullable (
-            hash:
-            callPackage (import ./persistenced.nix finalAttrs.finalPackage hash) {
-              fetchFromGitHub = fetchFromGithubOrNvidia;
-            }
-          ) persistencedSha256
+          lib.mapNullable
+            (
+              hash:
+              callPackage (import ./persistenced.nix finalAttrs.finalPackage hash) {
+                fetchFromGitHub = fetchFromGithubOrNvidia;
+              }
+            )
+            persistencedSha256
         else
           { };
       fabricmanager =
         if useFabricmanager then
-          lib.mapNullable (
-            hash: callPackage (import ./fabricmanager.nix finalAttrs.finalPackage hash) { }
-          ) fabricmanagerSha256
+          lib.mapNullable
+            (
+              hash: callPackage (import ./fabricmanager.nix finalAttrs.finalPackage hash) { }
+            )
+            fabricmanagerSha256
         else
           { };
       settingsVersion = if settingsVersion != null then settingsVersion else finalAttrs.version;

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  gtk3,
-  dbus-glib,
-  libXScrnSaver,
-  libnotify,
-  libxml2,
-  mate-desktop,
-  mate-menus,
-  mate-panel,
-  pam,
-  systemd,
-  wrapGAppsHook3,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, gtk3
+, dbus-glib
+, libXScrnSaver
+, libnotify
+, libxml2
+, mate-desktop
+, mate-menus
+, mate-panel
+, pam
+, systemd
+, wrapGAppsHook3
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

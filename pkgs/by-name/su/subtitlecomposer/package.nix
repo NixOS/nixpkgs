@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitLab,
-  cmake,
-  extra-cmake-modules,
-  ffmpeg_6,
-  openal,
-  stdenv,
-  libsForQt5,
+{ lib
+, fetchFromGitLab
+, cmake
+, extra-cmake-modules
+, ffmpeg_6
+, openal
+, stdenv
+, libsForQt5
+,
 }:
 
 stdenv.mkDerivation rec {

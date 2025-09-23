@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchgit,
-  fetchzip,
-  fetchpatch2,
-  python311,
-  rtlcss,
-  wkhtmltopdf,
-  nixosTests,
+{ lib
+, fetchgit
+, fetchzip
+, fetchpatch2
+, python311
+, rtlcss
+, wkhtmltopdf
+, nixosTests
+,
 }:
 
 let

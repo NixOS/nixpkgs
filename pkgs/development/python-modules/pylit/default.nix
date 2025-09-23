@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitea,
-  flit-core,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitea
+, flit-core
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

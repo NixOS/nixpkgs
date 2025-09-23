@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch2,
-  pillow,
-  setuptools,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch2
+, pillow
+, setuptools
+, python
+,
 }:
 
 buildPythonPackage rec {

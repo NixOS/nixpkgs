@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  parallel,
-  sassc,
-  inkscape,
-  libxml2,
-  glib,
-  gdk-pixbuf,
-  librsvg,
-  gtk-engine-murrine,
-  gnome-shell,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, parallel
+, sassc
+, inkscape
+, libxml2
+, glib
+, gdk-pixbuf
+, librsvg
+, gtk-engine-murrine
+, gnome-shell
+,
 }:
 
 stdenv.mkDerivation rec {

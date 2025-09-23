@@ -1,15 +1,15 @@
-{
-  buildPythonPackage,
-  cffi,
-  fetchFromGitHub,
-  inflection,
-  jinja2,
-  lib,
-  pysdl2,
-  setuptools,
-  vulkan-loader,
-  wheel,
-  xmltodict,
+{ buildPythonPackage
+, cffi
+, fetchFromGitHub
+, inflection
+, jinja2
+, lib
+, pysdl2
+, setuptools
+, vulkan-loader
+, wheel
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

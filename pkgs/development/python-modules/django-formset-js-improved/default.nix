@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  django-jquery-js,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, django-jquery-js
+,
 }:
 
 buildPythonPackage rec {

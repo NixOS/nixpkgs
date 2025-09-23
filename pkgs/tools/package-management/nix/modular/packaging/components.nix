@@ -1,11 +1,11 @@
-{
-  lib,
-  pkgs,
-  src,
-  officialRelease,
-  maintainers,
-  teams,
-  version,
+{ lib
+, pkgs
+, src
+, officialRelease
+, maintainers
+, teams
+, version
+,
 }:
 
 scope:
@@ -15,12 +15,14 @@ let
     callPackage
     ;
   inherit
-    (scope.callPackage (
-      { stdenv }:
-      {
-        inherit stdenv;
-      }
-    ) { })
+    (scope.callPackage
+      (
+        { stdenv }:
+        {
+          inherit stdenv;
+        }
+      )
+      { })
     stdenv
     ;
   inherit (pkgs.buildPackages)
@@ -121,20 +123,20 @@ let
     preConfigure =
       prevAttrs.preConfigure or ""
       +
-        lib.optionalString
-          (
-            !stdenv.hostPlatform.isWindows
-            # build failure
-            && !stdenv.hostPlatform.isStatic
-            # LTO breaks exception handling on x86-64-darwin.
-            && stdenv.system != "x86_64-darwin"
-          )
-          ''
-            case "$mesonBuildType" in
-            release|minsize) appendToVar mesonFlags "-Db_lto=true"  ;;
-            *)               appendToVar mesonFlags "-Db_lto=false" ;;
-            esac
-          '';
+      lib.optionalString
+        (
+          !stdenv.hostPlatform.isWindows
+          # build failure
+          && !stdenv.hostPlatform.isStatic
+          # LTO breaks exception handling on x86-64-darwin.
+          && stdenv.system != "x86_64-darwin"
+        )
+        ''
+          case "$mesonBuildType" in
+          release|minsize) appendToVar mesonFlags "-Db_lto=true"  ;;
+          *)               appendToVar mesonFlags "-Db_lto=false" ;;
+          esac
+        '';
     nativeBuildInputs = [
       meson
       ninja
@@ -153,16 +155,18 @@ let
     hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
     env =
       prevAttrs.env or { }
-      // lib.optionalAttrs (
-        stdenv.isLinux
-        && !(stdenv.hostPlatform.isStatic && stdenv.system == "aarch64-linux")
-        && !(
-          stdenv.buildPlatform.config != stdenv.hostPlatform.config
-          && stdenv.hostPlatform.system == "powerpc64-linux"
+      // lib.optionalAttrs
+        (
+          stdenv.isLinux
+          && !(stdenv.hostPlatform.isStatic && stdenv.system == "aarch64-linux")
+          && !(
+            stdenv.buildPlatform.config != stdenv.hostPlatform.config
+            && stdenv.hostPlatform.system == "powerpc64-linux"
+          )
+          && !(stdenv.system == "loongarch64-linux")
+          && !(stdenv.hostPlatform.useLLVM or false)
         )
-        && !(stdenv.system == "loongarch64-linux")
-        && !(stdenv.hostPlatform.useLLVM or false)
-      ) { LDFLAGS = "-fuse-ld=gold"; };
+        { LDFLAGS = "-fuse-ld=gold"; };
   };
 
   mesonLibraryLayer = finalAttrs: prevAttrs: {

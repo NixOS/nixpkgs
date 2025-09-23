@@ -1,44 +1,45 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  autoconf,
-  automake,
-  fontconfig,
-  libX11,
-  perl,
-  flex,
-  bison,
-  pkg-config,
-  tcl,
-  tk,
-  xorg,
-  yices, # bsc uses a patched version of yices
-  zlib,
-  ghc,
-  gmp-static,
-  iverilog,
-  asciidoctor,
-  texliveFull,
-  which,
-  makeBinaryWrapper,
-  cctools,
-  targetPackages,
-  # install -m 644 lib/libstp.dylib /private/tmp/nix-build-bluespec-2024.07.drv-5/source/inst/lib/SAT
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, autoconf
+, automake
+, fontconfig
+, libX11
+, perl
+, flex
+, bison
+, pkg-config
+, tcl
+, tk
+, xorg
+, yices
+, # bsc uses a patched version of yices
+  zlib
+, ghc
+, gmp-static
+, iverilog
+, asciidoctor
+, texliveFull
+, which
+, makeBinaryWrapper
+, cctools
+, targetPackages
+, # install -m 644 lib/libstp.dylib /private/tmp/nix-build-bluespec-2024.07.drv-5/source/inst/lib/SAT
   # install: cannot stat 'lib/libstp.dylib': No such file or directory
   # https://github.com/B-Lang-org/bsc/pull/600 might fix it
-  stubStp ? !stdenv.hostPlatform.isDarwin,
-  withDocs ? true,
-  # With 23 core parallel 10 mins on r9 5900x
+  stubStp ? !stdenv.hostPlatform.isDarwin
+, withDocs ? true
+, # With 23 core parallel 10 mins on r9 5900x
   # Broken on darwin currently
-  withSuiteCheck ? false,
-  gnugrep,
-  time,
-  dejagnu,
-  systemc,
-  glibcLocales,
-  buildPackages,
+  withSuiteCheck ? false
+, gnugrep
+, time
+, dejagnu
+, systemc
+, glibcLocales
+, buildPackages
+,
 }:
 
 let
@@ -235,9 +236,10 @@ stdenv.mkDerivation rec {
   checkTarget = if withSuiteCheck then "checkparallel" else "check-smoke"; # this is the shortest check but "check-suite" tests much more
 
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = lib.optionalString (
-    withSuiteCheck && stdenv.hostPlatform.isLinux
-  ) "${glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString
+    (
+      withSuiteCheck && stdenv.hostPlatform.isLinux
+    ) "${glibcLocales}/lib/locale/locale-archive";
 
   nativeCheckInputs = [
     gmp-static

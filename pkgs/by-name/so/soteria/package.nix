@@ -1,15 +1,15 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook4,
-  cairo,
-  gdk-pixbuf,
-  glib,
-  gtk4,
-  pango,
-  polkit,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook4
+, cairo
+, gdk-pixbuf
+, glib
+, gtk4
+, pango
+, polkit
+,
 }:
 let
   version = "0.2.0";

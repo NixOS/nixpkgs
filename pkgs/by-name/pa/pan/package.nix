@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  cmake,
-  pkg-config,
-  gtk3,
-  gspell,
-  gmime3,
-  gettext,
-  intltool,
-  itstool,
-  libxml2,
-  libnotify,
-  gnutls,
-  wrapGAppsHook3,
-  gnupg,
-  spellChecking ? true,
-  gnomeSupport ? true,
-  libsecret,
-  gcr,
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, pkg-config
+, gtk3
+, gspell
+, gmime3
+, gettext
+, intltool
+, itstool
+, libxml2
+, libnotify
+, gnutls
+, wrapGAppsHook3
+, gnupg
+, spellChecking ? true
+, gnomeSupport ? true
+, libsecret
+, gcr
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

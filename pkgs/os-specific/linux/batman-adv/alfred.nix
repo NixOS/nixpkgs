@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gpsd,
-  libcap,
-  libnl,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gpsd
+, libcap
+, libnl
+,
 }:
 
 let

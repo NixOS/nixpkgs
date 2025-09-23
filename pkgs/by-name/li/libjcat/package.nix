@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  docbook_xml_dtd_43,
-  docbook-xsl-nons,
-  glib,
-  json-glib,
-  gnutls,
-  gpgme,
-  gobject-introspection,
-  vala,
-  gtk-doc,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  nixosTests,
+{ stdenv
+, lib
+, fetchFromGitHub
+, docbook_xml_dtd_43
+, docbook-xsl-nons
+, glib
+, json-glib
+, gnutls
+, gpgme
+, gobject-introspection
+, vala
+, gtk-doc
+, meson
+, ninja
+, pkg-config
+, python3
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

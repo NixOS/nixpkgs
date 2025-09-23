@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchurl,
-  cmake,
-  pkg-config,
-  kdePackages,
-  qt6,
-  libsecret,
-  amneziawg-go,
-  openvpn,
-  shadowsocks-rust,
-  cloak-pt,
-  wireguard-tools,
-  libssh,
-  zlib,
-  openssl,
-  tun2socks,
-  xray,
-  nix-update-script,
-  bash,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, cmake
+, pkg-config
+, kdePackages
+, qt6
+, libsecret
+, amneziawg-go
+, openvpn
+, shadowsocks-rust
+, cloak-pt
+, wireguard-tools
+, libssh
+, zlib
+, openssl
+, tun2socks
+, xray
+, nix-update-script
+, bash
+,
 }:
 let
   awg-vendored = amneziawg-go.overrideAttrs (

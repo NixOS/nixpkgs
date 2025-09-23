@@ -1,13 +1,13 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  webcolors,
-  pythonOlder,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, webcolors
+, pythonOlder
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

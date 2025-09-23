@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
-  fastahack,
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, fastahack
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

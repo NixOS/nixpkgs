@@ -1,11 +1,11 @@
-{
-  stdenv,
-  fetchurl,
-  lib,
-  unzip,
-  # To select only certain themes, pass `selected_themes` as a list of strings.
+{ stdenv
+, fetchurl
+, lib
+, unzip
+, # To select only certain themes, pass `selected_themes` as a list of strings.
   # reference ./shas.nix for available themes
-  selected_themes ? [ ],
+  selected_themes ? [ ]
+,
 }:
 let
   version = "1.0";

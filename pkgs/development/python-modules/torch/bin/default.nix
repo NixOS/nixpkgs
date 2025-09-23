@@ -1,33 +1,29 @@
-{
-  lib,
-  stdenv,
-  python,
-  buildPythonPackage,
-  pythonOlder,
-  pythonAtLeast,
-  fetchurl,
-
-  # nativeBuildInputs
-  addDriverRunpath,
-  autoAddDriverRunpath,
-  autoPatchelfHook,
-
-  # buildInputs
-  cudaPackages,
-
-  # dependencies
-  filelock,
-  jinja2,
-  networkx,
-  numpy,
-  pyyaml,
-  requests,
-  setuptools,
-  sympy,
-  typing-extensions,
-  triton,
-
-  callPackage,
+{ lib
+, stdenv
+, python
+, buildPythonPackage
+, pythonOlder
+, pythonAtLeast
+, fetchurl
+, # nativeBuildInputs
+  addDriverRunpath
+, autoAddDriverRunpath
+, autoPatchelfHook
+, # buildInputs
+  cudaPackages
+, # dependencies
+  filelock
+, jinja2
+, networkx
+, numpy
+, pyyaml
+, requests
+, setuptools
+, sympy
+, typing-extensions
+, triton
+, callPackage
+,
 }:
 
 let

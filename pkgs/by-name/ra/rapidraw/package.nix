@@ -1,35 +1,35 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  rustPlatform,
-  makeWrapper,
-  pkg-config,
-  wrapGAppsHook4,
-  openssl,
-  onnxruntime,
-  webkitgtk_4_1,
-  gtk3,
-  glib,
-  gdk-pixbuf,
-  libappindicator,
-  cairo,
-  pango,
-  xorg,
-  libxkbcommon,
-  vulkan-loader,
-  libjpeg,
-  libpng,
-  zlib,
-  libGL,
-  dbus,
-  gvfs,
-  libheif,
-  glib-networking,
-  nodejs_20,
-  npmHooks,
-  cargo-tauri,
-  writableTmpDirAsHomeHook,
+{ lib
+, fetchFromGitHub
+, fetchNpmDeps
+, rustPlatform
+, makeWrapper
+, pkg-config
+, wrapGAppsHook4
+, openssl
+, onnxruntime
+, webkitgtk_4_1
+, gtk3
+, glib
+, gdk-pixbuf
+, libappindicator
+, cairo
+, pango
+, xorg
+, libxkbcommon
+, vulkan-loader
+, libjpeg
+, libpng
+, zlib
+, libGL
+, dbus
+, gvfs
+, libheif
+, glib-networking
+, nodejs_20
+, npmHooks
+, cargo-tauri
+, writableTmpDirAsHomeHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

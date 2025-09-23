@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  bash,
-  udevCheckHook,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, bash
+, udevCheckHook
+, nix-update-script
+,
 }:
 
 stdenvNoCC.mkDerivation {

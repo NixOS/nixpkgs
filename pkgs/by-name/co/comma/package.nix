@@ -1,15 +1,15 @@
-{
-  stdenv,
-  comma,
-  fetchFromGitHub,
-  installShellFiles,
-  fzy,
-  lib,
-  nix-index-unwrapped,
-  nix,
-  rustPlatform,
-  testers,
-  buildPackages,
+{ stdenv
+, comma
+, fetchFromGitHub
+, installShellFiles
+, fzy
+, lib
+, nix-index-unwrapped
+, nix
+, rustPlatform
+, testers
+, buildPackages
+,
 }:
 
 rustPlatform.buildRustPackage rec {

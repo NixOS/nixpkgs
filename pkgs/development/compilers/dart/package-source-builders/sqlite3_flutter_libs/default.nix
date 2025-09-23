@@ -1,5 +1,5 @@
-{
-  stdenv,
+{ stdenv
+,
 }:
 
 { version, src, ... }:

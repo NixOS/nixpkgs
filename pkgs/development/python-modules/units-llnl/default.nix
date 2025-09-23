@@ -1,20 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  units-llnl,
-
-  # build-system
-  nanobind,
-  scikit-build-core,
-
-  # nativeBuildInputs
-  cmake,
-  # NOTE that if top-level units-llnl package uses cmakeFlags other then
+{ lib
+, buildPythonPackage
+, units-llnl
+, # build-system
+  nanobind
+, scikit-build-core
+, # nativeBuildInputs
+  cmake
+, # NOTE that if top-level units-llnl package uses cmakeFlags other then
   # Nixpkgs' default, the build might fail, and you'd want to pick only the
   # cmakeFlags that don't cause a failure. See also:
   # https://github.com/scipp/scipp/issues/3705
-  cmakeFlags ? units-llnl.cmakeFlags,
-  ninja,
+  cmakeFlags ? units-llnl.cmakeFlags
+, ninja
+,
 }:
 
 buildPythonPackage {

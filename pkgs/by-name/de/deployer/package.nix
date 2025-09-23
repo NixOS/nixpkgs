@@ -1,7 +1,7 @@
-{
-  lib,
-  php,
-  fetchFromGitHub,
+{ lib
+, php
+, fetchFromGitHub
+,
 }:
 
 php.buildComposerProject2 (finalAttrs: {

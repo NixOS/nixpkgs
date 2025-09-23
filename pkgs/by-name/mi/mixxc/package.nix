@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  pkg-config,
-  libpulseaudio,
-  gtk4-layer-shell,
-  gtk4,
-  wrapGAppsHook4,
-  libxcb,
-  installShellFiles,
-  enableWayland ? true,
-  enableSass ? true,
-  enableX11 ? true,
+{ lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, libpulseaudio
+, gtk4-layer-shell
+, gtk4
+, wrapGAppsHook4
+, libxcb
+, installShellFiles
+, enableWayland ? true
+, enableSass ? true
+, enableX11 ? true
+,
 }:
 
 rustPlatform.buildRustPackage rec {

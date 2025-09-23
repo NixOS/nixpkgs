@@ -1,9 +1,9 @@
-{
-  lib,
-  dictionary,
-  fetchFromGitHub,
-  helm,
-  melpaBuild,
+{ lib
+, dictionary
+, fetchFromGitHub
+, helm
+, melpaBuild
+,
 }:
 
 melpaBuild {

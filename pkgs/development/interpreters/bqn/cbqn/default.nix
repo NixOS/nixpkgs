@@ -1,17 +1,17 @@
-{
-  lib,
-  callPackage,
-  fixDarwinDylibNames,
-  libffi,
-  mbqn-source,
-  pkg-config,
-  stdenv,
-  # Boolean flags
-  enableReplxx ? false,
-  enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx),
-  generateBytecode ? false,
-  # "Configurable" options
-  bqn-interpreter,
+{ lib
+, callPackage
+, fixDarwinDylibNames
+, libffi
+, mbqn-source
+, pkg-config
+, stdenv
+, # Boolean flags
+  enableReplxx ? false
+, enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx)
+, generateBytecode ? false
+, # "Configurable" options
+  bqn-interpreter
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  imake,
-  gccmakedep,
-  libX11,
-  libXext,
-  libXScrnSaver,
-  xorgproto,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, imake
+, gccmakedep
+, libX11
+, libXext
+, libXScrnSaver
+, xorgproto
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

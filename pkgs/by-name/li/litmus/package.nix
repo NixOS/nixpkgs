@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  expat,
-  libproxy,
-  neon,
-  zlib,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, expat
+, libproxy
+, neon
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

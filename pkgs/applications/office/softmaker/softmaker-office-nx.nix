@@ -1,22 +1,19 @@
-{
-  callPackage,
-  fetchurl,
-
-  # This is a bit unusual, but makes version and hash easily
+{ callPackage
+, fetchurl
+, # This is a bit unusual, but makes version and hash easily
   # overridable. This is useful when the upstream archive was replaced
   # and nixpkgs is not in sync yet.
   officeVersion ? {
     version = "1228";
     edition = "";
     hash = "sha256-Va0QkLQtsPbDAo3ygfp6UKr0OkLLBS0yAup+xLoLD0s=";
-  },
-
-  ...
+  }
+, ...
 }@args:
 
 callPackage ./generic.nix (
   args
-  // rec {
+    // rec {
     inherit (officeVersion) version edition;
 
     pname = "softmaker-office-nx";

@@ -1,11 +1,11 @@
-{
-  buildPecl,
-  lib,
-  gpgme,
-  file,
-  gnupg,
-  php,
-  fetchFromGitHub,
+{ buildPecl
+, lib
+, gpgme
+, file
+, gnupg
+, php
+, fetchFromGitHub
+,
 }:
 
 let

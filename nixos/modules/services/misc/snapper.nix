@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.snapper;
@@ -263,14 +262,16 @@ in
             SNAPPER_CONFIGS="${lib.concatStringsSep " " (builtins.attrNames cfg.configs)}"
           '';
         }
-        // (lib.mapAttrs' (
-          name: subvolume:
-          lib.nameValuePair "snapper/configs/${name}" ({
-            text = lib.generators.toKeyValue { inherit mkKeyValue; } (
-              lib.filterAttrs (k: v: v != defaultOf k) subvolume
-            );
-          })
-        ) cfg.configs)
+        // (lib.mapAttrs'
+          (
+            name: subvolume:
+              lib.nameValuePair "snapper/configs/${name}" ({
+                text = lib.generators.toKeyValue { inherit mkKeyValue; } (
+                  lib.filterAttrs (k: v: v != defaultOf k) subvolume
+                );
+              })
+          )
+          cfg.configs)
         // (lib.optionalAttrs (cfg.filters != null) { "snapper/filters/default.txt".text = cfg.filters; });
       };
 
@@ -333,21 +334,22 @@ in
         unitConfig.ConditionPathExists = "/etc/snapper/configs/root";
       };
 
-      assertions = lib.concatMap (
-        name:
-        let
-          sub = cfg.configs.${name};
-        in
-        [
-          {
-            assertion = !(sub ? extraConfig);
-            message = ''
-              The option definition `services.snapper.configs.${name}.extraConfig' no longer has any effect; please remove it.
-              The contents of this option should be migrated to attributes on `services.snapper.configs.${name}'.
-            '';
-          }
-        ]
-        ++
+      assertions = lib.concatMap
+        (
+          name:
+          let
+            sub = cfg.configs.${name};
+          in
+          [
+            {
+              assertion = !(sub ? extraConfig);
+              message = ''
+                The option definition `services.snapper.configs.${name}.extraConfig' no longer has any effect; please remove it.
+                The contents of this option should be migrated to attributes on `services.snapper.configs.${name}'.
+              '';
+            }
+          ]
+          ++
           map
             (attr: {
               assertion = !(lib.hasAttr attr sub);
@@ -359,7 +361,8 @@ in
               "fstype"
               "subvolume"
             ]
-      ) (lib.attrNames cfg.configs);
+        )
+        (lib.attrNames cfg.configs);
     }
   );
 

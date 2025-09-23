@@ -1,15 +1,15 @@
-{
-  lib,
-  generateSplicesForMkScope,
-  makeScopeWithSplicing',
-  fetchurl,
-  qt6Packages,
-  cmark,
-  gpgme,
-  taglib,
-  wayland-protocols,
-  wayland,
-  zxing-cpp,
+{ lib
+, generateSplicesForMkScope
+, makeScopeWithSplicing'
+, fetchurl
+, qt6Packages
+, cmark
+, gpgme
+, taglib
+, wayland-protocols
+, wayland
+, zxing-cpp
+,
 }:
 let
   allPackages =
@@ -28,15 +28,17 @@ let
       loadUrls = set: lib.importJSON (./generated/sources + "/${set}.json");
       allUrls = lib.attrsets.mergeAttrsList (map loadUrls sets);
 
-      sources = lib.mapAttrs (
-        _: v:
-        (fetchurl {
-          inherit (v) url hash;
-        })
-        // {
-          inherit (v) version;
-        }
-      ) allUrls;
+      sources = lib.mapAttrs
+        (
+          _: v:
+            (fetchurl {
+              inherit (v) url hash;
+            })
+            // {
+              inherit (v) version;
+            }
+        )
+        allUrls;
 
       debugAlias = set: lib.dontRecurseIntoAttrs (lib.filterAttrs (k: v: !v.meta.broken) set);
     in

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  coreutils,
-  jdk,
-  rlwrap,
-  gnupg,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, coreutils
+, jdk
+, rlwrap
+, gnupg
+,
 }:
 let
   pname = "leiningen";

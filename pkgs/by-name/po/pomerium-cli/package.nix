@@ -1,7 +1,7 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+,
 }:
 
 let
@@ -43,10 +43,12 @@ buildGoModule rec {
       concatStringsSpace = list: concatStringsSep " " list;
       mapAttrsToFlatList = fn: list: concatMap id (mapAttrsToList fn list);
       varFlags = concatStringsSpace (
-        mapAttrsToFlatList (
-          package: packageVars:
-          mapAttrsToList (variable: value: "-X ${package}.${variable}=${value}") packageVars
-        ) setVars
+        mapAttrsToFlatList
+          (
+            package: packageVars:
+              mapAttrsToList (variable: value: "-X ${package}.${variable}=${value}") packageVars
+          )
+          setVars
       );
     in
     [

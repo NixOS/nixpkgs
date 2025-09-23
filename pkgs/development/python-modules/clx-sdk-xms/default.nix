@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  iso8601,
-  requests,
-  setuptools,
-  unstableGitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, iso8601
+, requests
+, setuptools
+, unstableGitUpdater
+,
 }:
 
 buildPythonPackage {

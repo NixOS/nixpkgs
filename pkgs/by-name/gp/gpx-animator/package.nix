@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gradle_8,
-  jdk17,
-  makeBinaryWrapper,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gradle_8
+, jdk17
+, makeBinaryWrapper
+, nix-update-script
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gpx-animator";

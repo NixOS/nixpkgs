@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  shared-mime-info,
+{ mkKdeDerivation
+, shared-mime-info
+,
 }:
 mkKdeDerivation {
   pname = "kpkpass";

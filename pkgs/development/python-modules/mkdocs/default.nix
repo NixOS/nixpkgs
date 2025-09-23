@@ -1,37 +1,34 @@
 {
   # eval time deps
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-  pythonOlder,
-
-  # buildtime
-  hatchling,
-
-  # runtime deps
-  click,
-  ghp-import,
-  importlib-metadata,
-  jinja2,
-  markdown,
-  markupsafe,
-  mergedeep,
-  mkdocs-get-deps,
-  packaging,
-  pathspec,
-  platformdirs,
-  pyyaml,
-  pyyaml-env-tag,
-  watchdog,
-
-  # optional-dependencies
-  babel,
-  setuptools,
-
-  # testing deps
-  mock,
-  unittestCheckHook,
+  lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, pythonOlder
+, # buildtime
+  hatchling
+, # runtime deps
+  click
+, ghp-import
+, importlib-metadata
+, jinja2
+, markdown
+, markupsafe
+, mergedeep
+, mkdocs-get-deps
+, packaging
+, pathspec
+, platformdirs
+, pyyaml
+, pyyaml-env-tag
+, watchdog
+, # optional-dependencies
+  babel
+, setuptools
+, # testing deps
+  mock
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

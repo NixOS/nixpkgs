@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  # build inputs
-  jupyter-client,
-  nbformat,
-  nbconvert,
-  setuptools,
-  # check inputs
-  unittestCheckHook,
-  ipykernel,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build inputs
+  jupyter-client
+, nbformat
+, nbconvert
+, setuptools
+, # check inputs
+  unittestCheckHook
+, ipykernel
+,
 }:
 let
   pname = "nbexec";

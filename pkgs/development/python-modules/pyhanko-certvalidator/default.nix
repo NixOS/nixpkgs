@@ -1,18 +1,18 @@
-{
-  lib,
-  aiohttp,
-  asn1crypto,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  freezegun,
-  oscrypto,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  uritools,
+{ lib
+, aiohttp
+, asn1crypto
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, freezegun
+, oscrypto
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, uritools
+,
 }:
 
 buildPythonPackage rec {

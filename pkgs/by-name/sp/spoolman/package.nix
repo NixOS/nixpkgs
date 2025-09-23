@@ -1,9 +1,9 @@
-{
-  python312,
-  lib,
-  callPackage,
-  writeShellScript,
-  makeWrapper,
+{ python312
+, lib
+, callPackage
+, writeShellScript
+, makeWrapper
+,
 }:
 
 let

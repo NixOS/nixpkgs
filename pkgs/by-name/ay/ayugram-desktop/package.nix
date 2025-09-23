@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  telegram-desktop,
-  withWebkit ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, telegram-desktop
+, withWebkit ? true
+,
 }:
 
 telegram-desktop.override {

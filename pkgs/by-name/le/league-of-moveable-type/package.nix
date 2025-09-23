@@ -1,24 +1,24 @@
-{
-  lib,
-  symlinkJoin,
-  the-neue-black,
-  blackout,
-  chunk,
-  fanwood,
-  goudy-bookletter-1911,
-  junction-font,
-  knewave,
-  league-gothic,
-  league-mono,
-  league-script-number-one,
-  league-spartan,
-  linden-hill,
-  orbitron,
-  ostrich-sans,
-  prociono,
-  raleway,
-  sniglet,
-  sorts-mill-goudy,
+{ lib
+, symlinkJoin
+, the-neue-black
+, blackout
+, chunk
+, fanwood
+, goudy-bookletter-1911
+, junction-font
+, knewave
+, league-gothic
+, league-mono
+, league-script-number-one
+, league-spartan
+, linden-hill
+, orbitron
+, ostrich-sans
+, prociono
+, raleway
+, sniglet
+, sorts-mill-goudy
+,
 }:
 
 symlinkJoin {

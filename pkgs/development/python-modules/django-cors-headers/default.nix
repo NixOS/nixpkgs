@@ -1,13 +1,13 @@
-{
-  lib,
-  asgiref,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  pytest-django,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, asgiref
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, pytest-django
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

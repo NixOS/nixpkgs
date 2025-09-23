@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  docutils,
-  fetchPypi,
-  flit-core,
-  jinja2,
-  pythonOlder,
-  requests,
-  sphinx,
+{ lib
+, buildPythonPackage
+, docutils
+, fetchPypi
+, flit-core
+, jinja2
+, pythonOlder
+, requests
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

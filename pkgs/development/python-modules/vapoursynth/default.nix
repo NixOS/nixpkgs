@@ -1,9 +1,9 @@
-{
-  vapoursynth,
-  cython,
-  buildPythonPackage,
-  unittestCheckHook,
-  python,
+{ vapoursynth
+, cython
+, buildPythonPackage
+, unittestCheckHook
+, python
+,
 }:
 
 buildPythonPackage {

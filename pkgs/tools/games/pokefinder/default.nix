@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  copyDesktopItems,
-  makeDesktopItem,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  python3,
-  qtbase,
-  qttools,
-  qtwayland,
-  imagemagick,
-  wrapQtAppsHook,
-  gitUpdater,
+{ lib
+, stdenv
+, copyDesktopItems
+, makeDesktopItem
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, python3
+, qtbase
+, qttools
+, qtwayland
+, imagemagick
+, wrapQtAppsHook
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

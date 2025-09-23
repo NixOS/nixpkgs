@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  meson,
-  ninja,
-  fetchurl,
-  cairo,
-  girara,
-  gtk-mac-integration,
-  gumbo,
-  jbig2dec,
-  libjpeg,
-  mupdf,
-  openjpeg,
-  pkg-config,
-  zathura_core,
-  tesseract,
-  leptonica,
-  mujs,
-  desktop-file-utils,
-  appstream-glib,
-  gitUpdater,
+{ stdenv
+, lib
+, meson
+, ninja
+, fetchurl
+, cairo
+, girara
+, gtk-mac-integration
+, gumbo
+, jbig2dec
+, libjpeg
+, mupdf
+, openjpeg
+, pkg-config
+, zathura_core
+, tesseract
+, leptonica
+, mujs
+, desktop-file-utils
+, appstream-glib
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

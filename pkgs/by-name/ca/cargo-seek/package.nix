@@ -1,12 +1,12 @@
-{
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ fetchFromGitHub
+, lib
+, nix-update-script
+, openssl
+, pkg-config
+, rustPlatform
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

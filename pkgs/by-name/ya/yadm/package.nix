@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  resholve,
-  fetchFromGitHub,
-  git,
-  bash,
-  openssl,
-  gawk,
-  /*
-    TODO: yadm can use git-crypt and transcrypt
-    but it does so in a way that resholve 0.6.0
-    can't yet do anything smart about. It looks
-    like these are for interactive use, so the
-    main impact should just be that users still
-    need both of these packages in their profile
-    to support their use in yadm.
+{ lib
+, stdenv
+, resholve
+, fetchFromGitHub
+, git
+, bash
+, openssl
+, gawk
+, /*
+  TODO: yadm can use git-crypt and transcrypt
+  but it does so in a way that resholve 0.6.0
+  can't yet do anything smart about. It looks
+  like these are for interactive use, so the
+  main impact should just be that users still
+  need both of these packages in their profile
+  to support their use in yadm.
   */
   # git-crypt,
   # transcrypt,
-  j2cli,
-  esh,
-  gnupg,
-  coreutils,
-  gnutar,
-  installShellFiles,
-  runCommand,
-  yadm,
+  j2cli
+, esh
+, gnupg
+, coreutils
+, gnutar
+, installShellFiles
+, runCommand
+, yadm
+,
 }:
 
 resholve.mkDerivation rec {

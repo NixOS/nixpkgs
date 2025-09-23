@@ -1,16 +1,16 @@
-{
-  lib,
-  symlinkJoin,
-  libcMinimal,
-  libpthread,
-  libm,
-  libresolv,
-  librpcsvc,
-  i18n_module,
-  libutil,
-  librt,
-  libcrypt,
-  version,
+{ lib
+, symlinkJoin
+, libcMinimal
+, libpthread
+, libm
+, libresolv
+, librpcsvc
+, i18n_module
+, libutil
+, librt
+, libcrypt
+, version
+,
 }:
 
 symlinkJoin rec {

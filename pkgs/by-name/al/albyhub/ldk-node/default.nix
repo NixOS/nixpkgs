@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  cmake,
-  llvmPackages,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, llvmPackages
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

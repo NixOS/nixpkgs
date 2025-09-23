@@ -1,32 +1,32 @@
-{
-  alsa-lib,
-  libuuid,
-  cups,
-  dpkg,
-  fetchurl,
-  glib,
-  libssh2,
-  gtk3,
-  lib,
-  libayatana-appindicator,
-  libdrm,
-  libgcrypt,
-  libkrb5,
-  libnotify,
-  libgbm,
-  libpulseaudio,
-  libGL,
-  nss,
-  xorg,
-  systemd,
-  stdenv,
-  undmg,
-  vips,
-  at-spi2-core,
-  autoPatchelfHook,
-  makeShellWrapper,
-  wrapGAppsHook3,
-  commandLineArgs ? "",
+{ alsa-lib
+, libuuid
+, cups
+, dpkg
+, fetchurl
+, glib
+, libssh2
+, gtk3
+, lib
+, libayatana-appindicator
+, libdrm
+, libgcrypt
+, libkrb5
+, libnotify
+, libgbm
+, libpulseaudio
+, libGL
+, nss
+, xorg
+, systemd
+, stdenv
+, undmg
+, vips
+, at-spi2-core
+, autoPatchelfHook
+, makeShellWrapper
+, wrapGAppsHook3
+, commandLineArgs ? ""
+,
 }:
 
 let
@@ -59,7 +59,8 @@ let
   };
 in
 if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+  stdenv.mkDerivation
+  {
     inherit
       pname
       version

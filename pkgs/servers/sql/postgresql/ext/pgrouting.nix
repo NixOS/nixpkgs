@@ -1,11 +1,11 @@
-{
-  boost,
-  cmake,
-  fetchFromGitHub,
-  lib,
-  perl,
-  postgresql,
-  postgresqlBuildExtension,
+{ boost
+, cmake
+, fetchFromGitHub
+, lib
+, perl
+, postgresql
+, postgresqlBuildExtension
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

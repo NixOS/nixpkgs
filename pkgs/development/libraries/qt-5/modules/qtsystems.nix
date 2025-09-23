@@ -1,14 +1,14 @@
-{
-  qtModule,
-  stdenv,
-  lib,
-  bluez,
-  libevdev,
-  libX11,
-  pkg-config,
-  qtbase,
-  udev,
-  wrapQtAppsHook,
+{ qtModule
+, stdenv
+, lib
+, bluez
+, libevdev
+, libX11
+, pkg-config
+, qtbase
+, udev
+, wrapQtAppsHook
+,
 }:
 
 qtModule {

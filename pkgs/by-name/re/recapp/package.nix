@@ -1,21 +1,21 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  appstream-glib,
-  desktop-file-utils,
-  gettext,
-  glib,
-  gobject-introspection,
-  gtk3,
-  gst_all_1,
-  libnotify,
-  librsvg,
-  meson,
-  ninja,
-  pkg-config,
-  slop,
-  wrapGAppsHook3,
+{ lib
+, python3
+, fetchFromGitHub
+, appstream-glib
+, desktop-file-utils
+, gettext
+, glib
+, gobject-introspection
+, gtk3
+, gst_all_1
+, libnotify
+, librsvg
+, meson
+, ninja
+, pkg-config
+, slop
+, wrapGAppsHook3
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

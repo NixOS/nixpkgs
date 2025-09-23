@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  cmake,
-  setuptools-scm,
-  numpy,
-  pillow,
-  pybind11,
-  libzxing-cpp,
-  pytestCheckHook,
-  libzint,
+{ buildPythonPackage
+, cmake
+, setuptools-scm
+, numpy
+, pillow
+, pybind11
+, libzxing-cpp
+, pytestCheckHook
+, libzint
+,
 }:
 
 buildPythonPackage rec {

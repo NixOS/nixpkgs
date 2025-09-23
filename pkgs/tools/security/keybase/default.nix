@@ -1,9 +1,9 @@
-{
-  replaceVars,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  gnupg,
+{ replaceVars
+, lib
+, buildGoModule
+, fetchFromGitHub
+, gnupg
+,
 }:
 
 buildGoModule rec {

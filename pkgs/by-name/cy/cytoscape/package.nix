@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openjdk17,
-  makeWrapper,
-  replaceVars,
-  coreutils,
+{ lib
+, stdenv
+, fetchurl
+, openjdk17
+, makeWrapper
+, replaceVars
+, coreutils
+,
 }:
 
 stdenv.mkDerivation rec {

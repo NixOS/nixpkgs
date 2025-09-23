@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  isPyPy,
-  setuptools,
-  setuptools-scm,
-  flask,
-  flask-caching,
-  zstandard,
-  brotli,
-  brotlicffi,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, isPyPy
+, setuptools
+, setuptools-scm
+, flask
+, flask-caching
+, zstandard
+, brotli
+, brotlicffi
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

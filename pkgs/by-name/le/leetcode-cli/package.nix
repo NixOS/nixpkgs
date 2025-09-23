@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchCrate,
-  rustPlatform,
-  pkg-config,
-  installShellFiles,
-  openssl,
-  dbus,
-  sqlite,
-  stdenv,
-  testers,
-  leetcode-cli,
+{ lib
+, fetchCrate
+, rustPlatform
+, pkg-config
+, installShellFiles
+, openssl
+, dbus
+, sqlite
+, stdenv
+, testers
+, leetcode-cli
+,
 }:
 
 rustPlatform.buildRustPackage rec {

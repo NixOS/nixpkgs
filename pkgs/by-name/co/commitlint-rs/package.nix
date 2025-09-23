@@ -1,10 +1,10 @@
-{
-  lib,
-  commitlint-rs,
-  fetchFromGitHub,
-  nix-update-script,
-  rustPlatform,
-  testers,
+{ lib
+, commitlint-rs
+, fetchFromGitHub
+, nix-update-script
+, rustPlatform
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage rec {

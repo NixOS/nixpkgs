@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  appimageTools,
-  fetchurl,
-  _7zz,
+{ lib
+, stdenv
+, appimageTools
+, fetchurl
+, _7zz
+,
 }:
 
 let
@@ -28,8 +28,7 @@ let
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-mac_universal.dmg";
           hash = "sha256-bAvqGy7hEQbIhtx4wybxbzATogthcNREkjFDC5kb7WU=";
         };
-      }
-      .${stdenv.hostPlatform.system} or (throw "dbgate: ${stdenv.hostPlatform.system} is unsupported.");
+      }.${stdenv.hostPlatform.system} or (throw "dbgate: ${stdenv.hostPlatform.system} is unsupported.");
 
   passthru.updateScript = ./update.sh;
 
@@ -50,7 +49,8 @@ let
   };
 in
 if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+  stdenv.mkDerivation
+  {
     inherit
       pname
       version

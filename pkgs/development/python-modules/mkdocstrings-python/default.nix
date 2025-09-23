@@ -1,15 +1,15 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  griffe,
-  inline-snapshot,
-  mkdocs-autorefs,
-  mkdocs-material,
-  mkdocstrings,
-  pdm-backend,
-  pytestCheckHook,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, griffe
+, inline-snapshot
+, mkdocs-autorefs
+, mkdocs-material
+, mkdocstrings
+, pdm-backend
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

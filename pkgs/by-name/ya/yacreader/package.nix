@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libGLU,
-  libunarr,
-  libsForQt5,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libGLU
+, libunarr
+, libsForQt5
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

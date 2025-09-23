@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  jq,
-  curl,
-  glow,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, jq
+, curl
+, glow
+, makeWrapper
+,
 }:
 
 let

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  fetchurl,
-  boost,
-  gdk-pixbuf,
-  glib,
-  libjpeg,
-  libxml2,
-  lib,
-  pkg-config,
-  cargo,
-  rustc,
+{ stdenv
+, fetchurl
+, boost
+, gdk-pixbuf
+, glib
+, libjpeg
+, libxml2
+, lib
+, pkg-config
+, cargo
+, rustc
+,
 }:
 
 stdenv.mkDerivation rec {

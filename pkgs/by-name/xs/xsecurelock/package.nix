@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libX11,
-  libXcomposite,
-  libXft,
-  libXmu,
-  libXrandr,
-  libXext,
-  libXScrnSaver,
-  pam,
-  apacheHttpd,
-  pamtester,
-  xscreensaver,
-  coreutils,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libX11
+, libXcomposite
+, libXft
+, libXmu
+, libXrandr
+, libXext
+, libXScrnSaver
+, pam
+, apacheHttpd
+, pamtester
+, xscreensaver
+, coreutils
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

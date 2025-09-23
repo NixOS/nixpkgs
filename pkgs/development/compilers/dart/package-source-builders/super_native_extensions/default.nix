@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  pkg-config,
-  at-spi2-atk,
-  gdk-pixbuf,
-  cairo,
-  gtk3,
-  writeText,
-  stdenv,
+{ lib
+, rustPlatform
+, pkg-config
+, at-spi2-atk
+, gdk-pixbuf
+, cairo
+, gtk3
+, writeText
+, stdenv
+,
 }:
 
 { version, src, ... }:
@@ -45,8 +45,7 @@ let
         _0_8_19 = _0_8_22;
         _0_8_18 = _0_8_22;
         _0_8_17 = _0_8_22;
-      }
-      .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
+      }.${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
         Unsupported version of pub 'super_native_extensions': '${version}'
         Please add cargoHash to here. If the cargoHash
         is the same with existing versions, add an alias here.

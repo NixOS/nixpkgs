@@ -1,17 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  docker,
-  python-dotenv,
-  typing-extensions,
-  urllib3,
-  wrapt,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  docker
+, python-dotenv
+, typing-extensions
+, urllib3
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

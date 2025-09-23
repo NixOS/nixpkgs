@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  lilypond,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, lilypond
+,
 }:
 
 buildPythonPackage rec {

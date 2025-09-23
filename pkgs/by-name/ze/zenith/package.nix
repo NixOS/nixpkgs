@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  nvidiaSupport ? false,
-  makeWrapper,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, nvidiaSupport ? false
+, makeWrapper
+,
 }:
 
 rustPlatform.buildRustPackage rec {

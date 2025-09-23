@@ -1,43 +1,44 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  libxml2,
-  appstream,
-  desktop-file-utils,
-  glib,
-  gtk3,
-  pango,
-  atk,
-  gdk-pixbuf,
-  shared-mime-info,
-  itstool,
-  gnome,
-  poppler,
-  ghostscriptX,
-  djvulibre,
-  libspectre,
-  libarchive,
-  libgxps,
-  libhandy,
-  libsecret,
-  wrapGAppsHook3,
-  librsvg,
-  gobject-introspection,
-  yelp-tools,
-  gspell,
-  gsettings-desktop-schemas,
-  gnome-desktop,
-  dbus,
-  texlive,
-  gst_all_1,
-  gi-docgen,
-  supportMultimedia ? true, # PDF multimedia
-  withLibsecret ? true,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gettext
+, libxml2
+, appstream
+, desktop-file-utils
+, glib
+, gtk3
+, pango
+, atk
+, gdk-pixbuf
+, shared-mime-info
+, itstool
+, gnome
+, poppler
+, ghostscriptX
+, djvulibre
+, libspectre
+, libarchive
+, libgxps
+, libhandy
+, libsecret
+, wrapGAppsHook3
+, librsvg
+, gobject-introspection
+, yelp-tools
+, gspell
+, gsettings-desktop-schemas
+, gnome-desktop
+, dbus
+, texlive
+, gst_all_1
+, gi-docgen
+, supportMultimedia ? true
+, # PDF multimedia
+  withLibsecret ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

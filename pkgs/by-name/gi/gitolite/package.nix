@@ -1,13 +1,13 @@
-{
-  stdenv,
-  coreutils,
-  fetchFromGitHub,
-  git,
-  lib,
-  makeWrapper,
-  net-tools,
-  perl,
-  nixosTests,
+{ stdenv
+, coreutils
+, fetchFromGitHub
+, git
+, lib
+, makeWrapper
+, net-tools
+, perl
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

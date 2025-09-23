@@ -1,30 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-
-  withLibei ? !stdenv.hostPlatform.isDarwin,
-
-  avahi,
-  curl,
-  libICE,
-  libSM,
-  libX11,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
-  libei,
-  libportal,
-  openssl,
-  pkgsStatic,
-  pkg-config,
-  qtbase,
-  qttools,
-  wrapGAppsHook3,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, withLibei ? !stdenv.hostPlatform.isDarwin
+, avahi
+, curl
+, libICE
+, libSM
+, libX11
+, libXdmcp
+, libXext
+, libXinerama
+, libXrandr
+, libXtst
+, libei
+, libportal
+, openssl
+, pkgsStatic
+, pkg-config
+, qtbase
+, qttools
+, wrapGAppsHook3
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

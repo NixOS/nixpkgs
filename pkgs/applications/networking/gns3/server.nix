@@ -1,19 +1,19 @@
-{
-  channel,
-  version,
-  hash,
+{ channel
+, version
+, hash
+,
 }:
 
-{
-  fetchFromGitHub,
-  gns3-server,
-  lib,
-  nixosTests,
-  pkgsStatic,
-  python3Packages,
-  stdenv,
-  testers,
-  util-linux,
+{ fetchFromGitHub
+, gns3-server
+, lib
+, nixosTests
+, pkgsStatic
+, python3Packages
+, stdenv
+, testers
+, util-linux
+,
 }:
 
 python3Packages.buildPythonApplication {

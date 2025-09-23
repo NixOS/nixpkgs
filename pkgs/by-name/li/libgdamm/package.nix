@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  glibmm,
-  libgda5,
-  libxml2,
-  gnome,
-  mysqlSupport ? false,
-  postgresSupport ? false,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glibmm
+, libgda5
+, libxml2
+, gnome
+, mysqlSupport ? false
+, postgresSupport ? false
+,
 }:
 
 let

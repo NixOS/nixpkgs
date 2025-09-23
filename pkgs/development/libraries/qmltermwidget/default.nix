@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  qmake,
-  qtbase,
-  qtmultimedia,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, qmake
+, qtbase
+, qtmultimedia
+,
 }:
 
 stdenv.mkDerivation {

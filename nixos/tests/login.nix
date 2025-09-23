@@ -1,8 +1,7 @@
-{
-  lib,
-  pkgs,
-  latestKernel,
-  ...
+{ lib
+, pkgs
+, latestKernel
+, ...
 }:
 
 {

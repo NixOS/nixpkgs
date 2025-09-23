@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ipython,
-  keyring,
-  ptpython,
-  pytestCheckHook,
-  setuptools,
-  setuptools-generate,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, ipython
+, keyring
+, ptpython
+, pytestCheckHook
+, setuptools
+, setuptools-generate
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchFromGitHub,
-  rustPlatform,
-  installShellFiles,
-  pkg-config,
-  withPCRE2 ? true,
-  pcre2,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, pkg-config
+, withPCRE2 ? true
+, pcre2
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitMinimal,
-  pytestCheckHook,
-  pythonOlder,
-  ruamel-yaml,
-  setuptools,
-  tomli,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, gitMinimal
+, pytestCheckHook
+, pythonOlder
+, ruamel-yaml
+, setuptools
+, tomli
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  inform,
-  pythonOlder,
-  sly,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, inform
+, pythonOlder
+, sly
+,
 }:
 
 buildPythonPackage rec {

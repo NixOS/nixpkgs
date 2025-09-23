@@ -1,22 +1,19 @@
-{
-  lib,
-  python,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-
-  # build-system
-  setuptools,
-
-  # native dependencies
-  openmp,
-  xsimd,
-
-  # dependencies
-  ply,
-  gast,
-  numpy,
-  beniget,
+{ lib
+, python
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, # build-system
+  setuptools
+, # native dependencies
+  openmp
+, xsimd
+, # dependencies
+  ply
+, gast
+, numpy
+, beniget
+,
 }:
 
 let

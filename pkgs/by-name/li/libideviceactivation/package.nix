@@ -1,16 +1,16 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  pkg-config,
-  automake,
-  autoreconfHook,
-  libtool,
-  libplist,
-  libimobiledevice,
-  libxml2,
-  curl,
-  usbmuxd,
+{ stdenv
+, fetchFromGitHub
+, lib
+, pkg-config
+, automake
+, autoreconfHook
+, libtool
+, libplist
+, libimobiledevice
+, libxml2
+, curl
+, usbmuxd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

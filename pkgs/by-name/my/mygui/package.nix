@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  boost,
-  freetype,
-  libuuid,
-  ois,
-  withOgre ? false,
-  ogre,
-  libGL,
-  libGLU,
-  libX11,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, boost
+, freetype
+, libuuid
+, ois
+, withOgre ? false
+, ogre
+, libGL
+, libGLU
+, libX11
+,
 }:
 
 let

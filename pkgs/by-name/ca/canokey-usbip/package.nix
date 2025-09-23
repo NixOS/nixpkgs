@@ -1,10 +1,10 @@
-{
-  cmake,
-  fetchFromGitHub,
-  lib,
-  python3,
-  stdenv,
-  unstableGitUpdater,
+{ cmake
+, fetchFromGitHub
+, lib
+, python3
+, stdenv
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

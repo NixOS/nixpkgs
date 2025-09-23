@@ -1,47 +1,47 @@
-{
-  lib,
-  callPackage,
-  rustPlatform,
-  fetchFromGitHub,
-  buildNpmPackage,
-  bash,
-  cmake,
-  cairo,
-  deno,
-  go,
-  lld,
-  makeWrapper,
-  nsjail,
-  openssl,
-  pango,
-  pixman,
-  pkg-config,
-  python312,
-  rustfmt,
-  stdenv,
-  perl,
-  _experimental-update-script-combinators,
-  nix-update-script,
-  librusty_v8 ? (
+{ lib
+, callPackage
+, rustPlatform
+, fetchFromGitHub
+, buildNpmPackage
+, bash
+, cmake
+, cairo
+, deno
+, go
+, lld
+, makeWrapper
+, nsjail
+, openssl
+, pango
+, pixman
+, pkg-config
+, python312
+, rustfmt
+, stdenv
+, perl
+, _experimental-update-script-combinators
+, nix-update-script
+, librusty_v8 ? (
     callPackage ./librusty_v8.nix {
       inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
     }
-  ),
-  ui_builder ? (callPackage ./ui_builder.nix { }),
-  libxml2,
-  xmlsec,
-  libxslt,
-  flock,
-  powershell,
-  uv,
-  bun,
-  dotnet-sdk_9,
-  php,
-  procps,
-  cargo,
-  coreutils,
-  withEnterpriseFeatures ? false,
-  withClosedSourceFeatures ? false,
+  )
+, ui_builder ? (callPackage ./ui_builder.nix { })
+, libxml2
+, xmlsec
+, libxslt
+, flock
+, powershell
+, uv
+, bun
+, dotnet-sdk_9
+, php
+, procps
+, cargo
+, coreutils
+, withEnterpriseFeatures ? false
+, withClosedSourceFeatures ? false
+,
 }:
 
 let

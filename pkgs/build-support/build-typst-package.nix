@@ -1,6 +1,6 @@
-{
-  lib,
-  stdenvNoCC,
+{ lib
+, stdenvNoCC
+,
 }:
 
 /**
@@ -8,18 +8,18 @@
 
   # Inputs
 
-    `attrs`
-    : attrs for stdenvNoCC.mkDerivation + typstDeps (a list of `buildTypstPackage` derivations)
+  `attrs`
+  : attrs for stdenvNoCC.mkDerivation + typstDeps (a list of `buildTypstPackage` derivations)
 
   # Example
   ```nix
   { buildTypstPackage, typstPackages }:
 
   buildTypstPackage {
-    pname = "example";
-    version = "0.0.1";
-    src = ./.;
-    typstDeps = with typstPackages; [ oxifmt ];
+  pname = "example";
+  version = "0.0.1";
+  src = ./.;
+  typstDeps = with typstPackages; [ oxifmt ];
   }
   ```
 */
@@ -33,9 +33,8 @@ lib.extendMkDerivation {
 
   extendDrvArgs =
     finalAttrs:
-    {
-      typstDeps ? [ ],
-      ...
+    { typstDeps ? [ ]
+    , ...
     }@attrs:
     {
       name = "typst-package-${finalAttrs.pname}-${finalAttrs.version}";

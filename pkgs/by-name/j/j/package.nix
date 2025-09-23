@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  which,
-  gmp,
-  avx2Support ? stdenv.hostPlatform.avx2Support,
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, gmp
+, avx2Support ? stdenv.hostPlatform.avx2Support
+,
 }:
 
 stdenv.mkDerivation rec {

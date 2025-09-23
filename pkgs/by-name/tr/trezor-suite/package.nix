@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  appimageTools,
-  makeWrapper,
-  tor,
-  trezord,
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, makeWrapper
+, tor
+, trezord
+,
 }:
 
 let
@@ -16,8 +16,7 @@ let
     {
       aarch64-linux = "linux-arm64";
       x86_64-linux = "linux-x86_64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://github.com/trezor/trezor-suite/releases/download/v${version}/Trezor-Suite-${version}-${suffix}.AppImage";
@@ -26,8 +25,7 @@ let
         # curl -Lfs https://github.com/trezor/trezor-suite/releases/download/v${version}/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
         aarch64-linux = "sha512-bVLTYCT8jkjeJMHWPvzFVkGB69Z46nvebtEDh5HfqYgd3Xwov+s1BHlr82XjN4+0cdKJchXnyKVTShO32+at5A==";
         x86_64-linux = "sha512-wtMTW2Wj6dPsgUupXsHuP2/RS3Yp10bcCjkBfVIDfLrlClKFDHRLt9mNGtSdFfZM791NyDWsjU4xdi082BduSw==";
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   appimageContents = appimageTools.extract {

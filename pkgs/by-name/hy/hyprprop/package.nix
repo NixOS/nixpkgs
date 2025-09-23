@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenvNoCC,
-  bash,
-  copyDesktopItems,
-  coreutils,
-  fetchFromGitHub,
-  jq,
-  makeDesktopItem,
-  makeWrapper,
-  nix-update-script,
-  scdoc,
-  slurp,
+{ lib
+, stdenvNoCC
+, bash
+, copyDesktopItems
+, coreutils
+, fetchFromGitHub
+, jq
+, makeDesktopItem
+, makeWrapper
+, nix-update-script
+, scdoc
+, slurp
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "hyprprop";

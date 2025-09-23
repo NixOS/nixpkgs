@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  cyclonedds,
-  setuptools,
-  rich-click,
-
-  pytestCheckHook,
-  pytest-mock,
-  pytest-cov-stub,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cyclonedds
+, setuptools
+, rich-click
+, pytestCheckHook
+, pytest-mock
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

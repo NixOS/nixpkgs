@@ -1,11 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-
-  nix-update-script,
-  testers,
-  warp-plus,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, testers
+, warp-plus
+,
 }:
 
 buildGoModule rec {

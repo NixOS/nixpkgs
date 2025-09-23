@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  jre,
-  makeWrapper,
-  maven,
-  libGL,
-  xdg-utils,
-  libXxf86vm,
-  zip,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, jre
+, makeWrapper
+, maven
+, libGL
+, xdg-utils
+, libXxf86vm
+, zip
+, zlib
+,
 }:
 maven.buildMavenPackage rec {
   pname = "polyglot";
@@ -35,8 +35,7 @@ maven.buildMavenPackage rec {
     {
       aarch64-linux = "sha256-Tlz2I6xE8g3GqKz9N7VXRO0ObE1XOv6IfTrKZmVlscY=";
       x86_64-linux = "sha256-nQScNCkA+eaeL3tcLCec1qIoYO6ct28FLxGp/Cm4nn4=";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   mvnParameters = "-DskipTests";
 

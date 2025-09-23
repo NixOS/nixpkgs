@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchpatch2,
-  fetchFromGitHub,
-  pkg-config,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  alsa-lib,
-  freetype,
-  glew,
-  libGL,
-  libogg,
-  libpng,
-  libtheora,
-  libvorbis,
-  libX11,
-  python3,
-  tcl,
-  zlib,
+{ lib
+, stdenv
+, fetchpatch2
+, fetchFromGitHub
+, pkg-config
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, alsa-lib
+, freetype
+, glew
+, libGL
+, libogg
+, libpng
+, libtheora
+, libvorbis
+, libX11
+, python3
+, tcl
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

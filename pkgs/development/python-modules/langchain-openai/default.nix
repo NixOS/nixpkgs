@@ -1,33 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  langchain-core,
-  openai,
-  tiktoken,
-
-  # tests
-  freezegun,
-  langchain-tests,
-  lark,
-  pandas,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pytest-mock,
-  pytest-socket,
-  requests-mock,
-  responses,
-  syrupy,
-  toml,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pdm-backend
+, # dependencies
+  langchain-core
+, openai
+, tiktoken
+, # tests
+  freezegun
+, langchain-tests
+, lark
+, pandas
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, pytest-mock
+, pytest-socket
+, requests-mock
+, responses
+, syrupy
+, toml
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

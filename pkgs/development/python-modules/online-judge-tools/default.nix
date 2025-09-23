@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  colorama,
-  fetchFromGitHub,
-  online-judge-api-client,
-  packaging,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, colorama
+, fetchFromGitHub
+, online-judge-api-client
+, packaging
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

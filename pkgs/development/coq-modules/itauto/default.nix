@@ -1,10 +1,10 @@
-{
-  lib,
-  callPackage,
-  mkCoqDerivation,
-  coq,
-  stdlib,
-  version ? null,
+{ lib
+, callPackage
+, mkCoqDerivation
+, coq
+, stdlib
+, version ? null
+,
 }:
 
 (mkCoqDerivation {
@@ -35,7 +35,8 @@
       (case (isEq "8.15") "8.15.0")
       (case (isEq "8.14") "8.14.0")
       (case (isEq "8.13") "8.13+no")
-    ] null;
+    ]
+      null;
 
   mlPlugin = true;
   nativeBuildInputs = (with coq.ocamlPackages; [ ocamlbuild ]);
@@ -53,10 +54,11 @@
 }).overrideAttrs
   (
     o:
-    lib.optionalAttrs (o.version == "dev" || lib.versionAtLeast o.version "8.16") {
-      propagatedBuildInputs = o.propagatedBuildInputs ++ [ coq.ocamlPackages.findlib ];
-    }
-    // lib.optionalAttrs (o.version == "dev" || lib.versionAtLeast o.version "8.18") {
+    lib.optionalAttrs (o.version == "dev" || lib.versionAtLeast o.version "8.16")
+      {
+        propagatedBuildInputs = o.propagatedBuildInputs ++ [ coq.ocamlPackages.findlib ];
+      }
+      // lib.optionalAttrs (o.version == "dev" || lib.versionAtLeast o.version "8.18") {
       nativeBuildInputs = with coq.ocamlPackages; [
         ocaml
         findlib

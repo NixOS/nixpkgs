@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildNpmPackage,
-  nodejs,
-  ffmpeg,
-  callPackage,
-  replaceVars,
-  makeWrapper,
-  toml2json,
-  jq,
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, nodejs
+, ffmpeg
+, callPackage
+, replaceVars
+, makeWrapper
+, toml2json
+, jq
+,
 }:
 buildNpmPackage rec {
   pname = "vdhcoapp";

@@ -1,10 +1,10 @@
-{
-  curl,
-  fetchgit,
-  lib,
-  libusb1,
-  pkg-config,
-  stdenv,
+{ curl
+, fetchgit
+, lib
+, libusb1
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation {

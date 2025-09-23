@@ -1,14 +1,14 @@
-{
-  stdenv_32bit,
-  lib,
-  pkgs,
-  pkgsi686Linux,
-  pkgsCross,
-  callPackage,
-  replaceVars,
-  moltenvk,
-  wineRelease ? "stable",
-  supportFlags,
+{ stdenv_32bit
+, lib
+, pkgs
+, pkgsi686Linux
+, pkgsCross
+, callPackage
+, replaceVars
+, moltenvk
+, wineRelease ? "stable"
+, supportFlags
+,
 }:
 
 let

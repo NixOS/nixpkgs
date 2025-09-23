@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  maturin,
-  pythonOlder,
-  rustPlatform,
-  rustc,
-  cargo,
-  semantic-version,
-  setuptools,
-  setuptools-rust,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, maturin
+, pythonOlder
+, rustPlatform
+, rustc
+, cargo
+, semantic-version
+, setuptools
+, setuptools-rust
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,16 +1,16 @@
-{
-  fetchFromGitHub,
-  lib,
-  rustPlatform,
-  autoPatchelfHook,
-  pkg-config,
-  libxkbcommon,
-  libGL,
-  pipewire,
-  libpulseaudio,
-  wayland,
-  udev,
-  vulkan-loader,
+{ fetchFromGitHub
+, lib
+, rustPlatform
+, autoPatchelfHook
+, pkg-config
+, libxkbcommon
+, libGL
+, pipewire
+, libpulseaudio
+, wayland
+, udev
+, vulkan-loader
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "ashell";

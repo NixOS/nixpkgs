@@ -1,22 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  deepdish,
-  matplotlib,
-  numpy,
-  obspy,
-  pandas,
-  pyedflib,
-  scikit-learn,
-  scipy,
-  seaborn,
-  tabulate,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  deepdish
+, matplotlib
+, numpy
+, obspy
+, pandas
+, pyedflib
+, scikit-learn
+, scipy
+, seaborn
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

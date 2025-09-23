@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitea,
-  fetchNpmDeps,
-  buildGo125Module,
-  nodejs,
-  npmHooks,
-  python3,
+{ lib
+, fetchFromGitea
+, fetchNpmDeps
+, buildGo125Module
+, nodejs
+, npmHooks
+, python3
+,
 }:
 
 let

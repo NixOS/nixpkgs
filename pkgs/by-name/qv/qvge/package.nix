@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  libsForQt5,
-  graphviz,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, libsForQt5
+, graphviz
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

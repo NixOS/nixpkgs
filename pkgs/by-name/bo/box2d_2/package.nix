@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cmake,
-  pkg-config,
-
-  # buildInputs
-  glfw3,
-  libGLU,
-  libX11,
-  libXcursor,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libglut,
-  xorgproto,
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, # nativeBuildInputs
+  cmake
+, pkg-config
+, # buildInputs
+  glfw3
+, libGLU
+, libX11
+, libXcursor
+, libXi
+, libXinerama
+, libXrandr
+, libglut
+, xorgproto
+, nix-update-script
+,
 }:
 
 let

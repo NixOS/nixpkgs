@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  lzo,
-  gtk-doc,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  docbook_xsl,
-  fontconfig,
-  freetype,
-  libpng,
-  pixman,
-  zlib,
-  x11Support ? !stdenv.hostPlatform.isDarwin || true,
-  libXext,
-  libXrender,
-  gobjectSupport ? true,
-  glib,
-  xcbSupport ? x11Support,
-  libxcb,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, lzo
+, gtk-doc
+, meson
+, ninja
+, pkg-config
+, python3
+, docbook_xsl
+, fontconfig
+, freetype
+, libpng
+, pixman
+, zlib
+, x11Support ? !stdenv.hostPlatform.isDarwin || true
+, libXext
+, libXrender
+, gobjectSupport ? true
+, glib
+, xcbSupport ? x11Support
+, libxcb
+, testers
+,
 }:
 
 let

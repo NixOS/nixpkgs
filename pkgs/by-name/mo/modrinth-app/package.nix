@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  addDriverRunpath,
-  alsa-lib,
-  flite,
-  glib-networking,
-  jdk17,
-  jdk21,
-  jdk8,
-  jdks ? [
+{ lib
+, stdenv
+, addDriverRunpath
+, alsa-lib
+, flite
+, glib-networking
+, jdk17
+, jdk21
+, jdk8
+, jdks ? [
     jdk8
     jdk17
     jdk21
-  ],
-  libGL,
-  libjack2,
-  libpulseaudio,
-  modrinth-app-unwrapped,
-  pipewire,
-  symlinkJoin,
-  udev,
-  wrapGAppsHook4,
-  xorg,
+  ]
+, libGL
+, libjack2
+, libpulseaudio
+, modrinth-app-unwrapped
+, pipewire
+, symlinkJoin
+, udev
+, wrapGAppsHook4
+, xorg
+,
 }:
 
 symlinkJoin {

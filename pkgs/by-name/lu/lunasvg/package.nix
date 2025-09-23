@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  plutovg,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, plutovg
+, testers
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lunasvg";

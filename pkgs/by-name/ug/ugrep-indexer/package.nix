@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  brotli,
-  bzip2,
-  lz4,
-  xz,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, brotli
+, bzip2
+, lz4
+, xz
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

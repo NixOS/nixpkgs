@@ -1,42 +1,38 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  starlette,
-  pydantic,
-  typing-extensions,
-
-  # tests
-  anyio,
-  dirty-equals,
-  flask,
-  inline-snapshot,
-  passlib,
-  pyjwt,
-  pytest-asyncio,
-  pytestCheckHook,
-  sqlalchemy,
-  trio,
-
-  # optional-dependencies
-  fastapi-cli,
-  httpx,
-  jinja2,
-  itsdangerous,
-  python-multipart,
-  pyyaml,
-  ujson,
-  orjson,
-  email-validator,
-  uvicorn,
-  pydantic-settings,
-  pydantic-extra-types,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  pdm-backend
+, # dependencies
+  starlette
+, pydantic
+, typing-extensions
+, # tests
+  anyio
+, dirty-equals
+, flask
+, inline-snapshot
+, passlib
+, pyjwt
+, pytest-asyncio
+, pytestCheckHook
+, sqlalchemy
+, trio
+, # optional-dependencies
+  fastapi-cli
+, httpx
+, jinja2
+, itsdangerous
+, python-multipart
+, pyyaml
+, ujson
+, orjson
+, email-validator
+, uvicorn
+, pydantic-settings
+, pydantic-extra-types
+,
 }:
 
 buildPythonPackage rec {

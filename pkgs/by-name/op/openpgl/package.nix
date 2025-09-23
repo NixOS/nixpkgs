@@ -1,10 +1,10 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  ninja,
-  stdenv,
-  tbb,
+{ lib
+, cmake
+, fetchFromGitHub
+, ninja
+, stdenv
+, tbb
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,9 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DTBB_ROOT=${tbb.out}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isDarwin
-  ) "-flax-vector-conversions";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString
+    (
+      stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isDarwin
+    ) "-flax-vector-conversions";
 
   meta = {
     description = "Intel Open Path Guiding Library";

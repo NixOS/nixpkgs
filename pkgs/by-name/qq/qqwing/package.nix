@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  autoconf,
-  automake,
-  libtool,
+{ lib
+, stdenv
+, fetchFromGitHub
+, perl
+, autoconf
+, automake
+, libtool
+,
 }:
 
 stdenv.mkDerivation rec {

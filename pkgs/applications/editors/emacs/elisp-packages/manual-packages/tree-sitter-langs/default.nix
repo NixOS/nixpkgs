@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  melpaStablePackages,
-  runCommand,
-  tree-sitter-grammars,
-  plugins ? map (g: tree-sitter-grammars.${g}) (lib.importJSON ./default-grammars.json),
-  final,
+{ lib
+, stdenv
+, melpaStablePackages
+, runCommand
+, tree-sitter-grammars
+, plugins ? map (g: tree-sitter-grammars.${g}) (lib.importJSON ./default-grammars.json)
+, final
+,
 }:
 
 let
@@ -39,14 +39,16 @@ melpaStablePackages.tree-sitter-langs.overrideAttrs (old: {
   postInstall =
     old.postInstall or ""
     + lib.concatStringsSep "\n" (
-      map (g: ''
-        if [[ -d "${g}/queries" ]]; then
-          mkdir -p ${siteDir}/queries/${langName g}/
-          for f in ${g}/queries/*; do
-            ln -sfn "$f" ${siteDir}/queries/${langName g}/
-          done
-        fi
-      '') plugins
+      map
+        (g: ''
+          if [[ -d "${g}/queries" ]]; then
+            mkdir -p ${siteDir}/queries/${langName g}/
+            for f in ${g}/queries/*; do
+              ln -sfn "$f" ${siteDir}/queries/${langName g}/
+            done
+          fi
+        '')
+        plugins
     );
 
   passthru = old.passthru or { } // {

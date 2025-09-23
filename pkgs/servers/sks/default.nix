@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ocamlPackages,
-  perl,
-  zlib,
-  db,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocamlPackages
+, perl
+, zlib
+, db
+,
 }:
 
 let

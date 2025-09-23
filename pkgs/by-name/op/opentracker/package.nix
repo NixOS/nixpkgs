@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  libowfat,
-  zlib,
-  nixosTests,
+{ lib
+, stdenv
+, fetchgit
+, libowfat
+, zlib
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation {

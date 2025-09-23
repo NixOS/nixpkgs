@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pandas,
-  pyarrow,
-  pyproj,
-  shapely,
-  geopandas,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pandas
+, pyarrow
+, pyproj
+, shapely
+, geopandas
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyftdi,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pyftdi
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

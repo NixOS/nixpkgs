@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitLab,
-  rustPlatform,
-  pkg-config,
-  xen,
+{ lib
+, fetchFromGitLab
+, rustPlatform
+, pkg-config
+, xen
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "xen-guest-agent";

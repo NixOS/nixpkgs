@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -61,18 +60,20 @@ let
       generate =
         name: value:
         let
-          transformedValue = lib.mapAttrs (
-            key: val:
-            if lib.isList val then
-              if lib.elem key commaSeparated then
-                lib.concatStringsSep "," val
-              else if lib.elem key spaceSeparated then
-                lib.concatStringsSep " " val
-              else
-                throw "list value for unknown key ${key}: ${(lib.generators.toPretty { }) val}"
-            else
-              val
-          ) value;
+          transformedValue = lib.mapAttrs
+            (
+              key: val:
+                if lib.isList val then
+                  if lib.elem key commaSeparated then
+                    lib.concatStringsSep "," val
+                  else if lib.elem key spaceSeparated then
+                    lib.concatStringsSep " " val
+                  else
+                    throw "list value for unknown key ${key}: ${(lib.generators.toPretty { }) val}"
+                else
+                  val
+            )
+            value;
         in
         base.generate name transformedValue;
     };
@@ -154,7 +155,7 @@ let
       usersWithKeys = lib.attrValues (
         lib.flip lib.filterAttrs config.users.users (
           n: u:
-          lib.length u.openssh.authorizedKeys.keys != 0 || lib.length u.openssh.authorizedKeys.keyFiles != 0
+            lib.length u.openssh.authorizedKeys.keys != 0 || lib.length u.openssh.authorizedKeys.keyFiles != 0
         )
       );
     in
@@ -716,10 +717,12 @@ in
         wantedBy = [ "sockets.target" ];
         socketConfig.ListenStream =
           if cfg.listenAddresses != [ ] then
-            lib.concatMap (
-              { addr, port }:
-              if port != null then [ "${addr}:${toString port}" ] else map (p: "${addr}:${toString p}") cfg.ports
-            ) cfg.listenAddresses
+            lib.concatMap
+              (
+                { addr, port }:
+                if port != null then [ "${addr}:${toString port}" ] else map (p: "${addr}:${toString p}") cfg.ports
+              )
+              cfg.listenAddresses
           else
             cfg.ports;
         socketConfig.Accept = true;
@@ -821,9 +824,10 @@ in
       lib.optional cfg.authorizedKeysInHomedir "%h/.ssh/authorized_keys"
       ++ [ "/etc/ssh/authorized_keys.d/%u" ];
 
-    services.openssh.settings.AuthorizedPrincipalsFile = lib.mkIf (
-      authPrincipalsFiles != { }
-    ) "/etc/ssh/authorized_principals.d/%u";
+    services.openssh.settings.AuthorizedPrincipalsFile = lib.mkIf
+      (
+        authPrincipalsFiles != { }
+      ) "/etc/ssh/authorized_principals.d/%u";
 
     services.openssh.extraConfig = lib.mkOrder 0 ''
       Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}
@@ -886,15 +890,15 @@ in
       {
         assertion =
           (builtins.match "(.*\n)?(\t )*[Kk][Ee][Rr][Bb][Ee][Rr][Oo][Ss][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}")
-          != null
-          -> cfgc.package.withKerberos;
+            != null
+            -> cfgc.package.withKerberos;
         message = "cannot enable Kerberos authentication without using a package with Kerberos support";
       }
       {
         assertion =
           (builtins.match "(.*\n)?(\t )*[Gg][Ss][Ss][Aa][Pp][Ii][Aa][Uu][Tt][Hh][Ee][Nn][Tt][Ii][Cc][Aa][Tt][Ii][Oo][Nn][ |\t|=|\"]+yes.*" "${configFile}\n${cfg.extraConfig}")
-          != null
-          -> cfgc.package.withKerberos;
+            != null
+            -> cfgc.package.withKerberos;
         message = "cannot enable GSSAPI authentication without using a package with Kerberos support";
       }
       (
@@ -908,9 +912,11 @@ in
                 lib.groupBy lib.strings.toLower (lib.attrNames cfg.settings)
               )
             );
-          formattedDuplicates = lib.concatMapStringsSep ", " (
-            dupl: "(${lib.concatStringsSep ", " dupl})"
-          ) duplicates;
+          formattedDuplicates = lib.concatMapStringsSep ", "
+            (
+              dupl: "(${lib.concatStringsSep ", " dupl})"
+            )
+            duplicates;
         in
         {
           assertion = lib.length duplicates == 0;

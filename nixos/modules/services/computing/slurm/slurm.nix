@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  options,
-  pkgs,
-  ...
+{ config
+, lib
+, options
+, pkgs
+, ...
 }:
 let
 
@@ -142,9 +141,10 @@ in
       };
 
       package =
-        lib.mkPackageOption pkgs "slurm" {
-          example = "slurm-full";
-        }
+        lib.mkPackageOption pkgs "slurm"
+          {
+            example = "slurm-full";
+          }
         // {
           default = pkgs.slurm.override { enableX11 = !cfg.enableSrunX11; };
         };

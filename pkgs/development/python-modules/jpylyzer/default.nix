@@ -1,14 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  six,
-  lxml,
-  pytestCheckHook,
-  doFullCheck ? false, # weird filenames cause issues on some filesystems
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, six
+, lxml
+, pytestCheckHook
+, doFullCheck ? false
+, # weird filenames cause issues on some filesystems
 
   # for passthru.tests
-  jpylyzer,
+  jpylyzer
+,
 }:
 
 let

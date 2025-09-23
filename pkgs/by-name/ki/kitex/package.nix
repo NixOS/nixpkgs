@@ -1,9 +1,9 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  testers,
-  kitex,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, testers
+, kitex
+,
 }:
 
 buildGoModule (finalAttrs: {

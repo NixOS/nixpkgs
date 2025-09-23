@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  callPackage,
-  cmake,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, cmake
+, python3
+,
 }:
 
 let

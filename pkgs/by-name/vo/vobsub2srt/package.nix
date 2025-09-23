@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libtiff,
-  pkg-config,
-  tesseract3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libtiff
+, pkg-config
+, tesseract3
+,
 }:
 
 stdenv.mkDerivation {

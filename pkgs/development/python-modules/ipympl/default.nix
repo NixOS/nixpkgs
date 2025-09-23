@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  ipykernel,
-  ipython-genutils,
-  ipywidgets,
-  matplotlib,
-  numpy,
-  pillow,
-  traitlets,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, ipykernel
+, ipython-genutils
+, ipywidgets
+, matplotlib
+, numpy
+, pillow
+, traitlets
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  callPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  packaging,
-  typing-extensions,
-  tomli,
-
-  # optional-dependencies
-  rich,
+{ lib
+, buildPythonPackage
+, callPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  packaging
+, typing-extensions
+, tomli
+, # optional-dependencies
+  rich
+,
 }:
 
 buildPythonPackage rec {

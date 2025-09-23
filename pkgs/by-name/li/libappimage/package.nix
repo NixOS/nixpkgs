@@ -1,23 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  autoconf,
-  automake,
-  libtool,
-  pkg-config,
-  boost,
-  cairo,
-  fuse,
-  glib,
-  libarchive,
-  librsvg,
-  squashfuse,
-  xdg-utils-cxx,
-  xz, # for liblzma
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, autoconf
+, automake
+, libtool
+, pkg-config
+, boost
+, cairo
+, fuse
+, glib
+, libarchive
+, librsvg
+, squashfuse
+, xdg-utils-cxx
+, xz
+, # for liblzma
+  zlib
+,
 }:
 stdenv.mkDerivation rec {
   pname = "libappimage";

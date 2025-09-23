@@ -1,7 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -11,14 +11,14 @@ let
   qemu-common = import ../lib/qemu-common.nix { inherit lib pkgs; };
 
   mkStartCommand =
-    {
-      memory ? 2048,
-      cdrom ? null,
-      usb ? null,
-      pxe ? null,
-      uboot ? false,
-      uefi ? false,
-      extraFlags ? [ ],
+    { memory ? 2048
+    , cdrom ? null
+    , usb ? null
+    , pxe ? null
+    , uboot ? false
+    , uefi ? false
+    , extraFlags ? [ ]
+    ,
     }:
     let
       qemu = qemu-common.qemuBinary pkgs.qemu_test;
@@ -31,7 +31,7 @@ let
         "-device"
         (
           "virtio-net-pci,netdev=net0"
-          + (lib.optionalString (pxe != null && uefi) ",romfile=${pkgs.ipxe}/ipxe.efirom")
+            + (lib.optionalString (pxe != null && uefi) ",romfile=${pkgs.ipxe}/ipxe.efirom")
         )
       ]
       ++ lib.optionals (cdrom != null) [
@@ -173,7 +173,7 @@ in
     uefi = true;
   };
 }
-// lib.optionalAttrs (pkgs.stdenv.hostPlatform.system == "x86_64-linux") {
+  // lib.optionalAttrs (pkgs.stdenv.hostPlatform.system == "x86_64-linux") {
   biosCdrom = makeBootTest "bios-cdrom" {
     cdrom = "${iso}/iso/${iso.isoName}";
   };

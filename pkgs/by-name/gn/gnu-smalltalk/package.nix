@@ -1,22 +1,22 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libtool,
-  zip,
-  libffi,
-  libsigsegv,
-  readline,
-  gmp,
-  gnutls,
-  gtk2,
-  cairo,
-  SDL,
-  sqlite,
-  emacsSupport ? config.emacsSupport or false,
-  emacs ? null,
+{ config
+, lib
+, stdenv
+, fetchurl
+, pkg-config
+, libtool
+, zip
+, libffi
+, libsigsegv
+, readline
+, gmp
+, gnutls
+, gtk2
+, cairo
+, SDL
+, sqlite
+, emacsSupport ? config.emacsSupport or false
+, emacs ? null
+,
 }:
 
 assert emacsSupport -> (emacs != null);

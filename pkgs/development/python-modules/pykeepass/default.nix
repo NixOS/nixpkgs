@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  argon2-cffi,
-  construct,
-  lxml,
-  pycryptodomex,
-  pyotp,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, argon2-cffi
+, construct
+, lxml
+, pycryptodomex
+, pyotp
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

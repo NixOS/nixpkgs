@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGraalvmNativeImage,
-  fetchurl,
-  nix-update-script,
-  testers,
+{ lib
+, buildGraalvmNativeImage
+, fetchurl
+, nix-update-script
+, testers
+,
 }:
 
 buildGraalvmNativeImage (finalAttrs: {

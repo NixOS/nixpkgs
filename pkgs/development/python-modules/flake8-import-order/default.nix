@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flake8,
-  pycodestyle,
-  pylama,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flake8
+, pycodestyle
+, pylama
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

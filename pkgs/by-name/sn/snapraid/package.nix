@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  smartmontools,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, smartmontools
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

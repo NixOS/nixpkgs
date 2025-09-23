@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  gluten,
-  async,
-  faraday-async,
-  core,
+{ buildDunePackage
+, gluten
+, async
+, faraday-async
+, core
+,
 }:
 
 buildDunePackage {

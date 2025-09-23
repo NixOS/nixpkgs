@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  ocaml,
-  qcheck,
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, qcheck
+,
 }:
 
 buildDunePackage rec {

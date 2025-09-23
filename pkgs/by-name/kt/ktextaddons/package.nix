@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  libsForQt5,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, libsForQt5
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ktextaddons";

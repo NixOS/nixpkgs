@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  libsForQt5,
-  ghostscript,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, libsForQt5
+, ghostscript
+,
 }:
 
 python3Packages.buildPythonApplication rec {

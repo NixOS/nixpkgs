@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pkg-config,
-  swig,
-  libcdio,
-  libiconv,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pkg-config
+, swig
+, libcdio
+, libiconv
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

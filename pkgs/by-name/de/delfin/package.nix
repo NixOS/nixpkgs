@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  appstream,
-  cargo,
-  desktop-file-utils,
-  fetchFromGitea,
-  gitUpdater,
-  gtk4,
-  libadwaita,
-  libepoxy,
-  libglvnd,
-  meson,
-  mpv,
-  ninja,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, appstream
+, cargo
+, desktop-file-utils
+, fetchFromGitea
+, gitUpdater
+, gtk4
+, libadwaita
+, libepoxy
+, libglvnd
+, meson
+, mpv
+, ninja
+, openssl
+, pkg-config
+, rustPlatform
+, rustc
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation rec {

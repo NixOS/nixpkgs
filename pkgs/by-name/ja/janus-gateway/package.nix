@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  gengetopt,
-  glib,
-  libconfig,
-  libnice,
-  jansson,
-  boringssl,
-  zlib,
-  srtp,
-  libuv,
-  libmicrohttpd,
-  curl,
-  libwebsockets,
-  sofia_sip,
-  libogg,
-  libopus,
-  usrsctp,
-  ffmpeg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, gengetopt
+, glib
+, libconfig
+, libnice
+, jansson
+, boringssl
+, zlib
+, srtp
+, libuv
+, libmicrohttpd
+, curl
+, libwebsockets
+, sofia_sip
+, libogg
+, libopus
+, usrsctp
+, ffmpeg
+,
 }:
 
 let

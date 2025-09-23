@@ -1,17 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-
-  libpysal,
-  mapclassify,
-  matplotlib,
-  numpy,
-  scipy,
-  seaborn,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, libpysal
+, mapclassify
+, matplotlib
+, numpy
+, scipy
+, seaborn
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

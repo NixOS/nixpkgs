@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  click,
-  cython,
-  pythonOlder,
-  tabulate,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, click
+, cython
+, pythonOlder
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

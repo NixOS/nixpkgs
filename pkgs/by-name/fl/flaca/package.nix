@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  fetchurl,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, fetchurl
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

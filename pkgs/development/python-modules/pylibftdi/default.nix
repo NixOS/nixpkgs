@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  libftdi1,
-  libusb1,
-  pythonOlder,
-  poetry-core,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, libftdi1
+, libusb1
+, pythonOlder
+, poetry-core
+,
 }:
 
 buildPythonPackage rec {

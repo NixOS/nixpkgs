@@ -1,34 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  uv-build,
-
-  # dependencies
-  click,
-  docutils,
-  itsdangerous,
-  jedi,
-  loro,
-  markdown,
-  narwhals,
-  packaging,
-  psutil,
-  pygments,
-  pymdown-extensions,
-  pyyaml,
-  ruff,
-  starlette,
-  tomlkit,
-  typing-extensions,
-  uvicorn,
-  websockets,
-
-  # tests
-  versionCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  uv-build
+, # dependencies
+  click
+, docutils
+, itsdangerous
+, jedi
+, loro
+, markdown
+, narwhals
+, packaging
+, psutil
+, pygments
+, pymdown-extensions
+, pyyaml
+, ruff
+, starlette
+, tomlkit
+, typing-extensions
+, uvicorn
+, websockets
+, # tests
+  versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  wheel,
-  qrcode,
-  reportlab,
-  pillow,
-  pytest,
-  pyzbar,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, wheel
+, qrcode
+, reportlab
+, pillow
+, pytest
+, pyzbar
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  python ? null,
-  withPython ? false,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, python ? null
+, withPython ? false
+,
 }:
 
 stdenv.mkDerivation rec {

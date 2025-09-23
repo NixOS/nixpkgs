@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -25,9 +24,11 @@ let
   cfg = config.services.mtr-exporter;
 
   jobsConfig = pkgs.writeText "mtr-exporter.conf" (
-    concatMapStrings (job: ''
-      ${job.name} -- ${job.schedule} -- ${concatStringsSep " " job.flags} ${job.address}
-    '') cfg.jobs
+    concatMapStrings
+      (job: ''
+        ${job.name} -- ${job.schedule} -- ${concatStringsSep " " job.flags} ${job.address}
+      '')
+      cfg.jobs
   );
 in
 {

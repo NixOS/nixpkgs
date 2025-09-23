@@ -1,8 +1,8 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitea,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitea
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

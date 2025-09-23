@@ -1,41 +1,41 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  removeReferencesTo,
-  gfortran,
-  perl,
-  libnl,
-  rdma-core,
-  zlib,
-  numactl,
-  libevent,
-  hwloc,
-  targetPackages,
-  libpsm2,
-  libfabric,
-  pmix,
-  ucx,
-  ucc,
-  prrte,
-  makeWrapper,
-  python3,
-  config,
-  # Enable CUDA support
-  cudaSupport ? config.cudaSupport,
-  cudaPackages,
-  # Enable the Sun Grid Engine bindings
-  enableSGE ? false,
-  # Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
-  enablePrefix ? false,
-  # Enable libfabric support (necessary for Omnipath networks) on x86_64 linux
-  fabricSupport ? stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64,
-  # Enable Fortran support
-  fortranSupport ? true,
-  # AVX/SSE options. See passthru.defaultAvxOptions for the available options.
+{ lib
+, stdenv
+, fetchurl
+, removeReferencesTo
+, gfortran
+, perl
+, libnl
+, rdma-core
+, zlib
+, numactl
+, libevent
+, hwloc
+, targetPackages
+, libpsm2
+, libfabric
+, pmix
+, ucx
+, ucc
+, prrte
+, makeWrapper
+, python3
+, config
+, # Enable CUDA support
+  cudaSupport ? config.cudaSupport
+, cudaPackages
+, # Enable the Sun Grid Engine bindings
+  enableSGE ? false
+, # Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
+  enablePrefix ? false
+, # Enable libfabric support (necessary for Omnipath networks) on x86_64 linux
+  fabricSupport ? stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64
+, # Enable Fortran support
+  fortranSupport ? true
+, # AVX/SSE options. See passthru.defaultAvxOptions for the available options.
   # note that opempi fails to build with AVX disabled, meaning that everything
   # up to AVX is enabled by default.
-  avxOptions ? { },
+  avxOptions ? { }
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

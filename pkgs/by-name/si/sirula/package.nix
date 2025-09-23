@@ -1,11 +1,11 @@
-{
-  nix-update-script,
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  gtk3,
-  gtk-layer-shell,
+{ nix-update-script
+, lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, gtk3
+, gtk-layer-shell
+,
 }:
 
 rustPlatform.buildRustPackage rec {

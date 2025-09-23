@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libpcap,
-  tcpdump,
+{ lib
+, stdenv
+, fetchurl
+, libpcap
+, tcpdump
+,
 }:
 
 stdenv.mkDerivation rec {

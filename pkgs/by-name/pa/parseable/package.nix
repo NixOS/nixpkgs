@@ -1,12 +1,12 @@
-{
-  lib,
-  rdkafka,
-  pkg-config,
-  fetchFromGitHub,
-  rustPlatform,
-  fetchzip,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, rdkafka
+, pkg-config
+, fetchFromGitHub
+, rustPlatform
+, fetchzip
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  gfortran,
-  # Whether to build with ILP64 interface
-  blas64 ? false,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, gfortran
+, # Whether to build with ILP64 interface
+  blas64 ? false
+,
 }:
 
 stdenv.mkDerivation rec {

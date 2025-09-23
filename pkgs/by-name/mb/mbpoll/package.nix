@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  pkg-config,
-  fetchFromGitHub,
-  libmodbus,
+{ lib
+, stdenv
+, cmake
+, pkg-config
+, fetchFromGitHub
+, libmodbus
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

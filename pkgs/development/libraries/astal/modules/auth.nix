@@ -1,6 +1,6 @@
-{
-  buildAstalModule,
-  pam,
+{ buildAstalModule
+, pam
+,
 }:
 buildAstalModule {
   name = "auth";

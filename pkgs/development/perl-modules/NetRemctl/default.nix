@@ -1,7 +1,7 @@
-{
-  buildPerlModule,
-  remctl,
-  TestPod,
+{ buildPerlModule
+, remctl
+, TestPod
+,
 }:
 
 buildPerlModule {

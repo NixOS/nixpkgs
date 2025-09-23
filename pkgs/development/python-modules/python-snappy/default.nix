@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  cramjam,
-  setuptools,
-  snappy-cpp,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cramjam
+, setuptools
+, snappy-cpp
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

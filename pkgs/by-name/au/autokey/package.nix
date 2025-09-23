@@ -1,14 +1,14 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  gobject-introspection,
-  gtksourceview3,
-  libappindicator-gtk3,
-  libnotify,
-  zenity,
-  wmctrl,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, wrapGAppsHook3
+, gobject-introspection
+, gtksourceview3
+, libappindicator-gtk3
+, libnotify
+, zenity
+, wmctrl
+,
 }:
 
 python3Packages.buildPythonApplication rec {

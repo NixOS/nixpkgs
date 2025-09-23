@@ -1,13 +1,13 @@
-{
-  fetchgit,
-  gawk,
-  jq,
-  lib,
-  makeWrapper,
-  slurp,
-  stdenv,
-  sway,
-  bash,
+{ fetchgit
+, gawk
+, jq
+, lib
+, makeWrapper
+, slurp
+, stdenv
+, sway
+, bash
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,7 +1,7 @@
-{
-  fetchurl,
-  lib,
-  virtualbox,
+{ fetchurl
+, lib
+, virtualbox
+,
 }:
 let
   virtualboxExtPackVersion = "7.2.0";

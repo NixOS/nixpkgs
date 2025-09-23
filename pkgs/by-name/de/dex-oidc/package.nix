@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGo124Module,
-  fetchFromGitHub,
-  nixosTests,
-  testers,
-  dex-oidc,
+{ lib
+, buildGo124Module
+, fetchFromGitHub
+, nixosTests
+, testers
+, dex-oidc
+,
 }:
 
 buildGo124Module rec {

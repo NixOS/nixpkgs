@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  libpng,
-  libjpeg,
-  freetype,
-  xorg,
-  python3,
-  imagemagick,
-  gcc-arm-embedded,
-  pkg-config,
-  python3Packages,
-  makeDesktopItem,
-  copyDesktopItems,
+{ stdenv
+, lib
+, fetchFromGitHub
+, libpng
+, libjpeg
+, freetype
+, xorg
+, python3
+, imagemagick
+, gcc-arm-embedded
+, pkg-config
+, python3Packages
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 stdenv.mkDerivation rec {

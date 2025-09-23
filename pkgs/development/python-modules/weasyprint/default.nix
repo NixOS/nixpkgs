@@ -1,33 +1,30 @@
-{
-  lib,
-  stdenv,
-  pkgs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fontconfig,
-  glib,
-  harfbuzz,
-  pango,
-
-  # build-system
-  flit-core,
-
-  # dependencies
-  cffi,
-  cssselect2,
-  fonttools,
-  pillow,
-  pydyf,
-  pyphen,
-  tinycss2,
-  tinyhtml5,
-
-  # tests
-  pytest-cov-stub,
-  pytestCheckHook,
-  replaceVars,
-  versionCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, pkgs
+, buildPythonPackage
+, fetchFromGitHub
+, fontconfig
+, glib
+, harfbuzz
+, pango
+, # build-system
+  flit-core
+, # dependencies
+  cffi
+, cssselect2
+, fonttools
+, pillow
+, pydyf
+, pyphen
+, tinycss2
+, tinyhtml5
+, # tests
+  pytest-cov-stub
+, pytestCheckHook
+, replaceVars
+, versionCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

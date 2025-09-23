@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  llvmPackages,
-  pkg-config,
-  elfutils,
-  zlib,
-  zstd,
-  scx-common,
-  protobuf,
-  libseccomp,
+{ lib
+, rustPlatform
+, llvmPackages
+, pkg-config
+, elfutils
+, zlib
+, zstd
+, scx-common
+, protobuf
+, libseccomp
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "scx_rustscheds";

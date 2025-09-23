@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  rustPlatform,
-  libcosmicAppHook,
-  just,
-  pkg-config,
-  util-linuxMinimal,
-  dbus,
-  glib,
-  libinput,
-  pulseaudio,
-  udev,
-  xkeyboard_config,
-  nix-update-script,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, rustPlatform
+, libcosmicAppHook
+, just
+, pkg-config
+, util-linuxMinimal
+, dbus
+, glib
+, libinput
+, pulseaudio
+, udev
+, xkeyboard_config
+, nix-update-script
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

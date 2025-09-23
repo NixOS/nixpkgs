@@ -1,26 +1,25 @@
-{
-  lib,
-  config,
-  fetchFromGitHub,
-  stdenv,
-  cmake,
-  cudaPackages ? { },
-  cudaSupport ? config.cudaSupport,
-  pythonSupport ? true,
-  python3Packages,
-  llvmPackages,
-  blas,
-  swig,
-  autoAddDriverRunpath,
-  optLevel ?
-    let
-      optLevels =
-        lib.optionals stdenv.hostPlatform.avx2Support [ "avx2" ]
-        ++ lib.optionals stdenv.hostPlatform.sse4_1Support [ "sse4" ]
-        ++ [ "generic" ];
-    in
-    # Choose the maximum available optimization level
-    builtins.head optLevels,
+{ lib
+, config
+, fetchFromGitHub
+, stdenv
+, cmake
+, cudaPackages ? { }
+, cudaSupport ? config.cudaSupport
+, pythonSupport ? true
+, python3Packages
+, llvmPackages
+, blas
+, swig
+, autoAddDriverRunpath
+, optLevel ? let
+    optLevels =
+      lib.optionals stdenv.hostPlatform.avx2Support [ "avx2" ]
+      ++ lib.optionals stdenv.hostPlatform.sse4_1Support [ "sse4" ]
+      ++ [ "generic" ];
+  in
+  # Choose the maximum available optimization level
+  builtins.head optLevels
+,
 }@inputs:
 
 let

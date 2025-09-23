@@ -1,25 +1,25 @@
-{
-  autoPatchelfHook,
-  c-ares,
-  curl,
-  darwin,
-  expat,
-  fetchurl,
-  glibc,
-  icu60,
-  jq,
-  lib,
-  libiconv,
-  libredirect,
-  libxcrypt-legacy,
-  libxml2,
-  makeWrapper,
-  openssl,
-  stdenv,
-  unzip,
-  xercesc,
-  zlib,
-  acceptBroadcomEula ? false,
+{ autoPatchelfHook
+, c-ares
+, curl
+, darwin
+, expat
+, fetchurl
+, glibc
+, icu60
+, jq
+, lib
+, libiconv
+, libredirect
+, libxcrypt-legacy
+, libxml2
+, makeWrapper
+, openssl
+, stdenv
+, unzip
+, xercesc
+, zlib
+, acceptBroadcomEula ? false
+,
 }:
 
 let
@@ -29,14 +29,14 @@ let
 
   # Use browser devtools to figure out how this works.
   fetchFromBroadcom =
-    {
-      fileName,
-      version,
-      toolId ? ovftoolId,
-      artifactId ? 21342,
-      fileType ? "Download",
-      source ? "",
-      hash ? "",
+    { fileName
+    , version
+    , toolId ? ovftoolId
+    , artifactId ? 21342
+    , fileType ? "Download"
+    , source ? ""
+    , hash ? ""
+    ,
     }:
     let
       requestJson = builtins.toJSON {
@@ -101,9 +101,10 @@ stdenv.mkDerivation (final: {
 
   src =
     if acceptBroadcomEula then
-      fetchFromBroadcom {
-        inherit (ovftoolSystem) fileName version hash;
-      }
+      fetchFromBroadcom
+        {
+          inherit (ovftoolSystem) fileName version hash;
+        }
     else
       throw ''
         See the following URL for terms of using this software:

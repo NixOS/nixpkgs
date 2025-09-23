@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  expat,
-  fftwFloat,
-  fontconfig,
-  freetype,
-  libjack2,
-  jack2,
-  libclthreads,
-  libclxclient,
-  libsndfile,
-  libxcb,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, expat
+, fftwFloat
+, fontconfig
+, freetype
+, libjack2
+, jack2
+, libclthreads
+, libclxclient
+, libsndfile
+, libxcb
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

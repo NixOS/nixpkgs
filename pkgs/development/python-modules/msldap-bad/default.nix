@@ -1,18 +1,18 @@
-{
-  lib,
-  asn1crypto,
-  asyauth-bad,
-  asysocks,
-  buildPythonPackage,
-  fetchFromGitHub,
-  minikerberos-bad,
-  prompt-toolkit,
-  setuptools,
-  tabulate,
-  tqdm,
-  unicrypto,
-  wcwidth,
-  winacl,
+{ lib
+, asn1crypto
+, asyauth-bad
+, asysocks
+, buildPythonPackage
+, fetchFromGitHub
+, minikerberos-bad
+, prompt-toolkit
+, setuptools
+, tabulate
+, tqdm
+, unicrypto
+, wcwidth
+, winacl
+,
 }:
 
 buildPythonPackage rec {

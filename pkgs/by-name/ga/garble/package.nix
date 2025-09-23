@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  git,
-  versionCheckHook,
-  replaceVars,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, git
+, versionCheckHook
+, replaceVars
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

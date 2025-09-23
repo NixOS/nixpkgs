@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  glib,
-  libcanberra-gtk3,
-  libnotify,
-  libwnck,
-  gtk-layer-shell,
-  gtk3,
-  libxml2,
-  mate-desktop,
-  mate-panel,
-  wrapGAppsHook3,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, libcanberra-gtk3
+, libnotify
+, libwnck
+, gtk-layer-shell
+, gtk3
+, libxml2
+, mate-desktop
+, mate-panel
+, wrapGAppsHook3
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

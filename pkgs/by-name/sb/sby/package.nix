@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bash,
-  python3,
-  yosys,
-  yices,
-  boolector,
-  z3,
-  aiger,
-  btor2tools,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bash
+, python3
+, yosys
+, yices
+, boolector
+, z3
+, aiger
+, btor2tools
+, nix-update-script
+,
 }:
 
 let

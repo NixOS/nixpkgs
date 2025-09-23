@@ -1,9 +1,9 @@
-{
-  stdenvNoCC,
-  lib,
-  bash,
-  installShellFiles,
-  buildPackages,
+{ stdenvNoCC
+, lib
+, bash
+, installShellFiles
+, buildPackages
+,
 }:
 
 stdenvNoCC.mkDerivation {

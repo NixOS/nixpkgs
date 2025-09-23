@@ -1,9 +1,9 @@
-{
-  lib,
-  vscode-utils,
-  jq,
-  shfmt,
-  moreutils,
+{ lib
+, vscode-utils
+, jq
+, shfmt
+, moreutils
+,
 }:
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {

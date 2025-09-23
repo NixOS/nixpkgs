@@ -1,12 +1,12 @@
-{
-  lib,
-  freeipmi,
-  autoreconfHook,
-  pkg-config,
-  fetchFromGitHub,
-  tcp_wrappers,
-  stdenv,
-  expect,
+{ lib
+, freeipmi
+, autoreconfHook
+, pkg-config
+, fetchFromGitHub
+, tcp_wrappers
+, stdenv
+, expect
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "conman";

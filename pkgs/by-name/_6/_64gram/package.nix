@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  telegram-desktop,
-  alsa-lib,
-  jemalloc,
-  libopus,
-  libpulseaudio,
-  withWebkit ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, telegram-desktop
+, alsa-lib
+, jemalloc
+, libopus
+, libpulseaudio
+, withWebkit ? true
+,
 }:
 
 telegram-desktop.override {

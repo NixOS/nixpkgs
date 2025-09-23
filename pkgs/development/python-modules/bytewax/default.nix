@@ -1,30 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-
-  # build-system
-  cmake,
-  pkg-config,
-  rustPlatform,
-
-  # native dependencies
-  cyrus_sasl,
-  openssl,
-  protobuf,
-
-  # dependencies
-  jsonpickle,
-  prometheus-client,
-
-  # optional dependencies
-  confluent-kafka,
-
-  # test
-  myst-docutils,
-  pytestCheckHook,
-  pytest-benchmark,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, # build-system
+  cmake
+, pkg-config
+, rustPlatform
+, # native dependencies
+  cyrus_sasl
+, openssl
+, protobuf
+, # dependencies
+  jsonpickle
+, prometheus-client
+, # optional dependencies
+  confluent-kafka
+, # test
+  myst-docutils
+, pytestCheckHook
+, pytest-benchmark
+,
 }:
 
 buildPythonPackage rec {

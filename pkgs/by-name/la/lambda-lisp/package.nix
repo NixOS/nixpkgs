@@ -3,12 +3,12 @@
 # packages such as lambda-lisp-blc, lambda-lisp-lazyk,
 # lambda-lisp-clamb, etc.
 
-{
-  lib,
-  gccStdenv,
-  fetchFromGitHub,
-  fetchurl,
-  runtimeShell,
+{ lib
+, gccStdenv
+, fetchFromGitHub
+, fetchurl
+, runtimeShell
+,
 }:
 
 let

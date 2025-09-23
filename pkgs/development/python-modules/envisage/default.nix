@@ -1,14 +1,14 @@
-{
-  lib,
-  apptools,
-  buildPythonPackage,
-  fetchPypi,
-  pyface,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  traits,
-  traitsui,
+{ lib
+, apptools
+, buildPythonPackage
+, fetchPypi
+, pyface
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, traits
+, traitsui
+,
 }:
 
 buildPythonPackage rec {

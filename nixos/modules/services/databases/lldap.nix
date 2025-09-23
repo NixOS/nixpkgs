@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -194,16 +193,16 @@ in
         ''
       ]
       ++
-        lib.optionals
-          (cfg.settings.force_ldap_user_pass_reset == false && cfg.silenceForceUserPassResetWarning == false)
-          [
-            ''
-              lldap: The `force_ldap_user_pass_reset` setting is set to `false` which means
-              the admin password can be changed through the UI and will drift from the one defined in your nix config.
-              It also means changing the setting `ldap_user_pass` or `ldap_user_pass_file` will have no effect on the admin password.
-              Either set `force_ldap_user_pass_reset` to `"always"` or silence this warning by setting the option `services.lldap.silenceForceUserPassResetWarning` to `true`.
-            ''
-          ];
+      lib.optionals
+        (cfg.settings.force_ldap_user_pass_reset == false && cfg.silenceForceUserPassResetWarning == false)
+        [
+          ''
+            lldap: The `force_ldap_user_pass_reset` setting is set to `false` which means
+            the admin password can be changed through the UI and will drift from the one defined in your nix config.
+            It also means changing the setting `ldap_user_pass` or `ldap_user_pass_file` will have no effect on the admin password.
+            Either set `force_ldap_user_pass_reset` to `"always"` or silence this warning by setting the option `services.lldap.silenceForceUserPassResetWarning` to `true`.
+          ''
+        ];
 
     systemd.services.lldap = {
       description = "Lightweight LDAP server (lldap)";

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  yuicompressor,
-  zopfli,
-  stdenv,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, yuicompressor
+, zopfli
+, stdenv
+,
 }:
 buildGoModule {
   pname = "dcs";

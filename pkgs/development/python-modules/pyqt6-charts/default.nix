@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  sip,
-  pyqt-builder,
-  qt6Packages,
-  pythonOlder,
-  pyqt6,
-  python,
-  mesa,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, sip
+, pyqt-builder
+, qt6Packages
+, pythonOlder
+, pyqt6
+, python
+, mesa
+,
 }:
 
 buildPythonPackage rec {

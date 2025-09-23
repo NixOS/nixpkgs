@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  gitUpdater,
-  testers,
-  # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/issues/5
-  boost186,
-  cmake,
-  curl,
-  doxygen,
-  graphviz,
-  gtest,
-  jsoncpp,
-  lomiri,
-  pkg-config,
-  process-cpp,
-  properties-cpp,
-  python3,
-  validatePkgConfig,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, gitUpdater
+, testers
+, # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/issues/5
+  boost186
+, cmake
+, curl
+, doxygen
+, graphviz
+, gtest
+, jsoncpp
+, lomiri
+, pkg-config
+, process-cpp
+, properties-cpp
+, python3
+, validatePkgConfig
+,
 }:
 
 let

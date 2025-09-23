@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoconf,
-  automake,
-  libtool,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, libtool
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  writeText,
-  zlib,
-  rpmextract,
-  patchelf,
-  which,
+{ lib
+, stdenv
+, fetchurl
+, writeText
+, zlib
+, rpmextract
+, patchelf
+, which
+,
 }:
 
 let

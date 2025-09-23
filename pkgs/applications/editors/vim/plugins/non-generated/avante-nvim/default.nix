@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  rustPlatform,
-  stdenv,
-  vimPlugins,
-  vimUtils,
-  makeWrapper,
-  pkgs,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, openssl
+, pkg-config
+, rustPlatform
+, stdenv
+, vimPlugins
+, vimUtils
+, makeWrapper
+, pkgs
+,
 }:
 let
   version = "0.0.27-unstable-2025-09-11";

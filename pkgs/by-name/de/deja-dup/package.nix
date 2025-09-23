@@ -1,29 +1,29 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  replaceVars,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  gettext,
-  itstool,
-  desktop-file-utils,
-  glib,
-  glib-networking,
-  gtk4,
-  coreutils,
-  libsoup_3,
-  libsecret,
-  libadwaita,
-  wrapGAppsHook4,
-  libgpg-error,
-  json-glib,
-  duplicity,
-  rclone,
-  restic,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, replaceVars
+, meson
+, ninja
+, pkg-config
+, vala
+, gettext
+, itstool
+, desktop-file-utils
+, glib
+, glib-networking
+, gtk4
+, coreutils
+, libsoup_3
+, libsecret
+, libadwaita
+, wrapGAppsHook4
+, libgpg-error
+, json-glib
+, duplicity
+, rclone
+, restic
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

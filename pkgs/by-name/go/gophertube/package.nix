@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  yt-dlp,
-  mpv,
-  fzf,
-  chafa,
-  makeBinaryWrapper,
-  versionCheckHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, yt-dlp
+, mpv
+, fzf
+, chafa
+, makeBinaryWrapper
+, versionCheckHook
+,
 }:
 
 buildGoModule (finalAttrs: {

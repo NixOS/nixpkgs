@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pciutils,
-  pkg-config,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pciutils
+, pkg-config
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {

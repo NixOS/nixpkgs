@@ -1,11 +1,11 @@
-{
-  lib,
-  SDL2,
-  cmake,
-  fetchFromGitHub,
-  pkg-config,
-  stdenv,
-  flac,
+{ lib
+, SDL2
+, cmake
+, fetchFromGitHub
+, pkg-config
+, stdenv
+, flac
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

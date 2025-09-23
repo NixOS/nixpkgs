@@ -1,9 +1,9 @@
-{
-  lib,
-  badkeys,
-  fetchFromGitHub,
-  python3Packages,
-  testers,
+{ lib
+, badkeys
+, fetchFromGitHub
+, python3Packages
+, testers
+,
 }:
 
 python3Packages.buildPythonApplication rec {

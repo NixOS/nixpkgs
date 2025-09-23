@@ -1,41 +1,40 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  makeWrapper,
-  freetype,
-  SDL2,
-  glib,
-  pcre2,
-  openal,
-  rtmidi,
-  fluidsynth,
-  jack2,
-  alsa-lib,
-  qt5,
-  libvncserver,
-  discord-gamesdk,
-  libpcap,
-  libslirp,
-  wayland,
-  wayland-scanner,
-  libsndfile,
-  flac,
-  libogg,
-  libvorbis,
-  libopus,
-  libmpg123,
-  libgcrypt,
-
-  enableDynarec ? with stdenv.hostPlatform; isx86 || isAarch,
-  enableNewDynarec ? enableDynarec && stdenv.hostPlatform.isAarch,
-  enableVncRenderer ? false,
-  enableWayland ? stdenv.hostPlatform.isLinux,
-  unfreeEnableDiscord ? false,
-  unfreeEnableRoms ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, pkg-config
+, makeWrapper
+, freetype
+, SDL2
+, glib
+, pcre2
+, openal
+, rtmidi
+, fluidsynth
+, jack2
+, alsa-lib
+, qt5
+, libvncserver
+, discord-gamesdk
+, libpcap
+, libslirp
+, wayland
+, wayland-scanner
+, libsndfile
+, flac
+, libogg
+, libvorbis
+, libopus
+, libmpg123
+, libgcrypt
+, enableDynarec ? with stdenv.hostPlatform; isx86 || isAarch
+, enableNewDynarec ? enableDynarec && stdenv.hostPlatform.isAarch
+, enableVncRenderer ? false
+, enableWayland ? stdenv.hostPlatform.isLinux
+, unfreeEnableDiscord ? false
+, unfreeEnableRoms ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

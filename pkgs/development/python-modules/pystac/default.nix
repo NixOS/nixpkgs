@@ -1,18 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-
-  html5lib,
-  jsonschema,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-recording,
-  python-dateutil,
-  requests-mock,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, html5lib
+, jsonschema
+, pytest-cov-stub
+, pytest-mock
+, pytest-recording
+, python-dateutil
+, requests-mock
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

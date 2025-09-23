@@ -1,9 +1,9 @@
-{
-  fetchgit,
-  gnucap,
-  installShellFiles,
-  lib,
-  stdenv,
+{ fetchgit
+, gnucap
+, installShellFiles
+, lib
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

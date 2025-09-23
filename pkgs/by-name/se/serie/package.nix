@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  testers,
-  gitMinimal,
-  serie,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, testers
+, gitMinimal
+, serie
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  wagtail,
-  dj-database-url,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, wagtail
+, dj-database-url
+, python
+,
 }:
 
 buildPythonPackage rec {

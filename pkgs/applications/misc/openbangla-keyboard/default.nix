@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cargo,
-  cmake,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  wrapQtAppsHook,
-  fcitx5,
-  ibus,
-  qtbase,
-  zstd,
-  fetchpatch,
-  withFcitx5Support ? false,
-  withIbusSupport ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cargo
+, cmake
+, pkg-config
+, rustPlatform
+, rustc
+, wrapQtAppsHook
+, fcitx5
+, ibus
+, qtbase
+, zstd
+, fetchpatch
+, withFcitx5Support ? false
+, withIbusSupport ? false
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,45 +1,43 @@
-{
-  config,
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  meson,
-  ninja,
-  pkg-config,
-  perl,
-  python3,
-  python3Packages,
-  libiconv,
-  zlib,
-  libffi,
-  pcre2,
-  elfutils,
-  gnome,
-  libselinux,
-  bash,
-  gnum4,
-  libxslt,
-  docutils,
-  gi-docgen,
-  # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
-  util-linuxMinimal ? null,
-  buildPackages,
-
-  # this is just for tests (not in the closure of any regular package)
-  dbus,
-  tzdata,
-  desktop-file-utils,
-  shared-mime-info,
-  testers,
-  gobject-introspection,
-  libsystemtap,
-  libsysprof-capture,
-  mesonEmulatorHook,
-  withIntrospection ?
-    stdenv.hostPlatform.emulatorAvailable buildPackages
+{ config
+, lib
+, stdenv
+, fetchurl
+, gettext
+, meson
+, ninja
+, pkg-config
+, perl
+, python3
+, python3Packages
+, libiconv
+, zlib
+, libffi
+, pcre2
+, elfutils
+, gnome
+, libselinux
+, bash
+, gnum4
+, libxslt
+, docutils
+, gi-docgen
+, # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
+  util-linuxMinimal ? null
+, buildPackages
+, # this is just for tests (not in the closure of any regular package)
+  dbus
+, tzdata
+, desktop-file-utils
+, shared-mime-info
+, testers
+, gobject-introspection
+, libsystemtap
+, libsysprof-capture
+, mesonEmulatorHook
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
     && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian,
+    && stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian
+,
 }:
 
 assert stdenv.hostPlatform.isLinux -> util-linuxMinimal != null;
@@ -68,8 +66,8 @@ let
   withDtrace =
     lib.meta.availableOn stdenv.buildPlatform systemtap'
     &&
-      # dtrace support requires sys/sdt.h header
-      lib.meta.availableOn stdenv.hostPlatform libsystemtap;
+    # dtrace support requires sys/sdt.h header
+    lib.meta.availableOn stdenv.hostPlatform libsystemtap;
 in
 
 stdenv.mkDerivation (finalAttrs: {

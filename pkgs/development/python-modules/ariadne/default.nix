@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  graphql-core,
-  hatchling,
-  httpx,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  python-multipart,
-  starlette,
-  syrupy,
-  typing-extensions,
-  werkzeug,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, graphql-core
+, hatchling
+, httpx
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, python-multipart
+, starlette
+, syrupy
+, typing-extensions
+, werkzeug
+,
 }:
 
 buildPythonPackage rec {

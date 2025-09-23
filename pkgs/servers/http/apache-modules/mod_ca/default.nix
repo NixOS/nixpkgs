@@ -1,14 +1,14 @@
-{
-  apacheHttpd,
-  apr,
-  aprutil,
-  directoryListingUpdater,
-  fetchurl,
-  lib,
-  openldap,
-  openssl,
-  pkg-config,
-  stdenv,
+{ apacheHttpd
+, apr
+, aprutil
+, directoryListingUpdater
+, fetchurl
+, lib
+, openldap
+, openssl
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

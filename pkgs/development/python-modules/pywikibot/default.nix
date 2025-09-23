@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  mwparserfromhell,
-  requests,
-  packaging,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, mwparserfromhell
+, requests
+, packaging
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  libsForQt5,
-  openrgb,
-  glib,
-  libgtop,
-  lm_sensors,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitLab
+, libsForQt5
+, openrgb
+, glib
+, libgtop
+, lm_sensors
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

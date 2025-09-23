@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildDotnetModule,
-  dotnetCorePackages,
-  libX11,
-  libICE,
-  libSM,
-  libXi,
-  libXcursor,
-  libXext,
-  libXrandr,
-  fontconfig,
-  glew,
-  makeDesktopItem,
-  copyDesktopItems,
-  icoutils,
-  bintools,
-  fixDarwinDylibNames,
-  autoSignDarwinBinariesHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildDotnetModule
+, dotnetCorePackages
+, libX11
+, libICE
+, libSM
+, libXi
+, libXcursor
+, libXext
+, libXrandr
+, fontconfig
+, glew
+, makeDesktopItem
+, copyDesktopItems
+, icoutils
+, bintools
+, fixDarwinDylibNames
+, autoSignDarwinBinariesHook
+,
 }:
 
 buildDotnetModule rec {

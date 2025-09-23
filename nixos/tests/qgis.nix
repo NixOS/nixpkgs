@@ -1,9 +1,8 @@
 import ./make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    package,
-    ...
+  { pkgs
+  , lib
+  , package
+  , ...
   }:
   let
     qgisPackage = package.override { withServer = true; };

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  python,
-  fetchFromGitHub,
-  cmake,
-  fontconfig,
-  freetype,
-  libGL,
-  libGLU,
-  libX11,
-  libXext,
-  libXi,
-  libXmu,
-  opencascade-occt,
-  numpy,
-  rapidjson,
-  swig,
+{ lib
+, stdenv
+, python
+, fetchFromGitHub
+, cmake
+, fontconfig
+, freetype
+, libGL
+, libGLU
+, libX11
+, libXext
+, libXi
+, libXmu
+, opencascade-occt
+, numpy
+, rapidjson
+, swig
+,
 }:
 
 stdenv.mkDerivation rec {

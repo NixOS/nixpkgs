@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  lib,
-  libcasper,
-  libcapsicum,
-  libipsec,
+{ mkDerivation
+, lib
+, libcasper
+, libcapsicum
+, libipsec
+,
 }:
 mkDerivation {
   path = "sbin/ping";

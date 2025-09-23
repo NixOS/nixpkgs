@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  which,
-  pkg-config,
-  mono,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, which
+, pkg-config
+, mono
+,
 }:
 
 stdenv.mkDerivation rec {

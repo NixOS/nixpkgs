@@ -1,9 +1,9 @@
-{
-  lib,
-  clangStdenv,
-  fetchzip,
-  gnustep-back,
-  wrapGNUstepAppsHook,
+{ lib
+, clangStdenv
+, fetchzip
+, gnustep-back
+, wrapGNUstepAppsHook
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

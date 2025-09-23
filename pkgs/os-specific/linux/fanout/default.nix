@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kernel,
-  kernelModuleMakeFlags,
-  kmod,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, kernelModuleMakeFlags
+, kmod
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation {

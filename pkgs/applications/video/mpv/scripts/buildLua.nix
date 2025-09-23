@@ -21,11 +21,10 @@ lib.makeOverridable (
   args:
   stdenvNoCC.mkDerivation (
     extendedBy (if lib.isFunction args then args else (_: args)) (
-      {
-        pname,
-        extraScripts ? [ ],
-        runtime-dependencies ? [ ],
-        ...
+      { pname
+      , extraScripts ? [ ]
+      , runtime-dependencies ? [ ]
+      , ...
       }@args:
       let
         strippedName =

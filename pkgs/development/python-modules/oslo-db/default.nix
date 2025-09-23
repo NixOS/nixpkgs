@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  aiosqlite,
-  alembic,
-  debtcollector,
-  oslo-config,
-  oslo-context,
-  oslo-i18n,
-  oslo-utils,
-  oslotest,
-  pbr,
-  psycopg2,
-  setuptools,
-  sqlalchemy,
-  stevedore,
-  stestr,
-  testresources,
-  testscenarios,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, aiosqlite
+, alembic
+, debtcollector
+, oslo-config
+, oslo-context
+, oslo-i18n
+, oslo-utils
+, oslotest
+, pbr
+, psycopg2
+, setuptools
+, sqlalchemy
+, stevedore
+, stestr
+, testresources
+, testscenarios
+,
 }:
 
 buildPythonPackage rec {

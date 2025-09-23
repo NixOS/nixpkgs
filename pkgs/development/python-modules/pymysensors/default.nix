@@ -1,20 +1,20 @@
-{
-  lib,
-  awesomeversion,
-  buildPythonPackage,
-  click,
-  crcmod,
-  fetchFromGitHub,
-  getmac,
-  intelhex,
-  paho-mqtt,
-  pyserial-asyncio-fast,
-  pyserial,
-  pytest-sugar,
-  pytest-timeout,
-  pytestCheckHook,
-  setuptools,
-  voluptuous,
+{ lib
+, awesomeversion
+, buildPythonPackage
+, click
+, crcmod
+, fetchFromGitHub
+, getmac
+, intelhex
+, paho-mqtt
+, pyserial-asyncio-fast
+, pyserial
+, pytest-sugar
+, pytest-timeout
+, pytestCheckHook
+, setuptools
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

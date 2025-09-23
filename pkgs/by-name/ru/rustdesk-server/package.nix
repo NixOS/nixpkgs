@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libsodium,
-  sqlite,
-  nix-update-script,
-  testers,
-  rustdesk-server,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libsodium
+, sqlite
+, nix-update-script
+, testers
+, rustdesk-server
+,
 }:
 
 rustPlatform.buildRustPackage rec {

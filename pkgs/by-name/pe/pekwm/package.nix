@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  awk,
-  cmake,
-  grep,
-  libXext,
-  libXft,
-  libXinerama,
-  libXpm,
-  libXrandr,
-  libjpeg,
-  libpng,
-  pkg-config,
-  runtimeShell,
-  sed,
+{ lib
+, stdenv
+, fetchFromGitHub
+, awk
+, cmake
+, grep
+, libXext
+, libXft
+, libXinerama
+, libXpm
+, libXrandr
+, libjpeg
+, libpng
+, pkg-config
+, runtimeShell
+, sed
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  installShellFiles,
-  tcl,
-  libiconv,
-  fetchurl,
-  buildPackages,
-  zlib,
-  openssl,
-  readline,
-  withInternalSqlite ? true,
-  sqlite,
-  ed,
-  which,
-  tclPackages,
-  withJson ? true,
+{ lib
+, stdenv
+, installShellFiles
+, tcl
+, libiconv
+, fetchurl
+, buildPackages
+, zlib
+, openssl
+, readline
+, withInternalSqlite ? true
+, sqlite
+, ed
+, which
+, tclPackages
+, withJson ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

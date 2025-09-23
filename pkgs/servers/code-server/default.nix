@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildGoModule,
-  makeWrapper,
-  cacert,
-  moreutils,
-  jq,
-  git,
-  rsync,
-  pkg-config,
-  yarn,
-  python3,
-  esbuild,
-  nodejs,
-  node-gyp,
-  libsecret,
-  xorg,
-  ripgrep,
-  cctools,
-  xcbuild,
-  quilt,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, makeWrapper
+, cacert
+, moreutils
+, jq
+, git
+, rsync
+, pkg-config
+, yarn
+, python3
+, esbuild
+, nodejs
+, node-gyp
+, libsecret
+, xorg
+, ripgrep
+, cctools
+, xcbuild
+, quilt
+, nixosTests
+,
 }:
 
 let

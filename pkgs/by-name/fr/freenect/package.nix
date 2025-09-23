@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  libusb1,
-  pkg-config,
-  libglut,
-  libGLU,
-  libGL,
-  libXi,
-  libXmu,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libusb1
+, pkg-config
+, libglut
+, libGLU
+, libGL
+, libXi
+, libXmu
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  gobject-introspection,
-  gitUpdater,
+{ lib
+, python3
+, fetchFromGitHub
+, wrapGAppsHook3
+, gobject-introspection
+, gitUpdater
+,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "KlipperScreen";

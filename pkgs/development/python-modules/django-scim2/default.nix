@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # propagates
-  django,
-  scim2-filter-parser,
-
-  # tests
-  mock,
-  pytest-django,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # propagates
+  django
+, scim2-filter-parser
+, # tests
+  mock
+, pytest-django
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

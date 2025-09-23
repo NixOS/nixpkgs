@@ -1,12 +1,12 @@
-{
-  fetchgit,
+{ fetchgit
+,
 }:
 
 let
   nv-codec-headers-template =
-    {
-      version,
-      hash,
+    { version
+    , hash
+    ,
     }:
     {
       pname = "nv-codec-headers";

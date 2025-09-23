@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  buildPackages,
-  callPackage,
-  sqlite,
-  libtiff,
-  curl,
-  gtest,
-  nlohmann_json,
-  python3,
-  cacert,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, buildPackages
+, callPackage
+, sqlite
+, libtiff
+, curl
+, gtest
+, nlohmann_json
+, python3
+, cacert
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

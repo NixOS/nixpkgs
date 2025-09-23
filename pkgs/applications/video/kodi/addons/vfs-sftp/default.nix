@@ -1,11 +1,11 @@
-{
-  lib,
-  rel,
-  buildKodiBinaryAddon,
-  fetchFromGitHub,
-  openssl,
-  libssh,
-  zlib,
+{ lib
+, rel
+, buildKodiBinaryAddon
+, fetchFromGitHub
+, openssl
+, libssh
+, zlib
+,
 }:
 buildKodiBinaryAddon rec {
   pname = namespace;

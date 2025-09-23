@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitea,
-  buildGoModule,
-  nix-update-script,
+{ lib
+, fetchFromGitea
+, buildGoModule
+, nix-update-script
+,
 }:
 
 buildGoModule rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  morphys,
-  pytestCheckHook,
-  python-baseconv,
-  pythonOlder,
-  six,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, morphys
+, pytestCheckHook
+, python-baseconv
+, pythonOlder
+, six
+,
 }:
 buildPythonPackage rec {
   pname = "py-multibase";

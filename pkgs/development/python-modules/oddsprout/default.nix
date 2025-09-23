@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  pytestCheckHook,
-  pythonOlder,
-  dahlia,
-  ixia,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, pytestCheckHook
+, pythonOlder
+, dahlia
+, ixia
+,
 }:
 
 buildPythonPackage rec {

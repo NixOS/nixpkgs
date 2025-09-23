@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  pythonOlder,
-  cmake,
-  swig,
-  elastix,
-  itk,
-  numpy,
-  simpleitk,
-  scikit-build,
+{ buildPythonPackage
+, pythonOlder
+, cmake
+, swig
+, elastix
+, itk
+, numpy
+, simpleitk
+, scikit-build
+,
 }:
 
 buildPythonPackage rec {

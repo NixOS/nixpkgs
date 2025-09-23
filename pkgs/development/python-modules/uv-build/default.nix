@@ -1,9 +1,9 @@
-{
-  lib,
-  pkgs,
-  buildPythonPackage,
-  rustPlatform,
-  callPackage,
+{ lib
+, pkgs
+, buildPythonPackage
+, rustPlatform
+, callPackage
+,
 }:
 
 buildPythonPackage {

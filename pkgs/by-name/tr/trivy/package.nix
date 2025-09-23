@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  buildGo124Module,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  trivy,
+{ lib
+, stdenv
+, buildPackages
+, buildGo124Module
+, fetchFromGitHub
+, installShellFiles
+, testers
+, trivy
+,
 }:
 
 buildGo124Module rec {

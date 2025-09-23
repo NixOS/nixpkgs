@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  decorator,
-  deprecated,
-  fetchFromGitHub,
-  icecream,
-  invoke,
-  mock,
-  paramiko,
-  pytest-relaxed,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, decorator
+, deprecated
+, fetchFromGitHub
+, icecream
+, invoke
+, mock
+, paramiko
+, pytest-relaxed
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

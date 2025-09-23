@@ -1,7 +1,7 @@
-{
-  lib,
-  vimUtils,
-  meson,
+{ lib
+, vimUtils
+, meson
+,
 }:
 vimUtils.buildVimPlugin {
   inherit (meson) pname version src;

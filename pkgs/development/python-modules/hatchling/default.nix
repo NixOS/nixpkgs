@@ -1,22 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # runtime
-  editables,
-  packaging,
-  pathspec,
-  pluggy,
-  tomli,
-  trove-classifiers,
-
-  # tests
-  build,
-  python,
-  requests,
-  virtualenv,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # runtime
+  editables
+, packaging
+, pathspec
+, pluggy
+, tomli
+, trove-classifiers
+, # tests
+  build
+, python
+, requests
+, virtualenv
+,
 }:
 
 buildPythonPackage rec {

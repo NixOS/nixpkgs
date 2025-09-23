@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  autoPatchelfHook,
-  erlang,
+{ stdenv
+, lib
+, fetchurl
+, autoPatchelfHook
+, erlang
+,
 }:
 let
   # erlang-language-platform supports multiple OTP versions.

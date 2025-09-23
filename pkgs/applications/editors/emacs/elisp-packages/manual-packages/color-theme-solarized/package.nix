@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  melpaBuild,
+{ lib
+, fetchFromGitHub
+, melpaBuild
+,
 }:
 
 melpaBuild {

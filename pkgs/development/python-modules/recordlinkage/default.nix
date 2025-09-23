@@ -1,22 +1,22 @@
-{
-  lib,
-  bottleneck,
-  buildPythonPackage,
-  fetchPypi,
-  jellyfish,
-  joblib,
-  networkx,
-  numexpr,
-  numpy,
-  pandas,
-  pyarrow,
-  pytest,
-  pythonOlder,
-  scikit-learn,
-  scipy,
-  setuptools,
-  setuptools-scm,
-  wheel,
+{ lib
+, bottleneck
+, buildPythonPackage
+, fetchPypi
+, jellyfish
+, joblib
+, networkx
+, numexpr
+, numpy
+, pandas
+, pyarrow
+, pytest
+, pythonOlder
+, scikit-learn
+, scipy
+, setuptools
+, setuptools-scm
+, wheel
+,
 }:
 
 buildPythonPackage rec {

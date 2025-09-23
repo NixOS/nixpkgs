@@ -1,14 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ant,
-  jdk8, # the build script wants JAVA 8 for compilation
-  jre, # version can be >= 8 (latest version by default)
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  stripJavaArchivesHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ant
+, jdk8
+, # the build script wants JAVA 8 for compilation
+  jre
+, # version can be >= 8 (latest version by default)
+  makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, stripJavaArchivesHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

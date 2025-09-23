@@ -1,10 +1,10 @@
-{
-  lib,
-  autoreconfHook,
-  fetchFromGitHub,
-  stdenv,
-  wxGTK31,
-  withGui ? true,
+{ lib
+, autoreconfHook
+, fetchFromGitHub
+, stdenv
+, wxGTK31
+, withGui ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

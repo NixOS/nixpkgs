@@ -1,20 +1,20 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  callee,
-  cryptography,
-  fetchFromGitHub,
-  mock,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pyjwt,
-  pyopenssl,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  urllib3,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, callee
+, cryptography
+, fetchFromGitHub
+, mock
+, poetry-core
+, poetry-dynamic-versioning
+, pyjwt
+, pyopenssl
+, pytestCheckHook
+, pythonOlder
+, requests
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

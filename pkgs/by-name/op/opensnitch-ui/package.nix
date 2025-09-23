@@ -1,8 +1,8 @@
-{
-  python3Packages,
-  qt5,
-  lib,
-  opensnitch,
+{ python3Packages
+, qt5
+, lib
+, opensnitch
+,
 }:
 
 python3Packages.buildPythonApplication {

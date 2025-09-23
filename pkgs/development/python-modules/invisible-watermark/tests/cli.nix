@@ -1,10 +1,10 @@
-{
-  image,
-  method,
-  invisible-watermark,
-  runCommand,
-  testName,
-  withOnnx,
+{ image
+, method
+, invisible-watermark
+, runCommand
+, testName
+, withOnnx
+,
 }:
 
 # This file runs one test case.

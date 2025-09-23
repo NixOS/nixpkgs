@@ -1,11 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  numpy,
-  scipy, # optional, allows spline-related features (see patsy's docs)
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, numpy
+, scipy
+, # optional, allows spline-related features (see patsy's docs)
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

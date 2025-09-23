@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pandocfilters,
-  psutil,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pandocfilters
+, psutil
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

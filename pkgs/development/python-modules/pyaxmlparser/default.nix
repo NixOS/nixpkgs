@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  lib,
-  lxml,
-  click,
-  fetchFromGitHub,
-  pytestCheckHook,
-  asn1crypto,
+{ buildPythonPackage
+, lib
+, lxml
+, click
+, fetchFromGitHub
+, pytestCheckHook
+, asn1crypto
+,
 }:
 
 buildPythonPackage rec {

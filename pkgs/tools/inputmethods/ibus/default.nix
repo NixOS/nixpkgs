@@ -1,45 +1,45 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  fetchFromGitHub,
-  autoreconfHook,
-  gettext,
-  makeWrapper,
-  pkg-config,
-  vala,
-  wrapGAppsHook3,
-  dbus,
-  systemd,
-  dconf ? null,
-  glib,
-  gdk-pixbuf,
-  gobject-introspection,
-  gtk3,
-  gtk4,
-  gtk-doc,
-  libdbusmenu-gtk3,
-  runCommand,
-  isocodes,
-  cldr-annotations,
-  unicode-character-database,
-  unicode-emoji,
-  python3,
-  json-glib,
-  libnotify ? null,
-  enableUI ? !libOnly,
-  withWayland ? !libOnly,
-  libxkbcommon,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  buildPackages,
-  runtimeShell,
-  nixosTests,
-  versionCheckHook,
-  nix-update-script,
-  libX11,
-  libOnly ? false,
+{ lib
+, stdenv
+, replaceVars
+, fetchFromGitHub
+, autoreconfHook
+, gettext
+, makeWrapper
+, pkg-config
+, vala
+, wrapGAppsHook3
+, dbus
+, systemd
+, dconf ? null
+, glib
+, gdk-pixbuf
+, gobject-introspection
+, gtk3
+, gtk4
+, gtk-doc
+, libdbusmenu-gtk3
+, runCommand
+, isocodes
+, cldr-annotations
+, unicode-character-database
+, unicode-emoji
+, python3
+, json-glib
+, libnotify ? null
+, enableUI ? !libOnly
+, withWayland ? !libOnly
+, libxkbcommon
+, wayland
+, wayland-protocols
+, wayland-scanner
+, buildPackages
+, runtimeShell
+, nixosTests
+, versionCheckHook
+, nix-update-script
+, libX11
+, libOnly ? false
+,
 }:
 
 let

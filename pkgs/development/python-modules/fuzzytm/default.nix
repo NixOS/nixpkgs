@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  gensim,
-  numpy,
-  pandas,
-  pyfume,
-  setuptools,
-  scipy,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, gensim
+, numpy
+, pandas
+, pyfume
+, setuptools
+, scipy
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

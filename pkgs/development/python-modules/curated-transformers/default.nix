@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  catalogue,
-  curated-tokenizers,
-  fetchFromGitHub,
-  huggingface-hub,
-  setuptools,
-  tokenizers,
-  torch,
+{ lib
+, buildPythonPackage
+, catalogue
+, curated-tokenizers
+, fetchFromGitHub
+, huggingface-hub
+, setuptools
+, tokenizers
+, torch
+,
 }:
 
 buildPythonPackage rec {

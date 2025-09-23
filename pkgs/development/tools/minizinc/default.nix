@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  callPackage,
-  jq,
-  cmake,
-  flex,
-  bison,
-  gecode,
-  mpfr,
-  cbc,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, jq
+, cmake
+, flex
+, bison
+, gecode
+, mpfr
+, cbc
+, zlib
+,
 }:
 
 let

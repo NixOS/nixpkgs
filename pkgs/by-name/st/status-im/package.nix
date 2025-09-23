@@ -1,9 +1,9 @@
-{
-  lib,
-  appimageTools,
-  fetchzip,
-  fetchurl,
-  makeDesktopItem,
+{ lib
+, appimageTools
+, fetchzip
+, fetchurl
+, makeDesktopItem
+,
 }:
 let
   version = "2.29.0";

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  testers,
-  gitUpdater,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, testers
+, gitUpdater
+, autoreconfHook
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-macros";

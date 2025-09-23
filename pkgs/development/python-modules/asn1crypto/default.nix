@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  python,
-  fetchFromGitHub,
-
-  # build system
-  setuptools,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, python
+, fetchFromGitHub
+, # build system
+  setuptools
+, # tests
+  pytestCheckHook
+,
 }:
 
 # Switch version based on python version, as the situation isn't easy:

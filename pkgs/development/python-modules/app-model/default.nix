@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  in-n-out,
-  psygnal,
-  pydantic,
-  pydantic-compat,
-  pytestCheckHook,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, in-n-out
+, psygnal
+, pydantic
+, pydantic-compat
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

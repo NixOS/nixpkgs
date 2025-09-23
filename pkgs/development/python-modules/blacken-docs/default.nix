@@ -1,10 +1,10 @@
-{
-  black,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pytestCheckHook,
-  setuptools,
+{ black
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

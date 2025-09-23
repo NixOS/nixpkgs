@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib)
@@ -21,11 +20,10 @@ let
     ;
 
   fedimintdOpts =
-    {
-      config,
-      lib,
-      name,
-      ...
+    { config
+    , lib
+    , name
+    , ...
     }:
     {
       options = {
@@ -207,9 +205,11 @@ let
           };
           config = mkOption {
             type = types.submodule (
-              recursiveUpdate (import ../web-servers/nginx/vhost-options.nix {
-                inherit config lib;
-              }) { }
+              recursiveUpdate
+                (import ../web-servers/nginx/vhost-options.nix {
+                  inherit config lib;
+                })
+                { }
             );
             default = { };
             description = "Overrides to the nginx vhost section for api";
@@ -235,146 +235,154 @@ in
     mkIf (eachFedimintd != { }) {
 
       networking.firewall.allowedTCPPorts = concatLists (
-        mapAttrsToList (
-          fedimintdName: cfg:
+        mapAttrsToList
           (
-            lib.optional cfg.api_ws.openFirewall cfg.api_ws.port
-            ++ lib.optional cfg.p2p.openFirewall cfg.p2p.port
-            ++ lib.optional cfg.ui.openFirewall cfg.ui.port
+            fedimintdName: cfg:
+              (
+                lib.optional cfg.api_ws.openFirewall cfg.api_ws.port
+                ++ lib.optional cfg.p2p.openFirewall cfg.p2p.port
+                ++ lib.optional cfg.ui.openFirewall cfg.ui.port
+              )
           )
-        ) eachFedimintd
+          eachFedimintd
       );
 
       networking.firewall.allowedUDPPorts = concatLists (
-        mapAttrsToList (
-          fedimintdName: cfg:
+        mapAttrsToList
           (
-            lib.optional cfg.api_iroh.openFirewall cfg.api_iroh.port
-            ++ lib.optional cfg.p2p.openFirewall cfg.p2p.port
+            fedimintdName: cfg:
+              (
+                lib.optional cfg.api_iroh.openFirewall cfg.api_iroh.port
+                ++ lib.optional cfg.p2p.openFirewall cfg.p2p.port
+              )
           )
-        ) eachFedimintd
+          eachFedimintd
       );
 
-      systemd.services = mapAttrs' (
-        fedimintdName: cfg:
-        (nameValuePair "fedimintd-${fedimintdName}" (
-          let
-            startScript = pkgs.writeShellScriptBin "fedimintd" (
-              (
-                if cfg.bitcoin.rpc.secretFile != null then
+      systemd.services = mapAttrs'
+        (
+          fedimintdName: cfg:
+            (nameValuePair "fedimintd-${fedimintdName}" (
+              let
+                startScript = pkgs.writeShellScriptBin "fedimintd" (
+                  (
+                    if cfg.bitcoin.rpc.secretFile != null then
+                      ''
+                        >&2 echo "Setting FM_FORCE_BITCOIN_RPC_URL using password from ${cfg.bitcoin.rpc.secretFile}"
+                        secret=$(${pkgs.coreutils}/bin/head -n 1 "${cfg.bitcoin.rpc.secretFile}" || exit 1)
+                        export FM_FORCE_BITCOIN_RPC_URL=$(echo "$FM_BITCOIN_RPC_URL" | sed "s|^\(\w\+://[^@]\+\)\(@.*\)|\1:''${secret}\2|")
+                      ''
+                    else
+                      ""
+                  )
+                  + ''
+                    exec ${cfg.package}/bin/fedimintd
                   ''
-                    >&2 echo "Setting FM_FORCE_BITCOIN_RPC_URL using password from ${cfg.bitcoin.rpc.secretFile}"
-                    secret=$(${pkgs.coreutils}/bin/head -n 1 "${cfg.bitcoin.rpc.secretFile}" || exit 1)
-                    export FM_FORCE_BITCOIN_RPC_URL=$(echo "$FM_BITCOIN_RPC_URL" | sed "s|^\(\w\+://[^@]\+\)\(@.*\)|\1:''${secret}\2|")
-                  ''
-                else
-                  ""
-              )
-              + ''
-                exec ${cfg.package}/bin/fedimintd
-              ''
-            );
-          in
-          {
-            description = "Fedimint Server";
-            documentation = [ "https://github.com/fedimint/fedimint/" ];
-            wantedBy = [ "multi-user.target" ];
-            environment = lib.mkMerge [
+                );
+              in
               {
-                FM_BIND_P2P = "${cfg.p2p.bind}:${toString cfg.p2p.port}";
-                FM_BIND_API_WS = "${cfg.api_ws.bind}:${toString cfg.api_ws.port}";
-                FM_BIND_API_IROH = "${cfg.api_iroh.bind}:${toString cfg.api_iroh.port}";
-                FM_BIND_UI = "${cfg.ui.bind}:${toString cfg.ui.port}";
-                FM_DATA_DIR = cfg.dataDir;
-                FM_BITCOIN_NETWORK = cfg.bitcoin.network;
-                FM_BITCOIN_RPC_URL = cfg.bitcoin.rpc.url;
-                FM_BITCOIN_RPC_KIND = cfg.bitcoin.rpc.kind;
+                description = "Fedimint Server";
+                documentation = [ "https://github.com/fedimint/fedimint/" ];
+                wantedBy = [ "multi-user.target" ];
+                environment = lib.mkMerge [
+                  {
+                    FM_BIND_P2P = "${cfg.p2p.bind}:${toString cfg.p2p.port}";
+                    FM_BIND_API_WS = "${cfg.api_ws.bind}:${toString cfg.api_ws.port}";
+                    FM_BIND_API_IROH = "${cfg.api_iroh.bind}:${toString cfg.api_iroh.port}";
+                    FM_BIND_UI = "${cfg.ui.bind}:${toString cfg.ui.port}";
+                    FM_DATA_DIR = cfg.dataDir;
+                    FM_BITCOIN_NETWORK = cfg.bitcoin.network;
+                    FM_BITCOIN_RPC_URL = cfg.bitcoin.rpc.url;
+                    FM_BITCOIN_RPC_KIND = cfg.bitcoin.rpc.kind;
+                  }
+
+                  (lib.optionalAttrs (cfg.p2p.url != null) {
+                    FM_P2P_URL = cfg.p2p.url;
+                  })
+
+                  (lib.optionalAttrs (cfg.api_ws.url != null) {
+                    FM_API_URL = cfg.api_ws.url;
+                  })
+
+                  cfg.environment
+                ];
+                serviceConfig = {
+                  DynamicUser = true;
+
+                  StateDirectory = "fedimintd-${fedimintdName}";
+                  StateDirectoryMode = "0700";
+                  ExecStart = "${startScript}/bin/fedimintd";
+
+                  Restart = "always";
+                  RestartSec = 10;
+                  UMask = "007";
+                  LimitNOFILE = "100000";
+
+                  LockPersonality = true;
+                  MemoryDenyWriteExecute = true;
+                  NoNewPrivileges = true;
+                  PrivateDevices = true;
+                  PrivateMounts = true;
+                  PrivateTmp = true;
+                  ProtectClock = true;
+                  ProtectControlGroups = true;
+                  ProtectHostname = true;
+                  ProtectKernelLogs = true;
+                  ProtectKernelModules = true;
+                  ProtectKernelTunables = true;
+                  ProtectSystem = "full";
+                  RestrictAddressFamilies = [
+                    "AF_INET"
+                    "AF_INET6"
+                    "AF_NETLINK"
+                  ];
+                  RestrictNamespaces = true;
+                  RestrictRealtime = true;
+                  SocketBindAllow = "udp:${builtins.toString cfg.api_iroh.port}";
+                  SystemCallArchitectures = "native";
+                  SystemCallFilter = [
+                    "@system-service"
+                    "~@privileged"
+                  ];
+                };
+                unitConfig = {
+                  StartLimitBurst = 5;
+                };
               }
+            ))
+        )
+        eachFedimintd;
 
-              (lib.optionalAttrs (cfg.p2p.url != null) {
-                FM_P2P_URL = cfg.p2p.url;
-              })
+      services.nginx.virtualHosts = mapAttrs'
+        (
+          fedimintdName: cfg:
+            (nameValuePair cfg.nginx.fqdn (
+              lib.mkMerge [
+                cfg.nginx.config
 
-              (lib.optionalAttrs (cfg.api_ws.url != null) {
-                FM_API_URL = cfg.api_ws.url;
-              })
-
-              cfg.environment
-            ];
-            serviceConfig = {
-              DynamicUser = true;
-
-              StateDirectory = "fedimintd-${fedimintdName}";
-              StateDirectoryMode = "0700";
-              ExecStart = "${startScript}/bin/fedimintd";
-
-              Restart = "always";
-              RestartSec = 10;
-              UMask = "007";
-              LimitNOFILE = "100000";
-
-              LockPersonality = true;
-              MemoryDenyWriteExecute = true;
-              NoNewPrivileges = true;
-              PrivateDevices = true;
-              PrivateMounts = true;
-              PrivateTmp = true;
-              ProtectClock = true;
-              ProtectControlGroups = true;
-              ProtectHostname = true;
-              ProtectKernelLogs = true;
-              ProtectKernelModules = true;
-              ProtectKernelTunables = true;
-              ProtectSystem = "full";
-              RestrictAddressFamilies = [
-                "AF_INET"
-                "AF_INET6"
-                "AF_NETLINK"
-              ];
-              RestrictNamespaces = true;
-              RestrictRealtime = true;
-              SocketBindAllow = "udp:${builtins.toString cfg.api_iroh.port}";
-              SystemCallArchitectures = "native";
-              SystemCallFilter = [
-                "@system-service"
-                "~@privileged"
-              ];
-            };
-            unitConfig = {
-              StartLimitBurst = 5;
-            };
-          }
-        ))
-      ) eachFedimintd;
-
-      services.nginx.virtualHosts = mapAttrs' (
-        fedimintdName: cfg:
-        (nameValuePair cfg.nginx.fqdn (
-          lib.mkMerge [
-            cfg.nginx.config
-
-            {
-              # Note: we want by default to enable OpenSSL, but it seems anything 100 and above is
-              # overridden by default value from vhost-options.nix
-              enableACME = mkOverride 99 true;
-              forceSSL = mkOverride 99 true;
-              locations.${cfg.nginx.path_ws} = {
-                proxyPass = "http://127.0.0.1:${builtins.toString cfg.api_ws.port}/";
-                proxyWebsockets = true;
-                extraConfig = ''
-                  proxy_pass_header Authorization;
-                '';
-              };
-              locations.${cfg.nginx.path_ui} = {
-                proxyPass = "http://127.0.0.1:${builtins.toString cfg.ui.port}/";
-                extraConfig = ''
-                  proxy_pass_header Authorization;
-                '';
-              };
-            }
-          ]
-        ))
-      ) eachFedimintdNginx;
+                {
+                  # Note: we want by default to enable OpenSSL, but it seems anything 100 and above is
+                  # overridden by default value from vhost-options.nix
+                  enableACME = mkOverride 99 true;
+                  forceSSL = mkOverride 99 true;
+                  locations.${cfg.nginx.path_ws} = {
+                    proxyPass = "http://127.0.0.1:${builtins.toString cfg.api_ws.port}/";
+                    proxyWebsockets = true;
+                    extraConfig = ''
+                      proxy_pass_header Authorization;
+                    '';
+                  };
+                  locations.${cfg.nginx.path_ui} = {
+                    proxyPass = "http://127.0.0.1:${builtins.toString cfg.ui.port}/";
+                    extraConfig = ''
+                      proxy_pass_header Authorization;
+                    '';
+                  };
+                }
+              ]
+            ))
+        )
+        eachFedimintdNginx;
     };
 
   meta.maintainers = with lib.maintainers; [ dpc ];

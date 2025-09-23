@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  withBlas ? true,
-  blas,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, withBlas ? true
+, blas
+,
 }:
 
 stdenv.mkDerivation rec {

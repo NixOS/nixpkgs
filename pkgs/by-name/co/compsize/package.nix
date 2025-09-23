@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  btrfs-progs,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, btrfs-progs
+,
 }:
 
 let

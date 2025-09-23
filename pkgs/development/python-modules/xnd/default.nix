@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  libxnd,
-  setuptools,
-  ndtypes,
-  libndtypes,
-  pythonAtLeast,
-  python,
+{ lib
+, stdenv
+, buildPythonPackage
+, libxnd
+, setuptools
+, ndtypes
+, libndtypes
+, pythonAtLeast
+, python
+,
 }:
 
 buildPythonPackage {

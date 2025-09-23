@@ -1,9 +1,9 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  effects,
-  test,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, effects
+, test
+, lib
+,
 }:
 build-idris-package {
   pname = "containers";

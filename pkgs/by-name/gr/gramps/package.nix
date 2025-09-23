@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gtk3,
-  python3Packages,
-  glibcLocales,
-  intltool,
-  gexiv2,
-  pango,
-  gobject-introspection,
-  wrapGAppsHook3,
-  gettext,
-  desktopToDarwinBundle,
-  # Optional packages:
-  enableOSM ? true,
-  osm-gps-map,
-  glib-networking,
-  enableGraphviz ? true,
-  graphviz,
-  enableGhostscript ? true,
-  ghostscript,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gtk3
+, python3Packages
+, glibcLocales
+, intltool
+, gexiv2
+, pango
+, gobject-introspection
+, wrapGAppsHook3
+, gettext
+, desktopToDarwinBundle
+, # Optional packages:
+  enableOSM ? true
+, osm-gps-map
+, glib-networking
+, enableGraphviz ? true
+, graphviz
+, enableGhostscript ? true
+, ghostscript
+,
 }:
 
 python3Packages.buildPythonApplication rec {

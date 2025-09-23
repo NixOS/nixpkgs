@@ -1,9 +1,9 @@
-{
-  fetchPypi,
-  lib,
-  nb-cli,
-  python3,
-  testers,
+{ fetchPypi
+, lib
+, nb-cli
+, python3
+, testers
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

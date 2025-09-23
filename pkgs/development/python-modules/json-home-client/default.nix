@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  # build inputs
-  typing-extensions,
-  uri-template,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build inputs
+  typing-extensions
+, uri-template
+,
 }:
 
 buildPythonPackage rec {

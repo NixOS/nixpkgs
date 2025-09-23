@@ -1,13 +1,13 @@
-{
-  lib,
-  asttokens,
-  buildPythonPackage,
-  executing,
-  hatchling,
-  fetchFromGitHub,
-  pygments,
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, asttokens
+, buildPythonPackage
+, executing
+, hatchling
+, fetchFromGitHub
+, pygments
+, pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  runCommand,
-  srcOnly,
-  hello,
-  emptyDirectory,
-  zlib,
-  git,
-  withCFlags,
-  stdenv,
-  testers,
+{ lib
+, runCommand
+, srcOnly
+, hello
+, emptyDirectory
+, zlib
+, git
+, withCFlags
+, stdenv
+, testers
+,
 }:
 
 let
@@ -110,30 +110,30 @@ let
 in
 
 runCommand "srcOnly-tests"
-  {
-    moreTests = [
-      (testers.testEqualDerivation "zlibSrcEquiv == zlibSrc" zlibSrcEquiv zlibSrc)
-      # (testers.testEqualDerivation
-      #   "zlibSrcFreeform == zlibSrc"
-      #   zlibSrcFreeform
-      #   zlibSrc)
-      (testers.testEqualDerivation "helloSrcEquiv == helloSrc" helloSrcEquiv helloSrc)
-      (testers.testEqualDerivation "helloSrcEquiv == helloSrc" helloSrcEquiv helloSrc)
-      (testers.testEqualDerivation "gitSrcEquiv == gitSrc" gitSrcEquiv gitSrc)
-      (testers.testEqualDerivation "helloDrvSimpleSrcFreeform == helloDrvSimpleSrc"
-        helloDrvSimpleSrcFreeform
-        helloDrvSimpleSrc
-      )
-      (testers.testEqualDerivation "stdenvAdapterDrvSrcEquiv == stdenvAdapterDrvSrc"
-        stdenvAdapterDrvSrcEquiv
-        stdenvAdapterDrvSrc
-      )
-      (testers.testEqualDerivation "structuredAttrsDrvSrcEquiv == structuredAttrsDrvSrc"
-        structuredAttrsDrvSrcEquiv
-        structuredAttrsDrvSrc
-      )
-    ];
-  }
+{
+  moreTests = [
+    (testers.testEqualDerivation "zlibSrcEquiv == zlibSrc" zlibSrcEquiv zlibSrc)
+    # (testers.testEqualDerivation
+    #   "zlibSrcFreeform == zlibSrc"
+    #   zlibSrcFreeform
+    #   zlibSrc)
+    (testers.testEqualDerivation "helloSrcEquiv == helloSrc" helloSrcEquiv helloSrc)
+    (testers.testEqualDerivation "helloSrcEquiv == helloSrc" helloSrcEquiv helloSrc)
+    (testers.testEqualDerivation "gitSrcEquiv == gitSrc" gitSrcEquiv gitSrc)
+    (testers.testEqualDerivation "helloDrvSimpleSrcFreeform == helloDrvSimpleSrc"
+      helloDrvSimpleSrcFreeform
+      helloDrvSimpleSrc
+    )
+    (testers.testEqualDerivation "stdenvAdapterDrvSrcEquiv == stdenvAdapterDrvSrc"
+      stdenvAdapterDrvSrcEquiv
+      stdenvAdapterDrvSrc
+    )
+    (testers.testEqualDerivation "structuredAttrsDrvSrcEquiv == structuredAttrsDrvSrc"
+      structuredAttrsDrvSrcEquiv
+      structuredAttrsDrvSrc
+    )
+  ];
+}
   ''
     # Test that emptySrc is empty
     if [ -n "$(ls -A ${emptySrc})" ]; then

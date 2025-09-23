@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  cargo,
-  wrapGAppsHook4,
-  blueprint-compiler,
-  libadwaita,
-  libsecret,
-  tinysparql,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, rustPlatform
+, rustc
+, cargo
+, wrapGAppsHook4
+, blueprint-compiler
+, libadwaita
+, libsecret
+, tinysparql
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  unzip,
-  vscodium,
-  vscode-extensions,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, unzip
+, vscodium
+, vscode-extensions
+,
 }:
 
 buildNpmPackage rec {

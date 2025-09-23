@@ -1,14 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gmpy2,
-  isPyPy,
-  setuptools,
-  pytestCheckHook,
-
-  # Reverse dependency
-  sage,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gmpy2
+, isPyPy
+, setuptools
+, pytestCheckHook
+, # Reverse dependency
+  sage
+,
 }:
 
 buildPythonPackage rec {

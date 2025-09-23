@@ -1,6 +1,6 @@
-{
-  runCommand,
-  languageMachines,
+{ runCommand
+, languageMachines
+,
 }:
 
 runCommand "frog-test" { } ''

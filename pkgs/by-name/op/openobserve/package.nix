@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  protobuf,
-  bzip2,
-  oniguruma,
-  sqlite,
-  xz,
-  zlib,
-  zstd,
-  buildNpmPackage,
-  gitUpdater,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, protobuf
+, bzip2
+, oniguruma
+, sqlite
+, xz
+, zlib
+, zstd
+, buildNpmPackage
+, gitUpdater
+,
 }:
 
 let

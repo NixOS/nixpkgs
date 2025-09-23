@@ -1,11 +1,11 @@
-{
-  cmake,
-  mbedtls,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gitUpdater,
-  withTls ? !stdenv.hostPlatform.isDarwin,
+{ cmake
+, mbedtls
+, lib
+, stdenv
+, fetchFromGitHub
+, gitUpdater
+, withTls ? !stdenv.hostPlatform.isDarwin
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

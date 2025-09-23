@@ -1,24 +1,24 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  cmake,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
-  pkg-config,
-  alsa-lib,
-  curl,
-  gtkmm3,
-  libhandy,
-  libopus,
-  libpulseaudio,
-  libsecret,
-  libsodium,
-  nlohmann_json,
-  pcre2,
-  spdlog,
-  sqlite,
+{ lib
+, fetchFromGitHub
+, stdenv
+, cmake
+, copyDesktopItems
+, makeDesktopItem
+, makeWrapper
+, pkg-config
+, alsa-lib
+, curl
+, gtkmm3
+, libhandy
+, libopus
+, libpulseaudio
+, libsecret
+, libsodium
+, nlohmann_json
+, pcre2
+, spdlog
+, sqlite
+,
 }:
 
 stdenv.mkDerivation rec {

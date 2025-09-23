@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  cmake,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+,
 }:
 let
   pname = "ts_query_ls";

@@ -1,12 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # dependencies
-  deprecated,
-  memestra,
-  python-lsp-server,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # dependencies
+  deprecated
+, memestra
+, python-lsp-server
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  ocamlPackages,
-  pkg-config,
-  libdrm,
-  unstableGitUpdater,
+{ lib
+, fetchFromGitHub
+, ocamlPackages
+, pkg-config
+, libdrm
+, unstableGitUpdater
+,
 }:
 
 ocamlPackages.buildDunePackage {

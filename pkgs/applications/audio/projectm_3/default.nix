@@ -1,15 +1,15 @@
-{
-  stdenv,
-  mkDerivation,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  SDL2,
-  qtdeclarative,
-  libpulseaudio,
-  glm,
-  which,
+{ stdenv
+, mkDerivation
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, SDL2
+, qtdeclarative
+, libpulseaudio
+, glm
+, which
+,
 }:
 
 mkDerivation rec {

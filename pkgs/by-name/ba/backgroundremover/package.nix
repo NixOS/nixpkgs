@@ -1,10 +1,10 @@
-{
-  python3,
-  lib,
-  runCommand,
-  fetchFromGitHub,
-  fetchurl,
-  gitUpdater,
+{ python3
+, lib
+, runCommand
+, fetchFromGitHub
+, fetchurl
+, gitUpdater
+,
 }:
 
 let

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  wrapGAppsHook3,
-  gtk2,
-  hamlib_4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, wrapGAppsHook3
+, gtk2
+, hamlib_4
+,
 }:
 
 stdenv.mkDerivation rec {

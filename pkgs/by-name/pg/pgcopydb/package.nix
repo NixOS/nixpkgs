@@ -1,18 +1,18 @@
-{
-  lib,
-  clangStdenv,
-  fetchFromGitHub,
-  boehmgc,
-  libkrb5,
-  openssl,
-  pam,
-  pkg-config,
-  postgresql,
-  readline,
-  sqlite,
-  testers,
-  zlib,
-  python3Packages,
+{ lib
+, clangStdenv
+, fetchFromGitHub
+, boehmgc
+, libkrb5
+, openssl
+, pam
+, pkg-config
+, postgresql
+, readline
+, sqlite
+, testers
+, zlib
+, python3Packages
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

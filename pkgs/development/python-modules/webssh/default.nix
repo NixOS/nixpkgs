@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  paramiko,
-  pytestCheckHook,
-  setuptools,
-  tornado,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, paramiko
+, pytestCheckHook
+, setuptools
+, tornado
+,
 }:
 
 buildPythonPackage rec {

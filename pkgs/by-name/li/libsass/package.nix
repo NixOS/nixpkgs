@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  testers,
-
-  # for passthru.tests
-  gtk3,
-  gtk4,
-  sassc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, testers
+, # for passthru.tests
+  gtk3
+, gtk4
+, sassc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

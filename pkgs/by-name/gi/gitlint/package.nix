@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  gitMinimal,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, gitMinimal
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,9 +1,8 @@
-{
-  options,
-  config,
-  pkgs,
-  lib,
-  ...
+{ options
+, config
+, pkgs
+, lib
+, ...
 }:
 let
   opt = options.services.rkvm;
@@ -148,14 +147,12 @@ in
             {
               server = [ "network.target" ];
               client = [ "network-online.target" ];
-            }
-            .${component};
+            }.${component};
           wants =
             {
               server = [ ];
               client = [ "network-online.target" ];
-            }
-            .${component};
+            }.${component};
           serviceConfig = {
             ExecStart = "${cfg.package}/bin/rkvm-${component} ${
               toml.generate "rkvm-${component}.toml" cfg.${component}.settings

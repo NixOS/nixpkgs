@@ -1,10 +1,9 @@
 # Global configuration for wvdial.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let

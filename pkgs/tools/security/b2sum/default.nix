@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openmp ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, openmp ? null
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

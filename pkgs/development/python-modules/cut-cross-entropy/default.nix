@@ -1,25 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  torch,
-  triton,
-
-  # optional-dependencies
-  accelerate,
-  datasets,
-  fire,
-  huggingface-hub,
-  pandas,
-  pytestCheckHook,
-  tqdm,
-  transformers,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  torch
+, triton
+, # optional-dependencies
+  accelerate
+, datasets
+, fire
+, huggingface-hub
+, pandas
+, pytestCheckHook
+, tqdm
+, transformers
+,
 }:
 
 buildPythonPackage {

@@ -1,53 +1,53 @@
-{
-  channel,
-  pname,
-  version,
-  versionPrefix,
-  sha256Hash,
+{ channel
+, pname
+, version
+, versionPrefix
+, sha256Hash
+,
 }:
 
-{
-  android-tools,
-  bash,
-  buildFHSEnv,
-  coreutils,
-  dpkg,
-  e2fsprogs,
-  fetchurl,
-  findutils,
-  git,
-  gnugrep,
-  gnused,
-  gnutar,
-  gtk2,
-  glib,
-  gzip,
-  fontsConf,
-  fontconfig,
-  freetype,
-  libX11,
-  libXext,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
-  makeFontsConf,
-  makeWrapper,
-  ncurses5,
-  openssl,
-  ps,
-  python3,
-  lib,
-  stdenv,
-  unzip,
-  usbutils,
-  which,
-  runCommand,
-  xkeyboard_config,
-  zip,
-  zlib,
-  makeDesktopItem,
-  tiling_wm ? false, # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
+{ android-tools
+, bash
+, buildFHSEnv
+, coreutils
+, dpkg
+, e2fsprogs
+, fetchurl
+, findutils
+, git
+, gnugrep
+, gnused
+, gnutar
+, gtk2
+, glib
+, gzip
+, fontsConf
+, fontconfig
+, freetype
+, libX11
+, libXext
+, libXi
+, libXrandr
+, libXrender
+, libXtst
+, makeFontsConf
+, makeWrapper
+, ncurses5
+, openssl
+, ps
+, python3
+, lib
+, stdenv
+, unzip
+, usbutils
+, which
+, runCommand
+, xkeyboard_config
+, zip
+, zlib
+, makeDesktopItem
+, tiling_wm ? false
+, # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
 }:
 
 let
@@ -159,40 +159,40 @@ let
   };
 in
 runCommand drvName
-  {
-    startScript = ''
-      #!${bash}/bin/bash
-      ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudioForPlatform}/bin/studio.sh "$@"
+{
+  startScript = ''
+    #!${bash}/bin/bash
+    ${fhsEnv}/bin/${drvName}-fhs-env ${androidStudioForPlatform}/bin/studio.sh "$@"
+  '';
+  preferLocalBuild = true;
+  allowSubstitutes = false;
+  passthru = {
+    unwrapped = androidStudioForPlatform;
+  };
+  meta = with lib; {
+    description = "Official IDE for Android platform development";
+    longDescription = ''
+      Android Studio for Platform (ASfP) is the version of the Android Studio IDE
+      for Android Open Source Project (AOSP) platform developers who build with the Soong build system.
     '';
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-    passthru = {
-      unwrapped = androidStudioForPlatform;
-    };
-    meta = with lib; {
-      description = "Official IDE for Android platform development";
-      longDescription = ''
-        Android Studio for Platform (ASfP) is the version of the Android Studio IDE
-        for Android Open Source Project (AOSP) platform developers who build with the Soong build system.
-      '';
-      homepage = "https://developer.android.com/studio/platform.html";
-      license = with licenses; [
-        asl20
-        unfree
-      ]; # The code is under Apache-2.0, but:
-      # If one selects Help -> Licenses in Android Studio, the dialog shows the following:
-      # "Android Studio includes proprietary code subject to separate license,
-      # including JetBrains CLion(R) (www.jetbrains.com/clion) and IntelliJ(R)
-      # IDEA Community Edition (www.jetbrains.com/idea)."
-      # Also: For actual development the Android SDK is required and the Google
-      # binaries are also distributed as proprietary software (unlike the
-      # source-code itself).
-      platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; [ robbins ];
-      teams = [ teams.android ];
-      mainProgram = pname;
-    };
-  }
+    homepage = "https://developer.android.com/studio/platform.html";
+    license = with licenses; [
+      asl20
+      unfree
+    ]; # The code is under Apache-2.0, but:
+    # If one selects Help -> Licenses in Android Studio, the dialog shows the following:
+    # "Android Studio includes proprietary code subject to separate license,
+    # including JetBrains CLion(R) (www.jetbrains.com/clion) and IntelliJ(R)
+    # IDEA Community Edition (www.jetbrains.com/idea)."
+    # Also: For actual development the Android SDK is required and the Google
+    # binaries are also distributed as proprietary software (unlike the
+    # source-code itself).
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ robbins ];
+    teams = [ teams.android ];
+    mainProgram = pname;
+  };
+}
   ''
     mkdir -p $out/{bin,share/pixmaps}
 

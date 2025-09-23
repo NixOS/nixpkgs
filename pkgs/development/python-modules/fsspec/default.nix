@@ -1,39 +1,36 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-  hatch-vcs,
-
-  # optional-dependencies
-  adlfs,
-  pyarrow,
-  dask,
-  distributed,
-  requests,
-  dropbox,
-  aiohttp,
-  fusepy,
-  gcsfs,
-  libarchive-c,
-  ocifs,
-  panel,
-  paramiko,
-  pygit2,
-  s3fs,
-  smbprotocol,
-  tqdm,
-
-  # tests
-  numpy,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-vcr,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, hatch-vcs
+, # optional-dependencies
+  adlfs
+, pyarrow
+, dask
+, distributed
+, requests
+, dropbox
+, aiohttp
+, fusepy
+, gcsfs
+, libarchive-c
+, ocifs
+, panel
+, paramiko
+, pygit2
+, s3fs
+, smbprotocol
+, tqdm
+, # tests
+  numpy
+, pytest-asyncio
+, pytest-mock
+, pytest-vcr
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

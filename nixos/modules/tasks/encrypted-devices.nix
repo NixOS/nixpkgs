@@ -80,51 +80,57 @@ in
   };
 
   config = mkIf anyEncrypted {
-    assertions = concatMap (dev: [
-      {
-        assertion = dev.encrypted.label != null;
-        message = ''
-          The filesystem for ${dev.mountPoint} has encrypted.enable set to true, but no encrypted.label set
-        '';
-      }
-      {
-        assertion =
-          config.boot.initrd.systemd.enable
-          -> (
-            dev.encrypted.keyFile == null
-            || !lib.any (x: lib.hasPrefix x dev.encrypted.keyFile) [
-              "/mnt-root"
-              "$targetRoot"
-            ]
-          );
-        message = ''
-          Bad use of '/mnt-root' or '$targetRoot` in 'keyFile'.
+    assertions = concatMap
+      (dev: [
+        {
+          assertion = dev.encrypted.label != null;
+          message = ''
+            The filesystem for ${dev.mountPoint} has encrypted.enable set to true, but no encrypted.label set
+          '';
+        }
+        {
+          assertion =
+            config.boot.initrd.systemd.enable
+            -> (
+              dev.encrypted.keyFile == null
+              || !lib.any (x: lib.hasPrefix x dev.encrypted.keyFile) [
+                "/mnt-root"
+                "$targetRoot"
+              ]
+            );
+          message = ''
+            Bad use of '/mnt-root' or '$targetRoot` in 'keyFile'.
 
-            When 'boot.initrd.systemd.enable' is enabled, file systems
-            are mounted at '/sysroot' instead of '/mnt-root'.
-        '';
-      }
-    ]) encDevs;
+              When 'boot.initrd.systemd.enable' is enabled, file systems
+              are mounted at '/sysroot' instead of '/mnt-root'.
+          '';
+        }
+      ])
+      encDevs;
 
     boot.initrd = {
       luks = {
         devices = builtins.listToAttrs (
-          map (dev: {
-            name = dev.encrypted.label;
-            value = {
-              device = dev.encrypted.blkDev;
-              inherit (dev.encrypted) keyFile;
-            };
-          }) earlyEncDevs
+          map
+            (dev: {
+              name = dev.encrypted.label;
+              value = {
+                device = dev.encrypted.blkDev;
+                inherit (dev.encrypted) keyFile;
+              };
+            })
+            earlyEncDevs
         );
         forceLuksSupportInInitrd = true;
       };
       # TODO: systemd stage 1
       postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
-        concatMapStrings (
-          dev:
-          "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label};\n"
-        ) lateEncDevs
+        concatMapStrings
+          (
+            dev:
+            "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label};\n"
+          )
+          lateEncDevs
       );
     };
   };

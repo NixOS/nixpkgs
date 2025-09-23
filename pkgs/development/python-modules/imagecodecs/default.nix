@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  numpy,
-  setuptools,
-  pkgs,
-  jxrlib,
-  lcms2,
-  lerc,
-  libdeflate,
-  libpng,
-  libtiff,
-  libwebp,
-  openjpeg,
-  xz,
-  zlib,
-  zstd,
-  pytest,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, numpy
+, setuptools
+, pkgs
+, jxrlib
+, lcms2
+, lerc
+, libdeflate
+, libpng
+, libtiff
+, libwebp
+, openjpeg
+, xz
+, zlib
+, zstd
+, pytest
+,
 }:
 
 let

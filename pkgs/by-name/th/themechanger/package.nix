@@ -1,20 +1,20 @@
-{
-  lib,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  cinnamon-gsettings-overrides,
-  desktop-file-utils,
-  glib,
-  gnome,
-  gtk3,
-  mate,
-  python3,
-  gsettings-desktop-schemas,
-  python3Packages,
-  fetchFromGitHub,
+{ lib
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, cinnamon-gsettings-overrides
+, desktop-file-utils
+, glib
+, gnome
+, gtk3
+, mate
+, python3
+, gsettings-desktop-schemas
+, python3Packages
+, fetchFromGitHub
+,
 }:
 
 python3Packages.buildPythonApplication rec {

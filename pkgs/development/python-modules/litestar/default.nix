@@ -1,62 +1,60 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  annotated-types,
-  anyio,
-  asyncpg,
-  attrs,
-  brotli,
-  click,
-  cryptography,
-  fsspec,
-  httpx,
-  jinja2,
-  jsbeautifier,
-  litestar-htmx,
-  mako,
-  minijinja,
-  fast-query-parsers,
-  msgspec,
-  multidict,
-  multipart,
-  picologging,
-  polyfactory,
-  piccolo,
-  prometheus-client,
-  psutil,
-  opentelemetry-instrumentation-asgi,
-  psycopg,
-  pydantic-extra-types,
-  pydantic,
-  email-validator,
-  pyjwt,
-  pyyaml,
-  redis,
-  rich-click,
-  rich,
-  structlog,
-  time-machine,
-  typing-extensions,
-  uvicorn,
-  # valkey,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # dependencies
+  annotated-types
+, anyio
+, asyncpg
+, attrs
+, brotli
+, click
+, cryptography
+, fsspec
+, httpx
+, jinja2
+, jsbeautifier
+, litestar-htmx
+, mako
+, minijinja
+, fast-query-parsers
+, msgspec
+, multidict
+, multipart
+, picologging
+, polyfactory
+, piccolo
+, prometheus-client
+, psutil
+, opentelemetry-instrumentation-asgi
+, psycopg
+, pydantic-extra-types
+, pydantic
+, email-validator
+, pyjwt
+, pyyaml
+, redis
+, rich-click
+, rich
+, structlog
+, time-machine
+, typing-extensions
+, uvicorn
+, # valkey,
 
   # tests
-  httpx-sse,
-  pytest-asyncio,
-  pytest-lazy-fixtures,
-  pytest-mock,
-  pytest-rerunfailures,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  trio,
-  versionCheckHook,
+  httpx-sse
+, pytest-asyncio
+, pytest-lazy-fixtures
+, pytest-mock
+, pytest-rerunfailures
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+, trio
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

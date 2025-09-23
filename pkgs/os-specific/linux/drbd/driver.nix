@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  kernel,
-  kernelModuleMakeFlags,
-  nixosTests,
-  flex,
-  coccinelle,
-  python3,
+{ stdenv
+, lib
+, fetchurl
+, kernel
+, kernelModuleMakeFlags
+, nixosTests
+, flex
+, coccinelle
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

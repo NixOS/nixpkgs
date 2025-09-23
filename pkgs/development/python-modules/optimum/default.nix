@@ -1,29 +1,26 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  datasets,
-  huggingface-hub,
-  numpy,
-  packaging,
-  torch,
-  transformers,
-
-  # optional-dependencies
-  diffusers,
-  h5py,
-  onnx,
-  onnxruntime,
-  protobuf,
-  tensorflow,
-  tf2onnx,
-  timm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  datasets
+, huggingface-hub
+, numpy
+, packaging
+, torch
+, transformers
+, # optional-dependencies
+  diffusers
+, h5py
+, onnx
+, onnxruntime
+, protobuf
+, tensorflow
+, tf2onnx
+, timm
+,
 }:
 
 buildPythonPackage rec {

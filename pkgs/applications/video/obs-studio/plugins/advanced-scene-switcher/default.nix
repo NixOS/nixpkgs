@@ -1,30 +1,27 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-
-  cmake,
-  ninja,
-
-  alsa-lib,
-  asio,
-  curl,
-  libremidi,
-  nlohmann_json,
-  obs-studio,
-  opencv,
-  procps,
-  qtbase,
-  stdenv,
-  websocketpp,
-  libXScrnSaver,
-  libusb1,
-  pkg-config,
-# #FIXME: Could not get cmake to pick up on these dependencies
-# Ommiting them prevents cmake from building the OCR video capabilities
-# Everything else should work it's just missing this one plugin
-# tesseract,
-# leptonica,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, ninja
+, alsa-lib
+, asio
+, curl
+, libremidi
+, nlohmann_json
+, obs-studio
+, opencv
+, procps
+, qtbase
+, stdenv
+, websocketpp
+, libXScrnSaver
+, libusb1
+, pkg-config
+, # #FIXME: Could not get cmake to pick up on these dependencies
+  # Ommiting them prevents cmake from building the OCR video capabilities
+  # Everything else should work it's just missing this one plugin
+  # tesseract,
+  # leptonica,
 }:
 let
   httplib-src = fetchFromGitHub {

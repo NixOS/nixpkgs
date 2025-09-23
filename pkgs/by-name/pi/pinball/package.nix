@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libglvnd,
-  libtool,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libglvnd
+, libtool
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, xorg
+,
 }:
 
 stdenv.mkDerivation {

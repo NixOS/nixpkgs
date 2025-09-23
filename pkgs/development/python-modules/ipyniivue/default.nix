@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  pythonOlder,
-  nodejs,
-  npmHooks,
-  hatchling,
-  hatch-vcs,
-  anywidget,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchNpmDeps
+, pythonOlder
+, nodejs
+, npmHooks
+, hatchling
+, hatch-vcs
+, anywidget
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

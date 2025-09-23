@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -72,9 +71,11 @@ in
     systemd.services.microbin = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = lib.mapAttrs (
-        _: v: if lib.isBool v then lib.boolToString v else toString v
-      ) cfg.settings;
+      environment = lib.mapAttrs
+        (
+          _: v: if lib.isBool v then lib.boolToString v else toString v
+        )
+        cfg.settings;
       serviceConfig = {
         DevicePolicy = "closed";
         DynamicUser = true;

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchzip,
-  androidenv,
-  makeWrapper,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchzip
+, androidenv
+, makeWrapper
+,
 }:
 let
   version = "2.5.1";

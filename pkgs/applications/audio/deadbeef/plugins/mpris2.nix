@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  deadbeef,
-  autoreconfHook,
-  pkg-config,
-  glib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, deadbeef
+, autoreconfHook
+, pkg-config
+, glib
+,
 }:
 
 let

@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchzip,
-  callPackage,
-  newScope,
-  recurseIntoAttrs,
-  ocamlPackages_4_09,
-  ocamlPackages_4_10,
-  ocamlPackages_4_12,
-  ocamlPackages_4_14,
-  rocqPackages_9_0,
-  rocqPackages_9_1,
-  rocqPackages,
-  fetchpatch,
-  makeWrapper,
-  coq2html,
+{ lib
+, stdenv
+, fetchurl
+, fetchzip
+, callPackage
+, newScope
+, recurseIntoAttrs
+, ocamlPackages_4_09
+, ocamlPackages_4_10
+, ocamlPackages_4_12
+, ocamlPackages_4_14
+, rocqPackages_9_0
+, rocqPackages_9_1
+, rocqPackages
+, fetchpatch
+, makeWrapper
+, coq2html
+,
 }@args:
 let
   lib = import ../build-support/coq/extra-lib.nix { inherit (args) lib; };
@@ -241,7 +241,8 @@ let
                   case = isEq "8.14";
                   out = "3.11";
                 }
-              ] null;
+              ]
+                null;
           };
         })
         // (lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
@@ -260,17 +261,19 @@ let
   filterCoqPackages =
     set:
     lib.listToAttrs (
-      lib.concatMap (
-        name:
-        let
-          v = set.${name} or null;
-        in
-        lib.optional (!v.meta.coqFilter or false) (
-          lib.nameValuePair name (
-            if lib.isAttrs v && v.recurseForDerivations or false then filterCoqPackages v else v
+      lib.concatMap
+        (
+          name:
+          let
+            v = set.${name} or null;
+          in
+          lib.optional (!v.meta.coqFilter or false) (
+            lib.nameValuePair name (
+              if lib.isAttrs v && v.recurseForDerivations or false then filterCoqPackages v else v
+            )
           )
         )
-      ) (lib.attrNames set)
+        (lib.attrNames set)
     );
   mkCoq =
     version: rp:

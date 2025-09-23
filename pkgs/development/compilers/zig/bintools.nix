@@ -1,30 +1,31 @@
-{
-  lib,
-  stdenv,
-  zig,
-  runCommand,
-  makeWrapper,
-  coreutils,
+{ lib
+, stdenv
+, zig
+, runCommand
+, makeWrapper
+, coreutils
+,
 }:
 let
-  targetPrefix = lib.optionalString (
-    stdenv.hostPlatform != stdenv.targetPlatform
-  ) "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString
+    (
+      stdenv.hostPlatform != stdenv.targetPlatform
+    ) "${stdenv.targetPlatform.config}-";
 in
 runCommand "zig-bintools-${zig.version}"
-  {
-    pname = "zig-bintools";
-    inherit (zig) version meta;
+{
+  pname = "zig-bintools";
+  inherit (zig) version meta;
 
-    nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-    passthru = {
-      isZig = true;
-      inherit targetPrefix;
-    };
+  passthru = {
+    isZig = true;
+    inherit targetPrefix;
+  };
 
-    inherit zig;
-  }
+  inherit zig;
+}
   ''
     mkdir -p $out/bin
     for tool in ar objcopy ranlib ld.lld; do

@@ -1,23 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  importlib-metadata,
-
-  # Reverse dependency
-  sage,
-
-  # tests
-  jaraco-collections,
-  jaraco-test,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  importlib-metadata
+, # Reverse dependency
+  sage
+, # tests
+  jaraco-collections
+, jaraco-test
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

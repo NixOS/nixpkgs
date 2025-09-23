@@ -1,16 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  python,
-  unittestCheckHook,
-  setuptools,
-
-  fire,
-  python-crfsuite,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, python
+, unittestCheckHook
+, setuptools
+, fire
+, python-crfsuite
+, tqdm
+,
 }:
 
 buildPythonPackage {

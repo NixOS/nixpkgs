@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  cython,
-  pkg-config,
-  setuptools,
-  fuse3,
-  trio,
-  python,
-  pytestCheckHook,
-  pytest-trio,
-  which,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, cython
+, pkg-config
+, setuptools
+, fuse3
+, trio
+, python
+, pytestCheckHook
+, pytest-trio
+, which
+,
 }:
 
 buildPythonPackage rec {

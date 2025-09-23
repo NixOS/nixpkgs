@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  future,
-  psutil,
-  pytest,
-  pytest-shutil,
-  pytest-fixture-config,
-  requests,
-  retry,
-  six,
-  setuptools,
+{ lib
+, buildPythonPackage
+, future
+, psutil
+, pytest
+, pytest-shutil
+, pytest-fixture-config
+, requests
+, retry
+, six
+, setuptools
+,
 }:
 
 buildPythonPackage {

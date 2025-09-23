@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cmarkgfm,
-  docutils,
-  fetchPypi,
-  fetchpatch2,
-  nh3,
-  pygments,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cmarkgfm
+, docutils
+, fetchPypi
+, fetchpatch2
+, nh3
+, pygments
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

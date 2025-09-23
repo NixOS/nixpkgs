@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  asciidoctor,
-  installShellFiles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, asciidoctor
+, installShellFiles
+,
 }:
 
 buildGoModule rec {

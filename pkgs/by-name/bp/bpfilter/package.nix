@@ -1,22 +1,22 @@
-{
-  bison,
-  clangStdenv,
-  cmake,
-  cmocka,
-  doxygen,
-  fetchFromGitHub,
-  flex,
-  gitMinimal,
-  lcov,
-  lib,
-  libbpf,
-  libelf,
-  libnl,
-  nix-update-script,
-  pkg-config,
-  sphinx,
-  tinyxxd,
-  zlib,
+{ bison
+, clangStdenv
+, cmake
+, cmocka
+, doxygen
+, fetchFromGitHub
+, flex
+, gitMinimal
+, lcov
+, lib
+, libbpf
+, libelf
+, libnl
+, nix-update-script
+, pkg-config
+, sphinx
+, tinyxxd
+, zlib
+,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {

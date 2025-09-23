@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  installShellFiles,
-  pygments,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, installShellFiles
+, pygments
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

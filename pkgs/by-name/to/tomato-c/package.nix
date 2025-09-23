@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libnotify,
-  makeWrapper,
-  mpv,
-  ncurses,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libnotify
+, makeWrapper
+, mpv
+, ncurses
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

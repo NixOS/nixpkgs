@@ -1,8 +1,8 @@
-{
-  buildAspNetCore,
-  buildNetRuntime,
-  buildNetSdk,
-  fetchNupkg,
+{ buildAspNetCore
+, buildNetRuntime
+, buildNetSdk
+, fetchNupkg
+,
 }:
 
 # v10.0 (go-live)

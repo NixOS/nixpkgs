@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  stdenv,
-  pkgsBuildTarget,
+{ mkDerivation
+, stdenv
+, pkgsBuildTarget
+,
 }:
 
 mkDerivation {

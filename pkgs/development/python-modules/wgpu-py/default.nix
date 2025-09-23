@@ -1,40 +1,33 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # preBuild
-  wgpu-native,
-
-  # dependencies
-  cffi,
-  rubicon-objc,
-  sniffio,
-
-  # optional dependency
-  glfw,
-
-  # docs
-  sphinx-rtd-theme,
-  sphinxHook,
-
-  # tests
-  anyio,
-  imageio,
-  numpy,
-  psutil,
-  pypng,
-  pytest,
-  ruff,
-  trio,
-
-  # passthru
-  testers,
-  wgpu-py,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatchling
+, # preBuild
+  wgpu-native
+, # dependencies
+  cffi
+, rubicon-objc
+, sniffio
+, # optional dependency
+  glfw
+, # docs
+  sphinx-rtd-theme
+, sphinxHook
+, # tests
+  anyio
+, imageio
+, numpy
+, psutil
+, pypng
+, pytest
+, ruff
+, trio
+, # passthru
+  testers
+, wgpu-py
+,
 }:
 buildPythonPackage rec {
   pname = "wgpu-py";

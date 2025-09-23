@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitLab,
-  rustPlatform,
-  nix-update-script,
-  installShellFiles,
+{ lib
+, fetchFromGitLab
+, rustPlatform
+, nix-update-script
+, installShellFiles
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";

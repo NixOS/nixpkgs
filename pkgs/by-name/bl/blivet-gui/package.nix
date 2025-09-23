@@ -4,19 +4,19 @@
 # 2. You must prefix the blivet-gui command with "SHELL=/bin/bash"
 #    (otherwise your system polkit will reject the SHEL Lfrom nixpkgs).
 
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  gtk3,
-  util-linux,
-  gobject-introspection,
-  adwaita-icon-theme,
-  hicolor-icon-theme,
-  wrapGAppsHook3,
-  pkexecPath ? "pkexec",
-  testers,
-  blivet-gui,
+{ lib
+, python3
+, fetchFromGitHub
+, gtk3
+, util-linux
+, gobject-introspection
+, adwaita-icon-theme
+, hicolor-icon-theme
+, wrapGAppsHook3
+, pkexecPath ? "pkexec"
+, testers
+, blivet-gui
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

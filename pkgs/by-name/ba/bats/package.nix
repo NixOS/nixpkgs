@@ -1,29 +1,29 @@
-{
-  resholve,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bash,
-  coreutils,
-  gnugrep,
-  ncurses,
-  findutils,
-  hostname,
-  parallel,
-  flock,
-  procps,
-  bats,
-  lsof,
-  callPackages,
-  symlinkJoin,
-  makeWrapper,
-  runCommand,
-  doInstallCheck ? true,
-  # packages that use bats (for update testing)
-  bash-preexec,
-  kikit,
-  locate-dominating-file,
-  packcc,
+{ resholve
+, lib
+, stdenv
+, fetchFromGitHub
+, bash
+, coreutils
+, gnugrep
+, ncurses
+, findutils
+, hostname
+, parallel
+, flock
+, procps
+, bats
+, lsof
+, callPackages
+, symlinkJoin
+, makeWrapper
+, runCommand
+, doInstallCheck ? true
+, # packages that use bats (for update testing)
+  bash-preexec
+, kikit
+, locate-dominating-file
+, packcc
+,
 }:
 
 resholve.mkDerivation rec {

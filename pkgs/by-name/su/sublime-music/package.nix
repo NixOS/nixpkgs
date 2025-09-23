@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3,
-  gobject-introspection,
-  gtk3,
-  pango,
-  wrapGAppsHook3,
-  chromecastSupport ? false,
-  serverSupport ? false,
-  keyringSupport ? true,
-  notifySupport ? true,
-  libnotify,
-  networkSupport ? true,
-  networkmanager,
-  fetchpatch,
+{ lib
+, fetchFromGitHub
+, python3
+, gobject-introspection
+, gtk3
+, pango
+, wrapGAppsHook3
+, chromecastSupport ? false
+, serverSupport ? false
+, keyringSupport ? true
+, notifySupport ? true
+, libnotify
+, networkSupport ? true
+, networkmanager
+, fetchpatch
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

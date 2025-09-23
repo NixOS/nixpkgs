@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  alsa-lib,
-  versionCheckHook,
-  bacon,
-  buildPackages,
-  nix-update-script,
-
-  withSound ? false,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, alsa-lib
+, versionCheckHook
+, bacon
+, buildPackages
+, nix-update-script
+, withSound ? false
+,
 }:
 
 let

@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  godot_4,
-  makeWrapper,
-  just,
-  inkscape,
-  imagemagick,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchFromGitea
+, godot_4
+, makeWrapper
+, just
+, inkscape
+, imagemagick
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

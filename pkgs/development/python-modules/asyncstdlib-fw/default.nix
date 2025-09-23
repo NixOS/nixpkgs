@@ -1,10 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  pdm-backend,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  pdm-backend
+,
 }:
 
 buildPythonPackage rec {

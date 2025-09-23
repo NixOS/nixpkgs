@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  setuptools,
-  setuptools-scm,
-  deepdiff,
-  nibabel,
-  numpy,
-  pytestCheckHook,
-  psutil,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, setuptools
+, setuptools-scm
+, deepdiff
+, nibabel
+, numpy
+, pytestCheckHook
+, psutil
+,
 }:
 
 buildPythonPackage rec {

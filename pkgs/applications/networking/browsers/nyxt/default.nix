@@ -1,34 +1,34 @@
-{
-  stdenv,
-  lib,
-  testers,
-  wrapGAppsHook3,
-  fetchzip,
-  sbcl,
-  pkg-config,
-  libfixposix,
-  gobject-introspection,
-  gsettings-desktop-schemas,
-  glib-networking,
-  gtk3,
-  glib,
-  gdk-pixbuf,
-  cairo,
-  pango,
-  webkitgtk_4_1,
-  openssl,
-  sqlite,
-  gstreamer,
-  gst-libav,
-  gst-plugins-base,
-  gst-plugins-good,
-  gst-plugins-bad,
-  gst-plugins-ugly,
-  xdg-utils,
-  xclip,
-  wl-clipboard,
-  nix-update-script,
-  nixosTests,
+{ stdenv
+, lib
+, testers
+, wrapGAppsHook3
+, fetchzip
+, sbcl
+, pkg-config
+, libfixposix
+, gobject-introspection
+, gsettings-desktop-schemas
+, glib-networking
+, gtk3
+, glib
+, gdk-pixbuf
+, cairo
+, pango
+, webkitgtk_4_1
+, openssl
+, sqlite
+, gstreamer
+, gst-libav
+, gst-plugins-base
+, gst-plugins-good
+, gst-plugins-bad
+, gst-plugins-ugly
+, xdg-utils
+, xclip
+, wl-clipboard
+, nix-update-script
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

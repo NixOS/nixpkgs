@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  makeWrapper,
-  go,
-  nodejs,
-  zlib,
-  nix-update-script,
-  # Linux specific dependencies
-  gtk3,
-  webkitgtk_4_1,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, makeWrapper
+, go
+, nodejs
+, zlib
+, nix-update-script
+, # Linux specific dependencies
+  gtk3
+, webkitgtk_4_1
+,
 }:
 
 buildGoModule rec {
@@ -19,12 +19,13 @@ buildGoModule rec {
   version = "2.10.2";
 
   src =
-    fetchFromGitHub {
-      owner = "wailsapp";
-      repo = "wails";
-      tag = "v${version}";
-      hash = "sha256-b0ns2cXlUT5tPbVEOzQGftxoUqGEDuzj+2KDxNnfs4c=";
-    }
+    fetchFromGitHub
+      {
+        owner = "wailsapp";
+        repo = "wails";
+        tag = "v${version}";
+        hash = "sha256-b0ns2cXlUT5tPbVEOzQGftxoUqGEDuzj+2KDxNnfs4c=";
+      }
     + "/v2";
 
   vendorHash = "sha256-u1NoAHxBSzw44W3l5MzMxMUjgrfM9EDkKwR4GAPQBVE=";

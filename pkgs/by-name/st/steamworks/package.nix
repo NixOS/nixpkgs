@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  bison,
-  cmake,
-  flex,
-  arpa2cm,
-  arpa2common,
-  catch2,
-  log4cpp,
-  openldap,
-  sqlite,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitLab
+, bison
+, cmake
+, flex
+, arpa2cm
+, arpa2common
+, catch2
+, log4cpp
+, openldap
+, sqlite
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

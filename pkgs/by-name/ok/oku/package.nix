@@ -1,18 +1,18 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  wrapGAppsHook4,
-  pkg-config,
-  fuse,
-  glib,
-  gtk4,
-  hicolor-icon-theme,
-  libadwaita,
-  pango,
-  webkitgtk_6_0,
-  nix-update-script,
-  nixosTests,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, wrapGAppsHook4
+, pkg-config
+, fuse
+, glib
+, gtk4
+, hicolor-icon-theme
+, libadwaita
+, pango
+, webkitgtk_6_0
+, nix-update-script
+, nixosTests
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

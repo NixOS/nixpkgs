@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  fetchpatch2,
-  autoreconfHook,
-  ffmpeg,
-  flac,
-  libvorbis,
-  libogg,
-  libid3tag,
-  libexif,
-  libjpeg,
-  sqlite,
-  gettext,
-  nixosTests,
-  zlib,
+{ lib
+, stdenv
+, fetchgit
+, fetchpatch2
+, autoreconfHook
+, ffmpeg
+, flac
+, libvorbis
+, libogg
+, libid3tag
+, libexif
+, libjpeg
+, sqlite
+, gettext
+, nixosTests
+, zlib
+,
 }:
 
 let

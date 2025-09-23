@@ -1,10 +1,10 @@
-{
-  lib,
-  bundlerApp,
-  makeWrapper,
-  ruby,
-  writeShellScriptBin,
-  withOptionalDependencies ? false,
+{ lib
+, bundlerApp
+, makeWrapper
+, ruby
+, writeShellScriptBin
+, withOptionalDependencies ? false
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  perlPackages,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  gobject-introspection,
-  perl,
-  clamav,
+{ lib
+, perlPackages
+, fetchFromGitHub
+, wrapGAppsHook3
+, gobject-introspection
+, perl
+, clamav
+,
 }:
 
 perlPackages.buildPerlPackage rec {

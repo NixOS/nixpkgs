@@ -1,13 +1,13 @@
-{
-  pkgs,
-  buildPythonPackage,
-  fetchPypi,
-  python,
-  azure-common,
-  azure-mgmt-nspkg,
-  requests,
-  msrestazure,
-  isPy3k,
+{ pkgs
+, buildPythonPackage
+, fetchPypi
+, python
+, azure-common
+, azure-mgmt-nspkg
+, requests
+, msrestazure
+, isPy3k
+,
 }:
 
 buildPythonPackage rec {

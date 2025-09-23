@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jinja2,
-  jsonschema,
-  napalm,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  toml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jinja2
+, jsonschema
+, napalm
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, toml
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  wrapGAppsHook3,
-  gtk3,
-  librsvg,
-  xorg,
-  argyllcms,
+{ lib
+, python3
+, fetchPypi
+, wrapGAppsHook3
+, gtk3
+, librsvg
+, xorg
+, argyllcms
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

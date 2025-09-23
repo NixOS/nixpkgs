@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gmp,
-  mpfr,
-  flint,
-  boost,
-  bliss,
-  ppl,
-  singular,
-  cddlib,
-  lrs,
-  nauty,
-  ninja,
-  ant,
-  openjdk,
-  perl,
-  perlPackages,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, gmp
+, mpfr
+, flint
+, boost
+, bliss
+, ppl
+, singular
+, cddlib
+, lrs
+, nauty
+, ninja
+, ant
+, openjdk
+, perl
+, perlPackages
+, makeWrapper
+,
 }:
 
 # polymake compiles its own version of sympol and atint because we

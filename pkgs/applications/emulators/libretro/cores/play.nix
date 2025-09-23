@@ -1,16 +1,16 @@
-{
-  lib,
-  boost,
-  bzip2,
-  cmake,
-  curl,
-  fetchFromGitHub,
-  icu,
-  libGL,
-  libGLU,
-  mkLibretroCore,
-  openssl,
-  xorg,
+{ lib
+, boost
+, bzip2
+, cmake
+, curl
+, fetchFromGitHub
+, icu
+, libGL
+, libGLU
+, mkLibretroCore
+, openssl
+, xorg
+,
 }:
 mkLibretroCore {
   core = "play";

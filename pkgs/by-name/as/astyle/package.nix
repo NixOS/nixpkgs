@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  cmake,
-  versionCheckHook,
-  asLibrary ? false,
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, versionCheckHook
+, asLibrary ? false
+,
 }:
 
 stdenv.mkDerivation rec {

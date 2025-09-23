@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  libxslt,
-  html-tidy,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, libxslt
+, html-tidy
+,
 }:
 
 stdenv.mkDerivation rec {

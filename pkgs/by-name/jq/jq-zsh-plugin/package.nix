@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fzf,
-  jq,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fzf
+, jq
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

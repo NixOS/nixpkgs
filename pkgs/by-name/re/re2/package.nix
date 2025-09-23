@@ -1,18 +1,18 @@
-{
-  abseil-cpp,
-  chromium,
-  cmake,
-  fetchFromGitHub,
-  gbenchmark,
-  grpc,
-  gtest,
-  haskellPackages,
-  icu,
-  lib,
-  mercurial,
-  ninja,
-  python3Packages,
-  stdenv,
+{ abseil-cpp
+, chromium
+, cmake
+, fetchFromGitHub
+, gbenchmark
+, grpc
+, gtest
+, haskellPackages
+, icu
+, lib
+, mercurial
+, ninja
+, python3Packages
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

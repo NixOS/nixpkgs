@@ -1,10 +1,10 @@
-{
-  pname,
-  version,
-  src,
-  meta,
-  stdenvNoCC,
-  _7zz,
+{ pname
+, version
+, src
+, meta
+, stdenvNoCC
+, _7zz
+,
 }:
 
 stdenvNoCC.mkDerivation {

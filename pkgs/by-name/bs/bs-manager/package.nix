@@ -1,20 +1,17 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  nix-update-script,
-
-  buildNpmPackage,
-  fetchNpmDeps,
-  fetchFromGitHub,
-  makeDesktopItem,
-
-  autoPatchelfHook,
-  copyDesktopItems,
-  makeWrapper,
-
-  electron,
-  steam-run-free,
+{ lib
+, stdenv
+, callPackage
+, nix-update-script
+, buildNpmPackage
+, fetchNpmDeps
+, fetchFromGitHub
+, makeDesktopItem
+, autoPatchelfHook
+, copyDesktopItems
+, makeWrapper
+, electron
+, steam-run-free
+,
 }:
 
 buildNpmPackage (finalAttrs: {

@@ -1,11 +1,10 @@
-{
-  stdenv,
-  pkg-config,
-  which,
-  pam,
-
-  # apparmor deps
-  libapparmor,
+{ stdenv
+, pkg-config
+, which
+, pam
+, # apparmor deps
+  libapparmor
+,
 }:
 stdenv.mkDerivation {
   pname = "apparmor-pam";

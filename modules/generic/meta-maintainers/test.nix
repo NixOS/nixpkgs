@@ -21,14 +21,13 @@ rec {
 
   test =
     assert
-      example.config.meta.maintainers == {
-        ${toString ../meta-maintainers.nix} = [
-          lib.maintainers.pierron
-          lib.maintainers.roberth
-        ];
-        "eelco.nix" = [ lib.maintainers.eelco ];
-      };
+    example.config.meta.maintainers == {
+      ${toString ../meta-maintainers.nix} = [
+        lib.maintainers.pierron
+        lib.maintainers.roberth
+      ];
+      "eelco.nix" = [ lib.maintainers.eelco ];
+    };
     { };
 
-}
-.test
+}.test

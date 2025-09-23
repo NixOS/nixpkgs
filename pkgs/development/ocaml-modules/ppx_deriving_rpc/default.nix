@@ -1,12 +1,12 @@
-{
-  lib,
-  buildDunePackage,
-  fetchpatch,
-  rpclib,
-  alcotest,
-  ppxlib,
-  ppx_deriving,
-  yojson,
+{ lib
+, buildDunePackage
+, fetchpatch
+, rpclib
+, alcotest
+, ppxlib
+, ppx_deriving
+, yojson
+,
 }:
 
 buildDunePackage {

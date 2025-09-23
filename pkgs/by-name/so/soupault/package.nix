@@ -1,13 +1,13 @@
-{
-  lib,
-  darwin,
-  fetchzip,
-  ocamlPackages,
-  ocaml,
-  removeReferencesTo,
-  soupault,
-  stdenv,
-  testers,
+{ lib
+, darwin
+, fetchzip
+, ocamlPackages
+, ocaml
+, removeReferencesTo
+, soupault
+, stdenv
+, testers
+,
 }:
 
 ocamlPackages.buildDunePackage rec {

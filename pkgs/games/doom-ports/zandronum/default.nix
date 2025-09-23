@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchhg,
-  cmake,
-  pkg-config,
-  makeWrapper,
-  callPackage,
-  soundfont-fluid,
-  SDL_compat,
-  libGL,
-  glew,
-  bzip2,
-  zlib,
-  libjpeg,
-  fluidsynth,
-  fmodex,
-  openssl,
-  gtk2,
-  python3,
-  game-music-emu,
-  serverOnly ? false,
+{ stdenv
+, lib
+, fetchhg
+, cmake
+, pkg-config
+, makeWrapper
+, callPackage
+, soundfont-fluid
+, SDL_compat
+, libGL
+, glew
+, bzip2
+, zlib
+, libjpeg
+, fluidsynth
+, fmodex
+, openssl
+, gtk2
+, python3
+, game-music-emu
+, serverOnly ? false
+,
 }:
 
 let

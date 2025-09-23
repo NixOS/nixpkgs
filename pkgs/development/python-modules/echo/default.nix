@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
-  libxcrypt,
-  numpy,
-  qt6,
-  qtpy,
-  pyqt6,
-  mesa,
-  pytestCheckHook,
-  pytest-cov-stub,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, setuptools-scm
+, libxcrypt
+, numpy
+, qt6
+, qtpy
+, pyqt6
+, mesa
+, pytestCheckHook
+, pytest-cov-stub
+,
 }:
 
 buildPythonPackage rec {

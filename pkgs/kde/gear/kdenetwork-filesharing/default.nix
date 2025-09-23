@@ -1,10 +1,10 @@
-{
-  lib,
-  mkKdeDerivation,
-  replaceVars,
-  samba,
-  shadow,
-  qtdeclarative,
+{ lib
+, mkKdeDerivation
+, replaceVars
+, samba
+, shadow
+, qtdeclarative
+,
 }:
 mkKdeDerivation {
   pname = "kdenetwork-filesharing";

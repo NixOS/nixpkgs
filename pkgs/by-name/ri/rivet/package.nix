@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fastjet,
-  fastjet-contrib,
-  ghostscript,
-  graphicsmagick-imagemagick-compat,
-  hdf5,
-  hepmc3,
-  highfive,
-  less,
-  pkg-config,
-  python3,
-  rsync,
-  texliveBasic,
-  yoda,
-  which,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, fastjet
+, fastjet-contrib
+, ghostscript
+, graphicsmagick-imagemagick-compat
+, hdf5
+, hepmc3
+, highfive
+, less
+, pkg-config
+, python3
+, rsync
+, texliveBasic
+, yoda
+, which
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

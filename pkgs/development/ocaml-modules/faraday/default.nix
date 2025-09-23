@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  alcotest,
-  bigstringaf,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, alcotest
+, bigstringaf
+,
 }:
 
 buildDunePackage rec {

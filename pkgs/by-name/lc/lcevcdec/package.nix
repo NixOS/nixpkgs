@@ -1,15 +1,15 @@
-{
-  cmake,
-  fetchFromGitHub,
-  git,
-  gitUpdater,
-  fetchpatch,
-  lib,
-  nlohmann_json,
-  pkg-config,
-  python3,
-  stdenv,
-  testers,
+{ cmake
+, fetchFromGitHub
+, git
+, gitUpdater
+, fetchpatch
+, lib
+, nlohmann_json
+, pkg-config
+, python3
+, stdenv
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,7 +1,7 @@
-{
-  fetchPypi,
-  lib,
-  python3,
+{ fetchPypi
+, lib
+, python3
+,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "seventeenlands";

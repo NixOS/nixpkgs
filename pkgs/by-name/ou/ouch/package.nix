@@ -1,19 +1,18 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  bzip2,
-  bzip3,
-  xz,
-  git,
-  zlib,
-  zstd,
-
-  # RAR code is under non-free unRAR license
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, bzip2
+, bzip3
+, xz
+, git
+, zlib
+, zstd
+, # RAR code is under non-free unRAR license
   # see the meta.license section below for more details
-  enableUnfree ? false,
+  enableUnfree ? false
+,
 }:
 
 rustPlatform.buildRustPackage rec {

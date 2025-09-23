@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  bash,
-  bat,
-  fish,
-  getconf,
-  nix-update-script,
-  zsh,
+{ lib
+, fetchFromGitHub
+, stdenv
+, bash
+, bat
+, fish
+, getconf
+, nix-update-script
+, zsh
+,
 }:
 stdenv.mkDerivation rec {
   pname = "bat-extras";

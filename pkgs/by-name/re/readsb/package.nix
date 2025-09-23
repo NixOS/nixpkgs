@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  ncurses,
-  rtl-sdr,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, ncurses
+, rtl-sdr
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

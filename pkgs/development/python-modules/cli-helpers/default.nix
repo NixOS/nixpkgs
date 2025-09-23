@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  configobj,
-  mock,
-  pytestCheckHook,
-  pygments,
-  tabulate,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, configobj
+, mock
+, pytestCheckHook
+, pygments
+, tabulate
+,
 }:
 
 buildPythonPackage rec {

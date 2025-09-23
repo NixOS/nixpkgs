@@ -1,22 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  numpy,
-  scipy,
-
-  # tests
-  gstools,
-  pytestCheckHook,
-  scikit-learn,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, setuptools
+, setuptools-scm
+, # dependencies
+  numpy
+, scipy
+, # tests
+  gstools
+, pytestCheckHook
+, scikit-learn
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

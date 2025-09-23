@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoreconfHook,
-  bash,
-  python3,
-  root,
-  makeWrapper,
-  zlib,
-  withRootSupport ? false,
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, bash
+, python3
+, root
+, makeWrapper
+, zlib
+, withRootSupport ? false
+,
 }:
 
 stdenv.mkDerivation rec {

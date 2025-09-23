@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchpatch,
-  kernel,
-  rr,
+{ stdenv
+, lib
+, fetchpatch
+, kernel
+, rr
+,
 }:
 
 /*

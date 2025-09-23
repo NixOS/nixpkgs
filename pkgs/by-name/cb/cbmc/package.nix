@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  cadical,
-  cmake,
-  flex,
-  makeWrapper,
-  perl,
-  replaceVars,
-  cudd,
-  nix-update-script,
-  fetchpatch,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, cadical
+, cmake
+, flex
+, makeWrapper
+, perl
+, replaceVars
+, cudd
+, nix-update-script
+, fetchpatch
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,17 +1,17 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  stdenv,
-  _experimental-update-script-combinators,
-  nix-update-script,
-  nix-update,
-  writeScript,
-  git,
-  pkg-config,
-  openssl,
-  python312,
-  swim,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, stdenv
+, _experimental-update-script-combinators
+, nix-update-script
+, nix-update
+, writeScript
+, git
+, pkg-config
+, openssl
+, python312
+, swim
+,
 }:
 
 rustPlatform.buildRustPackage rec {

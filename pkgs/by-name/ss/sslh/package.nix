@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libcap,
-  libev,
-  libconfig,
-  perl,
-  tcp_wrappers,
-  pcre2,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libcap
+, libev
+, libconfig
+, perl
+, tcp_wrappers
+, pcre2
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

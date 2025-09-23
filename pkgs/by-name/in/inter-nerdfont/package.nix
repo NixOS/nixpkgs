@@ -1,9 +1,9 @@
-{
-  lib,
-  fontforge,
-  nerd-font-patcher,
-  stdenvNoCC,
-  fetchzip,
+{ lib
+, fontforge
+, nerd-font-patcher
+, stdenvNoCC
+, fetchzip
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

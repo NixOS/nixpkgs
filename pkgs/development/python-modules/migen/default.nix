@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  colorama,
-  pytestCheckHook,
-  unstableGitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, colorama
+, pytestCheckHook
+, unstableGitUpdater
+,
 }:
 
 buildPythonPackage {

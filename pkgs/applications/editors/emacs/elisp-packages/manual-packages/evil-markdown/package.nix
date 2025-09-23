@@ -1,10 +1,10 @@
-{
-  lib,
-  evil,
-  fetchFromGitHub,
-  markdown-mode,
-  melpaBuild,
-  unstableGitUpdater,
+{ lib
+, evil
+, fetchFromGitHub
+, markdown-mode
+, melpaBuild
+, unstableGitUpdater
+,
 }:
 
 melpaBuild {

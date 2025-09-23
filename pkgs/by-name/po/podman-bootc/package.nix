@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  buildPackages,
-  fetchFromGitHub,
-  installShellFiles,
-  libisoburn,
-  libvirt,
-  pkg-config,
-  stdenv,
+{ lib
+, buildGoModule
+, buildPackages
+, fetchFromGitHub
+, installShellFiles
+, libisoburn
+, libvirt
+, pkg-config
+, stdenv
+,
 }:
 
 buildGoModule rec {

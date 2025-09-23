@@ -1,20 +1,20 @@
-{
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  adwaita-icon-theme,
-  gtk4,
-  libadwaita,
-  desktop-file-utils,
-  wrapGAppsHook4,
-  meson,
-  ninja,
-  pkg-config,
-  cmake,
-  python3Packages,
-  appstream,
-  gobject-introspection,
-  glib,
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, adwaita-icon-theme
+, gtk4
+, libadwaita
+, desktop-file-utils
+, wrapGAppsHook4
+, meson
+, ninja
+, pkg-config
+, cmake
+, python3Packages
+, appstream
+, gobject-introspection
+, glib
+,
 }:
 
 python3Packages.buildPythonApplication rec {

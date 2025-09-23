@@ -1,26 +1,26 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  cryptography,
-  curl-cffi,
-  fetchFromGitHub,
-  frozendict,
-  html5lib,
-  lxml,
-  multitasking,
-  numpy,
-  pandas,
-  peewee,
-  platformdirs,
-  protobuf,
-  pytz,
-  requests-cache,
-  requests-ratelimiter,
-  requests,
-  scipy,
-  setuptools,
-  websockets,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, cryptography
+, curl-cffi
+, fetchFromGitHub
+, frozendict
+, html5lib
+, lxml
+, multitasking
+, numpy
+, pandas
+, peewee
+, platformdirs
+, protobuf
+, pytz
+, requests-cache
+, requests-ratelimiter
+, requests
+, scipy
+, setuptools
+, websockets
+,
 }:
 
 buildPythonPackage rec {

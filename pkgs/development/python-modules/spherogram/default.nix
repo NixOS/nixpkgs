@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  cython,
-  networkx,
-  decorator,
-  knot-floer-homology,
-  snappy-manifolds,
-  snappy-15-knots,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, cython
+, networkx
+, decorator
+, knot-floer-homology
+, snappy-manifolds
+, snappy-15-knots
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libpcap,
-  libnet,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpcap
+, libnet
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  alsa-lib,
-  perl,
-  pkg-config,
-  SDL2,
-  libX11,
-  libXext,
-  utf8proc,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, alsa-lib
+, perl
+, pkg-config
+, SDL2
+, libX11
+, libXext
+, utf8proc
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,43 +1,43 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch2,
-  cmake,
-  pkg-config,
-  python3,
-  openssl,
-  curl,
-  libevent,
-  inotify-tools,
-  systemd,
-  zlib,
-  pcre,
-  libb64,
-  libutp,
-  libdeflate,
-  utf8cpp,
-  fmt,
-  libpsl,
-  miniupnpc,
-  dht,
-  libnatpmp,
-  libiconv,
-  # Build options
-  enableGTK3 ? false,
-  gtkmm3,
-  xorg,
-  wrapGAppsHook3,
-  enableQt5 ? false,
-  enableQt6 ? false,
-  qt5,
-  qt6Packages,
-  nixosTests,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  enableDaemon ? true,
-  enableCli ? true,
-  installLib ? false,
-  apparmorRulesFromClosure,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, pkg-config
+, python3
+, openssl
+, curl
+, libevent
+, inotify-tools
+, systemd
+, zlib
+, pcre
+, libb64
+, libutp
+, libdeflate
+, utf8cpp
+, fmt
+, libpsl
+, miniupnpc
+, dht
+, libnatpmp
+, libiconv
+, # Build options
+  enableGTK3 ? false
+, gtkmm3
+, xorg
+, wrapGAppsHook3
+, enableQt5 ? false
+, enableQt6 ? false
+, qt5
+, qt6Packages
+, nixosTests
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, enableDaemon ? true
+, enableCli ? true
+, installLib ? false
+, apparmorRulesFromClosure
+,
 }:
 
 let

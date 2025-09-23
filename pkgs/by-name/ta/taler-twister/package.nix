@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  autoreconfHook,
-  pkg-config,
-  curl,
-  gnunet,
-  jansson,
-  libgcrypt,
-  libmicrohttpd,
-  libsodium,
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, curl
+, gnunet
+, jansson
+, libgcrypt
+, libmicrohttpd
+, libsodium
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,11 +1,11 @@
-{
-  stdenvNoCC,
-  fetchFromGitLab,
-  lib,
-  python3,
-  rdfind,
-  which,
-  writeShellScriptBin,
+{ stdenvNoCC
+, fetchFromGitLab
+, lib
+, python3
+, rdfind
+, which
+, writeShellScriptBin
+,
 }:
 let
   # check-whence.py attempts to call `git ls-files`, but we don't have a .git,

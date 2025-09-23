@@ -1,21 +1,21 @@
-{
-  lib,
-  python3,
-  gtk3,
-  lz4,
-  SDL2,
-  pkg-config,
-  vulkan-loader,
-  ninja,
-  cmake,
-  libuuid,
-  wrapGAppsHook3,
-  makeDesktopItem,
-  copyDesktopItems,
-  llvmPackages_20,
-  autoPatchelfHook,
-  unstableGitUpdater,
-  fetchFromGitHub,
+{ lib
+, python3
+, gtk3
+, lz4
+, SDL2
+, pkg-config
+, vulkan-loader
+, ninja
+, cmake
+, libuuid
+, wrapGAppsHook3
+, makeDesktopItem
+, copyDesktopItems
+, llvmPackages_20
+, autoPatchelfHook
+, unstableGitUpdater
+, fetchFromGitHub
+,
 }:
 llvmPackages_20.stdenv.mkDerivation {
   pname = "xenia-canary";

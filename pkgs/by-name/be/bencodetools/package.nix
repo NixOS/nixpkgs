@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  python3Packages,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

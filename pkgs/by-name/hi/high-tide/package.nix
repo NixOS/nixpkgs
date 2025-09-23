@@ -1,21 +1,21 @@
-{
-  lib,
-  python313Packages,
-  fetchFromGitHub,
-  wrapGAppsHook4,
-  meson,
-  ninja,
-  pkg-config,
-  blueprint-compiler,
-  desktop-file-utils,
-  libadwaita,
-  glib-networking,
-  gst_all_1,
-  libsecret,
-  libportal,
-  alsa-utils,
-  pipewire,
-  nix-update-script,
+{ lib
+, python313Packages
+, fetchFromGitHub
+, wrapGAppsHook4
+, meson
+, ninja
+, pkg-config
+, blueprint-compiler
+, desktop-file-utils
+, libadwaita
+, glib-networking
+, gst_all_1
+, libsecret
+, libportal
+, alsa-utils
+, pipewire
+, nix-update-script
+,
 }:
 
 python313Packages.buildPythonApplication rec {

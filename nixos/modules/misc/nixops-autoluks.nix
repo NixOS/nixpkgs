@@ -1,8 +1,7 @@
-{
-  config,
-  options,
-  lib,
-  ...
+{ config
+, options
+, lib
+, ...
 }:
 let
   path = [

@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  csv,
-  lwt,
+{ buildDunePackage
+, csv
+, lwt
+,
 }:
 
 buildDunePackage {

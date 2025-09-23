@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  boost,
-  cppunit,
-  glm,
-  gperf,
-  liblangtag,
-  librevenge,
-  libxml2,
-  mdds,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, boost
+, cppunit
+, glm
+, gperf
+, liblangtag
+, librevenge
+, libxml2
+, mdds
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

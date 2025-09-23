@@ -1,17 +1,17 @@
-{
-  lib,
-  buildDunePackage,
-  fetchurl,
-  angstrom,
-  base64,
-  bigstringaf,
-  fmt,
-  ke,
-  logs,
-  pecu,
-  prettym,
-  unstrctrd,
-  uutf,
+{ lib
+, buildDunePackage
+, fetchurl
+, angstrom
+, base64
+, bigstringaf
+, fmt
+, ke
+, logs
+, pecu
+, prettym
+, unstrctrd
+, uutf
+,
 }:
 
 buildDunePackage rec {

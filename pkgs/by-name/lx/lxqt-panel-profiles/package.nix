@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  python3Packages,
-  qt6,
-  bash,
+{ lib
+, stdenv
+, fetchFromGitea
+, python3Packages
+, qt6
+, bash
+,
 }:
 let
   pythonWithPyqt6 = python3Packages.python.withPackages (ps: [

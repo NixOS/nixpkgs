@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  binutils,
-  elfutils,
-  fetchFromGitHub,
-  glib,
-  libcap,
-  libmicrohttpd,
-  libnl,
-  libpcap,
-  libusb1,
-  libwebsockets,
-  lm_sensors,
-  networkmanager,
-  nix-update-script,
-  nixosTests,
-  pcre2,
-  pkg-config,
-  openssl,
-  protobuf,
-  protobufc,
-  python3,
-  sqlite,
-  withNetworkManager ? false,
-  withPython ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
-  withSensors ? false,
-  zlib,
+{ lib
+, stdenv
+, autoreconfHook
+, binutils
+, elfutils
+, fetchFromGitHub
+, glib
+, libcap
+, libmicrohttpd
+, libnl
+, libpcap
+, libusb1
+, libwebsockets
+, lm_sensors
+, networkmanager
+, nix-update-script
+, nixosTests
+, pcre2
+, pkg-config
+, openssl
+, protobuf
+, protobufc
+, python3
+, sqlite
+, withNetworkManager ? false
+, withPython ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, withSensors ? false
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalPackage: {

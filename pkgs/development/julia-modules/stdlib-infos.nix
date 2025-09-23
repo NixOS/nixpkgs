@@ -1,6 +1,6 @@
-{
-  julia,
-  runCommand,
+{ julia
+, runCommand
+,
 }:
 
 let
@@ -23,11 +23,11 @@ let
 in
 
 runCommand "julia-stdlib-infos.yml"
-  {
-    buildInputs = [
-      julia
-    ];
-  }
+{
+  buildInputs = [
+    julia
+  ];
+}
   ''
     # Prevent a warning where Julia tries to download package server info
     export JULIA_PKG_SERVER=""

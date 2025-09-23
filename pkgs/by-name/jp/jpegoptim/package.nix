@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libjpeg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libjpeg
+,
 }:
 
 stdenv.mkDerivation rec {

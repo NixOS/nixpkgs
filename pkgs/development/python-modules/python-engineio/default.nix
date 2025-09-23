@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  aiohttp,
-  buildPythonPackage,
-  setuptools,
-  eventlet,
-  fetchFromGitHub,
-  iana-etc,
-  libredirect,
-  mock,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  simple-websocket,
-  tornado,
-  websocket-client,
+{ lib
+, stdenv
+, aiohttp
+, buildPythonPackage
+, setuptools
+, eventlet
+, fetchFromGitHub
+, iana-etc
+, libredirect
+, mock
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, requests
+, simple-websocket
+, tornado
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

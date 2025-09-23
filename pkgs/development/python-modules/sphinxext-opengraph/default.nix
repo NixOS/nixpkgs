@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  sphinx,
-  matplotlib,
-  pytestCheckHook,
-  pythonOlder,
-  beautifulsoup4,
-  flit-core,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, sphinx
+, matplotlib
+, pytestCheckHook
+, pythonOlder
+, beautifulsoup4
+, flit-core
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  calmjs-types,
-  calmjs-parse,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, calmjs-types
+, calmjs-parse
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

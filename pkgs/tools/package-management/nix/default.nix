@@ -1,19 +1,18 @@
-{
-  lib,
-  config,
-  stdenv,
-  nixDependencies,
-  generateSplicesForMkScope,
-  fetchFromGitHub,
-  runCommand,
-  pkgs,
-  pkgsi686Linux,
-  pkgsStatic,
-  nixosTests,
-
-  storeDir ? "/nix/store",
-  stateDir ? "/nix/var",
-  confDir ? "/etc",
+{ lib
+, config
+, stdenv
+, nixDependencies
+, generateSplicesForMkScope
+, fetchFromGitHub
+, runCommand
+, pkgs
+, pkgsi686Linux
+, pkgsStatic
+, nixosTests
+, storeDir ? "/nix/store"
+, stateDir ? "/nix/var"
+, confDir ? "/etc"
+,
 }:
 let
   # Called for Nix == 2.28. Transitional until we always use
@@ -41,35 +40,37 @@ let
 
   addFallbackPathsCheck =
     pkg:
-    addTestsShallowly {
-      nix-fallback-paths =
-        runCommand "test-nix-fallback-paths-version-equals-nix-stable"
-          {
-            paths = lib.concatStringsSep "\n" (
-              builtins.attrValues (import ../../../../nixos/modules/installer/tools/nix-fallback-paths.nix)
-            );
-          }
-          ''
-            # NOTE: name may contain cross compilation details between the pname
-            #       and version this is permitted thanks to ([^-]*-)*
-            if [[ "" != $(grep -vE 'nix-([^-]*-)*${
-              lib.strings.replaceStrings [ "." ] [ "\\." ] pkg.version
-            }$' <<< "$paths") ]]; then
-              echo "nix-fallback-paths not up to date with nixVersions.stable (nix-${pkg.version})"
-              echo "The following paths are not up to date:"
-              grep -v 'nix-${pkg.version}$' <<< "$paths"
-              echo
-              echo "Fix it by running in nixpkgs:"
-              echo
-              echo "curl https://releases.nixos.org/nix/nix-${pkg.version}/fallback-paths.nix >nixos/modules/installer/tools/nix-fallback-paths.nix"
-              echo
-              exit 1
-            else
-              echo "nix-fallback-paths versions up to date"
-              touch $out
-            fi
-          '';
-    } pkg;
+    addTestsShallowly
+      {
+        nix-fallback-paths =
+          runCommand "test-nix-fallback-paths-version-equals-nix-stable"
+            {
+              paths = lib.concatStringsSep "\n" (
+                builtins.attrValues (import ../../../../nixos/modules/installer/tools/nix-fallback-paths.nix)
+              );
+            }
+            ''
+              # NOTE: name may contain cross compilation details between the pname
+              #       and version this is permitted thanks to ([^-]*-)*
+              if [[ "" != $(grep -vE 'nix-([^-]*-)*${
+                lib.strings.replaceStrings [ "." ] [ "\\." ] pkg.version
+              }$' <<< "$paths") ]]; then
+                echo "nix-fallback-paths not up to date with nixVersions.stable (nix-${pkg.version})"
+                echo "The following paths are not up to date:"
+                grep -v 'nix-${pkg.version}$' <<< "$paths"
+                echo
+                echo "Fix it by running in nixpkgs:"
+                echo
+                echo "curl https://releases.nixos.org/nix/nix-${pkg.version}/fallback-paths.nix >nixos/modules/installer/tools/nix-fallback-paths.nix"
+                echo
+                exit 1
+              else
+                echo "nix-fallback-paths versions up to date"
+                touch $out
+              fi
+            '';
+      }
+      pkg;
 
   # (meson based packaging)
   # Add passthru tests to the package, and re-expose package set overriding
@@ -198,16 +199,19 @@ lib.makeExtensible (
       # Read ./README.md before bumping a major release
       stable = addFallbackPathsCheck self.nix_2_28;
     }
-    // lib.optionalAttrs config.allowAliases (
-      lib.listToAttrs (
-        map (
-          minor:
-          let
-            attr = "nix_2_${toString minor}";
-          in
-          lib.nameValuePair attr (throw "${attr} has been removed")
-        ) (lib.range 4 23)
-      )
+      // lib.optionalAttrs config.allowAliases (
+      lib.listToAttrs
+        (
+          map
+            (
+              minor:
+              let
+                attr = "nix_2_${toString minor}";
+              in
+              lib.nameValuePair attr (throw "${attr} has been removed")
+            )
+            (lib.range 4 23)
+        )
       // {
         nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_git.";
         nix_2_24 = throw "nix_2_24 has been removed. use nix_2_28.";

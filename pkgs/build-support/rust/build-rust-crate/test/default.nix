@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPackages,
-  buildRustCrate,
-  callPackage,
-  releaseTools,
-  runCommand,
-  runCommandCC,
-  stdenv,
-  symlinkJoin,
-  writeTextFile,
-  pkgsCross,
+{ lib
+, buildPackages
+, buildRustCrate
+, callPackage
+, releaseTools
+, runCommand
+, runCommandCC
+, stdenv
+, symlinkJoin
+, writeTextFile
+, pkgsCross
+,
 }:
 
 let
@@ -27,10 +27,10 @@ let
   mkHostCrate = mkCrate buildRustCrate;
 
   mkCargoToml =
-    {
-      name,
-      crateVersion ? "0.1.0",
-      path ? "Cargo.toml",
+    { name
+    , crateVersion ? "0.1.0"
+    , path ? "Cargo.toml"
+    ,
     }:
     mkFile path ''
       [package]
@@ -170,60 +170,59 @@ let
     to be checked instead. You do not need to specify any directories.
   */
   assertOutputs =
-    {
-      name,
-      mkCrate ? mkHostCrate,
-      crateArgs,
-      expectedFiles,
-      output ? null,
+    { name
+    , mkCrate ? mkHostCrate
+    , crateArgs
+    , expectedFiles
+    , output ? null
+    ,
     }:
-    assert (builtins.isString name);
-    assert (builtins.isAttrs crateArgs);
-    assert (builtins.isList expectedFiles);
+      assert (builtins.isString name);
+      assert (builtins.isAttrs crateArgs);
+      assert (builtins.isList expectedFiles);
 
-    let
-      crate = mkCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
-      crateOutput = if output == null then crate else crate."${output}";
-      expectedFilesFile = writeTextFile {
-        name = "expected-files-${name}";
-        text =
-          let
-            sorted = builtins.sort (a: b: a < b) expectedFiles;
-            concatenated = builtins.concatStringsSep "\n" sorted;
-          in
-          "${concatenated}\n";
-      };
-    in
-    runCommand "assert-outputs-${name}"
-      {
-      }
-      (
-        ''
-          local actualFiles=$(mktemp)
+      let
+        crate = mkCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
+        crateOutput = if output == null then crate else crate."${output}";
+        expectedFilesFile = writeTextFile {
+          name = "expected-files-${name}";
+          text =
+            let
+              sorted = builtins.sort (a: b: a < b) expectedFiles;
+              concatenated = builtins.concatStringsSep "\n" sorted;
+            in
+            "${concatenated}\n";
+        };
+      in
+      runCommand "assert-outputs-${name}"
+        { }
+        (
+          ''
+            local actualFiles=$(mktemp)
 
-          cd "${crateOutput}"
-          find . -type f \
-            | sort \
-        ''
-        # sed out the hash because it differs per platform
-        + ''
-            | sed 's/-${crate.metadata}//g' \
-            > "$actualFiles"
-          diff -q ${expectedFilesFile} "$actualFiles" > /dev/null || {
-            echo -e "\033[0;1;31mERROR: Difference in expected output files in ${crateOutput} \033[0m" >&2
-            echo === Got:
-            sed -e 's/^/  /' $actualFiles
-            echo === Expected:
-            sed -e 's/^/  /' ${expectedFilesFile}
-            echo === Diff:
-            diff -u ${expectedFilesFile} $actualFiles |\
-              tail -n +3 |\
-              sed -e 's/^/  /'
-            exit 1
-          }
-          touch $out
-        ''
-      );
+            cd "${crateOutput}"
+            find . -type f \
+              | sort \
+          ''
+          # sed out the hash because it differs per platform
+          + ''
+              | sed 's/-${crate.metadata}//g' \
+              > "$actualFiles"
+            diff -q ${expectedFilesFile} "$actualFiles" > /dev/null || {
+              echo -e "\033[0;1;31mERROR: Difference in expected output files in ${crateOutput} \033[0m" >&2
+              echo === Got:
+              sed -e 's/^/  /' $actualFiles
+              echo === Expected:
+              sed -e 's/^/  /' ${expectedFilesFile}
+              echo === Diff:
+              diff -u ${expectedFilesFile} $actualFiles |\
+                tail -n +3 |\
+                sed -e 's/^/  /'
+              exit 1
+            }
+            touch $out
+          ''
+        );
 
 in
 rec {
@@ -264,7 +263,7 @@ rec {
           src = mkBin "src/foobar.rs";
         };
         crateBinNoPath1 = {
-          crateBin = [ { name = "my-binary2"; } ];
+          crateBin = [{ name = "my-binary2"; }];
           src = mkBin "src/my_binary2.rs";
         };
         crateBinNoPath2 = {
@@ -281,15 +280,15 @@ rec {
           };
         };
         crateBinNoPath3 = {
-          crateBin = [ { name = "my-binary5"; } ];
+          crateBin = [{ name = "my-binary5"; }];
           src = mkBin "src/bin/main.rs";
         };
         crateBinNoPath4 = {
-          crateBin = [ { name = "my-binary6"; } ];
+          crateBin = [{ name = "my-binary6"; }];
           src = mkBin "src/main.rs";
         };
         crateBinRename1 = {
-          crateBin = [ { name = "my-binary-rename1"; } ];
+          crateBin = [{ name = "my-binary-rename1"; }];
           src = mkBinExtern "src/main.rs" "foo_renamed";
           dependencies = [
             (mkHostCrate {
@@ -302,7 +301,7 @@ rec {
           };
         };
         crateBinRename2 = {
-          crateBin = [ { name = "my-binary-rename2"; } ];
+          crateBin = [{ name = "my-binary-rename2"; }];
           src = mkBinExtern "src/main.rs" "foo_renamed";
           dependencies = [
             (mkHostCrate {
@@ -732,9 +731,11 @@ rec {
         # Suppress deprecation warning
         buildRustCrate = null;
       };
-      tests = lib.mapAttrs (
-        key: value: mkTest (value // lib.optionalAttrs (!value ? crateName) { crateName = key; })
-      ) cases;
+      tests = lib.mapAttrs
+        (
+          key: value: mkTest (value // lib.optionalAttrs (!value ? crateName) { crateName = key; })
+        )
+        cases;
     in
     tests
     // {
@@ -780,7 +781,7 @@ rec {
       crateBinNoPath1Outputs = assertOutputs {
         name = "crateBinNoPath1";
         crateArgs = {
-          crateBin = [ { name = "my-binary2"; } ];
+          crateBin = [{ name = "my-binary2"; }];
           src = mkBin "src/my_binary2.rs";
         };
         expectedFiles = [
@@ -843,7 +844,7 @@ rec {
         mkCrate = mkCrate pkgsCross.wasm32-unknown-none.buildRustCrate;
         crateArgs = {
           crateName = "wasm32-crate-bin-hyphens";
-          crateBin = [ { name = "wasm32-crate-bin-hyphens"; } ];
+          crateBin = [{ name = "wasm32-crate-bin-hyphens"; }];
           src = mkBin "src/main.rs";
         };
         expectedFiles = [

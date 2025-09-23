@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  awscli2,
-  jq,
-  unixtools,
-  fetchFromGitHub,
-  installShellFiles,
-  bashInteractive,
-  getopt,
-  python3,
+{ lib
+, stdenv
+, makeWrapper
+, awscli2
+, jq
+, unixtools
+, fetchFromGitHub
+, installShellFiles
+, bashInteractive
+, getopt
+, python3
+,
 }:
 let
   runtimeDeps = [

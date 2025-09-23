@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jdk17_headless,
-  makeWrapper,
-  bash,
-  coreutils,
-  gnugrep,
-  gnused,
-  ps,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, jdk17_headless
+, makeWrapper
+, bash
+, coreutils
+, gnugrep
+, gnused
+, ps
+, nixosTests
+,
 }:
 
 let
@@ -111,6 +111,8 @@ let
       };
     };
 in
-lib.mapAttrs' (
-  majorVersion: versionInfo: lib.nameValuePair "apacheKafka_${majorVersion}" (build versionInfo)
-) versionMap
+lib.mapAttrs'
+  (
+    majorVersion: versionInfo: lib.nameValuePair "apacheKafka_${majorVersion}" (build versionInfo)
+  )
+  versionMap

@@ -1,9 +1,9 @@
-{
-  lib,
-  makeWrapper,
-  symlinkJoin,
-  thunar-unwrapped,
-  thunarPlugins ? [ ],
+{ lib
+, makeWrapper
+, symlinkJoin
+, thunar-unwrapped
+, thunarPlugins ? [ ]
+,
 }:
 
 let
@@ -56,7 +56,7 @@ else
       description =
         thunar.meta.description
         +
-          optionalString (0 != length thunarPlugins)
-            " (with plugins: ${concatStringsSep ", " (map (x: x.name) thunarPlugins)})";
+        optionalString (0 != length thunarPlugins)
+          " (with plugins: ${concatStringsSep ", " (map (x: x.name) thunarPlugins)})";
     };
   }

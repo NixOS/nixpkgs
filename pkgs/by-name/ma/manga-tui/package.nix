@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  dbus,
-  openssl,
-  perl,
-  cacert,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, dbus
+, openssl
+, perl
+, cacert
+, nix-update-script
+,
 }:
 let
   version = "0.9.0";

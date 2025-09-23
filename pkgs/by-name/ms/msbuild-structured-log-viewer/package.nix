@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  autoPatchelfHook,
-  copyDesktopItems,
-  icu,
-  openssl,
-  libkrb5,
-  makeDesktopItem,
-  nix-update-script,
+{ lib
+, stdenv
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, autoPatchelfHook
+, copyDesktopItems
+, icu
+, openssl
+, libkrb5
+, makeDesktopItem
+, nix-update-script
+,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "msbuild-structured-log-viewer";

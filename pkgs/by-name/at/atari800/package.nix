@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  SDL,
-  autoreconfHook,
-  fetchFromGitHub,
-  libGL,
-  libGLU,
-  libX11,
-  readline,
-  zlib,
+{ lib
+, stdenv
+, SDL
+, autoreconfHook
+, fetchFromGitHub
+, libGL
+, libGLU
+, libX11
+, readline
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

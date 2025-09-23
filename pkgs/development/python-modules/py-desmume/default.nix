@@ -1,19 +1,19 @@
-{
-  lib,
-  alsa-lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitpython,
-  libpcap,
-  meson,
-  ninja,
-  openal,
-  pillow,
-  pkg-config,
-  pygobject3,
-  pythonOlder,
-  SDL2,
-  soundtouch,
+{ lib
+, alsa-lib
+, buildPythonPackage
+, fetchFromGitHub
+, gitpython
+, libpcap
+, meson
+, ninja
+, openal
+, pillow
+, pkg-config
+, pygobject3
+, pythonOlder
+, SDL2
+, soundtouch
+,
 }:
 
 buildPythonPackage rec {

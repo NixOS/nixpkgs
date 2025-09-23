@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  hiredis,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, hiredis
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensmtpd-table-redis";

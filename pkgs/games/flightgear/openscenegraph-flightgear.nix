@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
-  cmake,
-  doxygen,
-  fetchpatch,
-  fetchurl,
-  glib,
-  libxml2,
-  pcre,
-  zlib,
-  libjpeg,
-  giflib,
-  libtiff,
-  libpng,
-  curl,
-  freetype,
-  boost,
-  libGLU,
-  libGL,
-  libX11,
-  libXinerama,
-  libXrandr,
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, cmake
+, doxygen
+, fetchpatch
+, fetchurl
+, glib
+, libxml2
+, pcre
+, zlib
+, libjpeg
+, giflib
+, libtiff
+, libpng
+, curl
+, freetype
+, boost
+, libGLU
+, libGL
+, libX11
+, libXinerama
+, libXrandr
+,
 }:
 
 stdenv.mkDerivation rec {

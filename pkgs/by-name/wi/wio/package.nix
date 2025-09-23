@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  alacritty,
-  cage,
-  cairo,
-  libxkbcommon,
-  makeWrapper,
-  libgbm,
-  meson,
-  ninja,
-  pkg-config,
-  wayland-scanner,
-  udev,
-  unstableGitUpdater,
-  wayland,
-  wayland-protocols,
-  wlroots,
-  xwayland,
+{ lib
+, stdenv
+, fetchFromGitLab
+, alacritty
+, cage
+, cairo
+, libxkbcommon
+, makeWrapper
+, libgbm
+, meson
+, ninja
+, pkg-config
+, wayland-scanner
+, udev
+, unstableGitUpdater
+, wayland
+, wayland-protocols
+, wlroots
+, xwayland
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

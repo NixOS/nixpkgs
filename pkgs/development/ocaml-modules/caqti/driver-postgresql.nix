@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  caqti,
-  postgresql,
+{ buildDunePackage
+, caqti
+, postgresql
+,
 }:
 
 buildDunePackage {

@@ -1,13 +1,13 @@
-{
-  lib,
-  idris2Packages,
-  fetchFromGitHub,
-  clang,
-  chez,
-  gmp,
-  zsh,
-  makeBinaryWrapper,
-  stdenv,
+{ lib
+, idris2Packages
+, fetchFromGitHub
+, clang
+, chez
+, gmp
+, zsh
+, makeBinaryWrapper
+, stdenv
+,
 }:
 let
   inherit (idris2Packages) idris2Api buildIdris;

@@ -1,16 +1,13 @@
-{
-  makeWrapper,
-  nixosTests,
-  symlinkJoin,
-
-  extraPythonPackages ? (ps: [ ]),
-
-  libsForQt5,
-
-  # unwrapped package parameters
-  withGrass ? false,
-  withServer ? false,
-  withWebKit ? false,
+{ makeWrapper
+, nixosTests
+, symlinkJoin
+, extraPythonPackages ? (ps: [ ])
+, libsForQt5
+, # unwrapped package parameters
+  withGrass ? false
+, withServer ? false
+, withWebKit ? false
+,
 }:
 let
   qgis-unwrapped = libsForQt5.callPackage ./unwrapped.nix {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  dpkg,
-  jre_headless,
-  openssl,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, dpkg
+, jre_headless
+, openssl
+, nixosTests
+,
 }:
 
 let

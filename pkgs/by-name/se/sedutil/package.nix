@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  systemdLibs,
-  libnvme,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, systemdLibs
+, libnvme
+,
 }:
 
 stdenv.mkDerivation rec {

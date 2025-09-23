@@ -1,13 +1,13 @@
-{
-  lib,
-  apple-sdk_15,
-  buildGoModule,
-  darwin,
-  fetchFromGitHub,
-  fetchpatch2,
-  nix-update-script,
-  testers,
-  vfkit,
+{ lib
+, apple-sdk_15
+, buildGoModule
+, darwin
+, fetchFromGitHub
+, fetchpatch2
+, nix-update-script
+, testers
+, vfkit
+,
 }:
 
 buildGoModule rec {

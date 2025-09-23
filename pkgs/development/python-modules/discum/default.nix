@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  brotli,
-  colorama,
-  filetype,
-  requests,
-  requests-toolbelt,
-  ua-parser,
-  websocket-client,
-  pycryptodome,
-  pypng,
-  pyqrcode,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, brotli
+, colorama
+, filetype
+, requests
+, requests-toolbelt
+, ua-parser
+, websocket-client
+, pycryptodome
+, pypng
+, pyqrcode
+,
 }:
 
 buildPythonPackage rec {

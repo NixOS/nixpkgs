@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  pygraphviz,
-  plasTeX,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  pygraphviz
+, plasTeX
+,
 }:
 buildPythonPackage {
   pname = "plastexdepgraph";

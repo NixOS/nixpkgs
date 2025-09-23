@@ -1,14 +1,14 @@
-{
-  haskellPackages,
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  # the following are non-haskell dependencies
-  makeWrapper,
-  which,
-  maude,
-  graphviz,
-  glibcLocales,
+{ haskellPackages
+, fetchFromGitHub
+, lib
+, stdenv
+, # the following are non-haskell dependencies
+  makeWrapper
+, which
+, maude
+, graphviz
+, glibcLocales
+,
 }:
 
 let
@@ -143,7 +143,7 @@ let
 in
 mkDerivation (
   common "tamarin-prover" src
-  // {
+    // {
     isLibrary = false;
     isExecutable = true;
 

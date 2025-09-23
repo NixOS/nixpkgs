@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  marshmallow,
-  packaging,
-  pytestCheckHook,
-  setuptools,
-  validators,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, marshmallow
+, packaging
+, pytestCheckHook
+, setuptools
+, validators
+,
 }:
 
 buildPythonPackage rec {

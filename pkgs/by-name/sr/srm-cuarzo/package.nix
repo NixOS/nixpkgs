@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  libdisplay-info,
-  libdrm,
-  libGL,
-  libinput,
-  libgbm,
-  seatd,
-  udev,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libdisplay-info
+, libdrm
+, libGL
+, libinput
+, libgbm
+, seatd
+, udev
+,
 }:
 stdenv.mkDerivation (self: {
   pname = "srm-cuarzo";

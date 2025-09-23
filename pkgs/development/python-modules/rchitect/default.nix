@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cffi,
-  packaging,
-  pytestCheckHook,
-  pytest-mock,
-  pythonOlder,
-  R,
-  rPackages,
-  setuptools,
-  setuptools-scm,
-  six,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cffi
+, packaging
+, pytestCheckHook
+, pytest-mock
+, pythonOlder
+, R
+, rPackages
+, setuptools
+, setuptools-scm
+, six
+,
 }:
 
 buildPythonPackage rec {

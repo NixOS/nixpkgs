@@ -1,24 +1,24 @@
-{
-  lib,
-  aiohttp,
-  botocore,
-  bottle,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  httpx,
-  importlib-metadata,
-  jsonpickle,
-  pymysql,
-  pytest-asyncio_0,
-  pynamodb,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
-  sqlalchemy,
-  webtest,
-  wrapt,
+{ lib
+, aiohttp
+, botocore
+, bottle
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, httpx
+, importlib-metadata
+, jsonpickle
+, pymysql
+, pytest-asyncio_0
+, pynamodb
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+, sqlalchemy
+, webtest
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  libxkbcommon,
-  cairo,
-  gdk-pixbuf,
-  pam,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, scdoc
+, wayland
+, wayland-protocols
+, wayland-scanner
+, libxkbcommon
+, cairo
+, gdk-pixbuf
+, pam
+,
 }:
 
 stdenv.mkDerivation rec {

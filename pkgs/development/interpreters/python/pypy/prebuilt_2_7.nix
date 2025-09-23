@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  python-setup-hook,
-  self,
-  # Dependencies
-  bzip2,
-  expat,
-  gdbm,
-  ncurses6,
-  sqlite,
-  tcl-8_5,
-  tk-8_5,
-  tcl-8_6,
-  tk-8_6,
-  zlib,
-  # For the Python package set
-  packageOverrides ? (self: super: { }),
-  sourceVersion,
-  pythonVersion,
-  hash,
-  passthruFun,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, python-setup-hook
+, self
+, # Dependencies
+  bzip2
+, expat
+, gdbm
+, ncurses6
+, sqlite
+, tcl-8_5
+, tk-8_5
+, tcl-8_6
+, tk-8_6
+, zlib
+, # For the Python package set
+  packageOverrides ? (self: super: { })
+, sourceVersion
+, pythonVersion
+, hash
+, passthruFun
+,
 }:
 
 # This version of PyPy is primarily added to speed-up translation of

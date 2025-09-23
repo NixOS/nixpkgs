@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  pythonOlder,
-  git,
-  gnupg,
-  fetchFromGitHub,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, git
+, gnupg
+, fetchFromGitHub
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

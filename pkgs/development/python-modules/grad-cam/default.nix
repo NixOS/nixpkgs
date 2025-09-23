@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  setuptools,
-  matplotlib,
-  numpy,
-  opencv-python,
-  pillow,
-  scikit-learn,
-  torch,
-  torchvision,
-  ttach,
-  tqdm,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, setuptools
+, matplotlib
+, numpy
+, opencv-python
+, pillow
+, scikit-learn
+, torch
+, torchvision
+, ttach
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

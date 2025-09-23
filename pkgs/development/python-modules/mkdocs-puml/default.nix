@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  httpx,
-  markdown,
-  mkdocs,
-  msgpack,
-  rich,
-  pytestCheckHook,
-  pytest-httpx,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, httpx
+, markdown
+, mkdocs
+, msgpack
+, rich
+, pytestCheckHook
+, pytest-httpx
+,
 }:
 
 buildPythonPackage rec {

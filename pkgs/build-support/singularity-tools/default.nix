@@ -1,21 +1,21 @@
-{
-  lib,
-  # Build helpers
-  stdenv,
-  runCommand,
-  vmTools,
-  writeClosure,
-  writeDirectReferencesToFile,
-  writeScript,
-  writeStringReferencesToFile,
-  # Native build inputs
-  buildPackages,
-  e2fsprogs,
-  util-linux,
-  # Build inputs
-  bashInteractive,
-  runtimeShell,
-  singularity,
+{ lib
+, # Build helpers
+  stdenv
+, runCommand
+, vmTools
+, writeClosure
+, writeDirectReferencesToFile
+, writeScript
+, writeStringReferencesToFile
+, # Native build inputs
+  buildPackages
+, e2fsprogs
+, util-linux
+, # Build inputs
+  bashInteractive
+, runtimeShell
+, singularity
+,
 }:
 
 let
@@ -23,14 +23,14 @@ let
 in
 lib.makeExtensible (final: {
   buildImage =
-    {
-      name,
-      contents ? [ ],
-      diskSize ? 1024,
-      memSize ? 1024,
-      runAsRoot ? null,
-      runScript ? "#!${stdenv.shell}\nexec /bin/sh",
-      singularity ? defaultSingularity,
+    { name
+    , contents ? [ ]
+    , diskSize ? 1024
+    , memSize ? 1024
+    , runAsRoot ? null
+    , runScript ? "#!${stdenv.shell}\nexec /bin/sh"
+    , singularity ? defaultSingularity
+    ,
     }:
     let
       projectName = singularity.projectName or "singularity";

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  rpm,
-  cpio,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, rpm
+, cpio
+, zlib
+,
 }:
 
 /*
@@ -15,11 +15,11 @@
 
   add the following lines to bindirCmds property of  printing/cupsd.nix:
 
-    ln -s ${pkgs.gutenprint-bin}/lib/cups/backend/* $out/lib/cups/backend/
-    ln -s ${pkgs.gutenprint-bin}/lib/cups/filter/* $out/lib/cups/filter/
-    mkdir -p $out/lib/cups/model
-    cat ${pkgs.gutenprint-bin}/ppds/Canon/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd.gz |gunzip > $out/lib/cups/model/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd
-    sed -i 's@/opt/gutenprint/cups@${pkgs.gutenprint-bin}/cups@' $out/lib/cups/model/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd
+  ln -s ${pkgs.gutenprint-bin}/lib/cups/backend/* $out/lib/cups/backend/
+  ln -s ${pkgs.gutenprint-bin}/lib/cups/filter/* $out/lib/cups/filter/
+  mkdir -p $out/lib/cups/model
+  cat ${pkgs.gutenprint-bin}/ppds/Canon/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd.gz |gunzip > $out/lib/cups/model/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd
+  sed -i 's@/opt/gutenprint/cups@${pkgs.gutenprint-bin}/cups@' $out/lib/cups/model/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd
 
   Then rebuild your system and add your printer using the the localhost:603 cups web interface
   select the extracted .ppd file which can be found in the model directory of
@@ -37,10 +37,11 @@ stdenv.mkDerivation {
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://www.openprinting.org/download/printdriver/debian/dists/lsb3.1/main/binary-amd64/gutenprint_5.0.1-1lsb3.1_amd64.deb";
-        sha256 = "0an5gba6r6v54r53s2gj2fjk8fzpl4lrksjas2333528b0k8gbbc";
-      }
+      fetchurl
+        {
+          url = "https://www.openprinting.org/download/printdriver/debian/dists/lsb3.1/main/binary-amd64/gutenprint_5.0.1-1lsb3.1_amd64.deb";
+          sha256 = "0an5gba6r6v54r53s2gj2fjk8fzpl4lrksjas2333528b0k8gbbc";
+        }
     else
       throw "TODO"; # get from openprint.com -> drivers -> gutenprint
 

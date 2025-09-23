@@ -1,18 +1,18 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  symlinkJoin,
-  versionCheckHook,
-  makeWrapper,
-  wrapGAppsHook4,
-  cairo,
-  gdk-pixbuf,
-  glib,
-  graphene,
-  gtk4,
-  libadwaita,
-  pango,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, symlinkJoin
+, versionCheckHook
+, makeWrapper
+, wrapGAppsHook4
+, cairo
+, gdk-pixbuf
+, glib
+, graphene
+, gtk4
+, libadwaita
+, pango
+,
 }:
 
 buildGoModule (finalAttrs: {

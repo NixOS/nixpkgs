@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  distutils,
-  django,
-  djangorestframework,
-  fetchFromGitHub,
-  persisting-theory,
-  pytest-django,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, distutils
+, django
+, djangorestframework
+, fetchFromGitHub
+, persisting-theory
+, pytest-django
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

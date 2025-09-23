@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  hatchling,
-  hatch-vcs,
-  numpy,
-  scipy,
-  matplotlib,
-  pandas,
-  multiprocess,
-  pathos,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, hatchling
+, hatch-vcs
+, numpy
+, scipy
+, matplotlib
+, pandas
+, multiprocess
+, pathos
+,
 }:
 let
   finalAttrs = {

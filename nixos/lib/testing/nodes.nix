@@ -1,10 +1,9 @@
-testModuleArgs@{
-  config,
-  lib,
-  hostPkgs,
-  nodes,
-  options,
-  ...
+testModuleArgs@{ config
+, lib
+, hostPkgs
+, nodes
+, options
+, ...
 }:
 
 let
@@ -38,7 +37,7 @@ let
 
         message = "NixOS Test: don't know which VM guest system to pair with VM host system: ${hostPlatform.system}. Perhaps you intended to run the tests on a Linux host, or one of the following systems that may run NixOS tests: ${supportedHosts}";
       in
-      hostToGuest.${hostPlatform.system} or (throw message);
+        hostToGuest.${hostPlatform.system} or (throw message);
 
   baseOS = import ../eval-config.nix {
     inherit lib;
@@ -189,16 +188,18 @@ in
 
   config = {
     _module.args.nodes = config.nodesCompat;
-    nodesCompat = mapAttrs (
-      name: config:
-      config
-      // {
-        config =
-          lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2211)
-            "Module argument `nodes.${name}.config` is deprecated. Use `nodes.${name}` instead."
-            config;
-      }
-    ) config.nodes;
+    nodesCompat = mapAttrs
+      (
+        name: config:
+          config
+          // {
+            config =
+              lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2211)
+                "Module argument `nodes.${name}.config` is deprecated. Use `nodes.${name}` instead."
+                config;
+          }
+      )
+      config.nodes;
 
     passthru.nodes = config.nodesCompat;
 
@@ -243,9 +244,9 @@ in
       See https://nixos.org/manual/nixos/unstable#sec-override-nixos-test
     */
     passthru.extendNixOS =
-      {
-        module,
-        specialArgs ? { },
+      { module
+      , specialArgs ? { }
+      ,
       }:
       config.passthru.extend {
         modules = [

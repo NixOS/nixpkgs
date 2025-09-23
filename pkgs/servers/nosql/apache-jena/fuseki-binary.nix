@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  java,
-  coreutils,
-  which,
-  makeWrapper,
-  # For the test
-  pkgs,
+{ lib
+, stdenv
+, fetchurl
+, java
+, coreutils
+, which
+, makeWrapper
+, # For the test
+  pkgs
+,
 }:
 
 stdenv.mkDerivation rec {

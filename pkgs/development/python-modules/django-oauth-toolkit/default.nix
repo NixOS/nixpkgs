@@ -1,21 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-
-  # propagates
-  django,
-  jwcrypto,
-  requests,
-  oauthlib,
-
-  # tests
-  djangorestframework,
-  pytest-cov-stub,
-  pytest-django,
-  pytest-mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, # propagates
+  django
+, jwcrypto
+, requests
+, oauthlib
+, # tests
+  djangorestframework
+, pytest-cov-stub
+, pytest-django
+, pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

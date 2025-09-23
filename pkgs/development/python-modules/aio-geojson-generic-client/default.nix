@@ -1,16 +1,16 @@
-{
-  lib,
-  aio-geojson-client,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  geojson,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  pytz,
-  setuptools,
+{ lib
+, aio-geojson-client
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, geojson
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, pytz
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

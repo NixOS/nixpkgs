@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  wafHook,
-  buildPackages,
-  python3,
-  readline,
-  libxslt,
-  libxcrypt,
-  docbook-xsl-nons,
-  docbook_xml_dtd_45,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, wafHook
+, buildPackages
+, python3
+, readline
+, libxslt
+, libxcrypt
+, docbook-xsl-nons
+, docbook_xml_dtd_45
+,
 }:
 
 let
@@ -21,8 +21,7 @@ let
     {
       # PYTHONHASHSEED=1 python3.9 ./buildtools/bin/waf configure --bundled-libraries=NONE --builtin-libraries=replace --cross-compile --cross-execute=' ' --cross-answers=answers
       x86_64-freebsd = ./answers-x86_64-freebsd;
-    }
-    .${stdenv.hostPlatform.system}
+    }.${stdenv.hostPlatform.system}
       or (throw "Need pre-generated answers file to compile for ${stdenv.hostPlatform.system}");
 in
 
@@ -89,9 +88,10 @@ stdenv.mkDerivation rec {
   PYTHON_CONFIG = "/invalid";
 
   # https://reviews.llvm.org/D135402
-  NIX_LDFLAGS = lib.optional (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) "--undefined-version";
+  NIX_LDFLAGS = lib.optional
+    (
+      stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+    ) "--undefined-version";
 
   meta = with lib; {
     description = "Trivial database";

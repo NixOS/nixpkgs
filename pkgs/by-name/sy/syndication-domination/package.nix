@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  pugixml,
-  fmt,
-  html-tidy,
-  enablePython ? false,
-  python3Packages,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, pugixml
+, fmt
+, html-tidy
+, enablePython ? false
+, python3Packages
+,
 }:
 
 stdenv.mkDerivation {

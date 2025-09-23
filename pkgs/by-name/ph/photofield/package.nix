@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  buildNpmPackage,
-  makeWrapper,
-  exiftool,
-  ffmpeg,
-  testers,
-  photofield,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, buildNpmPackage
+, makeWrapper
+, exiftool
+, ffmpeg
+, testers
+, photofield
+, nix-update-script
+,
 }:
 
 let

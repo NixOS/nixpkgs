@@ -1,35 +1,35 @@
-{
-  lib,
-  fetchFromGitHub,
-  accountsservice,
-  appstream-glib,
-  dbus,
-  desktop-file-utils,
-  gettext,
-  glib,
-  gobject-introspection,
-  gsettings-desktop-schemas,
-  gtk-layer-shell,
-  gtk3,
-  json-glib,
-  libgee,
-  libhandy,
-  libpulseaudio,
-  libxml2,
-  meson,
-  ninja,
-  pantheon,
-  pkg-config,
-  python3,
-  stdenv,
-  vala,
-  wrapGAppsHook3,
-  blueprint-compiler,
-  gtk4,
-  libadwaita,
-  udisks,
-  libgtop,
-  gtk4-layer-shell,
+{ lib
+, fetchFromGitHub
+, accountsservice
+, appstream-glib
+, dbus
+, desktop-file-utils
+, gettext
+, glib
+, gobject-introspection
+, gsettings-desktop-schemas
+, gtk-layer-shell
+, gtk3
+, json-glib
+, libgee
+, libhandy
+, libpulseaudio
+, libxml2
+, meson
+, ninja
+, pantheon
+, pkg-config
+, python3
+, stdenv
+, vala
+, wrapGAppsHook3
+, blueprint-compiler
+, gtk4
+, libadwaita
+, udisks
+, libgtop
+, gtk4-layer-shell
+,
 }:
 
 stdenv.mkDerivation rec {

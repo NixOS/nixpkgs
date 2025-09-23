@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # optional-dependencies
-  zeroconf,
-
-  # tests
-  wyoming-faster-whisper,
-  wyoming-openwakeword,
-  wyoming-piper,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # optional-dependencies
+  zeroconf
+, # tests
+  wyoming-faster-whisper
+, wyoming-openwakeword
+, wyoming-piper
+,
 }:
 
 buildPythonPackage rec {

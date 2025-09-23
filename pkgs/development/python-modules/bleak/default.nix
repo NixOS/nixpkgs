@@ -1,15 +1,15 @@
-{
-  lib,
-  async-timeout,
-  bluez,
-  buildPythonPackage,
-  dbus-fast,
-  fetchFromGitHub,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  typing-extensions,
+{ lib
+, async-timeout
+, bluez
+, buildPythonPackage
+, dbus-fast
+, fetchFromGitHub
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

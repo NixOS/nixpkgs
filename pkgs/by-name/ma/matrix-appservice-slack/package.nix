@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  makeWrapper,
-  mkYarnPackage,
-  nodejs_20,
-  callPackage,
+{ lib
+, fetchFromGitHub
+, fetchYarnDeps
+, makeWrapper
+, mkYarnPackage
+, nodejs_20
+, callPackage
+,
 }:
 
 let

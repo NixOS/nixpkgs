@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  nixosTests,
-  cacert,
-  caBundle ? "${cacert}/etc/ssl/certs/ca-bundle.crt",
-  nextcloud30Packages,
-  nextcloud31Packages,
+{ lib
+, stdenvNoCC
+, fetchurl
+, nixosTests
+, cacert
+, caBundle ? "${cacert}/etc/ssl/certs/ca-bundle.crt"
+, nextcloud30Packages
+, nextcloud31Packages
+,
 }:
 
 let
   generic =
-    {
-      version,
-      hash,
-      eol ? false,
-      extraVulnerabilities ? [ ],
-      packages,
+    { version
+    , hash
+    , eol ? false
+    , extraVulnerabilities ? [ ]
+    , packages
+    ,
     }:
     stdenvNoCC.mkDerivation rec {
       pname = "nextcloud";
@@ -28,9 +28,11 @@ let
       };
 
       passthru = {
-        tests = lib.filterAttrs (
-          key: _: (lib.hasSuffix (lib.versions.major version) key)
-        ) nixosTests.nextcloud;
+        tests = lib.filterAttrs
+          (
+            key: _: (lib.hasSuffix (lib.versions.major version) key)
+          )
+          nixosTests.nextcloud;
         inherit packages;
       };
 

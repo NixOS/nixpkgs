@@ -1,26 +1,26 @@
-{
-  lib,
-  fetchFromGitHub,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  cachetools,
-  cryptography,
-  flask,
-  freezegun,
-  grpcio,
-  mock,
-  pyasn1-modules,
-  pyjwt,
-  pyopenssl,
-  pytest-asyncio,
-  pytest-localserver,
-  pytestCheckHook,
-  pyu2f,
-  requests,
-  responses,
-  rsa,
-  setuptools,
+{ lib
+, fetchFromGitHub
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, cachetools
+, cryptography
+, flask
+, freezegun
+, grpcio
+, mock
+, pyasn1-modules
+, pyjwt
+, pyopenssl
+, pytest-asyncio
+, pytest-localserver
+, pytestCheckHook
+, pyu2f
+, requests
+, responses
+, rsa
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

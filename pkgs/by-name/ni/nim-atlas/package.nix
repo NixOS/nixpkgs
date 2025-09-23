@@ -1,8 +1,8 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitHub,
-  openssl,
+{ lib
+, buildNimPackage
+, fetchFromGitHub
+, openssl
+,
 }:
 
 buildNimPackage (

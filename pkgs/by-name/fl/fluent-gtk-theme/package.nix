@@ -1,16 +1,19 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  gitUpdater,
-  gnome-themes-extra,
-  gtk-engine-murrine,
-  jdupes,
-  sassc,
-  themeVariants ? [ ], # default: blue
-  colorVariants ? [ ], # default: all
-  sizeVariants ? [ ], # default: standard
-  tweaks ? [ ],
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gitUpdater
+, gnome-themes-extra
+, gtk-engine-murrine
+, jdupes
+, sassc
+, themeVariants ? [ ]
+, # default: blue
+  colorVariants ? [ ]
+, # default: all
+  sizeVariants ? [ ]
+, # default: standard
+  tweaks ? [ ]
+,
 }:
 
 let

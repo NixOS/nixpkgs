@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libuuid,
-  e2fsprogs,
-  nilfs-utils,
-  ntfs3g,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libuuid
+, e2fsprogs
+, nilfs-utils
+, ntfs3g
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

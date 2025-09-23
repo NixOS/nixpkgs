@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  dbus,
-  fpc,
-  getopt,
-  glib,
-  lazarus,
-  libX11,
-  libsForQt5,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, dbus
+, fpc
+, getopt
+, glib
+, lazarus
+, libX11
+, libsForQt5
+, writableTmpDirAsHomeHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

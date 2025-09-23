@@ -1,20 +1,20 @@
-{
-  bitarray,
-  buildPythonPackage,
-  dill,
-  diskcache,
-  fetchFromGitHub,
-  hiredis,
-  hypothesis,
-  lib,
-  pytest,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-rerunfailures,
-  pytestCheckHook,
-  redis,
-  setuptools,
-  xxhash,
+{ bitarray
+, buildPythonPackage
+, dill
+, diskcache
+, fetchFromGitHub
+, hiredis
+, hypothesis
+, lib
+, pytest
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-rerunfailures
+, pytestCheckHook
+, redis
+, setuptools
+, xxhash
+,
 }:
 
 buildPythonPackage rec {

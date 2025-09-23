@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  flex,
-  autoreconfHook,
-  automake,
-  autoconf-archive,
-  libtool,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, flex
+, autoreconfHook
+, automake
+, autoconf-archive
+, libtool
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

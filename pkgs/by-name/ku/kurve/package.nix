@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  nix-update-script,
-  kdePackages,
-  cava,
-  python3,
-  qt6,
+{ stdenv
+, lib
+, fetchFromGitHub
+, nix-update-script
+, kdePackages
+, cava
+, python3
+, qt6
+,
 }:
 let
   pythonEnv = python3.withPackages (ps: [ ps.websockets ]);

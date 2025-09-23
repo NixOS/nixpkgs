@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGhidraExtension,
-  ghidra,
-  ant,
+{ lib
+, fetchFromGitHub
+, buildGhidraExtension
+, ghidra
+, ant
+,
 }:
 buildGhidraExtension (finalAttrs: {
   pname = "wasm";

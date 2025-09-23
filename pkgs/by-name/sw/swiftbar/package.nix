@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchzip,
-  stdenvNoCC,
-  makeWrapper,
+{ lib
+, fetchzip
+, stdenvNoCC
+, makeWrapper
+,
 }:
 let
   build = "536";

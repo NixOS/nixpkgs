@@ -1,16 +1,15 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-
-  libGL,
-  libX11,
-  libXcursor,
-  libXinerama,
-  libXi,
-  libXrandr,
-  libXxf86vm,
-  pkg-config,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, libGL
+, libX11
+, libXcursor
+, libXinerama
+, libXi
+, libXrandr
+, libXxf86vm
+, pkg-config
+,
 }:
 
 buildGoModule rec {

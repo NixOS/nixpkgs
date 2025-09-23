@@ -1,9 +1,9 @@
-{
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  lib,
-  pysolarmanv5,
-  pyyaml,
+{ buildHomeAssistantComponent
+, fetchFromGitHub
+, lib
+, pysolarmanv5
+, pyyaml
+,
 }:
 
 buildHomeAssistantComponent rec {

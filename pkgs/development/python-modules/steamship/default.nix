@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools-scm,
-  requests,
-  pydantic,
-  aiohttp,
-  inflection,
-  fluent-logger,
-  toml,
-  click,
-  semver,
-  tiktoken,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools-scm
+, requests
+, pydantic
+, aiohttp
+, inflection
+, fluent-logger
+, toml
+, click
+, semver
+, tiktoken
+,
 }:
 
 buildPythonPackage rec {

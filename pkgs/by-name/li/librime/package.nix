@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  boost,
-  glog,
-  leveldb,
-  marisa,
-  opencc,
-  yaml-cpp,
-  gtest,
-  capnproto,
-  pkg-config,
-  librime-lua,
-  librime-octagram,
-  plugins ? [
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, glog
+, leveldb
+, marisa
+, opencc
+, yaml-cpp
+, gtest
+, capnproto
+, pkg-config
+, librime-lua
+, librime-octagram
+, plugins ? [
     librime-lua
     librime-octagram
-  ],
+  ]
+,
 }:
 
 let

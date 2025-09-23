@@ -11,11 +11,10 @@
   ];
 
   nodes.machine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     let
       inherit (config.image.repart.verityStore) partitionIds;

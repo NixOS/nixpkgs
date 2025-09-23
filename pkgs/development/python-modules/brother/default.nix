@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  dacite,
-  pysnmp,
-  pytest-asyncio,
-  pytest-error-for-skips,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  syrupy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, dacite
+, pysnmp
+, pytest-asyncio
+, pytest-error-for-skips
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, syrupy
+,
 }:
 
 buildPythonPackage rec {

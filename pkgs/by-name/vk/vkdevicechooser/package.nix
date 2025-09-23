@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  writeText,
-  meson,
-  vulkan-headers,
-  vulkan-utility-libraries,
-  ninja,
-  jq,
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeText
+, meson
+, vulkan-headers
+, vulkan-utility-libraries
+, ninja
+, jq
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  zlib,
-  kmod,
-  which,
-  hwdata,
-  static ? stdenv.hostPlatform.isStatic,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, zlib
+, kmod
+, which
+, hwdata
+, static ? stdenv.hostPlatform.isStatic
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

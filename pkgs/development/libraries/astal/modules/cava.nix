@@ -1,7 +1,7 @@
-{
-  buildAstalModule,
-  libcava,
-  fftw,
+{ buildAstalModule
+, libcava
+, fftw
+,
 }:
 buildAstalModule {
   name = "cava";

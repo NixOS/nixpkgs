@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  gconf,
-  imagemagick,
+{ lib
+, fetchurl
+, appimageTools
+, gconf
+, imagemagick
+,
 }:
 
 let

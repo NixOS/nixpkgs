@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  hatchling,
-  pytest-codspeed,
-  pytest-snapshot,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, hatchling
+, pytest-codspeed
+, pytest-snapshot
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  alex,
-  happy,
-  Agda,
-  buildPackages,
-  ghcWithPackages,
+{ stdenv
+, lib
+, fetchFromGitHub
+, alex
+, happy
+, Agda
+, buildPackages
+, ghcWithPackages
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,9 +35,10 @@ stdenv.mkDerivation rec {
   ];
 
   LANG = "en_US.UTF-8";
-  LOCALE_ARCHIVE = lib.optionalString (
-    stdenv.buildPlatform.libc == "glibc"
-  ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+  LOCALE_ARCHIVE = lib.optionalString
+    (
+      stdenv.buildPlatform.libc == "glibc"
+    ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
 
   postPatch = ''
     patchShebangs create-libraries.sh

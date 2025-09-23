@@ -1,7 +1,7 @@
-{
-  lib,
-  apple-sdk,
-  mkAppleDerivation,
+{ lib
+, apple-sdk
+, mkAppleDerivation
+,
 }:
 
 let

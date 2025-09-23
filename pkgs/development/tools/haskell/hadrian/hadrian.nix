@@ -1,31 +1,31 @@
 # See also ./make-hadria.nix
-{
-  mkDerivation,
-  base,
-  bytestring,
-  Cabal,
-  containers,
-  directory,
-  extra,
-  filepath,
-  lib,
-  mtl,
-  parsec,
-  shake,
-  text,
-  transformers,
-  unordered-containers,
-  cryptohash-sha256,
-  base16-bytestring,
-  writeText,
-  # Dependencies that are not on Hackage and only used in certain Hadrian versions
-  ghc-platform ? null,
-  ghc-toolchain ? null,
-  # GHC source tree to build hadrian from
-  ghcSrc,
-  ghcVersion,
-  # Customization
-  userSettings ? null,
+{ mkDerivation
+, base
+, bytestring
+, Cabal
+, containers
+, directory
+, extra
+, filepath
+, lib
+, mtl
+, parsec
+, shake
+, text
+, transformers
+, unordered-containers
+, cryptohash-sha256
+, base16-bytestring
+, writeText
+, # Dependencies that are not on Hackage and only used in certain Hadrian versions
+  ghc-platform ? null
+, ghc-toolchain ? null
+, # GHC source tree to build hadrian from
+  ghcSrc
+, ghcVersion
+, # Customization
+  userSettings ? null
+,
 }:
 
 mkDerivation {

@@ -1,8 +1,7 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }:
 
 let
@@ -308,8 +307,8 @@ in
     lib.mkIf cfg.enable {
       warnings = forEachEnabledNmh (
         k: v:
-        "The `programs.firefox.nativeMessagingHosts.${k}` option is deprecated, "
-        + "please add `${v.package.pname}` to `programs.firefox.nativeMessagingHosts.packages` instead."
+          "The `programs.firefox.nativeMessagingHosts.${k}` option is deprecated, "
+          + "please add `${v.package.pname}` to `programs.firefox.nativeMessagingHosts.packages` instead."
       );
       programs.firefox.nativeMessagingHosts.packages = forEachEnabledNmh (_: v: v.package);
 
@@ -338,19 +337,23 @@ in
       programs.firefox.policies = {
         DisableAppUpdate = true;
         Preferences = (
-          builtins.mapAttrs (_: value: {
-            Value = value;
-            Status = cfg.preferencesStatus;
-          }) cfg.preferences
+          builtins.mapAttrs
+            (_: value: {
+              Value = value;
+              Status = cfg.preferencesStatus;
+            })
+            cfg.preferences
         );
         ExtensionSettings = builtins.listToAttrs (
-          builtins.map (
-            lang:
-            lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
-              installation_mode = "normal_installed";
-              install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
-            }
-          ) cfg.languagePacks
+          builtins.map
+            (
+              lang:
+              lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
+                installation_mode = "normal_installed";
+                install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
+              }
+            )
+            cfg.languagePacks
         );
       };
     };

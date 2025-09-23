@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitLab,
-  python3,
-  librsvg,
-  xcursorgen,
+{ lib
+, stdenvNoCC
+, fetchFromGitLab
+, python3
+, librsvg
+, xcursorgen
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  stdenvNoLibc,
-  stdenvLibcMinimal,
-  runCommand,
-  rsync,
-  source,
-  bsdSetupHook,
-  openbsdSetupHook,
-  makeMinimal,
-  install,
-  tsort,
-  lorder,
+{ lib
+, stdenv
+, stdenvNoCC
+, stdenvNoLibc
+, stdenvLibcMinimal
+, runCommand
+, rsync
+, source
+, bsdSetupHook
+, openbsdSetupHook
+, makeMinimal
+, install
+, tsort
+, lorder
+,
 }:
 
 lib.makeOverridable (
@@ -103,6 +103,6 @@ lib.makeOverridable (
       dontBuild = true;
     }
     // lib.optionalAttrs stdenv'.hostPlatform.isStatic { NOLIBSHARED = true; }
-    // (builtins.removeAttrs attrs [ "extraNativeBuildInputs" ])
+      // (builtins.removeAttrs attrs [ "extraNativeBuildInputs" ])
   )
 )

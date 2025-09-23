@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  makeWrapper,
-  fzf,
-  gawk,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, makeWrapper
+, fzf
+, gawk
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

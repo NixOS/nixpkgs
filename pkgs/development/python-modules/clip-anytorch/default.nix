@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  ftfy,
-  packaging,
-  pythonOlder,
-  regex,
-  setuptools,
-  torch,
-  torchvision,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, ftfy
+, packaging
+, pythonOlder
+, regex
+, setuptools
+, torch
+, torchvision
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

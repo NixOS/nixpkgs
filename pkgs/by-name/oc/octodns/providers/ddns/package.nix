@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  octodns,
-  pytestCheckHook,
-  setuptools,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, octodns
+, pytestCheckHook
+, setuptools
+, requests
+,
 }:
 buildPythonPackage rec {
   pname = "octodns-ddns";

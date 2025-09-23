@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  makeWrapper,
-  fetchFromGitHub,
-  which,
-  pkg-config,
-  libjpeg,
-  ocamlPackages,
-  awscli2,
-  bubblewrap,
-  curl,
-  ffmpeg,
-  yt-dlp,
-  runtimePackages ? [
+{ lib
+, stdenv
+, makeWrapper
+, fetchFromGitHub
+, which
+, pkg-config
+, libjpeg
+, ocamlPackages
+, awscli2
+, bubblewrap
+, curl
+, ffmpeg
+, yt-dlp
+, runtimePackages ? [
     awscli2
     bubblewrap
     curl
     ffmpeg
     yt-dlp
-  ],
+  ]
+,
 }:
 
 let

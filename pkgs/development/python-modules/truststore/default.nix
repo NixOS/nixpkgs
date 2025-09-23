@@ -1,14 +1,14 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  httpx,
-  pyopenssl,
-  pythonOlder,
-  requests,
-  trustme,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, httpx
+, pyopenssl
+, pythonOlder
+, requests
+, trustme
+,
 }:
 
 buildPythonPackage rec {

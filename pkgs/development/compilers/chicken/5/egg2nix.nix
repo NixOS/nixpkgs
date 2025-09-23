@@ -1,8 +1,8 @@
-{
-  lib,
-  eggDerivation,
-  fetchFromGitHub,
-  chickenEggs,
+{ lib
+, eggDerivation
+, fetchFromGitHub
+, chickenEggs
+,
 }:
 
 eggDerivation {

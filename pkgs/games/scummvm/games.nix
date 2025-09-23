@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeDesktopItem,
-  unzip,
-  writeText,
-  scummvm,
-  runtimeShell,
+{ stdenv
+, lib
+, fetchurl
+, makeDesktopItem
+, unzip
+, writeText
+, scummvm
+, runtimeShell
+,
 }:
 
 let
@@ -37,15 +37,14 @@ let
     '';
 
   generic =
-    {
-      plong,
-      pshort,
-      pcode,
-      description,
-      version,
-      files,
-      docs ? [ "readme.txt" ],
-      ...
+    { plong
+    , pshort
+    , pcode
+    , description
+    , version
+    , files
+    , docs ? [ "readme.txt" ]
+    , ...
     }@attrs:
     let
       attrs' = builtins.removeAttrs attrs [

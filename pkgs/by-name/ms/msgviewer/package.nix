@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  unzip,
-  jre,
-  runtimeShell,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, unzip
+, jre
+, runtimeShell
+,
 }:
 
 stdenv.mkDerivation rec {

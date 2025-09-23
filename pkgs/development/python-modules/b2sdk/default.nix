@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  glibcLocales,
-  importlib-metadata,
-  logfury,
-  annotated-types,
-  packaging,
-  pdm-backend,
-  pyfakefs,
-  pytest-lazy-fixtures,
-  pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  tqdm,
-  typing-extensions,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, glibcLocales
+, importlib-metadata
+, logfury
+, annotated-types
+, packaging
+, pdm-backend
+, pyfakefs
+, pytest-lazy-fixtures
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, requests
+, tqdm
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

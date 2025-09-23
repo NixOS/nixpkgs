@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  build2,
-  DarwinTools,
-  fetchurl,
-  libuuid,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  enableStatic ? !enableShared,
+{ lib
+, stdenv
+, build2
+, DarwinTools
+, fetchurl
+, libuuid
+, enableShared ? !stdenv.hostPlatform.isStatic
+, enableStatic ? !enableShared
+,
 }:
 
 stdenv.mkDerivation rec {

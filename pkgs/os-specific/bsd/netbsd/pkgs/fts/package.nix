@@ -1,8 +1,8 @@
-{
-  mkDerivation,
-  bsdSetupHook,
-  netbsdSetupHook,
-  compatIfNeeded,
+{ mkDerivation
+, bsdSetupHook
+, netbsdSetupHook
+, compatIfNeeded
+,
 }:
 
 mkDerivation {

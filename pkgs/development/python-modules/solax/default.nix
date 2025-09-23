@@ -1,15 +1,15 @@
-{
-  lib,
-  aiohttp,
-  async-timeout,
-  buildPythonPackage,
-  fetchPypi,
-  pytest-asyncio,
-  pytest-httpserver,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
-  voluptuous,
+{ lib
+, aiohttp
+, async-timeout
+, buildPythonPackage
+, fetchPypi
+, pytest-asyncio
+, pytest-httpserver
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

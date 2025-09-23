@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nixosTests,
-  nix-update-script,
-  version ? "1.20.0",
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nixosTests
+, nix-update-script
+, version ? "1.20.0"
+,
 }:
 
 let

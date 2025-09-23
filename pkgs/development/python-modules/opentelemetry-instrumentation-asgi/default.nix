@@ -1,14 +1,14 @@
-{
-  buildPythonPackage,
-  pythonOlder,
-  asgiref,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-instrumentation,
-  opentelemetry-semantic-conventions,
-  opentelemetry-test-utils,
-  opentelemetry-util-http,
-  pytestCheckHook,
+{ buildPythonPackage
+, pythonOlder
+, asgiref
+, hatchling
+, opentelemetry-api
+, opentelemetry-instrumentation
+, opentelemetry-semantic-conventions
+, opentelemetry-test-utils
+, opentelemetry-util-http
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

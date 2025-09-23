@@ -1,19 +1,16 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-
-  # buildInputs
-  rust-jemalloc-sys,
-
-  # nativeBuildInputs
-  installShellFiles,
-
-  buildPackages,
-  versionCheckHook,
-  python3Packages,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, # buildInputs
+  rust-jemalloc-sys
+, # nativeBuildInputs
+  installShellFiles
+, buildPackages
+, versionCheckHook
+, python3Packages
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

@@ -1,38 +1,33 @@
-{
-  lib,
-  config,
-  stdenv,
-  blas,
-  lapack,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cudaSupport ? config.cudaSupport,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  jaxlib,
-  ml-dtypes,
-  numpy,
-  opt-einsum,
-  scipy,
-
-  # optional-dependencies
-  jax-cuda12-plugin,
-
-  # tests
-  cloudpickle,
-  hypothesis,
-  matplotlib,
-  pytestCheckHook,
-  pytest-xdist,
-
-  # passthru
-  callPackage,
-  jax,
-  jaxlib-build,
-  jaxlib-bin,
+{ lib
+, config
+, stdenv
+, blas
+, lapack
+, buildPythonPackage
+, fetchFromGitHub
+, cudaSupport ? config.cudaSupport
+, # build-system
+  setuptools
+, # dependencies
+  jaxlib
+, ml-dtypes
+, numpy
+, opt-einsum
+, scipy
+, # optional-dependencies
+  jax-cuda12-plugin
+, # tests
+  cloudpickle
+, hypothesis
+, matplotlib
+, pytestCheckHook
+, pytest-xdist
+, # passthru
+  callPackage
+, jax
+, jaxlib-build
+, jaxlib-bin
+,
 }:
 
 let

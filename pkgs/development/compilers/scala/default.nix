@@ -1,9 +1,9 @@
-{
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jre,
-  callPackage,
+{ stdenv
+, fetchurl
+, makeWrapper
+, jre
+, callPackage
+,
 }:
 
 let

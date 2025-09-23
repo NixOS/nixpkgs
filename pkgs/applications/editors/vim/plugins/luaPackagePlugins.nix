@@ -1,7 +1,7 @@
-{
-  lib,
-  buildNeovimPlugin,
-  neovim-unwrapped,
+{ lib
+, buildNeovimPlugin
+, neovim-unwrapped
+,
 }:
 final: prev:
 let

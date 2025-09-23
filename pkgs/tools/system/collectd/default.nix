@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  callPackage,
-  autoreconfHook,
-  pkg-config,
-  libtool,
-  bison,
-  flex,
-  perl,
-  nixosTests,
-  ...
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, callPackage
+, autoreconfHook
+, pkg-config
+, libtool
+, bison
+, flex
+, perl
+, nixosTests
+, ...
 }@args:
 let
   plugins = callPackage ./plugins.nix args;

@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  isPy3k,
-  requests,
-  flake8,
-  mock,
-  pytest,
-  mystem,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, isPy3k
+, requests
+, flake8
+, mock
+, pytest
+, mystem
+,
 }:
 
 buildPythonPackage rec {

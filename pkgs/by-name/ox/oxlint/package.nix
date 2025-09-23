@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  cmake,
-  nix-update-script,
-  rust-jemalloc-sys,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, nix-update-script
+, rust-jemalloc-sys
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

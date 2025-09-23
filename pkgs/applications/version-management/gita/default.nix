@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  pyyaml,
-  setuptools,
-  installShellFiles,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, pyyaml
+, setuptools
+, installShellFiles
+,
 }:
 
 buildPythonApplication rec {

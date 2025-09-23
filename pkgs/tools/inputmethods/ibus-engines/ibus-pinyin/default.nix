@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  intltool,
-  pkg-config,
-  python3,
-  wrapGAppsHook3,
-  glib,
-  gtk3,
-  ibus,
-  lua,
-  pyzy,
-  sqlite,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, intltool
+, pkg-config
+, python3
+, wrapGAppsHook3
+, glib
+, gtk3
+, ibus
+, lua
+, pyzy
+, sqlite
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

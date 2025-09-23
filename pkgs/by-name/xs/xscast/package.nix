@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  ffmpeg,
-  imagemagick,
-  dzen2,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, ffmpeg
+, imagemagick
+, dzen2
+, xorg
+,
 }:
 
 stdenv.mkDerivation {

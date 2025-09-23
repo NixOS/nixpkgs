@@ -1,10 +1,10 @@
-{
-  copyDesktopItems,
-  fetchFromGitLab,
-  lib,
-  makeDesktopItem,
-  python3Packages,
-  qt5,
+{ copyDesktopItems
+, fetchFromGitLab
+, lib
+, makeDesktopItem
+, python3Packages
+, qt5
+,
 }:
 
 let

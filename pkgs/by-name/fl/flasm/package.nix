@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  unzip,
-  fetchpatch,
-  bison,
-  flex,
-  gperf,
-  zlib,
+{ lib
+, stdenv
+, fetchzip
+, unzip
+, fetchpatch
+, bison
+, flex
+, gperf
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

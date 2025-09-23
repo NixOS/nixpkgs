@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  djangorestframework,
-  fetchFromGitHub,
-  filetype,
-  pillow,
-  psycopg2,
-  pytest-django,
-  pytestCheckHook,
-  pythonAtLeast,
-  setuptools,
-  pytz,
+{ lib
+, buildPythonPackage
+, django
+, djangorestframework
+, fetchFromGitHub
+, filetype
+, pillow
+, psycopg2
+, pytest-django
+, pytestCheckHook
+, pythonAtLeast
+, setuptools
+, pytz
+,
 }:
 
 buildPythonPackage rec {

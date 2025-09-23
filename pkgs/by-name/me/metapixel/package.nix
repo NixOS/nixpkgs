@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libpng,
-  libjpeg,
-  giflib,
-  perl,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpng
+, libjpeg
+, giflib
+, perl
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation {

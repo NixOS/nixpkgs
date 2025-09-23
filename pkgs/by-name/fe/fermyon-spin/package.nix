@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  gcc-unwrapped,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, gcc-unwrapped
+, zlib
+,
 }:
 
 let
@@ -16,8 +16,7 @@ let
       aarch64-linux = "linux-aarch64";
       x86_64-darwin = "macos-amd64";
       aarch64-darwin = "macos-aarch64";
-    }
-    .${system} or (throw "Unsupported system: ${system}");
+    }.${system} or (throw "Unsupported system: ${system}");
 
   # TODO: It'd be nice to write an update script that would update all of these
   # hashes together.
@@ -27,8 +26,7 @@ let
       aarch64-linux = "sha256-BSFxDJeY7fOOxDqAV+6FJf0hup1Y5IJ/czqwc4W7qSA=";
       x86_64-darwin = "sha256-T6J9IjfXdt9DnZksndAmZRkYyH/5H60J7V6xU0ltD2A=";
       aarch64-darwin = "sha256-6x+0PB5/2oqYDVNiNhc0xcs/ESCLvvSsWtm2KlTIeBo=";
-    }
-    .${system} or (throw "Unsupported system: ${system}");
+    }.${system} or (throw "Unsupported system: ${system}");
 
 in
 stdenv.mkDerivation rec {

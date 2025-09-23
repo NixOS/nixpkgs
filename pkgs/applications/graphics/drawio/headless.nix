@@ -1,9 +1,9 @@
-{
-  lib,
-  writeTextFile,
-  runtimeShell,
-  drawio,
-  xvfb-run,
+{ lib
+, writeTextFile
+, runtimeShell
+, drawio
+, xvfb-run
+,
 }:
 
 writeTextFile {

@@ -1,17 +1,17 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  withMySQL ? true,
-  withPSQL ? false,
-  withSQLite ? false,
-  mariadb,
-  postgresql,
-  sqlite,
-  gawk,
-  gnugrep,
-  findutils,
-  gnused,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, withMySQL ? true
+, withPSQL ? false
+, withSQLite ? false
+, mariadb
+, postgresql
+, sqlite
+, gawk
+, gnugrep
+, findutils
+, gnused
+, lib
+,
 }:
 
 stdenv.mkDerivation rec {

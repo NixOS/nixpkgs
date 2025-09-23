@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libffi,
-  pkg-config,
-  wayland-protocols,
-  wayland-scanner,
-  wayland,
-  xorg,
-  nix-update-script,
-  alsa-lib,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libffi
+, pkg-config
+, wayland-protocols
+, wayland-scanner
+, wayland
+, xorg
+, nix-update-script
+, alsa-lib
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

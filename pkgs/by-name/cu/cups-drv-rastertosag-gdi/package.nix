@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchzip,
-  fetchpatch,
-  cups,
-  python3Packages,
-  patchPpdFilesHook,
+{ lib
+, fetchzip
+, fetchpatch
+, cups
+, python3Packages
+, patchPpdFilesHook
+,
 }:
 
 python3Packages.buildPythonApplication rec {

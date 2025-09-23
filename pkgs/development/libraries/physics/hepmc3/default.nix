@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  coreutils,
-  python,
-  root,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, coreutils
+, python
+, root
+,
 }:
 
 let

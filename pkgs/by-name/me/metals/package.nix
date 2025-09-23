@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  coursier,
-  jre,
-  makeWrapper,
-  setJavaClassPath,
+{ stdenv
+, lib
+, coursier
+, jre
+, makeWrapper
+, setJavaClassPath
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

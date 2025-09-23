@@ -1,12 +1,12 @@
-{
-  jitSupport,
-  lib,
-  llvm,
-  nixosTests,
-  pg-dump-anon,
-  postgresql,
-  postgresqlBuildExtension,
-  runtimeShell,
+{ jitSupport
+, lib
+, llvm
+, nixosTests
+, pg-dump-anon
+, postgresql
+, postgresqlBuildExtension
+, runtimeShell
+,
 }:
 
 postgresqlBuildExtension {

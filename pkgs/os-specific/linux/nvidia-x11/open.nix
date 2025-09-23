@@ -1,13 +1,13 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  kernel,
-  kernelModuleMakeFlags,
-  nvidia_x11,
-  hash,
-  patches ? [ ],
-  broken ? false,
+{ stdenv
+, lib
+, fetchFromGitHub
+, kernel
+, kernelModuleMakeFlags
+, nvidia_x11
+, hash
+, patches ? [ ]
+, broken ? false
+,
 }:
 
 stdenv.mkDerivation (
@@ -35,8 +35,7 @@ stdenv.mkDerivation (
       {
         aarch64-linux = "TARGET_ARCH=aarch64";
         x86_64-linux = "TARGET_ARCH=x86_64";
-      }
-      .${stdenv.hostPlatform.system}
+      }.${stdenv.hostPlatform.system}
     ];
 
     installTargets = [ "modules_install" ];
@@ -57,7 +56,7 @@ stdenv.mkDerivation (
       inherit broken;
     };
   }
-  // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
+    // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
     env.NIX_CFLAGS_COMPILE = "-fno-stack-protector";
   }
 )

@@ -1,8 +1,8 @@
-{
-  lib,
-  melpaBuild,
-  lsp-bridge,
-  yasnippet,
+{ lib
+, melpaBuild
+, lsp-bridge
+, yasnippet
+,
 }:
 
 melpaBuild {

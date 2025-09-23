@@ -1,27 +1,22 @@
-{
-  config,
-  lib,
-
-  fetchFromGitHub,
-  stdenv,
-
-  nix-update-script,
-
-  enableCuda ? config.cudaSupport,
-
-  # nativeBuildInputs
-  cudaPackages,
-  gfortran,
-  meson,
-  ninja,
-  pkg-config,
-
-  # buildInputs
-  blas,
-  hwloc,
-  lapack,
-  llvmPackages,
-  metis,
+{ config
+, lib
+, fetchFromGitHub
+, stdenv
+, nix-update-script
+, enableCuda ? config.cudaSupport
+, # nativeBuildInputs
+  cudaPackages
+, gfortran
+, meson
+, ninja
+, pkg-config
+, # buildInputs
+  blas
+, hwloc
+, lapack
+, llvmPackages
+, metis
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

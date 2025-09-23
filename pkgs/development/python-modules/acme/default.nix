@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  certbot,
-  cryptography,
-  pyopenssl,
-  pyrfc3339,
-  josepy,
-  pytz,
-  requests,
-  setuptools,
+{ buildPythonPackage
+, certbot
+, cryptography
+, pyopenssl
+, pyrfc3339
+, josepy
+, pytz
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

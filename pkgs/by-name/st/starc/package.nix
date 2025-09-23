@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  makeWrapper,
+{ lib
+, fetchurl
+, appimageTools
+, makeWrapper
+,
 }:
 let
   pname = "starc";

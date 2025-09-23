@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  pcsclite,
-  pkg-config,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, pcsclite
+, pkg-config
+,
 }:
 
 buildGoModule rec {

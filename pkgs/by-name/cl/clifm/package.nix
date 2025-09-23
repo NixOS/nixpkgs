@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  libcap,
-  acl,
-  file,
-  readline,
-  python3,
-  nix-update-script,
-  versionCheckHook,
+{ stdenv
+, lib
+, fetchFromGitHub
+, libcap
+, acl
+, file
+, readline
+, python3
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

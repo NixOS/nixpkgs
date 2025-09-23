@@ -1,9 +1,9 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  stdlib,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, stdlib
+, version ? null
+,
 }:
 
 (mkCoqDerivation {
@@ -33,7 +33,8 @@
       (case "8.8" "1.2+coq8.8")
       (case "8.7" "1.0+coq8.7")
       (case "8.6" "1.0+coq8.6")
-    ] null;
+    ]
+      null;
 
   release."1.0+coq8.6".version = "1.0";
   release."1.0+coq8.6".rev = "v1.0";

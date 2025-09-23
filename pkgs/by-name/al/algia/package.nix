@@ -1,8 +1,8 @@
-{
-  pkgs,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
+{ pkgs
+, lib
+, buildGoModule
+, fetchFromGitHub
+,
 }:
 
 buildGoModule rec {

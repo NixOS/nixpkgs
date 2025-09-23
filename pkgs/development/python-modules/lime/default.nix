@@ -1,17 +1,15 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-
-  matplotlib,
-  numpy,
-  scipy,
-  tqdm,
-  scikit-learn,
-  scikit-image,
-
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, matplotlib
+, numpy
+, scipy
+, tqdm
+, scikit-learn
+, scikit-image
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

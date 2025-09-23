@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  soapysdr,
-  sdrplay,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, soapysdr
+, sdrplay
+,
 }:
 
 stdenv.mkDerivation rec {

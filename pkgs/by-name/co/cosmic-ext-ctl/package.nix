@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
-  cosmic-comp,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, versionCheckHook
+, nix-update-script
+, cosmic-comp
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-ext-ctl";

@@ -1,18 +1,18 @@
 # this package was called gimp-print in the past
-{
-  stdenv,
-  lib,
-  fetchurl,
-  makeWrapper,
-  pkg-config,
-  ijs,
-  zlib,
-  gimp2Support ? false,
-  gimp,
-  cupsSupport ? true,
-  cups,
-  libusb1,
-  perl,
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, pkg-config
+, ijs
+, zlib
+, gimp2Support ? false
+, gimp
+, cupsSupport ? true
+, cups
+, libusb1
+, perl
+,
 }:
 
 stdenv.mkDerivation rec {

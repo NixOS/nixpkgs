@@ -1,8 +1,8 @@
-{
-  lib,
-  flutter332,
-  fetchFromGitHub,
-  autoPatchelfHook,
+{ lib
+, flutter332
+, fetchFromGitHub
+, autoPatchelfHook
+,
 }:
 
 flutter332.buildFlutterApplication rec {

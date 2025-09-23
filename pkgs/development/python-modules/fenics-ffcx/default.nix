@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  numpy,
-  cffi,
-  fenics-ufl,
-  fenics-basix,
-  sympy,
-  numba,
-  pytestCheckHook,
-  addBinToPathHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, numpy
+, cffi
+, fenics-ufl
+, fenics-basix
+, sympy
+, numba
+, pytestCheckHook
+, addBinToPathHook
+,
 }:
 
 buildPythonPackage rec {

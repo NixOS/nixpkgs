@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  tokyocabinet,
-  ncurses,
-  cairo ? null,
-  pango ? null,
-  enableCairo ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, tokyocabinet
+, ncurses
+, cairo ? null
+, pango ? null
+, enableCairo ? stdenv.hostPlatform.isLinux
+,
 }:
 
 assert enableCairo -> cairo != null && pango != null;

@@ -3,23 +3,23 @@
 # Portions of this code are adapted from nixos-cosmic
 # https://github.com/lilyinstarlight/nixos-cosmic
 
-{
-  lib,
-  stdenv,
-  makeSetupHook,
-  makeBinaryWrapper,
-  pkg-config,
-  targetPackages,
-  libGL,
-  libxkbcommon,
-  xorg,
-  wayland,
-  vulkan-loader,
-
-  includeSettings ? true,
+{ lib
+, stdenv
+, makeSetupHook
+, makeBinaryWrapper
+, pkg-config
+, targetPackages
+, libGL
+, libxkbcommon
+, xorg
+, wayland
+, vulkan-loader
+, includeSettings ? true
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "libcosmic-app-hook";
 
   propagatedBuildInputs = [

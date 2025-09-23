@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  check,
-  cppunit,
-  perl,
-  python3Packages,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, check
+, cppunit
+, perl
+, python3Packages
+,
 }:
 
 # NOTE: for subunit python library see pkgs/top-level/python-packages.nix

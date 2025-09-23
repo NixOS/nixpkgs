@@ -1,49 +1,49 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  bzip2,
-  expat,
-  libffi,
-  gdbm,
-  db,
-  ncurses,
-  openssl,
-  readline,
-  sqlite,
-  tcl ? null,
-  tk ? null,
-  tclPackages,
-  libX11 ? null,
-  x11Support ? false,
-  zlib,
-  self,
-  coreutils,
-  autoreconfHook,
-  python-setup-hook,
-  # Some proprietary libs assume UCS2 unicode, especially on darwin :(
-  ucsEncoding ? 4,
-  # For the Python package set
-  packageOverrides ? (self: super: { }),
-  pkgsBuildBuild,
-  pkgsBuildHost,
-  pkgsBuildTarget,
-  pkgsHostHost,
-  pkgsTargetTarget,
-  sourceVersion,
-  hash,
-  passthruFun,
-  static ? stdenv.hostPlatform.isStatic,
-  stripBytecode ? reproducibleBuild,
-  rebuildBytecode ? true,
-  reproducibleBuild ? false,
-  enableOptimizations ? false,
-  strip2to3 ? false,
-  stripConfig ? false,
-  stripIdlelib ? false,
-  stripTests ? false,
-  pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}",
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, bzip2
+, expat
+, libffi
+, gdbm
+, db
+, ncurses
+, openssl
+, readline
+, sqlite
+, tcl ? null
+, tk ? null
+, tclPackages
+, libX11 ? null
+, x11Support ? false
+, zlib
+, self
+, coreutils
+, autoreconfHook
+, python-setup-hook
+, # Some proprietary libs assume UCS2 unicode, especially on darwin :(
+  ucsEncoding ? 4
+, # For the Python package set
+  packageOverrides ? (self: super: { })
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
+, sourceVersion
+, hash
+, passthruFun
+, static ? stdenv.hostPlatform.isStatic
+, stripBytecode ? reproducibleBuild
+, rebuildBytecode ? true
+, reproducibleBuild ? false
+, enableOptimizations ? false
+, strip2to3 ? false
+, stripConfig ? false
+, stripIdlelib ? false
+, stripTests ? false
+, pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
+,
 }:
 
 assert x11Support -> tcl != null && tk != null && libX11 != null;
@@ -51,17 +51,20 @@ assert x11Support -> tcl != null && tk != null && libX11 != null;
 assert lib.assertMsg (enableOptimizations -> (!stdenv.cc.isClang))
   "Optimizations with clang are not supported. configure: error: llvm-profdata is required for a --enable-optimizations build but could not be found.";
 
-assert lib.assertMsg (
-  reproducibleBuild -> stripBytecode
-) "Deterministic builds require stripping bytecode.";
+assert lib.assertMsg
+  (
+    reproducibleBuild -> stripBytecode
+  ) "Deterministic builds require stripping bytecode.";
 
-assert lib.assertMsg (
-  reproducibleBuild -> (!enableOptimizations)
-) "Deterministic builds are not achieved when optimizations are enabled.";
+assert lib.assertMsg
+  (
+    reproducibleBuild -> (!enableOptimizations)
+  ) "Deterministic builds are not achieved when optimizations are enabled.";
 
-assert lib.assertMsg (
-  reproducibleBuild -> (!rebuildBytecode)
-) "Deterministic builds are not achieved when (default unoptimized) bytecode is created.";
+assert lib.assertMsg
+  (
+    reproducibleBuild -> (!rebuildBytecode)
+  ) "Deterministic builds are not achieved when (default unoptimized) bytecode is created.";
 
 let
   buildPackages = pkgsBuildHost;
@@ -74,20 +77,21 @@ let
       pythonOnBuildForHost.interpreter;
 
   passthru =
-    passthruFun rec {
-      inherit self sourceVersion packageOverrides;
-      implementation = "cpython";
-      libPrefix = "python${pythonVersion}";
-      executable = libPrefix;
-      pythonVersion = with sourceVersion; "${major}.${minor}";
-      sitePackages = "lib/${libPrefix}/site-packages";
-      inherit hasDistutilsCxxPatch pythonAttr;
-      pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
-      pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
-      pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
-      pythonOnHostForHost = pkgsHostHost.${pythonAttr};
-      pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or { };
-    }
+    passthruFun
+      rec {
+        inherit self sourceVersion packageOverrides;
+        implementation = "cpython";
+        libPrefix = "python${pythonVersion}";
+        executable = libPrefix;
+        pythonVersion = with sourceVersion; "${major}.${minor}";
+        sitePackages = "lib/${libPrefix}/site-packages";
+        inherit hasDistutilsCxxPatch pythonAttr;
+        pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
+        pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
+        pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
+        pythonOnHostForHost = pkgsHostHost.${pythonAttr};
+        pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or { };
+      }
     // {
       inherit ucsEncoding;
     };
@@ -418,5 +422,5 @@ stdenv.mkDerivation (
       ];
     };
   }
-  // crossCompileEnv
+    // crossCompileEnv
 )

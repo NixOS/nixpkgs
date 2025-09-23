@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  glib,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  feedbackd,
-  gtk4,
-  libepoxy,
-  xorg,
-  zbar,
-  tiffSupport ? true,
-  libraw,
-  jpgSupport ? true,
-  graphicsmagick,
-  exiftool,
+{ stdenv
+, lib
+, fetchFromGitLab
+, glib
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, feedbackd
+, gtk4
+, libepoxy
+, xorg
+, zbar
+, tiffSupport ? true
+, libraw
+, jpgSupport ? true
+, graphicsmagick
+, exiftool
+,
 }:
 
 assert jpgSupport -> tiffSupport;

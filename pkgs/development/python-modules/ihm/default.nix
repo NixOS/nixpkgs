@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  swig,
-  msgpack,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, swig
+, msgpack
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

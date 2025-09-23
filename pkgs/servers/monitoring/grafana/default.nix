@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchpatch,
-  removeReferencesTo,
-  tzdata,
-  wire,
-  yarn-berry_4,
-  python3,
-  jq,
-  moreutils,
-  nix-update-script,
-  nixosTests,
-  xcbuild,
-  faketty,
-  nodejs,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, removeReferencesTo
+, tzdata
+, wire
+, yarn-berry_4
+, python3
+, jq
+, moreutils
+, nix-update-script
+, nixosTests
+, xcbuild
+, faketty
+, nodejs
+,
 }:
 
 let
@@ -107,9 +107,11 @@ buildGoModule rec {
   # derivation and fails because `offlineCache` is missing there.
   overrideModAttrs = (
     old: {
-      nativeBuildInputs = lib.filter (
-        x: lib.getName x != (lib.getName yarn-berry_4.yarnBerryConfigHook)
-      ) old.nativeBuildInputs;
+      nativeBuildInputs = lib.filter
+        (
+          x: lib.getName x != (lib.getName yarn-berry_4.yarnBerryConfigHook)
+        )
+        old.nativeBuildInputs;
     }
   );
 

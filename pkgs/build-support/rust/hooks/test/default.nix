@@ -1,7 +1,7 @@
-{
-  rustPlatform,
-  stdenv,
-  cargo,
+{ rustPlatform
+, stdenv
+, cargo
+,
 }:
 {
   /*

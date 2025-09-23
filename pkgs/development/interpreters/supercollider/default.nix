@@ -1,32 +1,32 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  fetchurl,
-  cmake,
-  runtimeShell,
-  pkg-config,
-  alsa-lib,
-  libjack2,
-  libsndfile,
-  fftw,
-  curl,
-  gcc,
-  libsForQt5,
-  libXt,
-  qtbase,
-  qttools,
-  qtwebengine,
-  readline,
-  qtwebsockets,
-  useSCEL ? false,
-  emacs,
-  gitUpdater,
-  supercollider-with-plugins,
-  supercolliderPlugins,
-  writeText,
-  runCommand,
-  withWebengine ? false, # vulnerable, so disabled by default
+{ lib
+, stdenv
+, mkDerivation
+, fetchurl
+, cmake
+, runtimeShell
+, pkg-config
+, alsa-lib
+, libjack2
+, libsndfile
+, fftw
+, curl
+, gcc
+, libsForQt5
+, libXt
+, qtbase
+, qttools
+, qtwebengine
+, readline
+, qtwebsockets
+, useSCEL ? false
+, emacs
+, gitUpdater
+, supercollider-with-plugins
+, supercolliderPlugins
+, writeText
+, runCommand
+, withWebengine ? false
+, # vulnerable, so disabled by default
 }:
 
 mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  requests,
-  xmltodict,
-  responses,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, requests
+, xmltodict
+, responses
+, python
+,
 }:
 
 buildPythonPackage rec {

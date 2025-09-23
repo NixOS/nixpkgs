@@ -1,9 +1,9 @@
-{
-  config,
-  lib,
-  callPackage,
-  pkg-config,
-  hyprland,
+{ config
+, lib
+, callPackage
+, pkg-config
+, hyprland
+,
 }@topLevelArgs:
 let
 
@@ -12,12 +12,11 @@ let
 
     extendDrvArgs =
       finalAttrs:
-      {
-        pluginName ? "",
-        nativeBuildInputs ? [ ],
-        buildInputs ? [ ],
-        hyprland ? topLevelArgs.hyprland,
-        ...
+      { pluginName ? ""
+      , nativeBuildInputs ? [ ]
+      , buildInputs ? [ ]
+      , hyprland ? topLevelArgs.hyprland
+      , ...
       }@args:
 
       {
@@ -28,7 +27,7 @@ let
           description = args.meta.description or "";
           longDescription =
             (args.meta.longDescription or "")
-            + "\n\nPlugins can be installed via a plugin entry in the Hyprland NixOS or Home Manager options.";
+              + "\n\nPlugins can be installed via a plugin entry in the Hyprland NixOS or Home Manager options.";
 
           platforms = args.meta.platforms or hyprland.meta.platforms or [ ];
         };
@@ -50,6 +49,6 @@ let
   ];
 in
 (lib.mapAttrs (name: plugin: callPackage plugin { inherit mkHyprlandPlugin; }) plugins)
-// {
+  // {
   inherit mkHyprlandPlugin;
 }

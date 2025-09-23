@@ -1,19 +1,19 @@
-{
-  lib,
-  appdirs,
-  buildPythonPackage,
-  certifi,
-  fetchFromGitHub,
-  importlib-metadata,
-  poetry-core,
-  pyee,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  syncer,
-  tqdm,
-  urllib3,
-  websockets,
+{ lib
+, appdirs
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
+, importlib-metadata
+, poetry-core
+, pyee
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, syncer
+, tqdm
+, urllib3
+, websockets
+,
 }:
 
 buildPythonPackage rec {

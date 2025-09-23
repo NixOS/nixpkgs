@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gcc,
-  flex,
-  bison,
-  texinfo,
-  jdk_headless,
-  erlang,
-  makeWrapper,
-  readline,
+{ lib
+, stdenv
+, fetchurl
+, gcc
+, flex
+, bison
+, texinfo
+, jdk_headless
+, erlang
+, makeWrapper
+, readline
+,
 }:
 
 stdenv.mkDerivation rec {

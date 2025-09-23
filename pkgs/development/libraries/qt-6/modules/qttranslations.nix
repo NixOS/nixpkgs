@@ -1,6 +1,6 @@
-{
-  qtModule,
-  qttools,
+{ qtModule
+, qttools
+,
 }:
 
 qtModule {

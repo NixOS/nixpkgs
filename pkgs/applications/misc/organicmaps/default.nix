@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  pkg-config,
-  which,
-  python3,
-  rsync,
-  wrapQtAppsHook,
-  qtbase,
-  qtpositioning,
-  qtsvg,
-  qtwayland,
-  libGLU,
-  libGL,
-  zlib,
-  icu,
-  freetype,
-  pugixml,
-  xorg,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, which
+, python3
+, rsync
+, wrapQtAppsHook
+, qtbase
+, qtpositioning
+, qtsvg
+, qtwayland
+, libGLU
+, libGL
+, zlib
+, icu
+, freetype
+, pugixml
+, xorg
+, nix-update-script
+,
 }:
 
 let

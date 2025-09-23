@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  gtk-doc,
-  docbook_xsl,
-  glib,
-  mesonEmulatorHook,
-  gnome,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gtk-doc
+, docbook_xsl
+, glib
+, mesonEmulatorHook
+, gnome
+,
 }:
 
 # TODO: Add installed tests once https://gitlab.gnome.org/World/libcloudproviders/issues/4 is fixed

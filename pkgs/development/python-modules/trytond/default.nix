@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  defusedxml,
-  lxml,
-  relatorio,
-  genshi,
-  python-dateutil,
-  polib,
-  python-sql,
-  werkzeug,
-  passlib,
-  pydot,
-  levenshtein,
-  html2text,
-  weasyprint,
-  gevent,
-  pillow,
-  pwdlib,
-  simpleeval,
-  withPostgresql ? true,
-  psycopg2,
-  unittestCheckHook,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, defusedxml
+, lxml
+, relatorio
+, genshi
+, python-dateutil
+, polib
+, python-sql
+, werkzeug
+, passlib
+, pydot
+, levenshtein
+, html2text
+, weasyprint
+, gevent
+, pillow
+, pwdlib
+, simpleeval
+, withPostgresql ? true
+, psycopg2
+, unittestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

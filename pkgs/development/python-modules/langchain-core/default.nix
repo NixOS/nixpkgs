@@ -1,37 +1,33 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  jsonpatch,
-  langsmith,
-  packaging,
-  pydantic,
-  pyyaml,
-  tenacity,
-  typing-extensions,
-
-  # tests
-  blockbuster,
-  freezegun,
-  grandalf,
-  httpx,
-  langchain-core,
-  langchain-tests,
-  numpy,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
-  syrupy,
-
-  # passthru
-  gitUpdater,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pdm-backend
+, # dependencies
+  jsonpatch
+, langsmith
+, packaging
+, pydantic
+, pyyaml
+, tenacity
+, typing-extensions
+, # tests
+  blockbuster
+, freezegun
+, grandalf
+, httpx
+, langchain-core
+, langchain-tests
+, numpy
+, pytest-asyncio
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, syrupy
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  curl,
-  cacert,
-  xmlstarlet,
-  common-updater-scripts,
-  writeShellApplication,
+{ lib
+, stdenvNoCC
+, fetchzip
+, curl
+, cacert
+, xmlstarlet
+, common-updater-scripts
+, writeShellApplication
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

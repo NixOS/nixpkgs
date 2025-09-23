@@ -1,23 +1,23 @@
-{
-  lib,
-  SDL2,
-  autoreconfHook,
-  fetchFromGitHub,
-  freetype,
-  gettext,
-  glib,
-  gtk2,
-  libGL,
-  libGLU,
-  libmpeg2,
-  lua,
-  openal,
-  pkg-config,
-  strip-nondeterminism,
-  stdenv,
-  zip,
-  zlib,
-  nix-update-script,
+{ lib
+, SDL2
+, autoreconfHook
+, fetchFromGitHub
+, freetype
+, gettext
+, glib
+, gtk2
+, libGL
+, libGLU
+, libmpeg2
+, lua
+, openal
+, pkg-config
+, strip-nondeterminism
+, stdenv
+, zip
+, zlib
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

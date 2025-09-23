@@ -1,26 +1,26 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  meson,
-  ninja,
-  flex,
-  pkg-config,
-  perl,
-  python3,
-  dbus,
-  polkit,
-  systemdLibs,
-  udev,
-  dbusSupport ? stdenv.hostPlatform.isLinux,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-  udevSupport ? dbusSupport,
-  libusb1,
-  testers,
-  nix-update-script,
-  pname ? "pcsclite",
-  polkitSupport ? false,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, meson
+, ninja
+, flex
+, pkg-config
+, perl
+, python3
+, dbus
+, polkit
+, systemdLibs
+, udev
+, dbusSupport ? stdenv.hostPlatform.isLinux
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs
+, udevSupport ? dbusSupport
+, libusb1
+, testers
+, nix-update-script
+, pname ? "pcsclite"
+, polkitSupport ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

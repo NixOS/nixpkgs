@@ -1,42 +1,36 @@
-{
-  lib,
-  config,
-  stdenv,
-  pkgs,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  scikit-build-core,
-
-  # nativeBuildInputs
-  cmake,
-  ninja,
-  pathspec,
-  pyproject-metadata,
-  writableTmpDirAsHomeHook,
-
-  # buildInputs
-  llvmPackages,
-  boost,
-  ocl-icd,
-  opencl-headers,
-
-  # dependencies
-  numpy,
-  scipy,
-
-  # optional-dependencies
-  cffi,
-  dask,
-  pandas,
-  pyarrow,
-  scikit-learn,
-
-  # optionals: gpu
-  gpuSupport ? stdenv.hostPlatform.isLinux && !cudaSupport,
-  cudaSupport ? config.cudaSupport,
-  cudaPackages,
+{ lib
+, config
+, stdenv
+, pkgs
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  scikit-build-core
+, # nativeBuildInputs
+  cmake
+, ninja
+, pathspec
+, pyproject-metadata
+, writableTmpDirAsHomeHook
+, # buildInputs
+  llvmPackages
+, boost
+, ocl-icd
+, opencl-headers
+, # dependencies
+  numpy
+, scipy
+, # optional-dependencies
+  cffi
+, dask
+, pandas
+, pyarrow
+, scikit-learn
+, # optionals: gpu
+  gpuSupport ? stdenv.hostPlatform.isLinux && !cudaSupport
+, cudaSupport ? config.cudaSupport
+, cudaPackages
+,
 }:
 
 assert gpuSupport -> !cudaSupport;

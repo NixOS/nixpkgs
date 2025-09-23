@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  glib,
-  intltool,
-  json_c,
-  libtool,
-  pkg-config,
-  python3,
-  gettext,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, glib
+, intltool
+, json_c
+, libtool
+, pkg-config
+, python3
+, gettext
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  pytestCheckHook,
-  runCommand,
-
-  setuptools,
-  unicodeit,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pytestCheckHook
+, runCommand
+, setuptools
+, unicodeit
+,
 }:
 buildPythonPackage rec {
   pname = "unicodeit";

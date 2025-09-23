@@ -1,31 +1,31 @@
-{
-  lib,
-  buildPythonPackage,
-  cliff,
-  doc8,
-  docutils,
-  fetchPypi,
-  hacking,
-  keystoneauth1,
-  makePythonPath,
-  openstackdocstheme,
-  installer,
-  osc-lib,
-  oslotest,
-  oslo-serialization,
-  oslo-utils,
-  pbr,
-  pygments,
-  python-neutronclient,
-  python-openstackclient,
-  requests,
-  requests-mock,
-  setuptools,
-  sphinx,
-  sphinxcontrib-apidoc,
-  stestr,
-  subunit,
-  testscenarios,
+{ lib
+, buildPythonPackage
+, cliff
+, doc8
+, docutils
+, fetchPypi
+, hacking
+, keystoneauth1
+, makePythonPath
+, openstackdocstheme
+, installer
+, osc-lib
+, oslotest
+, oslo-serialization
+, oslo-utils
+, pbr
+, pygments
+, python-neutronclient
+, python-openstackclient
+, requests
+, requests-mock
+, setuptools
+, sphinx
+, sphinxcontrib-apidoc
+, stestr
+, subunit
+, testscenarios
+,
 }:
 
 buildPythonPackage rec {

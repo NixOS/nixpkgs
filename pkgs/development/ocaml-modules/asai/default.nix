@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  algaeff,
-  bwd,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, algaeff
+, bwd
+,
 }:
 
 buildDunePackage rec {

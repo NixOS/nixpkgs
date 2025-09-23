@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  doxygen,
-  graphviz,
-  pkg-config,
-  python3,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, doxygen
+, graphviz
+, pkg-config
+, python3
+, nix-update-script
+,
 }:
 let
   version = "4.2.0";

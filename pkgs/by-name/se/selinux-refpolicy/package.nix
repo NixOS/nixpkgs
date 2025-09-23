@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gnum4,
-  python3,
-  getopt,
-  checkpolicy,
-  policycoreutils,
-  semodule-utils,
-  policyVersion ? null,
-  moduleVersion ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gnum4
+, python3
+, getopt
+, checkpolicy
+, policycoreutils
+, semodule-utils
+, policyVersion ? null
+, moduleVersion ? null
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "selinux-refpolicy";

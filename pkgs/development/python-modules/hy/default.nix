@@ -1,15 +1,15 @@
-{
-  lib,
-  astor,
-  buildPythonPackage,
-  fetchFromGitHub,
-  funcparserlib,
-  hy,
-  pytestCheckHook,
-  python,
-  pythonOlder,
-  setuptools,
-  testers,
+{ lib
+, astor
+, buildPythonPackage
+, fetchFromGitHub
+, funcparserlib
+, hy
+, pytestCheckHook
+, python
+, pythonOlder
+, setuptools
+, testers
+,
 }:
 
 buildPythonPackage rec {

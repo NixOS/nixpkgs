@@ -1,7 +1,7 @@
-{
-  fetchgit,
-  lib,
-  stdenv,
+{ fetchgit
+, lib
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

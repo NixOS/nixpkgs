@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  qrcodegen,
-  setuptools,
-  python,
+{ lib
+, buildPythonPackage
+, qrcodegen
+, setuptools
+, python
+,
 }:
 
 buildPythonPackage rec {

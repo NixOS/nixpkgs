@@ -1,10 +1,9 @@
 # This module adds a scripted iPXE entry to the GRUB boot menu.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -55,10 +54,12 @@ in
       "ipxe.lkrn" = "${pkgs.ipxe}/ipxe.lkrn";
     }
     // builtins.listToAttrs (
-      map (name: {
-        name = name + ".ipxe";
-        value = scriptFile name;
-      }) scripts
+      map
+        (name: {
+          name = name + ".ipxe";
+          value = scriptFile name;
+        })
+        scripts
     );
   };
 

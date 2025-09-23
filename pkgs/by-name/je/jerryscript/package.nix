@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  python3,
-  validatePkgConfig,
-  versionCheckHook,
-  testers,
-  nix-update-script,
-
-  enableCmdline ? !stdenv.hostPlatform.isNone,
-  enableMath ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, python3
+, validatePkgConfig
+, versionCheckHook
+, testers
+, nix-update-script
+, enableCmdline ? !stdenv.hostPlatform.isNone
+, enableMath ? false
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "jerryscript";

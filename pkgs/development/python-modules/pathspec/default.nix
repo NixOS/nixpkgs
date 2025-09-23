@@ -1,15 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  unittestCheckHook,
-
-  # for passthru.tests
-  awsebcli,
-  black,
-  hatchling,
-  yamllint,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, unittestCheckHook
+, # for passthru.tests
+  awsebcli
+, black
+, hatchling
+, yamllint
+,
 }:
 
 buildPythonPackage rec {

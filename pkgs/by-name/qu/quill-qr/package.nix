@@ -1,12 +1,12 @@
-{
-  coreutils,
-  fetchFromGitHub,
-  gzip,
-  jq,
-  lib,
-  makeWrapper,
-  qrencode,
-  stdenvNoCC,
+{ coreutils
+, fetchFromGitHub
+, gzip
+, jq
+, lib
+, makeWrapper
+, qrencode
+, stdenvNoCC
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

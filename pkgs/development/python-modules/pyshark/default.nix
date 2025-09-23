@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  appdirs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  lxml,
-  packaging,
-  py,
-  pytestCheckHook,
-  pythonOlder,
-  termcolor,
-  wireshark-cli,
+{ lib
+, stdenv
+, appdirs
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, lxml
+, packaging
+, py
+, pytestCheckHook
+, pythonOlder
+, termcolor
+, wireshark-cli
+,
 }:
 
 buildPythonPackage rec {

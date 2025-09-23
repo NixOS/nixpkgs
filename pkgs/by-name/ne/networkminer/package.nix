@@ -1,12 +1,12 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchzip,
-  dos2unix,
-  msbuild,
-  gtk2,
-  mono,
-  dotnetCorePackages,
+{ lib
+, buildDotnetModule
+, fetchzip
+, dos2unix
+, msbuild
+, gtk2
+, mono
+, dotnetCorePackages
+,
 }:
 
 buildDotnetModule rec {

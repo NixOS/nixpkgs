@@ -1,30 +1,27 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pbr,
-  setuptools,
-  twine,
-
-  # dependencies
-  click,
-  click-completion,
-  inquirer,
-  notify-py,
-  pendulum,
-  prettytable,
-  requests,
-  validate-email,
-
-  # tests
-  factory-boy,
-  pytest-cov-stub,
-  pytest-mock,
-  pytestCheckHook,
-  versionCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pbr
+, setuptools
+, twine
+, # dependencies
+  click
+, click-completion
+, inquirer
+, notify-py
+, pendulum
+, prettytable
+, requests
+, validate-email
+, # tests
+  factory-boy
+, pytest-cov-stub
+, pytest-mock
+, pytestCheckHook
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

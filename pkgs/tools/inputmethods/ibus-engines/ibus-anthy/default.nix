@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gettext,
-  pkg-config,
-  wrapGAppsHook3,
-  anthy,
-  ibus,
-  glib,
-  gobject-introspection,
-  gtk3,
-  python3,
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, pkg-config
+, wrapGAppsHook3
+, anthy
+, ibus
+, glib
+, gobject-introspection
+, gtk3
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

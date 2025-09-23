@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  httpx,
-  pydicom,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, httpx
+, pydicom
+,
 }:
 
 buildPythonPackage rec {

@@ -1,15 +1,15 @@
-{
-  fetchFromGitHub,
-  freetype,
-  lib,
-  lua5_4,
-  meson,
-  ninja,
-  cmake,
-  pcre2,
-  pkg-config,
-  sdl3,
-  stdenv,
+{ fetchFromGitHub
+, freetype
+, lib
+, lua5_4
+, meson
+, ninja
+, cmake
+, pcre2
+, pkg-config
+, sdl3
+, stdenv
+,
 }:
 let
   pname = "lite-xl";

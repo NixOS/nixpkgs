@@ -1,48 +1,46 @@
-{
-  stdenv,
-  pkgs,
-  makeWrapper,
-  runCommand,
-  lib,
-  writeShellScript,
-  fetchFromGitHub,
-  bundlerEnv,
-  callPackage,
-  nixosTests,
-
-  ruby_3_3,
-  gzip,
-  gnutar,
-  git,
-  cacert,
-  util-linux,
-  gawk,
-  net-tools,
-  imagemagick,
-  optipng,
-  pngquant,
-  libjpeg,
-  jpegoptim,
-  gifsicle,
-  jhead,
-  oxipng,
-  libpsl,
-  redis,
-  postgresql,
-  which,
-  brotli,
-  procps,
-  rsync,
-  icu,
-  pnpm_9,
-  svgo,
-  nodejs,
-  jq,
-  moreutils,
-  terser,
-  uglify-js,
-
-  plugins ? [ ],
+{ stdenv
+, pkgs
+, makeWrapper
+, runCommand
+, lib
+, writeShellScript
+, fetchFromGitHub
+, bundlerEnv
+, callPackage
+, nixosTests
+, ruby_3_3
+, gzip
+, gnutar
+, git
+, cacert
+, util-linux
+, gawk
+, net-tools
+, imagemagick
+, optipng
+, pngquant
+, libjpeg
+, jpegoptim
+, gifsicle
+, jhead
+, oxipng
+, libpsl
+, redis
+, postgresql
+, which
+, brotli
+, procps
+, rsync
+, icu
+, pnpm_9
+, svgo
+, nodejs
+, jq
+, moreutils
+, terser
+, uglify-js
+, plugins ? [ ]
+,
 }:
 
 let
@@ -93,15 +91,14 @@ let
   };
 
   mkDiscoursePlugin =
-    {
-      name ? null,
-      pname ? null,
-      version ? null,
-      meta ? null,
-      bundlerEnvArgs ? { },
-      preserveGemsDir ? false,
-      src,
-      ...
+    { name ? null
+    , pname ? null
+    , version ? null
+    , meta ? null
+    , bundlerEnvArgs ? { }
+    , preserveGemsDir ? false
+    , src
+    , ...
     }@args:
     let
       rubyEnv = bundlerEnv (

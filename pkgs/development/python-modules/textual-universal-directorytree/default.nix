@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  textual,
-  universal-pathlib,
-  adlfs,
-  aiohttp,
-  gcsfs,
-  paramiko,
-  requests,
-  s3fs,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, textual
+, universal-pathlib
+, adlfs
+, aiohttp
+, gcsfs
+, paramiko
+, requests
+, s3fs
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

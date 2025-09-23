@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNimPackage,
-  fetchFromGitHub,
-  termbox,
-  pcre,
+{ lib
+, buildNimPackage
+, fetchFromGitHub
+, termbox
+, pcre
+,
 }:
 
 buildNimPackage (finalAttrs: {

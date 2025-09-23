@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ilmbase,
-  openexr,
-  libtiff,
-  aces-container,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ilmbase
+, openexr
+, libtiff
+, aces-container
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

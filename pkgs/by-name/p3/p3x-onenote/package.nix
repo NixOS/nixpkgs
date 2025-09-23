@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  appimageTools,
-  desktop-file-utils,
-  fetchurl,
+{ lib
+, stdenv
+, appimageTools
+, desktop-file-utils
+, fetchurl
+,
 }:
 
 let
@@ -15,16 +15,14 @@ let
       aarch64-linux = "-arm64";
       armv7l-linux = "-armv7l";
       x86_64-linux = "";
-    }
-    .${stdenv.hostPlatform.system};
+    }.${stdenv.hostPlatform.system};
 
   hash =
     {
       aarch64-linux = "sha256-FB6+0Ze3d/6QETgtMtc6GztnPdSy5s7k67qsAtFdsyM=";
       armv7l-linux = "sha256-Q45tfcGrNjd9wXt+VhXhaHrC4w68lRUIuB4cJSW5NDE=";
       x86_64-linux = "sha256-h2U9EctjyM4FlVe/pPMWugCIe9tQ4Av4/HOcWWSUNEI=";
-    }
-    .${stdenv.hostPlatform.system};
+    }.${stdenv.hostPlatform.system};
 
   src = fetchurl {
     url = "https://github.com/patrikx3/onenote/releases/download/v${version}/P3X-OneNote-${version}${plat}.AppImage";

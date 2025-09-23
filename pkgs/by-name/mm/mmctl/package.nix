@@ -1,5 +1,5 @@
-{
-  mattermost,
+{ mattermost
+,
 }:
 
 mattermost.withoutTests.server.overrideAttrs (o: {

@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  aiohttp,
-  dask,
-  fsspec,
-  numpy,
-  requests,
-  scikit-image,
-  toolz,
-  zarr,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  aiohttp
+, dask
+, fsspec
+, numpy
+, requests
+, scikit-image
+, toolz
+, zarr
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

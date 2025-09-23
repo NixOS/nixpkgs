@@ -1,13 +1,13 @@
-{
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  lib,
-  just,
-  pkg-config,
-  fd,
-  libqalculate,
-  libxkbcommon,
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, lib
+, just
+, pkg-config
+, fd
+, libqalculate
+, libxkbcommon
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  fetchurl,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, fetchurl
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 buildNpmPackage (finalAttrs: {

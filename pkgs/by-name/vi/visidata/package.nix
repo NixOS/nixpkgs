@@ -1,15 +1,15 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  # other
-  gitMinimal,
-  withPcap ? true,
-  withXclip ? stdenv.hostPlatform.isLinux,
-  xclip,
-  testers,
-  visidata,
-  stdenv,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, # other
+  gitMinimal
+, withPcap ? true
+, withXclip ? stdenv.hostPlatform.isLinux
+, xclip
+, testers
+, visidata
+, stdenv
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "visidata";

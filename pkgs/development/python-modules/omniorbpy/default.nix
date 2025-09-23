@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchurl,
-  omniorb,
-  pkg-config,
-  python,
+{ lib
+, buildPythonPackage
+, fetchurl
+, omniorb
+, pkg-config
+, python
+,
 }:
 
 buildPythonPackage rec {

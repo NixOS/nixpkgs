@@ -1,31 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-
-  # dependencies
-  azure-identity,
-  langchain-core,
-  langchain-openai,
-
-  # tests
-  freezegun,
-  lark,
-  pandas,
-  pytest-asyncio,
-  pytest-mock,
-  pytest-socket,
-  pytestCheckHook,
-  requests-mock,
-  responses,
-  syrupy,
-  toml,
-
-  # passthru
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  poetry-core
+, # dependencies
+  azure-identity
+, langchain-core
+, langchain-openai
+, # tests
+  freezegun
+, lark
+, pandas
+, pytest-asyncio
+, pytest-mock
+, pytest-socket
+, pytestCheckHook
+, requests-mock
+, responses
+, syrupy
+, toml
+, # passthru
+  gitUpdater
+,
 }:
 
 buildPythonPackage rec {

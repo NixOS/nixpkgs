@@ -1,8 +1,8 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  xrdb,
+{ lib
+, python3
+, fetchFromGitHub
+, xrdb
+,
 }:
 
 # requires openrazer-daemon to be running on the system

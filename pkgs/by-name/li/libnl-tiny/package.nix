@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchgit,
-  cmake,
+{ stdenv
+, lib
+, fetchgit
+, cmake
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,12 +1,12 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  ffmpeg,
-  lib,
-  makeBinaryWrapper,
-  nix-update-script,
-  pulseaudio,
-  testers,
+{ buildGoModule
+, fetchFromGitHub
+, ffmpeg
+, lib
+, makeBinaryWrapper
+, nix-update-script
+, pulseaudio
+, testers
+,
 }:
 let
   self = buildGoModule rec {

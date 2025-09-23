@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nodejs,
-  makeWrapper,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nodejs
+, makeWrapper
+, versionCheckHook
+, nix-update-script
+,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "jdenticon-cli";

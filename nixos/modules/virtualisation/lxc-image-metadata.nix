@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 
 let
@@ -43,19 +42,23 @@ let
         );
       in
       {
-        files = map (tpl: {
-          source = tpl.template;
-          target = "/templates/${tpl.name}.tpl";
-        }) list;
+        files = map
+          (tpl: {
+            source = tpl.template;
+            target = "/templates/${tpl.name}.tpl";
+          })
+          list;
         properties = lib.listToAttrs (
-          map (
-            tpl:
-            lib.nameValuePair tpl.target {
-              when = tpl.when;
-              template = "${tpl.name}.tpl";
-              properties = tpl.properties;
-            }
-          ) list
+          map
+            (
+              tpl:
+              lib.nameValuePair tpl.target {
+                when = tpl.when;
+                template = "${tpl.name}.tpl";
+                properties = tpl.properties;
+              }
+            )
+            list
         );
       }
     else

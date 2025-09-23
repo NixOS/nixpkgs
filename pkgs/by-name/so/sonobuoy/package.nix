@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  sonobuoy,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, sonobuoy
+,
 }:
 
 # SHA of ${version} for the tool's help output. Unfortunately this is needed in build flags.

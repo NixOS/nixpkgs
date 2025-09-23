@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  kafka-python-ng,
-  port-for,
-  pytest,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, kafka-python-ng
+, port-for
+, pytest
+,
 }:
 
 buildPythonPackage rec {

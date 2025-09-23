@@ -1,10 +1,10 @@
-{
-  cmake,
-  fetchFromGitLab,
-  mediastreamer,
-  openh264,
-  lib,
-  stdenv,
+{ cmake
+, fetchFromGitLab
+, mediastreamer
+, openh264
+, lib
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

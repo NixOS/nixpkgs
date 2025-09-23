@@ -1,15 +1,14 @@
-{
-  callPackage,
-  cairo,
-  libvterm-neovim,
-  robodoc,
-  cmake,
-  ...
+{ callPackage
+, cairo
+, libvterm-neovim
+, robodoc
+, cmake
+, ...
 }@args:
 
 callPackage ./generic.nix (
   args
-  // {
+    // {
     pname = "moony";
     version = "0.40.0";
 

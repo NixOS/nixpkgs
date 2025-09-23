@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  lockfileProgs,
-  perlPackages,
+{ lib
+, stdenv
+, fetchurl
+, lockfileProgs
+, perlPackages
+,
 }:
 
 stdenv.mkDerivation rec {

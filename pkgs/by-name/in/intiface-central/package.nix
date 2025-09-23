@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  flutter329,
-  corrosion,
-  rustPlatform,
-  cargo,
-  rustc,
-  udev,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, fetchFromGitHub
+, flutter329
+, corrosion
+, rustPlatform
+, cargo
+, rustc
+, udev
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 flutter329.buildFlutterApplication rec {

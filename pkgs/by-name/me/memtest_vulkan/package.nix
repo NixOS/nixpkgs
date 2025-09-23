@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  vulkan-loader,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, vulkan-loader
+,
 }:
 
 rustPlatform.buildRustPackage rec {

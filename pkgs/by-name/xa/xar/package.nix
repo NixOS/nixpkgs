@@ -1,33 +1,32 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  applyPatches,
-  autoreconfHook,
-  nix-update-script,
-
-  # Required dependencies.
-  openssl,
-  zlib,
-  libxml2,
-
-  # Optional dependencies.
-  e2fsprogs,
-  bzip2,
-  xz, # lzma
+{ lib
+, stdenv
+, fetchFromGitHub
+, applyPatches
+, autoreconfHook
+, nix-update-script
+, # Required dependencies.
+  openssl
+, zlib
+, libxml2
+, # Optional dependencies.
+  e2fsprogs
+, bzip2
+, xz
+, # lzma
 
   # Platform-specific dependencies.
-  acl,
-  musl-fts,
-
-  # for tests
-  testers,
-  python3,
-  libxslt, # xsltproc
-  runCommand,
-  runCommandCC,
-  makeWrapper,
-  xar,
+  acl
+, musl-fts
+, # for tests
+  testers
+, python3
+, libxslt
+, # xsltproc
+  runCommand
+, runCommandCC
+, makeWrapper
+, xar
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xar${lib.optionalString (e2fsprogs == null) "-minimal"}";
@@ -50,9 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
   #   git format-patch --zero-commit --output-directory ../pkgs/by-name/xa/xar/patches main
   patches =
     # Avoid Darwin rebuilds on staging-next
-    lib.filter (
-      p: stdenv.hostPlatform.isDarwin -> baseNameOf p != "0020-Fall-back-to-readlink-on-Linux.patch"
-    ) (lib.filesystem.listFilesRecursive ./patches);
+    lib.filter
+      (
+        p: stdenv.hostPlatform.isDarwin -> baseNameOf p != "0020-Fall-back-to-readlink-on-Linux.patch"
+      )
+      (lib.filesystem.listFilesRecursive ./patches);
 
   # We do not use or modify files outside of the xar subdirectory.
   patchFlags = [ "-p2" ];

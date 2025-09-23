@@ -1,18 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  cython,
-  pip,
-  pkgconfig,
-  setuptools,
-
-  # dependencies
-  mpi4py,
-  numpy,
-  precice,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  cython
+, pip
+, pkgconfig
+, setuptools
+, # dependencies
+  mpi4py
+, numpy
+, precice
+,
 }:
 
 buildPythonPackage rec {

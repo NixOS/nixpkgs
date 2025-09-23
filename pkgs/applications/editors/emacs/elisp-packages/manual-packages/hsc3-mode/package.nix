@@ -1,7 +1,7 @@
-{
-  melpaBuild,
-  haskell-mode,
-  haskellPackages,
+{ melpaBuild
+, haskell-mode
+, haskellPackages
+,
 }:
 
 let

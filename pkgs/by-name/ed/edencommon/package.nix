@@ -1,21 +1,17 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-
-  cmake,
-  ninja,
-
-  glog,
-  gflags,
-  folly,
-  fb303,
-  wangle,
-  fbthrift,
-  gtest,
-
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, glog
+, gflags
+, folly
+, fb303
+, wangle
+, fbthrift
+, gtest
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

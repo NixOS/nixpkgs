@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  zlib,
-  zstd,
-  openssl,
-  curl,
-  cyrus_sasl,
-  cmake,
-  ninja,
-  pkg-config,
-  deterministic-host-uname,
+{ lib
+, stdenv
+, fetchFromGitHub
+, zlib
+, zstd
+, openssl
+, curl
+, cyrus_sasl
+, cmake
+, ninja
+, pkg-config
+, deterministic-host-uname
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

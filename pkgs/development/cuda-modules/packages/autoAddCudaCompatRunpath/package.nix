@@ -3,12 +3,13 @@
 # patched elf files, but `cuda_compat` path must take precedence (otherwise,
 # it doesn't have any effect) and thus appear first. Meaning this hook must be
 # executed last.
-{
-  autoFixElfFiles,
-  cuda_compat,
-  makeSetupHook,
+{ autoFixElfFiles
+, cuda_compat
+, makeSetupHook
+,
 }:
-makeSetupHook {
+makeSetupHook
+{
   name = "auto-add-cuda-compat-runpath-hook";
   propagatedBuildInputs = [ autoFixElfFiles ];
 

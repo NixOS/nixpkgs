@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cmake,
-  cython,
-  ninja,
-  scikit-build-core,
-  numpy,
-  hypothesis,
-  pandas,
-  pytestCheckHook,
-  rapidfuzz-cpp,
-  taskflow,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, cython
+, ninja
+, scikit-build-core
+, numpy
+, hypothesis
+, pandas
+, pytestCheckHook
+, rapidfuzz-cpp
+, taskflow
+,
 }:
 
 buildPythonPackage rec {

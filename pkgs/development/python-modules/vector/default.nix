@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  numpy,
-  packaging,
-
-  # tests
-  awkward,
-  dask-awkward,
-  notebook,
-  numba,
-  papermill,
-  pytestCheckHook,
-  sympy,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  numpy
+, packaging
+, # tests
+  awkward
+, dask-awkward
+, notebook
+, numba
+, papermill
+, pytestCheckHook
+, sympy
+,
 }:
 
 buildPythonPackage rec {

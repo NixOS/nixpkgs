@@ -1,10 +1,10 @@
-{
-  lib,
-  buildFishPlugin,
-  fetchFromGitHub,
-  gnused,
-  bash,
-  coreutils,
+{ lib
+, buildFishPlugin
+, fetchFromGitHub
+, gnused
+, bash
+, coreutils
+,
 }:
 
 buildFishPlugin {

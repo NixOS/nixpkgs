@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildHomeAssistantComponent,
-  pyopensprinkler,
+{ lib
+, fetchFromGitHub
+, buildHomeAssistantComponent
+, pyopensprinkler
+,
 }:
 
 buildHomeAssistantComponent rec {

@@ -1,10 +1,10 @@
-{
-  fetchFromGitHub,
-  gawk,
-  lib,
-  runCommand,
-  stdenvNoCC,
-  writableTmpDirAsHomeHook,
+{ fetchFromGitHub
+, gawk
+, lib
+, runCommand
+, stdenvNoCC
+, writableTmpDirAsHomeHook
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

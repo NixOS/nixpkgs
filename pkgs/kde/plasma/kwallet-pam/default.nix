@@ -1,10 +1,10 @@
-{
-  lib,
-  mkKdeDerivation,
-  pkg-config,
-  pam,
-  libgcrypt,
-  socat,
+{ lib
+, mkKdeDerivation
+, pkg-config
+, pam
+, libgcrypt
+, socat
+,
 }:
 mkKdeDerivation {
   pname = "kwallet-pam";

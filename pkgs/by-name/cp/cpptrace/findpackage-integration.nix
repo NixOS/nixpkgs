@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  cmake,
-  cpptrace,
-  src,
-  checkOutput,
-  static,
+{ stdenv
+, lib
+, cmake
+, cpptrace
+, src
+, checkOutput
+, static
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

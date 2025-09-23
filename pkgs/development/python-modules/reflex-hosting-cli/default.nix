@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  charset-normalizer,
-  httpx,
-  pipdeptree,
-  platformdirs,
-  pydantic,
-  python-dateutil,
-  pyyaml,
-  rich,
-  tabulate,
-  typer,
-  websockets,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, charset-normalizer
+, httpx
+, pipdeptree
+, platformdirs
+, pydantic
+, python-dateutil
+, pyyaml
+, rich
+, tabulate
+, typer
+, websockets
+,
 }:
 
 buildPythonPackage rec {

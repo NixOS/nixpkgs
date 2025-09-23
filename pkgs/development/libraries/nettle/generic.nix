@@ -1,13 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  gmp,
-  gnum4,
-
-  # Version specific args
-  version,
-  src,
+{ lib
+, stdenv
+, buildPackages
+, gmp
+, gnum4
+, # Version specific args
+  version
+, src
+,
 }:
 
 stdenv.mkDerivation {

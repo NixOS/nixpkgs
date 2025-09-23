@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  autoPatchelfHook,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dbus,
-  dotnetCorePackages,
+{ lib
+, stdenv
+, autoPatchelfHook
+, buildDotnetModule
+, fetchFromGitHub
+, dbus
+, dotnetCorePackages
+,
 }:
 
 buildDotnetModule (finalAttrs: {

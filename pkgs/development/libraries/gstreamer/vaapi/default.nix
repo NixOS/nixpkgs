@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gst-plugins-base,
-  bzip2,
-  libva,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  libdrm,
-  udev,
-  xorg,
-  libGLU,
-  libGL,
-  gstreamer,
-  gst-plugins-bad,
-  nasm,
-  libvpx,
-  python3,
-  # Checks meson.is_cross_build(), so even canExecute isn't enough.
-  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
-  hotdoc,
-  directoryListingUpdater,
-  apple-sdk_gstreamer,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gst-plugins-base
+, bzip2
+, libva
+, wayland
+, wayland-protocols
+, wayland-scanner
+, libdrm
+, udev
+, xorg
+, libGLU
+, libGL
+, gstreamer
+, gst-plugins-bad
+, nasm
+, libvpx
+, python3
+, # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform
+, hotdoc
+, directoryListingUpdater
+, apple-sdk_gstreamer
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

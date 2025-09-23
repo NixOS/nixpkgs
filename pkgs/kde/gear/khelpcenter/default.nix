@@ -1,11 +1,11 @@
-{
-  mkKdeDerivation,
-  replaceVars,
-  qtwebengine,
-  xapian,
-  man-db,
-  python3,
-  kio-extras,
+{ mkKdeDerivation
+, replaceVars
+, qtwebengine
+, xapian
+, man-db
+, python3
+, kio-extras
+,
 }:
 mkKdeDerivation {
   pname = "khelpcenter";

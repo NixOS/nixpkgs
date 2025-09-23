@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  pkg-config,
-  ninja,
-  liblo,
-  libjack2,
-  fltk,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, liblo
+, libjack2
+, fltk
+,
 }:
 
 stdenv.mkDerivation rec {

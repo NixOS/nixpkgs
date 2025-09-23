@@ -1,27 +1,24 @@
-{
-  lib,
-  stdenv,
-
-  fetchFromGitHub,
-  fetchYarnDeps,
-  replaceVars,
-  writeShellScriptBin,
-
-  copyDesktopItems,
-  cctools,
-  clojure,
-  darwin,
-  makeDesktopItem,
-  makeWrapper,
-  nodejs,
-  removeReferencesTo,
-  yarnBuildHook,
-  yarnConfigHook,
-  xcbuild,
-  zip,
-
-  electron,
-  git,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, replaceVars
+, writeShellScriptBin
+, copyDesktopItems
+, cctools
+, clojure
+, darwin
+, makeDesktopItem
+, makeWrapper
+, nodejs
+, removeReferencesTo
+, yarnBuildHook
+, yarnConfigHook
+, xcbuild
+, zip
+, electron
+, git
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  makeWrapper,
-  pkg-config,
-  bash,
-  libusb1,
-  qt5,
-  wget,
-  zenity,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, pkg-config
+, bash
+, libusb1
+, qt5
+, wget
+, zenity
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

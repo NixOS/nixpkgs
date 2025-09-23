@@ -1,9 +1,9 @@
-{
-  lib,
-  asciidoctor,
-  fetchFromGitLab,
-  ncurses,
-  stdenv,
+{ lib
+, asciidoctor
+, fetchFromGitLab
+, ncurses
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  scribus,
+{ lib
+, python3
+, fetchFromGitHub
+, scribus
+,
 }:
 
 python3.pkgs.buildPythonApplication {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ant,
-  jdk,
-  hdf4,
-  hdf5,
-  makeDesktopItem,
-  copyDesktopItems,
-  strip-nondeterminism,
-  stripJavaArchivesHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ant
+, jdk
+, hdf4
+, hdf5
+, makeDesktopItem
+, copyDesktopItems
+, strip-nondeterminism
+, stripJavaArchivesHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pymupdf,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pymupdf
+,
 }:
 
 buildPythonPackage rec {

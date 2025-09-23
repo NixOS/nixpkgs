@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
+{ lib
+, stdenvNoCC
+, fetchzip
+,
 }:
 
 # Source Serif Pro got renamed to Source Serif 4 (see

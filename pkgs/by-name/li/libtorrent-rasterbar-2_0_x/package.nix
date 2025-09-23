@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  zlib,
-  boost,
-  openssl,
-  python3,
-  ncurses,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, zlib
+, boost
+, openssl
+, python3
+, ncurses
+,
 }:
 
 let

@@ -1,8 +1,8 @@
-{
-  mkDerivation,
-  base,
-  containers,
-  lib,
+{ mkDerivation
+, base
+, containers
+, lib
+,
 }:
 
 mkDerivation {

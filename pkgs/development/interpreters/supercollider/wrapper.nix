@@ -1,8 +1,8 @@
-{
-  symlinkJoin,
-  makeWrapper,
-  supercollider,
-  plugins,
+{ symlinkJoin
+, makeWrapper
+, supercollider
+, plugins
+,
 }:
 
 symlinkJoin {

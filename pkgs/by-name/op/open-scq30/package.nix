@@ -1,18 +1,18 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  protobuf,
-  wrapGAppsHook4,
-  cairo,
-  dbus,
-  gdk-pixbuf,
-  glib,
-  gtk4,
-  libadwaita,
-  pango,
-  cargo-make,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, protobuf
+, wrapGAppsHook4
+, cairo
+, dbus
+, gdk-pixbuf
+, glib
+, gtk4
+, libadwaita
+, pango
+, cargo-make
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,7 +1,7 @@
-{
-  lib,
-  pkgs,
-  config,
+{ lib
+, pkgs
+, config
+,
 }:
 
 lib.makeScope pkgs.newScope (
@@ -29,7 +29,7 @@ lib.makeScope pkgs.newScope (
     graalvm-oracle_17 = self.callPackage ./graalvm-oracle { version = "17"; };
     graalvm-oracle = self.graalvm-oracle_25;
   }
-  // lib.optionalAttrs config.allowAliases {
+    // lib.optionalAttrs config.allowAliases {
     graalvm-oracle_22 = throw "GraalVM 22 is EOL, use a newer version instead";
     graalvm-oracle_23 = throw "GraalVM 23 is EOL, use a newer version instead";
     graalvm-oracle_24 = throw "GraalVM 24 is EOL, use a newer version instead";

@@ -1,20 +1,20 @@
-{
-  lib,
-  boto3,
-  buildPythonPackage,
-  celery,
-  django-storages,
-  django,
-  fetchFromGitHub,
-  flit-core,
-  flit-scm,
-  gitMinimal,
-  mock,
-  pytest-cov-stub,
-  pytest-django,
-  pytestCheckHook,
-  redis,
-  sphinx,
+{ lib
+, boto3
+, buildPythonPackage
+, celery
+, django-storages
+, django
+, fetchFromGitHub
+, flit-core
+, flit-scm
+, gitMinimal
+, mock
+, pytest-cov-stub
+, pytest-django
+, pytestCheckHook
+, redis
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

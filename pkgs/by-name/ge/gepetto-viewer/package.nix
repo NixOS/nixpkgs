@@ -1,21 +1,21 @@
-{
-  boost,
-  cmake,
-  darwin,
-  doxygen,
-  fetchFromGitHub,
-  fontconfig,
-  lib,
-  jrl-cmakemodules,
-  libsForQt5,
-  makeWrapper,
-  openscenegraph,
-  osgqt,
-  pkg-config,
-  python3Packages,
-  qgv,
-  stdenv,
-  runCommand,
+{ boost
+, cmake
+, darwin
+, doxygen
+, fetchFromGitHub
+, fontconfig
+, lib
+, jrl-cmakemodules
+, libsForQt5
+, makeWrapper
+, openscenegraph
+, osgqt
+, pkg-config
+, python3Packages
+, qgv
+, stdenv
+, runCommand
+,
 }:
 let
   gepetto-viewer = stdenv.mkDerivation (finalAttrs: {

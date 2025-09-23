@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  deepdiff,
-  eval-type-backport,
-  fetchFromGitHub,
-  llama-cloud,
-  llama-index-core,
-  platformdirs,
-  hatchling,
-  pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  python-dotenv,
+{ lib
+, buildPythonPackage
+, click
+, deepdiff
+, eval-type-backport
+, fetchFromGitHub
+, llama-cloud
+, llama-index-core
+, platformdirs
+, hatchling
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, python-dotenv
+,
 }:
 
 buildPythonPackage rec {

@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-  cmdstan,
-  setuptools,
-  pandas,
-  numpy,
-  tqdm,
-  stanio,
-  xarray,
-  pytestCheckHook,
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, cmdstan
+, setuptools
+, pandas
+, numpy
+, tqdm
+, stanio
+, xarray
+, pytestCheckHook
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

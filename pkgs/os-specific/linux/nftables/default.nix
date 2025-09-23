@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  bison,
-  flex,
-  asciidoc,
-  libxslt,
-  findXMLCatalogs,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  libmnl,
-  libnftnl,
-  libpcap,
-  gmp,
-  jansson,
-  autoreconfHook,
-  withDebugSymbols ? false,
-  withCli ? true,
-  libedit,
-  withXtables ? true,
-  iptables,
-  nixosTests,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, bison
+, flex
+, asciidoc
+, libxslt
+, findXMLCatalogs
+, docbook_xml_dtd_45
+, docbook_xsl
+, libmnl
+, libnftnl
+, libpcap
+, gmp
+, jansson
+, autoreconfHook
+, withDebugSymbols ? false
+, withCli ? true
+, libedit
+, withXtables ? true
+, iptables
+, nixosTests
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

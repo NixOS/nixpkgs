@@ -1,20 +1,20 @@
-{
-  fetchFromGitLab,
-  lib,
-  meson,
-  ninja,
-  python3,
-  weston,
-  xorg,
-  xwayland,
-  withCage ? false,
-  cage,
-  withKwin ? false,
-  kdePackages,
-  withMutter ? false,
-  gnome,
-  withDbus ? withMutter,
-  dbus, # Since 0.0.3, mutter compositors run with their own DBUS sessions
+{ fetchFromGitLab
+, lib
+, meson
+, ninja
+, python3
+, weston
+, xorg
+, xwayland
+, withCage ? false
+, cage
+, withKwin ? false
+, kdePackages
+, withMutter ? false
+, gnome
+, withDbus ? withMutter
+, dbus
+, # Since 0.0.3, mutter compositors run with their own DBUS sessions
 }:
 let
   compositors = [

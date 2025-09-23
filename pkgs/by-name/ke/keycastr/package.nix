@@ -1,8 +1,8 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchurl,
-  unzip,
+{ stdenvNoCC
+, lib
+, fetchurl
+, unzip
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "keycastr";

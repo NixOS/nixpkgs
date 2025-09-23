@@ -1,23 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pybind11,
-  setuptools,
-
-  # dependencies
-  numpy,
-
-  # tests
-  cirq-core,
-  matplotlib,
-  networkx,
-  pandas,
-  pytest-xdist,
-  pytestCheckHook,
-  scipy,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pybind11
+, setuptools
+, # dependencies
+  numpy
+, # tests
+  cirq-core
+, matplotlib
+, networkx
+, pandas
+, pytest-xdist
+, pytestCheckHook
+, scipy
+,
 }:
 
 buildPythonPackage rec {

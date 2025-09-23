@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  runCommand,
-  yallback,
-  yara,
+{ lib
+, fetchFromGitHub
+, runCommand
+, yallback
+, yara
+,
 }:
 
 /*
@@ -89,10 +89,10 @@ rec {
     is the source for the next. See resholve for an example.)
   */
   collect =
-    {
-      lore ? loreDef,
-      drvs,
-      strip ? [ ],
+    { lore ? loreDef
+    , drvs
+    , strip ? [ ]
+    ,
     }:
     (runCommand "more-binlore" { } ''
       mkdir $out
@@ -134,20 +134,20 @@ rec {
           ${lore.callback lore drv}
         ''
         +
-          # append lore from package's $out and drv.binlore.${drv.outputName} (last entry wins)
-          ''
-            for lore_type in ${builtins.toString lore.types}; do
-              if [[ -f "${drv}/nix-support/$lore_type" ]]; then
-                cat "${drv}/nix-support/$lore_type" >> "$out/$lore_type"
-              fi
-          ''
+        # append lore from package's $out and drv.binlore.${drv.outputName} (last entry wins)
+        ''
+          for lore_type in ${builtins.toString lore.types}; do
+            if [[ -f "${drv}/nix-support/$lore_type" ]]; then
+              cat "${drv}/nix-support/$lore_type" >> "$out/$lore_type"
+            fi
+        ''
         +
-          lib.optionalString (builtins.hasAttr "binlore" drv && builtins.hasAttr drv.outputName drv.binlore)
-            ''
-              if [[ -f "${drv.binlore."${drv.outputName}"}/$lore_type" ]]; then
-                cat "${drv.binlore."${drv.outputName}"}/$lore_type" >> "$out/$lore_type"
-              fi
-            ''
+        lib.optionalString (builtins.hasAttr "binlore" drv && builtins.hasAttr drv.outputName drv.binlore)
+          ''
+            if [[ -f "${drv.binlore."${drv.outputName}"}/$lore_type" ]]; then
+              cat "${drv.binlore."${drv.outputName}"}/$lore_type" >> "$out/$lore_type"
+            fi
+          ''
         + ''
           done
 

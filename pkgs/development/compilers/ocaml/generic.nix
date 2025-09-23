@@ -1,36 +1,35 @@
-{
-  minor_version,
-  major_version,
-  patch_version,
-  patches ? [ ],
-  ...
+{ minor_version
+, major_version
+, patch_version
+, patches ? [ ]
+, ...
 }@args:
 let
   versionNoPatch = "${toString major_version}.${toString minor_version}";
   version = "${versionNoPatch}.${toString patch_version}";
   safeX11 =
     stdenv:
-    !(stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isMips || stdenv.hostPlatform.isStatic);
+      !(stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isMips || stdenv.hostPlatform.isStatic);
 in
 
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  binutils,
-  buildEnv,
-  libunwind,
-  fetchpatch,
-  libX11,
-  xorgproto,
-  useX11 ? safeX11 stdenv && lib.versionOlder version "4.09",
-  aflSupport ? false,
-  flambdaSupport ? false,
-  spaceTimeSupport ? false,
-  unsafeStringSupport ? false,
-  framePointerSupport ? false,
-  noNakedPointers ? false,
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, binutils
+, buildEnv
+, libunwind
+, fetchpatch
+, libX11
+, xorgproto
+, useX11 ? safeX11 stdenv && lib.versionOlder version "4.09"
+, aflSupport ? false
+, flambdaSupport ? false
+, spaceTimeSupport ? false
+, unsafeStringSupport ? false
+, framePointerSupport ? false
+, noNakedPointers ? false
+,
 }:
 
 assert useX11 -> safeX11 stdenv;
@@ -84,7 +83,7 @@ in
 
 stdenv.mkDerivation (
   args
-  // {
+    // {
 
     inherit pname version src;
 
@@ -97,11 +96,12 @@ stdenv.mkDerivation (
       let
         flags = new: old: if lib.versionAtLeast version "4.08" then new else old;
       in
-      optionals useX11 (
-        flags
-          [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}" ]
-          [ "-x11lib" x11lib "-x11include" x11inc ]
-      )
+      optionals useX11
+        (
+          flags
+            [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}" ]
+            [ "-x11lib" x11lib "-x11include" x11inc ]
+        )
       ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
       ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
       ++ optional spaceTimeSupport (flags "--enable-spacetime" "-spacetime")

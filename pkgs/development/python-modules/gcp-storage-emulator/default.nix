@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  fs,
-  google-cloud-storage,
-  google-crc32c,
-  pytestCheckHook,
-  pytest-cov-stub,
-  requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, fs
+, google-cloud-storage
+, google-crc32c
+, pytestCheckHook
+, pytest-cov-stub
+, requests
+,
 }:
 
 buildPythonPackage rec {

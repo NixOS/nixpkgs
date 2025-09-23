@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  gitUpdater,
-  pkg-config,
-  meson,
-  ninja,
-  libevdev,
-  mtdev,
-  udev,
-  libwacom,
-  documentationSupport ? false,
-  doxygen,
-  graphviz,
-  runCommand,
-  eventGUISupport ? false,
-  cairo,
-  glib,
-  gtk3,
-  testsSupport ? false,
-  check,
-  valgrind,
-  python3,
-  nixosTests,
-  wayland-scanner,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, gitUpdater
+, pkg-config
+, meson
+, ninja
+, libevdev
+, mtdev
+, udev
+, libwacom
+, documentationSupport ? false
+, doxygen
+, graphviz
+, runCommand
+, eventGUISupport ? false
+, cairo
+, glib
+, gtk3
+, testsSupport ? false
+, check
+, valgrind
+, python3
+, nixosTests
+, wayland-scanner
+, udevCheckHook
+,
 }:
 
 let
@@ -41,7 +41,7 @@ let
       );
     in
     # Expose only the sphinx-build binary to avoid contaminating
-    # everything with Sphinx’s Python environment.
+      # everything with Sphinx’s Python environment.
     runCommand "sphinx-build" { } ''
       mkdir -p "$out/bin"
       ln -s "${env}/bin/sphinx-build" "$out/bin"

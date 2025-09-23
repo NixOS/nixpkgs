@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  atk,
-  gobject-introspection,
-  wrapGAppsHook3,
-  click,
-  hidapi,
-  psutil,
-  pygobject3,
-  udevCheckHook,
-  stdenv,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, atk
+, gobject-introspection
+, wrapGAppsHook3
+, click
+, hidapi
+, psutil
+, pygobject3
+, udevCheckHook
+, stdenv
+,
 }:
 
 buildPythonApplication rec {

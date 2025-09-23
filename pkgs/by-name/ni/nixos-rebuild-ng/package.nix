@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  installShellFiles,
-  mkShell,
-  nix,
-  python3,
-  python3Packages,
-  runCommand,
-  scdoc,
-  withNgSuffix ? true,
-  withReexec ? false,
-  withShellFiles ? true,
-  # Very long tmp dirs lead to "too long for Unix domain socket"
+{ lib
+, stdenv
+, callPackage
+, installShellFiles
+, mkShell
+, nix
+, python3
+, python3Packages
+, runCommand
+, scdoc
+, withNgSuffix ? true
+, withReexec ? false
+, withShellFiles ? true
+, # Very long tmp dirs lead to "too long for Unix domain socket"
   # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
-  withTmpdir ? if stdenv.hostPlatform.isDarwin then "/tmp" else null,
-  # passthru.tests
-  nixosTests,
-  nixVersions,
-  lixPackageSets,
-  nixos-rebuild-ng,
+  withTmpdir ? if stdenv.hostPlatform.isDarwin then "/tmp" else null
+, # passthru.tests
+  nixosTests
+, nixVersions
+, lixPackageSets
+, nixos-rebuild-ng
+,
 }:
 let
   executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";

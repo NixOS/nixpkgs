@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitea,
-  pytest-mock,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitea
+, pytest-mock
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

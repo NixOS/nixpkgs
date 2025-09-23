@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  libbsd,
-  openssl,
-  libmilter,
-  autoreconfHook,
-  perl,
-  makeWrapper,
-  unbound,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libbsd
+, openssl
+, libmilter
+, autoreconfHook
+, perl
+, makeWrapper
+, unbound
+,
 }:
 
 stdenv.mkDerivation rec {

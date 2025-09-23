@@ -1,16 +1,16 @@
-{
-  stdenv,
-  autoreconfHook,
-  lib,
-  fetchFromGitHub,
-  util-linux,
-  mergerfs,
-  attr,
-  makeWrapper,
-  pandoc,
-  coreutils,
-  installShellFiles,
-  versionCheckHook,
+{ stdenv
+, autoreconfHook
+, lib
+, fetchFromGitHub
+, util-linux
+, mergerfs
+, attr
+, makeWrapper
+, pandoc
+, coreutils
+, installShellFiles
+, versionCheckHook
+,
 }:
 stdenv.mkDerivation {
   pname = "try";

@@ -1,11 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  versionCheckHook,
-
-  pkg-config,
-  libudev-zero,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, versionCheckHook
+, pkg-config
+, libudev-zero
+,
 }:
 
 rustPlatform.buildRustPackage rec {

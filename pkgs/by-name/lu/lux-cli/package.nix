@@ -1,19 +1,19 @@
-{
-  fetchFromGitHub,
-  gnupg,
-  gpgme,
-  installShellFiles,
-  lib,
-  libgit2,
-  libgpg-error,
-  lua5_4,
-  makeWrapper,
-  nix,
-  openssl,
-  perl,
-  pkg-config,
-  rustPlatform,
-  versionCheckHook,
+{ fetchFromGitHub
+, gnupg
+, gpgme
+, installShellFiles
+, lib
+, libgit2
+, libgpg-error
+, lua5_4
+, makeWrapper
+, nix
+, openssl
+, perl
+, pkg-config
+, rustPlatform
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  buildPythonPackage,
-  a2wsgi,
-  uvicorn,
-  httpx,
-  pytestCheckHook,
-  pytest-mock,
-  trustme,
-  typing-extensions,
-  watchgod,
-  wsproto,
+{ stdenv
+, buildPythonPackage
+, a2wsgi
+, uvicorn
+, httpx
+, pytestCheckHook
+, pytest-mock
+, trustme
+, typing-extensions
+, watchgod
+, wsproto
+,
 }:
 
 buildPythonPackage {

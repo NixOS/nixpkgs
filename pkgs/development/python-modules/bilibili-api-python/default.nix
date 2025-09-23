@@ -1,26 +1,26 @@
-{
-  aiohttp,
-  apscheduler,
-  beautifulsoup4,
-  brotli,
-  buildPythonPackage,
-  colorama,
-  fetchPypi,
-  httpx,
-  lib,
-  lxml,
-  pillow,
-  pycryptodomex,
-  pyjwt,
-  pyyaml,
-  qrcode,
-  qrcode-terminal,
-  rsa,
-  setuptools,
-  setuptools-scm,
-  tqdm,
-  yarl,
-  nix-update-script,
+{ aiohttp
+, apscheduler
+, beautifulsoup4
+, brotli
+, buildPythonPackage
+, colorama
+, fetchPypi
+, httpx
+, lib
+, lxml
+, pillow
+, pycryptodomex
+, pyjwt
+, pyyaml
+, qrcode
+, qrcode-terminal
+, rsa
+, setuptools
+, setuptools-scm
+, tqdm
+, yarl
+, nix-update-script
+,
 }:
 buildPythonPackage rec {
   pname = "bilibili-api-python";

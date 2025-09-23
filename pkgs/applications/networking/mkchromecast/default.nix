@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3Packages,
-  sox,
-  flac,
-  lame,
-  wrapQtAppsHook,
-  ffmpeg,
-  vorbis-tools,
-  pulseaudio,
-  nodejs,
-  youtube-dl,
-  opusTools,
-  gst_all_1,
-  enableSonos ? true,
-  qtwayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, sox
+, flac
+, lame
+, wrapQtAppsHook
+, ffmpeg
+, vorbis-tools
+, pulseaudio
+, nodejs
+, youtube-dl
+, opusTools
+, gst_all_1
+, enableSonos ? true
+, qtwayland
+,
 }:
 let
   packages = [

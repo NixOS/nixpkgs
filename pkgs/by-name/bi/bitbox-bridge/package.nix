@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  libudev-zero,
-  nixosTests,
-  nix-update-script,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, libudev-zero
+, nixosTests
+, nix-update-script
+, udevCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

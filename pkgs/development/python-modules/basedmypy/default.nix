@@ -1,32 +1,28 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  pythonAtLeast,
-  pythonOlder,
-  stdenv,
-
-  # build-system
-  setuptools,
-  types-psutil,
-  types-setuptools,
-
-  # propagates
-  basedtyping,
-  mypy-extensions,
-  tomli,
-  typing-extensions,
-
-  # optionals
-  lxml,
-  psutil,
-
-  # tests
-  attrs,
-  filelock,
-  pytest-xdist,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, nix-update-script
+, pythonAtLeast
+, pythonOlder
+, stdenv
+, # build-system
+  setuptools
+, types-psutil
+, types-setuptools
+, # propagates
+  basedtyping
+, mypy-extensions
+, tomli
+, typing-extensions
+, # optionals
+  lxml
+, psutil
+, # tests
+  attrs
+, filelock
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {
@@ -126,11 +122,11 @@ buildPythonPackage rec {
     "mypyc/test/test_run.py"
   ]
   ++
-    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 && pythonOlder "3.13")
-      [
-        # mypy/test/testsolve.py::SolveSuite::test_simple_constraints_with_dynamic_type: [Any | A] != [Any]
-        "mypy/test/testsolve.py"
-      ];
+  lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 && pythonOlder "3.13")
+    [
+      # mypy/test/testsolve.py::SolveSuite::test_simple_constraints_with_dynamic_type: [Any | A] != [Any]
+      "mypy/test/testsolve.py"
+    ];
 
   passthru.updateScript = nix-update-script { };
 

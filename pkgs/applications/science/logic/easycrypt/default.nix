@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  darwin,
-  fetchFromGitHub,
-  ocamlPackages,
-  why3,
-  python3,
+{ lib
+, stdenv
+, darwin
+, fetchFromGitHub
+, ocamlPackages
+, why3
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

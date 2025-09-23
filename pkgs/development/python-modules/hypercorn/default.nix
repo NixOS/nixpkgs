@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  aioquic,
-  cacert,
-  h11,
-  h2,
-  httpx,
-  priority,
-  trio,
-  uvloop,
-  wsproto,
-  poetry-core,
-  pytest-asyncio,
-  pytest-trio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, aioquic
+, cacert
+, h11
+, h2
+, httpx
+, priority
+, trio
+, uvloop
+, wsproto
+, poetry-core
+, pytest-asyncio
+, pytest-trio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

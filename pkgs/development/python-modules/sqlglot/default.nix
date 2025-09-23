@@ -1,18 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  python-dateutil,
-
-  # tests
-  pytestCheckHook,
-  duckdb,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  python-dateutil
+, # tests
+  pytestCheckHook
+, duckdb
+,
 }:
 
 buildPythonPackage rec {

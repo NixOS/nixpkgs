@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  writeScript,
-  pkg-config,
-  fetchurl,
-  libiconv,
+{ lib
+, stdenv
+, writeScript
+, pkg-config
+, fetchurl
+, libiconv
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "luit";

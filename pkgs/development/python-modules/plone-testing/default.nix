@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  zope-testing,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, zope-testing
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

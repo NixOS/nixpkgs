@@ -1,22 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  fsspec,
-  numpy,
-  packaging,
-  psutil,
-  pyre-extensions,
-  tabulate,
-  tensorboard,
-  torch,
-  tqdm,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  setuptools
+, # dependencies
+  fsspec
+, numpy
+, packaging
+, psutil
+, pyre-extensions
+, tabulate
+, tensorboard
+, torch
+, tqdm
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

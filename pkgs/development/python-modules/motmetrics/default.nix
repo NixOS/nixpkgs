@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  numpy,
-  pandas,
-  scipy,
-  xmltodict,
-
-  # tests
-  pytestCheckHook,
-  pytest-benchmark,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  numpy
+, pandas
+, scipy
+, xmltodict
+, # tests
+  pytestCheckHook
+, pytest-benchmark
+,
 }:
 
 let

@@ -1,25 +1,25 @@
-{
-  autoreconfHook,
-  cairo,
-  cppunit,
-  fetchFromGitHub,
-  fetchpatch,
-  fetchNpmDeps,
-  lib,
-  libcap,
-  libpng,
-  libreoffice-collabora,
-  nodejs,
-  npmHooks,
-  pam,
-  pango,
-  pixman,
-  pkg-config,
-  poco,
-  python3,
-  rsync,
-  stdenv,
-  zstd,
+{ autoreconfHook
+, cairo
+, cppunit
+, fetchFromGitHub
+, fetchpatch
+, fetchNpmDeps
+, lib
+, libcap
+, libpng
+, libreoffice-collabora
+, nodejs
+, npmHooks
+, pam
+, pango
+, pixman
+, pkg-config
+, poco
+, python3
+, rsync
+, stdenv
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,15 +1,15 @@
-{
-  lib,
-  aiohttp,
-  async-lru,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  oauthlib,
-  pytestCheckHook,
-  requests-oauthlib,
-  requests,
-  vcrpy,
+{ lib
+, aiohttp
+, async-lru
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, oauthlib
+, pytestCheckHook
+, requests-oauthlib
+, requests
+, vcrpy
+,
 }:
 
 buildPythonPackage rec {

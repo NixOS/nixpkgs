@@ -1,12 +1,12 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  wrapGAppsHook4,
-  gobject-introspection,
-  gtk4-layer-shell,
-  libadwaita,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, wrapGAppsHook4
+, gobject-introspection
+, gtk4-layer-shell
+, libadwaita
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonPackage rec {

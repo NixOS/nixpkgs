@@ -1,7 +1,7 @@
 # This file gets copied into the installation
 
-{
-  evalConfig ? import <nixpkgs/nixos/lib/eval-config.nix>,
+{ evalConfig ? import <nixpkgs/nixos/lib/eval-config.nix>
+,
 }:
 
 evalConfig {

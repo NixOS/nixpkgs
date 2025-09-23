@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  options,
-  ...
+{ config
+, lib
+, pkgs
+, options
+, ...
 }:
 let
 
@@ -50,7 +49,8 @@ in
       "python3"
       "pkgs"
       "jupyter"
-    ] { };
+    ]
+      { };
 
     extraPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;

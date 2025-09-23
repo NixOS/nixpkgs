@@ -1,15 +1,15 @@
-{
-  lib,
-  beautifulsoup4,
-  buildPythonPackage,
-  fetchFromGitHub,
-  google-auth,
-  grpcio,
-  protobuf,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, beautifulsoup4
+, buildPythonPackage
+, fetchFromGitHub
+, google-auth
+, grpcio
+, protobuf
+, pytestCheckHook
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

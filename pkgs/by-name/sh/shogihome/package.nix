@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  makeWrapper,
-  electron_37,
-  vulkan-loader,
-  makeDesktopItem,
-  copyDesktopItems,
-  commandLineArgs ? [ ],
-  nix-update-script,
-  _experimental-update-script-combinators,
-  writeShellApplication,
-  nix,
-  jq,
-  gnugrep,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, makeWrapper
+, electron_37
+, vulkan-loader
+, makeDesktopItem
+, copyDesktopItems
+, commandLineArgs ? [ ]
+, nix-update-script
+, _experimental-update-script-combinators
+, writeShellApplication
+, nix
+, jq
+, gnugrep
+,
 }:
 
 let

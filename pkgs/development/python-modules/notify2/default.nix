@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchPypi,
-  pygobject3,
-  dbus-python,
+{ buildPythonPackage
+, lib
+, fetchPypi
+, pygobject3
+, dbus-python
+,
 }:
 
 buildPythonPackage rec {

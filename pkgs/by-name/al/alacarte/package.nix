@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitLab,
-  python3,
-  autoconf,
-  automake,
-  gettext,
-  pkg-config,
-  libxslt,
-  gobject-introspection,
-  wrapGAppsHook3,
-  gnome-menus,
-  glib,
-  gtk3,
-  docbook_xsl,
-  nix-update-script,
+{ lib
+, fetchFromGitLab
+, python3
+, autoconf
+, automake
+, gettext
+, pkg-config
+, libxslt
+, gobject-introspection
+, wrapGAppsHook3
+, gnome-menus
+, glib
+, gtk3
+, docbook_xsl
+, nix-update-script
+,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "alacarte";

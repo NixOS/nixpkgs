@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  which,
-  buildPackages,
-  libxcrypt,
-  libiconv,
-  enableStatic ? stdenv.hostPlatform.isStatic,
-  enableMinimal ? false,
-  extraConfig ? "",
+{ stdenv
+, lib
+, fetchFromGitHub
+, which
+, buildPackages
+, libxcrypt
+, libiconv
+, enableStatic ? stdenv.hostPlatform.isStatic
+, enableMinimal ? false
+, extraConfig ? ""
+,
 }:
 
 let

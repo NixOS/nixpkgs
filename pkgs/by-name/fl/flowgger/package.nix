@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  pkg-config,
-  openssl,
-  capnproto,
+{ lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, openssl
+, capnproto
+,
 }:
 
 rustPlatform.buildRustPackage rec {

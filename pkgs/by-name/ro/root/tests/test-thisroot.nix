@@ -1,19 +1,19 @@
-{
-  lib,
-  runCommand,
-  root,
-  bash,
-  fish,
-  tcsh,
-  zsh,
+{ lib
+, runCommand
+, root
+, bash
+, fish
+, tcsh
+, zsh
+,
 }:
 runCommand "test-thisroot"
-  {
-    meta = with lib; {
-      description = "Test for root thisroot.* sourcing";
-      maintainers = unique ((with maintainers; [ ShamrockLee ]) ++ root.meta.maintainers);
-    };
-  }
+{
+  meta = with lib; {
+    description = "Test for root thisroot.* sourcing";
+    maintainers = unique ((with maintainers; [ ShamrockLee ]) ++ root.meta.maintainers);
+  };
+}
   ''
     set -eu -o pipefail
     declare -a shellNameArray shellOutpathArray sourcefileNameArray sourceCommandArray

@@ -1,9 +1,9 @@
-{
-  cinny-unwrapped,
-  jq,
-  stdenvNoCC,
-  writeText,
-  conf ? { },
+{ cinny-unwrapped
+, jq
+, stdenvNoCC
+, writeText
+, conf ? { }
+,
 }:
 let
   configOverrides = writeText "cinny-config-overrides.json" (builtins.toJSON conf);

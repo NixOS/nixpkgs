@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  maison,
-  pdm-backend,
-  pytest-freezegun,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
-  ruyaml,
-  setuptools,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, maison
+, pdm-backend
+, pytest-freezegun
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, ruyaml
+, setuptools
+, writableTmpDirAsHomeHook
+,
 }:
 let
   maison143 = maison.overridePythonAttrs (old: rec {

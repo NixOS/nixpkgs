@@ -1,20 +1,19 @@
-{
-  lib,
-  callPackage,
-  stdenvNoCC,
-  writeShellScript,
+{ lib
+, callPackage
+, stdenvNoCC
+, writeShellScript
+,
 }:
 let
   root = ./.;
   updateScript = ./update.py;
 
   mkYaziPlugin =
-    args@{
-      pname,
-      src,
-      meta ? { },
-      installPhase ? null,
-      ...
+    args@{ pname
+    , src
+    , meta ? { }
+    , installPhase ? null
+    , ...
     }:
     let
       # Extract the plugin name from pname (removing .yazi suffix if present)
@@ -27,8 +26,8 @@ let
           if installPhase != null then
             installPhase
           else if (src ? owner && src.owner == "yazi-rs") then
-            # NOTE: License is a relative symbolic link
-            # We remove the link and copy the true license
+          # NOTE: License is a relative symbolic link
+          # We remove the link and copy the true license
             ''
               runHook preInstall
 
@@ -39,7 +38,7 @@ let
               runHook postInstall
             ''
           else
-            # Normal plugins don't require special installation other than to copy their contents.
+          # Normal plugins don't require special installation other than to copy their contents.
             ''
               runHook preInstall
 
@@ -76,6 +75,6 @@ lib.pipe root [
   (lib.filterAttrs (_: type: type == "directory"))
   (builtins.mapAttrs (name: _: call name))
 ]
-// {
+  // {
   inherit mkYaziPlugin;
 }

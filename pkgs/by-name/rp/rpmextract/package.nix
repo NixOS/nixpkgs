@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  rpm,
-  cpio,
-  replaceVarsWith,
+{ lib
+, stdenv
+, rpm
+, cpio
+, replaceVarsWith
+,
 }:
 
 stdenv.mkDerivation {

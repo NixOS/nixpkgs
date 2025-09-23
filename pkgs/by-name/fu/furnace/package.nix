@@ -1,30 +1,30 @@
-{
-  stdenv,
-  lib,
-  testers,
-  furnace,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  makeWrapper,
-  fftw,
-  fmt,
-  freetype,
-  libsndfile,
-  libX11,
-  libGL,
-  rtmidi,
-  SDL2,
-  zlib,
-  withJACK ? stdenv.hostPlatform.isUnix,
-  libjack2,
-  withGUI ? true,
-  portaudio,
-  alsa-lib,
-  # Enable GL/GLES rendering
-  withGL ? !stdenv.hostPlatform.isDarwin,
-  # Use GLES instead of GL, some platforms have better support for one than the other
-  preferGLES ? stdenv.hostPlatform.isAarch,
+{ stdenv
+, lib
+, testers
+, furnace
+, fetchFromGitHub
+, cmake
+, pkg-config
+, makeWrapper
+, fftw
+, fmt
+, freetype
+, libsndfile
+, libX11
+, libGL
+, rtmidi
+, SDL2
+, zlib
+, withJACK ? stdenv.hostPlatform.isUnix
+, libjack2
+, withGUI ? true
+, portaudio
+, alsa-lib
+, # Enable GL/GLES rendering
+  withGL ? !stdenv.hostPlatform.isDarwin
+, # Use GLES instead of GL, some platforms have better support for one than the other
+  preferGLES ? stdenv.hostPlatform.isAarch
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

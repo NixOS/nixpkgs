@@ -1,8 +1,8 @@
-{
-  buildAspNetCore,
-  buildNetRuntime,
-  buildNetSdk,
-  fetchNupkg,
+{ buildAspNetCore
+, buildNetRuntime
+, buildNetSdk
+, fetchNupkg
+,
 }:
 
 # v9.0 (active)

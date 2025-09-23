@@ -1,51 +1,49 @@
-{
-  lib,
-  bison,
-  buildPackages,
-  directx-headers,
-  elfutils,
-  expat,
-  fetchCrate,
-  fetchFromGitLab,
-  file,
-  flex,
-  glslang,
-  spirv-tools,
-  intltool,
-  jdupes,
-  libdrm,
-  libgbm,
-  libglvnd,
-  libpng,
-  libunwind,
-  libva-minimal,
-  libvdpau,
-  llvmPackages,
-  lm_sensors,
-  meson,
-  ninja,
-  pkg-config,
-  python3Packages,
-  runCommand,
-  rust-bindgen,
-  rust-cbindgen,
-  rustPlatform,
-  rustc,
-  spirv-llvm-translator,
-  stdenv,
-  udev,
-  valgrind-light,
-  vulkan-loader,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  xcbutilkeysyms,
-  xorg,
-  zstd,
-  enablePatentEncumberedCodecs ? true,
-  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
-
-  # We enable as many drivers as possible here, to build cross tools
+{ lib
+, bison
+, buildPackages
+, directx-headers
+, elfutils
+, expat
+, fetchCrate
+, fetchFromGitLab
+, file
+, flex
+, glslang
+, spirv-tools
+, intltool
+, jdupes
+, libdrm
+, libgbm
+, libglvnd
+, libpng
+, libunwind
+, libva-minimal
+, libvdpau
+, llvmPackages
+, lm_sensors
+, meson
+, ninja
+, pkg-config
+, python3Packages
+, runCommand
+, rust-bindgen
+, rust-cbindgen
+, rustPlatform
+, rustc
+, spirv-llvm-translator
+, stdenv
+, udev
+, valgrind-light
+, vulkan-loader
+, wayland
+, wayland-protocols
+, wayland-scanner
+, xcbutilkeysyms
+, xorg
+, zstd
+, enablePatentEncumberedCodecs ? true
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light
+, # We enable as many drivers as possible here, to build cross tools
   # and support emulation use cases (emulated x86_64 on aarch64, etc)
   galliumDrivers ? [
     "asahi" # Apple AGX
@@ -69,8 +67,8 @@
     "vc4" # Broadcom VC4 (Raspberry Pi 0-3)
     "virgl" # QEMU virtualized GPU (aka VirGL)
     "zink" # generic OpenGL over Vulkan, experimental
-  ],
-  vulkanDrivers ? [
+  ]
+, vulkanDrivers ? [
     "amd" # AMD (aka RADV)
     "asahi" # Apple AGX
     "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
@@ -85,27 +83,28 @@
     "swrast" # software renderer (aka Lavapipe)
   ]
   ++
-    lib.optionals
-      (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6")
-      [
-        # QEMU virtualized GPU (aka VirGL)
-        # Requires ATOMIC_INT_LOCK_FREE == 2.
-        "virtio"
-      ],
-  eglPlatforms ? [
+  lib.optionals
+    (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6")
+    [
+      # QEMU virtualized GPU (aka VirGL)
+      # Requires ATOMIC_INT_LOCK_FREE == 2.
+      "virtio"
+    ]
+, eglPlatforms ? [
     "x11"
     "wayland"
-  ],
-  vulkanLayers ? [
+  ]
+, vulkanLayers ? [
     "device-select"
     "intel-nullhw"
     "overlay"
     "screenshot"
     "vram-report-limit"
-  ],
-  mesa,
-  mesa-gl-headers,
-  makeSetupHook,
+  ]
+, mesa
+, mesa-gl-headers
+, makeSetupHook
+,
 }:
 
 let
@@ -322,9 +321,11 @@ stdenv.mkDerivation {
     (buildPackages.mesa.cross_tools or null)
   ];
 
-  disallowedRequisites = lib.optional (
-    needNativeCLC && buildPackages.mesa ? cross_tools
-  ) buildPackages.mesa.cross_tools;
+  disallowedRequisites = lib.optional
+    (
+      needNativeCLC && buildPackages.mesa ? cross_tools
+    )
+    buildPackages.mesa.cross_tools;
 
   doCheck = false;
 
@@ -399,9 +400,10 @@ stdenv.mkDerivation {
       disallowedRequisites = [ llvmPackages.llvm ];
     };
 
-    llvmpipeHook = makeSetupHook {
-      name = "llvmpipe-hook";
-      substitutions.mesa = mesa;
-    } ./llvmpipe-hook.sh;
+    llvmpipeHook = makeSetupHook
+      {
+        name = "llvmpipe-hook";
+        substitutions.mesa = mesa;
+      } ./llvmpipe-hook.sh;
   };
 }

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pretix-plugin-build,
-  setuptools,
-  django,
-  drafthorse,
-  ghostscript_headless,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pretix-plugin-build
+, setuptools
+, django
+, drafthorse
+, ghostscript_headless
+,
 }:
 
 buildPythonPackage rec {

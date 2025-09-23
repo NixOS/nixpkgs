@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  pythonAtLeast,
-  fetchPypi,
-  requests,
-  six,
-  python-dateutil,
+{ buildPythonPackage
+, pythonAtLeast
+, fetchPypi
+, requests
+, six
+, python-dateutil
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, openssl
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

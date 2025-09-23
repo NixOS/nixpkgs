@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  installShellFiles,
-  makeWrapper,
-  asciidoc,
-  docbook_xsl,
-  docbook_xml_dtd_45,
-  xmlto,
-  curl,
-  git,
-  perl,
-  darwin,
-  libiconv,
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
+, makeWrapper
+, asciidoc
+, docbook_xsl
+, docbook_xml_dtd_45
+, xmlto
+, curl
+, git
+, perl
+, darwin
+, libiconv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

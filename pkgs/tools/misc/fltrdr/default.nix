@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  icu,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, icu
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

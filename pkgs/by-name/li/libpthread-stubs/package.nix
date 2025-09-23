@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  testers,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, testers
+, writeScript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

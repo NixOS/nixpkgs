@@ -1,8 +1,8 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  unstableGitUpdater,
-  lib,
+{ stdenv
+, fetchFromGitHub
+, unstableGitUpdater
+, lib
+,
 }:
 stdenv.mkDerivation {
   pname = "ps3iso-utils";

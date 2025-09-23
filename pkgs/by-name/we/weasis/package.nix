@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  jdk24,
-  unzip,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchzip
+, jdk24
+, unzip
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 let
   selectSystem =
     attrs:
-    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   platform = selectSystem {
     "x86_64-linux" = "linux-x86-64";
     "aarch64-linux" = "linux-aarch64";

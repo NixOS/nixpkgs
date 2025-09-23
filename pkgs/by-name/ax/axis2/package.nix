@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  ant,
-  fetchurl,
-  jdk,
-  nixosTests,
-  stripJavaArchivesHook,
-  unzip,
+{ lib
+, stdenvNoCC
+, ant
+, fetchurl
+, jdk
+, nixosTests
+, stripJavaArchivesHook
+, unzip
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

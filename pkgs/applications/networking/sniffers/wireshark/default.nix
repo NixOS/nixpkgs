@@ -1,53 +1,51 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-
-  asciidoctor,
-  bcg729,
-  bison,
-  buildPackages,
-  c-ares,
-  cmake,
-  fixDarwinDylibNames,
-  flex,
-  gettext,
-  glib,
-  gmp,
-  gnutls,
-  libcap,
-  libgcrypt,
-  libgpg-error,
-  libkrb5,
-  libmaxminddb,
-  libnl,
-  libopus,
-  libpcap,
-  libsmi,
-  libssh,
-  lua5_4,
-  lz4,
-  makeWrapper,
-  minizip,
-  nghttp2,
-  nghttp3,
-  ninja,
-  opencore-amr,
-  openssl,
-  pcre2,
-  perl,
-  pkg-config,
-  python3,
-  sbc,
-  snappy,
-  spandsp3,
-  speexdsp,
-  wrapGAppsHook3,
-  zlib-ng,
-  zstd,
-
-  withQt ? true,
-  qt6 ? null,
+{ lib
+, stdenv
+, fetchFromGitLab
+, asciidoctor
+, bcg729
+, bison
+, buildPackages
+, c-ares
+, cmake
+, fixDarwinDylibNames
+, flex
+, gettext
+, glib
+, gmp
+, gnutls
+, libcap
+, libgcrypt
+, libgpg-error
+, libkrb5
+, libmaxminddb
+, libnl
+, libopus
+, libpcap
+, libsmi
+, libssh
+, lua5_4
+, lz4
+, makeWrapper
+, minizip
+, nghttp2
+, nghttp3
+, ninja
+, opencore-amr
+, openssl
+, pcre2
+, perl
+, pkg-config
+, python3
+, sbc
+, snappy
+, spandsp3
+, speexdsp
+, wrapGAppsHook3
+, zlib-ng
+, zstd
+, withQt ? true
+, qt6 ? null
+,
 }:
 let
   isAppBundle = withQt && stdenv.hostPlatform.isDarwin;

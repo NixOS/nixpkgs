@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  pkg-config,
-  validatePkgConfig,
-  openssl,
-  sqlcipher,
-  boost,
-  cpr,
-  curl,
-  glib,
-  libsecret,
-  libmaddy-markdown,
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, pkg-config
+, validatePkgConfig
+, openssl
+, sqlcipher
+, boost
+, cpr
+, curl
+, glib
+, libsecret
+, libmaddy-markdown
+, testers
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

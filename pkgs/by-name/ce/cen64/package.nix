@@ -1,12 +1,12 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  libGL,
-  libiconv,
-  libX11,
-  openal,
-  stdenv,
+{ lib
+, cmake
+, fetchFromGitHub
+, libGL
+, libiconv
+, libX11
+, openal
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

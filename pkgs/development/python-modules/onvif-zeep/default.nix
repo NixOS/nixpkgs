@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  zeep,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, zeep
+,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.dependency-track;
@@ -41,12 +40,14 @@ let
 
   renderSettings =
     settings:
-    lib.mapAttrs' (
-      n: v:
-      lib.nameValuePair (lib.toUpper (lib.replaceStrings [ "." ] [ "_" ] n)) (
-        if lib.isBool v then lib.boolToString v else v
+    lib.mapAttrs'
+      (
+        n: v:
+        lib.nameValuePair (lib.toUpper (lib.replaceStrings [ "." ] [ "_" ] n)) (
+          if lib.isBool v then lib.boolToString v else v
+        )
       )
-    ) (filterNull settings);
+      (filterNull settings);
 in
 {
   options.services.dependency-track = {
@@ -600,8 +601,8 @@ in
             "db_password:${cfg.database.passwordFile}"
           ]
           ++
-            lib.optional cfg.settings."alpine.ldap.enabled"
-              "ldap_bind_password:${cfg.ldap.bindPasswordFile}";
+          lib.optional cfg.settings."alpine.ldap.enabled"
+            "ldap_bind_password:${cfg.ldap.bindPasswordFile}";
         };
         script = ''
           set -eou pipefail

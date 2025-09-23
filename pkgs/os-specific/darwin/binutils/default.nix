@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  cctools,
-  clang-unwrapped,
-  ld64,
-  llvm,
-  llvm-manpages,
-  makeWrapper,
-  enableManpages ? stdenvNoCC.targetPlatform == stdenvNoCC.hostPlatform,
+{ lib
+, stdenvNoCC
+, cctools
+, clang-unwrapped
+, ld64
+, llvm
+, llvm-manpages
+, makeWrapper
+, enableManpages ? stdenvNoCC.targetPlatform == stdenvNoCC.hostPlatform
+,
 }:
 
 let

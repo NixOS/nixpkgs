@@ -1,26 +1,27 @@
-{
-  lib,
-  stdenv,
-  makeSetupHook,
-  fetchFromGitHub,
-  libelf,
-  which,
-  pkg-config,
-  libglut,
-  avrgcc,
-  avrlibc,
-  libGLU,
-  libGL,
+{ lib
+, stdenv
+, makeSetupHook
+, fetchFromGitHub
+, libelf
+, which
+, pkg-config
+, libglut
+, avrgcc
+, avrlibc
+, libGLU
+, libGL
+,
 }:
 
 let
-  setupHookDarwin = makeSetupHook {
-    name = "darwin-avr-gcc-hook";
-    substitutions = {
-      darwinSuffixSalt = stdenv.cc.suffixSalt;
-      avrSuffixSalt = avrgcc.suffixSalt;
-    };
-  } ./setup-hook-darwin.sh;
+  setupHookDarwin = makeSetupHook
+    {
+      name = "darwin-avr-gcc-hook";
+      substitutions = {
+        darwinSuffixSalt = stdenv.cc.suffixSalt;
+        avrSuffixSalt = avrgcc.suffixSalt;
+      };
+    } ./setup-hook-darwin.sh;
 in
 stdenv.mkDerivation rec {
   pname = "simavr";

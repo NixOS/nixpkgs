@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pidgin,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pidgin
+,
 }:
 
 let

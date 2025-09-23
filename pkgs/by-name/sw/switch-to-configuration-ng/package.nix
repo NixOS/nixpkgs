@@ -1,10 +1,10 @@
-{
-  buildPackages,
-  clippy,
-  dbus,
-  lib,
-  pkg-config,
-  rustPlatform,
+{ buildPackages
+, clippy
+, dbus
+, lib
+, pkg-config
+, rustPlatform
+,
 }:
 
 rustPlatform.buildRustPackage {

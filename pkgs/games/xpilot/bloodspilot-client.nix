@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libX11,
-  SDL,
-  libGLU,
-  libGL,
-  expat,
-  zlib,
-  SDL_ttf,
-  SDL_image,
+{ lib
+, stdenv
+, fetchurl
+, libX11
+, SDL
+, libGLU
+, libGL
+, expat
+, zlib
+, SDL_ttf
+, SDL_image
+,
 }:
 
 stdenv.mkDerivation rec {

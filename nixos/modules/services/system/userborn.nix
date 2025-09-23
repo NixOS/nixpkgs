@@ -1,9 +1,8 @@
-{
-  utils,
-  config,
-  lib,
-  pkgs,
-  ...
+{ utils
+, config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -12,26 +11,30 @@ let
   userCfg = config.users;
 
   userbornConfig = {
-    groups = lib.mapAttrsToList (username: opts: {
-      inherit (opts) name gid members;
-    }) config.users.groups;
+    groups = lib.mapAttrsToList
+      (username: opts: {
+        inherit (opts) name gid members;
+      })
+      config.users.groups;
 
-    users = lib.mapAttrsToList (username: opts: {
-      inherit (opts)
-        name
-        uid
-        group
-        description
-        home
-        password
-        hashedPassword
-        hashedPasswordFile
-        initialPassword
-        initialHashedPassword
-        ;
-      isNormal = opts.isNormalUser;
-      shell = utils.toShellPath opts.shell;
-    }) (lib.filterAttrs (_: u: u.enable) config.users.users);
+    users = lib.mapAttrsToList
+      (username: opts: {
+        inherit (opts)
+          name
+          uid
+          group
+          description
+          home
+          password
+          hashedPassword
+          hashedPasswordFile
+          initialPassword
+          initialHashedPassword
+          ;
+        isNormal = opts.isNormalUser;
+        shell = utils.toShellPath opts.shell;
+      })
+      (lib.filterAttrs (_: u: u.enable) config.users.users);
   };
 
   userbornConfigJson = pkgs.writeText "userborn.json" (builtins.toJSON userbornConfig);
@@ -99,18 +102,20 @@ in
         lib.mapAttrs'
           (
             username: opts:
-            lib.nameValuePair (toString opts.home) {
-              d = {
-                mode = opts.homeMode;
-                user = opts.name;
-                inherit (opts) group;
-              };
-            }
+              lib.nameValuePair (toString opts.home) {
+                d = {
+                  mode = opts.homeMode;
+                  user = opts.name;
+                  inherit (opts) group;
+                };
+              }
           )
           (
-            lib.filterAttrs (
-              _username: opts: opts.enable && opts.createHome && opts.home != "/var/empty"
-            ) userCfg.users
+            lib.filterAttrs
+              (
+                _username: opts: opts.enable && opts.createHome && opts.home != "/var/empty"
+              )
+              userCfg.users
           );
 
       services.userborn = {
@@ -160,10 +165,12 @@ in
 
           # Make the source files read-only after userborn has finished.
           ExecStartPost = lib.mkIf (!userCfg.mutableUsers) (
-            lib.map (
-              file:
-              "${pkgs.util-linux}/bin/mount --bind -o ro ${cfg.passwordFilesLocation}/${file} ${cfg.passwordFilesLocation}/${file}"
-            ) passwordFiles
+            lib.map
+              (
+                file:
+                "${pkgs.util-linux}/bin/mount --bind -o ro ${cfg.passwordFilesLocation}/${file} ${cfg.passwordFilesLocation}/${file}"
+              )
+              passwordFiles
           );
         };
       };
@@ -174,13 +181,15 @@ in
     # immutable /etc!
     environment.etc = lib.mkIf (cfg.passwordFilesLocation != "/etc") (
       lib.listToAttrs (
-        lib.map (
-          file:
-          lib.nameValuePair file {
-            source = "${cfg.passwordFilesLocation}/${file}";
-            mode = "direct-symlink";
-          }
-        ) passwordFiles
+        lib.map
+          (
+            file:
+            lib.nameValuePair file {
+              source = "${cfg.passwordFilesLocation}/${file}";
+              mode = "direct-symlink";
+            }
+          )
+          passwordFiles
       )
     );
   };

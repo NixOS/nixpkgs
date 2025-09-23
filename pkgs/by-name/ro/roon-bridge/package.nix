@@ -1,14 +1,14 @@
-{
-  alsa-lib,
-  alsa-utils,
-  autoPatchelfHook,
-  fetchurl,
-  ffmpeg,
-  lib,
-  makeWrapper,
-  openssl,
-  stdenv,
-  zlib,
+{ alsa-lib
+, alsa-utils
+, autoPatchelfHook
+, fetchurl
+, ffmpeg
+, lib
+, makeWrapper
+, openssl
+, stdenv
+, zlib
+,
 }:
 let
   version = "1.8-1125";

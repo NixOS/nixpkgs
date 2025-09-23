@@ -1,19 +1,19 @@
-{
-  addDriverRunpath,
-  autoAddDriverRunpath,
-  autoPatchelfHook,
-  backendStdenv,
-  cmake,
-  cuda_cccl ? null,
-  cuda_cudart ? null,
-  cuda_nvcc ? null,
-  cudatoolkit,
-  cusparselt ? null,
-  cutensor ? null,
-  fetchFromGitHub,
-  lib,
-  libcusparse ? null,
-  setupCudaHook,
+{ addDriverRunpath
+, autoAddDriverRunpath
+, autoPatchelfHook
+, backendStdenv
+, cmake
+, cuda_cccl ? null
+, cuda_cudart ? null
+, cuda_nvcc ? null
+, cudatoolkit
+, cusparselt ? null
+, cutensor ? null
+, fetchFromGitHub
+, lib
+, libcusparse ? null
+, setupCudaHook
+,
 }:
 
 let
@@ -127,10 +127,10 @@ in
         broken =
           # Base dependencies
           cusparselt == null
-          || libcusparse == null
-          || cuda_nvcc == null
-          || cuda_cudart == null
-          || cuda_cccl == null;
+            || libcusparse == null
+            || cuda_nvcc == null
+            || cuda_cudart == null
+            || cuda_cccl == null;
       };
     }
   );

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  wheel,
-  docutils,
-  sphinx,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, wheel
+, docutils
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

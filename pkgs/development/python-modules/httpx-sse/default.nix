@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytestCheckHook,
-  setuptools-scm,
-  setuptools,
-  sse-starlette,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, httpx
+, pytest-asyncio
+, pytest-cov-stub
+, pytestCheckHook
+, setuptools-scm
+, setuptools
+, sse-starlette
+,
 }:
 
 buildPythonPackage rec {

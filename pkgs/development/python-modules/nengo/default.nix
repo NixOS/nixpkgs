@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  numpy,
-  scipySupport ? false,
-  scipy,
-  scikitSupport ? false,
-  scikit-learn,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, numpy
+, scipySupport ? false
+, scipy
+, scikitSupport ? false
+, scikit-learn
+,
 }:
 
 buildPythonPackage rec {

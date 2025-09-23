@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  flit-core,
-  iocapture,
-  mock,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flit-core
+, iocapture
+, mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

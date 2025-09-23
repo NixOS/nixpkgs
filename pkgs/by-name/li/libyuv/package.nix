@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  cmake,
-  libjpeg,
-  gtest,
+{ lib
+, stdenv
+, fetchgit
+, cmake
+, libjpeg
+, gtest
+,
 }:
 
 stdenv.mkDerivation {

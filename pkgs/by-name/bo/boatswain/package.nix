@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  appstream,
-  desktop-file-utils,
-  fetchFromGitLab,
-  glib,
-  graphene,
-  gtk4,
-  gusb,
-  hidapi,
-  json-glib,
-  libadwaita,
-  libpeas2,
-  libportal-gtk4,
-  libsecret,
-  libsoup_3,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  wrapGAppsHook4,
+{ lib
+, stdenv
+, appstream
+, desktop-file-utils
+, fetchFromGitLab
+, glib
+, graphene
+, gtk4
+, gusb
+, hidapi
+, json-glib
+, libadwaita
+, libpeas2
+, libportal-gtk4
+, libsecret
+, libsoup_3
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, wrapGAppsHook4
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

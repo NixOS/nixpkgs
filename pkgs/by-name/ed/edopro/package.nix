@@ -1,54 +1,53 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchzip,
-  makeWrapper,
-  premake5,
-  writeShellApplication,
-  runCommandLocal,
-  symlinkJoin,
-  writeText,
-  imagemagick,
-  bzip2,
-  curl,
-  envsubst,
-  flac,
-  fmt,
-  freetype,
-  irrlicht,
-  libevent,
-  libgit2,
-  libGL,
-  libGLU,
-  libjpeg,
-  libpng,
-  libvorbis,
-  libX11,
-  libxkbcommon,
-  libXxf86vm,
-  mono,
-  nlohmann_json,
-  openal,
-  SDL2,
-  sqlite,
-  wayland,
-  egl-wayland,
-  zenity,
-  covers_url ? "https://pics.projectignis.org:2096/pics/cover/{}.jpg",
-  fields_url ? "https://pics.projectignis.org:2096/pics/field/{}.png",
-  # While ygoprodeck has higher quality images:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchzip
+, makeWrapper
+, premake5
+, writeShellApplication
+, runCommandLocal
+, symlinkJoin
+, writeText
+, imagemagick
+, bzip2
+, curl
+, envsubst
+, flac
+, fmt
+, freetype
+, irrlicht
+, libevent
+, libgit2
+, libGL
+, libGLU
+, libjpeg
+, libpng
+, libvorbis
+, libX11
+, libxkbcommon
+, libXxf86vm
+, mono
+, nlohmann_json
+, openal
+, SDL2
+, sqlite
+, wayland
+, egl-wayland
+, zenity
+, covers_url ? "https://pics.projectignis.org:2096/pics/cover/{}.jpg"
+, fields_url ? "https://pics.projectignis.org:2096/pics/field/{}.png"
+, # While ygoprodeck has higher quality images:
   # 1. automated downloads for sims via their API are discouraged by the owner
   # 2. images for prerelease cards are unavailable on their service
-  pics_url ? "https://pics.projectignis.org:2096/pics/{}.jpg",
+  pics_url ? "https://pics.projectignis.org:2096/pics/{}.jpg"
+,
 }:
 let
   archLabel =
     {
       "x86_64-linux" = "x64";
       "aarch64-linux" = "arm64";
-    }
-    .${stdenv.hostPlatform.system}
+    }.${stdenv.hostPlatform.system}
       or (throw "${stdenv.hostPlatform.system} is an unsupported arch label for edopro");
 
   maintainers = with lib.maintainers; [

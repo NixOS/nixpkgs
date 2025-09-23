@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gpytorch,
-  linear-operator,
-  multipledispatch,
-  pyre-extensions,
-  pyro-ppl,
-  setuptools,
-  setuptools-scm,
-  torch,
-  scipy,
-  pytestCheckHook,
-  pythonAtLeast,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, gpytorch
+, linear-operator
+, multipledispatch
+, pyre-extensions
+, pyro-ppl
+, setuptools
+, setuptools-scm
+, torch
+, scipy
+, pytestCheckHook
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

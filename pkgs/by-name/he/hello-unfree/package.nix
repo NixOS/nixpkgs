@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  runtimeShell,
+{ lib
+, stdenv
+, runtimeShell
+,
 }:
 
 stdenv.mkDerivation {

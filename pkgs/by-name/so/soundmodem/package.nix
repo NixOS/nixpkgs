@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  alsa-lib,
-  audiofile,
-  gtk2,
-  libxml2,
-  copyDesktopItems,
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, alsa-lib
+, audiofile
+, gtk2
+, libxml2
+, copyDesktopItems
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {

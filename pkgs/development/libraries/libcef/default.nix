@@ -1,37 +1,37 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  glib,
-  nss,
-  nspr,
-  atk,
-  at-spi2-atk,
-  libdrm,
-  expat,
-  libxcb,
-  libxkbcommon,
-  libX11,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
-  libgbm,
-  gtk3,
-  pango,
-  cairo,
-  alsa-lib,
-  dbus,
-  at-spi2-core,
-  cups,
-  libxshmfence,
-  libGL,
-  udev,
-  systemd,
-  obs-studio,
-  xorg,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, glib
+, nss
+, nspr
+, atk
+, at-spi2-atk
+, libdrm
+, expat
+, libxcb
+, libxkbcommon
+, libX11
+, libXcomposite
+, libXdamage
+, libXext
+, libXfixes
+, libXrandr
+, libgbm
+, gtk3
+, pango
+, cairo
+, alsa-lib
+, dbus
+, at-spi2-core
+, cups
+, libxshmfence
+, libGL
+, udev
+, systemd
+, obs-studio
+, xorg
+,
 }:
 
 let
@@ -77,7 +77,7 @@ let
 
   selectSystem =
     attrs:
-    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
+      attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
 
   platformInfo = selectSystem {
     aarch64-linux = {

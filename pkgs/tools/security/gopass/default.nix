@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  makeBinaryWrapper,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  gitMinimal,
-  gnupg,
-  xclip,
-  wl-clipboard,
-  passAlias ? false,
-  apple-sdk_14,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, stdenv
+, makeBinaryWrapper
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, gitMinimal
+, gnupg
+, xclip
+, wl-clipboard
+, passAlias ? false
+, apple-sdk_14
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 let

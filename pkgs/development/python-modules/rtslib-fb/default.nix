@@ -1,14 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-
-  # build-system
-  hatchling,
-  hatch-vcs,
-
-  # dependencies
-  pyudev,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, # build-system
+  hatchling
+, hatch-vcs
+, # dependencies
+  pyudev
+,
 }:
 
 buildPythonPackage rec {

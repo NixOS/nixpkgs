@@ -1,15 +1,15 @@
-{
-  boost,
-  cmake,
-  doxygen,
-  fetchFromGitHub,
-  fontconfig,
-  gepetto-viewer,
-  lib,
-  pkg-config,
-  python3Packages,
-  libsForQt5,
-  stdenv,
+{ boost
+, cmake
+, doxygen
+, fetchFromGitHub
+, fontconfig
+, gepetto-viewer
+, lib
+, pkg-config
+, python3Packages
+, libsForQt5
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

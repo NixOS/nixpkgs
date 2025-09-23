@@ -1,16 +1,16 @@
-{
-  lib,
-  arrow,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pydantic,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  requests-oauthlib,
-  responses,
-  typing-extensions,
+{ lib
+, arrow
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pydantic
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, requests-oauthlib
+, responses
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

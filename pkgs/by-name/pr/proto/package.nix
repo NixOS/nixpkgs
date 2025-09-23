@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  libiconv,
-  makeBinaryWrapper,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, libiconv
+, makeBinaryWrapper
+, pkg-config
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  file,
-  glibmm,
-  gst_all_1,
-  gnome,
-  apple-sdk_gstreamer,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, file
+, glibmm
+, gst_all_1
+, gnome
+, apple-sdk_gstreamer
+,
 }:
 
 stdenv.mkDerivation rec {

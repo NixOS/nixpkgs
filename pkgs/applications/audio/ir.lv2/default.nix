@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  fftw,
-  gtk2,
-  lv2,
-  libsamplerate,
-  libsndfile,
-  pkg-config,
-  zita-convolver,
+{ lib
+, stdenv
+, fetchgit
+, fftw
+, gtk2
+, lv2
+, libsamplerate
+, libsndfile
+, pkg-config
+, zita-convolver
+,
 }:
 
 stdenv.mkDerivation {

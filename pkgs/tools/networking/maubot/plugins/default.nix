@@ -1,16 +1,16 @@
-{
-  lib,
-  fetchgit,
-  fetchFromGitHub,
-  fetchFromGitLab,
-  fetchFromGitea,
-  stdenvNoCC,
-  callPackage,
-  ensureNewerSourcesForZipFilesHook,
-  maubot,
-  python3,
-  poetry,
-  formats,
+{ lib
+, fetchgit
+, fetchFromGitHub
+, fetchFromGitLab
+, fetchFromGitea
+, stdenvNoCC
+, callPackage
+, ensureNewerSourcesForZipFilesHook
+, maubot
+, python3
+, poetry
+, formats
+,
 }:
 
 let
@@ -18,11 +18,10 @@ let
   # version: plugin version
   # other attributes are passed directly to stdenv.mkDerivation (you at least need src)
   buildMaubotPlugin =
-    attrs@{
-      version,
-      pname,
-      base_config ? null,
-      ...
+    attrs@{ version
+    , pname
+    , base_config ? null
+    , ...
     }:
     stdenvNoCC.mkDerivation (
       builtins.removeAttrs attrs [ "base_config" ]
@@ -79,7 +78,7 @@ let
   };
 in
 generated
-// {
+  // {
   inherit buildMaubotPlugin;
 
   allOfficialPlugins = builtins.filter (x: x.isOfficial && !x.meta.broken) (

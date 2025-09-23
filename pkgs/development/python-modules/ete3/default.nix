@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  numpy,
-  six,
-  withTreeVisualization ? false,
-  lxml,
-  withXmlSupport ? false,
-  pyqt5,
-  setuptools,
-  legacy-cgi,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, numpy
+, six
+, withTreeVisualization ? false
+, lxml
+, withXmlSupport ? false
+, pyqt5
+, setuptools
+, legacy-cgi
+,
 }:
 
 buildPythonPackage rec {

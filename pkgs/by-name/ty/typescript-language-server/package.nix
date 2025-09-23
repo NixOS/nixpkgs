@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  fixup-yarn-lock,
-  makeWrapper,
-  nodejs,
-  prefetch-yarn-deps,
-  replaceVars,
-  yarn,
-  testers,
-  typescript,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchYarnDeps
+, fixup-yarn-lock
+, makeWrapper
+, nodejs
+, prefetch-yarn-deps
+, replaceVars
+, yarn
+, testers
+, typescript
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

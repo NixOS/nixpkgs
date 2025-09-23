@@ -1,12 +1,12 @@
-{
-  fetchFromGitLab,
-  lib,
-  libusb1,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  stdenv,
+{ fetchFromGitLab
+, lib
+, libusb1
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

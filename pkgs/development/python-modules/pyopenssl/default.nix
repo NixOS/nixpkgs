@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  openssl,
-  setuptools,
-  cryptography,
-  typing-extensions,
-  pytestCheckHook,
-  pretend,
-  sphinxHook,
-  sphinx-rtd-theme,
-  pytest-rerunfailures,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, openssl
+, setuptools
+, cryptography
+, typing-extensions
+, pytestCheckHook
+, pretend
+, sphinxHook
+, sphinx-rtd-theme
+, pytest-rerunfailures
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  scorecard,
-  gitMinimal,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, scorecard
+, gitMinimal
+,
 }:
 
 buildGoModule rec {

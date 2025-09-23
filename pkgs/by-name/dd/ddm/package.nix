@@ -1,17 +1,16 @@
-{
-  stdenvNoCC,
-  lib,
-  requireFile,
-  asar,
-  copyDesktopItems,
-  electron,
-  makeDesktopItem,
-  makeWrapper,
-  unzip,
-
-  campaigns ? [ ],
-  cubes ? [ ],
-  constructed ? [ ],
+{ stdenvNoCC
+, lib
+, requireFile
+, asar
+, copyDesktopItems
+, electron
+, makeDesktopItem
+, makeWrapper
+, unzip
+, campaigns ? [ ]
+, cubes ? [ ]
+, constructed ? [ ]
+,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -54,15 +53,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Install externally-downloaded campaign packs and cube & constructed lists
     mkdir $out/share/ddm/{campaigns,cubes,constructed}
   ''
-  + lib.concatMapStringsSep "\n" (campaignZip: ''
-    unzip "${campaignZip}" -d $out/share/ddm/campaigns/
-  '') campaigns
-  + lib.concatMapStringsSep "\n" (cubeFile: ''
-    cp "${cubeFile}" $out/share/ddm/cubes/
-  '') cubes
-  + lib.concatMapStringsSep "\n" (constructedFile: ''
-    cp "${constructedFile}" $out/share/ddm/constructed/
-  '') constructed
+  + lib.concatMapStringsSep "\n"
+    (campaignZip: ''
+      unzip "${campaignZip}" -d $out/share/ddm/campaigns/
+    '')
+    campaigns
+  + lib.concatMapStringsSep "\n"
+    (cubeFile: ''
+      cp "${cubeFile}" $out/share/ddm/cubes/
+    '')
+    cubes
+  + lib.concatMapStringsSep "\n"
+    (constructedFile: ''
+      cp "${constructedFile}" $out/share/ddm/constructed/
+    '')
+    constructed
   + ''
 
     runHook postInstall

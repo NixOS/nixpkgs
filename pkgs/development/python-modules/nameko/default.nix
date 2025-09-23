@@ -1,22 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # install_requires
-  dnspython,
-  eventlet,
-  kombu,
-  mock,
-  packaging,
-  path,
-  pyyaml,
-  requests,
-  setuptools,
-  six,
-  werkzeug,
-  wrapt,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # install_requires
+  dnspython
+, eventlet
+, kombu
+, mock
+, packaging
+, path
+, pyyaml
+, requests
+, setuptools
+, six
+, werkzeug
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

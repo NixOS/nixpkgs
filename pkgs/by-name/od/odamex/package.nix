@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  pkg-config,
-  makeWrapper,
-  SDL,
-  SDL_mixer,
-  SDL_net,
-  wxGTK32,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, pkg-config
+, makeWrapper
+, SDL
+, SDL_mixer
+, SDL_net
+, wxGTK32
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchMavenArtifact,
-  jdk11,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchMavenArtifact
+, jdk11
+, makeWrapper
+,
 }:
 
 let

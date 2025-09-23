@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  SDL2,
-  python3,
-  jack2,
-  alsa-lib,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, SDL2
+, python3
+, jack2
+, alsa-lib
+, pkg-config
+,
 }:
 let
   python = python3.withPackages (ps: with ps; [ pillow ]);

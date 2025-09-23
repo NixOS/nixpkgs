@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  tree-sitter-sql,
-
-  #optional-dependencies
-  tree-sitter,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, tree-sitter-sql
+, #optional-dependencies
+  tree-sitter
+,
 }:
 buildPythonPackage rec {
   pname = "tree-sitter-sql";

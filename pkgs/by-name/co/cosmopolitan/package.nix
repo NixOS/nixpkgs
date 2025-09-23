@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bintools-unwrapped,
-  callPackage,
-  coreutils,
-  replaceVars,
-  unzip,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bintools-unwrapped
+, callPackage
+, coreutils
+, replaceVars
+, unzip
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

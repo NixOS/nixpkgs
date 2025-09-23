@@ -1,15 +1,15 @@
-{
-  lib,
-  writeScript,
-  common-updater-scripts,
-  bash,
-  coreutils,
-  curl,
-  fetchurl,
-  gnugrep,
-  gnupg,
-  gnused,
-  nix,
+{ lib
+, writeScript
+, common-updater-scripts
+, bash
+, coreutils
+, curl
+, fetchurl
+, gnugrep
+, gnupg
+, gnused
+, nix
+,
 }:
 
 let

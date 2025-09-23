@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  openssl,
-  autoreconfHook,
-  nettle,
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, autoreconfHook
+, nettle
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,17 +1,17 @@
-{
-  autoPatchelfHook,
-  squashfsTools,
-  alsa-lib,
-  fetchurl,
-  makeDesktopItem,
-  makeWrapper,
-  stdenv,
-  lib,
-  libsecret,
-  libgbm,
-  udev,
-  wrapGAppsHook3,
-  writeScript,
+{ autoPatchelfHook
+, squashfsTools
+, alsa-lib
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, stdenv
+, lib
+, libsecret
+, libgbm
+, udev
+, wrapGAppsHook3
+, writeScript
+,
 }:
 
 stdenv.mkDerivation rec {

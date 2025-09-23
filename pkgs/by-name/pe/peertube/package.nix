@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  nixosTests,
-  brotli,
-  fixup-yarn-lock,
-  jq,
-  fd,
-  nodejs_20,
-  which,
-  yarn,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, fetchYarnDeps
+, nixosTests
+, brotli
+, fixup-yarn-lock
+, jq
+, fd
+, nodejs_20
+, which
+, yarn
+,
 }:
 let
   bcryptHostPlatformAttrs = {

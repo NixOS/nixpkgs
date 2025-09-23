@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  versionCheckHook,
-  writeScript,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, versionCheckHook
+, writeScript
+,
 }:
 
 let

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitea,
-  autoreconfHook,
-  pkg-config,
-  openssl,
-  readline,
-  fetchurl,
+{ stdenv
+, lib
+, fetchFromGitea
+, autoreconfHook
+, pkg-config
+, openssl
+, readline
+, fetchurl
+,
 }:
 
 let

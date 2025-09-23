@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  oniguruma,
-  installShellFiles,
-  zola,
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, oniguruma
+, installShellFiles
+, zola
+, testers
+,
 }:
 
 rustPlatform.buildRustPackage rec {

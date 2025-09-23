@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  alsa-lib,
-  udevCheckHook,
-  nix-update-script,
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, alsa-lib
+, udevCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

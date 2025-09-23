@@ -1,10 +1,10 @@
-{
-  lib,
-  beamPackages,
-  makeWrapper,
-  fetchFromGitHub,
-  nixosTests,
-  nix-update-script,
+{ lib
+, beamPackages
+, makeWrapper
+, fetchFromGitHub
+, nixosTests
+, nix-update-script
+,
 }:
 
 beamPackages.mixRelease rec {

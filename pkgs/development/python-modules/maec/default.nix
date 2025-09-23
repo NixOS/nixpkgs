@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cybox,
-  distutils,
-  fetchFromGitHub,
-  lxml,
-  mixbox,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cybox
+, distutils
+, fetchFromGitHub
+, lxml
+, mixbox
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

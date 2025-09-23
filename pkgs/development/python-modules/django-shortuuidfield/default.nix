@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchPypi,
-  shortuuid,
-  six,
+{ lib
+, buildPythonPackage
+, django
+, fetchPypi
+, shortuuid
+, six
+,
 }:
 
 buildPythonPackage rec {

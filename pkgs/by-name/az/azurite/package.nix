@@ -1,11 +1,11 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  stdenv,
-  libsecret,
-  pkg-config,
-  python3,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, stdenv
+, libsecret
+, pkg-config
+, python3
+,
 }:
 
 buildNpmPackage rec {

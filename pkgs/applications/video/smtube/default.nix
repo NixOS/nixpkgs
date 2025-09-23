@@ -1,10 +1,10 @@
-{
-  lib,
-  mkDerivation,
-  fetchurl,
-  qmake,
-  qtscript,
-  qtwebkit,
+{ lib
+, mkDerivation
+, fetchurl
+, qmake
+, qtscript
+, qtwebkit
+,
 }:
 
 mkDerivation rec {

@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 
 let
@@ -19,12 +18,16 @@ let
 
   metaName = name: "mautrix-meta-${name}";
 
-  enabledInstances = lib.filterAttrs (
-    name: config: config.enable
-  ) config.services.mautrix-meta.instances;
-  registerToSynapseInstances = lib.filterAttrs (
-    name: config: config.enable && config.registerToSynapse
-  ) config.services.mautrix-meta.instances;
+  enabledInstances = lib.filterAttrs
+    (
+      name: config: config.enable
+    )
+    config.services.mautrix-meta.instances;
+  registerToSynapseInstances = lib.filterAttrs
+    (
+      name: config: config.enable && config.registerToSynapse
+    )
+    config.services.mautrix-meta.instances;
 in
 {
   options = {
@@ -326,77 +329,81 @@ in
     (lib.mkIf (enabledInstances != { }) {
       assertions = lib.mkMerge (
         lib.attrValues (
-          lib.mapAttrs (name: cfg: [
-            {
-              assertion = cfg.settings.homeserver.domain != "" && cfg.settings.homeserver.address != "";
-              message = ''
-                The options with information about the homeserver:
-                `services.mautrix-meta.instances.${name}.settings.homeserver.domain` and
-                `services.mautrix-meta.instances.${name}.settings.homeserver.address` have to be set.
-              '';
-            }
-            {
-              assertion = builtins.elem cfg.settings.network.mode [
-                "facebook"
-                "facebook-tor"
-                "messenger"
-                "instagram"
-              ];
-              message = ''
-                The option `services.mautrix-meta.instances.${name}.settings.network.mode` has to be set
-                to one of: facebook, facebook-tor, messenger, instagram.
-                This configures the mode of the bridge.
-              '';
-            }
-            {
-              assertion = cfg.settings.bridge.permissions != { };
-              message = ''
-                The option `services.mautrix-meta.instances.${name}.settings.bridge.permissions` has to be set.
-              '';
-            }
-            {
-              assertion = cfg.settings.appservice.id != "";
-              message = ''
-                The option `services.mautrix-meta.instances.${name}.settings.appservice.id` has to be set.
-              '';
-            }
-            {
-              assertion = cfg.settings.appservice.bot.username != "";
-              message = ''
-                The option `services.mautrix-meta.instances.${name}.settings.appservice.bot.username` has to be set.
-              '';
-            }
-            {
-              assertion = !(cfg.settings ? bridge.disable_xma);
-              message = ''
-                The option `bridge.disable_xma` has been moved to `network.disable_xma_always`. Please [migrate your configuration](https://github.com/mautrix/meta/releases/tag/v0.4.0). You may wish to use [the auto-migration code](https://github.com/mautrix/meta/blob/f5440b05aac125b4c95b1af85635a717cbc6dd0e/cmd/mautrix-meta/legacymigrate.go#L23) for reference.
-              '';
-            }
-            {
-              assertion = !(cfg.settings ? bridge.displayname_template);
-              message = ''
-                The option `bridge.displayname_template` has been moved to `network.displayname_template`. Please [migrate your configuration](https://github.com/mautrix/meta/releases/tag/v0.4.0). You may wish to use [the auto-migration code](https://github.com/mautrix/meta/blob/f5440b05aac125b4c95b1af85635a717cbc6dd0e/cmd/mautrix-meta/legacymigrate.go#L23) for reference.
-              '';
-            }
-            {
-              assertion = !(cfg.settings ? meta);
-              message = ''
-                The options in `meta` have been moved to `network`. Please [migrate your configuration](https://github.com/mautrix/meta/releases/tag/v0.4.0). You may wish to use [the auto-migration code](https://github.com/mautrix/meta/blob/f5440b05aac125b4c95b1af85635a717cbc6dd0e/cmd/mautrix-meta/legacymigrate.go#L23) for reference.
-              '';
-            }
-          ]) enabledInstances
+          lib.mapAttrs
+            (name: cfg: [
+              {
+                assertion = cfg.settings.homeserver.domain != "" && cfg.settings.homeserver.address != "";
+                message = ''
+                  The options with information about the homeserver:
+                  `services.mautrix-meta.instances.${name}.settings.homeserver.domain` and
+                  `services.mautrix-meta.instances.${name}.settings.homeserver.address` have to be set.
+                '';
+              }
+              {
+                assertion = builtins.elem cfg.settings.network.mode [
+                  "facebook"
+                  "facebook-tor"
+                  "messenger"
+                  "instagram"
+                ];
+                message = ''
+                  The option `services.mautrix-meta.instances.${name}.settings.network.mode` has to be set
+                  to one of: facebook, facebook-tor, messenger, instagram.
+                  This configures the mode of the bridge.
+                '';
+              }
+              {
+                assertion = cfg.settings.bridge.permissions != { };
+                message = ''
+                  The option `services.mautrix-meta.instances.${name}.settings.bridge.permissions` has to be set.
+                '';
+              }
+              {
+                assertion = cfg.settings.appservice.id != "";
+                message = ''
+                  The option `services.mautrix-meta.instances.${name}.settings.appservice.id` has to be set.
+                '';
+              }
+              {
+                assertion = cfg.settings.appservice.bot.username != "";
+                message = ''
+                  The option `services.mautrix-meta.instances.${name}.settings.appservice.bot.username` has to be set.
+                '';
+              }
+              {
+                assertion = !(cfg.settings ? bridge.disable_xma);
+                message = ''
+                  The option `bridge.disable_xma` has been moved to `network.disable_xma_always`. Please [migrate your configuration](https://github.com/mautrix/meta/releases/tag/v0.4.0). You may wish to use [the auto-migration code](https://github.com/mautrix/meta/blob/f5440b05aac125b4c95b1af85635a717cbc6dd0e/cmd/mautrix-meta/legacymigrate.go#L23) for reference.
+                '';
+              }
+              {
+                assertion = !(cfg.settings ? bridge.displayname_template);
+                message = ''
+                  The option `bridge.displayname_template` has been moved to `network.displayname_template`. Please [migrate your configuration](https://github.com/mautrix/meta/releases/tag/v0.4.0). You may wish to use [the auto-migration code](https://github.com/mautrix/meta/blob/f5440b05aac125b4c95b1af85635a717cbc6dd0e/cmd/mautrix-meta/legacymigrate.go#L23) for reference.
+                '';
+              }
+              {
+                assertion = !(cfg.settings ? meta);
+                message = ''
+                  The options in `meta` have been moved to `network`. Please [migrate your configuration](https://github.com/mautrix/meta/releases/tag/v0.4.0). You may wish to use [the auto-migration code](https://github.com/mautrix/meta/blob/f5440b05aac125b4c95b1af85635a717cbc6dd0e/cmd/mautrix-meta/legacymigrate.go#L23) for reference.
+                '';
+              }
+            ])
+            enabledInstances
         )
       );
 
-      users.users = lib.mapAttrs' (
-        name: cfg:
-        lib.nameValuePair "mautrix-meta-${name}" {
-          isSystemUser = true;
-          group = "mautrix-meta";
-          extraGroups = [ "mautrix-meta-registration" ];
-          description = "Mautrix-Meta-${name} bridge user";
-        }
-      ) enabledInstances;
+      users.users = lib.mapAttrs'
+        (
+          name: cfg:
+            lib.nameValuePair "mautrix-meta-${name}" {
+              isSystemUser = true;
+              group = "mautrix-meta";
+              extraGroups = [ "mautrix-meta-registration" ];
+              description = "Mautrix-Meta-${name} bridge user";
+            }
+        )
+        enabledInstances;
 
       users.groups.mautrix-meta = { };
       users.groups.mautrix-meta-registration = {
@@ -429,152 +436,156 @@ in
           );
         }
 
-        (lib.mapAttrs' (
-          name: cfg:
-          lib.nameValuePair "${metaName name}-registration" {
-            description = "Mautrix-Meta registration generation service - ${metaName name}";
+        (lib.mapAttrs'
+          (
+            name: cfg:
+              lib.nameValuePair "${metaName name}-registration" {
+                description = "Mautrix-Meta registration generation service - ${metaName name}";
 
-            path = [
-              pkgs.yq
-              pkgs.envsubst
-              upperCfg.package
-            ];
+                path = [
+                  pkgs.yq
+                  pkgs.envsubst
+                  upperCfg.package
+                ];
 
-            script = ''
-              # substitute the settings file by environment variables
-              # in this case read from EnvironmentFile
-              rm -f '${settingsFile cfg}'
-              old_umask=$(umask)
-              umask 0177
-              envsubst \
-                -o '${settingsFile cfg}' \
-                -i '${settingsFileUnsubstituted cfg}'
+                script = ''
+                  # substitute the settings file by environment variables
+                  # in this case read from EnvironmentFile
+                  rm -f '${settingsFile cfg}'
+                  old_umask=$(umask)
+                  umask 0177
+                  envsubst \
+                    -o '${settingsFile cfg}' \
+                    -i '${settingsFileUnsubstituted cfg}'
 
-              config_has_tokens=$(yq '.appservice | has("as_token") and has("hs_token")' '${settingsFile cfg}')
-              registration_already_exists=$([[ -f '${cfg.registrationFile}' ]] && echo "true" || echo "false")
+                  config_has_tokens=$(yq '.appservice | has("as_token") and has("hs_token")' '${settingsFile cfg}')
+                  registration_already_exists=$([[ -f '${cfg.registrationFile}' ]] && echo "true" || echo "false")
 
-              echo "There are tokens in the config: $config_has_tokens"
-              echo "Registration already existed: $registration_already_exists"
+                  echo "There are tokens in the config: $config_has_tokens"
+                  echo "Registration already existed: $registration_already_exists"
 
-              # tokens not configured from config/environment file, and registration file
-              # is already generated, override tokens in config to make sure they are not lost
-              if [[ $config_has_tokens == "false" && $registration_already_exists == "true" ]]; then
-                echo "Copying as_token, hs_token from registration into configuration"
-                yq -sY '.[0].appservice.as_token = .[1].as_token
-                  | .[0].appservice.hs_token = .[1].hs_token
-                  | .[0]' '${settingsFile cfg}' '${cfg.registrationFile}' \
-                  > '${settingsFile cfg}.tmp'
-                mv '${settingsFile cfg}.tmp' '${settingsFile cfg}'
-              fi
+                  # tokens not configured from config/environment file, and registration file
+                  # is already generated, override tokens in config to make sure they are not lost
+                  if [[ $config_has_tokens == "false" && $registration_already_exists == "true" ]]; then
+                    echo "Copying as_token, hs_token from registration into configuration"
+                    yq -sY '.[0].appservice.as_token = .[1].as_token
+                      | .[0].appservice.hs_token = .[1].hs_token
+                      | .[0]' '${settingsFile cfg}' '${cfg.registrationFile}' \
+                      > '${settingsFile cfg}.tmp'
+                    mv '${settingsFile cfg}.tmp' '${settingsFile cfg}'
+                  fi
 
-              # make sure --generate-registration does not affect config.yaml
-              cp '${settingsFile cfg}' '${settingsFile cfg}.tmp'
+                  # make sure --generate-registration does not affect config.yaml
+                  cp '${settingsFile cfg}' '${settingsFile cfg}.tmp'
 
-              echo "Generating registration file"
-              mautrix-meta \
-                --generate-registration \
-                --config='${settingsFile cfg}.tmp' \
-                --registration='${cfg.registrationFile}'
+                  echo "Generating registration file"
+                  mautrix-meta \
+                    --generate-registration \
+                    --config='${settingsFile cfg}.tmp' \
+                    --registration='${cfg.registrationFile}'
 
-              rm '${settingsFile cfg}.tmp'
+                  rm '${settingsFile cfg}.tmp'
 
-              # no tokens configured, and new were just generated by generate registration for first time
-              if [[ $config_has_tokens == "false" && $registration_already_exists == "false" ]]; then
-                echo "Copying newly generated as_token, hs_token from registration into configuration"
-                yq -sY '.[0].appservice.as_token = .[1].as_token
-                  | .[0].appservice.hs_token = .[1].hs_token
-                  | .[0]' '${settingsFile cfg}' '${cfg.registrationFile}' \
-                  > '${settingsFile cfg}.tmp'
-                mv '${settingsFile cfg}.tmp' '${settingsFile cfg}'
-              fi
+                  # no tokens configured, and new were just generated by generate registration for first time
+                  if [[ $config_has_tokens == "false" && $registration_already_exists == "false" ]]; then
+                    echo "Copying newly generated as_token, hs_token from registration into configuration"
+                    yq -sY '.[0].appservice.as_token = .[1].as_token
+                      | .[0].appservice.hs_token = .[1].hs_token
+                      | .[0]' '${settingsFile cfg}' '${cfg.registrationFile}' \
+                      > '${settingsFile cfg}.tmp'
+                    mv '${settingsFile cfg}.tmp' '${settingsFile cfg}'
+                  fi
 
-              # Make sure correct tokens are in the registration file
-              if [[ $config_has_tokens == "true" || $registration_already_exists == "true" ]]; then
-                echo "Copying as_token, hs_token from configuration to the registration file"
-                yq -sY '.[1].as_token = .[0].appservice.as_token
-                  | .[1].hs_token = .[0].appservice.hs_token
-                  | .[1]' '${settingsFile cfg}' '${cfg.registrationFile}' \
-                  > '${cfg.registrationFile}.tmp'
-                mv '${cfg.registrationFile}.tmp' '${cfg.registrationFile}'
-              fi
+                  # Make sure correct tokens are in the registration file
+                  if [[ $config_has_tokens == "true" || $registration_already_exists == "true" ]]; then
+                    echo "Copying as_token, hs_token from configuration to the registration file"
+                    yq -sY '.[1].as_token = .[0].appservice.as_token
+                      | .[1].hs_token = .[0].appservice.hs_token
+                      | .[1]' '${settingsFile cfg}' '${cfg.registrationFile}' \
+                      > '${cfg.registrationFile}.tmp'
+                    mv '${cfg.registrationFile}.tmp' '${cfg.registrationFile}'
+                  fi
 
-              umask $old_umask
+                  umask $old_umask
 
-              chown :mautrix-meta-registration '${cfg.registrationFile}'
-              chmod 640 '${cfg.registrationFile}'
-            '';
+                  chown :mautrix-meta-registration '${cfg.registrationFile}'
+                  chmod 640 '${cfg.registrationFile}'
+                '';
 
-            serviceConfig = {
-              Type = "oneshot";
-              UMask = 27;
+                serviceConfig = {
+                  Type = "oneshot";
+                  UMask = 27;
 
-              User = "mautrix-meta-${name}";
-              Group = "mautrix-meta";
+                  User = "mautrix-meta-${name}";
+                  Group = "mautrix-meta";
 
-              SystemCallFilter = [ "@system-service" ];
+                  SystemCallFilter = [ "@system-service" ];
 
-              ProtectSystem = "strict";
-              ProtectHome = true;
+                  ProtectSystem = "strict";
+                  ProtectHome = true;
 
-              ReadWritePaths = fullDataDir cfg;
-              StateDirectory = cfg.dataDir;
-              EnvironmentFile = cfg.environmentFile;
-            };
+                  ReadWritePaths = fullDataDir cfg;
+                  StateDirectory = cfg.dataDir;
+                  EnvironmentFile = cfg.environmentFile;
+                };
 
-            restartTriggers = [ (settingsFileUnsubstituted cfg) ];
-          }
-        ) enabledInstances)
+                restartTriggers = [ (settingsFileUnsubstituted cfg) ];
+              }
+          )
+          enabledInstances)
 
-        (lib.mapAttrs' (
-          name: cfg:
-          lib.nameValuePair "${metaName name}" {
-            description = "Mautrix-Meta bridge - ${metaName name}";
-            wantedBy = [ "multi-user.target" ];
-            wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
-            after = [ "network-online.target" ] ++ cfg.serviceDependencies;
+        (lib.mapAttrs'
+          (
+            name: cfg:
+              lib.nameValuePair "${metaName name}" {
+                description = "Mautrix-Meta bridge - ${metaName name}";
+                wantedBy = [ "multi-user.target" ];
+                wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
+                after = [ "network-online.target" ] ++ cfg.serviceDependencies;
 
-            serviceConfig = {
-              Type = "simple";
+                serviceConfig = {
+                  Type = "simple";
 
-              User = "mautrix-meta-${name}";
-              Group = "mautrix-meta";
-              PrivateUsers = true;
+                  User = "mautrix-meta-${name}";
+                  Group = "mautrix-meta";
+                  PrivateUsers = true;
 
-              LockPersonality = true;
-              MemoryDenyWriteExecute = true;
-              NoNewPrivileges = true;
-              PrivateDevices = true;
-              PrivateTmp = true;
-              ProtectClock = true;
-              ProtectControlGroups = true;
-              ProtectHome = true;
-              ProtectHostname = true;
-              ProtectKernelLogs = true;
-              ProtectKernelModules = true;
-              ProtectKernelTunables = true;
-              ProtectSystem = "strict";
-              Restart = "on-failure";
-              RestartSec = "30s";
-              RestrictRealtime = true;
-              RestrictSUIDSGID = true;
-              SystemCallArchitectures = "native";
-              SystemCallErrorNumber = "EPERM";
-              SystemCallFilter = [ "@system-service" ];
-              UMask = 27;
+                  LockPersonality = true;
+                  MemoryDenyWriteExecute = true;
+                  NoNewPrivileges = true;
+                  PrivateDevices = true;
+                  PrivateTmp = true;
+                  ProtectClock = true;
+                  ProtectControlGroups = true;
+                  ProtectHome = true;
+                  ProtectHostname = true;
+                  ProtectKernelLogs = true;
+                  ProtectKernelModules = true;
+                  ProtectKernelTunables = true;
+                  ProtectSystem = "strict";
+                  Restart = "on-failure";
+                  RestartSec = "30s";
+                  RestrictRealtime = true;
+                  RestrictSUIDSGID = true;
+                  SystemCallArchitectures = "native";
+                  SystemCallErrorNumber = "EPERM";
+                  SystemCallFilter = [ "@system-service" ];
+                  UMask = 27;
 
-              WorkingDirectory = fullDataDir cfg;
-              ReadWritePaths = fullDataDir cfg;
-              StateDirectory = cfg.dataDir;
-              EnvironmentFile = cfg.environmentFile;
+                  WorkingDirectory = fullDataDir cfg;
+                  ReadWritePaths = fullDataDir cfg;
+                  StateDirectory = cfg.dataDir;
+                  EnvironmentFile = cfg.environmentFile;
 
-              ExecStart = lib.escapeShellArgs [
-                (lib.getExe upperCfg.package)
-                "--config=${settingsFile cfg}"
-              ];
-            };
-            restartTriggers = [ (settingsFileUnsubstituted cfg) ];
-          }
-        ) enabledInstances)
+                  ExecStart = lib.escapeShellArgs [
+                    (lib.getExe upperCfg.package)
+                    "--config=${settingsFile cfg}"
+                  ];
+                };
+                restartTriggers = [ (settingsFileUnsubstituted cfg) ];
+              }
+          )
+          enabledInstances)
       ];
     })
     {

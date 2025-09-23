@@ -1,12 +1,12 @@
-{
-  buildDunePackage,
-  conan,
-  lwt,
-  bigstringaf,
-  alcotest,
-  crowbar,
-  fmt,
-  rresult,
+{ buildDunePackage
+, conan
+, lwt
+, bigstringaf
+, alcotest
+, crowbar
+, fmt
+, rresult
+,
 }:
 
 buildDunePackage {

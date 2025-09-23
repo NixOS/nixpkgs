@@ -1,13 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  hatchling,
-
-  # native dependencies
-  knot-dns,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  hatchling
+, # native dependencies
+  knot-dns
+,
 }:
 
 buildPythonPackage rec {

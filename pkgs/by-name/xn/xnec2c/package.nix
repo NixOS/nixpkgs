@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  wrapGAppsHook3,
-  pkg-config,
-  which,
-  gtk3,
-  blas,
-  lapack,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, wrapGAppsHook3
+, pkg-config
+, which
+, gtk3
+, blas
+, lapack
+, nix-update-script
+,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);

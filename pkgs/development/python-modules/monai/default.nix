@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  ninja,
-  numpy,
-  packaging,
-  pybind11,
-  torch,
-  which,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, ninja
+, numpy
+, packaging
+, pybind11
+, torch
+, which
+,
 }:
 
 buildPythonPackage rec {

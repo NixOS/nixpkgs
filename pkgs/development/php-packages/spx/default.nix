@@ -1,8 +1,8 @@
-{
-  buildPecl,
-  lib,
-  fetchFromGitHub,
-  zlib,
+{ buildPecl
+, lib
+, fetchFromGitHub
+, zlib
+,
 }:
 
 let

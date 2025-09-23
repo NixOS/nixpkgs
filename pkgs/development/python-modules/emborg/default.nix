@@ -1,21 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  pytestCheckHook,
-  pythonOlder,
-  borgbackup,
-  appdirs,
-  arrow,
-  docopt,
-  inform,
-  nestedtext,
-  parametrize-from-file,
-  quantiphy,
-  requests,
-  shlib,
-  voluptuous,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, pytestCheckHook
+, pythonOlder
+, borgbackup
+, appdirs
+, arrow
+, docopt
+, inform
+, nestedtext
+, parametrize-from-file
+, quantiphy
+, requests
+, shlib
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

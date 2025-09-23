@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  gtk3,
-  audacious-bare,
-  mpg123,
-  ffmpeg,
-  libvorbis,
-  libao,
-  speex,
-  nix-update-script,
+{ stdenv
+, lib
+, fetchzip
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gtk3
+, audacious-bare
+, mpg123
+, ffmpeg
+, libvorbis
+, libao
+, speex
+, nix-update-script
+,
 }:
 
 let
@@ -79,13 +79,13 @@ stdenv.mkDerivation rec {
       --replace-fail "pkg_get_variable(AUDACIOUS_PLUGIN_DIR audacious plugin_dir)" "set(AUDACIOUS_PLUGIN_DIR \"$audacious/lib/audacious\")"
   ''
   +
-    # cmake/dependencies/celt.cmake uses configure_file to modify ${CELT_0110_PATH}/libcelt/ecintrin.h.
-    # Therefore, CELT_0110_PATH needs to point to a mutable directory.
-    lib.optionalString (stdenv.system == "x86_64-linux") ''
-      mkdir -p dependencies/celt-0.11.0/
-      cp -r ${celt-0_11_0-src}/* dependencies/celt-0.11.0/
-      chmod -R +w dependencies/celt-0.11.0/
-    '';
+  # cmake/dependencies/celt.cmake uses configure_file to modify ${CELT_0110_PATH}/libcelt/ecintrin.h.
+  # Therefore, CELT_0110_PATH needs to point to a mutable directory.
+  lib.optionalString (stdenv.system == "x86_64-linux") ''
+    mkdir -p dependencies/celt-0.11.0/
+    cp -r ${celt-0_11_0-src}/* dependencies/celt-0.11.0/
+    chmod -R +w dependencies/celt-0.11.0/
+  '';
 
   cmakeFlags = [
     "-DATRAC9_PATH=${atrac9-src}"

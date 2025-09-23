@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  desktop-file-utils,
-  gettext,
-  pkg-config,
-  glib,
-  gtk2,
-  libxml2,
-  libbfd,
-  zlib,
-  gnutls,
-  enableGui ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, desktop-file-utils
+, gettext
+, pkg-config
+, glib
+, gtk2
+, libxml2
+, libbfd
+, zlib
+, gnutls
+, enableGui ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

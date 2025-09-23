@@ -1,11 +1,11 @@
-{
-  bundlerApp,
-  defaultGemConfig,
-  bundlerUpdateScript,
-  lib,
-  makeWrapper,
-  puppet-bolt,
-  testers,
+{ bundlerApp
+, defaultGemConfig
+, bundlerUpdateScript
+, lib
+, makeWrapper
+, puppet-bolt
+, testers
+,
 }:
 
 (bundlerApp {

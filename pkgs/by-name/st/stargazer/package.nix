@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromSourcehut,
-  rustPlatform,
-  installShellFiles,
-  scdoc,
-  nixosTests,
-  nix-update-script,
+{ lib
+, fetchFromSourcehut
+, rustPlatform
+, installShellFiles
+, scdoc
+, nixosTests
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -157,13 +156,15 @@ let
         Address = mkDefault (map (address: "${address.address} ${toString address.port}") config.addresses);
 
         Subnet = mkDefault (
-          map (
-            subnet:
-            if subnet.prefixLength == null then
-              "${subnet.address}#${toString subnet.weight}"
-            else
-              "${subnet.address}/${toString subnet.prefixLength}#${toString subnet.weight}"
-          ) config.subnets
+          map
+            (
+              subnet:
+              if subnet.prefixLength == null then
+                "${subnet.address}#${toString subnet.weight}"
+              else
+                "${subnet.address}/${toString subnet.prefixLength}#${toString subnet.weight}"
+            )
+            config.subnets
         );
       };
     };
@@ -338,10 +339,12 @@ in
                 };
 
                 config = {
-                  hosts = mapAttrs (hostname: host: ''
-                    ${toTincConf host.settings}
-                    ${host.rsaPublicKey}
-                  '') config.hostSettings;
+                  hosts = mapAttrs
+                    (hostname: host: ''
+                      ${toTincConf host.settings}
+                      ${host.rsaPublicKey}
+                    '')
+                    config.hostSettings;
 
                   settings = {
                     DeviceType = mkDefault config.interfaceType;
@@ -374,23 +377,24 @@ in
       etcConfig = foldr (a: b: a // b) { } (
         flip mapAttrsToList cfg.networks (
           network: data:
-          flip mapAttrs' data.hosts (
-            host: text:
-            nameValuePair ("tinc/${network}/hosts/${host}") ({
-              mode = "0644";
-              user = "tinc-${network}";
-              inherit text;
-            })
-          )
-          // {
-            "tinc/${network}/tinc.conf" = {
-              mode = "0444";
-              text = ''
-                ${toTincConf ({ Interface = "tinc.${network}"; } // data.settings)}
-                ${data.extraConfig}
-              '';
-            };
-          }
+            flip mapAttrs' data.hosts
+              (
+                host: text:
+                  nameValuePair ("tinc/${network}/hosts/${host}") ({
+                    mode = "0644";
+                    user = "tinc-${network}";
+                    inherit text;
+                  })
+              )
+            // {
+              "tinc/${network}/tinc.conf" = {
+                mode = "0444";
+                text = ''
+                  ${toTincConf ({ Interface = "tinc.${network}"; } // data.settings)}
+                  ${data.extraConfig}
+                '';
+              };
+            }
         )
       );
     in
@@ -399,62 +403,62 @@ in
 
       systemd.services = flip mapAttrs' cfg.networks (
         network: data:
-        nameValuePair ("tinc.${network}") (
-          let
-            version = getVersion data.package;
-          in
-          {
-            description = "Tinc Daemon - ${network}";
-            documentation = [
-              "info:tinc"
-              "man:tincd(8)"
-            ];
-            wantedBy = [ "multi-user.target" ];
-            path = [ data.package ];
-            reloadTriggers = mkIf (versionAtLeast version "1.1pre") [ (builtins.toJSON etcConfig) ];
-            restartTriggers = mkIf (versionOlder version "1.1pre") [ (builtins.toJSON etcConfig) ];
-            serviceConfig = {
-              Type = "simple";
-              Restart = "always";
-              RestartSec = "3";
-              ExecReload = mkIf (versionAtLeast version "1.1pre") "${data.package}/bin/tinc -n ${network} reload";
-              ExecStart = "${data.package}/bin/tincd -D -U tinc-${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
-            };
-            preStart = ''
-              mkdir -p /etc/tinc/${network}/hosts
-              chown tinc-${network} /etc/tinc/${network}/hosts
-              mkdir -p /etc/tinc/${network}/invitations
-              chown tinc-${network} /etc/tinc/${network}/invitations
+          nameValuePair ("tinc.${network}") (
+            let
+              version = getVersion data.package;
+            in
+            {
+              description = "Tinc Daemon - ${network}";
+              documentation = [
+                "info:tinc"
+                "man:tincd(8)"
+              ];
+              wantedBy = [ "multi-user.target" ];
+              path = [ data.package ];
+              reloadTriggers = mkIf (versionAtLeast version "1.1pre") [ (builtins.toJSON etcConfig) ];
+              restartTriggers = mkIf (versionOlder version "1.1pre") [ (builtins.toJSON etcConfig) ];
+              serviceConfig = {
+                Type = "simple";
+                Restart = "always";
+                RestartSec = "3";
+                ExecReload = mkIf (versionAtLeast version "1.1pre") "${data.package}/bin/tinc -n ${network} reload";
+                ExecStart = "${data.package}/bin/tincd -D -U tinc-${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
+              };
+              preStart = ''
+                mkdir -p /etc/tinc/${network}/hosts
+                chown tinc-${network} /etc/tinc/${network}/hosts
+                mkdir -p /etc/tinc/${network}/invitations
+                chown tinc-${network} /etc/tinc/${network}/invitations
 
-              # Determine how we should generate our keys
-              if type tinc >/dev/null 2>&1; then
-                # Tinc 1.1+ uses the tinc helper application for key generation
-              ${
-                if data.ed25519PrivateKeyFile != null then
-                  "  # ed25519 Keyfile managed by nix"
+                # Determine how we should generate our keys
+                if type tinc >/dev/null 2>&1; then
+                  # Tinc 1.1+ uses the tinc helper application for key generation
+                ${
+                  if data.ed25519PrivateKeyFile != null then
+                    "  # ed25519 Keyfile managed by nix"
+                  else
+                    ''
+                      # Prefer ED25519 keys (only in 1.1+)
+                      [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
+                    ''
+                }
+                ${
+                  if data.rsaPrivateKeyFile != null then
+                    "  # RSA Keyfile managed by nix"
+                  else
+                    ''
+                      [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
+                    ''
+                }
+                  # In case there isn't anything to do
+                  true
                 else
-                  ''
-                    # Prefer ED25519 keys (only in 1.1+)
-                    [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
-                  ''
-              }
-              ${
-                if data.rsaPrivateKeyFile != null then
-                  "  # RSA Keyfile managed by nix"
-                else
-                  ''
-                    [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
-                  ''
-              }
-                # In case there isn't anything to do
-                true
-              else
-                # Tinc 1.0 uses the tincd application
-                [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
-              fi
-            '';
-          }
-        )
+                  # Tinc 1.0 uses the tincd application
+                  [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
+                fi
+              '';
+            }
+          )
       );
 
       environment.systemPackages =
@@ -481,11 +485,11 @@ in
 
       users.users = flip mapAttrs' cfg.networks (
         network: _:
-        nameValuePair ("tinc-${network}") ({
-          description = "Tinc daemon user for ${network}";
-          isSystemUser = true;
-          group = "tinc-${network}";
-        })
+          nameValuePair ("tinc-${network}") ({
+            description = "Tinc daemon user for ${network}";
+            isSystemUser = true;
+            group = "tinc-${network}";
+          })
       );
       users.groups = flip mapAttrs' cfg.networks (network: _: nameValuePair "tinc-${network}" { });
     }

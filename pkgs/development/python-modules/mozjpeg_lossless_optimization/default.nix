@@ -1,14 +1,14 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  buildPythonPackage,
-  mozjpeg,
-  pytestCheckHook,
-  setuptools,
-  cmake,
-  nix-update-script,
-  cffi,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, buildPythonPackage
+, mozjpeg
+, pytestCheckHook
+, setuptools
+, cmake
+, nix-update-script
+, cffi
+,
 }:
 buildPythonPackage rec {
   pname = "mozjpeg_lossless_optimization";

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  installShellFiles,
-  gnustep-base,
-  bzip2,
-  zlib,
-  icu,
-  openssl,
-  wavpack,
-  xcbuildHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, gnustep-base
+, bzip2
+, zlib
+, icu
+, openssl
+, wavpack
+, xcbuildHook
+,
 }:
 
 stdenv.mkDerivation rec {

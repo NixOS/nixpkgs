@@ -1,15 +1,15 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  libGL,
-  libGLU,
-  libzip,
-  mkLibretroCore,
-  pkg-config,
-  python3,
-  snappy,
-  xorg,
+{ lib
+, cmake
+, fetchFromGitHub
+, libGL
+, libGLU
+, libzip
+, mkLibretroCore
+, pkg-config
+, python3
+, snappy
+, xorg
+,
 }:
 mkLibretroCore {
   core = "ppsspp";

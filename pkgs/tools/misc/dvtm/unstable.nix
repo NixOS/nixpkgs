@@ -1,7 +1,7 @@
-{
-  callPackage,
-  fetchpatch,
-  fetchzip,
+{ callPackage
+, fetchpatch
+, fetchzip
+,
 }:
 
 let

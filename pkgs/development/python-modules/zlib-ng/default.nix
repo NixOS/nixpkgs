@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  replaceVars,
-
-  # build-system
-  cmake,
-  setuptools,
-  versioningit,
-
-  # native dependencies
-  zlib-ng,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, replaceVars
+, # build-system
+  cmake
+, setuptools
+, versioningit
+, # native dependencies
+  zlib-ng
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

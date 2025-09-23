@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  equicord,
-  electron,
-  libicns,
-  pipewire,
-  libpulseaudio,
-  autoPatchelfHook,
-  pnpm_10,
-  nodejs,
-  nix-update-script,
-  withTTS ? true,
-  withMiddleClickScroll ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, equicord
+, electron
+, libicns
+, pipewire
+, libpulseaudio
+, autoPatchelfHook
+, pnpm_10
+, nodejs
+, nix-update-script
+, withTTS ? true
+, withMiddleClickScroll ? false
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";

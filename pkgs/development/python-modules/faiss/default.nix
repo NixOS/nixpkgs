@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  callPackage,
-  faiss-build,
-  numpy,
-  packaging,
-  setuptools,
-  pip,
+{ lib
+, buildPythonPackage
+, callPackage
+, faiss-build
+, numpy
+, packaging
+, setuptools
+, pip
+,
 }:
 
 buildPythonPackage {

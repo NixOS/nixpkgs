@@ -1,27 +1,26 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  fetchurl,
-  makeWrapper,
-  meson,
-  ninja,
-  pkg-config,
-  libxml2,
-  json-glib,
-  glib,
-  gettext,
-  libsoup_3,
-  gi-docgen,
-  gobject-introspection,
-  python3,
-  tzdata,
-  geocode-glib_2,
-  vala,
-  gnome,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, makeWrapper
+, meson
+, ninja
+, pkg-config
+, libxml2
+, json-glib
+, glib
+, gettext
+, libsoup_3
+, gi-docgen
+, gobject-introspection
+, python3
+, tzdata
+, geocode-glib_2
+, vala
+, gnome
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

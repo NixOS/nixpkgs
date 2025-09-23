@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  wrapGAppsHook3,
-  glew,
-  gtk3,
-  xorg,
-  nix-update-script,
+{ lib
+, stdenv
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, wrapGAppsHook3
+, glew
+, gtk3
+, xorg
+, nix-update-script
+,
 }:
 
 buildDotnetModule rec {

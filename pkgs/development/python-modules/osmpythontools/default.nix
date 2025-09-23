@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  beautifulsoup4,
-  geojson,
-  lxml,
-  matplotlib,
-  numpy,
-  pandas,
-  setuptools,
-  ujson,
-  xarray,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, beautifulsoup4
+, geojson
+, lxml
+, matplotlib
+, numpy
+, pandas
+, setuptools
+, ujson
+, xarray
+,
 }:
 
 buildPythonPackage rec {

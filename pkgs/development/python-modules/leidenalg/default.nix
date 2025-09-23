@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  ddt,
-  fetchFromGitHub,
-  igraph,
-  igraph-c,
-  libleidenalg,
-  pythonOlder,
-  setuptools-scm,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, ddt
+, fetchFromGitHub
+, igraph
+, igraph-c
+, libleidenalg
+, pythonOlder
+, setuptools-scm
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

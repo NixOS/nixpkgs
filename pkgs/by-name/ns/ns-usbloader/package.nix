@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
-  wrapGAppsHook3,
-  gvfs,
-  maven,
-  jre,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, copyDesktopItems
+, makeDesktopItem
+, makeWrapper
+, wrapGAppsHook3
+, gvfs
+, maven
+, jre
+, udevCheckHook
+,
 }:
 let
   pkgDescription = "All-in-one tool for managing Nintendo Switch homebrew";
 
   selectSystem =
     attrs:
-    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   jreWithJavaFX = jre.override { enableJavaFX = true; };
 in

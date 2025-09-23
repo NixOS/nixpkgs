@@ -1,6 +1,6 @@
-{
-  mkKdeDerivation,
-  sane-backends,
+{ mkKdeDerivation
+, sane-backends
+,
 }:
 mkKdeDerivation {
   pname = "ksanecore";

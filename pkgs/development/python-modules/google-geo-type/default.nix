@@ -1,14 +1,14 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  gitUpdater,
-  google-api-core,
-  google-auth,
-  lib,
-  proto-plus,
-  protobuf,
-  pytestCheckHook,
-  setuptools,
+{ buildPythonPackage
+, fetchFromGitHub
+, gitUpdater
+, google-api-core
+, google-auth
+, lib
+, proto-plus
+, protobuf
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

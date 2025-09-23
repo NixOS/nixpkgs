@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  qt6,
-  dfl-ipc,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, qt6
+, dfl-ipc
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

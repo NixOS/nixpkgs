@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  attrs,
-  buildPythonPackage,
-  distro,
-  fetchFromGitHub,
-  parameterized,
-  jsonschema,
-  mock,
-  packaging,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  testfixtures,
-  zipfile2,
+{ lib
+, stdenv
+, attrs
+, buildPythonPackage
+, distro
+, fetchFromGitHub
+, parameterized
+, jsonschema
+, mock
+, packaging
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, testfixtures
+, zipfile2
+,
 }:
 
 buildPythonPackage rec {

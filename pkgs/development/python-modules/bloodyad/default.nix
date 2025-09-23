@@ -1,18 +1,18 @@
-{
-  lib,
-  asn1crypto,
-  buildPythonPackage,
-  certipy,
-  cryptography,
-  dnspython,
-  fetchFromGitHub,
-  hatchling,
-  minikerberos-bad,
-  msldap-bad,
-  pyasn1,
-  pytestCheckHook,
-  pythonOlder,
-  winacl,
+{ lib
+, asn1crypto
+, buildPythonPackage
+, certipy
+, cryptography
+, dnspython
+, fetchFromGitHub
+, hatchling
+, minikerberos-bad
+, msldap-bad
+, pyasn1
+, pytestCheckHook
+, pythonOlder
+, winacl
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,21 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  libxml2,
-  ncurses,
-  zlib,
-  features ? [
+{ lib
+, rustPlatform
+, fetchCrate
+, libxml2
+, ncurses
+, zlib
+, features ? [
     "use_jemalloc"
     "allow_avx2"
     "unstable"
-  ],
+  ]
+,
 }:
 # Don't allow LLVM support until https://github.com/ezrosent/frawk/issues/115 is resolved.
-assert lib.assertMsg (
-  !(lib.elem "default" features || lib.elem "llvm_backend" features)
-) "LLVM support has been dropped due to LLVM 12 EOL.";
+assert lib.assertMsg
+  (
+    !(lib.elem "default" features || lib.elem "llvm_backend" features)
+  ) "LLVM support has been dropped due to LLVM 12 EOL.";
 rustPlatform.buildRustPackage rec {
   pname = "frawk";
   version = "0.4.8";

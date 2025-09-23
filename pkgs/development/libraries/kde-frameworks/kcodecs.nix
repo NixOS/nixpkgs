@@ -1,9 +1,9 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  qtbase,
-  qttools,
-  gperf,
+{ mkDerivation
+, extra-cmake-modules
+, qtbase
+, qttools
+, gperf
+,
 }:
 
 mkDerivation {

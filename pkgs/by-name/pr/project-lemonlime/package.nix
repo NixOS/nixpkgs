@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  qt6,
-  nix-update-script,
-  bubblewrap,
-  bash,
-  diffutils,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qt6
+, nix-update-script
+, bubblewrap
+, bash
+, diffutils
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  libtool,
-  fftw,
-  eigen,
-  qt5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libtool
+, fftw
+, eigen
+, qt5
+,
 }:
 
 stdenv.mkDerivation rec {

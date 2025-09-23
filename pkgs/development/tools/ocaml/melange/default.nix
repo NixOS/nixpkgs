@@ -1,22 +1,22 @@
-{
-  buildDunePackage,
-  cmdliner,
-  cppo,
-  dune-build-info,
-  fetchurl,
-  fetchpatch,
-  jq,
-  lib,
-  makeWrapper,
-  menhirLib,
-  merlin,
-  nodejs,
-  ocaml,
-  ounit2,
-  ppxlib,
-  reason,
-  stdenv,
-  tree,
+{ buildDunePackage
+, cmdliner
+, cppo
+, dune-build-info
+, fetchurl
+, fetchpatch
+, jq
+, lib
+, makeWrapper
+, menhirLib
+, merlin
+, nodejs
+, ocaml
+, ounit2
+, ppxlib
+, reason
+, stdenv
+, tree
+,
 }:
 
 let

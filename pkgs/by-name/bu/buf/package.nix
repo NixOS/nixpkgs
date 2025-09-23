@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  protobuf,
-  git,
-  testers,
-  installShellFiles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, protobuf
+, git
+, testers
+, installShellFiles
+,
 }:
 
 buildGoModule (finalAttrs: {

@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-
-  poetry-core,
-  python-lzo,
-  tkinter,
-
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, python-lzo
+, tkinter
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  expat,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
-  systemdMinimal,
-  audit,
-  libapparmor,
-  dbus,
-  docbook_xml_dtd_44,
-  docbook-xsl-nons,
-  xmlto,
-  autoreconfHook,
-  autoconf-archive,
-  x11Support ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
-  xorg,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, expat
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
+, systemdMinimal
+, audit
+, libapparmor
+, dbus
+, docbook_xml_dtd_44
+, docbook-xsl-nons
+, xmlto
+, autoreconfHook
+, autoconf-archive
+, x11Support ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
+, xorg
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -69,14 +69,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optionals x11Support (
-      with xorg;
-      [
-        libX11
-        libICE
-        libSM
-      ]
-    )
+    lib.optionals x11Support
+      (
+        with xorg;
+        [
+          libX11
+          libICE
+          libSM
+        ]
+      )
     ++ lib.optional enableSystemd systemdMinimal
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       audit

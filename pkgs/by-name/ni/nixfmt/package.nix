@@ -1,9 +1,9 @@
-{
-  haskell,
-  haskellPackages,
-  lib,
-  runCommand,
-  nixfmt,
+{ haskell
+, haskellPackages
+, lib
+, runCommand
+, nixfmt
+,
 }:
 let
   inherit (haskell.lib.compose) overrideCabal justStaticExecutables;

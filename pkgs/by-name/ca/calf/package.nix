@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  cairo,
-  expat,
-  fftwSinglePrec,
-  fluidsynth,
-  glib,
-  gtk2,
-  libjack2,
-  ladspaH,
-  gnome2,
-  lv2,
-  pkg-config,
-  fetchFromGitHub,
-  cmake,
+{ lib
+, stdenv
+, cairo
+, expat
+, fftwSinglePrec
+, fluidsynth
+, glib
+, gtk2
+, libjack2
+, ladspaH
+, gnome2
+, lv2
+, pkg-config
+, fetchFromGitHub
+, cmake
+,
 }:
 stdenv.mkDerivation rec {
   pname = "calf";

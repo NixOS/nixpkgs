@@ -1,29 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchgit,
-  cmake,
-  libuuid,
-  expat,
-  libiconv,
-  botan2,
-  systemd,
-  pkg-config,
-  python3Packages,
-  withIDN ? true,
-  libidn,
-  withPostgreSQL ? false,
-  libpq,
-  withSQLite ? true,
-  sqlite,
-  withUDNS ? true,
-  udns,
+{ lib
+, stdenv
+, fetchurl
+, fetchgit
+, cmake
+, libuuid
+, expat
+, libiconv
+, botan2
+, systemd
+, pkg-config
+, python3Packages
+, withIDN ? true
+, libidn
+, withPostgreSQL ? false
+, libpq
+, withSQLite ? true
+, sqlite
+, withUDNS ? true
+, udns
+,
 }:
 
-assert lib.assertMsg (
-  withPostgreSQL || withSQLite
-) "At least one Biboumi database provider required";
+assert lib.assertMsg
+  (
+    withPostgreSQL || withSQLite
+  ) "At least one Biboumi database provider required";
 
 let
   louiz_catch = fetchgit {

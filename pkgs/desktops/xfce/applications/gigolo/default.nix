@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook3,
-  gtk3,
-  glib,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook3
+, gtk3
+, glib
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

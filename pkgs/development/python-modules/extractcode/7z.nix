@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  plugincode,
-  p7zip,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, plugincode
+, p7zip
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  pkg-config,
-  imagemagick,
-  fetchFromGitHub,
-  SDL2,
-  numactl,
-  libvncserver,
-  freetype,
-  unstableGitUpdater,
+{ stdenv
+, lib
+, pkg-config
+, imagemagick
+, fetchFromGitHub
+, SDL2
+, numactl
+, libvncserver
+, freetype
+, unstableGitUpdater
+,
 }:
 stdenv.mkDerivation {
   pname = "shoreline";

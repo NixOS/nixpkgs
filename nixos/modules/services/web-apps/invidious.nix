@@ -1,9 +1,8 @@
-{
-  lib,
-  config,
-  pkgs,
-  options,
-  ...
+{ lib
+, config
+, pkgs
+, options
+, ...
 }:
 let
   cfg = config.services.invidious;
@@ -118,10 +117,12 @@ let
 
   serviceConfig = {
     systemd.services = builtins.listToAttrs (
-      builtins.genList (scaleIndex: {
-        name = "invidious" + lib.optionalString (scaleIndex > 0) "-${builtins.toString scaleIndex}";
-        value = mkInvidiousService scaleIndex;
-      }) cfg.serviceScale
+      builtins.genList
+        (scaleIndex: {
+          name = "invidious" + lib.optionalString (scaleIndex > 0) "-${builtins.toString scaleIndex}";
+          value = mkInvidiousService scaleIndex;
+        })
+        cfg.serviceScale
     );
 
     services.invidious.settings = {
@@ -280,10 +281,12 @@ let
         };
         upstreams = lib.mkIf (cfg.serviceScale > 1) {
           "upstream-invidious".servers = builtins.listToAttrs (
-            builtins.genList (scaleIndex: {
-              name = "${ip}:${toString (cfg.port + scaleIndex)}";
-              value = { };
-            }) cfg.serviceScale
+            builtins.genList
+              (scaleIndex: {
+                name = "${ip}:${toString (cfg.port + scaleIndex)}";
+                value = { };
+              })
+              cfg.serviceScale
           );
         };
       };

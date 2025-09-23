@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pymysql,
-  sqlalchemy,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pymysql
+, sqlalchemy
+,
 }:
 
 buildPythonPackage rec {

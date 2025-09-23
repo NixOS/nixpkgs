@@ -1,9 +1,8 @@
 # PipeWire service.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -34,9 +33,11 @@ let
   json = pkgs.formats.json { };
   mapToFiles =
     location: config:
-    concatMapAttrs (name: value: {
-      "share/pipewire/${location}.conf.d/${name}.conf" = json.generate "${name}" value;
-    }) config;
+    concatMapAttrs
+      (name: value: {
+        "share/pipewire/${location}.conf.d/${name}.conf" = json.generate "${name}" value;
+      })
+      config;
   extraConfigPkgFromFiles =
     locations: filesSet:
     pkgs.runCommand "pipewire-extra-config" { } ''
@@ -341,11 +342,12 @@ in
       }
       {
         assertion =
-          length (
-            attrNames (
-              filterAttrs (name: value: hasPrefix "pipewire/" name || name == "pipewire") config.environment.etc
-            )
-          ) == 1;
+          length
+            (
+              attrNames (
+                filterAttrs (name: value: hasPrefix "pipewire/" name || name == "pipewire") config.environment.etc
+              )
+            ) == 1;
         message = "Using `environment.etc.\"pipewire<...>\"` directly is no longer supported. Use `services.pipewire.extraConfig` or `services.pipewire.configPackages` instead.";
       }
     ];
@@ -366,9 +368,10 @@ in
     systemd.user.services.pipewire.enable = !cfg.systemWide;
 
     systemd.services.pipewire.environment.LV2_PATH = mkIf cfg.systemWide "${lv2Plugins}/lib/lv2";
-    systemd.user.services.pipewire.environment.LV2_PATH = mkIf (
-      !cfg.systemWide
-    ) "${lv2Plugins}/lib/lv2";
+    systemd.user.services.pipewire.environment.LV2_PATH = mkIf
+      (
+        !cfg.systemWide
+      ) "${lv2Plugins}/lib/lv2";
 
     # Mask pw-pulse if it's not wanted
     systemd.services.pipewire-pulse.enable = cfg.pulse.enable && cfg.systemWide;

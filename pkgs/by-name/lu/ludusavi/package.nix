@@ -1,34 +1,34 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  cmake,
-  pkg-config,
-  makeWrapper,
-  wrapGAppsHook3,
-  bzip2,
-  fontconfig,
-  freetype,
-  libGL,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXi,
-  libxkbcommon,
-  vulkan-loader,
-  wayland,
-  zenity,
-  kdePackages,
-  cairo,
-  pango,
-  atkmm,
-  gdk-pixbuf,
-  dbus-glib,
-  gtk3,
-  glib,
-  rclone,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, cmake
+, pkg-config
+, makeWrapper
+, wrapGAppsHook3
+, bzip2
+, fontconfig
+, freetype
+, libGL
+, libX11
+, libXcursor
+, libXrandr
+, libXi
+, libxkbcommon
+, vulkan-loader
+, wayland
+, zenity
+, kdePackages
+, cairo
+, pango
+, atkmm
+, gdk-pixbuf
+, dbus-glib
+, gtk3
+, glib
+, rclone
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

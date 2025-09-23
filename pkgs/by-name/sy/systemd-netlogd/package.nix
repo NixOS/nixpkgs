@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gperf,
-  libcap,
-  meson,
-  ninja,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  pkgsCross,
-  sphinx,
-  systemd,
-  systemdLibs,
-  testers,
-  opensslSupport ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gperf
+, libcap
+, meson
+, ninja
+, nix-update-script
+, openssl
+, pkg-config
+, pkgsCross
+, sphinx
+, systemd
+, systemdLibs
+, testers
+, opensslSupport ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

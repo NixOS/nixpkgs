@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  boost,
-  libpng,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, boost
+, libpng
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  doxygen,
-  enchant,
-  glib,
-  llvmPackages,
-  pkg-config,
-  qtbase,
-  qttools,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, doxygen
+, enchant
+, glib
+, llvmPackages
+, pkg-config
+, qtbase
+, qttools
+,
 }:
 
 stdenv.mkDerivation rec {

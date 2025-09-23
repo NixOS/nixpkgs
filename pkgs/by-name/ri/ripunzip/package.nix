@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  openssl,
-  pkg-config,
-  testers,
-  fetchzip,
-  ripunzip,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, openssl
+, pkg-config
+, testers
+, fetchzip
+, ripunzip
+,
 }:
 
 rustPlatform.buildRustPackage rec {

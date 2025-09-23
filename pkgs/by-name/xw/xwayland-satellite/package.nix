@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  libxcb,
-  makeBinaryWrapper,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  xcb-util-cursor,
-  xwayland,
-  withSystemd ? true,
+{ lib
+, fetchFromGitHub
+, libxcb
+, makeBinaryWrapper
+, nix-update-script
+, pkg-config
+, rustPlatform
+, xcb-util-cursor
+, xwayland
+, withSystemd ? true
+,
 }:
 
 rustPlatform.buildRustPackage rec {

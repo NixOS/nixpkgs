@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  ninja,
-  setuptools,
-  torch,
-  cudaPackages,
-  rocmPackages,
-  config,
-  cudaSupport ? config.cudaSupport,
-  which,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, ninja
+, setuptools
+, torch
+, cudaPackages
+, rocmPackages
+, config
+, cudaSupport ? config.cudaSupport
+, which
+,
 }:
 
 buildPythonPackage rec {

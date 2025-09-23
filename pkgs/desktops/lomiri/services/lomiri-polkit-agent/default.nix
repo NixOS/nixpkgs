@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  nixosTests,
-  cmake,
-  cmake-extras,
-  dbus,
-  dbus-test-runner,
-  gtest,
-  libnotify,
-  pkg-config,
-  polkit,
-  properties-cpp,
-  python3,
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, nixosTests
+, cmake
+, cmake-extras
+, dbus
+, dbus-test-runner
+, gtest
+, libnotify
+, pkg-config
+, polkit
+, properties-cpp
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

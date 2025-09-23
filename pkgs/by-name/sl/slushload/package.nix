@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  makeWrapper,
-  wineWowPackages,
+{ lib
+, stdenvNoCC
+, fetchzip
+, makeWrapper
+, wineWowPackages
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "slushload";

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  efl,
-  gst_all_1,
-  wrapGAppsHook3,
-  directoryListingUpdater,
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, efl
+, gst_all_1
+, wrapGAppsHook3
+, directoryListingUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

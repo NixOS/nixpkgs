@@ -1,8 +1,8 @@
-{
-  build-idris-package,
-  fetchFromGitLab,
-  lightyear,
-  lib,
+{ build-idris-package
+, fetchFromGitLab
+, lightyear
+, lib
+,
 }:
 build-idris-package {
   pname = "graphviz";

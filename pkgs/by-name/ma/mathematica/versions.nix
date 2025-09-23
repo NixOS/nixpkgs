@@ -3,7 +3,7 @@
 /*
   To calculate the hash of an installer, use a command like this:
 
-    nix --extra-experimental-features nix-command hash file <installer-file>
+  nix --extra-experimental-features nix-command hash file <installer-file>
 */
 
 let
@@ -195,12 +195,12 @@ let
 in
 
 lib.flip map versions (
-  {
-    version,
-    lang,
-    language,
-    sha256,
-    installer,
+  { version
+  , lang
+  , language
+  , sha256
+  , installer
+  ,
   }:
   {
     inherit version lang;

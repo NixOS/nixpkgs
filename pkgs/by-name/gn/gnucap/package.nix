@@ -1,13 +1,13 @@
-{
-  callPackage,
-  fetchgit,
-  installShellFiles,
-  lib,
-  readline,
-  runCommand,
-  stdenv,
-  termcap,
-  writeScript,
+{ callPackage
+, fetchgit
+, installShellFiles
+, lib
+, readline
+, runCommand
+, stdenv
+, termcap
+, writeScript
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

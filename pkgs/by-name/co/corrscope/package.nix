@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  ffmpeg,
-  python3Packages,
-  qt6Packages,
-  testers,
-  corrscope,
+{ stdenv
+, lib
+, fetchFromGitHub
+, ffmpeg
+, python3Packages
+, qt6Packages
+, testers
+, corrscope
+,
 }:
 
 python3Packages.buildPythonApplication rec {

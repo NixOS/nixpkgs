@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  folly,
-  gflags,
-  glog,
-  openssl,
-  double-conversion,
-  unstableGitUpdater,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, folly
+, gflags
+, glog
+, openssl
+, double-conversion
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

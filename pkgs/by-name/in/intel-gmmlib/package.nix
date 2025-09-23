@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  # for passthru.tests
-  intel-compute-runtime,
-  intel-media-driver,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, # for passthru.tests
+  intel-compute-runtime
+, intel-media-driver
+,
 }:
 
 stdenv.mkDerivation rec {

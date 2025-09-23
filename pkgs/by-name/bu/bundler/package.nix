@@ -1,12 +1,12 @@
-{
-  lib,
-  buildRubyGem,
-  ruby,
-  writeScript,
-  testers,
-  bundler,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, buildRubyGem
+, ruby
+, writeScript
+, testers
+, bundler
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 buildRubyGem rec {

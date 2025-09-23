@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -11,9 +10,10 @@ let
   # Compile keyfiles to dconf DB
   compileDconfDb =
     dir:
-    pkgs.runCommand "dconf-db" {
-      nativeBuildInputs = [ (lib.getBin pkgs.dconf) ];
-    } "dconf compile $out ${dir}";
+    pkgs.runCommand "dconf-db"
+      {
+        nativeBuildInputs = [ (lib.getBin pkgs.dconf) ];
+      } "dconf compile $out ${dir}";
 
   # Check if dconf keyfiles are valid
   checkDconfKeyfiles =
@@ -96,13 +96,15 @@ let
       pkgs.writeTextDir "etc/dconf/profile/${name}" (
         lib.concatMapStrings (x: "${x}\n") (
           (lib.optional value.enableUserDb "user-db:user")
-          ++ (map (
-            value:
-            let
-              db = if lib.isAttrs value && !lib.isDerivation value then mkDconfDb value else checkDconfDb value;
-            in
-            "file-db:${db}"
-          ) value.databases)
+          ++ (map
+            (
+              value:
+              let
+                db = if lib.isAttrs value && !lib.isDerivation value then mkDconfDb value else checkDconfDb value;
+              in
+              "file-db:${db}"
+            )
+            value.databases)
         )
       );
 

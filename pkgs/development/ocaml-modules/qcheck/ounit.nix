@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  qcheck-core,
-  ounit2,
+{ buildDunePackage
+, qcheck-core
+, ounit2
+,
 }:
 
 buildDunePackage {

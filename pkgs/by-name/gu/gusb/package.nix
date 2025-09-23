@@ -1,24 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  meson,
-  ninja,
-  pkg-config,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  gobject-introspection,
-  gi-docgen,
-  python3,
-  glib,
-  libusb1,
-  json-glib,
-  vala,
-  hwdata,
-  umockdev,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, meson
+, ninja
+, pkg-config
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, gobject-introspection
+, gi-docgen
+, python3
+, glib
+, libusb1
+, json-glib
+, vala
+, hwdata
+, umockdev
+,
 }:
 
 let

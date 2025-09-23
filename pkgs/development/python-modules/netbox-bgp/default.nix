@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  netbox,
-  pytestCheckHook,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, netbox
+, pytestCheckHook
+, python
+,
 }:
 
 buildPythonPackage rec {

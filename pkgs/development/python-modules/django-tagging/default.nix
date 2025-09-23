@@ -1,7 +1,7 @@
-{
-  buildPythonPackage,
-  fetchPypi,
-  django,
+{ buildPythonPackage
+, fetchPypi
+, django
+,
 }:
 
 buildPythonPackage rec {

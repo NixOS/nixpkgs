@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pdm-backend,
-  tqdm,
-  hypothesis,
-  pytest,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pdm-backend
+, tqdm
+, hypothesis
+, pytest
+,
 }:
 
 buildPythonPackage rec {

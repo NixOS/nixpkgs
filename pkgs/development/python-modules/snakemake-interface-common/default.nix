@@ -1,12 +1,12 @@
-{
-  lib,
-  argparse-dataclass,
-  buildPythonPackage,
-  configargparse,
-  fetchFromGitHub,
-  poetry-core,
-  pythonOlder,
-  pytestCheckHook,
+{ lib
+, argparse-dataclass
+, buildPythonPackage
+, configargparse
+, fetchFromGitHub
+, poetry-core
+, pythonOlder
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

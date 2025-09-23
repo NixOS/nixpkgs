@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitHub,
-  perl,
-  cryptography,
-  rustPlatform,
-  pretend,
-  pytestCheckHook,
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, perl
+, cryptography
+, rustPlatform
+, pretend
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

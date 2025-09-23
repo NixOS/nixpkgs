@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  platformdirs,
-  bokeh,
-  buildPythonPackage,
-  dask,
-  entrypoints,
-  fetchFromGitHub,
-  fsspec,
-  hvplot,
-  intake-parquet,
-  jinja2,
-  msgpack,
-  msgpack-numpy,
-  pandas,
-  panel,
-  pyarrow,
-  pytestCheckHook,
-  python-snappy,
-  pythonOlder,
-  pythonAtLeast,
-  pyyaml,
-  networkx,
-  requests,
-  setuptools,
-  setuptools-scm,
-  tornado,
+{ lib
+, stdenv
+, platformdirs
+, bokeh
+, buildPythonPackage
+, dask
+, entrypoints
+, fetchFromGitHub
+, fsspec
+, hvplot
+, intake-parquet
+, jinja2
+, msgpack
+, msgpack-numpy
+, pandas
+, panel
+, pyarrow
+, pytestCheckHook
+, python-snappy
+, pythonOlder
+, pythonAtLeast
+, pyyaml
+, networkx
+, requests
+, setuptools
+, setuptools-scm
+, tornado
+,
 }:
 
 buildPythonPackage rec {

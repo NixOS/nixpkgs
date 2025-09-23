@@ -1,8 +1,8 @@
-{
-  pkgs,
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
+{ pkgs
+, lib
+, stdenvNoCC
+, fetchFromGitHub
+,
 }:
 
 stdenvNoCC.mkDerivation {

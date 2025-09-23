@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  gdk-pixbuf,
-  optipng,
-  librsvg,
-  gtk3,
-  pantheon,
-  adwaita-icon-theme,
-  gnome-icon-theme,
-  hicolor-icon-theme,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, gdk-pixbuf
+, optipng
+, librsvg
+, gtk3
+, pantheon
+, adwaita-icon-theme
+, gnome-icon-theme
+, hicolor-icon-theme
+,
 }:
 
 stdenv.mkDerivation rec {

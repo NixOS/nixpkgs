@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  gcc_meta,
-  release_version,
-  version,
-  getVersionFile,
-  monorepoSrc ? null,
-  fetchpatch,
-  autoreconfHook269,
-  runCommand,
-  gettext,
+{ lib
+, stdenv
+, gcc_meta
+, release_version
+, version
+, getVersionFile
+, monorepoSrc ? null
+, fetchpatch
+, autoreconfHook269
+, runCommand
+, gettext
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libstdcxx";

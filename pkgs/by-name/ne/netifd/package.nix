@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchgit,
-  libnl,
-  libubox,
-  uci,
-  ubus,
-  json_c,
-  pkg-config,
-  udebug,
+{ lib
+, stdenv
+, cmake
+, fetchgit
+, libnl
+, libubox
+, uci
+, ubus
+, json_c
+, pkg-config
+, udebug
+,
 }:
 
 stdenv.mkDerivation {

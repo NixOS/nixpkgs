@@ -1,12 +1,12 @@
-{
-  lib,
-  buildKodiAddon,
-  fetchFromGitHub,
-  signals,
-  inputstream-adaptive,
-  inputstreamhelper,
-  requests,
-  myconnpy,
+{ lib
+, buildKodiAddon
+, fetchFromGitHub
+, signals
+, inputstream-adaptive
+, inputstreamhelper
+, requests
+, myconnpy
+,
 }:
 
 buildKodiAddon rec {

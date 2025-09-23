@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  ecdsa,
-  fetchFromGitHub,
-  pyasn1,
-  pycrypto,
-  pycryptodome,
-  pytestCheckHook,
-  rsa,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cryptography
+, ecdsa
+, fetchFromGitHub
+, pyasn1
+, pycrypto
+, pycryptodome
+, pytestCheckHook
+, rsa
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

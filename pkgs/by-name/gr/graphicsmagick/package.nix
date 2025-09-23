@@ -1,29 +1,29 @@
-{
-  lib,
-  bzip2,
-  callPackage,
-  coreutils,
-  fetchurl,
-  fixDarwinDylibNames,
-  freetype,
-  ghostscript,
-  graphviz,
-  libX11,
-  libjpeg,
-  libpng,
-  libtiff,
-  libtool,
-  libwebp,
-  libxml2,
-  libheifSupport ? true,
-  libheif,
-  nukeReferences,
-  pkg-config,
-  quantumdepth ? 8,
-  runCommand,
-  stdenv,
-  xz,
-  zlib,
+{ lib
+, bzip2
+, callPackage
+, coreutils
+, fetchurl
+, fixDarwinDylibNames
+, freetype
+, ghostscript
+, graphviz
+, libX11
+, libjpeg
+, libpng
+, libtiff
+, libtool
+, libwebp
+, libxml2
+, libheifSupport ? true
+, libheif
+, nukeReferences
+, pkg-config
+, quantumdepth ? 8
+, runCommand
+, stdenv
+, xz
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

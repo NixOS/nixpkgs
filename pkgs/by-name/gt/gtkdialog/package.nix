@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  flex,
-  gtk3,
-  gtk-layer-shell,
-  meson,
-  ninja,
-  pkg-config,
-  vte,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, flex
+, gtk3
+, gtk-layer-shell
+, meson
+, ninja
+, pkg-config
+, vte
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

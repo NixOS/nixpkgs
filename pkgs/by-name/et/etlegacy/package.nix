@@ -1,9 +1,9 @@
-{
-  lib,
-  symlinkJoin,
-  etlegacy-assets,
-  etlegacy-unwrapped,
-  makeBinaryWrapper,
+{ lib
+, symlinkJoin
+, etlegacy-assets
+, etlegacy-unwrapped
+, makeBinaryWrapper
+,
 }:
 
 symlinkJoin {

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  lib,
-  glib,
-  gtk4,
-  libadwaita,
-  libX11,
-  libXtst,
-  pkg-config,
-  wrapGAppsHook4,
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, lib
+, glib
+, gtk4
+, libadwaita
+, libX11
+, libXtst
+, pkg-config
+, wrapGAppsHook4
+,
 }:
 
 rustPlatform.buildRustPackage rec {

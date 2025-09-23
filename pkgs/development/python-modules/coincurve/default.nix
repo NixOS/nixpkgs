@@ -1,24 +1,21 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-
-  # build-system
-  cmake,
-  hatchling,
-  ninja,
-  pkg-config,
-  setuptools,
-  scikit-build-core,
-
-  # dependencies
-  asn1crypto,
-  cffi,
-  secp256k1,
-
-  # checks
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, # build-system
+  cmake
+, hatchling
+, ninja
+, pkg-config
+, setuptools
+, scikit-build-core
+, # dependencies
+  asn1crypto
+, cffi
+, secp256k1
+, # checks
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

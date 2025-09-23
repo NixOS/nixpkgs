@@ -1,10 +1,10 @@
-{
-  resholve,
-  lib,
-  coreutils,
-  nix,
-  fetchFromGitHub,
-  writeText,
+{ resholve
+, lib
+, coreutils
+, nix
+, fetchFromGitHub
+, writeText
+,
 }:
 
 # resholve does not yet support `finalAttrs` call pattern hence `rec`

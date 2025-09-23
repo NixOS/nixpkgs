@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  aacSupport ? true,
-  alsa-lib,
-  autoreconfHook,
-  bluez,
-  dbus,
-  fdk_aac,
-  fetchFromGitHub,
-  gitUpdater,
-  glib,
-  libbsd,
-  ncurses,
-  pkg-config,
-  readline,
-  sbc,
-  python3,
+{ lib
+, stdenv
+, aacSupport ? true
+, alsa-lib
+, autoreconfHook
+, bluez
+, dbus
+, fdk_aac
+, fetchFromGitHub
+, gitUpdater
+, glib
+, libbsd
+, ncurses
+, pkg-config
+, readline
+, sbc
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

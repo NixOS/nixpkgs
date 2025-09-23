@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenvNoCC,
-  python3Packages,
-  yq,
+{ lib
+, fetchFromGitHub
+, stdenvNoCC
+, python3Packages
+, yq
+,
 }:
 let
   inherit (python3Packages) mkdocs mkdocs-material pymdown-extensions;

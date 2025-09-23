@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cairo,
-  libjpeg,
-  libXft,
-  pkg-config,
-  python3,
-  wafHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cairo
+, libjpeg
+, libXft
+, pkg-config
+, python3
+, wafHook
+,
 }:
 
 stdenv.mkDerivation rec {

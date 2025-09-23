@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  glib,
-  boost,
-  libsigrok,
-  libserialport,
-  libzip,
-  libftdi1,
-  hidapi,
-  glibmm,
-  python3,
-  bluez,
-  pcre,
-  libsForQt5,
-  desktopToDarwinBundle,
-  qt5,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, glib
+, boost
+, libsigrok
+, libserialport
+, libzip
+, libftdi1
+, hidapi
+, glibmm
+, python3
+, bluez
+, pcre
+, libsForQt5
+, desktopToDarwinBundle
+, qt5
+,
 }:
 
 stdenv.mkDerivation {

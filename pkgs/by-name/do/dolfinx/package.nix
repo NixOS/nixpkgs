@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  spdlog,
-  pugixml,
-  boost,
-  petsc,
-  slepc,
-  kahip,
-  adios2,
-  python3Packages,
-  catch2_3,
-  withParmetis ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, spdlog
+, pugixml
+, boost
+, petsc
+, slepc
+, kahip
+, adios2
+, python3Packages
+, catch2_3
+, withParmetis ? false
+,
 }:
 let
   dolfinxPackages = petsc.petscPackages.overrideScope (

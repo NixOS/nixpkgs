@@ -1,28 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  pkg-config,
-  python3Packages,
-  makeWrapper,
-  libsamplerate,
-  wafHook,
-  # Darwin Dependencies
-  aften,
-
-  # BSD Dependencies
-  freebsd,
-
-  # Optional Dependencies
-  dbus ? null,
-  libffado ? null,
-  alsa-lib ? null,
-
-  # Extra options
-  prefix ? "",
-
-  testers,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, pkg-config
+, python3Packages
+, makeWrapper
+, libsamplerate
+, wafHook
+, # Darwin Dependencies
+  aften
+, # BSD Dependencies
+  freebsd
+, # Optional Dependencies
+  dbus ? null
+, libffado ? null
+, alsa-lib ? null
+, # Extra options
+  prefix ? ""
+, testers
+,
 }:
 
 let
@@ -93,9 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (optDbus != null) "--dbus"
   ++ lib.optional (optLibffado != null) "--firewire"
   ++ lib.optional (optAlsaLib != null) "--alsa"
-  ++ lib.optional (
-    stdenv.hostPlatform != stdenv.buildPlatform
-  ) "--platform=${stdenv.hostPlatform.parsed.kernel.name}";
+  ++ lib.optional
+    (
+      stdenv.hostPlatform != stdenv.buildPlatform
+    ) "--platform=${stdenv.hostPlatform.parsed.kernel.name}";
 
   postInstall = (
     if libOnly then

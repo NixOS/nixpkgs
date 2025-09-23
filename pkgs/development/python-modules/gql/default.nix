@@ -1,24 +1,24 @@
-{
-  lib,
-  aiofiles,
-  aiohttp,
-  anyio,
-  backoff,
-  botocore,
-  buildPythonPackage,
-  fetchFromGitHub,
-  graphql-core,
-  httpx,
-  parse,
-  pytest-asyncio_0,
-  pytest-console-scripts,
-  pytestCheckHook,
-  requests,
-  requests-toolbelt,
-  setuptools,
-  vcrpy,
-  websockets,
-  yarl,
+{ lib
+, aiofiles
+, aiohttp
+, anyio
+, backoff
+, botocore
+, buildPythonPackage
+, fetchFromGitHub
+, graphql-core
+, httpx
+, parse
+, pytest-asyncio_0
+, pytest-console-scripts
+, pytestCheckHook
+, requests
+, requests-toolbelt
+, setuptools
+, vcrpy
+, websockets
+, yarl
+,
 }:
 
 buildPythonPackage rec {

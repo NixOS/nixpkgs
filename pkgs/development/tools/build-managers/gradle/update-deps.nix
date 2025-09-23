@@ -1,31 +1,31 @@
-{
-  lib,
-  runtimeShell,
-  srcOnly,
-  stdenvNoCC,
-  writeTextFile,
-  writeShellScript,
-  path,
-  bubblewrap,
-  coreutils,
-  curl,
-  jq,
-  mitm-cache,
-  nix,
-  openssl,
-  procps,
-  python3,
+{ lib
+, runtimeShell
+, srcOnly
+, stdenvNoCC
+, writeTextFile
+, writeShellScript
+, path
+, bubblewrap
+, coreutils
+, curl
+, jq
+, mitm-cache
+, nix
+, openssl
+, procps
+, python3
+,
 }:
 
 lib.makeOverridable (
-  {
-    pkg,
-    pname,
-    attrPath,
-    bwrapFlags,
-    data,
-    silent,
-    useBwrap,
+  { pkg
+  , pname
+  , attrPath
+  , bwrapFlags
+  , data
+  , silent
+  , useBwrap
+  ,
   }:
   let
     keep = [

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  w3lib,
-  parsel,
-  jmespath,
-  itemadapter,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, w3lib
+, parsel
+, jmespath
+, itemadapter
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

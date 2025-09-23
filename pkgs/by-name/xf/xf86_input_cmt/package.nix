@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  xorgserver,
-  xorgproto,
-  utilmacros,
-  libgestures,
-  libevdevc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, xorgserver
+, xorgproto
+, utilmacros
+, libgestures
+, libevdevc
+,
 }:
 
 stdenv.mkDerivation rec {

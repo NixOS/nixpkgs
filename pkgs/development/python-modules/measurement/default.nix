@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  isPy3k,
-  flit-core,
-  flit-scm,
-  sympy,
-  pytestCheckHook,
-  pytest-cov-stub,
-  sphinx,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, isPy3k
+, flit-core
+, flit-scm
+, sympy
+, pytestCheckHook
+, pytest-cov-stub
+, sphinx
+,
 }:
 
 buildPythonPackage rec {

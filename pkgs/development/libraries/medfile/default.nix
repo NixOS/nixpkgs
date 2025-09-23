@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  hdf5,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, hdf5
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

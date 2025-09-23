@@ -1,20 +1,20 @@
-{
-  lib,
-  babel,
-  buildPythonPackage,
-  cssselect,
-  fetchFromGitHub,
-  glibcLocales,
-  isodate,
-  leather,
-  lxml,
-  parsedatetime,
-  pyicu,
-  pytestCheckHook,
-  python-slugify,
-  pythonOlder,
-  pytimeparse,
-  setuptools,
+{ lib
+, babel
+, buildPythonPackage
+, cssselect
+, fetchFromGitHub
+, glibcLocales
+, isodate
+, leather
+, lxml
+, parsedatetime
+, pyicu
+, pytestCheckHook
+, python-slugify
+, pythonOlder
+, pytimeparse
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

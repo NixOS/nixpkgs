@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 let
@@ -144,10 +143,12 @@ let
 
   # Create parts of the lovelace config that reference lovelave modules as resources
   customLovelaceModulesResources = {
-    lovelace.resources = map (card: {
-      url = "/local/nixos-lovelace-modules/${card.entrypoint or (card.pname + ".js")}?${card.version}";
-      type = "module";
-    }) cfg.customLovelaceModules;
+    lovelace.resources = map
+      (card: {
+        url = "/local/nixos-lovelace-modules/${card.entrypoint or (card.pname + ".js")}?${card.version}";
+        type = "module";
+      })
+      cfg.customLovelaceModules;
   };
 in
 {

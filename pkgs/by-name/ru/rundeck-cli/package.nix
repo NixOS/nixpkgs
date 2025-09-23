@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeBinaryWrapper,
-  jre11_minimal,
-  jdk11_headless,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchurl
+, makeBinaryWrapper
+, jre11_minimal
+, jdk11_headless
+, versionCheckHook
+, nix-update-script
+,
 }:
 let
   jre11_minimal_headless = jre11_minimal.override {

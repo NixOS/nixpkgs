@@ -1,32 +1,33 @@
-{
-  cmake,
-  coin3d,
-  doxygen,
-  eigen,
-  fetchFromGitHub,
-  fetchpatch,
-  lapack,
-  lib,
-  libdc1394,
-  libdmtx,
-  libglvnd,
-  libjpeg, # this is libjpeg-turbo
-  libpng,
-  librealsense,
-  libxml2,
-  libX11,
-  nlohmann_json,
-  #ogre,
-  openblas,
-  opencv,
-  pkg-config,
-  python3Packages,
-  stdenv,
-  texliveSmall,
-  v4l-utils,
-  xorg,
-  zbar,
-  zlib,
+{ cmake
+, coin3d
+, doxygen
+, eigen
+, fetchFromGitHub
+, fetchpatch
+, lapack
+, lib
+, libdc1394
+, libdmtx
+, libglvnd
+, libjpeg
+, # this is libjpeg-turbo
+  libpng
+, librealsense
+, libxml2
+, libX11
+, nlohmann_json
+, #ogre,
+  openblas
+, opencv
+, pkg-config
+, python3Packages
+, stdenv
+, texliveSmall
+, v4l-utils
+, xorg
+, zbar
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

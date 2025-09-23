@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  gettext,
-  libxslt,
-  docbook_xsl_ns,
-  libcap,
-  libidn2,
-  iproute2,
-  apparmorRulesFromClosure,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gettext
+, libxslt
+, docbook_xsl_ns
+, libcap
+, libidn2
+, iproute2
+, apparmorRulesFromClosure
+,
 }:
 
 stdenv.mkDerivation rec {

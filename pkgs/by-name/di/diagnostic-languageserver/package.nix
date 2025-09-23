@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchYarnDeps,
-  fetchFromGitHub,
-  nix-update-script,
-  yarnConfigHook,
-  yarnBuildHook,
-  npmHooks,
-  nodejs,
+{ lib
+, stdenv
+, fetchYarnDeps
+, fetchFromGitHub
+, nix-update-script
+, yarnConfigHook
+, yarnBuildHook
+, npmHooks
+, nodejs
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "diagnostic-languageserver";

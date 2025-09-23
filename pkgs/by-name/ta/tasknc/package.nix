@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  makeWrapper,
-  perl,
-  ncurses5,
-  taskwarrior2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, perl
+, ncurses5
+, taskwarrior2
+,
 }:
 
 stdenv.mkDerivation rec {

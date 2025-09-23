@@ -1,14 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-
-  compressed-rtf,
-
-  pytestCheckHook,
-  pytest-console-scripts,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, compressed-rtf
+, pytestCheckHook
+, pytest-console-scripts
+,
 }:
 
 buildPythonPackage rec {

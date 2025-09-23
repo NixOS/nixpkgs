@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  buildEnv,
-  fetchFromGitHub,
-  mono,
+{ lib
+, stdenv
+, buildEnv
+, fetchFromGitHub
+, mono
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  coreutils,
-  gawk,
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, gawk
+,
 }:
 
 stdenv.mkDerivation rec {

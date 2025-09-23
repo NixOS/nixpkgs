@@ -1,33 +1,35 @@
-{
-  buildOpenRAEngine,
-  fetchFromGitHub,
-  postFetch,
+{ buildOpenRAEngine
+, fetchFromGitHub
+, postFetch
+,
 }:
 
 let
   buildUpstreamOpenRAEngine =
-    {
-      version,
-      rev,
-      sha256,
+    { version
+    , rev
+    , sha256
+    ,
     }:
     name:
-    (buildOpenRAEngine {
-      inherit version;
-      description = "Open-source re-implementation of Westwood Studios' 2D Command and Conquer games";
-      homepage = "https://www.openra.net/";
-      mods = [
-        "cnc"
-        "d2k"
-        "ra"
-        "ts"
-      ];
-      src = fetchFromGitHub {
-        owner = "OpenRA";
-        repo = "OpenRA";
-        inherit rev sha256 postFetch;
-      };
-    } name).overrideAttrs
+    (buildOpenRAEngine
+      {
+        inherit version;
+        description = "Open-source re-implementation of Westwood Studios' 2D Command and Conquer games";
+        homepage = "https://www.openra.net/";
+        mods = [
+          "cnc"
+          "d2k"
+          "ra"
+          "ts"
+        ];
+        src = fetchFromGitHub {
+          owner = "OpenRA";
+          repo = "OpenRA";
+          inherit rev sha256 postFetch;
+        };
+      }
+      name).overrideAttrs
       (origAttrs: {
         postInstall = ''
           ${origAttrs.postInstall}
@@ -41,19 +43,23 @@ in
 {
   release =
     name:
-    (buildUpstreamOpenRAEngine rec {
-      version = "20190314";
-      rev = "${name}-${version}";
-      sha256 = "15pvn5cx3g0nzbrgpsfz8dngad5wkzp5dz25ydzn8bmxafiijvcr";
-    } name);
+    (buildUpstreamOpenRAEngine
+      rec {
+        version = "20190314";
+        rev = "${name}-${version}";
+        sha256 = "15pvn5cx3g0nzbrgpsfz8dngad5wkzp5dz25ydzn8bmxafiijvcr";
+      }
+      name);
 
   playtest =
     name:
-    (buildUpstreamOpenRAEngine rec {
-      version = "20190302";
-      rev = "${name}-${version}";
-      sha256 = "1vqvfk2p2lpk3m0d3rpvj34i8cmk3mfc7w4cn4llqd9zp4kk9pya";
-    } name);
+    (buildUpstreamOpenRAEngine
+      rec {
+        version = "20190302";
+        rev = "${name}-${version}";
+        sha256 = "1vqvfk2p2lpk3m0d3rpvj34i8cmk3mfc7w4cn4llqd9zp4kk9pya";
+      }
+      name);
 
   bleed = buildUpstreamOpenRAEngine {
     version = "8ee1102";

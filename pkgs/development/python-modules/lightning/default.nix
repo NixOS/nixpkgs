@@ -1,17 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  pytorch-lightning,
-
-  # tests
-  psutil,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  pytorch-lightning
+, # tests
+  psutil
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage {

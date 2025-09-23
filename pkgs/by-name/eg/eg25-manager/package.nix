@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  gnugrep,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  curl,
-  glib,
-  libgpiod,
-  libgudev,
-  libusb1,
-  modemmanager,
+{ lib
+, stdenv
+, fetchFromGitLab
+, gnugrep
+, meson
+, ninja
+, pkg-config
+, scdoc
+, curl
+, glib
+, libgpiod
+, libgudev
+, libusb1
+, modemmanager
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

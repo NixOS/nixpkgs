@@ -1,9 +1,9 @@
-{
-  lib,
-  writers,
-  nixdoc,
-  runCommand,
-  treefmt,
+{ lib
+, writers
+, nixdoc
+, runCommand
+, treefmt
+,
 }:
 let
   root = toString ./.;

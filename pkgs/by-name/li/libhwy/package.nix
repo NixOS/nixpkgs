@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  ninja,
-  gtest,
-  fetchFromGitHub,
-  fetchpatch,
+{ lib
+, stdenv
+, cmake
+, ninja
+, gtest
+, fetchFromGitHub
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

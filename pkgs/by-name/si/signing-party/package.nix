@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  autoconf,
-  automake,
-  makeWrapper,
-  python3,
-  perl,
-  perlPackages,
-  libmd,
-  gnupg,
-  which,
-  getopt,
-  libpaper,
-  net-tools,
-  qprint,
-  sendmailPath ? "/run/wrappers/bin/sendmail",
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoconf
+, automake
+, makeWrapper
+, python3
+, perl
+, perlPackages
+, libmd
+, gnupg
+, which
+, getopt
+, libpaper
+, net-tools
+, qprint
+, sendmailPath ? "/run/wrappers/bin/sendmail"
+,
 }:
 
 let

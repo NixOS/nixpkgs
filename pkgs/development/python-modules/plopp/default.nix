@@ -1,36 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  lazy-loader,
-  matplotlib,
-
-  # tests
-  pytestCheckHook,
-  anywidget,
-  graphviz,
-  h5py,
-  ipympl,
-  ipywidgets,
-  mpltoolbox,
-  pandas,
-  plotly,
-  pooch,
-  pyarrow,
-  pythreejs,
-  scipp,
-  scipy,
-  xarray,
-
-  # tests data
-  symlinkJoin,
-  fetchurl,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  lazy-loader
+, matplotlib
+, # tests
+  pytestCheckHook
+, anywidget
+, graphviz
+, h5py
+, ipympl
+, ipywidgets
+, mpltoolbox
+, pandas
+, plotly
+, pooch
+, pyarrow
+, pythreejs
+, scipp
+, scipy
+, xarray
+, # tests data
+  symlinkJoin
+, fetchurl
+,
 }:
 
 buildPythonPackage rec {
@@ -86,16 +82,16 @@ buildPythonPackage rec {
           lib.mapAttrsToList
             (
               file: hash:
-              fetchurl {
-                url = "https://public.esss.dk/groups/scipp/plopp/${_version}/${file}";
-                inherit hash;
-                downloadToTemp = true;
-                recursiveHash = true;
-                postFetch = ''
-                  mkdir -p $out/${_version}
-                  mv $downloadedFile $out/${_version}/${file}
-                '';
-              }
+                fetchurl {
+                  url = "https://public.esss.dk/groups/scipp/plopp/${_version}/${file}";
+                  inherit hash;
+                  downloadToTemp = true;
+                  recursiveHash = true;
+                  postFetch = ''
+                    mkdir -p $out/${_version}
+                    mv $downloadedFile $out/${_version}/${file}
+                  '';
+                }
             )
             {
               "nyc_taxi_data.h5" = "sha256-hso8ESM+uLRf4y2CW/7dpAmm/kysAfJY3b+5vz78w4Q=";

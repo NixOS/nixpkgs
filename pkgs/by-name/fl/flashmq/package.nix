@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  installShellFiles,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, installShellFiles
+, openssl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

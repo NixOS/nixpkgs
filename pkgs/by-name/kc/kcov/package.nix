@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  zlib,
-  curl,
-  elfutils,
-  python3,
-  libiberty,
-  libopcodes,
-  runCommandCC,
-  rustc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, zlib
+, curl
+, elfutils
+, python3
+, libiberty
+, libopcodes
+, runCommandCC
+, rustc
+,
 }:
 
 let

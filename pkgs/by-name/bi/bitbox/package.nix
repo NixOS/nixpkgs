@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
-  buildNpmPackage,
-  clang,
-  go,
-  libsForQt5,
-  qt6,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, buildNpmPackage
+, clang
+, go
+, libsForQt5
+, qt6
+, udevCheckHook
+,
 }:
 
 let

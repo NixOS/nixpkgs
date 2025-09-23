@@ -1,42 +1,39 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-
-  # build-system
-  packaging,
-  setuptools,
-  wheel,
-
-  # dependencies
-  alembic,
-  argcomplete,
-  boto3,
-  dogpile-cache,
-  flask,
-  geoip2,
-  gfal2-python,
-  google-auth,
-  jsonschema,
-  oic,
-  paramiko,
-  prometheus-client,
-  pymemcache,
-  python-dateutil,
-  python-magic,
-  redis,
-  requests,
-  rich,
-  sqlalchemy,
-  statsd,
-  stomp-py,
-  tabulate,
-  typing-extensions,
-  urllib3,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, # build-system
+  packaging
+, setuptools
+, wheel
+, # dependencies
+  alembic
+, argcomplete
+, boto3
+, dogpile-cache
+, flask
+, geoip2
+, gfal2-python
+, google-auth
+, jsonschema
+, oic
+, paramiko
+, prometheus-client
+, pymemcache
+, python-dateutil
+, python-magic
+, redis
+, requests
+, rich
+, sqlalchemy
+, statsd
+, stomp-py
+, tabulate
+, typing-extensions
+, urllib3
+, # tests
+  pytestCheckHook
+,
 }:
 
 let

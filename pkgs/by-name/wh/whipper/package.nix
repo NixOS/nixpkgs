@@ -1,20 +1,20 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  fetchpatch,
-  installShellFiles,
-  wrapGAppsNoGuiHook,
-  gobject-introspection,
-  libcdio-paranoia,
-  cdrdao,
-  libsndfile,
-  glib,
-  flac,
-  sox,
-  util-linux,
-  testers,
-  whipper,
+{ lib
+, python3
+, fetchFromGitHub
+, fetchpatch
+, installShellFiles
+, wrapGAppsNoGuiHook
+, gobject-introspection
+, libcdio-paranoia
+, cdrdao
+, libsndfile
+, glib
+, flac
+, sox
+, util-linux
+, testers
+, whipper
+,
 }:
 
 let

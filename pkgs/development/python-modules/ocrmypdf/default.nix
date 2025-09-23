@@ -1,29 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  deprecation,
-  fetchFromGitHub,
-  ghostscript_headless,
-  hatch-vcs,
-  hatchling,
-  hypothesis,
-  img2pdf,
-  jbig2enc,
-  packaging,
-  pdfminer-six,
-  pillow-heif,
-  pikepdf,
-  pillow,
-  pluggy,
-  pngquant,
-  pytest-xdist,
-  pytestCheckHook,
-  rich,
-  reportlab,
-  replaceVars,
-  tesseract,
-  unpaper,
-  installShellFiles,
+{ lib
+, buildPythonPackage
+, deprecation
+, fetchFromGitHub
+, ghostscript_headless
+, hatch-vcs
+, hatchling
+, hypothesis
+, img2pdf
+, jbig2enc
+, packaging
+, pdfminer-six
+, pillow-heif
+, pikepdf
+, pillow
+, pluggy
+, pngquant
+, pytest-xdist
+, pytestCheckHook
+, rich
+, reportlab
+, replaceVars
+, tesseract
+, unpaper
+, installShellFiles
+,
 }:
 
 buildPythonPackage rec {

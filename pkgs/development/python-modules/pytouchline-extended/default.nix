@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  faust-cchardet,
-  fetchFromGitHub,
-  httplib2,
-  lib,
-  pytestCheckHook,
-  setuptools,
+{ buildPythonPackage
+, faust-cchardet
+, fetchFromGitHub
+, httplib2
+, lib
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

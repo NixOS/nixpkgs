@@ -1,34 +1,34 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  gnome,
-  pkg-config,
-  meson,
-  ninja,
-  adwaita-icon-theme,
-  exiv2,
-  libheif,
-  libjpeg,
-  libtiff,
-  gst_all_1,
-  libraw,
-  glib,
-  gtk3,
-  gsettings-desktop-schemas,
-  libjxl,
-  librsvg,
-  libwebp,
-  libX11,
-  lcms2,
-  bison,
-  flex,
-  clutter-gtk,
-  wrapGAppsHook3,
-  shared-mime-info,
-  python3,
-  desktop-file-utils,
-  itstool,
+{ stdenv
+, lib
+, fetchurl
+, gnome
+, pkg-config
+, meson
+, ninja
+, adwaita-icon-theme
+, exiv2
+, libheif
+, libjpeg
+, libtiff
+, gst_all_1
+, libraw
+, glib
+, gtk3
+, gsettings-desktop-schemas
+, libjxl
+, librsvg
+, libwebp
+, libX11
+, lcms2
+, bison
+, flex
+, clutter-gtk
+, wrapGAppsHook3
+, shared-mime-info
+, python3
+, desktop-file-utils
+, itstool
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

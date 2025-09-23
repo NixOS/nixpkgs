@@ -1,19 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonAtLeast,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  param,
-  pyyaml,
-  requests,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, # build-system
+  setuptools
+, # dependencies
+  param
+, pyyaml
+, requests
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

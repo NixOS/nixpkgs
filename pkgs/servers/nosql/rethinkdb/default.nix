@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  which,
-  m4,
-  protobuf,
-  boost,
-  zlib,
-  curl,
-  openssl,
-  icu,
-  jemalloc,
-  libtool,
-  python3Packages,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchurl
+, which
+, m4
+, protobuf
+, boost
+, zlib
+, curl
+, openssl
+, icu
+, jemalloc
+, libtool
+, python3Packages
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

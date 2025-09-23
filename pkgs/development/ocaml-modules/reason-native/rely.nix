@@ -1,12 +1,12 @@
-{
-  lib,
-  buildDunePackage,
-  re,
-  reason,
-  cli,
-  file-context-printer,
-  pastel,
-  src,
+{ lib
+, buildDunePackage
+, re
+, reason
+, cli
+, file-context-printer
+, pastel
+, src
+,
 }:
 
 buildDunePackage {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  cudaPackages,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
-  nvidia-ml-py,
-  pynvml,
+{ lib
+, buildPythonPackage
+, cudaPackages
+, fetchFromGitHub
+, setuptools
+, pytestCheckHook
+, nvidia-ml-py
+, pynvml
+,
 }:
 
 buildPythonPackage rec {

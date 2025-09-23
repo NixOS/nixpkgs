@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  makeBinaryWrapper,
-  niri,
-  stardust-xr-kiara,
-  testers,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, makeBinaryWrapper
+, niri
+, stardust-xr-kiara
+, testers
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

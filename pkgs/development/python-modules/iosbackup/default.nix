@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  nskeyedunarchiver,
-  pycrypto,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, nskeyedunarchiver
+, pycrypto
+,
 }:
 
 buildPythonPackage rec {

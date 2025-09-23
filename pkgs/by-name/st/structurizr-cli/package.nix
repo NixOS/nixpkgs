@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  coreutils,
-  findutils,
-  gnused,
-  jre,
-  gradle,
-  makeBinaryWrapper,
-  gitMinimal,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, coreutils
+, findutils
+, gnused
+, jre
+, gradle
+, makeBinaryWrapper
+, gitMinimal
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,13 +57,15 @@ stdenv.mkDerivation (finalAttrs: {
         }
       ];
     in
-    builtins.map (
-      entry:
-      fetchpatch {
-        url = "https://github.com/structurizr/cli/commit/${entry.rev}.patch";
-        hash = entry.hash;
-      }
-    ) commits;
+    builtins.map
+      (
+        entry:
+        fetchpatch {
+          url = "https://github.com/structurizr/cli/commit/${entry.rev}.patch";
+          hash = entry.hash;
+        }
+      )
+      commits;
 
   postPatch = ''
     substituteInPlace src/main/resources/build.properties \

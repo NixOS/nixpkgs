@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  etcd,
-  fetchFromGitHub,
-  grpcio,
-  hypothesis,
-  mock,
-  pifpaf,
-  protobuf,
-  pytestCheckHook,
-  six,
-  tenacity,
-  setuptools,
+{ lib
+, buildPythonPackage
+, etcd
+, fetchFromGitHub
+, grpcio
+, hypothesis
+, mock
+, pifpaf
+, protobuf
+, pytestCheckHook
+, six
+, tenacity
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

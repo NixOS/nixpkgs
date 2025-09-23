@@ -1,17 +1,17 @@
-{
-  lib,
-  cairo,
-  fetchFromSourcehut,
-  librsvg,
-  libxkbcommon,
-  meson,
-  ninja,
-  pkg-config,
-  scdoc,
-  stdenv,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
+{ lib
+, cairo
+, fetchFromSourcehut
+, librsvg
+, libxkbcommon
+, meson
+, ninja
+, pkg-config
+, scdoc
+, stdenv
+, wayland
+, wayland-protocols
+, wayland-scanner
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

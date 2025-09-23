@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  setuptools,
-  scipy,
-  scikits-odes-core,
-  scikits-odes-daepack,
-  scikits-odes-sundials,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, setuptools
+, scipy
+, scikits-odes-core
+, scikits-odes-daepack
+, scikits-odes-sundials
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

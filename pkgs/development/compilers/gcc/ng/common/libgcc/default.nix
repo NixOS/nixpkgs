@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  gcc_meta,
-  release_version,
-  version,
-  getVersionFile,
-  monorepoSrc ? null,
-  fetchpatch,
-  autoreconfHook269,
-  buildGccPackages,
-  buildPackages,
-  which,
-  python3,
+{ lib
+, stdenv
+, gcc_meta
+, release_version
+, version
+, getVersionFile
+, monorepoSrc ? null
+, fetchpatch
+, autoreconfHook269
+, buildGccPackages
+, buildPackages
+, which
+, python3
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgcc";
@@ -175,15 +175,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-zlib"
   ]
   ++
-    lib.optional (!stdenv.hostPlatform.isRiscV)
-      # RISC-V does not like it being empty
-      "--with-multilib-list="
+  lib.optional (!stdenv.hostPlatform.isRiscV)
+    # RISC-V does not like it being empty
+    "--with-multilib-list="
   ++
-    lib.optional (stdenv.hostPlatform.libc == "glibc")
-      # Cheat and use previous stage's glibc to avoid infinite recursion. As
-      # of GCC 11, libgcc only cares if the version is greater than 2.19,
-      # which is quite ancient, so this little lie should be fine.
-      "--with-glibc-version=${buildPackages.glibc.version}";
+  lib.optional (stdenv.hostPlatform.libc == "glibc")
+    # Cheat and use previous stage's glibc to avoid infinite recursion. As
+    # of GCC 11, libgcc only cares if the version is greater than 2.19,
+    # which is quite ancient, so this little lie should be fine.
+    "--with-glibc-version=${buildPackages.glibc.version}";
 
   configurePlatforms = [
     "build"

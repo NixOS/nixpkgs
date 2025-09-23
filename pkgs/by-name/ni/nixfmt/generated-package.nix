@@ -1,25 +1,25 @@
 # This file has been autogenerate with cabal2nix.
 # Update via ./update.sh
-{
-  mkDerivation,
-  base,
-  bytestring,
-  cmdargs,
-  directory,
-  fetchzip,
-  file-embed,
-  filepath,
-  lib,
-  megaparsec,
-  mtl,
-  parser-combinators,
-  pretty-simple,
-  process,
-  safe-exceptions,
-  scientific,
-  text,
-  transformers,
-  unix,
+{ mkDerivation
+, base
+, bytestring
+, cmdargs
+, directory
+, fetchzip
+, file-embed
+, filepath
+, lib
+, megaparsec
+, mtl
+, parser-combinators
+, pretty-simple
+, process
+, safe-exceptions
+, scientific
+, text
+, transformers
+, unix
+,
 }:
 mkDerivation {
   pname = "nixfmt";

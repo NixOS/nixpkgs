@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  libevent,
-  file,
-  qrencode,
-  openssl,
-  miniupnpc,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libevent
+, file
+, qrencode
+, openssl
+, miniupnpc
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

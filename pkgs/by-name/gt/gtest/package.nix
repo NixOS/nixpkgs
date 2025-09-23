@@ -1,10 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  # Enable C++17 support
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, # Enable C++17 support
   #     https://github.com/google/googletest/issues/3081
   # Projects that require a higher standard can override this package.
   # For an example why that may be necessary, see:
@@ -20,8 +19,9 @@
       "17"
     else
       null
-  ),
-  static ? stdenv.hostPlatform.isStatic,
+  )
+, static ? stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation rec {

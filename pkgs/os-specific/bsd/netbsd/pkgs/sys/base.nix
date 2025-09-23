@@ -1,18 +1,18 @@
-{
-  lib,
-  mkDerivation,
-  include,
-  bsdSetupHook,
-  netbsdSetupHook,
-  makeMinimal,
-  install,
-  tsort,
-  lorder,
-  statHook,
-  uudecode,
-  config,
-  genassym,
-  defaultMakeFlags,
+{ lib
+, mkDerivation
+, include
+, bsdSetupHook
+, netbsdSetupHook
+, makeMinimal
+, install
+, tsort
+, lorder
+, statHook
+, uudecode
+, config
+, genassym
+, defaultMakeFlags
+,
 }:
 {
   path = "sys";
@@ -37,8 +37,8 @@
       --replace "-nocombreloc" "-z nocombreloc"
   ''
   +
-    # multiple header dirs, see above
-    include.postPatch;
+  # multiple header dirs, see above
+  include.postPatch;
 
   CONFIG = "GENERIC";
 

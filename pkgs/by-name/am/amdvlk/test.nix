@@ -1,9 +1,9 @@
-{
-  lib,
-  makeImpureTest,
-  coreutils,
-  amdvlk,
-  vulkan-tools,
+{ lib
+, makeImpureTest
+, coreutils
+, amdvlk
+, vulkan-tools
+,
 }:
 makeImpureTest {
   name = "amdvlk";

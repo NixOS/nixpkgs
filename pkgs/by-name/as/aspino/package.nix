@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  zlib,
-  boost,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, zlib
+, boost
+,
 }:
 
 let

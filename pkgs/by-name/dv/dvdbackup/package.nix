@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  libdvdread,
-  libdvdcss,
-  dvdauthor,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libdvdread
+, libdvdcss
+, dvdauthor
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,29 +1,29 @@
-{
-  buildVersion,
-  dev ? false,
-  aarch64sha256,
-  x64sha256,
+{ buildVersion
+, dev ? false
+, aarch64sha256
+, x64sha256
+,
 }:
 
-{
-  fetchurl,
-  stdenv,
-  lib,
-  xorg,
-  glib,
-  libglvnd,
-  glibcLocales,
-  gtk3,
-  cairo,
-  pango,
-  makeWrapper,
-  wrapGAppsHook3,
-  writeShellScript,
-  common-updater-scripts,
-  curl,
-  openssl_1_1,
-  bzip2,
-  sqlite,
+{ fetchurl
+, stdenv
+, lib
+, xorg
+, glib
+, libglvnd
+, glibcLocales
+, gtk3
+, cairo
+, pango
+, makeWrapper
+, wrapGAppsHook3
+, writeShellScript
+, common-updater-scripts
+, curl
+, openssl_1_1
+, bzip2
+, sqlite
+,
 }:
 
 let

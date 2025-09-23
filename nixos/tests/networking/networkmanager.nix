@@ -1,7 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+,
 }:
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
@@ -14,27 +14,29 @@ let
   qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
   clientConfig =
     extraConfig:
-    lib.recursiveUpdate {
-      networking.useDHCP = false;
+    lib.recursiveUpdate
+      {
+        networking.useDHCP = false;
 
-      # Make sure that only NetworkManager configures the interface
-      networking.interfaces = lib.mkForce {
-        eth1 = { };
-      };
-      networking.networkmanager = {
-        enable = true;
-        # this is needed so NM doesn't generate 'Wired Connection' profiles and instead uses the default one
-        settings.main.no-auto-default = "*";
-        ensureProfiles.profiles.default = {
-          connection = {
-            id = "default";
-            type = "ethernet";
-            interface-name = "eth1";
-            autoconnect = true;
+        # Make sure that only NetworkManager configures the interface
+        networking.interfaces = lib.mkForce {
+          eth1 = { };
+        };
+        networking.networkmanager = {
+          enable = true;
+          # this is needed so NM doesn't generate 'Wired Connection' profiles and instead uses the default one
+          settings.main.no-auto-default = "*";
+          ensureProfiles.profiles.default = {
+            connection = {
+              id = "default";
+              type = "ethernet";
+              interface-name = "eth1";
+              autoconnect = true;
+            };
           };
         };
-      };
-    } extraConfig;
+      }
+      extraConfig;
   testCases = {
     startup = {
       name = "startup";
@@ -182,16 +184,18 @@ let
     };
   };
 in
-lib.mapAttrs (lib.const (
-  attrs:
-  makeTest (
-    attrs
-    // {
-      name = "${attrs.name}-Networking-NetworkManager";
-      meta = {
-        maintainers = [ ];
-      };
+lib.mapAttrs
+  (lib.const (
+    attrs:
+    makeTest (
+      attrs
+        // {
+        name = "${attrs.name}-Networking-NetworkManager";
+        meta = {
+          maintainers = [ ];
+        };
 
-    }
-  )
-)) testCases
+      }
+    )
+  ))
+  testCases

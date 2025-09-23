@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pdm-backend,
-
-  # dependencies
-  huggingface-hub,
-  pyyaml,
-  safetensors,
-  torch,
-  torchvision,
-
-  # tests
-  expecttest,
-  pytestCheckHook,
-  pytest-timeout,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pdm-backend
+, # dependencies
+  huggingface-hub
+, pyyaml
+, safetensors
+, torch
+, torchvision
+, # tests
+  expecttest
+, pytestCheckHook
+, pytest-timeout
+,
 }:
 
 buildPythonPackage rec {

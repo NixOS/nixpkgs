@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pcre2,
-  sqlite,
-  readline,
-  zlib,
-  bzip2,
-  autoconf,
-  automake,
-  curl,
-  buildPackages,
-  re2c,
-  gpm,
-  libarchive,
-  nix-update-script,
-  cargo,
-  rustPlatform,
-  rustc,
-  libunistring,
-  prqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pcre2
+, sqlite
+, readline
+, zlib
+, bzip2
+, autoconf
+, automake
+, curl
+, buildPackages
+, re2c
+, gpm
+, libarchive
+, nix-update-script
+, cargo
+, rustPlatform
+, rustc
+, libunistring
+, prqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

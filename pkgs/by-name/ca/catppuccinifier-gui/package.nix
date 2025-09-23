@@ -1,20 +1,20 @@
-{
-  lib,
-  gtk3,
-  glib,
-  dbus,
-  nodejs,
-  cairo,
-  cargo-tauri,
-  webkitgtk_4_1,
-  wrapGAppsHook3,
-  gdk-pixbuf,
-  pkg-config,
-  rustPlatform,
-  fetchYarnDeps,
-  yarnConfigHook,
-  fetchFromGitHub,
-  desktop-file-utils,
+{ lib
+, gtk3
+, glib
+, dbus
+, nodejs
+, cairo
+, cargo-tauri
+, webkitgtk_4_1
+, wrapGAppsHook3
+, gdk-pixbuf
+, pkg-config
+, rustPlatform
+, fetchYarnDeps
+, yarnConfigHook
+, fetchFromGitHub
+, desktop-file-utils
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "catppuccinifier-gui";

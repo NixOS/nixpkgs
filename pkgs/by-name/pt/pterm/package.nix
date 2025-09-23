@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libsndfile,
-  wxGTK32,
-  SDL,
+{ lib
+, stdenv
+, fetchurl
+, libsndfile
+, wxGTK32
+, SDL
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  texinfo,
+{ lib
+, stdenv
+, fetchFromGitHub
+, texinfo
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

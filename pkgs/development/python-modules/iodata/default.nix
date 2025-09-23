@@ -1,14 +1,14 @@
-{
-  buildPythonPackage,
-  lib,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  numpy,
-  scipy,
-  attrs,
-  pytest-xdist,
-  pytestCheckHook,
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, numpy
+, scipy
+, attrs
+, pytest-xdist
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

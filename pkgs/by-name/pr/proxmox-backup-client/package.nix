@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchgit,
-  rustPlatform,
-  pkgconf,
-  openssl,
-  fuse3,
-  acl,
-  installShellFiles,
-  sphinx,
-  stdenv,
-  versionCheckHook,
+{ lib
+, fetchgit
+, rustPlatform
+, pkgconf
+, openssl
+, fuse3
+, acl
+, installShellFiles
+, sphinx
+, stdenv
+, versionCheckHook
+,
 }:
 
 let

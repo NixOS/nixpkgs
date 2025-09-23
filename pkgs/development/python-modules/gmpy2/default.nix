@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isPyPy,
-  setuptools,
-  gmp,
-  mpfr,
-  libmpc,
-  pytestCheckHook,
-  hypothesis,
-  cython,
-  mpmath,
-  # Reverse dependency
-  sage,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, isPyPy
+, setuptools
+, gmp
+, mpfr
+, libmpc
+, pytestCheckHook
+, hypothesis
+, cython
+, mpmath
+, # Reverse dependency
+  sage
+,
 }:
 
 buildPythonPackage rec {

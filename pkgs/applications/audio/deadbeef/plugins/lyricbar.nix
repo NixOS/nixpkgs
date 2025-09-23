@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  deadbeef,
-  gtkmm3,
-  libxmlxx3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, deadbeef
+, gtkmm3
+, libxmlxx3
+,
 }:
 
 stdenv.mkDerivation {

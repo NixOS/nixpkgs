@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  octave,
-  buildEnv,
-  makeWrapper,
-  locale,
-  texinfo,
-  glibcLocalesUtf8,
-  wrapOctave,
-  computeRequiredOctavePackages,
-  extraLibs ? [ ],
-  extraOutputsToInstall ? [ ],
-  postBuild ? "",
-  ignoreCollisions ? false,
+{ lib
+, stdenv
+, octave
+, buildEnv
+, makeWrapper
+, locale
+, texinfo
+, glibcLocalesUtf8
+, wrapOctave
+, computeRequiredOctavePackages
+, extraLibs ? [ ]
+, extraOutputsToInstall ? [ ]
+, postBuild ? ""
+, ignoreCollisions ? false
+,
 }:
 
 # Create an octave executable that knows about additional packages

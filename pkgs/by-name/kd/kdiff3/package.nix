@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  extra-cmake-modules,
-  boost,
-  kdePackages,
+{ stdenv
+, lib
+, fetchurl
+, extra-cmake-modules
+, boost
+, kdePackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

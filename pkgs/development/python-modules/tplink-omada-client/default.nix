@@ -1,11 +1,11 @@
-{
-  lib,
-  aiohttp,
-  awesomeversion,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  pythonOlder,
+{ lib
+, aiohttp
+, awesomeversion
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

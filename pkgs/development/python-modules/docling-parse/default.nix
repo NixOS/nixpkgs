@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  cxxopts,
-  setuptools,
-  pybind11,
-  zlib,
-  nlohmann_json,
-  utf8cpp,
-  libjpeg,
-  qpdf,
-  loguru-cpp,
-  # python dependencies
-  tabulate,
-  pillow,
-  pydantic,
-  docling-core,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cmake
+, pkg-config
+, cxxopts
+, setuptools
+, pybind11
+, zlib
+, nlohmann_json
+, utf8cpp
+, libjpeg
+, qpdf
+, loguru-cpp
+, # python dependencies
+  tabulate
+, pillow
+, pydantic
+, docling-core
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

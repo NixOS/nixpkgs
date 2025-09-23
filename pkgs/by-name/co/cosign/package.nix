@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  pcsclite,
-  pkg-config,
-  installShellFiles,
-  pivKeySupport ? true,
-  pkcs11Support ? true,
-  testers,
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, pcsclite
+, pkg-config
+, installShellFiles
+, pivKeySupport ? true
+, pkcs11Support ? true
+, testers
+,
 }:
 
 buildGoModule (finalAttrs: {

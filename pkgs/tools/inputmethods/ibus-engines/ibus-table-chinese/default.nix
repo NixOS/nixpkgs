@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  ibus,
-  ibus-table,
-  python3,
-  cmake,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, ibus
+, ibus-table
+, python3
+, cmake
+, writableTmpDirAsHomeHook
+,
 }:
 
 let

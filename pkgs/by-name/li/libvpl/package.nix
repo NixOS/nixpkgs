@@ -1,11 +1,11 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  replaceVars,
-  addDriverRunpath,
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, pkg-config
+, replaceVars
+, addDriverRunpath
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

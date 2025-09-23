@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkgsBuildBuild,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchurl
+, pkgsBuildBuild
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

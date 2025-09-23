@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytest-httpbin,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  six,
-  yarl,
-  wrapt,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest-httpbin
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, six
+, yarl
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

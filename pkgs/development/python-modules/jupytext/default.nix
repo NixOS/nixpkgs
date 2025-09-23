@@ -1,32 +1,29 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  nodejs,
-  yarn-berry_3,
-
-  # build-system
-  hatch-jupyter-builder,
-  hatchling,
-  jupyterlab,
-
-  # dependencies
-  markdown-it-py,
-  mdit-py-plugins,
-  nbformat,
-  packaging,
-  pyyaml,
-  pythonOlder,
-  tomli,
-
-  # tests
-  jupyter-client,
-  notebook,
-  pytest-asyncio,
-  pytest-xdist,
-  pytestCheckHook,
-  versionCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, nodejs
+, yarn-berry_3
+, # build-system
+  hatch-jupyter-builder
+, hatchling
+, jupyterlab
+, # dependencies
+  markdown-it-py
+, mdit-py-plugins
+, nbformat
+, packaging
+, pyyaml
+, pythonOlder
+, tomli
+, # tests
+  jupyter-client
+, notebook
+, pytest-asyncio
+, pytest-xdist
+, pytestCheckHook
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

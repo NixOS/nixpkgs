@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  decorator,
-  fetchFromGitHub,
-  jinja2,
-  jsonschema,
-  mypy,
-  packaging,
-  pytest,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  regex,
-  setuptools,
-  tomlkit,
+{ lib
+, buildPythonPackage
+, decorator
+, fetchFromGitHub
+, jinja2
+, jsonschema
+, mypy
+, packaging
+, pytest
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, regex
+, setuptools
+, tomlkit
+,
 }:
 
 buildPythonPackage rec {

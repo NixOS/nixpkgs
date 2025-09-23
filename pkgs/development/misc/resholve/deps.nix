@@ -1,10 +1,9 @@
-{
-  lib,
-  callPackage,
-  fetchFromGitHub,
-  python27,
-  fetchPypi,
-  ...
+{ lib
+, callPackage
+, fetchFromGitHub
+, python27
+, fetchPypi
+, ...
 }:
 
 /*

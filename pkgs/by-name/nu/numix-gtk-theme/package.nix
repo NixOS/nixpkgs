@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  sassc,
-  glib,
-  libxml2,
-  gdk-pixbuf,
-  gtk-engine-murrine,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, sassc
+, glib
+, libxml2
+, gdk-pixbuf
+, gtk-engine-murrine
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation {

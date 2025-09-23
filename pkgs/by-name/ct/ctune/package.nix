@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  openssl,
-  curl,
-  ffmpeg,
-  vlc,
-  SDL2,
-  lame,
-  json_c,
-  cmake,
-  pkg-config,
-  ncurses,
-  libuuid,
-  pandoc,
+{ stdenv
+, lib
+, fetchFromGitHub
+, openssl
+, curl
+, ffmpeg
+, vlc
+, SDL2
+, lame
+, json_c
+, cmake
+, pkg-config
+, ncurses
+, libuuid
+, pandoc
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ctune";

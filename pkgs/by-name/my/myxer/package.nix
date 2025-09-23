@@ -1,13 +1,13 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  wrapGAppsHook3,
-  libpulseaudio,
-  glib,
-  pango,
-  gtk3,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, wrapGAppsHook3
+, libpulseaudio
+, glib
+, pango
+, gtk3
+,
 }:
 
 rustPlatform.buildRustPackage rec {

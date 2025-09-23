@@ -1,16 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  hatchling,
-  platformdirs,
-  traitlets,
-  pip,
-  pytestCheckHook,
-
-  # Reverse dependency
-  sage,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, hatchling
+, platformdirs
+, traitlets
+, pip
+, pytestCheckHook
+, # Reverse dependency
+  sage
+,
 }:
 
 buildPythonPackage rec {

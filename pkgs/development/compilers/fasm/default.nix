@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fasm-bin,
-  isx86_64,
+{ stdenv
+, lib
+, fasm-bin
+, isx86_64
+,
 }:
 
 stdenv.mkDerivation {

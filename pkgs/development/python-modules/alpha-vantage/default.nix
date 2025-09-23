@@ -1,15 +1,15 @@
-{
-  lib,
-  aiohttp,
-  aioresponses,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pandas,
-  pytestCheckHook,
-  requests,
-  requests-mock,
-  setuptools,
-  pythonOlder,
+{ lib
+, aiohttp
+, aioresponses
+, buildPythonPackage
+, fetchFromGitHub
+, pandas
+, pytestCheckHook
+, requests
+, requests-mock
+, setuptools
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

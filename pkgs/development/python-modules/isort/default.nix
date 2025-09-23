@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  colorama,
-  hatchling,
-  hatch-vcs,
-  hypothesis,
-  pylama,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, colorama
+, hatchling
+, hatch-vcs
+, hypothesis
+, pylama
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

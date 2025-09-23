@@ -1,18 +1,16 @@
-{
-  lib,
-  stdenv,
-
-  coreutils,
-  fetchFromGitHub,
-  nix-update-script,
-  python3Packages,
-
-  # nativeCheckInputs
-  debian-devscripts,
-  dpkg,
-  gitMinimal,
-  gitSetupHook,
-  man,
+{ lib
+, stdenv
+, coreutils
+, fetchFromGitHub
+, nix-update-script
+, python3Packages
+, # nativeCheckInputs
+  debian-devscripts
+, dpkg
+, gitMinimal
+, gitSetupHook
+, man
+,
 }:
 
 python3Packages.buildPythonApplication rec {

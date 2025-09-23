@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libpulseaudio,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  alsa-lib,
-  libjack2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpulseaudio
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, alsa-lib
+, libjack2
+,
 }:
 
 stdenv.mkDerivation rec {

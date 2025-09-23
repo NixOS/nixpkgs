@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  requests,
-  responses,
-  pytestCheckHook,
-  glibcLocalesUtf8,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, requests
+, responses
+, pytestCheckHook
+, glibcLocalesUtf8
+,
 }:
 
 buildPythonPackage rec {

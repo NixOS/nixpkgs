@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  versioningit,
-  numpy,
-  scipy,
-  h5py,
-  dill,
-  matplotlib,
-  blinker,
-  aiohttp,
-  python,
-  plotly,
-  python-socketio,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools
+, versioningit
+, numpy
+, scipy
+, h5py
+, dill
+, matplotlib
+, blinker
+, aiohttp
+, python
+, plotly
+, python-socketio
+,
 }:
 
 buildPythonPackage rec {

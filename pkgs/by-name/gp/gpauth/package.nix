@@ -1,11 +1,11 @@
-{
-  rustPlatform,
-  lib,
-  fetchFromGitHub,
-  openssl,
-  pkg-config,
-  perl,
-  webkitgtk_4_1,
+{ rustPlatform
+, lib
+, fetchFromGitHub
+, openssl
+, pkg-config
+, perl
+, webkitgtk_4_1
+,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

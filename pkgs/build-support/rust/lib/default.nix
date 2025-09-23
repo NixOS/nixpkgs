@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  pkgsBuildHost,
-  pkgsBuildTarget,
-  pkgsTargetTarget,
+{ lib
+, stdenv
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsTargetTarget
+,
 }:
 
 rec {
@@ -81,36 +81,36 @@ rec {
       '';
     };
 }
-//
-  lib.mapAttrs
-    (
-      old: new: platform:
+  //
+lib.mapAttrs
+  (
+    old: new: platform:
       lib.warn
         "`rust.${old} platform` is deprecated. Use `platform.rust.${lib.showAttrPath new}` instead."
         lib.getAttrFromPath
         new
         platform.rust
-    )
-    {
-      toTargetArch = [
-        "platform"
-        "arch"
-      ];
-      toTargetOs = [
-        "platform"
-        "os"
-      ];
-      toTargetFamily = [
-        "platform"
-        "target-family"
-      ];
-      toTargetVendor = [
-        "platform"
-        "vendor"
-      ];
-      toRustTarget = [ "rustcTarget" ];
-      toRustTargetSpec = [ "rustcTargetSpec" ];
-      toRustTargetSpecShort = [ "cargoShortTarget" ];
-      toRustTargetForUseInEnvVars = [ "cargoEnvVarTarget" ];
-      IsNoStdTarget = [ "isNoStdTarget" ];
-    }
+  )
+  {
+    toTargetArch = [
+      "platform"
+      "arch"
+    ];
+    toTargetOs = [
+      "platform"
+      "os"
+    ];
+    toTargetFamily = [
+      "platform"
+      "target-family"
+    ];
+    toTargetVendor = [
+      "platform"
+      "vendor"
+    ];
+    toRustTarget = [ "rustcTarget" ];
+    toRustTargetSpec = [ "rustcTargetSpec" ];
+    toRustTargetSpecShort = [ "cargoShortTarget" ];
+    toRustTargetForUseInEnvVars = [ "cargoEnvVarTarget" ];
+    IsNoStdTarget = [ "isNoStdTarget" ];
+  }

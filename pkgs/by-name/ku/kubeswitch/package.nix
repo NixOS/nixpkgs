@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  kubeswitch,
-  installShellFiles,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, kubeswitch
+, installShellFiles
+,
 }:
 
 buildGoModule rec {

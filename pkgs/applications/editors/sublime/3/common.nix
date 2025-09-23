@@ -1,29 +1,29 @@
-{
-  buildVersion,
-  x32sha256,
-  x64sha256,
-  dev ? false,
+{ buildVersion
+, x32sha256
+, x64sha256
+, dev ? false
+,
 }:
 
-{
-  fetchurl,
-  lib,
-  stdenv,
-  xorg,
-  glib,
-  glibcLocales,
-  gtk3,
-  cairo,
-  pango,
-  libredirect,
-  makeWrapper,
-  wrapGAppsHook3,
-  pkexecPath ? "/run/wrappers/bin/pkexec",
-  openssl,
-  bzip2,
-  bash,
-  unzip,
-  zip,
+{ fetchurl
+, lib
+, stdenv
+, xorg
+, glib
+, glibcLocales
+, gtk3
+, cairo
+, pango
+, libredirect
+, makeWrapper
+, wrapGAppsHook3
+, pkexecPath ? "/run/wrappers/bin/pkexec"
+, openssl
+, bzip2
+, bash
+, unzip
+, zip
+,
 }:
 
 let

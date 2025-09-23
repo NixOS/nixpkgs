@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  paramiko,
-  psutil,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-timeout,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, paramiko
+, psutil
+, pytest-cov-stub
+, pytest-mock
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

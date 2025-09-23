@@ -1,14 +1,13 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pytestCheckHook,
-  setuptools,
-
-  # dependencies
-  fluent-syntax,
-  pygments,
-  six,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytestCheckHook
+, setuptools
+, # dependencies
+  fluent-syntax
+, pygments
+, six
+,
 }:
 
 let

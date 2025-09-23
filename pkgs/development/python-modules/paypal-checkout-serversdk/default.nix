@@ -1,14 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # propagates
-  paypalhttp,
-
-  # tersts
-  pytestCheckHook,
-  responses,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # propagates
+  paypalhttp
+, # tersts
+  pytestCheckHook
+, responses
+,
 }:
 
 buildPythonPackage rec {

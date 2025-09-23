@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  defusedxml,
-  dnspython,
-  fetchFromGitHub,
-  iana-etc,
-  libredirect,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, stdenv
+, buildPythonPackage
+, defusedxml
+, dnspython
+, fetchFromGitHub
+, iana-etc
+, libredirect
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

@@ -1,19 +1,19 @@
-{
-  mkDerivation,
-  cmake,
-  fetchFromGitLab,
-  nix-update-script,
-  gst_all_1,
-  lib,
-  libpulseaudio,
-  ninja,
-  pcre,
-  pkg-config,
-  qtbase,
-  qttools,
-  taglib,
-  zlib,
-  python3,
+{ mkDerivation
+, cmake
+, fetchFromGitLab
+, nix-update-script
+, gst_all_1
+, lib
+, libpulseaudio
+, ninja
+, pcre
+, pkg-config
+, qtbase
+, qttools
+, taglib
+, zlib
+, python3
+,
 }:
 
 let

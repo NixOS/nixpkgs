@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  gtk-doc,
-  glib,
-  intltool,
-  menu-cache,
-  pango,
-  pkg-config,
-  vala,
-  extraOnly ? false,
-  withGtk3 ? false,
-  gtk2,
-  gtk3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, gtk-doc
+, glib
+, intltool
+, menu-cache
+, pango
+, pkg-config
+, vala
+, extraOnly ? false
+, withGtk3 ? false
+, gtk2
+, gtk3
+,
 }:
 
 let

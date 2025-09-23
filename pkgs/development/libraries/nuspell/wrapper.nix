@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  nuspell,
-  makeWrapper,
-  dicts ? [ ],
+{ stdenv
+, lib
+, nuspell
+, makeWrapper
+, dicts ? [ ]
+,
 }:
 
 let

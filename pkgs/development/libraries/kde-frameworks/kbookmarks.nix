@@ -1,15 +1,15 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  qttools,
-  kcodecs,
-  kconfig,
-  kconfigwidgets,
-  kcoreaddons,
-  kiconthemes,
-  kwidgetsaddons,
-  kxmlgui,
-  qtbase,
+{ mkDerivation
+, extra-cmake-modules
+, qttools
+, kcodecs
+, kconfig
+, kconfigwidgets
+, kcoreaddons
+, kiconthemes
+, kwidgetsaddons
+, kxmlgui
+, qtbase
+,
 }:
 
 mkDerivation {

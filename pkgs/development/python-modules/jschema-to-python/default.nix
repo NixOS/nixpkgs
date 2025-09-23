@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  attrs,
-  jsonpickle,
-  pbr,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, attrs
+, jsonpickle
+, pbr
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

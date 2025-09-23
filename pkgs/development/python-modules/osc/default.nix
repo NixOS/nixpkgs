@@ -1,13 +1,13 @@
-{
-  bashInteractive,
-  buildPythonPackage,
-  cryptography,
-  diffstat,
-  fetchFromGitHub,
-  lib,
-  rpm,
-  urllib3,
-  keyring,
+{ bashInteractive
+, buildPythonPackage
+, cryptography
+, diffstat
+, fetchFromGitHub
+, lib
+, rpm
+, urllib3
+, keyring
+,
 }:
 
 buildPythonPackage rec {

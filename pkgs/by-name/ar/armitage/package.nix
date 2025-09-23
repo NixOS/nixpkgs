@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  jdk11,
-  gradle_8,
-  metasploit,
-  makeWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  writeDarwinBundle,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, jdk11
+, gradle_8
+, metasploit
+, makeWrapper
+, makeDesktopItem
+, copyDesktopItems
+, writeDarwinBundle
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  libGL,
-  nssmdns,
-  pkg-config,
-  xorg,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, libGL
+, nssmdns
+, pkg-config
+, xorg
+,
 }:
 
 buildGoModule rec {

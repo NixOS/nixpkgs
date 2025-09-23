@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  openssl,
-  libogg,
-  libopus,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, openssl
+, libogg
+, libopus
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

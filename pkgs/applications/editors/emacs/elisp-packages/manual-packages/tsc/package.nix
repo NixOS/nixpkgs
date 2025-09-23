@@ -1,10 +1,10 @@
-{
-  lib,
-  melpaBuild,
-  fetchFromGitHub,
-  rustPlatform,
-  stdenv,
-  nix-update-script,
+{ lib
+, melpaBuild
+, fetchFromGitHub
+, rustPlatform
+, stdenv
+, nix-update-script
+,
 }:
 
 let

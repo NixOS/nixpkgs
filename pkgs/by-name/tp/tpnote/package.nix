@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  rustPlatform,
-  cmake,
-  pkg-config,
-  oniguruma,
-  installShellFiles,
-  tpnote,
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cmake
+, pkg-config
+, oniguruma
+, installShellFiles
+, tpnote
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

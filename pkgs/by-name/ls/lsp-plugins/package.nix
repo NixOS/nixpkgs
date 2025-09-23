@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  cairo,
-  fetchurl,
-  gst_all_1,
-  jack2,
-  ladspaH,
-  libGL,
-  libGLU,
-  libXrandr,
-  libsndfile,
-  lv2,
-  php82,
-  pkg-config,
+{ lib
+, stdenv
+, cairo
+, fetchurl
+, gst_all_1
+, jack2
+, ladspaH
+, libGL
+, libGLU
+, libXrandr
+, libsndfile
+, lv2
+, php82
+, pkg-config
+,
 }:
 
 let

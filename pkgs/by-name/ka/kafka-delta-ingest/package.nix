@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  perl,
-  rdkafka,
-  # these are features in the cargo, where one may be disabled to reduce the final size
-  enableS3 ? true,
-  enableAzure ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+, perl
+, rdkafka
+, # these are features in the cargo, where one may be disabled to reduce the final size
+  enableS3 ? true
+, enableAzure ? true
+,
 }:
 
 assert lib.assertMsg (enableS3 || enableAzure) "Either S3 or azure support needs to be enabled";

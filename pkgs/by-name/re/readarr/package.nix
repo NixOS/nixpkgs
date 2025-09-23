@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libmediainfo,
-  sqlite,
-  curl,
-  makeWrapper,
-  icu,
-  dotnet-runtime,
-  openssl,
-  nixosTests,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, libmediainfo
+, sqlite
+, curl
+, makeWrapper
+, icu
+, dotnet-runtime
+, openssl
+, nixosTests
+, zlib
+,
 }:
 
 let
@@ -20,15 +20,13 @@ let
       x86_64-linux = "x64";
       aarch64-linux = "arm64";
       x86_64-darwin = "x64";
-    }
-    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash =
     {
       x64-linux_hash = "sha256-hCqxH6xPLhA+V7reqsHi1EY2sU3HJ6ESMJiiWXrcUUE=";
       arm64-linux_hash = "sha256-7NpH32tkEOYVyfwIBq9LCKAo0IQ1IehYfKi+qiBzf8o=";
       x64-osx_hash = "sha256-ypzOWXxtzvOTgTmU7pQ1cS+FcyNCOo5R2Z4l5Mk+4wA=";
-    }
-    ."${arch}-${os}_hash";
+    }."${arch}-${os}_hash";
 in
 stdenv.mkDerivation rec {
   pname = "readarr";

@@ -1,8 +1,8 @@
-{
-  lib,
-  skawarePackages,
-  skalibs,
-  execline,
+{ lib
+, skawarePackages
+, skalibs
+, execline
+,
 }:
 
 skawarePackages.buildPackage {

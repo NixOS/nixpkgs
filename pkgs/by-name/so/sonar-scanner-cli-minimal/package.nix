@@ -1,8 +1,8 @@
-{
-  lib,
-  sonar-scanner-cli,
-  jre_minimal,
-  jdk_headless,
+{ lib
+, sonar-scanner-cli
+, jre_minimal
+, jdk_headless
+,
 }:
 
 sonar-scanner-cli.override {

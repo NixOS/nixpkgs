@@ -1,9 +1,9 @@
-{
-  pkgs,
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pkg-config,
+{ pkgs
+, lib
+, buildPythonPackage
+, fetchPypi
+, pkg-config
+,
 }:
 
 let

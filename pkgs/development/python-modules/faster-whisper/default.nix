@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  av,
-  ctranslate2,
-  huggingface-hub,
-  onnxruntime,
-  tokenizers,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  av
+, ctranslate2
+, huggingface-hub
+, onnxruntime
+, tokenizers
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

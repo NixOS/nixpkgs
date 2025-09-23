@@ -1,12 +1,12 @@
-{
-  lib,
-  aiooss2,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fsspec,
-  oss2,
-  pythonOlder,
-  setuptools-scm,
+{ lib
+, aiooss2
+, buildPythonPackage
+, fetchFromGitHub
+, fsspec
+, oss2
+, pythonOlder
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

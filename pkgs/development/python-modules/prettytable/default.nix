@@ -1,20 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatch-vcs,
-  hatchling,
-
-  # dependencies
-  wcwidth,
-
-  # tests
-  coverage,
-  pytest-cov-stub,
-  pytest-lazy-fixtures,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  hatch-vcs
+, hatchling
+, # dependencies
+  wcwidth
+, # tests
+  coverage
+, pytest-cov-stub
+, pytest-lazy-fixtures
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

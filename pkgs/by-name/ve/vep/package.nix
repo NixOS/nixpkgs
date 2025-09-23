@@ -1,14 +1,14 @@
 # Instructions:http://www.ensembl.org/info/docs/api/api_installation.html,
 # Do not use https://github.com/Ensembl/ensembl-vep/archive/release/${version}.zip
 # We cannot use INSTALL.pl but it’s not that bad:install the dependencies and copies the .pm files should be ok
-{
-  lib,
-  htslib,
-  perlPackages,
-  stdenv,
-  fetchFromGitHub,
-  perl,
-  makeWrapper,
+{ lib
+, htslib
+, perlPackages
+, stdenv
+, fetchFromGitHub
+, perl
+, makeWrapper
+,
 }:
 
 let

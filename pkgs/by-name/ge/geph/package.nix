@@ -1,20 +1,20 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libxkbcommon,
-  openssl,
-  rust-jemalloc-sys-unprefixed,
-  sqlite,
-  vulkan-loader,
-  wayland,
-  iproute2,
-  iptables,
-  libglvnd,
-  copyDesktopItems,
-  makeDesktopItem,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libxkbcommon
+, openssl
+, rust-jemalloc-sys-unprefixed
+, sqlite
+, vulkan-loader
+, wayland
+, iproute2
+, iptables
+, libglvnd
+, copyDesktopItems
+, makeDesktopItem
+, nix-update-script
+,
 }:
 let
   binPath = lib.makeBinPath [

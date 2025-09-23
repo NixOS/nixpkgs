@@ -1,13 +1,13 @@
-{
-  lib,
-  glib,
-  cairo,
-  libuuid,
-  pango,
-  gtk3,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
+{ lib
+, glib
+, cairo
+, libuuid
+, pango
+, gtk3
+, stdenv
+, fetchurl
+, autoPatchelfHook
+,
 }:
 
 stdenv.mkDerivation {

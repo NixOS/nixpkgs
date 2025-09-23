@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  autoreconfHook,
-  yodl,
-  perl,
-  groff,
-  util-linux,
-  texinfo,
-  ncurses,
-  pcre2,
-  pkg-config,
-  buildPackages,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, yodl
+, perl
+, groff
+, util-linux
+, texinfo
+, ncurses
+, pcre2
+, pkg-config
+, buildPackages
+, nixosTests
+,
 }:
 
 let

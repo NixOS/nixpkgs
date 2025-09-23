@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  fetchFromGitHub,
-  php,
-  versionCheckHook,
-  runCommand,
+{ lib
+, fetchurl
+, fetchFromGitHub
+, php
+, versionCheckHook
+, runCommand
+,
 }:
 
 let

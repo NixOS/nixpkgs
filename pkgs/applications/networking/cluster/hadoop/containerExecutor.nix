@@ -1,12 +1,11 @@
-{
-  version,
-  stdenv,
-  fetchurl,
-  lib,
-  cmake,
-  openssl,
-  platformAttrs,
-  ...
+{ version
+, stdenv
+, fetchurl
+, lib
+, cmake
+, openssl
+, platformAttrs
+, ...
 }:
 
 stdenv.mkDerivation (finalAttrs: {

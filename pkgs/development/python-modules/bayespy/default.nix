@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  numpy,
-  scipy,
-  h5py,
-  truncnorm,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, numpy
+, scipy
+, h5py
+, truncnorm
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  aiohttp,
-  assertpy,
-  buildPythonPackage,
-  fetchFromGitHub,
-  freezegun,
-  poetry-core,
-  pycryptodome,
-  pytest-asyncio,
-  pytest-mockservers,
-  pytest-resource-path,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  pytz,
-  time-machine,
+{ lib
+, aiohttp
+, assertpy
+, buildPythonPackage
+, fetchFromGitHub
+, freezegun
+, poetry-core
+, pycryptodome
+, pytest-asyncio
+, pytest-mockservers
+, pytest-resource-path
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, pytz
+, time-machine
+,
 }:
 
 buildPythonPackage rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  gtfs-realtime-bindings,
-  httpx,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, gtfs-realtime-bindings
+, httpx
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

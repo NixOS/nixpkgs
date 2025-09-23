@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  unzip,
-  fetchurl,
+{ lib
+, stdenv
+, unzip
+, fetchurl
+,
 }:
 
 let
@@ -10,10 +10,10 @@ let
   hashes = lib.importJSON ./hashes.json;
 
   maple-font =
-    {
-      pname,
-      hash,
-      desc,
+    { pname
+    , hash
+    , desc
+    ,
     }:
     stdenv.mkDerivation rec {
       inherit pname;
@@ -117,32 +117,38 @@ let
   };
 
   combinedFonts =
-    lib.concatMapAttrs (
-      ligName: ligVariant:
-      lib.concatMapAttrs (
-        typeName: typeVariant:
-        let
-          pname = "MapleMono${ligVariant.suffix}-${typeVariant.suffix}";
-        in
-        {
-          "${ligVariant.suffix}-${typeVariant.suffix}" = maple-font {
+    lib.concatMapAttrs
+      (
+        ligName: ligVariant:
+          lib.concatMapAttrs
+            (
+              typeName: typeVariant:
+                let
+                  pname = "MapleMono${ligVariant.suffix}-${typeVariant.suffix}";
+                in
+                {
+                  "${ligVariant.suffix}-${typeVariant.suffix}" = maple-font {
+                    inherit pname;
+                    desc = "${ligVariant.desc} ${typeVariant.desc}";
+                    hash = hashes.${pname};
+                  };
+                }
+            )
+            typeVariants
+      )
+      ligatureVariants
+    // lib.mapAttrs
+      (
+        _: value:
+          let
+            pname = "MapleMono-${value.suffix}";
+          in
+          maple-font {
             inherit pname;
-            desc = "${ligVariant.desc} ${typeVariant.desc}";
+            inherit (value) desc;
             hash = hashes.${pname};
-          };
-        }
-      ) typeVariants
-    ) ligatureVariants
-    // lib.mapAttrs (
-      _: value:
-      let
-        pname = "MapleMono-${value.suffix}";
-      in
-      maple-font {
-        inherit pname;
-        inherit (value) desc;
-        hash = hashes.${pname};
-      }
-    ) typeVariants;
+          }
+      )
+      typeVariants;
 in
 combinedFonts

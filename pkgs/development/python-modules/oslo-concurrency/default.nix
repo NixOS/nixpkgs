@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  bash,
-  coreutils,
-  debtcollector,
-  eventlet,
-  fasteners,
-  fixtures,
-  iana-etc,
-  libredirect,
-  oslo-config,
-  oslo-i18n,
-  oslo-utils,
-  oslotest,
-  pbr,
-  setuptools,
-  stdenv,
-  stestr,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, bash
+, coreutils
+, debtcollector
+, eventlet
+, fasteners
+, fixtures
+, iana-etc
+, libredirect
+, oslo-config
+, oslo-i18n
+, oslo-utils
+, oslotest
+, pbr
+, setuptools
+, stdenv
+, stestr
+,
 }:
 
 buildPythonPackage rec {

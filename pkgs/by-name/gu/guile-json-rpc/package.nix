@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  guile,
-  pkg-config,
-  guile-srfi-145,
-  guile-srfi-180,
+{ lib
+, stdenv
+, fetchFromGitea
+, guile
+, pkg-config
+, guile-srfi-145
+, guile-srfi-180
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-json-rpc";

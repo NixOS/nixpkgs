@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  zlib,
-  stdenv,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, zlib
+, stdenv
+,
 }:
 
 rustPlatform.buildRustPackage rec {

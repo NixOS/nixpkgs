@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  docling-core,
-  docling,
-  fetchPypi,
-  hatchling,
-  llama-index-core,
-  numpy,
+{ lib
+, buildPythonPackage
+, docling-core
+, docling
+, fetchPypi
+, hatchling
+, llama-index-core
+, numpy
+,
 }:
 
 buildPythonPackage rec {

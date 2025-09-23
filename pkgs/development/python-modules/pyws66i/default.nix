@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  standard-telnetlib,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, standard-telnetlib
+,
 }:
 
 buildPythonPackage rec {

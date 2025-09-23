@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  python3,
-  librsync,
-  glib,
-  ncftp,
-  gnupg,
-  gnutar,
-  par2cmdline,
-  util-linux,
-  rsync,
-  makeWrapper,
-  wrapGAppsNoGuiHook,
-  gettext,
-  getconf,
-  testers,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, python3
+, librsync
+, glib
+, ncftp
+, gnupg
+, gnutar
+, par2cmdline
+, util-linux
+, rsync
+, makeWrapper
+, wrapGAppsNoGuiHook
+, gettext
+, getconf
+, testers
+, nix-update-script
+,
 }:
 
 let

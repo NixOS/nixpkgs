@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pandas,
-  pytestCheckHook,
-  setuptools,
-  tensorboard,
-  torch,
-  torchvision,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pandas
+, pytestCheckHook
+, setuptools
+, tensorboard
+, torch
+, torchvision
+,
 }:
 let
   version = "0.4.0";

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  xorg,
-  libglvnd,
-  pkg-config,
-  withGui ? true,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, xorg
+, libglvnd
+, pkg-config
+, withGui ? true
+,
 }:
 
 buildGoModule rec {

@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  numpy,
-  pyparsing,
-  cython,
-  zlib,
-  python-lzo,
-  pytestCheckHook,
-  setuptools,
-  oldest-supported-numpy,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, numpy
+, pyparsing
+, cython
+, zlib
+, python-lzo
+, pytestCheckHook
+, setuptools
+, oldest-supported-numpy
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  cudaAtLeast,
-  gmp,
-  expat,
-  libxcrypt-legacy,
-  ncurses6,
-  python310,
-  python311,
-  python312,
-  stdenv,
-  lib,
+{ cudaAtLeast
+, gmp
+, expat
+, libxcrypt-legacy
+, ncurses6
+, python310
+, python311
+, python312
+, stdenv
+, lib
+,
 }:
 prevAttrs: {
   buildInputs =

@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchFromSourcehut,
-  python3Packages,
-  wrapGAppsHook3,
+{ lib
+, fetchFromSourcehut
+, python3Packages
+, wrapGAppsHook3
+,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  appstream,
-  qtbase,
-  qttools,
-  nixosTests,
+{ lib
+, stdenv
+, appstream
+, qtbase
+, qttools
+, nixosTests
+,
 }:
 
 # TODO: look into using the libraries from the regular appstream derivation as we keep duplicates here

@@ -1,27 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  numpy,
-  scikit-image,
-  torchvision,
-  torch,
-  runstats,
-  pytorch-lightning,
-  h5py,
-  pyyaml,
-  torchmetrics,
-  pandas,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build system
+  setuptools
+, setuptools-scm
+, # dependencies
+  numpy
+, scikit-image
+, torchvision
+, torch
+, runstats
+, pytorch-lightning
+, h5py
+, pyyaml
+, torchmetrics
+, pandas
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

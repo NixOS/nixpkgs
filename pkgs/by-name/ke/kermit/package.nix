@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ncurses,
-  libxcrypt,
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, libxcrypt
+,
 }:
 
 stdenv.mkDerivation {

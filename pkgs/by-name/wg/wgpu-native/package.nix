@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  fixDarwinDylibNames,
-  vulkan-loader,
-  nix-update-script,
-  callPackage,
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, fixDarwinDylibNames
+, vulkan-loader
+, nix-update-script
+, callPackage
+,
 }:
 
 rustPlatform.buildRustPackage rec {

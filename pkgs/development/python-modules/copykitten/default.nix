@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  buildPythonPackage,
-  rustPlatform,
-  lib,
-  pillow,
+{ fetchFromGitHub
+, buildPythonPackage
+, rustPlatform
+, lib
+, pillow
+,
 }:
 
 buildPythonPackage rec {

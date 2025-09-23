@@ -1,31 +1,31 @@
-{
-  autoPatchelfHook,
-  fetchurl,
-  lib,
-  copyDesktopItems,
-  makeDesktopItem,
-  makeWrapper,
-  stdenv,
-  wrapGAppsHook3,
-  at-spi2-core,
-  atk,
-  alsa-lib,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  gcc-unwrapped,
-  gdk-pixbuf,
-  glib,
-  pango,
-  gtk3-x11,
-  libudev0-shim,
-  libuuid,
-  libgbm,
-  nss,
-  nspr,
-  xorg,
-  streamlink,
+{ autoPatchelfHook
+, fetchurl
+, lib
+, copyDesktopItems
+, makeDesktopItem
+, makeWrapper
+, stdenv
+, wrapGAppsHook3
+, at-spi2-core
+, atk
+, alsa-lib
+, cairo
+, cups
+, dbus
+, expat
+, gcc-unwrapped
+, gdk-pixbuf
+, glib
+, pango
+, gtk3-x11
+, libudev0-shim
+, libuuid
+, libgbm
+, nss
+, nspr
+, xorg
+, streamlink
+,
 }:
 let
   basename = "streamlink-twitch-gui";
@@ -50,8 +50,7 @@ stdenv.mkDerivation rec {
         url = "https://github.com/streamlink/${basename}/releases/download/v${version}/${basename}-v${version}-linux32.tar.gz";
         hash = "sha256-y252QhVsRakngdApOHgegMMhs61KTxL9gfPjBjaSKOI=";
       };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = with xorg; [
     at-spi2-core

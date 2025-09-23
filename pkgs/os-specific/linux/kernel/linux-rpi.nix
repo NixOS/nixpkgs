@@ -1,10 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  buildLinux,
-  rpiVersion,
-  ...
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildLinux
+, rpiVersion
+, ...
 }@args:
 
 let
@@ -33,8 +32,7 @@ lib.overrideDerivation
           "2" = "bcm2709_defconfig";
           "3" = if stdenv.hostPlatform.isAarch64 then "bcm2711_defconfig" else "bcm2709_defconfig";
           "4" = "bcm2711_defconfig";
-        }
-        .${toString rpiVersion};
+        }.${toString rpiVersion};
 
       features = {
         efiBootStub = false;
@@ -56,7 +54,7 @@ lib.overrideDerivation
           };
       ignoreConfigErrors = true;
     }
-    // (args.argsOverride or { })
+      // (args.argsOverride or { })
   ))
   (oldAttrs: {
     postConfigure = ''
@@ -89,18 +87,18 @@ lib.overrideDerivation
       copyDTB bcm2709-rpi-2-b.dtb bcm2836-rpi-2-b.dtb
     ''
     +
-      lib.optionalString
-        (lib.elem stdenv.hostPlatform.system [
-          "armv7l-linux"
-          "aarch64-linux"
-        ])
-        ''
-          copyDTB bcm2710-rpi-zero-2.dtb bcm2837-rpi-zero-2.dtb
-          copyDTB bcm2710-rpi-zero-2-w.dtb bcm2837-rpi-zero-2-w.dtb
-          copyDTB bcm2710-rpi-3-b.dtb bcm2837-rpi-3-b.dtb
-          copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-a-plus.dtb
-          copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-b-plus.dtb
-          copyDTB bcm2710-rpi-cm3.dtb bcm2837-rpi-cm3.dtb
-          copyDTB bcm2711-rpi-4-b.dtb bcm2838-rpi-4-b.dtb
-        '';
+    lib.optionalString
+      (lib.elem stdenv.hostPlatform.system [
+        "armv7l-linux"
+        "aarch64-linux"
+      ])
+      ''
+        copyDTB bcm2710-rpi-zero-2.dtb bcm2837-rpi-zero-2.dtb
+        copyDTB bcm2710-rpi-zero-2-w.dtb bcm2837-rpi-zero-2-w.dtb
+        copyDTB bcm2710-rpi-3-b.dtb bcm2837-rpi-3-b.dtb
+        copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-a-plus.dtb
+        copyDTB bcm2710-rpi-3-b-plus.dtb bcm2837-rpi-3-b-plus.dtb
+        copyDTB bcm2710-rpi-cm3.dtb bcm2837-rpi-cm3.dtb
+        copyDTB bcm2711-rpi-4-b.dtb bcm2838-rpi-4-b.dtb
+      '';
   })

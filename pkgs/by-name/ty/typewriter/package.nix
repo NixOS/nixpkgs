@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  rustPlatform,
-  meson,
-  ninja,
-  pkg-config,
-  rustc,
-  cargo,
-  wrapGAppsHook4,
-  blueprint-compiler,
-  desktop-file-utils,
-  appstream-glib,
-  openssl,
-  libadwaita,
-  libpanel,
-  gtksourceview5,
+{ lib
+, stdenv
+, fetchFromGitLab
+, rustPlatform
+, meson
+, ninja
+, pkg-config
+, rustc
+, cargo
+, wrapGAppsHook4
+, blueprint-compiler
+, desktop-file-utils
+, appstream-glib
+, openssl
+, libadwaita
+, libpanel
+, gtksourceview5
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "typewriter";

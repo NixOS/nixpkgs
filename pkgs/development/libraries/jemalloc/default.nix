@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autogen,
-  autoconf,
-  automake,
-  # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autogen
+, autoconf
+, automake
+, # By default, jemalloc puts a je_ prefix onto all its symbols on OSX, which
   # then stops downstream builds (mariadb in particular) from detecting it. This
   # option should remove the prefix and give us a working jemalloc.
   # Causes segfaults with some software (ex. rustc), but defaults to true for backward
   # compatibility.
-  stripPrefix ? stdenv.hostPlatform.isDarwin,
-  disableInitExecTls ? false,
+  stripPrefix ? stdenv.hostPlatform.isDarwin
+, disableInitExecTls ? false
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,34 +1,34 @@
-{
-  lib,
-  repoRevToNameMaybe,
-  fetchgit,
-  fetchzip,
+{ lib
+, repoRevToNameMaybe
+, fetchgit
+, fetchzip
+,
 }:
 
 lib.makeOverridable (
-  {
-    owner,
-    repo,
-    tag ? null,
-    rev ? null,
-    name ? repoRevToNameMaybe repo (lib.revOrTag rev tag) "github",
-    fetchSubmodules ? false,
-    leaveDotGit ? null,
-    deepClone ? false,
-    private ? false,
-    forceFetchGit ? false,
-    fetchLFS ? false,
-    sparseCheckout ? [ ],
-    githubBase ? "github.com",
-    varPrefix ? null,
-    meta ? { },
-    ... # For hash agility
+  { owner
+  , repo
+  , tag ? null
+  , rev ? null
+  , name ? repoRevToNameMaybe repo (lib.revOrTag rev tag) "github"
+  , fetchSubmodules ? false
+  , leaveDotGit ? null
+  , deepClone ? false
+  , private ? false
+  , forceFetchGit ? false
+  , fetchLFS ? false
+  , sparseCheckout ? [ ]
+  , githubBase ? "github.com"
+  , varPrefix ? null
+  , meta ? { }
+  , ... # For hash agility
   }@args:
 
   assert (
-    lib.assertMsg (lib.xor (tag == null) (
-      rev == null
-    )) "fetchFromGitHub requires one of either `rev` or `tag` to be provided (not both)."
+    lib.assertMsg
+      (lib.xor (tag == null) (
+        rev == null
+      )) "fetchFromGitHub requires one of either `rev` or `tag` to be provided (not both)."
   );
 
   let
@@ -157,7 +157,7 @@ lib.makeOverridable (
   in
 
   fetcher fetcherArgs
-  // {
+    // {
     meta = newMeta;
     inherit owner repo tag;
     rev = revWithTag;

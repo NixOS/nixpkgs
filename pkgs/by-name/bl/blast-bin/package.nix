@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python3,
-  perl,
-  blast,
-  autoPatchelfHook,
-  zlib,
-  bzip2,
-  glib,
-  libxml2,
-  coreutils,
-  sqlite,
+{ lib
+, stdenv
+, fetchurl
+, python3
+, perl
+, blast
+, autoPatchelfHook
+, zlib
+, bzip2
+, glib
+, libxml2
+, coreutils
+, sqlite
+,
 }:
 let
   pname = "blast-bin";

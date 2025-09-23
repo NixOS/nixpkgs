@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  glib,
-  glibc,
-  libseccomp,
-  systemd,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, glib
+, glibc
+, libseccomp
+, systemd
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

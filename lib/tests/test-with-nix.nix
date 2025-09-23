@@ -8,27 +8,27 @@
   Try not to change the interface of this file, or if you need to, ping the
   Nix AND Lix maintainers (`nix eval -f . lib.teams.lix`) for help. Thank you!
 */
-{
-  pkgs,
-  lib,
-  # Only ever use this nix; see comment at top
-  nix,
+{ pkgs
+, lib
+, # Only ever use this nix; see comment at top
+  nix
+,
 }:
 
 pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}"
-  {
-    buildInputs = [
-      (import ../path/tests {
-        inherit pkgs;
-      })
-    ];
-    nativeBuildInputs = [
-      nix
-      pkgs.gitMinimal
-    ]
-    ++ lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.inotify-tools;
-    strictDeps = true;
-  }
+{
+  buildInputs = [
+    (import ../path/tests {
+      inherit pkgs;
+    })
+  ];
+  nativeBuildInputs = [
+    nix
+    pkgs.gitMinimal
+  ]
+  ++ lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.inotify-tools;
+  strictDeps = true;
+}
   ''
     datadir="${nix}/share"
     export TEST_ROOT=$(pwd)/test-tmp

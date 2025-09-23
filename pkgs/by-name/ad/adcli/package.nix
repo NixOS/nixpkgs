@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  cyrus_sasl,
-  docbook_xml_dtd_43,
-  docbook_xsl,
-  fetchFromGitLab,
-  libkrb5,
-  libxslt,
-  openldap,
-  pkg-config,
-  util-linux,
-  xmlto,
+{ lib
+, stdenv
+, autoreconfHook
+, cyrus_sasl
+, docbook_xml_dtd_43
+, docbook_xsl
+, fetchFromGitLab
+, libkrb5
+, libxslt
+, openldap
+, pkg-config
+, util-linux
+, xmlto
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

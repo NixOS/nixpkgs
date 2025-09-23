@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkLibretroCore,
-  libGLU,
-  libGL,
+{ lib
+, fetchFromGitHub
+, mkLibretroCore
+, libGLU
+, libGL
+,
 }:
 mkLibretroCore {
   core = "melonds";

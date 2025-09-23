@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  zlib,
-  ocaml,
-  findlib,
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, ocaml
+, findlib
+,
 }:
 
 let

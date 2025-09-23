@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
-  libjack2,
-  alsa-lib,
-  freetype,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXext,
-  libXcursor,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, libjack2
+, alsa-lib
+, freetype
+, libX11
+, libXrandr
+, libXinerama
+, libXext
+, libXcursor
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ruby,
-  zfs,
-  freebsd,
-  makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ruby
+, zfs
+, freebsd
+, makeWrapper
+,
 }:
 
 stdenv.mkDerivation rec {

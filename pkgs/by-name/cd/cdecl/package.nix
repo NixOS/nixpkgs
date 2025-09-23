@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoconf,
-  automake,
-  bison,
-  flex,
-  readline,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, bison
+, flex
+, readline
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

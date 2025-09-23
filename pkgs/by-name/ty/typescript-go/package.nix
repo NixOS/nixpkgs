@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGo125Module,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, buildGo125Module
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 
 let

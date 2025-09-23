@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  python,
-  fetchFromGitHub,
-  fetchpatch,
-  cython ? null,
-  numpy ? null,
+{ lib
+, buildPythonPackage
+, python
+, fetchFromGitHub
+, fetchpatch
+, cython ? null
+, numpy ? null
+,
 }:
 
 buildPythonPackage {

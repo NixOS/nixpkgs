@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGo125Module,
-  fetchFromGitHub,
-  installShellFiles,
-  testers,
-  dnscontrol,
+{ lib
+, buildGo125Module
+, fetchFromGitHub
+, installShellFiles
+, testers
+, dnscontrol
+,
 }:
 
 buildGo125Module rec {

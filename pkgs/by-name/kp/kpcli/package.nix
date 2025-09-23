@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  perl,
-  perlPackages,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, perl
+, perlPackages
+,
 }:
 
 stdenv.mkDerivation rec {

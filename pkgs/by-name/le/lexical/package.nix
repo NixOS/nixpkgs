@@ -1,10 +1,10 @@
-{
-  lib,
-  beamPackages,
-  fetchFromGitHub,
-  elixir,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, beamPackages
+, fetchFromGitHub
+, elixir
+, nix-update-script
+, versionCheckHook
+,
 }:
 
 beamPackages.mixRelease rec {

@@ -1,20 +1,20 @@
-{
-  lib,
-  bc-soci,
-  belcard,
-  belle-sip,
-  cmake,
-  doxygen,
-  fetchFromGitLab,
-  jsoncpp,
-  libxml2,
-  lime,
-  mediastreamer,
-  python3,
-  sqlite,
-  stdenv,
-  xercesc,
-  zxing-cpp,
+{ lib
+, bc-soci
+, belcard
+, belle-sip
+, cmake
+, doxygen
+, fetchFromGitLab
+, jsoncpp
+, libxml2
+, lime
+, mediastreamer
+, python3
+, sqlite
+, stdenv
+, xercesc
+, zxing-cpp
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,16 +1,16 @@
-{
-  lib,
-  python3,
-  fetchFromGitHub,
-  desktop-file-utils,
-  glib,
-  gobject-introspection,
-  meson,
-  ninja,
-  wrapGAppsHook4,
-  libadwaita,
-  xdotool,
-  wl-clipboard,
+{ lib
+, python3
+, fetchFromGitHub
+, desktop-file-utils
+, glib
+, gobject-introspection
+, meson
+, ninja
+, wrapGAppsHook4
+, libadwaita
+, xdotool
+, wl-clipboard
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

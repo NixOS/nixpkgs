@@ -1,31 +1,31 @@
-{
-  lib,
-  addDriverRunpath,
-  buildPythonPackage,
-  cmake,
-  config,
-  cudaPackages,
-  fetchFromGitHub,
-  filelock,
-  gtest,
-  libxml2,
-  lit,
-  llvm,
-  ncurses,
-  ninja,
-  pybind11,
-  python,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
-  stdenv,
-  replaceVars,
-  setuptools,
-  torchWithRocm,
-  zlib,
-  cudaSupport ? config.cudaSupport,
-  runCommand,
-  rocmPackages,
-  triton,
+{ lib
+, addDriverRunpath
+, buildPythonPackage
+, cmake
+, config
+, cudaPackages
+, fetchFromGitHub
+, filelock
+, gtest
+, libxml2
+, lit
+, llvm
+, ncurses
+, ninja
+, pybind11
+, python
+, pytestCheckHook
+, writableTmpDirAsHomeHook
+, stdenv
+, replaceVars
+, setuptools
+, torchWithRocm
+, zlib
+, cudaSupport ? config.cudaSupport
+, runCommand
+, rocmPackages
+, triton
+,
 }:
 
 buildPythonPackage rec {

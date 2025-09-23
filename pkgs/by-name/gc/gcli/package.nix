@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  curl,
-  pkg-config,
-  byacc,
-  flex,
-  fetchpatch,
+{ lib
+, fetchFromGitHub
+, stdenv
+, curl
+, pkg-config
+, byacc
+, flex
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

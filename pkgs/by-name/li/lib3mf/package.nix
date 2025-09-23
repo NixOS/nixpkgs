@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  ninja,
-  automaticcomponenttoolkit,
-  pkg-config,
-  fast-float,
-  libzip,
-  gtest,
-  openssl,
-  libuuid,
-  zlib,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, ninja
+, automaticcomponenttoolkit
+, pkg-config
+, fast-float
+, libzip
+, gtest
+, openssl
+, libuuid
+, zlib
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

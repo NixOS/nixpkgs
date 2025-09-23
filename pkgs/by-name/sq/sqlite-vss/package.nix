@@ -1,13 +1,13 @@
-{
-  lib,
-  cmake,
-  faiss,
-  fetchFromGitHub,
-  gomp,
-  llvmPackages,
-  nlohmann_json,
-  sqlite,
-  stdenv,
+{ lib
+, cmake
+, faiss
+, fetchFromGitHub
+, gomp
+, llvmPackages
+, nlohmann_json
+, sqlite
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,22 +1,22 @@
-{
-  boost,
-  casadi,
-  casadiSupport ? true,
-  cmake,
-  collisionSupport ? true,
-  console-bridge,
-  doxygen,
-  eigen,
-  example-robot-data,
-  fetchFromGitHub,
-  coal,
-  jrl-cmakemodules,
-  lib,
-  pkg-config,
-  pythonSupport ? false,
-  python3Packages,
-  stdenv,
-  urdfdom,
+{ boost
+, casadi
+, casadiSupport ? true
+, cmake
+, collisionSupport ? true
+, console-bridge
+, doxygen
+, eigen
+, example-robot-data
+, fetchFromGitHub
+, coal
+, jrl-cmakemodules
+, lib
+, pkg-config
+, pythonSupport ? false
+, python3Packages
+, stdenv
+, urdfdom
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

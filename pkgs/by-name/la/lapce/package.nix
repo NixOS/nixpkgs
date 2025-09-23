@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  rustPlatform,
-  cmake,
-  pkg-config,
-  perl,
-  python3,
-  fontconfig,
-  glib,
-  gtk3,
-  openssl,
-  libGL,
-  libxkbcommon,
-  wrapGAppsHook3,
-  wayland,
-  gobject-introspection,
-  xorg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, rustPlatform
+, cmake
+, pkg-config
+, perl
+, python3
+, fontconfig
+, glib
+, gtk3
+, openssl
+, libGL
+, libxkbcommon
+, wrapGAppsHook3
+, wayland
+, gobject-introspection
+, xorg
+,
 }:
 let
   rpathLibs = lib.optionals stdenv.hostPlatform.isLinux [

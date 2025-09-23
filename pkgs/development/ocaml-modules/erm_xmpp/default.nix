@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
-  camlp4,
-  cstruct,
-  ocamlbuild,
-  erm_xml,
-  mirage-crypto,
-  mirage-crypto-rng,
-  base64,
-  digestif,
+{ stdenv
+, lib
+, fetchFromGitHub
+, ocaml
+, findlib
+, camlp4
+, cstruct
+, ocamlbuild
+, erm_xml
+, mirage-crypto
+, mirage-crypto-rng
+, base64
+, digestif
+,
 }:
 
 stdenv.mkDerivation {

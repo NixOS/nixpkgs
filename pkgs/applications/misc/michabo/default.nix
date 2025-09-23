@@ -1,12 +1,12 @@
-{
-  lib,
-  mkDerivation,
-  makeDesktopItem,
-  fetchFromGitLab,
-  qmake,
-  # qt
-  qtbase,
-  qtwebsockets,
+{ lib
+, mkDerivation
+, makeDesktopItem
+, fetchFromGitLab
+, qmake
+, # qt
+  qtbase
+, qtwebsockets
+,
 }:
 
 let

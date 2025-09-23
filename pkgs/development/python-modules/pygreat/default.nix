@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pyusb,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, pyusb
+,
 }:
 
 buildPythonPackage rec {

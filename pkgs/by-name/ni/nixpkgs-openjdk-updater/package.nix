@@ -1,10 +1,10 @@
-{
-  lib,
-  python3Packages,
-  ruff,
-  pyright,
-  fetchFromGitHub,
-  nixpkgs-openjdk-updater,
+{ lib
+, python3Packages
+, ruff
+, pyright
+, fetchFromGitHub
+, nixpkgs-openjdk-updater
+,
 }:
 
 python3Packages.buildPythonApplication {
@@ -38,9 +38,9 @@ python3Packages.buildPythonApplication {
   '';
 
   passthru.openjdkSource =
-    {
-      sourceFile,
-      featureVersionPrefix,
+    { sourceFile
+    , featureVersionPrefix
+    ,
     }:
     let
       sourceInfo = lib.importJSON sourceFile;

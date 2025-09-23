@@ -1,28 +1,28 @@
-{
-  stdenv,
-  nodejs,
-  buildNpmPackage,
-  lib,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  talloc,
-  pkg-config,
-  mongoc,
-  cmake,
-  libyaml,
-  libmicrohttpd,
-  flex,
-  bison,
-  libgcrypt,
-  libidn,
-  lksctp-tools,
-  gnutls,
-  libnghttp2,
-  openssl,
-  curl,
-  libtins,
-  mongosh,
+{ stdenv
+, nodejs
+, buildNpmPackage
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, talloc
+, pkg-config
+, mongoc
+, cmake
+, libyaml
+, libmicrohttpd
+, flex
+, bison
+, libgcrypt
+, libidn
+, lksctp-tools
+, gnutls
+, libnghttp2
+, openssl
+, curl
+, libtins
+, mongosh
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

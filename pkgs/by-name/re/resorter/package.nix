@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  rPackages,
-  rWrapper,
-  stdenv,
+{ lib
+, fetchFromGitHub
+, rPackages
+, rWrapper
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

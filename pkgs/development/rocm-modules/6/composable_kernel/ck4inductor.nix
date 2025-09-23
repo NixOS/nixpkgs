@@ -1,11 +1,11 @@
-{
-  buildPythonPackage,
-  python,
-  composable_kernel,
-  lib,
-  setuptools,
-  setuptools-scm,
-  rocm-merged-llvm,
+{ buildPythonPackage
+, python
+, composable_kernel
+, lib
+, setuptools
+, setuptools-scm
+, rocm-merged-llvm
+,
 }:
 buildPythonPackage {
   pyproject = true;

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  isPy27,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
-  py,
-  pytestCheckHook,
-  pythonAtLeast,
+{ lib
+, stdenv
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, setuptools
+, setuptools-scm
+, py
+, pytestCheckHook
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

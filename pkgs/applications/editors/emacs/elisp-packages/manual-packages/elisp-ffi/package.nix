@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  libffi,
-  melpaBuild,
-  pkg-config,
+{ lib
+, fetchFromGitHub
+, libffi
+, melpaBuild
+, pkg-config
+,
 }:
 
 melpaBuild {

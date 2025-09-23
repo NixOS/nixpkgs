@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pdm-backend,
-  pyhumps,
-  quart,
-  msgspec,
-  attrs,
-  pytestCheckHook,
-  pytest-asyncio,
-  pydantic,
-  hypothesis,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pdm-backend
+, pyhumps
+, quart
+, msgspec
+, attrs
+, pytestCheckHook
+, pytest-asyncio
+, pydantic
+, hypothesis
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  intltool,
-  libxml2,
-  pciutils,
-  pkg-config,
-  gtk2,
-  ddccontrol-db,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, intltool
+, libxml2
+, pciutils
+, pkg-config
+, gtk2
+, ddccontrol-db
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  mkDerivation,
-  fetchFromGitHub,
-  qmake,
-  qtmultimedia,
-  qtbase,
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, qmake
+, qtmultimedia
+, qtbase
+,
 }:
 
 mkDerivation rec {

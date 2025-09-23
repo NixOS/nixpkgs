@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  httpie,
-  requests-ntlm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, httpie
+, requests-ntlm
+,
 }:
 
 buildPythonPackage rec {

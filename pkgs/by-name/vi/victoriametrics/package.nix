@@ -1,14 +1,19 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  nixosTests,
-  withServer ? true, # the actual metrics server
-  withVmAgent ? true, # Agent to collect metrics
-  withVmAlert ? true, # Alert Manager
-  withVmAuth ? true, # HTTP proxy for authentication
-  withBackupTools ? true, # vmbackup, vmrestore
-  withVmctl ? true, # vmctl is used to migrate time series
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+, withServer ? true
+, # the actual metrics server
+  withVmAgent ? true
+, # Agent to collect metrics
+  withVmAlert ? true
+, # Alert Manager
+  withVmAuth ? true
+, # HTTP proxy for authentication
+  withBackupTools ? true
+, # vmbackup, vmrestore
+  withVmctl ? true
+, # vmctl is used to migrate time series
 }:
 
 buildGoModule (finalAttrs: {

@@ -1,10 +1,9 @@
 # tcsd daemon.
-{
-  config,
-  options,
-  pkgs,
-  lib,
-  ...
+{ config
+, options
+, pkgs
+, lib
+, ...
 }:
 let
 

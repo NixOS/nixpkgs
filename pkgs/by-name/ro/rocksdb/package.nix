@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  bzip2,
-  lz4,
-  snappy,
-  zlib,
-  zstd,
-  windows,
-  enableJemalloc ? false,
-  jemalloc,
-  enableLiburing ? stdenv.hostPlatform.isLinux,
-  liburing,
-  enableShared ? !stdenv.hostPlatform.isStatic,
-  sse42Support ? stdenv.hostPlatform.sse4_2Support,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, bzip2
+, lz4
+, snappy
+, zlib
+, zstd
+, windows
+, enableJemalloc ? false
+, jemalloc
+, enableLiburing ? stdenv.hostPlatform.isLinux
+, liburing
+, enableShared ? !stdenv.hostPlatform.isStatic
+, sse42Support ? stdenv.hostPlatform.sse4_2Support
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,9 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TDYXzYbOLhcIRi+qi0FW1OLVtfKOF+gUbj62Tgpp3/E=";
   };
 
-  patches = lib.optional (
-    lib.versionAtLeast finalAttrs.version "6.29.3" && enableLiburing
-  ) ./fix-findliburing.patch;
+  patches = lib.optional
+    (
+      lib.versionAtLeast finalAttrs.version "6.29.3" && enableLiburing
+    ) ./fix-findliburing.patch;
 
   nativeBuildInputs = [
     cmake

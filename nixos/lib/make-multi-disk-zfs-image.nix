@@ -24,66 +24,54 @@
 # presumably because zed doesn’t get an event saying it’s partition grew,
 # whereas it can and does get an event saying the whole disk it is on is
 # now larger.
-{
-  lib,
-  pkgs,
-  # The NixOS configuration to be installed onto the disk image.
-  config,
-
-  # size of the FAT boot disk in MiB (1024*1024 bytes)
-  bootSize ? 1024,
-
-  # The size of the root disk in MiB (1024*1024 bytes)
-  rootSize ? 2048,
-
-  # The name of the ZFS pool
-  rootPoolName ? "tank",
-
-  # zpool properties
+{ lib
+, pkgs
+, # The NixOS configuration to be installed onto the disk image.
+  config
+, # size of the FAT boot disk in MiB (1024*1024 bytes)
+  bootSize ? 1024
+, # The size of the root disk in MiB (1024*1024 bytes)
+  rootSize ? 2048
+, # The name of the ZFS pool
+  rootPoolName ? "tank"
+, # zpool properties
   rootPoolProperties ? {
     autoexpand = "on";
-  },
-  # pool-wide filesystem properties
+  }
+, # pool-wide filesystem properties
   rootPoolFilesystemProperties ? {
     acltype = "posixacl";
     atime = "off";
     compression = "on";
     mountpoint = "legacy";
     xattr = "sa";
-  },
-
-  # datasets, with per-attribute options:
+  }
+, # datasets, with per-attribute options:
   # mount: (optional) mount point in the VM
   # properties: (optional) ZFS properties on the dataset, like filesystemProperties
   # Notes:
   # 1. datasets will be created from shorter to longer names as a simple topo-sort
   # 2. you should define a root's dataset's mount for `/`
-  datasets ? { },
-
-  # The files and directories to be placed in the target file system.
+  datasets ? { }
+, # The files and directories to be placed in the target file system.
   # This is a list of attribute sets {source, target} where `source'
   # is the file system object (regular file or directory) to be
   # grafted in the file system at path `target'.
-  contents ? [ ],
-
-  # The initial NixOS configuration file to be copied to
+  contents ? [ ]
+, # The initial NixOS configuration file to be copied to
   # /etc/nixos/configuration.nix. This configuration will be embedded
   # inside a configuration which includes the described ZFS fileSystems.
-  configFile ? null,
-
-  # Shell code executed after the VM has finished.
-  postVM ? "",
-
-  # Guest memory size in MiB (1024*1024 bytes)
-  memSize ? 1024,
-
-  name ? "nixos-disk-image",
-
-  # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
-  format ? "raw",
-
-  # Include a copy of Nixpkgs in the disk image
-  includeChannel ? true,
+  configFile ? null
+, # Shell code executed after the VM has finished.
+  postVM ? ""
+, # Guest memory size in MiB (1024*1024 bytes)
+  memSize ? 1024
+, name ? "nixos-disk-image"
+, # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
+  format ? "raw"
+, # Include a copy of Nixpkgs in the disk image
+  includeChannel ? true
+,
 }:
 let
   formatOpt = if format == "qcow2-compressed" then "qcow2" else format;
@@ -97,8 +85,7 @@ let
       vdi = "vdi";
       vpc = "vhd";
       raw = "img";
-    }
-    .${formatOpt} or formatOpt;
+    }.${formatOpt} or formatOpt;
   bootFilename = "nixos.boot${filenameSuffix}";
   rootFilename = "nixos.root${filenameSuffix}";
 
@@ -150,17 +137,21 @@ let
   stringifyProperties =
     prefix: properties:
     lib.concatStringsSep " \\\n" (
-      lib.mapAttrsToList (
-        property: value: "${prefix} ${lib.escapeShellArg property}=${lib.escapeShellArg value}"
-      ) properties
+      lib.mapAttrsToList
+        (
+          property: value: "${prefix} ${lib.escapeShellArg property}=${lib.escapeShellArg value}"
+        )
+        properties
     );
 
   createDatasets =
     let
       datasetlist = lib.mapAttrsToList lib.nameValuePair datasets;
-      sorted = lib.sort (
-        left: right: (lib.stringLength left.name) < (lib.stringLength right.name)
-      ) datasetlist;
+      sorted = lib.sort
+        (
+          left: right: (lib.stringLength left.name) < (lib.stringLength right.name)
+        )
+        datasetlist;
       cmd =
         { name, value }:
         let
@@ -174,9 +165,11 @@ let
     let
       datasetlist = lib.mapAttrsToList lib.nameValuePair datasets;
       mounts = lib.filter ({ value, ... }: hasDefinedMount value) datasetlist;
-      sorted = lib.sort (
-        left: right: (lib.stringLength left.value.mount) < (lib.stringLength right.value.mount)
-      ) mounts;
+      sorted = lib.sort
+        (
+          left: right: (lib.stringLength left.value.mount) < (lib.stringLength right.value.mount)
+        )
+        mounts;
       cmd =
         { name, value }:
         ''
@@ -190,9 +183,11 @@ let
     let
       datasetlist = lib.mapAttrsToList lib.nameValuePair datasets;
       mounts = lib.filter ({ value, ... }: hasDefinedMount value) datasetlist;
-      sorted = lib.sort (
-        left: right: (lib.stringLength left.value.mount) > (lib.stringLength right.value.mount)
-      ) mounts;
+      sorted = lib.sort
+        (
+          left: right: (lib.stringLength left.value.mount) > (lib.stringLength right.value.mount)
+        )
+        mounts;
       cmd =
         { name, value }:
         ''
@@ -212,13 +207,15 @@ let
           nixpkgs-fmt
         ];
         filesystems = builtins.toJSON {
-          fileSystems = lib.mapAttrs' (dataset: attrs: {
-            name = attrs.mount;
-            value = {
-              fsType = "zfs";
-              device = "${dataset}";
-            };
-          }) mountable;
+          fileSystems = lib.mapAttrs'
+            (dataset: attrs: {
+              name = attrs.mount;
+              value = {
+                fsType = "zfs";
+                device = "${dataset}";
+              };
+            })
+            mountable;
         };
         passAsFile = [ "filesystems" ];
       }

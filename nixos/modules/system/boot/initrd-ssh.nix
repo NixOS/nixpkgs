@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -316,9 +315,11 @@ in
           gid = 1;
         };
 
-        users.root.shell = mkIf (
-          config.boot.initrd.network.ssh.shell != null
-        ) config.boot.initrd.network.ssh.shell;
+        users.root.shell = mkIf
+          (
+            config.boot.initrd.network.ssh.shell != null
+          )
+          config.boot.initrd.network.ssh.shell;
 
         contents = {
           "/etc/ssh/sshd_config".text = sshdConfig;

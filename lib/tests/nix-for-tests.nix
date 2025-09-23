@@ -1,6 +1,6 @@
-{
-  lib ? pkgs.lib,
-  pkgs,
+{ lib ? pkgs.lib
+, pkgs
+,
 }:
 
 # The aws-sdk-cpp tests are flaky.  Since pull requests to staging
@@ -12,10 +12,12 @@
 #
 # See also: https://github.com/NixOS/nix/issues/7582
 
-builtins.mapAttrs (
-  attr: pkg:
-  if lib.versionAtLeast pkg.version "2.29pre" then
-    pkg.overrideScope (finalScope: prevScope: { aws-sdk-cpp = null; })
-  else
-    pkg.override { withAWS = false; }
-) pkgs.nixVersions
+builtins.mapAttrs
+  (
+    attr: pkg:
+    if lib.versionAtLeast pkg.version "2.29pre" then
+      pkg.overrideScope (finalScope: prevScope: { aws-sdk-cpp = null; })
+    else
+      pkg.override { withAWS = false; }
+  )
+  pkgs.nixVersions

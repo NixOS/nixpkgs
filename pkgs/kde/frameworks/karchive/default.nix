@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qttools,
-  pkg-config,
-  xz,
+{ mkKdeDerivation
+, qttools
+, pkg-config
+, xz
+,
 }:
 mkKdeDerivation {
   pname = "karchive";

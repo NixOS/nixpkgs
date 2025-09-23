@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cctools,
-  pkg-config,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cctools
+, pkg-config
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

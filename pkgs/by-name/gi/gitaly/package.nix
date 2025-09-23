@@ -1,9 +1,9 @@
-{
-  lib,
-  callPackage,
-  fetchFromGitLab,
-  buildGoModule,
-  pkg-config,
+{ lib
+, callPackage
+, fetchFromGitLab
+, buildGoModule
+, pkg-config
+,
 }:
 
 let
@@ -103,5 +103,5 @@ buildGoModule (
       license = licenses.mit;
     };
   }
-  // commonOpts
+    // commonOpts
 )

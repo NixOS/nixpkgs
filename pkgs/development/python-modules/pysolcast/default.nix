@@ -1,16 +1,16 @@
-{
-  lib,
-  anyconfig,
-  buildPythonPackage,
-  fetchFromGitHub,
-  isodate,
-  poetry-core,
-  poetry-dynamic-versioning,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  requests,
-  responses,
+{ lib
+, anyconfig
+, buildPythonPackage
+, fetchFromGitHub
+, isodate
+, poetry-core
+, poetry-dynamic-versioning
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, responses
+,
 }:
 
 buildPythonPackage rec {

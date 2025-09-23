@@ -1,18 +1,17 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-
-  # dependencies
-  systemd,
-  hidapi,
-  coreutils,
-  kmod,
-  efibootmgr,
-  dbus,
-  lsof,
-  btrfs-progs,
-  util-linux,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, # dependencies
+  systemd
+, hidapi
+, coreutils
+, kmod
+, efibootmgr
+, dbus
+, lsof
+, btrfs-progs
+, util-linux
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "handheld-daemon";

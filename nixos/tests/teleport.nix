@@ -1,8 +1,8 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-  lib ? pkgs.lib,
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+, lib ? pkgs.lib
+,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -81,39 +81,41 @@ let
     };
   };
 in
-lib.concatMapAttrs (name: package: {
-  "minimal_${name}" = makeTest {
-    # minimal setup should always work
-    name = "teleport-minimal-setup";
-    meta.maintainers = with pkgs.lib.maintainers; [ justinas ];
-    nodes.minimal = minimal package;
+lib.concatMapAttrs
+  (name: package: {
+    "minimal_${name}" = makeTest {
+      # minimal setup should always work
+      name = "teleport-minimal-setup";
+      meta.maintainers = with pkgs.lib.maintainers; [ justinas ];
+      nodes.minimal = minimal package;
 
-    testScript = ''
-      minimal.wait_for_open_port(3025)
-      minimal.wait_for_open_port(3080)
-      minimal.wait_for_open_port(3022)
-    '';
-  };
-
-  "basic_${name}" = makeTest {
-    # basic server and client test
-    name = "teleport-server-client";
-    meta.maintainers = with pkgs.lib.maintainers; [ justinas ];
-    nodes = {
-      server = server package;
-      client = client package;
+      testScript = ''
+        minimal.wait_for_open_port(3025)
+        minimal.wait_for_open_port(3080)
+        minimal.wait_for_open_port(3022)
+      '';
     };
 
-    testScript = ''
-      with subtest("teleport ready"):
-          server.wait_for_open_port(3025)
-          client.wait_for_open_port(3022)
+    "basic_${name}" = makeTest {
+      # basic server and client test
+      name = "teleport-server-client";
+      meta.maintainers = with pkgs.lib.maintainers; [ justinas ];
+      nodes = {
+        server = server package;
+        client = client package;
+      };
 
-      with subtest("check applied configuration"):
-          server.wait_until_succeeds("tctl get nodes --format=json | ${pkgs.jq}/bin/jq -e '.[] | select(.spec.hostname==\"client\") | .metadata.labels.role==\"client\"'")
-          server.wait_for_open_port(3000)
-          client.succeed("journalctl -u teleport.service --grep='DEBU'")
-          server.succeed("journalctl -u teleport.service --grep='Starting teleport in insecure mode.'")
-    '';
-  };
-}) packages
+      testScript = ''
+        with subtest("teleport ready"):
+            server.wait_for_open_port(3025)
+            client.wait_for_open_port(3022)
+
+        with subtest("check applied configuration"):
+            server.wait_until_succeeds("tctl get nodes --format=json | ${pkgs.jq}/bin/jq -e '.[] | select(.spec.hostname==\"client\") | .metadata.labels.role==\"client\"'")
+            server.wait_for_open_port(3000)
+            client.succeed("journalctl -u teleport.service --grep='DEBU'")
+            server.succeed("journalctl -u teleport.service --grep='Starting teleport in insecure mode.'")
+      '';
+    };
+  })
+  packages

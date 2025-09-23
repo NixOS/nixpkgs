@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  kernel,
-  kernelModuleMakeFlags,
-  unstableGitUpdater,
+{ lib
+, fetchFromGitHub
+, kernel
+, kernelModuleMakeFlags
+, unstableGitUpdater
+,
 }:
 kernel.stdenv.mkDerivation {
   pname = "rust-out-of-tree-module";

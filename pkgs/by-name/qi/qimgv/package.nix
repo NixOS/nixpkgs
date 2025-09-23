@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libsForQt5,
-  exiv2,
-  mpv,
-  opencv4,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libsForQt5
+, exiv2
+, mpv
+, opencv4
+,
 }:
 
 stdenv.mkDerivation rec {

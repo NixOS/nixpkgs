@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  httpx,
-  jinja2,
-  nodeenv,
-  pydantic,
-  python-dotenv,
-  pythonOlder,
-  setuptools,
-  strenum,
-  tomlkit,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, httpx
+, jinja2
+, nodeenv
+, pydantic
+, python-dotenv
+, pythonOlder
+, setuptools
+, strenum
+, tomlkit
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

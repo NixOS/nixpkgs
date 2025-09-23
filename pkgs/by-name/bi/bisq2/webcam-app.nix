@@ -2,16 +2,16 @@
 # bisq2 communicates with the webcam app via a local TCP connection using a simple one-way protocol.
 # Since the webcam app dynamically loads native code, this package is for maintainers to test QR code scanning without having to spend bitcoin to execute a trade.
 # This package is exposed as an attribute of the bisq2 package; bisq2.webcam-app.
-{
-  stdenv,
-  lib,
-  makeBinaryWrapper,
-  jdk,
-  writeShellScript,
-  unzip,
-  bisq2,
-  socat,
-  libraryPath,
+{ stdenv
+, lib
+, makeBinaryWrapper
+, jdk
+, writeShellScript
+, unzip
+, bisq2
+, socat
+, libraryPath
+,
 }:
 
 let

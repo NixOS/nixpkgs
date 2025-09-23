@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  fetchzip,
-  python3Packages,
-  fetchpatch2,
-  parallel,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, fetchzip
+, python3Packages
+, fetchpatch2
+, parallel
+,
 }:
 let
 

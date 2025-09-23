@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  sassc,
-  gnome-themes-extra,
-  gtk-engine-murrine,
-  unstableGitUpdater,
-  colorVariants ? [ ],
-  sizeVariants ? [ ],
-  themeVariants ? [ ],
-  tweakVariants ? [ ],
-  iconVariants ? [ ],
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, sassc
+, gnome-themes-extra
+, gtk-engine-murrine
+, unstableGitUpdater
+, colorVariants ? [ ]
+, sizeVariants ? [ ]
+, themeVariants ? [ ]
+, tweakVariants ? [ ]
+, iconVariants ? [ ]
+,
 }:
 
 let
@@ -68,53 +68,53 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
   iconVariants
 
   stdenvNoCC.mkDerivation
-  {
-    inherit pname;
-    version = "0-unstable-2025-09-09";
+{
+  inherit pname;
+  version = "0-unstable-2025-09-09";
 
-    src = fetchFromGitHub {
-      owner = "Fausto-Korpsvart";
-      repo = "Nightfox-GTK-Theme";
-      rev = "7672385bb28e39c65d1509f15efbe1a7c1bde631";
-      hash = "sha256-Rd8GkXeyrX3fYoYOO+1GN8MLg2+vW3BsXcbBraAL+Is=";
-    };
+  src = fetchFromGitHub {
+    owner = "Fausto-Korpsvart";
+    repo = "Nightfox-GTK-Theme";
+    rev = "7672385bb28e39c65d1509f15efbe1a7c1bde631";
+    hash = "sha256-Rd8GkXeyrX3fYoYOO+1GN8MLg2+vW3BsXcbBraAL+Is=";
+  };
 
-    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
-    nativeBuildInputs = [ sassc ];
-    buildInputs = [ gnome-themes-extra ];
+  nativeBuildInputs = [ sassc ];
+  buildInputs = [ gnome-themes-extra ];
 
-    dontBuild = true;
+  dontBuild = true;
 
-    passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { };
 
-    postPatch = ''
-      patchShebangs themes/install.sh
-    '';
+  postPatch = ''
+    patchShebangs themes/install.sh
+  '';
 
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/share/themes
-      cd themes
-      ./install.sh -n Nightfox \
-      ${lib.optionalString (colorVariants != [ ]) "-c " + toString colorVariants} \
-      ${lib.optionalString (sizeVariants != [ ]) "-s " + toString sizeVariants} \
-      ${lib.optionalString (themeVariants != [ ]) "-t " + toString themeVariants} \
-      ${lib.optionalString (tweakVariants != [ ]) "--tweaks " + toString tweakVariants} \
-      -d "$out/share/themes"
-      cd ../icons
-      ${lib.optionalString (iconVariants != [ ]) ''
-        mkdir -p $out/share/icons
-        cp -a ${toString (map (v: "${v}") iconVariants)} $out/share/icons/
-      ''}
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/share/themes
+    cd themes
+    ./install.sh -n Nightfox \
+    ${lib.optionalString (colorVariants != [ ]) "-c " + toString colorVariants} \
+    ${lib.optionalString (sizeVariants != [ ]) "-s " + toString sizeVariants} \
+    ${lib.optionalString (themeVariants != [ ]) "-t " + toString themeVariants} \
+    ${lib.optionalString (tweakVariants != [ ]) "--tweaks " + toString tweakVariants} \
+    -d "$out/share/themes"
+    cd ../icons
+    ${lib.optionalString (iconVariants != [ ]) ''
+      mkdir -p $out/share/icons
+      cp -a ${toString (map (v: "${v}") iconVariants)} $out/share/icons/
+    ''}
+    runHook postInstall
+  '';
 
-    meta = {
-      description = "GTK theme based on the Nightfox colour palette";
-      homepage = "https://github.com/Fausto-Korpsvart/Nightfox-GTK-Theme";
-      license = lib.licenses.gpl3Plus;
-      platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ d3vil0p3r ];
-    };
-  }
+  meta = {
+    description = "GTK theme based on the Nightfox colour palette";
+    homepage = "https://github.com/Fausto-Korpsvart/Nightfox-GTK-Theme";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+  };
+}

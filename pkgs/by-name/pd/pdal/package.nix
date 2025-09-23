@@ -1,31 +1,29 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  ctestCheckHook,
-  fetchFromGitHub,
-  testers,
-
-  enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format,
-
-  cmake,
-  curl,
-  gdal,
-  hdf5-cpp,
-  laszip,
-  libe57format,
-  libgeotiff,
-  libtiff,
-  libxml2,
-  openscenegraph,
-  pkg-config,
-  libpq,
-  proj,
-  sqlite,
-  tiledb,
-  xercesc,
-  zlib,
-  zstd,
+{ lib
+, stdenv
+, callPackage
+, ctestCheckHook
+, fetchFromGitHub
+, testers
+, enableE57 ? lib.meta.availableOn stdenv.hostPlatform libe57format
+, cmake
+, curl
+, gdal
+, hdf5-cpp
+, laszip
+, libe57format
+, libgeotiff
+, libtiff
+, libxml2
+, openscenegraph
+, pkg-config
+, libpq
+, proj
+, sqlite
+, tiledb
+, xercesc
+, zlib
+, zstd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

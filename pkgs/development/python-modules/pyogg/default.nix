@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  libvorbis,
-  flac,
-  libogg,
-  libopus,
-  opusfile,
-  replaceVars,
+{ stdenv
+, lib
+, fetchPypi
+, buildPythonPackage
+, libvorbis
+, flac
+, libogg
+, libopus
+, opusfile
+, replaceVars
+,
 }:
 
 buildPythonPackage rec {

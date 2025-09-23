@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  flex,
-  itstool,
-  wrapGAppsHook3,
-  desktop-file-utils,
-  exiv2,
-  libgsf,
-  taglib,
-  poppler,
-  samba,
-  gtest,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, flex
+, itstool
+, wrapGAppsHook3
+, desktop-file-utils
+, exiv2
+, libgsf
+, taglib
+, poppler
+, samba
+, gtest
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

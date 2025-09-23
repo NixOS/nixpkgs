@@ -2,14 +2,13 @@
   This makes a keter bundle as described on the github page:
   https://github.com/snoyberg/keter#bundling-your-app-for-keter
 */
-{
-  keterDomain,
-  keterExecutable,
-  gnutar,
-  writeTextFile,
-  lib,
-  stdenv,
-  ...
+{ keterDomain
+, keterExecutable
+, gnutar
+, writeTextFile
+, lib
+, stdenv
+, ...
 }:
 
 let

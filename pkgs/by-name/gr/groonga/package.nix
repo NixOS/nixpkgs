@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchurl,
-  kytea,
-  msgpack-c,
-  mecab,
-  pkg-config,
-  rapidjson,
-  testers,
-  xxHash,
-  zstd,
-  postgresqlPackages,
-  suggestSupport ? false,
-  zeromq,
-  libevent,
-  lz4Support ? false,
-  lz4,
-  zlibSupport ? true,
-  zlib,
+{ lib
+, stdenv
+, cmake
+, fetchurl
+, kytea
+, msgpack-c
+, mecab
+, pkg-config
+, rapidjson
+, testers
+, xxHash
+, zstd
+, postgresqlPackages
+, suggestSupport ? false
+, zeromq
+, libevent
+, lz4Support ? false
+, lz4
+, zlibSupport ? true
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

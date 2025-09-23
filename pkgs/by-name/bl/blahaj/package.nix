@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  crystal,
-  fetchFromGitHub,
-  # https://crystal-lang.org/2019/09/06/parallelism-in-crystal/
-  multithreading ? true,
-  static ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, crystal
+, fetchFromGitHub
+, # https://crystal-lang.org/2019/09/06/parallelism-in-crystal/
+  multithreading ? true
+, static ? stdenv.hostPlatform.isStatic
+,
 }:
 
 crystal.buildCrystalPackage rec {

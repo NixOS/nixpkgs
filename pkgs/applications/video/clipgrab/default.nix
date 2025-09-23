@@ -1,18 +1,18 @@
-{
-  lib,
-  fetchurl,
-  makeDesktopItem,
-  ffmpeg,
-  qmake,
-  qttools,
-  mkDerivation,
-  qtbase,
-  qtdeclarative,
-  qtlocation,
-  qtquickcontrols2,
-  qtwebchannel,
-  qtwebengine,
-  yt-dlp,
+{ lib
+, fetchurl
+, makeDesktopItem
+, ffmpeg
+, qmake
+, qttools
+, mkDerivation
+, qtbase
+, qtdeclarative
+, qtlocation
+, qtquickcontrols2
+, qtwebchannel
+, qtwebengine
+, yt-dlp
+,
 }:
 
 mkDerivation rec {

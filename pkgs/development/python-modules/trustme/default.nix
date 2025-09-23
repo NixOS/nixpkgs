@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchPypi,
-  hatchling,
-  idna,
-  pyopenssl,
-  pytestCheckHook,
-  pythonOlder,
-  service-identity,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchPypi
+, hatchling
+, idna
+, pyopenssl
+, pytestCheckHook
+, pythonOlder
+, service-identity
+,
 }:
 
 buildPythonPackage rec {

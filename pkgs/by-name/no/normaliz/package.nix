@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  gmpxx,
-  flint3,
-  nauty,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gmpxx
+, flint3
+, nauty
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

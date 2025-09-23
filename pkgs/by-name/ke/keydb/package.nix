@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  libuuid,
-  curl,
-  pkg-config,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  tlsSupport ? !stdenv.hostPlatform.isStatic,
-  openssl,
-  jemalloc,
-  which,
-  tcl,
-  tclPackages,
-  ps,
-  getconf,
-  nixosTests,
+{ stdenv
+, lib
+, fetchFromGitHub
+, libuuid
+, curl
+, pkg-config
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, tlsSupport ? !stdenv.hostPlatform.isStatic
+, openssl
+, jemalloc
+, which
+, tcl
+, tclPackages
+, ps
+, getconf
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

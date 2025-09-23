@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  jdk,
-  jre,
-  swt,
-  makeWrapper,
-  xorg,
-  dpkg,
-  gtk3,
-  glib,
+{ lib
+, stdenv
+, fetchurl
+, jdk
+, jre
+, swt
+, makeWrapper
+, xorg
+, dpkg
+, gtk3
+, glib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

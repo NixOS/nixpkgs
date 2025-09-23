@@ -1,14 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-
-  # tests
-  ipykernel,
-  nbconvert,
-  pytestCheckHook,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, # tests
+  ipykernel
+, nbconvert
+, pytestCheckHook
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

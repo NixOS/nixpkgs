@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  unzip,
-  libusb-compat-0_1,
+{ lib
+, stdenv
+, fetchurl
+, unzip
+, libusb-compat-0_1
+,
 }:
 
 let

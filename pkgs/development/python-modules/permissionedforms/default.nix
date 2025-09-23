@@ -1,10 +1,10 @@
-{
-  buildPythonPackage,
-  django,
-  django-modelcluster,
-  fetchFromGitHub,
-  lib,
-  python,
+{ buildPythonPackage
+, django
+, django-modelcluster
+, fetchFromGitHub
+, lib
+, python
+,
 }:
 
 buildPythonPackage rec {

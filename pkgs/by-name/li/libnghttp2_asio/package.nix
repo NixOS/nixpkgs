@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  nghttp2,
-  openssl,
-  boost186,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, nghttp2
+, openssl
+, boost186
+,
 }:
 
 stdenv.mkDerivation {

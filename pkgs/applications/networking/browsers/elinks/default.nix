@@ -1,31 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ncurses,
-  libX11,
-  bzip2,
-  zlib,
-  brotli,
-  zstd,
-  xz,
-  openssl,
-  autoreconfHook,
-  gettext,
-  pkg-config,
-  libev,
-  gpm,
-  libidn,
-  tre,
-  expat,
-  # Incompatible licenses, LGPLv3 - GPLv2
-  enableGuile ? false,
-  guile ? null,
-  enablePython ? false,
-  python ? null,
-  enablePerl ? (!stdenv.hostPlatform.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform),
-  perl ? null,
-# re-add javascript support when upstream supports modern spidermonkey
+{ lib
+, stdenv
+, fetchFromGitHub
+, ncurses
+, libX11
+, bzip2
+, zlib
+, brotli
+, zstd
+, xz
+, openssl
+, autoreconfHook
+, gettext
+, pkg-config
+, libev
+, gpm
+, libidn
+, tre
+, expat
+, # Incompatible licenses, LGPLv3 - GPLv2
+  enableGuile ? false
+, guile ? null
+, enablePython ? false
+, python ? null
+, enablePerl ? (!stdenv.hostPlatform.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform)
+, perl ? null
+, # re-add javascript support when upstream supports modern spidermonkey
 }:
 
 assert enableGuile -> guile != null;

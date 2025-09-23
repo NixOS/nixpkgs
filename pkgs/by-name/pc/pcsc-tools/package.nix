@@ -1,26 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  autoconf-archive,
-  autoreconfHook,
-  gobject-introspection,
-  makeWrapper,
-  pkg-config,
-  wrapGAppsHook3,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  dbusSupport ? stdenv.hostPlatform.isLinux,
-  dbus,
-  pcsclite,
-  wget,
-  coreutils,
-  perlPackages,
-  testers,
-  nix-update-script,
-
-  # gui does not cross compile properly
-  withGui ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoconf-archive
+, autoreconfHook
+, gobject-introspection
+, makeWrapper
+, pkg-config
+, wrapGAppsHook3
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, dbusSupport ? stdenv.hostPlatform.isLinux
+, dbus
+, pcsclite
+, wget
+, coreutils
+, perlPackages
+, testers
+, nix-update-script
+, # gui does not cross compile properly
+  withGui ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+,
 }:
 
 assert systemdSupport -> dbusSupport;

@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
-  pkg-config,
-  bluez,
-  dbus,
-  libpulseaudio,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, pkg-config
+, bluez
+, dbus
+, libpulseaudio
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "earbuds";

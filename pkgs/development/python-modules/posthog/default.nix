@@ -1,21 +1,21 @@
-{
-  lib,
-  anthropic,
-  backoff,
-  buildPythonPackage,
-  distro,
-  fetchFromGitHub,
-  freezegun,
-  mock,
-  monotonic,
-  openai,
-  parameterized,
-  pytestCheckHook,
-  python-dateutil,
-  requests,
-  setuptools,
-  six,
-  typing-extensions,
+{ lib
+, anthropic
+, backoff
+, buildPythonPackage
+, distro
+, fetchFromGitHub
+, freezegun
+, mock
+, monotonic
+, openai
+, parameterized
+, pytestCheckHook
+, python-dateutil
+, requests
+, setuptools
+, six
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

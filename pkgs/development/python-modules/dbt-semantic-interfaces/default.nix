@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  dateutils,
-  fetchFromGitHub,
-  hatchling,
-  hypothesis,
-  importlib-metadata,
-  jinja2,
-  jsonschema,
-  more-itertools,
-  pydantic,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, click
+, dateutils
+, fetchFromGitHub
+, hatchling
+, hypothesis
+, importlib-metadata
+, jinja2
+, jsonschema
+, more-itertools
+, pydantic
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

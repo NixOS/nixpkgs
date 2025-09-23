@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  perl,
-  ghostscript,
-  nixosTests,
+{ lib
+, stdenv
+, buildNpmPackage
+, fetchFromGitHub
+, makeBinaryWrapper
+, perl
+, ghostscript
+, nixosTests
+,
 }:
 
 buildNpmPackage rec {

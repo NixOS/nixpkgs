@@ -1,42 +1,42 @@
-{
-  config,
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch2,
-  pkg-config,
-  zlib,
-  expat,
-  openssl,
-  autoconf,
-  libjpeg,
-  libpng,
-  libtiff,
-  freetype,
-  fontconfig,
-  libpaper,
-  jbig2dec,
-  libiconv,
-  ijs,
-  lcms2,
-  callPackage,
-  bash,
-  buildPackages,
-  openjpeg,
-  fixDarwinDylibNames,
-  cupsSupport ? config.ghostscript.cups or (!stdenv.hostPlatform.isDarwin),
-  cups,
-  x11Support ? cupsSupport,
-  xorg, # with CUPS, X11 only adds very little
-  dynamicDrivers ? true,
-
-  # for passthru.tests
-  graphicsmagick,
-  imagemagick,
-  libspectre,
-  lilypond,
-  pstoedit,
-  python3,
+{ config
+, stdenv
+, lib
+, fetchurl
+, fetchpatch2
+, pkg-config
+, zlib
+, expat
+, openssl
+, autoconf
+, libjpeg
+, libpng
+, libtiff
+, freetype
+, fontconfig
+, libpaper
+, jbig2dec
+, libiconv
+, ijs
+, lcms2
+, callPackage
+, bash
+, buildPackages
+, openjpeg
+, fixDarwinDylibNames
+, cupsSupport ? config.ghostscript.cups or (!stdenv.hostPlatform.isDarwin)
+, cups
+, x11Support ? cupsSupport
+, xorg
+, # with CUPS, X11 only adds very little
+  dynamicDrivers ? true
+, # for passthru.tests
+  graphicsmagick
+, imagemagick
+, libspectre
+, lilypond
+, pstoedit
+, python3
+,
 }:
 
 let

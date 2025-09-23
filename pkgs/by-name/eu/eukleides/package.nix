@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  bison,
-  flex,
-  makeWrapper,
-  getopt,
-  readline,
-  texinfo,
-  texlive,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitLab
+, bison
+, flex
+, makeWrapper
+, getopt
+, readline
+, texinfo
+, texlive
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

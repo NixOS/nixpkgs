@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  libbfd,
-  libopcodes,
-  libunwind,
-  nix-update-script,
+{ lib
+, rustPlatform
+, fetchCrate
+, libbfd
+, libopcodes
+, libunwind
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {

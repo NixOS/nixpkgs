@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  openvpn,
-  iproute2,
-  iptables,
-  util-linux,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, openvpn
+, iproute2
+, iptables
+, util-linux
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  python3,
-  pandoc,
+{ stdenv
+, lib
+, fetchFromGitHub
+, python3
+, pandoc
+,
 }:
 
 stdenv.mkDerivation {

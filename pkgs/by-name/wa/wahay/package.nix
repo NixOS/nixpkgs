@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  gnumake,
-  pkg-config,
-  gtk3,
-  rubyPackages,
-  tor,
-  mumble,
-  installShellFiles,
-  wrapGAppsHook3,
-  writableTmpDirAsHomeHook,
-  nix-update-script,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, gnumake
+, pkg-config
+, gtk3
+, rubyPackages
+, tor
+, mumble
+, installShellFiles
+, wrapGAppsHook3
+, writableTmpDirAsHomeHook
+, nix-update-script
+,
 }:
 
 buildGoModule (finalAttrs: {

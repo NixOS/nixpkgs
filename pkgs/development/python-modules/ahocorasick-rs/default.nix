@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  rustPlatform,
-  pytestCheckHook,
-  pyahocorasick,
-  hypothesis,
-  typing-extensions,
-  pytest-benchmark,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, rustPlatform
+, pytestCheckHook
+, pyahocorasick
+, hypothesis
+, typing-extensions
+, pytest-benchmark
+,
 }:
 
 buildPythonPackage rec {

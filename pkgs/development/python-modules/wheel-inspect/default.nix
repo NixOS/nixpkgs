@@ -1,19 +1,19 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  entry-points-txt,
-  fetchFromGitHub,
-  hatchling,
-  headerparser,
-  jsonschema,
-  packaging,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
-  readme-renderer,
-  setuptools,
-  wheel-filename,
+{ lib
+, attrs
+, buildPythonPackage
+, entry-points-txt
+, fetchFromGitHub
+, hatchling
+, headerparser
+, jsonschema
+, packaging
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+, readme-renderer
+, setuptools
+, wheel-filename
+,
 }:
 
 buildPythonPackage rec {

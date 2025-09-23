@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  dash,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libixp,
-  pkg-config,
-  txt2tags,
-  unzip,
-  which,
+{ lib
+, stdenv
+, fetchFromGitHub
+, dash
+, libX11
+, libXext
+, libXft
+, libXinerama
+, libXrandr
+, libXrender
+, libixp
+, pkg-config
+, txt2tags
+, unzip
+, which
+,
 }:
 
 stdenv.mkDerivation {

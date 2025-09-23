@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.athens;
@@ -971,9 +970,10 @@ in
         ProtectHome = "read-only";
         ProtectSystem = "full";
 
-        ReadWritePaths = lib.mkIf (
-          cfg.storage.disk.rootPath != null && (!lib.hasPrefix "/var/lib/" cfg.storage.disk.rootPath)
-        ) [ cfg.storage.disk.rootPath ];
+        ReadWritePaths = lib.mkIf
+          (
+            cfg.storage.disk.rootPath != null && (!lib.hasPrefix "/var/lib/" cfg.storage.disk.rootPath)
+          ) [ cfg.storage.disk.rootPath ];
         StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/" cfg.storage.disk.rootPath) [
           (lib.removePrefix "/var/lib/" cfg.storage.disk.rootPath)
         ];

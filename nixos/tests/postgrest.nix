@@ -7,11 +7,10 @@
   };
 
   nodes.machine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
+    { config
+    , lib
+    , pkgs
+    , ...
     }:
     {
       services.postgresql = {

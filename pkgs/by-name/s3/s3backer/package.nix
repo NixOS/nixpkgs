@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  fuse,
-  curl,
-  expat,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, fuse
+, curl
+, expat
+,
 }:
 
 stdenv.mkDerivation rec {

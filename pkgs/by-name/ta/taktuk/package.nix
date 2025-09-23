@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  autoreconfHook,
-  fetchFromGitLab,
-  perl,
-  buildPackages,
+{ lib
+, stdenv
+, autoreconfHook
+, fetchFromGitLab
+, perl
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation {

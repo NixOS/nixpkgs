@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  adwaita-icon-theme,
-  gobject-introspection,
-  gtk3,
-  intltool,
-  python3Packages,
-  wrapGAppsHook3,
-  xdg-utils,
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, adwaita-icon-theme
+, gobject-introspection
+, gtk3
+, intltool
+, python3Packages
+, wrapGAppsHook3
+, xdg-utils
+,
 }:
 
 python3Packages.buildPythonApplication rec {

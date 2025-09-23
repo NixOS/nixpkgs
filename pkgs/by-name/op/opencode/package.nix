@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  buildGoModule,
-  bun,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  models-dev,
-  nix-update-script,
-  testers,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, stdenvNoCC
+, buildGoModule
+, bun
+, fetchFromGitHub
+, makeBinaryWrapper
+, models-dev
+, nix-update-script
+, testers
+, writableTmpDirAsHomeHook
+,
 }:
 
 let
@@ -109,8 +109,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-linux = "sha256-jEsDrC/uNZKx7TvD1X9ToTFFTBgrKIeSXd5cTPBvxGI=";
         x86_64-darwin = "sha256-U2F3mXas/iMOCqQgBY34crHtkPx5wOMeFClUAGEj4Go=";
         aarch64-darwin = "sha256-sibjZaPzA4r/CjHg0ual5ueEELDUU1jeZjDnZEMrozI=";
-      }
-      .${stdenv.hostPlatform.system};
+      }.${stdenv.hostPlatform.system};
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };

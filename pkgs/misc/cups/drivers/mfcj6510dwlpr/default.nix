@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkgsi686Linux,
-  dpkg,
-  makeWrapper,
-  coreutils,
-  gnused,
-  gawk,
-  file,
-  cups,
-  util-linux,
-  xxd,
-  runtimeShell,
-  ghostscript,
-  a2ps,
+{ lib
+, stdenv
+, fetchurl
+, pkgsi686Linux
+, dpkg
+, makeWrapper
+, coreutils
+, gnused
+, gawk
+, file
+, cups
+, util-linux
+, xxd
+, runtimeShell
+, ghostscript
+, a2ps
+,
 }:
 
 # Why:

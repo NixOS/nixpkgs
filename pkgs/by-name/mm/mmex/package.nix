@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  appstream,
-  cmake,
-  gettext,
-  git,
-  makeWrapper,
-  lsb-release,
-  pkg-config,
-  wrapGAppsHook3,
-  curl,
-  sqlite,
-  wxGTK32,
-  gtk3,
-  lua,
-  wxsqlite3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, appstream
+, cmake
+, gettext
+, git
+, makeWrapper
+, lsb-release
+, pkg-config
+, wrapGAppsHook3
+, curl
+, sqlite
+, wxGTK32
+, gtk3
+, lua
+, wxsqlite3
+,
 }:
 
 stdenv.mkDerivation rec {

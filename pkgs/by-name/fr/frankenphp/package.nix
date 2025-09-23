@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  php,
-  brotli,
-  watcher,
-  testers,
-  frankenphp,
-  cctools,
-  darwin,
-  libiconv,
-  pkg-config,
-  makeBinaryWrapper,
-  runCommand,
-  writeText,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, php
+, brotli
+, watcher
+, testers
+, frankenphp
+, cctools
+, darwin
+, libiconv
+, pkg-config
+, makeBinaryWrapper
+, runCommand
+, writeText
+,
 }:
 
 let

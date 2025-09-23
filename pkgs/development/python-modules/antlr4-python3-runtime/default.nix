@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  setuptools,
-  python,
-  antlr4,
+{ lib
+, buildPythonPackage
+, setuptools
+, python
+, antlr4
+,
 }:
 
 buildPythonPackage rec {

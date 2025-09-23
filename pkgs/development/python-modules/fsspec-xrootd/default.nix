@@ -1,20 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  fsspec,
-  xrootd,
-
-  # tests
-  pkgs,
-  pytestCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  fsspec
+, xrootd
+, # tests
+  pkgs
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

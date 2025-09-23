@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  bash,
-  coreutils,
-  gnugrep,
-  gnused,
-  jq,
-  lldap,
-  unixtools,
-  curl,
-  makeWrapper,
-  unstableGitUpdater,
+{ stdenv
+, lib
+, fetchFromGitHub
+, bash
+, coreutils
+, gnugrep
+, gnused
+, jq
+, lldap
+, unixtools
+, curl
+, makeWrapper
+, unstableGitUpdater
+,
 }:
 stdenv.mkDerivation {
   pname = "lldap-cli";

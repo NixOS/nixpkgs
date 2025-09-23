@@ -1,9 +1,9 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  testers,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, testers
+,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yaml2nix";

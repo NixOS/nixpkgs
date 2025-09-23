@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  clang-unwrapped,
-  clang,
-  libcxxClang,
-  llvm_meta,
-  # enableLibcxx will use the c++ headers from clang instead of gcc.
+{ lib
+, stdenv
+, clang-unwrapped
+, clang
+, libcxxClang
+, llvm_meta
+, # enableLibcxx will use the c++ headers from clang instead of gcc.
   # This shouldn't have any effect on platforms that use clang as the default compiler already.
-  enableLibcxx ? false,
+  enableLibcxx ? false
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,19 +1,19 @@
-{
-  fetchFromGitHub,
-  fetchurl,
-  ffmpeg_4,
-  fontconfig,
-  gtk2,
-  lib,
-  libconfig,
-  libGL,
-  libXpm,
-  makeFontsConf,
-  makeWrapper,
-  nanum,
-  openal,
-  pkg-config,
-  stdenv,
+{ fetchFromGitHub
+, fetchurl
+, ffmpeg_4
+, fontconfig
+, gtk2
+, lib
+, libconfig
+, libGL
+, libXpm
+, makeFontsConf
+, makeWrapper
+, nanum
+, openal
+, pkg-config
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

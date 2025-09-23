@@ -1,25 +1,25 @@
-{
-  lib,
-  apple-sdk_14,
-  buildNpmPackage,
-  cargo,
-  copyDesktopItems,
-  darwin,
-  electron_36,
-  fetchFromGitHub,
-  gnome-keyring,
-  jq,
-  llvmPackages_18,
-  makeDesktopItem,
-  makeWrapper,
-  napi-rs-cli,
-  nix-update-script,
-  nodejs_22,
-  pkg-config,
-  rustc,
-  rustPlatform,
-  stdenv,
-  xcbuild,
+{ lib
+, apple-sdk_14
+, buildNpmPackage
+, cargo
+, copyDesktopItems
+, darwin
+, electron_36
+, fetchFromGitHub
+, gnome-keyring
+, jq
+, llvmPackages_18
+, makeDesktopItem
+, makeWrapper
+, napi-rs-cli
+, nix-update-script
+, nodejs_22
+, pkg-config
+, rustc
+, rustPlatform
+, stdenv
+, xcbuild
+,
 }:
 
 let

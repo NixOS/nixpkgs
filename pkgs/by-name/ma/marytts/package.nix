@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
-  gradle_8,
-  makeWrapper,
-  jdk,
-  nixosTests,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle_8
+, makeWrapper
+, jdk
+, nixosTests
+,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "marytts";

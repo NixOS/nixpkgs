@@ -1,42 +1,38 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  python3,
-  perl,
-  bison,
-  flex,
-  texinfo,
-  perlPackages,
-
-  openldap,
-  libcap_ng,
-  sqlite,
-  openssl,
-  db,
-  libedit,
-  pam,
-  libmicrohttpd,
-  cjson,
-
-  curl,
-  jdk_headless,
-  unzip,
-  which,
-
-  nixosTests,
-
-  withCJSON ? true,
-  withCapNG ? stdenv.hostPlatform.isLinux,
-  # libmicrohttpd should theoretically work for darwin as well, but something is broken.
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, python3
+, perl
+, bison
+, flex
+, texinfo
+, perlPackages
+, openldap
+, libcap_ng
+, sqlite
+, openssl
+, db
+, libedit
+, pam
+, libmicrohttpd
+, cjson
+, curl
+, jdk_headless
+, unzip
+, which
+, nixosTests
+, withCJSON ? true
+, withCapNG ? stdenv.hostPlatform.isLinux
+, # libmicrohttpd should theoretically work for darwin as well, but something is broken.
   # It affects tests check-bx509d and check-httpkadmind.
-  withMicroHTTPD ? stdenv.hostPlatform.isLinux,
-  withOpenLDAP ? true,
-  withOpenLDAPAsHDBModule ? false,
-  withOpenSSL ? true,
-  withSQLite3 ? true,
+  withMicroHTTPD ? stdenv.hostPlatform.isLinux
+, withOpenLDAP ? true
+, withOpenLDAPAsHDBModule ? false
+, withOpenSSL ? true
+, withSQLite3 ? true
+,
 }:
 
 assert lib.assertMsg (withOpenLDAPAsHDBModule -> withOpenLDAP) ''

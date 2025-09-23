@@ -1,16 +1,16 @@
-{
-  lib,
-  git,
-  clang,
-  fetchFromGitHub,
-  requireFile,
-  openssl,
-  xz,
-  gnutar,
-  automake,
-  autoconf,
-  libtool,
-  clangStdenv,
+{ lib
+, git
+, clang
+, fetchFromGitHub
+, requireFile
+, openssl
+, xz
+, gnutar
+, automake
+, autoconf
+, libtool
+, clangStdenv
+,
 }:
 
 clangStdenv.mkDerivation rec {

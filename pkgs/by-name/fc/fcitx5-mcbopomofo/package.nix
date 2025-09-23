@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  gettext,
-  json_c,
-  icu,
-  fmt,
-  gtest,
-  fcitx5,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, gettext
+, json_c
+, icu
+, fmt
+, gtest
+, fcitx5
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation rec {

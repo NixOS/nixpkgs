@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  removeReferencesTo,
-  autoreconfHook,
-  bison,
-  onigurumaSupport ? true,
-  oniguruma,
-  tzdata,
-  nix-update-script,
-  testers,
+{ lib
+, stdenv
+, fetchurl
+, removeReferencesTo
+, autoreconfHook
+, bison
+, onigurumaSupport ? true
+, oniguruma
+, tzdata
+, nix-update-script
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 # TODO: test configuration when building nixexpr (use -t parameter)
@@ -31,12 +30,14 @@ let
         ++ optional (tls_cfg.certificate != null) ''TLS Certificate = "${tls_cfg.certificate}";''
         ++ [ ''TLS Key = "${tls_cfg.key}";'' ]
         ++ optional (tls_cfg.verifyPeer != null) "TLS Verify Peer = ${yes_no tls_cfg.verifyPeer};"
-        ++ optional (
-          tls_cfg.allowedCN != [ ]
-        ) "TLS Allowed CN = ${concatStringsSep " " (tls_cfg.allowedCN)};"
-        ++ optional (
-          tls_cfg.caCertificateFile != null
-        ) ''TLS CA Certificate File = "${tls_cfg.caCertificateFile}";''
+        ++ optional
+          (
+            tls_cfg.allowedCN != [ ]
+          ) "TLS Allowed CN = ${concatStringsSep " " (tls_cfg.allowedCN)};"
+        ++ optional
+          (
+            tls_cfg.caCertificateFile != null
+          ) ''TLS CA Certificate File = "${tls_cfg.caCertificateFile}";''
       )
     );
 

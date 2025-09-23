@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  readline,
-  perl,
-  libharu,
-  libX11,
-  libpng,
-  libXt,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, readline
+, perl
+, libharu
+, libX11
+, libpng
+, libXt
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

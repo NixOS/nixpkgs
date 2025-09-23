@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  perlPackages,
-  fetchFromGitHub,
-  installShellFiles,
-  shortenPerlShebang,
+{ lib
+, stdenv
+, perlPackages
+, fetchFromGitHub
+, installShellFiles
+, shortenPerlShebang
+,
 }:
 
 perlPackages.buildPerlPackage rec {

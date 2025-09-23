@@ -1,7 +1,6 @@
-{
-  addDriverRunpath,
-  allowedPatternsPath ? callPackage ./closure.nix { inherit allowedPatterns; },
-  allowedPatterns ? rec {
+{ addDriverRunpath
+, allowedPatternsPath ? callPackage ./closure.nix { inherit allowedPatterns; }
+, allowedPatterns ? rec {
     # This config is just an example.
     # When the hook observes either of the following requiredSystemFeatures:
     nvidia-gpu.onFeatures = [
@@ -17,14 +16,15 @@
       "/dev/nvidia*"
     ];
     nvidia-gpu.unsafeFollowSymlinks = true;
-  },
-  callPackage,
-  extraWrapperArgs ? [ ],
-  lib,
-  makeWrapper,
-  nix,
-  nixosTests,
-  python3Packages,
+  }
+, callPackage
+, extraWrapperArgs ? [ ]
+, lib
+, makeWrapper
+, nix
+, nixosTests
+, python3Packages
+,
 }:
 
 let

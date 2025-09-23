@@ -1,26 +1,27 @@
-{
-  autoPatchelfHook,
-  blas,
-  cmake,
-  cudaPackages,
-  cudaSupport ? config.cudaSupport,
-  fetchurl,
-  gfortran,
-  gpuTargets ? [ ], # Non-CUDA targets, that is HIP
-  rocmPackages,
-  lapack,
-  lib,
-  libpthreadstubs,
-  ninja,
-  python3,
-  config,
-  # At least one back-end has to be enabled,
+{ autoPatchelfHook
+, blas
+, cmake
+, cudaPackages
+, cudaSupport ? config.cudaSupport
+, fetchurl
+, gfortran
+, gpuTargets ? [ ]
+, # Non-CUDA targets, that is HIP
+  rocmPackages
+, lapack
+, lib
+, libpthreadstubs
+, ninja
+, python3
+, config
+, # At least one back-end has to be enabled,
   # and we can't default to CUDA since it's unfree
-  rocmSupport ? !cudaSupport,
-  runCommand,
-  static ? stdenv.hostPlatform.isStatic,
-  stdenv,
-  writeShellApplication,
+  rocmSupport ? !cudaSupport
+, runCommand
+, static ? stdenv.hostPlatform.isStatic
+, stdenv
+, writeShellApplication
+,
 }:
 
 let
@@ -79,14 +80,16 @@ let
   # Use trivial.warnIf to print a warning if any unsupported GPU targets are specified.
   gpuArchWarner =
     supported: unsupported:
-    trivial.throwIf (supported == [ ]) (
-      "No supported GPU targets specified. Requested GPU targets: "
-      + strings.concatStringsSep ", " unsupported
-    ) supported;
+    trivial.throwIf (supported == [ ])
+      (
+        "No supported GPU targets specified. Requested GPU targets: "
+        + strings.concatStringsSep ", " unsupported
+      )
+      supported;
 
   gpuTargetString = strings.concatStringsSep "," (
     if gpuTargets != [ ] then
-      # If gpuTargets is specified, it always takes priority.
+    # If gpuTargets is specified, it always takes priority.
       gpuArchWarner supportedCustomGpuTargets unsupportedCustomGpuTargets
     else if rocmSupport then
       gpuArchWarner supportedRocmArches unsupportedRocmArches

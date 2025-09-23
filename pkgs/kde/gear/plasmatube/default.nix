@@ -1,11 +1,11 @@
-{
-  lib,
-  mkKdeDerivation,
-  qtquick3d,
-  qtsvg,
-  pkg-config,
-  mpv-unwrapped,
-  yt-dlp,
+{ lib
+, mkKdeDerivation
+, qtquick3d
+, qtsvg
+, pkg-config
+, mpv-unwrapped
+, yt-dlp
+,
 }:
 mkKdeDerivation {
   pname = "plasmatube";

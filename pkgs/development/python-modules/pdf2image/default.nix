@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pillow,
-  poppler-utils,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pillow
+, poppler-utils
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

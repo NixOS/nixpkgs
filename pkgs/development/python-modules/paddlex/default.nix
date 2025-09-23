@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  numpy,
-  pillow,
-  pyyaml,
-  chardet,
-  colorlog,
-  filelock,
-  pandas,
-  prettytable,
-  py-cpuinfo,
-  pydantic,
-  requests,
-  ruamel-yaml,
-  typing-extensions,
-  ujson,
-  distutils,
-  huggingface-hub,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, numpy
+, pillow
+, pyyaml
+, chardet
+, colorlog
+, filelock
+, pandas
+, prettytable
+, py-cpuinfo
+, pydantic
+, requests
+, ruamel-yaml
+, typing-extensions
+, ujson
+, distutils
+, huggingface-hub
+, nix-update-script
+,
 }:
 
 let

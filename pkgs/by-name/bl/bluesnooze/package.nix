@@ -1,8 +1,8 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  unzip,
+{ fetchurl
+, lib
+, stdenv
+, unzip
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluesnooze";

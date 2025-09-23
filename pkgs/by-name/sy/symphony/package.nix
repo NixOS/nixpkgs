@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  coin-utils,
-  coinmp,
-  gfortran,
-  libtool,
-  glpk,
-  osi,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, coin-utils
+, coinmp
+, gfortran
+, libtool
+, glpk
+, osi
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

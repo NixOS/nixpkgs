@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  cython,
-  fetchPypi,
-  pythonOlder,
-  setuptools,
-  nasm,
+{ lib
+, buildPythonPackage
+, cython
+, fetchPypi
+, pythonOlder
+, setuptools
+, nasm
+,
 }:
 
 buildPythonPackage rec {

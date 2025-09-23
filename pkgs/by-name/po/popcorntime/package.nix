@@ -1,19 +1,19 @@
-{
-  autoPatchelfHook,
-  fetchurl,
-  gcc-unwrapped,
-  gsettings-desktop-schemas,
-  gtk3,
-  lib,
-  libGL,
-  makeDesktopItem,
-  makeWrapper,
-  nwjs,
-  stdenv,
-  unzip,
-  udev,
-  wrapGAppsHook3,
-  copyDesktopItems,
+{ autoPatchelfHook
+, fetchurl
+, gcc-unwrapped
+, gsettings-desktop-schemas
+, gtk3
+, lib
+, libGL
+, makeDesktopItem
+, makeWrapper
+, nwjs
+, stdenv
+, unzip
+, udev
+, wrapGAppsHook3
+, copyDesktopItems
+,
 }:
 
 stdenv.mkDerivation rec {

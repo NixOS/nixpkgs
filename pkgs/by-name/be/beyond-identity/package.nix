@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  buildFHSEnv,
-  glibc,
-  glib,
-  openssl,
-  tpm2-tss,
-  gtk3,
-  gnome-keyring,
-  polkit,
-  polkit_gnome,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, buildFHSEnv
+, glibc
+, glib
+, openssl
+, tpm2-tss
+, gtk3
+, gnome-keyring
+, polkit
+, polkit_gnome
+,
 }:
 
 let

@@ -1,9 +1,8 @@
 import ../make-test-python.nix (
-  {
-    pkgs,
-    lib,
-    rke2,
-    ...
+  { pkgs
+  , lib
+  , rke2
+  , ...
   }:
   let
     throwSystem = throw "RKE2: Unsupported system: ${pkgs.stdenv.hostPlatform.system}";
@@ -11,14 +10,12 @@ import ../make-test-python.nix (
       {
         aarch64-linux = rke2.images-core-linux-arm64-tar-zst;
         x86_64-linux = rke2.images-core-linux-amd64-tar-zst;
-      }
-      .${pkgs.stdenv.hostPlatform.system} or throwSystem;
+      }.${pkgs.stdenv.hostPlatform.system} or throwSystem;
     canalImages =
       {
         aarch64-linux = rke2.images-canal-linux-arm64-tar-zst;
         x86_64-linux = rke2.images-canal-linux-amd64-tar-zst;
-      }
-      .${pkgs.stdenv.hostPlatform.system} or throwSystem;
+      }.${pkgs.stdenv.hostPlatform.system} or throwSystem;
     helloImage = pkgs.dockerTools.buildImage {
       name = "test.local/hello";
       tag = "local";
@@ -78,11 +75,10 @@ import ../make-test-python.nix (
 
     nodes = {
       server =
-        {
-          config,
-          nodes,
-          pkgs,
-          ...
+        { config
+        , nodes
+        , pkgs
+        , ...
         }:
         {
           # Setup image archives to be imported by rke2
@@ -138,11 +134,10 @@ import ../make-test-python.nix (
         };
 
       agent =
-        {
-          config,
-          nodes,
-          pkgs,
-          ...
+        { config
+        , nodes
+        , pkgs
+        , ...
         }:
         {
           # Setup image archives to be imported by rke2

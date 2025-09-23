@@ -1,30 +1,27 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  unstableGitUpdater,
-
-  # Native Build Inputs
-  cmake,
-  python3,
-  pkg-config,
-
-  # Build Inputs
-  xorg,
-  wayland,
-  libxkbcommon,
-  wayland-protocols,
-  glew,
-  qt6,
-  mesa,
-  alsa-lib,
-  sdl3,
-  iniparser,
-
-  # Options
-  imguiDebug ? false,
-  addrSan ? false,
-  emscriptenHost ? "",
+{ lib
+, fetchFromGitHub
+, stdenv
+, unstableGitUpdater
+, # Native Build Inputs
+  cmake
+, python3
+, pkg-config
+, # Build Inputs
+  xorg
+, wayland
+, libxkbcommon
+, wayland-protocols
+, glew
+, qt6
+, mesa
+, alsa-lib
+, sdl3
+, iniparser
+, # Options
+  imguiDebug ? false
+, addrSan ? false
+, emscriptenHost ? ""
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;

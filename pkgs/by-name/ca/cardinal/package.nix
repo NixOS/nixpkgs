@@ -1,29 +1,29 @@
-{
-  stdenv,
-  fetchurl,
-  cmake,
-  dbus,
-  fftwFloat,
-  file,
-  freetype,
-  jansson,
-  lib,
-  libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrandr,
-  libarchive,
-  libjack2,
-  liblo,
-  libsamplerate,
-  libsndfile,
-  makeWrapper,
-  pkg-config,
-  python3,
-  speexdsp,
-  libglvnd,
-  headless ? false,
+{ stdenv
+, fetchurl
+, cmake
+, dbus
+, fftwFloat
+, file
+, freetype
+, jansson
+, lib
+, libGL
+, libX11
+, libXcursor
+, libXext
+, libXrandr
+, libarchive
+, libjack2
+, liblo
+, libsamplerate
+, libsndfile
+, makeWrapper
+, pkg-config
+, python3
+, speexdsp
+, libglvnd
+, headless ? false
+,
 }:
 
 stdenv.mkDerivation rec {

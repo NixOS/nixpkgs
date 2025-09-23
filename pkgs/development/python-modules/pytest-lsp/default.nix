@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  hatchling,
-  pygls,
-  pytestCheckHook,
-  pytest-asyncio,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, hatchling
+, pygls
+, pytestCheckHook
+, pytest-asyncio
+,
 }:
 
 buildPythonPackage rec {

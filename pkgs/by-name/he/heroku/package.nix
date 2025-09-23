@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  makeWrapper,
-  nodejs,
-  writeScript,
+{ stdenv
+, lib
+, fetchzip
+, makeWrapper
+, nodejs
+, writeScript
+,
 }:
 
 stdenv.mkDerivation {

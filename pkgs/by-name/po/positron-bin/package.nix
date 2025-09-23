@@ -1,24 +1,24 @@
-{
-  lib,
-  _7zz,
-  alsa-lib,
-  systemd,
-  wrapGAppsHook4,
-  autoPatchelfHook,
-  blas,
-  dpkg,
-  fetchurl,
-  gtk3,
-  libglvnd,
-  libxkbcommon,
-  makeShellWrapper,
-  libgbm,
-  musl,
-  nss,
-  patchelf,
-  openssl,
-  stdenv,
-  xorg,
+{ lib
+, _7zz
+, alsa-lib
+, systemd
+, wrapGAppsHook4
+, autoPatchelfHook
+, blas
+, dpkg
+, fetchurl
+, gtk3
+, libglvnd
+, libxkbcommon
+, makeShellWrapper
+, libgbm
+, musl
+, nss
+, patchelf
+, openssl
+, stdenv
+, xorg
+,
 }:
 let
   pname = "positron-bin";
@@ -29,15 +29,17 @@ stdenv.mkDerivation {
 
   src =
     if stdenv.hostPlatform.isDarwin then
-      fetchurl {
-        url = "https://cdn.posit.co/positron/releases/mac/universal/Positron-${version}-universal.dmg";
-        hash = "sha256-N6urQYmpVoL2JeriHxO/H0J66U6nAez7U8w8qbzZ+ys=";
-      }
+      fetchurl
+        {
+          url = "https://cdn.posit.co/positron/releases/mac/universal/Positron-${version}-universal.dmg";
+          hash = "sha256-N6urQYmpVoL2JeriHxO/H0J66U6nAez7U8w8qbzZ+ys=";
+        }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
-      fetchurl {
-        url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
-        hash = "sha256-IbMLnI/SDDLKIL1sTWjez186tbY3SZtuNmfNe9b6PXw=";
-      }
+      fetchurl
+        {
+          url = "https://cdn.posit.co/positron/releases/deb/arm64/Positron-${version}-arm64.deb";
+          hash = "sha256-IbMLnI/SDDLKIL1sTWjez186tbY3SZtuNmfNe9b6PXw=";
+        }
     else
       fetchurl {
         url = "https://cdn.posit.co/positron/releases/deb/x86_64/Positron-${version}-x64.deb";

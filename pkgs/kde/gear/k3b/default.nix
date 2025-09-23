@@ -1,25 +1,25 @@
-{
-  lib,
-  mkKdeDerivation,
-  pkg-config,
-  qtwebengine,
-  shared-mime-info,
-  libdvdread,
-  flac,
-  libmad,
-  libsndfile,
-  lame,
-  libvorbis,
-  libsamplerate,
-  cdrdao,
-  cdrtools,
-  cdparanoia,
-  dvdplusrwtools,
-  libburn,
-  libdvdcss,
-  normalize,
-  sox,
-  vcdimager,
+{ lib
+, mkKdeDerivation
+, pkg-config
+, qtwebengine
+, shared-mime-info
+, libdvdread
+, flac
+, libmad
+, libsndfile
+, lame
+, libvorbis
+, libsamplerate
+, cdrdao
+, cdrtools
+, cdparanoia
+, dvdplusrwtools
+, libburn
+, libdvdcss
+, normalize
+, sox
+, vcdimager
+,
 }:
 mkKdeDerivation {
   pname = "k3b";

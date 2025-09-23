@@ -1,10 +1,10 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  expect,
-  makeWrapper,
-  updateAutotoolsGnuConfigScriptsHook,
+{ fetchurl
+, lib
+, stdenv
+, expect
+, makeWrapper
+, updateAutotoolsGnuConfigScriptsHook
+,
 }:
 
 stdenv.mkDerivation rec {

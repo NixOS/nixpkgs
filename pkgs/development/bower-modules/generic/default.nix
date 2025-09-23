@@ -1,9 +1,8 @@
 { pkgs }:
 
-{
-  buildInputs ? [ ],
-  generated,
-  ...
+{ buildInputs ? [ ]
+, generated
+, ...
 }@attrs:
 
 let
@@ -16,7 +15,7 @@ let
 in
 pkgs.stdenv.mkDerivation (
   attrs
-  // {
+    // {
     name = "bower_components-" + attrs.name;
 
     inherit bowerPackages;

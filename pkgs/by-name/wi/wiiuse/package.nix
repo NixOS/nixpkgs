@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  bluez,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, bluez
+,
 }:
 stdenv.mkDerivation rec {
 

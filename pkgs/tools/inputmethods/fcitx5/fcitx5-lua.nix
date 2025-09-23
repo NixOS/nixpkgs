@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  fcitx5,
-  lua,
-  gettext,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, fcitx5
+, lua
+, gettext
+,
 }:
 stdenv.mkDerivation rec {
   pname = "fcitx5-lua";

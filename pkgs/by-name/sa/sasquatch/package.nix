@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  lz4,
-  lzo,
-  which,
-  xz,
-  zlib,
-  zstd,
-  bigEndian ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, lz4
+, lzo
+, which
+, xz
+, zlib
+, zstd
+, bigEndian ? false
+,
 }:
 
 let

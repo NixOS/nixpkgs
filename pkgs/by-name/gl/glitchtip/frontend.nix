@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitLab,
-  buildNpmPackage,
-  fetchNpmDeps,
-  jq,
-  moreutils,
+{ lib
+, fetchFromGitLab
+, buildNpmPackage
+, fetchNpmDeps
+, jq
+, moreutils
+,
 }:
 
 buildNpmPackage (finalAttrs: {

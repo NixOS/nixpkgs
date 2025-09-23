@@ -1,12 +1,12 @@
-{
-  lib,
-  newScope,
-  yarn-berry,
-  yarn,
-  replaceVars,
-  libzip,
-  zlib,
-  zlib-ng,
+{ lib
+, newScope
+, yarn-berry
+, yarn
+, replaceVars
+, libzip
+, zlib
+, zlib-ng
+,
 }:
 
 let
@@ -82,6 +82,6 @@ lib.makeScope newScope (
       fetchYarnBerryDeps = final.callPackage ./fetch-yarn-berry-deps.nix { };
       yarnBerryConfigHook = final.callPackage ./yarn-berry-config-hook.nix { };
     }
-    // variantOverlay
+      // variantOverlay
   )
 )

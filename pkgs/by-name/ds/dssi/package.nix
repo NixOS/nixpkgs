@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  ladspaH,
-  libjack2,
-  liblo,
-  alsa-lib,
-  libX11,
-  libsndfile,
-  libSM,
-  libsamplerate,
-  libtool,
-  autoconf,
-  automake,
-  xorgproto,
-  libICE,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, ladspaH
+, libjack2
+, liblo
+, alsa-lib
+, libX11
+, libsndfile
+, libSM
+, libsamplerate
+, libtool
+, autoconf
+, automake
+, xorgproto
+, libICE
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitLab,
-  nix-update-script,
+{ lib
+, buildGoModule
+, fetchFromGitLab
+, nix-update-script
+,
 }:
 let
   version = "1.2";

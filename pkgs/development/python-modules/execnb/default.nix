@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fastcore,
-  fetchPypi,
-  ipython,
-  pythonOlder,
-  setuptools,
-  traitlets,
+{ lib
+, buildPythonPackage
+, fastcore
+, fetchPypi
+, ipython
+, pythonOlder
+, setuptools
+, traitlets
+,
 }:
 
 buildPythonPackage rec {

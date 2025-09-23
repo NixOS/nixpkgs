@@ -1,34 +1,30 @@
-{
-  stdenv,
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-
-  # buildInputs
-  llvmPackages,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  huggingface-hub,
-  numpy,
-  packaging,
-  psutil,
-  pyyaml,
-  safetensors,
-  torch,
-
-  # tests
-  addBinToPathHook,
-  evaluate,
-  parameterized,
-  pytestCheckHook,
-  transformers,
-  config,
-  cudatoolkit,
-  writableTmpDirAsHomeHook,
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, # buildInputs
+  llvmPackages
+, # build-system
+  setuptools
+, # dependencies
+  huggingface-hub
+, numpy
+, packaging
+, psutil
+, pyyaml
+, safetensors
+, torch
+, # tests
+  addBinToPathHook
+, evaluate
+, parameterized
+, pytestCheckHook
+, transformers
+, config
+, cudatoolkit
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

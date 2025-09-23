@@ -1,10 +1,10 @@
-{
-  lib,
-  installShellFiles,
-  rustPlatform,
-  fetchFromGitLab,
-  stdenv,
-  mdbook,
+{ lib
+, installShellFiles
+, rustPlatform
+, fetchFromGitLab
+, stdenv
+, mdbook
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

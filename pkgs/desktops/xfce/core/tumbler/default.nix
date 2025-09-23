@@ -1,20 +1,20 @@
-{
-  lib,
-  mkXfceDerivation,
-  fetchpatch,
-  ffmpegthumbnailer,
-  gdk-pixbuf,
-  glib,
-  freetype,
-  libgepub,
-  libgsf,
-  libheif,
-  libjxl,
-  librsvg,
-  poppler,
-  gst_all_1,
-  webp-pixbuf-loader,
-  libxfce4util,
+{ lib
+, mkXfceDerivation
+, fetchpatch
+, ffmpegthumbnailer
+, gdk-pixbuf
+, glib
+, freetype
+, libgepub
+, libgsf
+, libheif
+, libjxl
+, librsvg
+, poppler
+, gst_all_1
+, webp-pixbuf-loader
+, libxfce4util
+,
 }:
 
 # TODO: add libopenraw

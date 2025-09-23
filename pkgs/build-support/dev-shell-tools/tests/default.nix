@@ -1,12 +1,12 @@
-{
-  devShellTools,
-  emptyFile,
-  lib,
-  stdenv,
-  hello,
-  writeText,
-  zlib,
-  nixosTests,
+{ devShellTools
+, emptyFile
+, lib
+, stdenv
+, hello
+, writeText
+, zlib
+, nixosTests
+,
 }:
 let
   inherit (lib)
@@ -109,21 +109,21 @@ lib.recurseIntoAttrs {
       result = unstructuredDerivationInputEnv { inherit drvAttrs; };
     in
     assert
-      result // { barPath = "<check later>"; } == {
-        one = "1";
-        boolTrue = "1";
-        boolFalse = "";
-        foo = "foo";
-        list = "1 2 3";
-        pathDefaultNix = "${./default.nix}";
-        stringWithDep = "Exe: ${hello}/bin/hello";
-        aPackageAttrSet = "${hello}";
-        anOutPath = "${hello.outPath}";
-        anAnAlternateOutput = "${zlib.dev}";
+    result // { barPath = "<check later>"; } == {
+      one = "1";
+      boolTrue = "1";
+      boolFalse = "";
+      foo = "foo";
+      list = "1 2 3";
+      pathDefaultNix = "${./default.nix}";
+      stringWithDep = "Exe: ${hello}/bin/hello";
+      aPackageAttrSet = "${hello}";
+      anOutPath = "${hello.outPath}";
+      anAnAlternateOutput = "${zlib.dev}";
 
-        passAsFile = "bar";
-        barPath = "<check later>";
-      };
+      passAsFile = "bar";
+      barPath = "<check later>";
+    };
 
     # Not runCommand, because it alters `passAsFile`
     stdenv.mkDerivation (

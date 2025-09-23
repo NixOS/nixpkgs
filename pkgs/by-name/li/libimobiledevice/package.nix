@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  pkg-config,
-  openssl,
-  libgcrypt,
-  libplist,
-  libtasn1,
-  libusbmuxd,
-  libimobiledevice-glue,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, openssl
+, libgcrypt
+, libplist
+, libtasn1
+, libusbmuxd
+, libimobiledevice-glue
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

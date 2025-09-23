@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  mkDerivation,
-  include,
-  buildPackages,
-  freebsd-lib,
-  vtfontcvt,
+{ lib
+, stdenv
+, mkDerivation
+, include
+, buildPackages
+, freebsd-lib
+, vtfontcvt
+,
 }:
 let
   hostArchBsd = freebsd-lib.mkBsdArch stdenv;

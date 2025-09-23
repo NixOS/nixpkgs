@@ -1,21 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  glib,
-  python3,
-  help2man,
-  bash-completion,
-  bash,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
-  withDocs ? stdenv.hostPlatform == stdenv.buildPlatform,
-  gobject-introspection,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, glib
+, python3
+, help2man
+, bash-completion
+, bash
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+, withDocs ? stdenv.hostPlatform == stdenv.buildPlatform
+, gobject-introspection
+,
 }:
 
 stdenv.mkDerivation rec {

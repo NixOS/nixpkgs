@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  libxml2,
-  curl,
-  libxslt,
-  pkg-config,
-  cmake,
-  fetchFromGitHub,
-  perl,
-  bison,
-  flex,
-  fetchpatch,
-  static ? stdenv.hostPlatform.isStatic,
+{ lib
+, stdenv
+, libxml2
+, curl
+, libxslt
+, pkg-config
+, cmake
+, fetchFromGitHub
+, perl
+, bison
+, flex
+, fetchpatch
+, static ? stdenv.hostPlatform.isStatic
+,
 }:
 
 stdenv.mkDerivation rec {

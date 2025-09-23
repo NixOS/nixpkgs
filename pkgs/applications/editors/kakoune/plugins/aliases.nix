@@ -24,13 +24,17 @@ let
 
   mapAliases =
     aliases:
-    lib.mapAttrs (
-      n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
-    ) aliases;
+    lib.mapAttrs
+      (
+        n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
+      )
+      aliases;
 
-  deprecations = lib.mapAttrs (
-    old: info: throw "${old} was renamed to ${info.new} on ${info.date}. Please update to ${info.new}."
-  ) (lib.importJSON ./deprecated.json);
+  deprecations = lib.mapAttrs
+    (
+      old: info: throw "${old} was renamed to ${info.new} on ${info.date}. Please update to ${info.new}."
+    )
+    (lib.importJSON ./deprecated.json);
 
 in
 mapAliases (
@@ -43,5 +47,5 @@ mapAliases (
     kak-prelude = overridden.prelude-kak; # backwards compat, added 2021-01-04
     kak-vertical-selection = overridden.kakoune-vertical-selection; # backwards compat, added 2021-01-04
   }
-  // deprecations
+    // deprecations
 )

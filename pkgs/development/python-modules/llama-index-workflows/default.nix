@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  eval-type-backport,
-  fetchPypi,
-  hatchling,
-  llama-index-instrumentation,
-  pydantic,
+{ lib
+, buildPythonPackage
+, eval-type-backport
+, fetchPypi
+, hatchling
+, llama-index-instrumentation
+, pydantic
+,
 }:
 
 buildPythonPackage rec {

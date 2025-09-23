@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  python,
-  pyusb,
-  udevCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, pyusb
+, udevCheckHook
+,
 }:
 
 buildPythonPackage rec {

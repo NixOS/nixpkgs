@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  perlPackages,
-  beancount,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, perlPackages
+, beancount
+,
 }:
 
 let

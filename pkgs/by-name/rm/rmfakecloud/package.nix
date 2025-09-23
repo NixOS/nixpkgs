@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  enableWebui ? true,
-  pnpm_9,
-  nodejs,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, enableWebui ? true
+, pnpm_9
+, nodejs
+, nixosTests
+,
 }:
 
 buildGoModule rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchurl,
-  versionCheckHook,
-  writeShellApplication,
-  curl,
-  jq,
-  nix-update,
-  common-updater-scripts,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, fetchurl
+, versionCheckHook
+, writeShellApplication
+, curl
+, jq
+, nix-update
+, common-updater-scripts
+,
 }:
 
 let

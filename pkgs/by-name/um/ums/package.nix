@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  libzen,
-  libmediainfo,
-  jdk17,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, libzen
+, libmediainfo
+, jdk17
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     let
       selectSystem =
         attrs:
-        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+          attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
       arch = selectSystem {
         x86_64-linux = "x86_64";
         aarch64-linux = "arm64";

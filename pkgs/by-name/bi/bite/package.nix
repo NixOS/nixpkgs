@@ -1,23 +1,23 @@
-{
-  lib,
-  apple-sdk_15,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  makeBinaryWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  imagemagick,
-  atk,
-  cairo,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  libxkbcommon,
-  pango,
-  vulkan-loader,
-  stdenv,
-  wayland,
+{ lib
+, apple-sdk_15
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, makeBinaryWrapper
+, copyDesktopItems
+, makeDesktopItem
+, imagemagick
+, atk
+, cairo
+, gdk-pixbuf
+, glib
+, gtk3
+, libxkbcommon
+, pango
+, vulkan-loader
+, stdenv
+, wayland
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "bite";

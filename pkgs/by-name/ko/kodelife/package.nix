@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  autoPatchelfHook,
-  dpkg,
-  alsa-lib,
-  curl,
-  avahi,
-  gst_all_1,
-  libxcb,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libXxf86vm,
-  libglvnd,
-  zenity,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, autoPatchelfHook
+, dpkg
+, alsa-lib
+, curl
+, avahi
+, gst_all_1
+, libxcb
+, libX11
+, libXcursor
+, libXext
+, libXi
+, libXinerama
+, libXrandr
+, libXrender
+, libXxf86vm
+, libglvnd
+, zenity
+,
 }:
 
 let
@@ -52,8 +52,7 @@ stdenv.mkDerivation rec {
       aarch64-linux = "linux-arm64";
       armv7l-linux = "linux-armhf";
       x86_64-linux = "linux-x64";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
@@ -62,8 +61,7 @@ stdenv.mkDerivation rec {
         aarch64-linux = "sha256-WPUWvgVZR+2Dg4zpk+iUemMBGlGBDtaGkUGrWuF5LBs=";
         armv7l-linux = "sha256-tOPqP40e0JrXg92OluMZrurWHXZavGwTkJiNN1IFVEE=";
         x86_64-linux = "sha256-ZA8BlUtKaiSnXGncYwb2BbhBlULuGz7SWuXL0RAgQLI=";
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   strictDeps = true;

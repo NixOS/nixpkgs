@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  pyxdg,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-mock,
-  setuptools,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, pyxdg
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-mock
+, setuptools
+,
 }:
 
 buildPythonApplication rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  asciidoctor,
-  installShellFiles,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, asciidoctor
+, installShellFiles
+,
 }:
 
 stdenv.mkDerivation rec {

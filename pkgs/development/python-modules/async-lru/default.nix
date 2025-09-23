@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  typing-extensions,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-timeout,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, typing-extensions
+, pytestCheckHook
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-timeout
+,
 }:
 
 buildPythonPackage rec {

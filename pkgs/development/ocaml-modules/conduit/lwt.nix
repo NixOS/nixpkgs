@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  ppx_sexp_conv,
-  conduit,
-  lwt,
-  sexplib0,
+{ buildDunePackage
+, ppx_sexp_conv
+, conduit
+, lwt
+, sexplib0
+,
 }:
 
 buildDunePackage {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jre_headless,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jre_headless
+, nixosTests
+,
 }:
 
 let

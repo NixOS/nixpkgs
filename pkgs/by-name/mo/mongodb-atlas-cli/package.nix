@@ -1,12 +1,12 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  buildGoModule,
-  installShellFiles,
-  nix-update-script,
-  testers,
-  mongodb-atlas-cli,
+{ stdenv
+, fetchFromGitHub
+, lib
+, buildGoModule
+, installShellFiles
+, nix-update-script
+, testers
+, mongodb-atlas-cli
+,
 }:
 
 buildGoModule rec {

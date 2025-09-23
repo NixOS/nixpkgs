@@ -1,11 +1,11 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  gitMinimal,
-  testers,
-  gitsign,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, gitMinimal
+, testers
+, gitsign
+,
 }:
 
 buildGoModule rec {

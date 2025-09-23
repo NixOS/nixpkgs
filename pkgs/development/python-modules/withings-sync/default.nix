@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  garth,
-  lxml,
-  python-dotenv,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, garth
+, lxml
+, python-dotenv
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

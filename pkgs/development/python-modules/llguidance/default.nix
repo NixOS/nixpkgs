@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # nativeBuildInputs
-  cargo,
-  pkg-config,
-  rustPlatform,
-  rustc,
-
-  # buildInputs
-  oniguruma,
-  openssl,
-
-  # tests
-  pytestCheckHook,
-  torch,
-  transformers,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # nativeBuildInputs
+  cargo
+, pkg-config
+, rustPlatform
+, rustc
+, # buildInputs
+  oniguruma
+, openssl
+, # tests
+  pytestCheckHook
+, torch
+, transformers
+,
 }:
 
 buildPythonPackage rec {

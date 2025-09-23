@@ -1,24 +1,24 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  # nativeBuildInputs
-  setuptools,
-  # nativeCheckInputs
-  pytestCheckHook,
-  # install_requires
-  appdirs,
-  beautifulsoup4,
-  cachecontrol,
-  distro,
-  feedparser,
-  packaging,
-  python-dateutil,
-  pyyaml,
-  requests,
-  tqdm,
-  urllib3,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # nativeBuildInputs
+  setuptools
+, # nativeCheckInputs
+  pytestCheckHook
+, # install_requires
+  appdirs
+, beautifulsoup4
+, cachecontrol
+, distro
+, feedparser
+, packaging
+, python-dateutil
+, pyyaml
+, requests
+, tqdm
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

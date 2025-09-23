@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  serialio,
-  sockio,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, serialio
+, sockio
+,
 }:
 
 buildPythonPackage rec {

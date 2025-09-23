@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
-  dieHook,
-  cmake,
-  icu,
-  boost,
-  pkg-config,
-  sqlite,
-  cg3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, dieHook
+, cmake
+, icu
+, boost
+, pkg-config
+, sqlite
+, cg3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

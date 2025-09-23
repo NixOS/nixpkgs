@@ -1,23 +1,21 @@
-{
-  lib,
-  pkgs,
-  fetchPypi,
-  buildPythonPackage,
-  pythonOlder,
-  click,
-  joblib,
-  regex,
-  tqdm,
-
-  # preInstallCheck
-  nltk,
-
-  # nativeCheckInputs
-  matplotlib,
-  numpy,
-  pyparsing,
-  pytestCheckHook,
-  pytest-mock,
+{ lib
+, pkgs
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, click
+, joblib
+, regex
+, tqdm
+, # preInstallCheck
+  nltk
+, # nativeCheckInputs
+  matplotlib
+, numpy
+, pyparsing
+, pytestCheckHook
+, pytest-mock
+,
 }:
 
 buildPythonPackage rec {

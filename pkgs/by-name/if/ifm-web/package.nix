@@ -1,10 +1,10 @@
-{
-  fetchurl,
-  stdenv,
-  lib,
-  php83,
-  writeShellScript,
-  nixosTests,
+{ fetchurl
+, stdenv
+, lib
+, php83
+, writeShellScript
+, nixosTests
+,
 }:
 let
   version = "4.0.2";

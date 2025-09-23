@@ -1,26 +1,26 @@
-{
-  stdenv,
-  buildFHSEnv,
-  writeShellScriptBin,
-  fetchurl,
-  callPackage,
-  makeDesktopItem,
-  copyDesktopItems,
-  ffmpeg,
-  glibc,
-  jq,
-  lib,
-  libmediainfo,
-  libsForQt5,
-  libusb1,
-  ocl-icd,
-  p7zip,
-  patchelf,
-  socat,
-  vapoursynth,
-  xdg-utils,
-  xorg,
-  zenity,
+{ stdenv
+, buildFHSEnv
+, writeShellScriptBin
+, fetchurl
+, callPackage
+, makeDesktopItem
+, copyDesktopItems
+, ffmpeg
+, glibc
+, jq
+, lib
+, libmediainfo
+, libsForQt5
+, libusb1
+, ocl-icd
+, p7zip
+, patchelf
+, socat
+, vapoursynth
+, xdg-utils
+, xorg
+, zenity
+,
 }:
 let
   mpvForSVP = callPackage ./mpv.nix { };

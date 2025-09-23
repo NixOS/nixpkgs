@@ -1,14 +1,14 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  replaceVars,
-  meson,
-  pkg-config,
-  ninja,
-  qtbase,
-  qtwayland,
-  wayland,
+{ stdenv
+, lib
+, fetchFromGitLab
+, replaceVars
+, meson
+, pkg-config
+, ninja
+, qtbase
+, qtwayland
+, wayland
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

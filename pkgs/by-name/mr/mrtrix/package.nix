@@ -1,23 +1,23 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  python3,
-  makeWrapper,
-  eigen_3_4_0,
-  fftw,
-  libtiff,
-  libpng,
-  zlib,
-  ants,
-  bc,
-  qt5,
-  libGL,
-  libGLU,
-  libX11,
-  libXext,
-  less,
-  withGui ? true,
+{ stdenv
+, lib
+, fetchFromGitHub
+, python3
+, makeWrapper
+, eigen_3_4_0
+, fftw
+, libtiff
+, libpng
+, zlib
+, ants
+, bc
+, qt5
+, libGL
+, libGLU
+, libX11
+, libXext
+, less
+, withGui ? true
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

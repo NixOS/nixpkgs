@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  makeWrapper,
-  coreutils,
-  codeowners,
-  jq,
-  curl,
-  github-cli,
-  gitMinimal,
+{ lib
+, stdenvNoCC
+, makeWrapper
+, coreutils
+, codeowners
+, jq
+, curl
+, github-cli
+, gitMinimal
+,
 }:
 stdenvNoCC.mkDerivation {
   name = "request-reviews";

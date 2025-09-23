@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  python-dateutil,
-  pkgs,
-  which,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, python-dateutil
+, pkgs
+, which
+,
 }:
 
 buildPythonPackage rec {

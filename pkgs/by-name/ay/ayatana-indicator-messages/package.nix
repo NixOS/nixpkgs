@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  gitUpdater,
-  nixosTests,
-  testers,
-  accountsservice,
-  cmake,
-  dbus-test-runner,
-  withDocumentation ? true,
-  docbook_xsl,
-  docbook_xml_dtd_45,
-  glib,
-  gobject-introspection,
-  gtest,
-  gtk-doc,
-  intltool,
-  lomiri,
-  pkg-config,
-  python3,
-  systemd,
-  vala,
-  wrapGAppsHook3,
+{ stdenv
+, lib
+, fetchFromGitHub
+, gitUpdater
+, nixosTests
+, testers
+, accountsservice
+, cmake
+, dbus-test-runner
+, withDocumentation ? true
+, docbook_xsl
+, docbook_xml_dtd_45
+, glib
+, gobject-introspection
+, gtest
+, gtk-doc
+, intltool
+, lomiri
+, pkg-config
+, python3
+, systemd
+, vala
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

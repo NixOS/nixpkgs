@@ -1,19 +1,19 @@
-{
-  config,
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  cmake,
-  gtest,
-  doCheck ? true,
-  autoAddDriverRunpath,
-  cudaSupport ? config.cudaSupport,
-  ncclSupport ? false,
-  rLibrary ? false,
-  cudaPackages,
-  llvmPackages,
-  R,
-  rPackages,
+{ config
+, stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, gtest
+, doCheck ? true
+, autoAddDriverRunpath
+, cudaSupport ? config.cudaSupport
+, ncclSupport ? false
+, rLibrary ? false
+, cudaPackages
+, llvmPackages
+, R
+, rPackages
+,
 }@inputs:
 
 assert ncclSupport -> (cudaSupport && !cudaPackages.nccl.meta.unsupported);

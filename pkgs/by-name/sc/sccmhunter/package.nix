@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  # Pinned to Python 3.12 because future-1.0.0 is not supported for Python 3.13:
+{ lib
+, fetchFromGitHub
+, # Pinned to Python 3.12 because future-1.0.0 is not supported for Python 3.13:
   # error: future-1.0.0 not supported for interpreter python3.13
-  python312Packages,
+  python312Packages
+,
 }:
 python312Packages.buildPythonApplication rec {
   pname = "sccmhunter";

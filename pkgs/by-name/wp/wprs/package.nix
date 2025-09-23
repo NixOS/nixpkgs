@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  libxkbcommon,
-  python3,
-  runCommand,
-  wprs,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libxkbcommon
+, python3
+, runCommand
+, wprs
+,
 }:
 rustPlatform.buildRustPackage {
   pname = "wprs";

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  chardet,
-  gitpython,
-  pygments,
-  rich,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, chardet
+, gitpython
+, pygments
+, rich
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

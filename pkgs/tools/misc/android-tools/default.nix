@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cmake,
-  ninja,
-  pkg-config,
-  perl,
-  go,
-  python3,
-  protobuf,
-  zlib,
-  gtest,
-  brotli,
-  lz4,
-  zstd,
-  pcre2,
-  fetchpatch2,
-  fmt,
-  udev,
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, ninja
+, pkg-config
+, perl
+, go
+, python3
+, protobuf
+, zlib
+, gtest
+, brotli
+, lz4
+, zstd
+, pcre2
+, fetchpatch2
+, fmt
+, udev
+,
 }:
 
 let

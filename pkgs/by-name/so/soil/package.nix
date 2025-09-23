@@ -1,9 +1,9 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  libGL,
-  libX11,
+{ stdenv
+, lib
+, fetchzip
+, libGL
+, libX11
+,
 }:
 
 stdenv.mkDerivation {

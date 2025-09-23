@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  cachetools,
-  fetchFromGitHub,
-  isPy27,
-  lib,
+{ buildPythonPackage
+, cachetools
+, fetchFromGitHub
+, isPy27
+, lib
+,
 }:
 
 buildPythonPackage rec {

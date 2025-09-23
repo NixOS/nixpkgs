@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPy3k,
-  numpy,
-  scipy,
-  matplotlib,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, numpy
+, scipy
+, matplotlib
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

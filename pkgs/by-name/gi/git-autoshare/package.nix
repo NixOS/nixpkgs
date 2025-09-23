@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  git,
-  lib,
-  python3Packages,
+{ fetchFromGitHub
+, git
+, lib
+, python3Packages
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "git-autoshare";

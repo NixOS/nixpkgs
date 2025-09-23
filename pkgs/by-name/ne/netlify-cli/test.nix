@@ -1,23 +1,23 @@
-{
-  curl,
-  darwin,
-  lib,
-  netlify-cli,
-  runCommand,
-  stdenv,
+{ curl
+, darwin
+, lib
+, netlify-cli
+, runCommand
+, stdenv
+,
 }:
 
 runCommand "netlify-cli-test"
-  {
-    nativeBuildInputs = [
-      netlify-cli
-      curl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.ps
-    ];
-    meta.timeout = 600;
-  }
+{
+  nativeBuildInputs = [
+    netlify-cli
+    curl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.ps
+  ];
+  meta.timeout = 600;
+}
   ''
     mkdir home
     export HOME=$PWD/home

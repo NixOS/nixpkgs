@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  openssl,
-  gtest,
-  nlohmann_json,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openssl
+, gtest
+, nlohmann_json
+,
 }:
 
 stdenv.mkDerivation rec {

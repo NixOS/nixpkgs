@@ -1,14 +1,14 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  meson,
-  ninja,
-  pkg-config,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
-  cmake,
+{ stdenv
+, fetchFromGitHub
+, lib
+, meson
+, ninja
+, pkg-config
+, qtbase
+, qttools
+, wrapQtAppsHook
+, cmake
+,
 }:
 
 let

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildFishPlugin,
-  fetchFromGitHub,
-  unstableGitUpdater,
+{ lib
+, buildFishPlugin
+, fetchFromGitHub
+, unstableGitUpdater
+,
 }:
 buildFishPlugin {
   pname = "fish-you-should-use";

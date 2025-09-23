@@ -1,77 +1,77 @@
-{
-  pname,
-  version,
-  src,
-  meta,
-  binaryName,
-  desktopName,
-  autoPatchelfHook,
-  makeDesktopItem,
-  lib,
-  stdenv,
-  wrapGAppsHook3,
-  makeShellWrapper,
-  alsa-lib,
-  at-spi2-atk,
-  at-spi2-core,
-  atk,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  fontconfig,
-  freetype,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  libcxx,
-  libdrm,
-  libglvnd,
-  libnotify,
-  libpulseaudio,
-  libuuid,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
-  libxcb,
-  libxshmfence,
-  libgbm,
-  nspr,
-  nss,
-  pango,
-  systemdLibs,
-  libappindicator-gtk3,
-  libdbusmenu,
-  writeScript,
-  pipewire,
-  python3,
-  runCommand,
-  speechd-minimal,
-  wayland,
-  branch,
-  withOpenASAR ? false,
-  openasar,
-  withVencord ? false,
-  vencord,
-  withEquicord ? false,
-  equicord,
-  withMoonlight ? false,
-  moonlight,
-  withTTS ? true,
-  enableAutoscroll ? false,
-  # Disabling this would normally break Discord.
+{ pname
+, version
+, src
+, meta
+, binaryName
+, desktopName
+, autoPatchelfHook
+, makeDesktopItem
+, lib
+, stdenv
+, wrapGAppsHook3
+, makeShellWrapper
+, alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, cairo
+, cups
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gtk3
+, libcxx
+, libdrm
+, libglvnd
+, libnotify
+, libpulseaudio
+, libuuid
+, libX11
+, libXScrnSaver
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXext
+, libXfixes
+, libXi
+, libXrandr
+, libXrender
+, libXtst
+, libxcb
+, libxshmfence
+, libgbm
+, nspr
+, nss
+, pango
+, systemdLibs
+, libappindicator-gtk3
+, libdbusmenu
+, writeScript
+, pipewire
+, python3
+, runCommand
+, speechd-minimal
+, wayland
+, branch
+, withOpenASAR ? false
+, openasar
+, withVencord ? false
+, vencord
+, withEquicord ? false
+, equicord
+, withMoonlight ? false
+, moonlight
+, withTTS ? true
+, enableAutoscroll ? false
+, # Disabling this would normally break Discord.
   # The intended use-case for this is when SKIP_HOST_UPDATE is enabled via other means,
   # for example if a settings.json is linked declaratively (e.g., with home-manager).
-  disableUpdates ? true,
-  commandLineArgs ? "",
+  disableUpdates ? true
+, commandLineArgs ? ""
+,
 }:
 
 let
@@ -96,9 +96,10 @@ let
         chmod +x $out/bin/disable-breaking-updates.py
       '';
 in
-assert lib.assertMsg (
-  enabledDiscordModsCount <= 1
-) "discord: Only one of Vencord, Equicord or Moonlight can be enabled at the same time";
+assert lib.assertMsg
+  (
+    enabledDiscordModsCount <= 1
+  ) "discord: Only one of Vencord, Equicord or Moonlight can be enabled at the same time";
 stdenv.mkDerivation (finalAttrs: {
   inherit
     pname

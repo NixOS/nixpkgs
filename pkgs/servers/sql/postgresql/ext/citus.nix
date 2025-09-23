@@ -1,12 +1,12 @@
-{
-  curl,
-  fetchFromGitHub,
-  fetchpatch,
-  lib,
-  lz4,
-  postgresql,
-  postgresqlBuildExtension,
-  postgresqlTestExtension,
+{ curl
+, fetchFromGitHub
+, fetchpatch
+, lib
+, lz4
+, postgresql
+, postgresqlBuildExtension
+, postgresqlTestExtension
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {
@@ -69,11 +69,11 @@ postgresqlBuildExtension (finalAttrs: {
     broken =
       lib.versionOlder postgresql.version "15"
       ||
-        # PostgreSQL 18 support issue upstream: https://github.com/citusdata/citus/issues/7978
-        # Check after next package update.
-        lib.warnIf (finalAttrs.version != "13.0.3") "Is postgresql18Packages.citus still broken?" (
-          lib.versionAtLeast postgresql.version "18"
-        );
+      # PostgreSQL 18 support issue upstream: https://github.com/citusdata/citus/issues/7978
+      # Check after next package update.
+      lib.warnIf (finalAttrs.version != "13.0.3") "Is postgresql18Packages.citus still broken?" (
+        lib.versionAtLeast postgresql.version "18"
+      );
     description = "Distributed PostgreSQL as an extension";
     homepage = "https://www.citusdata.com/";
     changelog = "https://github.com/citusdata/citus/blob/${finalAttrs.src.rev}/CHANGELOG.md";

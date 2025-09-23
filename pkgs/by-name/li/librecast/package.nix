@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitea,
-  lcrq,
-  lib,
-  libsodium,
-  nix-update-script,
+{ stdenv
+, fetchFromGitea
+, lcrq
+, lib
+, libsodium
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "librecast";

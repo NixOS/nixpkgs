@@ -1,32 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  hatchling,
-  setuptools,
-  click,
-  requests,
-  packaging,
-  dparse,
-  ruamel-yaml,
-  jinja2,
-  marshmallow,
-  nltk,
-  authlib,
-  typer,
-  pydantic,
-  safety-schemas,
-  typing-extensions,
-  filelock,
-  psutil,
-  httpx,
-  tenacity,
-  tomlkit,
-  git,
-  pytestCheckHook,
-  tomli,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, hatchling
+, setuptools
+, click
+, requests
+, packaging
+, dparse
+, ruamel-yaml
+, jinja2
+, marshmallow
+, nltk
+, authlib
+, typer
+, pydantic
+, safety-schemas
+, typing-extensions
+, filelock
+, psutil
+, httpx
+, tenacity
+, tomlkit
+, git
+, pytestCheckHook
+, tomli
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

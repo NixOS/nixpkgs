@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -180,16 +179,16 @@ in
     ]
     # Declare service conflicts, also sourced from `tuned.service`
     ++
-      map
-        (name: {
-          assertion = !(moduleFromName name).enable;
-          message = "`services.tuned` conflicts with `${name}`.";
-        })
-        [
-          "services.auto-cpufreq"
-          "services.power-profiles-daemon"
-          "services.tlp"
-        ];
+    map
+      (name: {
+        assertion = !(moduleFromName name).enable;
+        message = "`services.tuned` conflicts with `${name}`.";
+      })
+      [
+        "services.auto-cpufreq"
+        "services.power-profiles-daemon"
+        "services.tlp"
+      ];
 
     environment = {
       etc = lib.mkMerge [
@@ -204,12 +203,14 @@ in
           );
         }
 
-        (lib.mapAttrs' (
-          name: value:
-          lib.nameValuePair "tuned/profiles/${name}/tuned.conf" {
-            source = profileFormat.generate "tuned.conf" value;
-          }
-        ) cfg.profiles)
+        (lib.mapAttrs'
+          (
+            name: value:
+              lib.nameValuePair "tuned/profiles/${name}/tuned.conf" {
+                source = profileFormat.generate "tuned.conf" value;
+              }
+          )
+          cfg.profiles)
       ];
 
       systemPackages = [ cfg.package ];

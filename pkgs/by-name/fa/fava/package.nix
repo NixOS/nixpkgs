@@ -1,9 +1,9 @@
-{
-  lib,
-  python3Packages,
-  buildNpmPackage,
-  fetchFromGitHub,
-  stdenv,
+{ lib
+, python3Packages
+, buildNpmPackage
+, fetchFromGitHub
+, stdenv
+,
 }:
 let
   src = buildNpmPackage (finalAttrs: {

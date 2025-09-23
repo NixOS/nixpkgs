@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  pkgs,
-  ...
+{ lib
+, config
+, pkgs
+, ...
 }:
 let
   cfg = config.services.matrix-alertmanager;
@@ -43,8 +42,8 @@ in
               description = "Matrix room ID";
               apply =
                 x:
-                assert lib.assertMsg (lib.hasPrefix "!" x) "Matrix room ID must start with a '!'. Got: ${x}";
-                x;
+                  assert lib.assertMsg (lib.hasPrefix "!" x) "Matrix room ID must start with a '!'. Got: ${x}";
+                  x;
             };
           };
         }

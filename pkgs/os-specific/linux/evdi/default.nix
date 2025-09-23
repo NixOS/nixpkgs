@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kernel,
-  kernelModuleMakeFlags,
-  libdrm,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, kernelModuleMakeFlags
+, libdrm
+, python3
+,
 }:
 
 let

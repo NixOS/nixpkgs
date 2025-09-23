@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
-  libGLU,
-  libGL,
-  libpng,
-  libretro,
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, libGLU
+, libGL
+, libpng
+, libretro
+,
 }:
 let
   # Converts a version string like x.y.z to vx.y-z

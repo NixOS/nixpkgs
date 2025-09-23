@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  tzdata,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, tzdata
+,
 }:
 
 stdenv.mkDerivation rec {

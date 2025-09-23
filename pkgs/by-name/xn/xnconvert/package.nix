@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  appimageTools,
-  makeDesktopItem,
-  imagemagick,
-  runCommand,
+{ lib
+, fetchurl
+, appimageTools
+, makeDesktopItem
+, imagemagick
+, runCommand
+,
 }:
 
 let

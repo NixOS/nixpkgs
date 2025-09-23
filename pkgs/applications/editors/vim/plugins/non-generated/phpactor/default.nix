@@ -1,6 +1,6 @@
-{
-  vimUtils,
-  phpactor,
+{ vimUtils
+, phpactor
+,
 }:
 vimUtils.buildVimPlugin {
   inherit (phpactor)

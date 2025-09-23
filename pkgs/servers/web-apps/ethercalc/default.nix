@@ -1,8 +1,8 @@
-{
-  stdenv,
-  pkgs,
-  lib,
-  nodejs_20,
+{ stdenv
+, pkgs
+, lib
+, nodejs_20
+,
 }:
 
 let

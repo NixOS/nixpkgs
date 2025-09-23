@@ -1,20 +1,20 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  mesonEmulatorHook,
-  ninja,
-  pkg-config,
-  gettext,
-  gtk-doc,
-  docbook-xsl-nons,
-  gobject-introspection,
-  gnome,
-  libsoup_3,
-  json-glib,
-  glib,
-  nixosTests,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, gettext
+, gtk-doc
+, docbook-xsl-nons
+, gobject-introspection
+, gnome
+, libsoup_3
+, json-glib
+, glib
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

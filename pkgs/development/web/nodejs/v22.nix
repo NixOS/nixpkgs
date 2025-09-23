@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  buildPackages,
-  callPackage,
-  fetchpatch2,
-  openssl,
-  python3,
-  enableNpm ? true,
+{ lib
+, stdenv
+, buildPackages
+, callPackage
+, fetchpatch2
+, openssl
+, python3
+, enableNpm ? true
+,
 }:
 
 let

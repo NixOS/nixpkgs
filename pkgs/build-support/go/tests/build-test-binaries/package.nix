@@ -1,6 +1,6 @@
-{
-  buildGoModule,
-  runCommandCC,
+{ buildGoModule
+, runCommandCC
+,
 }:
 
 let
@@ -13,10 +13,10 @@ let
 in
 
 runCommandCC "build-test-binaries-check"
-  {
-    nativeBuildInputs = [ testPackage ];
-    passthru = { inherit testPackage; };
-  }
+{
+  nativeBuildInputs = [ testPackage ];
+  passthru = { inherit testPackage; };
+}
   ''
     fail() {
       echo "Test failed: $1" >&2

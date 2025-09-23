@@ -1,12 +1,12 @@
-{
-  lib,
-  attrs,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pygtrie,
-  orjson,
-  setuptools-scm,
+{ lib
+, attrs
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pygtrie
+, orjson
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

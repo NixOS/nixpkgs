@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fastapi,
-  fetchFromGitHub,
-  flask,
-  httpx,
-  pytestCheckHook,
-  pythonOlder,
-  pythonAtLeast,
-  quart,
-  requests,
-  sanic,
-  setuptools,
-  uvicorn,
+{ lib
+, buildPythonPackage
+, fastapi
+, fetchFromGitHub
+, flask
+, httpx
+, pytestCheckHook
+, pythonOlder
+, pythonAtLeast
+, quart
+, requests
+, sanic
+, setuptools
+, uvicorn
+,
 }:
 
 buildPythonPackage rec {

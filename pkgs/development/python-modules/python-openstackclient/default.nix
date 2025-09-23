@@ -1,34 +1,34 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  ddt,
-  openstackdocstheme,
-  osc-lib,
-  osc-placement,
-  pbr,
-  python-aodhclient,
-  python-barbicanclient,
-  python-cinderclient,
-  python-designateclient,
-  python-heatclient,
-  python-ironicclient,
-  python-keystoneclient,
-  python-magnumclient,
-  python-manilaclient,
-  python-mistralclient,
-  python-neutronclient,
-  python-openstackclient,
-  python-watcherclient,
-  python-zaqarclient,
-  python-zunclient,
-  requests-mock,
-  requests,
-  setuptools,
-  sphinxHook,
-  sphinxcontrib-apidoc,
-  stestr,
-  testers,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ddt
+, openstackdocstheme
+, osc-lib
+, osc-placement
+, pbr
+, python-aodhclient
+, python-barbicanclient
+, python-cinderclient
+, python-designateclient
+, python-heatclient
+, python-ironicclient
+, python-keystoneclient
+, python-magnumclient
+, python-manilaclient
+, python-mistralclient
+, python-neutronclient
+, python-openstackclient
+, python-watcherclient
+, python-zaqarclient
+, python-zunclient
+, requests-mock
+, requests
+, setuptools
+, sphinxHook
+, sphinxcontrib-apidoc
+, stestr
+, testers
+,
 }:
 
 buildPythonPackage rec {

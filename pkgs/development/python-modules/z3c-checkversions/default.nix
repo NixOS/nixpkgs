@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  python,
-  pythonAtLeast,
-  zc-buildout,
-  zope-testrunner,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, python
+, pythonAtLeast
+, zc-buildout
+, zope-testrunner
+,
 }:
 
 buildPythonPackage rec {

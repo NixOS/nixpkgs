@@ -1,16 +1,15 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  nix-update-script,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, nix-update-script
+,
 }:
 
 let
   buildStyle =
-    {
-      name,
-      stylePath ? name,
-      ...
+    { name
+    , stylePath ? name
+    , ...
     }@args:
     stdenvNoCC.mkDerivation (
       {

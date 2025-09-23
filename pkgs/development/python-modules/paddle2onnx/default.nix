@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  pythonAtLeast,
-  python,
-  onnx,
-  paddlepaddle,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pythonAtLeast
+, python
+, onnx
+, paddlepaddle
+,
 }:
 let
   pname = "paddle2onnx";

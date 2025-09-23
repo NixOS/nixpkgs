@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  docbook-xsl-nons,
-  docutils,
-  gi-docgen,
-  gobject-introspection,
-  gtk-doc,
-  libxslt,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wrapGAppsHook3,
-  glib,
-  gsound,
-  json-glib,
-  libgudev,
-  dbus,
-  gmobile,
-  umockdev,
-  feedbackd-device-themes,
-  udevCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitLab
+, docbook-xsl-nons
+, docutils
+, gi-docgen
+, gobject-introspection
+, gtk-doc
+, libxslt
+, meson
+, ninja
+, pkg-config
+, vala
+, wrapGAppsHook3
+, glib
+, gsound
+, json-glib
+, libgudev
+, dbus
+, gmobile
+, umockdev
+, feedbackd-device-themes
+, udevCheckHook
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

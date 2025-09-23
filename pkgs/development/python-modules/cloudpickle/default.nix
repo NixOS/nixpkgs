@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  flit-core,
-
-  # tests
-  psutil,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  flit-core
+, # tests
+  psutil
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

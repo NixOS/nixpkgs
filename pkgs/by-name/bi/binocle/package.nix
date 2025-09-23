@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  makeWrapper,
-  xorg,
-  vulkan-loader,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, makeWrapper
+, xorg
+, vulkan-loader
+,
 }:
 
 rustPlatform.buildRustPackage rec {

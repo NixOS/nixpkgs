@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  httpTwoLevelsUpdater,
+{ lib
+, stdenv
+, fetchurl
+, httpTwoLevelsUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

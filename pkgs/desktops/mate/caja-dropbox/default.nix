@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  replaceVars,
-  pkg-config,
-  gobject-introspection,
-  gdk-pixbuf,
-  caja,
-  gtk3,
-  python3,
-  dropbox,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, replaceVars
+, pkg-config
+, gobject-introspection
+, gdk-pixbuf
+, caja
+, gtk3
+, python3
+, dropbox
+, mateUpdateScript
+,
 }:
 
 let

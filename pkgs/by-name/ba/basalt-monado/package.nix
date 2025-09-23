@@ -1,29 +1,29 @@
-{
-  config,
-  autoPatchelfHook,
-  boost,
-  bzip2,
-  cereal,
-  cmake,
-  eigen,
-  extra-cmake-modules,
-  fetchFromGitLab,
-  fmt,
-  freeglut,
-  glew,
-  lib,
-  libepoxy,
-  libGL,
-  lz4,
-  magic-enum,
-  nix-update-script,
-  opencv,
-  pkg-config,
-  stdenv,
-  tbb,
-  xorg,
-  cudaPackages,
-  enableCuda ? config.cudaSupport,
+{ config
+, autoPatchelfHook
+, boost
+, bzip2
+, cereal
+, cmake
+, eigen
+, extra-cmake-modules
+, fetchFromGitLab
+, fmt
+, freeglut
+, glew
+, lib
+, libepoxy
+, libGL
+, lz4
+, magic-enum
+, nix-update-script
+, opencv
+, pkg-config
+, stdenv
+, tbb
+, xorg
+, cudaPackages
+, enableCuda ? config.cudaSupport
+,
 }:
 stdenv.mkDerivation {
   pname = "basalt-monado";

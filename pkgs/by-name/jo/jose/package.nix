@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  pkg-config,
-  ninja,
-  asciidoc,
-  zlib,
-  jansson,
-  openssl,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, asciidoc
+, zlib
+, jansson
+, openssl
+,
 }:
 
 stdenv.mkDerivation rec {

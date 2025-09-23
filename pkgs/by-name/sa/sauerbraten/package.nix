@@ -1,21 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-
-  # nativeBuildInputs
-  makeWrapper,
-  copyDesktopItems,
-
-  # buildInputs
-  libGL,
-  SDL2,
-  SDL2_image,
-  SDL2_mixer,
-  xorg,
-  zlib,
-
-  makeDesktopItem,
+{ lib
+, stdenv
+, fetchzip
+, # nativeBuildInputs
+  makeWrapper
+, copyDesktopItems
+, # buildInputs
+  libGL
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, xorg
+, zlib
+, makeDesktopItem
+,
 }:
 
 stdenv.mkDerivation rec {

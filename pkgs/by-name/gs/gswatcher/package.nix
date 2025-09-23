@@ -1,25 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-
-  meson,
-  ninja,
-  vala,
-  wrapGAppsHook4,
-  desktop-file-utils,
-  pkg-config,
-  imagemagick,
-
-  gtk4,
-  libadwaita,
-  libgee,
-  lua5_4,
-  geoip,
-  geolite-legacy,
-
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, vala
+, wrapGAppsHook4
+, desktop-file-utils
+, pkg-config
+, imagemagick
+, gtk4
+, libadwaita
+, libgee
+, lua5_4
+, geoip
+, geolite-legacy
+, versionCheckHook
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gswatcher";

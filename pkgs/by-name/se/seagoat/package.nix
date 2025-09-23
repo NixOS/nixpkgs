@@ -1,15 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-
-  # tests
-  gitMinimal,
-  ripgrep,
-  writableTmpDirAsHomeHook,
-
-  versionCheckHook,
-  nix-update-script,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, # tests
+  gitMinimal
+, ripgrep
+, writableTmpDirAsHomeHook
+, versionCheckHook
+, nix-update-script
+,
 }:
 
 python3Packages.buildPythonApplication rec {

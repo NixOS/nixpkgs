@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  google-auth,
-  keyring,
-  pluggy,
-  requests,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, google-auth
+, keyring
+, pluggy
+, requests
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

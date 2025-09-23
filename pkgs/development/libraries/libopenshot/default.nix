@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  alsa-lib,
-  cmake,
-  cppzmq,
-  doxygen,
-  ffmpeg,
-  imagemagick,
-  jsoncpp,
-  libopenshot-audio,
-  llvmPackages,
-  pkg-config,
-  python3,
-  qtbase,
-  qtmultimedia,
-  swig,
-  zeromq,
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, cmake
+, cppzmq
+, doxygen
+, ffmpeg
+, imagemagick
+, jsoncpp
+, libopenshot-audio
+, llvmPackages
+, pkg-config
+, python3
+, qtbase
+, qtmultimedia
+, swig
+, zeromq
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

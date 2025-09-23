@@ -1,30 +1,30 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  plib,
-  libglut,
-  xorgproto,
-  libX11,
-  libXext,
-  libXi,
-  libICE,
-  libSM,
-  libXt,
-  libXmu,
-  libGLU,
-  libGL,
-  boost179,
-  zlib,
-  libjpeg,
-  freealut,
-  openscenegraph,
-  openal,
-  expat,
-  cmake,
-  apr,
-  xz,
-  curl,
+{ lib
+, stdenv
+, fetchFromGitLab
+, plib
+, libglut
+, xorgproto
+, libX11
+, libXext
+, libXi
+, libICE
+, libSM
+, libXt
+, libXmu
+, libGLU
+, libGL
+, boost179
+, zlib
+, libjpeg
+, freealut
+, openscenegraph
+, openal
+, expat
+, cmake
+, apr
+, xz
+, curl
+,
 }:
 let
   version = "2024.1.1";

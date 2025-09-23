@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  hatchling,
-  scim2-client,
-  pytestCheckHook,
-  werkzeug,
-  scim2-server,
-  pytest-httpserver,
-  cacert,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, hatchling
+, scim2-client
+, pytestCheckHook
+, werkzeug
+, scim2-server
+, pytest-httpserver
+, cacert
+,
 }:
 
 buildPythonPackage rec {

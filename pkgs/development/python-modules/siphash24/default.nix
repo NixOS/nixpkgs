@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  meson,
-  meson-python,
-  cython,
-  pkg-config,
-  c-siphash,
-  pytestCheckHook,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, meson
+, meson-python
+, cython
+, pkg-config
+, c-siphash
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

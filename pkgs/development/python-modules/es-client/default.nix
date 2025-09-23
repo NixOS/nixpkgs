@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  certifi,
-  click,
-  cryptography,
-  dotmap,
-  ecs-logging,
-  elastic-transport,
-  elasticsearch8,
-  fetchFromGitHub,
-  hatchling,
-  mock,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  requests,
-  tiered-debug,
-  voluptuous,
+{ lib
+, buildPythonPackage
+, certifi
+, click
+, cryptography
+, dotmap
+, ecs-logging
+, elastic-transport
+, elasticsearch8
+, fetchFromGitHub
+, hatchling
+, mock
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, tiered-debug
+, voluptuous
+,
 }:
 
 buildPythonPackage rec {

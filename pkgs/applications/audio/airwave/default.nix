@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  multiStdenv,
-  fetchFromGitHub,
-  requireFile,
-  unzip,
-  wine,
-  cmake,
-  makeWrapper,
-  wrapQtAppsHook,
-  file,
-  libX11,
-  qt5,
-  vst2-sdk,
+{ lib
+, stdenv
+, multiStdenv
+, fetchFromGitHub
+, requireFile
+, unzip
+, wine
+, cmake
+, makeWrapper
+, wrapQtAppsHook
+, file
+, libX11
+, qt5
+, vst2-sdk
+,
 }:
 
 let

@@ -1,17 +1,14 @@
-{
-  lib,
-  stdenv,
-  python3Packages,
-  fetchFromGitHub,
-  fetchzip,
-  makeBinaryWrapper,
-
-  makeDesktopItem,
-  replaceVars,
-
-  todds,
-
-  steam,
+{ lib
+, stdenv
+, python3Packages
+, fetchFromGitHub
+, fetchzip
+, makeBinaryWrapper
+, makeDesktopItem
+, replaceVars
+, todds
+, steam
+,
 }:
 let
   pname = "rimsort";

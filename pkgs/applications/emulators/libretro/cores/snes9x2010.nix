@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchFromGitHub,
-  mkLibretroCore,
+{ lib
+, fetchFromGitHub
+, mkLibretroCore
+,
 }:
 mkLibretroCore rec {
   core = "snes9x2010";

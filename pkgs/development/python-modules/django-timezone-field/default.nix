@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  poetry-core,
-  django,
-  djangorestframework,
-  pytestCheckHook,
-  pytest-django,
-  pytest-lazy-fixture,
-  pytz,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, django
+, djangorestframework
+, pytestCheckHook
+, pytest-django
+, pytest-lazy-fixture
+, pytz
+,
 }:
 
 buildPythonPackage rec {

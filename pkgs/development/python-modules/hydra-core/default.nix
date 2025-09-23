@@ -1,27 +1,22 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # patches
-  replaceVars,
-  antlr4,
-  fetchpatch,
-
-  # nativeBuildInputs
-  jre_headless,
-
-  # dependencies
-  antlr4-python3-runtime,
-  omegaconf,
-  packaging,
-
-  # tests
-  pytest8_3CheckHook,
-  pythonAtLeast,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # patches
+  replaceVars
+, antlr4
+, fetchpatch
+, # nativeBuildInputs
+  jre_headless
+, # dependencies
+  antlr4-python3-runtime
+, omegaconf
+, packaging
+, # tests
+  pytest8_3CheckHook
+, pythonAtLeast
+,
 }:
 
 buildPythonPackage rec {

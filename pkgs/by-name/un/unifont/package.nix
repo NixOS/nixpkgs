@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  xorg,
-  libfaketime,
+{ lib
+, stdenv
+, fetchurl
+, xorg
+, libfaketime
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

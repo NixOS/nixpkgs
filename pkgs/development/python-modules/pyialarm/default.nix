@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  dicttoxml2,
-  fetchFromGitHub,
-  pythonOlder,
-  xmltodict,
+{ lib
+, buildPythonPackage
+, dicttoxml2
+, fetchFromGitHub
+, pythonOlder
+, xmltodict
+,
 }:
 
 buildPythonPackage rec {

@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  replaceVars,
-  pkg-config,
-  cmake,
-  bluez,
-  libusb1,
-  curl,
-  libiconv,
-  gettext,
-  sqlite,
-  bash,
-  dialog,
-  dbiSupport ? false,
-  libdbi ? null,
-  libdbiDrivers ? null,
-  postgresSupport ? false,
-  libpq ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, replaceVars
+, pkg-config
+, cmake
+, bluez
+, libusb1
+, curl
+, libiconv
+, gettext
+, sqlite
+, bash
+, dialog
+, dbiSupport ? false
+, libdbi ? null
+, libdbiDrivers ? null
+, postgresSupport ? false
+, libpq ? null
+,
 }:
 
 stdenv.mkDerivation rec {

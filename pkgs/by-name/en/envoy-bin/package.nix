@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  autoPatchelfHook,
-  fetchurl,
-  makeWrapper,
-  nixosTests,
-  versionCheckHook,
+{ lib
+, stdenv
+, autoPatchelfHook
+, fetchurl
+, makeWrapper
+, nixosTests
+, versionCheckHook
+,
 }:
 let
   version = "1.35.2";
@@ -16,15 +16,13 @@ let
     {
       aarch64-linux = "aarch_64";
       x86_64-linux = "x86_64";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 
   hash =
     {
       aarch64-linux = "sha256-XfV0d4l8yTsEF9hDXAFnd0wgtu+Hm6VaEfPfXHF9wdE=";
       x86_64-linux = "sha256-6Uo9Gya7lpkb5GAiB8yxIX81Yw1BWurBUF1ooDuJc9w=";
-    }
-    .${system} or throwSystem;
+    }.${system} or throwSystem;
 in
 stdenv.mkDerivation {
   pname = "envoy-bin";

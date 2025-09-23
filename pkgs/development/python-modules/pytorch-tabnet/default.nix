@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fsspec,
-  numpy,
-  poetry-core,
-  pytestCheckHook,
-  scikit-learn,
-  scipy,
-  torch,
-  tqdm,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fsspec
+, numpy
+, poetry-core
+, pytestCheckHook
+, scikit-learn
+, scipy
+, torch
+, tqdm
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  vscode-extension-update,
+{ lib
+, vscode-extension-update
+,
 }:
 
-{
-  attrPath ? null,
-  extraArgs ? [ ],
+{ attrPath ? null
+, extraArgs ? [ ]
+,
 }:
 
 [ "${lib.getExe vscode-extension-update}" ]

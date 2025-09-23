@@ -1,10 +1,10 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  stdenv,
-  makeWrapper,
-  nodejs,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, stdenv
+, makeWrapper
+, nodejs
+,
 }:
 buildNpmPackage rec {
   pname = "nextcloud-whiteboard-server";

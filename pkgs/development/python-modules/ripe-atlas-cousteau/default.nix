@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  jsonschema,
-  pytestCheckHook,
-  python-dateutil,
-  pythonOlder,
-  requests,
-  setuptools,
-  typing-extensions,
-  websocket-client,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, jsonschema
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, requests
+, setuptools
+, typing-extensions
+, websocket-client
+,
 }:
 
 buildPythonPackage rec {

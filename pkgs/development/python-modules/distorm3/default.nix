@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  distutils,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  setuptools,
-  yasm,
+{ lib
+, buildPythonPackage
+, distutils
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, setuptools
+, yasm
+,
 }:
 
 buildPythonPackage rec {

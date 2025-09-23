@@ -1,9 +1,9 @@
-{
-  lib,
-  callPackage,
-  fetchzip,
-  stdenv,
-  zlib,
+{ lib
+, callPackage
+, fetchzip
+, stdenv
+, zlib
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

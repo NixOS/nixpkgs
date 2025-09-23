@@ -1,11 +1,11 @@
-{
-  lib,
-  ocaml,
-  fetchFromGitHub,
-  buildDunePackage,
-  algaeff,
-  bwd,
-  qcheck-alcotest,
+{ lib
+, ocaml
+, fetchFromGitHub
+, buildDunePackage
+, algaeff
+, bwd
+, qcheck-alcotest
+,
 }:
 
 let

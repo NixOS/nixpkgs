@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  celery,
-  debugpy,
-  docker,
-  fetchFromGitHub,
-  kombu,
-  poetry-core,
-  psutil,
-  pytest-docker-tools,
-  pytest,
-  pythonOlder,
-  setuptools,
-  tenacity,
+{ lib
+, buildPythonPackage
+, celery
+, debugpy
+, docker
+, fetchFromGitHub
+, kombu
+, poetry-core
+, psutil
+, pytest-docker-tools
+, pytest
+, pythonOlder
+, setuptools
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

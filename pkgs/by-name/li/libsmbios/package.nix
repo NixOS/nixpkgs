@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  pkg-config,
-  autoreconfHook,
-  help2man,
-  gettext,
-  libxml2,
-  perl,
-  python3,
-  doxygen,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, pkg-config
+, autoreconfHook
+, help2man
+, gettext
+, libxml2
+, perl
+, python3
+, doxygen
+,
 }:
 
 stdenv.mkDerivation rec {

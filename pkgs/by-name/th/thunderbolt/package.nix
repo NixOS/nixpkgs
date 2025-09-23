@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  boost,
-  cmake,
-  fetchFromGitHub,
-  pkg-config,
-  txt2tags,
-  udevCheckHook,
+{ lib
+, stdenv
+, boost
+, cmake
+, fetchFromGitHub
+, pkg-config
+, txt2tags
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation rec {

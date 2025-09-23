@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPackages,
-  directoryListingUpdater,
-  fetchurl,
-  stdenv,
-  testers,
+{ lib
+, buildPackages
+, directoryListingUpdater
+, fetchurl
+, stdenv
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

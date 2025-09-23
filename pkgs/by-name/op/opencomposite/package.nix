@@ -1,17 +1,17 @@
-{
-  cmake,
-  fetchFromGitLab,
-  glm,
-  jsoncpp,
-  lib,
-  libGL,
-  nix-update-script,
-  openxr-loader,
-  python3,
-  stdenv,
-  vulkan-headers,
-  vulkan-loader,
-  xorg,
+{ cmake
+, fetchFromGitLab
+, glm
+, jsoncpp
+, lib
+, libGL
+, nix-update-script
+, openxr-loader
+, python3
+, stdenv
+, vulkan-headers
+, vulkan-loader
+, xorg
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

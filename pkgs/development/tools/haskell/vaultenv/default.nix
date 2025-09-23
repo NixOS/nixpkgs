@@ -1,34 +1,34 @@
-{
-  mkDerivation,
-  HsOpenSSL,
-  QuickCheck,
-  aeson,
-  async,
-  base,
-  bytestring,
-  containers,
-  crypton-connection,
-  directory,
-  hpack,
-  hspec,
-  hspec-discover,
-  hspec-expectations,
-  http-client,
-  http-client-openssl,
-  http-conduit,
-  lib,
-  megaparsec,
-  network-uri,
-  optparse-applicative,
-  parser-combinators,
-  quickcheck-instances,
-  retry,
-  text,
-  unix,
-  unordered-containers,
-  utf8-string,
-  dotenv,
-  fetchFromGitHub,
+{ mkDerivation
+, HsOpenSSL
+, QuickCheck
+, aeson
+, async
+, base
+, bytestring
+, containers
+, crypton-connection
+, directory
+, hpack
+, hspec
+, hspec-discover
+, hspec-expectations
+, http-client
+, http-client-openssl
+, http-conduit
+, lib
+, megaparsec
+, network-uri
+, optparse-applicative
+, parser-combinators
+, quickcheck-instances
+, retry
+, text
+, unix
+, unordered-containers
+, utf8-string
+, dotenv
+, fetchFromGitHub
+,
 }:
 mkDerivation rec {
   pname = "vaultenv";

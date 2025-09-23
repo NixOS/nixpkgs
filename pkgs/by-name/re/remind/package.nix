@@ -1,17 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  gitUpdater,
-  tk,
-  tclPackages,
-  tcl,
-  tkremind ? null,
-  withGui ?
-    if tkremind != null then
-      lib.warn "tkremind is deprecated and should be removed; use withGui instead." tkremind
-    else
-      true,
+{ lib
+, stdenv
+, fetchFromGitea
+, gitUpdater
+, tk
+, tclPackages
+, tcl
+, tkremind ? null
+, withGui ? if tkremind != null then
+    lib.warn "tkremind is deprecated and should be removed; use withGui instead." tkremind
+  else
+    true
+,
 }:
 
 tcl.mkTclDerivation rec {

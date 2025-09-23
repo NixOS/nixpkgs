@@ -66,7 +66,8 @@ self: super: {
   base-orphans = dontCheck (doDistribute super.base-orphans);
   generically = addBuildDepends [
     self.base-orphans
-  ] super.generically;
+  ]
+    super.generically;
 
   # Needs base-orphans for GHC < 9.8 / base < 4.19
   some = addBuildDepend self.base-orphans super.some;
@@ -75,14 +76,16 @@ self: super: {
   # https://gitlab.haskell.org/ghc/ghc/-/issues/21619
   hedgehog = dontHaddock super.hedgehog;
 
-  hpack = overrideCabal (drv: {
-    # Cabal 3.6 seems to preserve comments when reading, which makes this test fail
-    # 2021-10-10: 9.2.1 is not yet supported (also no issue)
-    testFlags = [
-      "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
-    ]
-    ++ drv.testFlags or [ ];
-  }) (doJailbreak super.hpack);
+  hpack = overrideCabal
+    (drv: {
+      # Cabal 3.6 seems to preserve comments when reading, which makes this test fail
+      # 2021-10-10: 9.2.1 is not yet supported (also no issue)
+      testFlags = [
+        "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
+      ]
+      ++ drv.testFlags or [ ];
+    })
+    (doJailbreak super.hpack);
 
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
@@ -116,21 +119,19 @@ self: super: {
   relude = dontCheck super.relude;
 
   inherit
-    (
-      let
-        hls_overlay = lself: lsuper: {
-          Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
-          Cabal = lself.Cabal_3_10_3_0;
-        };
-      in
-      lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
-        haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
-        fourmolu = doJailbreak self.fourmolu_0_14_0_0; # ansi-terminal, Diff
-        ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
-        hlint = self.hlint_3_6_1;
-        stylish-haskell = self.stylish-haskell_0_14_5_0;
-      }
-    )
+    (let
+      hls_overlay = lself: lsuper: {
+        Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
+        Cabal = lself.Cabal_3_10_3_0;
+      };
+    in
+    lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
+      haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
+      fourmolu = doJailbreak self.fourmolu_0_14_0_0; # ansi-terminal, Diff
+      ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
+      hlint = self.hlint_3_6_1;
+      stylish-haskell = self.stylish-haskell_0_14_5_0;
+    })
     haskell-language-server
     fourmolu
     ormolu
@@ -153,7 +154,8 @@ self: super: {
   base-compat-batteries = addBuildDepends [
     self.foldable1-classes-compat
     self.OneTuple
-  ] super.base-compat-batteries;
+  ]
+    super.base-compat-batteries;
 
   # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
   aeson = dontCheck super.aeson;

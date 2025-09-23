@@ -1,16 +1,16 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  dbus,
-  openssl,
-  gtk4,
-  gtk4-layer-shell,
-  mimalloc,
-  glib,
-  pkg-config,
-  wrapGAppsHook4,
-  installShellFiles,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, dbus
+, openssl
+, gtk4
+, gtk4-layer-shell
+, mimalloc
+, glib
+, pkg-config
+, wrapGAppsHook4
+, installShellFiles
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

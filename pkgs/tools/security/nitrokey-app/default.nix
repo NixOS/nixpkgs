@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  cmake,
-  fetchFromGitHub,
-  pkg-config,
-  wrapQtAppsHook,
-  libnitrokey,
-  cppcodec,
-  qttools,
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, pkg-config
+, wrapQtAppsHook
+, libnitrokey
+, cppcodec
+, qttools
+,
 }:
 
 stdenv.mkDerivation rec {

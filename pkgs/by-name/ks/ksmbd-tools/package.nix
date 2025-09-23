@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  glib,
-  libkrb5,
-  libnl,
-  libtool,
-  pkg-config,
-  withKerberos ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, glib
+, libkrb5
+, libnl
+, libtool
+, pkg-config
+, withKerberos ? false
+,
 }:
 
 stdenv.mkDerivation rec {

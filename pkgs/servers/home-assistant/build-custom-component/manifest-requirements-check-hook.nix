@@ -1,9 +1,10 @@
-{
-  python,
-  makeSetupHook,
+{ python
+, makeSetupHook
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "manifest-check-hook";
   substitutions = {
     pythonCheckInterpreter = python.interpreter;

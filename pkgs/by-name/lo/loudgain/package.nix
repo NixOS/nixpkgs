@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  ffmpeg,
-  libebur128,
-  libresample,
-  taglib_1,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ffmpeg
+, libebur128
+, libresample
+, taglib_1
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

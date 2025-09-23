@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  qmake,
-  qtbase,
-  libGLU,
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, qtbase
+, libGLU
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

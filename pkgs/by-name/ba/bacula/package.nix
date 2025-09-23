@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  sqlite,
-  libpq,
-  zlib,
-  acl,
-  ncurses,
-  openssl,
-  readline,
-  gettext,
+{ lib
+, stdenv
+, fetchurl
+, sqlite
+, libpq
+, zlib
+, acl
+, ncurses
+, openssl
+, readline
+, gettext
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
     "--mandir=\${out}/share/man"
   ]
   ++
-    lib.optional (stdenv.buildPlatform != stdenv.hostPlatform)
-      "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
+  lib.optional (stdenv.buildPlatform != stdenv.hostPlatform)
+    "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # bacula’s `configure` script fails to detect CoreFoundation correctly,
     # but these symbols are available in the nixpkgs CoreFoundation framework.

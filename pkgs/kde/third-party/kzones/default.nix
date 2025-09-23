@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kpackage,
-  kwin,
-  zip,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kpackage
+, kwin
+, zip
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

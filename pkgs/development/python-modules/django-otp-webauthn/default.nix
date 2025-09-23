@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  hatchling,
-  django,
-  django-otp,
-  djangorestframework,
-  webauthn,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, django
+, django-otp
+, djangorestframework
+, webauthn
+,
 }:
 
 buildPythonPackage rec {

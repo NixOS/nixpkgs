@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  pkg-config,
-  libjpeg,
-  libpng,
-  libX11,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, libjpeg
+, libpng
+, libX11
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

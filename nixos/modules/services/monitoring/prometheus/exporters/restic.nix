@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  options,
-  ...
+{ config
+, lib
+, pkgs
+, options
+, ...
 }:
 
 let
@@ -160,14 +159,18 @@ in
         REFRESH_INTERVAL = toString cfg.refreshInterval;
         RESTIC_CACHE_DIR = "$CACHE_DIRECTORY";
       }
-      // (mapAttrs' (
-        name: value: nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
-      ) cfg.rcloneOptions)
+      // (mapAttrs'
+        (
+          name: value: nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
+        )
+        cfg.rcloneOptions)
       // optionalAttrs (cfg.rcloneConfigFile != null) {
         RCLONE_CONFIG = cfg.rcloneConfigFile;
       }
-      // (mapAttrs' (
-        name: value: nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
-      ) cfg.rcloneConfig);
+      // (mapAttrs'
+        (
+          name: value: nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
+        )
+        cfg.rcloneConfig);
   };
 }

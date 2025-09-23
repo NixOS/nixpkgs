@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  sqlite,
-  cppcheck,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, sqlite
+, cppcheck
+,
 }:
 
 stdenv.mkDerivation rec {

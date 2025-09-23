@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  python3,
-  mpv,
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, mpv
+,
 }:
 
 stdenv.mkDerivation rec {

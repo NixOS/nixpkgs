@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  vala,
-  gtk3,
-  beets,
-  libgee,
-  glib,
-  libxml2,
-  unstableGitUpdater,
-  pkg-config,
-  cmake,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, vala
+, gtk3
+, beets
+, libgee
+, glib
+, libxml2
+, unstableGitUpdater
+, pkg-config
+, cmake
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

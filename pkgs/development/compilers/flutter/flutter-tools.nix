@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  systemPlatform,
-  buildDartApplication,
-  runCommand,
-  writeTextFile,
-  git,
-  which,
-  dart,
-  version,
-  flutterSrc,
-  patches ? [ ],
-  pubspecLock,
-  engineVersion,
+{ lib
+, stdenv
+, systemPlatform
+, buildDartApplication
+, runCommand
+, writeTextFile
+, git
+, which
+, dart
+, version
+, flutterSrc
+, patches ? [ ]
+, pubspecLock
+, engineVersion
+,
 }:
 
 let

@@ -1,8 +1,8 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  icalendar,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, icalendar
+,
 }:
 
 buildHomeAssistantComponent rec {

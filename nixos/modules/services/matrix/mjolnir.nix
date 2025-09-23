@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.mjolnir;
@@ -48,9 +47,11 @@ let
   # replace all secret strings using replace-secret
   generateConfig = pkgs.writeShellScript "mjolnir-generate-config" (
     let
-      yqEvalStr = lib.concatImapStringsSep " * " (
-        pos: _: "select(fileIndex == ${toString (pos - 1)})"
-      ) configFiles;
+      yqEvalStr = lib.concatImapStringsSep " * "
+        (
+          pos: _: "select(fileIndex == ${toString (pos - 1)})"
+        )
+        configFiles;
       yqEvalArgs = lib.concatStringsSep " " configFiles;
     in
     ''
@@ -205,9 +206,10 @@ in
     services.mjolnir.settings.encryption.use = lib.mkDefault false;
 
     services.pantalaimon-headless.instances."mjolnir" =
-      lib.mkIf cfg.pantalaimon.enable {
-        homeserver = cfg.homeserverUrl;
-      }
+      lib.mkIf cfg.pantalaimon.enable
+        {
+          homeserver = cfg.homeserverUrl;
+        }
       // cfg.pantalaimon.options;
 
     systemd.services.mjolnir = {

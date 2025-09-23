@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  django,
-  psycopg,
-  python-dateutil,
-  nix-update-script,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, django
+, psycopg
+, python-dateutil
+, nix-update-script
+,
 }:
 
 buildPythonPackage rec {

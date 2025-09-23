@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  runCommand,
-  nix-your-shell,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, nix-update-script
+, runCommand
+, nix-your-shell
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nix-your-shell";

@@ -1,13 +1,13 @@
-{
-  bundlerApp,
-  bundlerUpdateScript,
-  git,
-  gnutar,
-  gzip,
-  lib,
-  makeWrapper,
-  r10k,
-  testers,
+{ bundlerApp
+, bundlerUpdateScript
+, git
+, gnutar
+, gzip
+, lib
+, makeWrapper
+, r10k
+, testers
+,
 }:
 
 bundlerApp rec {

@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
-  topkg,
-  ocamlbuild,
-  re,
+{ stdenv
+, lib
+, fetchFromGitHub
+, ocaml
+, findlib
+, topkg
+, ocamlbuild
+, re
+,
 }:
 
 stdenv.mkDerivation rec {

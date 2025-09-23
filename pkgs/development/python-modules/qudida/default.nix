@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  numpy,
-  opencv-python,
-  pythonOlder,
-  scikit-learn,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, numpy
+, opencv-python
+, pythonOlder
+, scikit-learn
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

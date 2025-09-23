@@ -1,13 +1,11 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-
-  autoPatchelfHook,
-  wrapGAppsHook3,
-
-  dbus-glib,
-  gtk3,
+{ lib
+, stdenvNoCC
+, fetchurl
+, autoPatchelfHook
+, wrapGAppsHook3
+, dbus-glib
+, gtk3
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

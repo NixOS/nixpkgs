@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  sphinx,
-  acl,
-  curl,
-  fuse,
-  libselinux,
-  udev,
-  xz,
-  zstd,
-  fuseSupport ? true,
-  selinuxSupport ? true,
-  udevSupport ? true,
-  glibcLocales,
-  rsync,
-  udevCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, python3
+, sphinx
+, acl
+, curl
+, fuse
+, libselinux
+, udev
+, xz
+, zstd
+, fuseSupport ? true
+, selinuxSupport ? true
+, udevSupport ? true
+, glibcLocales
+, rsync
+, udevCheckHook
+,
 }:
 
 stdenv.mkDerivation {

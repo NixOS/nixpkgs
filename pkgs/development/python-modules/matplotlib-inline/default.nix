@@ -1,13 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  traitlets,
-
-  # tests
-  ipython,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, traitlets
+, # tests
+  ipython
+,
 }:
 
 buildPythonPackage rec {

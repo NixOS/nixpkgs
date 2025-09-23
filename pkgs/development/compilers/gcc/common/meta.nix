@@ -1,7 +1,7 @@
-{
-  lib,
-  version,
-  targetPrefix,
+{ lib
+, version
+, targetPrefix
+,
 }:
 
 let

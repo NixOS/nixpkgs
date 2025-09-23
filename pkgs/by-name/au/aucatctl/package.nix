@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  sndio,
-  libbsd,
+{ lib
+, stdenv
+, fetchurl
+, sndio
+, libbsd
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

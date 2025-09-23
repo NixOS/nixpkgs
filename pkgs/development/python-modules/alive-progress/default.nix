@@ -1,14 +1,14 @@
-{
-  lib,
-  about-time,
-  buildPythonPackage,
-  click,
-  fetchFromGitHub,
-  grapheme,
-  pytestCheckHook,
-  python,
-  pythonOlder,
-  setuptools,
+{ lib
+, about-time
+, buildPythonPackage
+, click
+, fetchFromGitHub
+, grapheme
+, pytestCheckHook
+, python
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

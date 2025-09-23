@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pythonPackages,
+{ lib
+, stdenv
+, fetchurl
+, pythonPackages
+,
 }:
 
 stdenv.mkDerivation rec {

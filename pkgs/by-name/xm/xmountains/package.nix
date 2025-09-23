@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  xbitmaps,
-  libX11,
-  imake,
-  gccmakedep,
+{ lib
+, stdenv
+, fetchFromGitHub
+, xbitmaps
+, libX11
+, imake
+, gccmakedep
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

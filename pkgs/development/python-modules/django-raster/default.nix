@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPy3k,
-  numpy,
-  django-colorful,
-  pillow,
-  psycopg2,
-  pyparsing,
-  django,
-  celery,
-  boto3,
-  importlib-metadata,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, numpy
+, django-colorful
+, pillow
+, psycopg2
+, pyparsing
+, django
+, celery
+, boto3
+, importlib-metadata
+,
 }:
 
 buildPythonPackage rec {

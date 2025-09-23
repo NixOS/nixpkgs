@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  stdenv,
-  testers,
-  mynewt-newtmgr,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, stdenv
+, testers
+, mynewt-newtmgr
+,
 }:
 
 buildGoModule rec {

@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  utils,
-  ...
+{ config
+, lib
+, pkgs
+, utils
+, ...
 }:
 
 with utils;
@@ -482,34 +481,38 @@ in
       let
         mkOneNetOnlineWarn =
           typeStr: name: def:
-          lib.optional (
-            lib.elem "network-online.target" def.after
-            && !(lib.elem "network-online.target" (def.wants ++ def.requires ++ def.bindsTo))
-          ) "${name}.${typeStr} is ordered after 'network-online.target' but doesn't depend on it";
+          lib.optional
+            (
+              lib.elem "network-online.target" def.after
+              && !(lib.elem "network-online.target" (def.wants ++ def.requires ++ def.bindsTo))
+            ) "${name}.${typeStr} is ordered after 'network-online.target' but doesn't depend on it";
         mkNetOnlineWarns =
           typeStr: defs: lib.concatLists (lib.mapAttrsToList (mkOneNetOnlineWarn typeStr) defs);
         mkMountNetOnlineWarns =
           typeStr: defs: lib.concatLists (map (m: mkOneNetOnlineWarn typeStr m.what m) defs);
       in
-      concatLists (
-        mapAttrsToList (
-          name: service:
-          let
-            type = service.serviceConfig.Type or "";
-            restart = service.serviceConfig.Restart or "no";
-            hasDeprecated = builtins.hasAttr "StartLimitInterval" service.serviceConfig;
-          in
-          concatLists [
-            (optional (type == "oneshot" && (restart == "always" || restart == "on-success"))
-              "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'"
+      concatLists
+        (
+          mapAttrsToList
+            (
+              name: service:
+                let
+                  type = service.serviceConfig.Type or "";
+                  restart = service.serviceConfig.Restart or "no";
+                  hasDeprecated = builtins.hasAttr "StartLimitInterval" service.serviceConfig;
+                in
+                concatLists [
+                  (optional (type == "oneshot" && (restart == "always" || restart == "on-success"))
+                    "Service '${name}.service' with 'Type=oneshot' cannot have 'Restart=always' or 'Restart=on-success'"
+                  )
+                  (optional hasDeprecated "Service '${name}.service' uses the attribute 'StartLimitInterval' in the Service section, which is deprecated. See https://github.com/NixOS/nixpkgs/issues/45786.")
+                  (optional (service.reloadIfChanged && service.reloadTriggers != [ ])
+                    "Service '${name}.service' has both 'reloadIfChanged' and 'reloadTriggers' set. This is probably not what you want, because 'reloadTriggers' behave the same whay as 'restartTriggers' if 'reloadIfChanged' is set."
+                  )
+                ]
             )
-            (optional hasDeprecated "Service '${name}.service' uses the attribute 'StartLimitInterval' in the Service section, which is deprecated. See https://github.com/NixOS/nixpkgs/issues/45786.")
-            (optional (service.reloadIfChanged && service.reloadTriggers != [ ])
-              "Service '${name}.service' has both 'reloadIfChanged' and 'reloadTriggers' set. This is probably not what you want, because 'reloadTriggers' behave the same whay as 'restartTriggers' if 'reloadIfChanged' is set."
-            )
-          ]
-        ) cfg.services
-      )
+            cfg.services
+        )
       ++ (mkNetOnlineWarns "target" cfg.targets)
       ++ (mkNetOnlineWarns "service" cfg.services)
       ++ (mkNetOnlineWarns "socket" cfg.sockets)
@@ -520,23 +523,25 @@ in
       ++ (mkNetOnlineWarns "slice" cfg.slices);
 
     assertions = concatLists (
-      mapAttrsToList (
-        name: service:
-        map
-          (message: {
-            assertion = false;
-            inherit message;
-          })
-          (concatLists [
-            (optional
-              (
-                (builtins.elem "network-interfaces.target" service.after)
-                || (builtins.elem "network-interfaces.target" service.wants)
-              )
-              "Service '${name}.service' is using the deprecated target network-interfaces.target, which no longer exists. Using network.target is recommended instead."
-            )
-          ])
-      ) cfg.services
+      mapAttrsToList
+        (
+          name: service:
+            map
+              (message: {
+                assertion = false;
+                inherit message;
+              })
+              (concatLists [
+                (optional
+                  (
+                    (builtins.elem "network-interfaces.target" service.after)
+                    || (builtins.elem "network-interfaces.target" service.wants)
+                  )
+                  "Service '${name}.service' is using the deprecated target network-interfaces.target, which no longer exists. Using network.target is recommended instead."
+                )
+              ])
+        )
+        cfg.services
     );
 
     system.build.units = cfg.units;
@@ -687,9 +692,10 @@ in
       LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
       TZDIR = "/etc/zoneinfo";
       # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
-      SYSTEMD_UNIT_PATH = lib.mkIf (
-        config.boot.extraSystemdUnitPaths != [ ]
-      ) "${builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths}:";
+      SYSTEMD_UNIT_PATH = lib.mkIf
+        (
+          config.boot.extraSystemdUnitPaths != [ ]
+        ) "${builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths}:";
     };
     systemd.settings.Manager = {
       ManagerEnvironment = lib.concatStringsSep " " (
@@ -721,10 +727,12 @@ in
     ];
 
     # Generate timer units for all services that have a ‘startAt’ value.
-    systemd.timers = mapAttrs (name: service: {
-      wantedBy = [ "timers.target" ];
-      timerConfig.OnCalendar = service.startAt;
-    }) (filterAttrs (name: service: service.enable && service.startAt != [ ]) cfg.services);
+    systemd.timers = mapAttrs
+      (name: service: {
+        wantedBy = [ "timers.target" ];
+        timerConfig.OnCalendar = service.startAt;
+      })
+      (filterAttrs (name: service: service.enable && service.startAt != [ ]) cfg.services);
 
     # Some overrides to upstream units.
     systemd.services."systemd-backlight@".restartIfChanged = false;

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  kernel,
-  klibc,
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, klibc
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  qtModule,
-  qtbase,
-  qtquickcontrols,
-  wayland,
-  wayland-scanner,
-  pkg-config,
-  lib,
+{ qtModule
+, qtbase
+, qtquickcontrols
+, wayland
+, wayland-scanner
+, pkg-config
+, lib
+,
 }:
 
 qtModule {

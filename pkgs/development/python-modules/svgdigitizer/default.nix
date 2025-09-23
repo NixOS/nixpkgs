@@ -1,30 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  stdenv,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  astropy,
-  click,
-  frictionless,
-  matplotlib,
-  mergedeep,
-  pandas,
-  pillow,
-  pybtex,
-  pymupdf,
-  pyyaml,
-  scipy,
-  svg-path,
-  svgpathtools,
-  svgwrite,
-
-  # tests
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, stdenv
+, # build-system
+  setuptools
+, # dependencies
+  astropy
+, click
+, frictionless
+, matplotlib
+, mergedeep
+, pandas
+, pillow
+, pybtex
+, pymupdf
+, pyyaml
+, scipy
+, svg-path
+, svgpathtools
+, svgwrite
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

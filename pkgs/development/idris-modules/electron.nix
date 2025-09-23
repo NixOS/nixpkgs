@@ -1,10 +1,10 @@
-{
-  build-idris-package,
-  fetchFromGitHub,
-  contrib,
-  jheiling-extras,
-  jheiling-js,
-  lib,
+{ build-idris-package
+, fetchFromGitHub
+, contrib
+, jheiling-extras
+, jheiling-js
+, lib
+,
 }:
 build-idris-package {
   pname = "electron";

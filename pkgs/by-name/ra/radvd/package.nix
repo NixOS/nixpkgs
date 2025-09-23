@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  libbsd,
-  libdaemon,
-  bison,
-  flex,
-  check,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libbsd
+, libdaemon
+, bison
+, flex
+, check
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

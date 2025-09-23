@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchgit,
-  qemu,
-  podman,
-  makeWrapper,
+{ lib
+, buildGoModule
+, fetchgit
+, qemu
+, podman
+, makeWrapper
+,
 }:
 
 buildGoModule rec {

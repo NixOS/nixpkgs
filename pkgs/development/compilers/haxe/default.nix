@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  coreutils,
-  ocaml-ng,
-  zlib,
-  pcre,
-  pcre2,
-  neko,
-  mbedtls_2,
+{ lib
+, stdenv
+, fetchFromGitHub
+, coreutils
+, ocaml-ng
+, zlib
+, pcre
+, pcre2
+, neko
+, mbedtls_2
+,
 }:
 let
   ocamlDependencies =
@@ -48,11 +48,11 @@ let
   '';
 
   generic =
-    {
-      hash,
-      version,
-      prePatch ? defaultPatch,
-      patches ? [ ],
+    { hash
+    , version
+    , prePatch ? defaultPatch
+    , patches ? [ ]
+    ,
     }:
     stdenv.mkDerivation {
       pname = "haxe";

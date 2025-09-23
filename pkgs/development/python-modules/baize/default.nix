@@ -1,14 +1,14 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  httpx,
-  lib,
-  pdm-pep517,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
-  starlette,
-  fetchpatch,
+{ buildPythonPackage
+, fetchFromGitHub
+, httpx
+, lib
+, pdm-pep517
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+, starlette
+, fetchpatch
+,
 }:
 
 buildPythonPackage rec {

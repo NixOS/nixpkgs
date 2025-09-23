@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  click,
-  defusedxml,
-  fetchFromGitHub,
-  httpx,
-  mashumaro,
-  poetry-core,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  respx,
+{ lib
+, buildPythonPackage
+, click
+, defusedxml
+, fetchFromGitHub
+, httpx
+, mashumaro
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, respx
+,
 }:
 
 buildPythonPackage rec {

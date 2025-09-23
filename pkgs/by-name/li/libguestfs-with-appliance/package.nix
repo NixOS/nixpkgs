@@ -1,7 +1,7 @@
-{
-  lib,
-  libguestfs,
-  libguestfs-appliance,
+{ lib
+, libguestfs
+, libguestfs-appliance
+,
 }:
 
 let
@@ -17,12 +17,13 @@ in
 # https://github.com/NixOS/nixpkgs/issues/280881
 lib.warnIf
   (
-    builtins.compareVersions (lib.versions.majorMinor libguestfs.version) (
-      lib.versions.majorMinor appliance.version
-    ) > 0
-    && !libguestfsCompatible
+    builtins.compareVersions (lib.versions.majorMinor libguestfs.version)
+      (
+        lib.versions.majorMinor appliance.version
+      ) > 0
+      && !libguestfsCompatible
   )
   "libguestfs has a different version than ${appliance.pname} (${libguestfs.version} > ${appliance.version}), runtime errors may occur!"
 
   libguestfs.override
-  { inherit appliance; }
+{ inherit appliance; }

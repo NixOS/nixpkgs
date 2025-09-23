@@ -1,10 +1,10 @@
-{
-  mkDerivation,
-  fetchFromGitHub,
-  base,
-  bytestring,
-  network,
-  lib,
+{ mkDerivation
+, fetchFromGitHub
+, base
+, bytestring
+, network
+, lib
+,
 }:
 mkDerivation {
   pname = "client-ip-echo";

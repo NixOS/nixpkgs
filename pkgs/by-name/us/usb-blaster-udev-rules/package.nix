@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  udevCheckHook,
+{ lib
+, stdenvNoCC
+, udevCheckHook
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

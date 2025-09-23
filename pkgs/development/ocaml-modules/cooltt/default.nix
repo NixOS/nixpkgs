@@ -1,23 +1,23 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildDunePackage,
-  bos,
-  bwd,
-  cmdliner,
-  containers,
-  ezjsonm,
-  findlib,
-  menhir,
-  menhirLib,
-  ppx_deriving,
-  ppxlib,
-  uuseg,
-  uutf,
-  yuujinchou,
-  ounit2,
-  qcheck,
-  qcheck-core,
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, bos
+, bwd
+, cmdliner
+, containers
+, ezjsonm
+, findlib
+, menhir
+, menhirLib
+, ppx_deriving
+, ppxlib
+, uuseg
+, uutf
+, yuujinchou
+, ounit2
+, qcheck
+, qcheck-core
+,
 }:
 
 let

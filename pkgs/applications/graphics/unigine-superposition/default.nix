@@ -1,31 +1,31 @@
-{
-  lib,
-  glib,
-  stdenv,
-  dbus,
-  freetype,
-  fontconfig,
-  zlib,
-  qtquickcontrols2,
-  libXinerama,
-  libxcb,
-  libSM,
-  libXi,
-  libglvnd,
-  libXext,
-  libXrandr,
-  mailspring,
-  libX11,
-  libICE,
-  libXrender,
-  autoPatchelfHook,
-  makeWrapper,
-  mkDerivation,
-  xkeyboard_config,
-  fetchurl,
-  buildFHSEnv,
-  openal,
-  makeDesktopItem,
+{ lib
+, glib
+, stdenv
+, dbus
+, freetype
+, fontconfig
+, zlib
+, qtquickcontrols2
+, libXinerama
+, libxcb
+, libSM
+, libXi
+, libglvnd
+, libXext
+, libXrandr
+, mailspring
+, libX11
+, libICE
+, libXrender
+, autoPatchelfHook
+, makeWrapper
+, mkDerivation
+, xkeyboard_config
+, fetchurl
+, buildFHSEnv
+, openal
+, makeDesktopItem
+,
 }:
 
 let
@@ -96,7 +96,7 @@ let
 in
 
 # We can patch the "/bin/superposition", but "/bin/launcher" checks it for changes.
-# For that we need use a buildFHSEnv.
+  # For that we need use a buildFHSEnv.
 
 buildFHSEnv {
   inherit pname version;

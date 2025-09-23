@@ -1,14 +1,14 @@
-{
-  callPackage,
-  fetchFromGitHub,
-  installShellFiles,
-  lib,
-  makeWrapper,
-  nix-update-script,
-  ocaml-ng,
-  removeReferencesTo,
-  util-linux,
-  which,
+{ callPackage
+, fetchFromGitHub
+, installShellFiles
+, lib
+, makeWrapper
+, nix-update-script
+, ocaml-ng
+, removeReferencesTo
+, util-linux
+, which
+,
 }:
 
 let

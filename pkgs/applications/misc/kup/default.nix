@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  extra-cmake-modules,
-  shared-mime-info,
-  wrapQtAppsHook,
-  kcoreaddons,
-  kdbusaddons,
-  ki18n,
-  kio,
-  solid,
-  kidletime,
-  knotifications,
-  kconfig,
-  kinit,
-  kjobwidgets,
-  plasma-framework,
-  libgit2,
+{ lib
+, stdenv
+, fetchFromGitLab
+, extra-cmake-modules
+, shared-mime-info
+, wrapQtAppsHook
+, kcoreaddons
+, kdbusaddons
+, ki18n
+, kio
+, solid
+, kidletime
+, knotifications
+, kconfig
+, kinit
+, kjobwidgets
+, plasma-framework
+, libgit2
+,
 }:
 
 stdenv.mkDerivation rec {

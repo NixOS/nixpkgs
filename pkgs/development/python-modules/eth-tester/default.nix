@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  # dependencies
-  eth-abi,
-  eth-account,
-  eth-keys,
-  eth-utils,
-  pydantic,
-  rlp,
-  semantic-version,
-  # nativeCheckInputs
-  py-evm,
-  pytestCheckHook,
-  pytest-xdist,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, # dependencies
+  eth-abi
+, eth-account
+, eth-keys
+, eth-utils
+, pydantic
+, rlp
+, semantic-version
+, # nativeCheckInputs
+  py-evm
+, pytestCheckHook
+, pytest-xdist
+,
 }:
 
 buildPythonPackage rec {

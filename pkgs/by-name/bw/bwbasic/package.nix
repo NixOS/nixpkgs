@@ -1,9 +1,9 @@
-{
-  lib,
-  gccStdenv,
-  dos2unix,
-  fetchurl,
-  unzip,
+{ lib
+, gccStdenv
+, dos2unix
+, fetchurl
+, unzip
+,
 }:
 
 gccStdenv.mkDerivation (finalAttrs: {

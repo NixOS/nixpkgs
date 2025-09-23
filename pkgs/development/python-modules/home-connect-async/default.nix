@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  wheel,
-  aiohttp,
-  aiohttp-sse-client,
-  charset-normalizer,
-  dataclasses-json,
-  oauth2-client,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, wheel
+, aiohttp
+, aiohttp-sse-client
+, charset-normalizer
+, dataclasses-json
+, oauth2-client
+,
 }:
 
 buildPythonPackage rec {

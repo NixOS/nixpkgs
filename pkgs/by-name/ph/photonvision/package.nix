@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  temurin-jre-bin-17,
-  bash,
-  suitesparse,
-  nixosTests,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, temurin-jre-bin-17
+, bash
+, suitesparse
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
         url = "https://github.com/PhotonVision/photonvision/releases/download/v${version}/photonvision-v${version}-linuxarm64.jar";
         hash = "sha256-mNQk8gaTASsmyJUpLLIbG7QRMjbdSN2LMCXx6j3gbCU=";
       };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   dontUnpack = true;
 

@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  autoconf,
-  automake,
-  libtool,
-  cups,
-  popt,
-  libtiff,
-  libpng,
-  ghostscript,
+{ stdenv
+, lib
+, fetchzip
+, autoconf
+, automake
+, libtool
+, cups
+, popt
+, libtiff
+, libpng
+, ghostscript
+,
 }:
 
 /*

@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  fetchFromGitHub,
-  cppo,
-  lwt,
-  react,
+{ buildDunePackage
+, fetchFromGitHub
+, cppo
+, lwt
+, react
+,
 }:
 
 buildDunePackage {

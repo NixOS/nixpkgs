@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  wafHook,
-  python3,
-  asciidoc,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  libxml2,
-  libxslt,
-  curl,
-  libevent,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, wafHook
+, python3
+, asciidoc
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxml2
+, libxslt
+, curl
+, libevent
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,9 +1,9 @@
-{
-  callPackage,
-  fetchFromGitHub,
-  lib,
-  stdenv,
-  zig_0_13,
+{ callPackage
+, fetchFromGitHub
+, lib
+, stdenv
+, zig_0_13
+,
 }:
 
 let

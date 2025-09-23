@@ -1,9 +1,9 @@
-{
-  lib,
-  anki-utils,
-  fetchFromGitHub,
-  python3,
-  nix-update-script,
+{ lib
+, anki-utils
+, fetchFromGitHub
+, python3
+, nix-update-script
+,
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "local-audio-yomichan";

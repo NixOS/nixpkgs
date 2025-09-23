@@ -1,15 +1,15 @@
-{
-  pkgs,
-  stdenv,
-  callPackage,
-  lib,
-  fetchFromGitHub,
-  python3,
-  replaceVars,
-  nix-update-script,
-  nixosTests,
-  # To include additional plugins, pass them here as an overlay.
-  packageOverrides ? self: super: { },
+{ pkgs
+, stdenv
+, callPackage
+, lib
+, fetchFromGitHub
+, python3
+, replaceVars
+, nix-update-script
+, nixosTests
+, # To include additional plugins, pass them here as an overlay.
+  packageOverrides ? self: super: { }
+,
 }:
 let
 
@@ -32,7 +32,8 @@ let
             };
             doCheck = false;
           });
-        })
+        }
+      )
       # Built-in dependency
       (self: super: {
         octoprint-filecheck = self.buildPythonPackage rec {

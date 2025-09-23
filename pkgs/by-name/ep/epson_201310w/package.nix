@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  rpmextract,
-  libjpeg,
-  cups,
+{ lib
+, stdenv
+, fetchurl
+, rpmextract
+, libjpeg
+, cups
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "epson_201310w";

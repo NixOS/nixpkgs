@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  fetchpatch,
-  lame,
-  libvorbis,
-  gettext,
+{ lib
+, stdenv
+, fetchgit
+, fetchpatch
+, lame
+, libvorbis
+, gettext
+,
 }:
 
 stdenv.mkDerivation rec {

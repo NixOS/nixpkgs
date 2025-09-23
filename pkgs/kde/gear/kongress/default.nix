@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  kcontacts,
-  qtlocation,
-  qtsvg,
+{ mkKdeDerivation
+, kcontacts
+, qtlocation
+, qtsvg
+,
 }:
 mkKdeDerivation {
   pname = "kongress";

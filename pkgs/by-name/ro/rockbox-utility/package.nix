@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  cryptopp,
-  libusb1,
-  makeWrapper,
-  pkg-config,
-  qt5,
-  cmake,
-  withEspeak ? false,
-  espeak ? null,
+{ lib
+, stdenv
+, fetchurl
+, cryptopp
+, libusb1
+, makeWrapper
+, pkg-config
+, qt5
+, cmake
+, withEspeak ? false
+, espeak ? null
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ocaml,
-  findlib,
-  piqi,
-  stdlib-shims,
-  num,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocaml
+, findlib
+, piqi
+, stdlib-shims
+, num
+,
 }:
 
 stdenv.mkDerivation rec {

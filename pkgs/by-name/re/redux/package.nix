@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  writeScript,
-  libX11,
-  libXext,
-  alsa-lib,
-  autoPatchelfHook,
-  releasePath ? null,
+{ lib
+, stdenv
+, fetchurl
+, writeScript
+, libX11
+, libXext
+, alsa-lib
+, autoPatchelfHook
+, releasePath ? null
+,
 }:
 
 # To use the full release version (same as renoise):

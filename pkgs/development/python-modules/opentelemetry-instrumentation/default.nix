@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  opentelemetry-api,
-  opentelemetry-test-utils,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  wrapt,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, opentelemetry-api
+, opentelemetry-test-utils
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, wrapt
+,
 }:
 
 buildPythonPackage rec {

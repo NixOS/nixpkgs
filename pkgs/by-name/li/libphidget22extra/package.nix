@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  automake,
-  libusb1,
-  libphidget22,
+{ lib
+, stdenv
+, fetchurl
+, automake
+, libusb1
+, libphidget22
+,
 }:
 let
 

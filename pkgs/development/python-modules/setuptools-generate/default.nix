@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools-scm,
-  click,
-  help2man,
-  markdown-it-py,
-  shtab,
-  tomli,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools-scm
+, click
+, help2man
+, markdown-it-py
+, shtab
+, tomli
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

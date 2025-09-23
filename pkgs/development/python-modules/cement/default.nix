@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  colorlog,
-  fetchFromGitHub,
-  jinja2,
-  mock,
-  pdm-backend,
-  pylibmc,
-  pystache,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  redis,
-  requests,
-  tabulate,
-  watchdog,
+{ lib
+, stdenv
+, buildPythonPackage
+, colorlog
+, fetchFromGitHub
+, jinja2
+, mock
+, pdm-backend
+, pylibmc
+, pystache
+, pytest-cov-stub
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, redis
+, requests
+, tabulate
+, watchdog
+,
 }:
 
 buildPythonPackage rec {

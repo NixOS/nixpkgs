@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  libX11,
-  libGL,
-  linuxPackages,
-  nvidia_x11 ? linuxPackages.nvidia_x11.override { libsOnly = true; },
-  libglvnd,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, libX11
+, libGL
+, linuxPackages
+, nvidia_x11 ? linuxPackages.nvidia_x11.override { libsOnly = true; }
+, libglvnd
+,
 }:
 
 let

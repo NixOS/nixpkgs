@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  libsbuf,
-  libbsdxml,
+{ mkDerivation
+, libsbuf
+, libbsdxml
+,
 }:
 mkDerivation {
   path = "lib/lib80211";

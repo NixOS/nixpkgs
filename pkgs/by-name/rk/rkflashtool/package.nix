@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libusb1,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, libusb1
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

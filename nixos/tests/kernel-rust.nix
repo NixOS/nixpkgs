@@ -1,7 +1,7 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
+,
 }:
 
 let
@@ -49,16 +49,18 @@ let
   kernels = {
     inherit (pkgs.linuxKernel.packages) linux_testing;
   }
-  // filterAttrs (const (
-    x:
-    let
-      inherit (builtins.tryEval (x.rust-out-of-tree-module or null != null))
-        success
-        value
-        ;
-      available = meta.availableOn pkgs.stdenv.hostPlatform x.rust-out-of-tree-module;
-    in
-    success && value && available
-  )) pkgs.linuxKernel.vanillaPackages;
+  // filterAttrs
+    (const (
+      x:
+      let
+        inherit (builtins.tryEval (x.rust-out-of-tree-module or null != null))
+          success
+          value
+          ;
+        available = meta.availableOn pkgs.stdenv.hostPlatform x.rust-out-of-tree-module;
+      in
+      success && value && available
+    ))
+    pkgs.linuxKernel.vanillaPackages;
 in
 mapAttrs (const kernelRustTest) kernels

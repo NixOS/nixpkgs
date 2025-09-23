@@ -1,19 +1,19 @@
-{
-  lib,
-  fetchFromGitHub,
-  gettext,
-  ninja,
-  meson,
-  sassc,
-  python3Packages,
-  gobject-introspection,
-  wrapGAppsHook3,
-  libayatana-appindicator,
-  libxcb,
-  qt6,
-  ibus,
-  usbutils,
-  psmisc,
+{ lib
+, fetchFromGitHub
+, gettext
+, ninja
+, meson
+, sassc
+, python3Packages
+, gobject-introspection
+, wrapGAppsHook3
+, libayatana-appindicator
+, libxcb
+, qt6
+, ibus
+, usbutils
+, psmisc
+,
 }:
 
 python3Packages.buildPythonApplication rec {

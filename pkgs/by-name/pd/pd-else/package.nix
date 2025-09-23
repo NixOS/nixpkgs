@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  puredata,
-  pkg-config,
-  cmake,
-  openssl,
-  libogg,
-  libvorbis,
-  opusfile,
-  ffmpeg,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, puredata
+, pkg-config
+, cmake
+, openssl
+, libogg
+, libvorbis
+, opusfile
+, ffmpeg
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

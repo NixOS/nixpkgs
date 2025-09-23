@@ -1,14 +1,14 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  gobject-introspection,
-  libpulseaudio,
-  glib,
-  gtk3,
-  pango,
-  xorg,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, wrapGAppsHook3
+, gobject-introspection
+, libpulseaudio
+, glib
+, gtk3
+, pango
+, xorg
+,
 }:
 
 python3Packages.buildPythonApplication rec {

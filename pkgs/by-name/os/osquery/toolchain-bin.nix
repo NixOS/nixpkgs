@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchzip,
-  autoPatchelfHook,
+{ stdenv
+, lib
+, fetchzip
+, autoPatchelfHook
+,
 }:
 let
 

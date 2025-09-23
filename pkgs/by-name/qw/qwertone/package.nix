@@ -1,12 +1,12 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitLab,
-  wrapGAppsHook3,
-  pkg-config,
-  alsa-lib,
-  atk,
-  gtk3,
+{ lib
+, rustPlatform
+, fetchFromGitLab
+, wrapGAppsHook3
+, pkg-config
+, alsa-lib
+, atk
+, gtk3
+,
 }:
 
 rustPlatform.buildRustPackage rec {

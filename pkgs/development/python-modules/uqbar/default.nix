@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
-  defusedxml,
-  setuptools,
-  sphinx,
-  typing-extensions,
-  unidecode,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, defusedxml
+, setuptools
+, sphinx
+, typing-extensions
+, unidecode
+,
 }:
 
 buildPythonPackage rec {

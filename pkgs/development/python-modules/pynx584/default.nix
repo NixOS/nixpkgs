@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  flask,
-  mock,
-  prettytable,
-  pyserial,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  stevedore,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, flask
+, mock
+, prettytable
+, pyserial
+, pytestCheckHook
+, pythonOlder
+, requests
+, stevedore
+,
 }:
 
 buildPythonPackage {

@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenvNoCC,
-  maven,
-  fetchFromGitHub,
-  replaceVars,
-  openjdk23,
-  libarchive,
-  makeWrapper,
+{ lib
+, stdenvNoCC
+, maven
+, fetchFromGitHub
+, replaceVars
+, openjdk23
+, libarchive
+, makeWrapper
+,
 }:
 let
   # Wants at least Java 22

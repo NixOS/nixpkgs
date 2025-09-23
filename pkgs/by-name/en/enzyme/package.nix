@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  cmake,
-  llvmPackages,
-  git,
+{ lib
+, fetchFromGitHub
+, cmake
+, llvmPackages
+, git
+,
 }:
 llvmPackages.stdenv.mkDerivation rec {
   pname = "enzyme";

@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  pythonOlder,
-  pytestCheckHook,
-  setuptools,
-  django-parler,
-  django-cms,
-  distutils,
-  pytest-django,
-  beautifulsoup4,
-  python,
-  django-app-helper,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, pythonOlder
+, pytestCheckHook
+, setuptools
+, django-parler
+, django-cms
+, distutils
+, pytest-django
+, beautifulsoup4
+, python
+, django-app-helper
+,
 }:
 
 buildPythonPackage rec {

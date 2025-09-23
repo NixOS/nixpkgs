@@ -1,8 +1,8 @@
-{
-  buildEnv,
-  makeWrapper,
-  zeroad-unwrapped,
-  zeroad-data,
+{ buildEnv
+, makeWrapper
+, zeroad-unwrapped
+, zeroad-data
+,
 }:
 
 assert zeroad-unwrapped.version == zeroad-data.version;

@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  hatch-vcs,
-  typing-extensions,
-  pytestCheckHook,
-  kicad,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, hatch-vcs
+, typing-extensions
+, pytestCheckHook
+, kicad
+,
 }:
 
 buildPythonPackage rec {

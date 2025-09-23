@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -93,9 +92,11 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.etc = lib.mkIf (cfg.config != { }) {
-      "rshim.conf".text = lib.generators.toKeyValue {
-        mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
-      } cfg.config;
+      "rshim.conf".text = lib.generators.toKeyValue
+        {
+          mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
+        }
+        cfg.config;
     };
 
     systemd.services.rshim = {

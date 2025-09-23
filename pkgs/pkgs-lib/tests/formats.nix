@@ -41,16 +41,18 @@ let
   # use this to check for proper serialization
   # in practice you do not have to supply the name parameter as this one will be added by runBuildTests
   shouldPass =
-    {
-      format,
-      input,
-      expected,
+    { format
+    , input
+    , expected
+    ,
     }:
     name: {
       name = "pass-${name}";
-      path = runDiff "test-format-${name}" (format.generate "test-format-${name}" (
-        mergeInput name format input
-      )) expected;
+      path = runDiff "test-format-${name}"
+        (format.generate "test-format-${name}" (
+          mergeInput name format input
+        ))
+        expected;
     };
 
   # use this function to assert that a type check must fail

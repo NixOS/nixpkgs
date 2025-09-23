@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  libGL,
-  xorgproto,
-  libx11,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, libGL
+, xorgproto
+, libx11
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdriinfo";

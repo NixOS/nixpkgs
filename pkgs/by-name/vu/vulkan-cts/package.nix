@@ -1,33 +1,33 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  runCommand,
-  cmake,
-  ffmpeg,
-  glslang,
-  libdrm,
-  libglvnd,
-  libffi,
-  libpng,
-  libX11,
-  libXau,
-  libXdmcp,
-  libxcb,
-  makeWrapper,
-  mesa,
-  ninja,
-  pkg-config,
-  python3,
-  spirv-headers,
-  vulkan-headers,
-  vulkan-loader,
-  vulkan-utility-libraries,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, runCommand
+, cmake
+, ffmpeg
+, glslang
+, libdrm
+, libglvnd
+, libffi
+, libpng
+, libX11
+, libXau
+, libXdmcp
+, libxcb
+, makeWrapper
+, mesa
+, ninja
+, pkg-config
+, python3
+, spirv-headers
+, vulkan-headers
+, vulkan-loader
+, vulkan-utility-libraries
+, wayland
+, wayland-protocols
+, wayland-scanner
+, zlib
+,
 }:
 let
   renderdoc = fetchurl {

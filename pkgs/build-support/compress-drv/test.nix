@@ -1,7 +1,7 @@
-{
-  gzip,
-  runCommand,
-  compressDrv,
+{ gzip
+, runCommand
+, compressDrv
+,
 }:
 let
   example = runCommand "sample-drv" { } ''

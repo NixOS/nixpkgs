@@ -1,30 +1,30 @@
-{
-  autoPatchelfHook,
-  ccid,
-  cjson,
-  copyDesktopItems,
-  curl,
-  doxygen,
-  fetchurl,
-  flatpak,
-  lib,
-  libGL,
-  libgcc,
-  libsForQt5,
-  libzip,
-  makeDesktopItem,
-  makeWrapper,
-  openjpeg,
-  openpace,
-  openssl,
-  ostree,
-  patchelf,
-  pcsclite,
-  pkg-config,
-  proot,
-  qt5,
-  stdenv,
-  xml-security-c,
+{ autoPatchelfHook
+, ccid
+, cjson
+, copyDesktopItems
+, curl
+, doxygen
+, fetchurl
+, flatpak
+, lib
+, libGL
+, libgcc
+, libsForQt5
+, libzip
+, makeDesktopItem
+, makeWrapper
+, openjpeg
+, openpace
+, openssl
+, ostree
+, patchelf
+, pcsclite
+, pkg-config
+, proot
+, qt5
+, stdenv
+, xml-security-c
+,
 }:
 
 let

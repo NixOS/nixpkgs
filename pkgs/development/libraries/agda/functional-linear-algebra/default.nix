@@ -1,8 +1,8 @@
-{
-  fetchFromGitHub,
-  lib,
-  mkDerivation,
-  standard-library,
+{ fetchFromGitHub
+, lib
+, mkDerivation
+, standard-library
+,
 }:
 
 mkDerivation rec {

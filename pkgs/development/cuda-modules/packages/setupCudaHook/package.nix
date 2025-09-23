@@ -1,6 +1,7 @@
 # Currently propagated by cuda_nvcc or cudatoolkit, rather than used directly
 { makeSetupHook, backendStdenv }:
-makeSetupHook {
+makeSetupHook
+{
   name = "setup-cuda-hook";
 
   substitutions.setupCudaHook = placeholder "out";

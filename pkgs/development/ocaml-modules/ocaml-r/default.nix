@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  buildDunePackage,
-  pkg-config,
-  dune-configurator,
-  stdio,
-  R,
-  alcotest,
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, buildDunePackage
+, pkg-config
+, dune-configurator
+, stdio
+, R
+, alcotest
+,
 }:
 
 buildDunePackage rec {

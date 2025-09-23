@@ -3,15 +3,15 @@
   broken nix expressions.
 
   * `trace`-like functions take two values, print
-    the first to stderr and return the second.
+  the first to stderr and return the second.
   * `traceVal`-like functions take one argument
-    which both printed and returned.
+  which both printed and returned.
   * `traceSeq`-like functions fully evaluate their
-    traced value before printing (not just to “weak
-    head normal form” like trace does by default).
+  traced value before printing (not just to “weak
+  head normal form” like trace does by default).
   * Functions that end in `-Fn` take an additional
-    function as their first argument, which is applied
-    to the traced value before it is printed.
+  function as their first argument, which is applied
+  to the traced value before it is printed.
 */
 { lib }:
 let
@@ -344,11 +344,13 @@ rec {
     let
       res = f v;
     in
-    lib.traceSeqN (depth + 1) {
-      fn = name;
-      from = v;
-      to = res;
-    } res;
+    lib.traceSeqN (depth + 1)
+      {
+        fn = name;
+        from = v;
+        to = res;
+      }
+      res;
 
   # -- TESTING --
 
@@ -430,27 +432,29 @@ rec {
     tests:
     concatLists (
       attrValues (
-        mapAttrs (
-          name: test:
-          let
-            testsToRun = if tests ? tests then tests.tests else [ ];
-          in
-          if
-            (substring 0 4 name == "test" || elem name testsToRun)
-            && ((testsToRun == [ ]) || elem name tests.tests)
-            && (test.expr != test.expected)
+        mapAttrs
+          (
+            name: test:
+            let
+              testsToRun = if tests ? tests then tests.tests else [ ];
+            in
+            if
+              (substring 0 4 name == "test" || elem name testsToRun)
+              && ((testsToRun == [ ]) || elem name tests.tests)
+              && (test.expr != test.expected)
 
-          then
-            [
-              {
-                inherit name;
-                expected = test.expected;
-                result = test.expr;
-              }
-            ]
-          else
-            [ ]
-        ) tests
+            then
+              [
+                {
+                  inherit name;
+                  expected = test.expected;
+                  result = test.expr;
+                }
+              ]
+            else
+              [ ]
+          )
+          tests
       )
     );
 

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  isPy27,
-  fetchFromGitHub,
-  poetry-core,
-  requests,
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchFromGitHub
+, poetry-core
+, requests
+,
 }:
 
 buildPythonPackage rec {

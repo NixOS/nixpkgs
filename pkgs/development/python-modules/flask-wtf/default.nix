@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  pythonOlder,
-  hatchling,
-  flask,
-  itsdangerous,
-  wtforms,
-  email-validator,
-  pytestCheckHook,
-  setuptools,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, hatchling
+, flask
+, itsdangerous
+, wtforms
+, email-validator
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

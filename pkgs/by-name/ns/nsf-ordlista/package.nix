@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
+{ lib
+, stdenvNoCC
+, fetchzip
+,
 }:
 stdenvNoCC.mkDerivation {
   pname = "nsf-ordlista";

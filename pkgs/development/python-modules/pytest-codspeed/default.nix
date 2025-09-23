@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  cffi,
-  fetchFromGitHub,
-  filelock,
-  hatchling,
-  importlib-metadata,
-  pytest-benchmark,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytest,
-  pytestCheckHook,
-  rich,
-  semver,
-  setuptools,
+{ lib
+, buildPythonPackage
+, cffi
+, fetchFromGitHub
+, filelock
+, hatchling
+, importlib-metadata
+, pytest-benchmark
+, pytest-cov-stub
+, pytest-xdist
+, pytest
+, pytestCheckHook
+, rich
+, semver
+, setuptools
+,
 }:
 
 let

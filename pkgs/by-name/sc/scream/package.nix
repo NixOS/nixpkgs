@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  config,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  alsaSupport ? stdenv.hostPlatform.isLinux,
-  alsa-lib,
-  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
-  libpulseaudio,
-  jackSupport ? false,
-  libjack2,
-  soxr,
-  pcapSupport ? false,
-  libpcap,
+{ stdenv
+, lib
+, config
+, fetchFromGitHub
+, cmake
+, pkg-config
+, alsaSupport ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
+, libpulseaudio
+, jackSupport ? false
+, libjack2
+, soxr
+, pcapSupport ? false
+, libpcap
+,
 }:
 
 stdenv.mkDerivation rec {

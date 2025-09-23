@@ -1,29 +1,29 @@
-{
-  version,
-  dmdHash,
-  phobosHash,
+{ version
+, dmdHash
+, phobosHash
+,
 }:
 
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  removeReferencesTo,
-  makeWrapper,
-  which,
-  writeTextFile,
-  curl,
-  tzdata,
-  gdb,
-  callPackage,
-  targetPackages,
-  fetchpatch,
-  bash,
-  installShellFiles,
-  git,
-  unzip,
-  dmdBootstrap ? callPackage ./bootstrap.nix { },
-  dmdBin ? "${dmdBootstrap}/bin",
+{ stdenv
+, lib
+, fetchFromGitHub
+, removeReferencesTo
+, makeWrapper
+, which
+, writeTextFile
+, curl
+, tzdata
+, gdb
+, callPackage
+, targetPackages
+, fetchpatch
+, bash
+, installShellFiles
+, git
+, unzip
+, dmdBootstrap ? callPackage ./bootstrap.nix { }
+, dmdBin ? "${dmdBootstrap}/bin"
+,
 }:
 
 let

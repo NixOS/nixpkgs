@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  cglm,
-  gtk3,
-  libepoxy,
-  libGLU,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, cglm
+, gtk3
+, libepoxy
+, libGLU
+,
 }:
 
 stdenv.mkDerivation rec {

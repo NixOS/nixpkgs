@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  glibcLocales,
-  unzip,
-  hasktags,
-  ctags,
+{ stdenv
+, lib
+, glibcLocales
+, unzip
+, hasktags
+, ctags
+,
 }:
 {
   # optional srcDir
@@ -24,12 +24,12 @@
   # createTagFiles =  [ { name  = "my_tag_name_without_suffix", tagCmd = "ctags -R . -o \$TAG_FILE"; } ]
   # tag command must create file named $TAG_FILE
   sourceWithTagsDerivation =
-    {
-      name,
-      src,
-      srcDir ? ".",
-      tagSuffix ? "_tags",
-      createTagFiles ? [ ],
+    { name
+    , src
+    , srcDir ? "."
+    , tagSuffix ? "_tags"
+    , createTagFiles ? [ ]
+    ,
     }:
     stdenv.mkDerivation {
       inherit src srcDir tagSuffix;
@@ -40,12 +40,14 @@
       installPhase =
         let
           createTags = lib.concatStringsSep "\n" (
-            map (a: ''
-              TAG_FILE="$SRC_DEST/${a.name}$tagSuffix"
-              echo running tag cmd "${a.tagCmd}" in `pwd`
-              ${a.tagCmd}
-              TAG_FILES="$TAG_FILES''${TAG_FILES:+:}$TAG_FILE"
-            '') createTagFiles
+            map
+              (a: ''
+                TAG_FILE="$SRC_DEST/${a.name}$tagSuffix"
+                echo running tag cmd "${a.tagCmd}" in `pwd`
+                ${a.tagCmd}
+                TAG_FILES="$TAG_FILES''${TAG_FILES:+:}$TAG_FILE"
+              '')
+              createTagFiles
           );
         in
         ''
@@ -117,8 +119,8 @@
   experimental
   idea:
   a) Attach some information to a nexpression telling how to create a tag file which can then be used within your favourite editor
-     Do this in a way not affecting the expression (using passthru or meta which is ignored when calculating the hash)
-     implementations: addCTaggingInfo (C / C++) and addHasktagsTaggingInfo (Haskell)
+   Do this in a way not affecting the expression (using passthru or meta which is ignored when calculating the hash)
+   implementations: addCTaggingInfo (C / C++) and addHasktagsTaggingInfo (Haskell)
   b) use sourceWithTagsDerivation function to create a derivation installing the source along with the generated tag files
-     so that you can use them easily witihn your favourite text editor
+   so that you can use them easily witihn your favourite text editor
 */

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  dask,
-  pandas,
-  psutil,
-  tqdm,
-  ipywidgets,
-  ray,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, dask
+, pandas
+, psutil
+, tqdm
+, ipywidgets
+, ray
+,
 }:
 
 buildPythonPackage rec {

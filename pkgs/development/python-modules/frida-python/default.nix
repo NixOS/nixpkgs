@@ -1,8 +1,8 @@
-{
-  lib,
-  fetchPypi,
-  stdenvNoCC,
-  buildPythonPackage,
+{ lib
+, fetchPypi
+, stdenvNoCC
+, buildPythonPackage
+,
 }:
 let
   version = "17.2.11";
@@ -28,8 +28,7 @@ let
         hash = "sha256-vzyHYlstwm1GT1jKc0g5Yr6JVte9WGn+hALYpkefKBY=";
         platform = "macosx_11_0_arm64";
       };
-    }
-    .${system} or (throw "Unsupported system: ${system}");
+    }.${system} or (throw "Unsupported system: ${system}");
 in
 buildPythonPackage {
   pname = "frida-python";

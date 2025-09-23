@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  m4,
-  which,
-  yasm,
-  autoreconfHook,
-  fetchpatch,
-  buildPackages,
+{ lib
+, stdenv
+, fetchurl
+, m4
+, which
+, yasm
+, autoreconfHook
+, fetchpatch
+, buildPackages
+,
 }:
 
 stdenv.mkDerivation rec {

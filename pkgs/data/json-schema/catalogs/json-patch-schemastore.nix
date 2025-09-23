@@ -1,7 +1,7 @@
-{
-  fetchurl,
-  lib,
-  newCatalog,
+{ fetchurl
+, lib
+, newCatalog
+,
 }:
 
 newCatalog {

@@ -1,15 +1,15 @@
-{
-  buildPgrxExtension,
-  cargo-pgrx_0_12_0_alpha_1,
-  clang,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  openssl,
-  pkg-config,
-  postgresql,
-  postgresqlTestExtension,
-  replaceVars,
+{ buildPgrxExtension
+, cargo-pgrx_0_12_0_alpha_1
+, clang
+, fetchFromGitHub
+, lib
+, nix-update-script
+, openssl
+, pkg-config
+, postgresql
+, postgresqlTestExtension
+, replaceVars
+,
 }:
 
 buildPgrxExtension (finalAttrs: {
@@ -105,9 +105,9 @@ buildPgrxExtension (finalAttrs: {
     broken =
       (lib.versionOlder postgresql.version "14")
       ||
-        # PostgreSQL 17 support issue upstream: https://github.com/tensorchord/pgvecto.rs/issues/607
-        # Check after next package update.
-        lib.versionAtLeast postgresql.version "17" && finalAttrs.version == "0.3.0";
+      # PostgreSQL 17 support issue upstream: https://github.com/tensorchord/pgvecto.rs/issues/607
+      # Check after next package update.
+      lib.versionAtLeast postgresql.version "17" && finalAttrs.version == "0.3.0";
     description = "Scalable, Low-latency and Hybrid-enabled Vector Search in Postgres";
     homepage = "https://github.com/tensorchord/pgvecto.rs";
     license = lib.licenses.asl20;

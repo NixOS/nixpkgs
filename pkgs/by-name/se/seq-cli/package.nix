@@ -1,9 +1,9 @@
-{
-  lib,
-  buildDotnetModule,
-  fetchFromGitHub,
-  dotnetCorePackages,
-  testers,
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, testers
+,
 }:
 
 buildDotnetModule (finalAttrs: {

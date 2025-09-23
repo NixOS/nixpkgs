@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  removeReferencesTo,
-  runtimeShellPackage,
-  texinfo,
-  interactive ? false,
-  readline,
-  autoreconfHook, # no-pma fix
+{ lib
+, stdenv
+, fetchurl
+, removeReferencesTo
+, runtimeShellPackage
+, texinfo
+, interactive ? false
+, readline
+, autoreconfHook
+, # no-pma fix
 
   /*
     Test suite broke on:
@@ -16,9 +16,10 @@
      || stdenv.hostPlatform.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
      || stdenv.hostPlatform.isFreeBSD
   */
-  doCheck ? (interactive && stdenv.hostPlatform.isLinux),
-  glibcLocales ? null,
-  locale ? null,
+  doCheck ? (interactive && stdenv.hostPlatform.isLinux)
+, glibcLocales ? null
+, locale ? null
+,
 }:
 
 assert (doCheck && stdenv.hostPlatform.isLinux) -> glibcLocales != null;

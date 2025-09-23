@@ -1,7 +1,7 @@
-{
-  mkKdeDerivation,
-  qttools,
-  libxslt,
+{ mkKdeDerivation
+, qttools
+, libxslt
+,
 }:
 mkKdeDerivation {
   pname = "pimcommon";

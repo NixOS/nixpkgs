@@ -1,9 +1,8 @@
-{
-  config,
-  lib,
-  pkgs,
-  options,
-  ...
+{ config
+, lib
+, pkgs
+, options
+, ...
 }:
 let
 
@@ -124,14 +123,16 @@ let
       chown -R ${user} .lego/accounts
     ''
     + (lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (cert: data: ''
-        for fixpath in ${lib.escapeShellArg cert} .lego/${lib.escapeShellArg cert}; do
-          if [ -d "$fixpath" ]; then
-            chmod -R u=rwX,g=rX,o= "$fixpath"
-            chown -R ${user}:${data.group} "$fixpath"
-          fi
-        done
-      '') certConfigs
+      lib.mapAttrsToList
+        (cert: data: ''
+          for fixpath in ${lib.escapeShellArg cert} .lego/${lib.escapeShellArg cert}; do
+            if [ -d "$fixpath" ]; then
+              chmod -R u=rwX,g=rX,o= "$fixpath"
+              chown -R ${user}:${data.group} "$fixpath"
+            fi
+          done
+        '')
+        certConfigs
     ))
   );
 
@@ -272,10 +273,12 @@ let
         "-d"
         data.domain
       ]
-      ++ lib.concatMap (name: [
-        "-d"
-        name
-      ]) extraDomains
+      ++ lib.concatMap
+        (name: [
+          "-d"
+          name
+        ])
+        extraDomains
       ++ data.extraLegoFlags;
 
       # Although --must-staple is common to both modes, it is not declared as a
@@ -496,12 +499,12 @@ let
               '');
           }
           //
-            lib.optionalAttrs
-              (data.listenHTTP != null && lib.toInt (lib.last (lib.splitString ":" data.listenHTTP)) < 1024)
-              {
-                CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
-                AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-              };
+          lib.optionalAttrs
+            (data.listenHTTP != null && lib.toInt (lib.last (lib.splitString ":" data.listenHTTP)) < 1024)
+            {
+              CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+              AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+            };
 
         # Working directory will be /tmp
         script = wrapInFlock ''
@@ -1036,14 +1039,16 @@ in
       # FIXME Most of these custom warnings and filters for security.acme.certs.* are required
       # because using mkRemovedOptionModule/mkChangedOptionModule with attrsets isn't possible.
       warnings = lib.filter (w: w != "") (
-        lib.mapAttrsToList (
-          cert: data:
-          lib.optionalString (data.extraDomains != "_mkMergedOptionModule") ''
-            The option definition `security.acme.certs.${cert}.extraDomains` has changed
-            to `security.acme.certs.${cert}.extraDomainNames` and is now a list of strings.
-            Setting a custom webroot for extra domains is not possible, instead use separate certs.
-          ''
-        ) cfg.certs
+        lib.mapAttrsToList
+          (
+            cert: data:
+              lib.optionalString (data.extraDomains != "_mkMergedOptionModule") ''
+                The option definition `security.acme.certs.${cert}.extraDomains` has changed
+                to `security.acme.certs.${cert}.extraDomainNames` and is now a list of strings.
+                Setting a custom webroot for extra domains is not possible, instead use separate certs.
+              ''
+          )
+          cfg.certs
       );
 
       assertions =
@@ -1069,79 +1074,83 @@ in
           }
         ]
         ++ (builtins.concatLists (
-          lib.mapAttrsToList (cert: data: [
-            {
-              assertion = data.user == "_mkRemovedOptionModule";
-              message = ''
-                The option definition `security.acme.certs.${cert}.user' no longer has any effect; Please remove it.
-                Certificate user is now hard coded to the "acme" user. If you would
-                like another user to have access, consider adding them to the
-                "acme" group or changing security.acme.certs.${cert}.group.
-              '';
-            }
-            {
-              assertion = data.allowKeysForGroup == "_mkRemovedOptionModule";
-              message = ''
-                The option definition `security.acme.certs.${cert}.allowKeysForGroup' no longer has any effect; Please remove it.
-                All certs are readable by the configured group. If this is undesired,
-                consider changing security.acme.certs.${cert}.group to an unused group.
-              '';
-            }
-            # * in the cert value breaks building of systemd services, and makes
-            # referencing them as a user quite weird too. Best practice is to use
-            # the domain option.
-            {
-              assertion = !lib.hasInfix "*" cert;
-              message = ''
-                The cert option path `security.acme.certs.${cert}.dnsProvider`
-                cannot contain a * character.
-                Instead, set `security.acme.certs.${cert}.domain = "${cert}";`
-                and remove the wildcard from the path.
-              '';
-            }
-            (
-              let
-                exclusiveAttrs = {
-                  inherit (data)
-                    dnsProvider
-                    webroot
-                    listenHTTP
-                    s3Bucket
-                    ;
-                };
-              in
+          lib.mapAttrsToList
+            (cert: data: [
               {
-                assertion = lib.length (lib.filter (x: x != null) (builtins.attrValues exclusiveAttrs)) == 1;
+                assertion = data.user == "_mkRemovedOptionModule";
                 message = ''
-                  Exactly one of the options
-                  `security.acme.certs.${cert}.dnsProvider`,
-                  `security.acme.certs.${cert}.webroot`,
-                  `security.acme.certs.${cert}.listenHTTP` and
-                  `security.acme.certs.${cert}.s3Bucket`
-                  is required.
-                  Current values: ${(lib.generators.toPretty { } exclusiveAttrs)}.
+                  The option definition `security.acme.certs.${cert}.user' no longer has any effect; Please remove it.
+                  Certificate user is now hard coded to the "acme" user. If you would
+                  like another user to have access, consider adding them to the
+                  "acme" group or changing security.acme.certs.${cert}.group.
                 '';
               }
-            )
-            {
-              assertion = lib.all (lib.hasSuffix "_FILE") (lib.attrNames data.credentialFiles);
-              message = ''
-                Option `security.acme.certs.${cert}.credentialFiles` can only be
-                used for variables suffixed by "_FILE".
-              '';
-            }
+              {
+                assertion = data.allowKeysForGroup == "_mkRemovedOptionModule";
+                message = ''
+                  The option definition `security.acme.certs.${cert}.allowKeysForGroup' no longer has any effect; Please remove it.
+                  All certs are readable by the configured group. If this is undesired,
+                  consider changing security.acme.certs.${cert}.group to an unused group.
+                '';
+              }
+              # * in the cert value breaks building of systemd services, and makes
+              # referencing them as a user quite weird too. Best practice is to use
+              # the domain option.
+              {
+                assertion = !lib.hasInfix "*" cert;
+                message = ''
+                  The cert option path `security.acme.certs.${cert}.dnsProvider`
+                  cannot contain a * character.
+                  Instead, set `security.acme.certs.${cert}.domain = "${cert}";`
+                  and remove the wildcard from the path.
+                '';
+              }
+              (
+                let
+                  exclusiveAttrs = {
+                    inherit (data)
+                      dnsProvider
+                      webroot
+                      listenHTTP
+                      s3Bucket
+                      ;
+                  };
+                in
+                {
+                  assertion = lib.length (lib.filter (x: x != null) (builtins.attrValues exclusiveAttrs)) == 1;
+                  message = ''
+                    Exactly one of the options
+                    `security.acme.certs.${cert}.dnsProvider`,
+                    `security.acme.certs.${cert}.webroot`,
+                    `security.acme.certs.${cert}.listenHTTP` and
+                    `security.acme.certs.${cert}.s3Bucket`
+                    is required.
+                    Current values: ${(lib.generators.toPretty { } exclusiveAttrs)}.
+                  '';
+                }
+              )
+              {
+                assertion = lib.all (lib.hasSuffix "_FILE") (lib.attrNames data.credentialFiles);
+                message = ''
+                  Option `security.acme.certs.${cert}.credentialFiles` can only be
+                  used for variables suffixed by "_FILE".
+                '';
+              }
 
-            {
-              assertion = lib.all (
-                certOpts:
-                (certOpts.csr == null && certOpts.csrKey == null)
-                || (certOpts.csr != null && certOpts.csrKey != null)
-              ) certs;
-              message = ''
-                When passing a certificate signing request both `security.acme.certs.${cert}.csr` and `security.acme.certs.${cert}.csrKey` need to be set.
-              '';
-            }
-          ]) cfg.certs
+              {
+                assertion = lib.all
+                  (
+                    certOpts:
+                    (certOpts.csr == null && certOpts.csrKey == null)
+                    || (certOpts.csr != null && certOpts.csrKey != null)
+                  )
+                  certs;
+                message = ''
+                  When passing a certificate signing request both `security.acme.certs.${cert}.csr` and `security.acme.certs.${cert}.csrKey` need to be set.
+                '';
+              }
+            ])
+            cfg.certs
         ));
 
       users.users.acme = {
@@ -1155,12 +1164,16 @@ in
 
       systemd.services =
         let
-          orderRenewServices = lib.mapAttrs' (
-            cert: conf: lib.nameValuePair "acme-order-renew-${cert}" conf.orderRenewService
-          ) certConfigs;
-          baseServices = lib.mapAttrs' (
-            cert: conf: lib.nameValuePair "acme-${cert}" conf.baseService
-          ) certConfigs;
+          orderRenewServices = lib.mapAttrs'
+            (
+              cert: conf: lib.nameValuePair "acme-order-renew-${cert}" conf.orderRenewService
+            )
+            certConfigs;
+          baseServices = lib.mapAttrs'
+            (
+              cert: conf: lib.nameValuePair "acme-${cert}" conf.baseService
+            )
+            certConfigs;
         in
         {
           acme-setup = setupService;
@@ -1168,9 +1181,11 @@ in
         // baseServices
         // orderRenewServices;
 
-      systemd.timers = lib.mapAttrs' (
-        cert: conf: lib.nameValuePair "acme-renew-${cert}" conf.renewTimer
-      ) certConfigs;
+      systemd.timers = lib.mapAttrs'
+        (
+          cert: conf: lib.nameValuePair "acme-renew-${cert}" conf.renewTimer
+        )
+        certConfigs;
 
       systemd.targets =
         let
@@ -1183,24 +1198,26 @@ in
           # Using a target here is fine - account creation is a one time event. Even if
           # systemd clean --what=state is used to delete the account, so long as the user
           # then runs one of the cert services, there won't be any issues.
-          accountTargets = lib.mapAttrs' (
-            hash: confs:
-            let
-              dnsConfs = builtins.filter (conf: cfg.certs.${conf.cert}.dnsProvider != null) confs;
-              leaderConf = if dnsConfs != [ ] then builtins.head dnsConfs else builtins.head confs;
-              leader = "acme-order-renew-${leaderConf.cert}.service";
-              followers = map (conf: "acme-order-renew-${conf.cert}.service") (
-                builtins.filter (conf: conf != leaderConf) confs
-              );
-            in
-            lib.nameValuePair "acme-account-${hash}" {
-              requiredBy = followers;
-              before = followers;
-              requires = [ leader ];
-              after = [ leader ];
-              unitConfig.RefuseManualStart = true;
-            }
-          ) (lib.groupBy (conf: conf.accountHash) (lib.attrValues certConfigs));
+          accountTargets = lib.mapAttrs'
+            (
+              hash: confs:
+                let
+                  dnsConfs = builtins.filter (conf: cfg.certs.${conf.cert}.dnsProvider != null) confs;
+                  leaderConf = if dnsConfs != [ ] then builtins.head dnsConfs else builtins.head confs;
+                  leader = "acme-order-renew-${leaderConf.cert}.service";
+                  followers = map (conf: "acme-order-renew-${conf.cert}.service") (
+                    builtins.filter (conf: conf != leaderConf) confs
+                  );
+                in
+                lib.nameValuePair "acme-account-${hash}" {
+                  requiredBy = followers;
+                  before = followers;
+                  requires = [ leader ];
+                  after = [ leader ];
+                  unitConfig.RefuseManualStart = true;
+                }
+            )
+            (lib.groupBy (conf: conf.accountHash) (lib.attrValues certConfigs));
         in
         accountTargets;
     })

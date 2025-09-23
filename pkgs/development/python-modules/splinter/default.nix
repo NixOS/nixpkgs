@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  urllib3,
-  selenium,
-  cssselect,
-  django,
-  flask,
-  lxml,
-  pytestCheckHook,
-  zope-testbrowser,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, urllib3
+, selenium
+, cssselect
+, django
+, flask
+, lxml
+, pytestCheckHook
+, zope-testbrowser
+,
 }:
 
 buildPythonPackage rec {

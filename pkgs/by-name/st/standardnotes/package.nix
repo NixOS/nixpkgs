@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  dpkg,
-  makeWrapper,
-  electron,
-  libsecret,
-  asar,
-  python3,
-  glib,
-  desktop-file-utils,
-  callPackage,
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, electron
+, libsecret
+, asar
+, python3
+, glib
+, desktop-file-utils
+, callPackage
+,
 }:
 
 let

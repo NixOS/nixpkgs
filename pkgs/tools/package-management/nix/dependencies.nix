@@ -1,9 +1,9 @@
-regular@{
-  lib,
-  boehmgc,
-  aws-sdk-cpp,
-  fetchFromGitHub,
-  pkgs,
+regular@{ lib
+, boehmgc
+, aws-sdk-cpp
+, fetchFromGitHub
+, pkgs
+,
 }:
 
 {

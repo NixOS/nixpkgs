@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  django,
-  fetchFromGitHub,
-  polib,
-  pythonOlder,
-  requests,
-  setuptools,
+{ lib
+, buildPythonPackage
+, django
+, fetchFromGitHub
+, polib
+, pythonOlder
+, requests
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

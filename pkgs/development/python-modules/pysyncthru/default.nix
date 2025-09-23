@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  setuptools,
-  aiohttp,
-  demjson3,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools
+, aiohttp
+, demjson3
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

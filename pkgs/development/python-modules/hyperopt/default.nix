@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  cloudpickle,
-  fetchPypi,
-  future,
-  networkx,
-  numpy,
-  py4j,
-  pymongo,
-  pyspark,
-  scipy,
-  six,
-  tqdm,
+{ lib
+, buildPythonPackage
+, cloudpickle
+, fetchPypi
+, future
+, networkx
+, numpy
+, py4j
+, pymongo
+, pyspark
+, scipy
+, six
+, tqdm
+,
 }:
 
 buildPythonPackage rec {

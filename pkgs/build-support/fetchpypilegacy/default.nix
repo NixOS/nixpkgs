@@ -1,9 +1,9 @@
 # Fetch from PyPi legacy API as documented in https://warehouse.pypa.io/api-reference/legacy.html
-{
-  runCommand,
-  lib,
-  python3,
-  cacert,
+{ runCommand
+, lib
+, python3
+, cacert
+,
 }@pkgs:
 let
   inherit (lib)
@@ -22,19 +22,20 @@ in
 lib.makeOverridable (
   {
     # package name
-    pname,
-    # Package index
-    url ? null,
-    # Multiple package indices to consider
-    urls ? [ ],
-    # filename including extension
-    file,
-    # SRI hash
-    hash,
-    # allow overriding the derivation name
-    name ? null,
-    # allow overriding cacert using src.override { cacert = cacert.override { extraCertificateFiles = [ ./path/to/cert.pem ]; }; }
-    cacert ? pkgs.cacert,
+    pname
+  , # Package index
+    url ? null
+  , # Multiple package indices to consider
+    urls ? [ ]
+  , # filename including extension
+    file
+  , # SRI hash
+    hash
+  , # allow overriding the derivation name
+    name ? null
+  , # allow overriding cacert using src.override { cacert = cacert.override { extraCertificateFiles = [ ./path/to/cert.pem ]; }; }
+    cacert ? pkgs.cacert
+  ,
   }:
   let
     urls' = urls ++ optional (url != null) url;
@@ -59,7 +60,7 @@ lib.makeOverridable (
         outputHash = hash;
       }
       // optionalAttrs (name != null) { inherit name; }
-      // optionalAttrs (!inPureEvalMode) { env.NETRC = netrc_file; }
+        // optionalAttrs (!inPureEvalMode) { env.NETRC = netrc_file; }
     )
     ''
       python ${./fetch-legacy.py} ${

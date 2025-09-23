@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  influxdb,
-  jsonpath-ng,
-  paho-mqtt,
-  py-expression-eval,
-  pyaml,
-  pycron,
-  pytestCheckHook,
-  schema,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, influxdb
+, jsonpath-ng
+, paho-mqtt
+, py-expression-eval
+, pyaml
+, pycron
+, pytestCheckHook
+, schema
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

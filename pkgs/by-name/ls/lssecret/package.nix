@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  pkg-config,
-  libsecret,
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, libsecret
+,
 }:
 
 stdenv.mkDerivation {

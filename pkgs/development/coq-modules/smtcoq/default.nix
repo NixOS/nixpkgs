@@ -1,12 +1,12 @@
-{
-  lib,
-  pkgs,
-  mkCoqDerivation,
-  coq,
-  zchaff,
-  cvc5,
-  stdlib,
-  version ? null,
+{ lib
+, pkgs
+, mkCoqDerivation
+, coq
+, zchaff
+, cvc5
+, stdlib
+, version ? null
+,
 }:
 
 # Broken since https://github.com/NixOS/nixpkgs/pull/354627, temporarily disactivated
@@ -73,7 +73,8 @@ mkCoqDerivation {
         case = isEq "8.13";
         out = "SMTCoq-2.2+8.13";
       }
-    ] null;
+    ]
+      null;
 
   propagatedBuildInputs = [
     cvc5

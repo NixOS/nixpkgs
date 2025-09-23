@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  aiohttp,
-  jinja2,
-  markupsafe,
-  pythonOlder,
-  pyyaml,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, aiohttp
+, jinja2
+, markupsafe
+, pythonOlder
+, pyyaml
+,
 }:
 
 buildPythonPackage rec {

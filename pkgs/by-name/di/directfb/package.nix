@@ -1,21 +1,21 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
-  perl,
-  pkg-config,
-  flux,
-  zlib,
-  libjpeg,
-  freetype,
-  libpng,
-  giflib,
-  enableX11 ? true,
-  xorg,
-  enableSDL ? true,
-  SDL,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, perl
+, pkg-config
+, flux
+, zlib
+, libjpeg
+, freetype
+, libpng
+, giflib
+, enableX11 ? true
+, xorg
+, enableSDL ? true
+, SDL
+,
 }:
 
 stdenv.mkDerivation rec {

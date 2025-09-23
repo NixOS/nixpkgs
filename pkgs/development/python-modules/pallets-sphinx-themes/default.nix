@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  sphinx,
-  packaging,
-  flit-core,
-  sphinx-notfound-page,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, sphinx
+, packaging
+, flit-core
+, sphinx-notfound-page
+,
 }:
 
 buildPythonPackage rec {

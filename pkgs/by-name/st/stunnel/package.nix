@@ -1,13 +1,13 @@
-{
-  fetchurl,
-  lib,
-  nixosTests,
-  openssl,
-  stdenv,
-  systemd,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  mimalloc,
-  mimallocSupport ? false,
+{ fetchurl
+, lib
+, nixosTests
+, openssl
+, stdenv
+, systemd
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, mimalloc
+, mimallocSupport ? false
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

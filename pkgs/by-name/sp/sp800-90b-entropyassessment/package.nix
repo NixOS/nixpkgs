@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bzip2,
-  libdivsufsort,
-  jsoncpp,
-  openssl,
-  mpfr,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bzip2
+, libdivsufsort
+, jsoncpp
+, openssl
+, mpfr
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

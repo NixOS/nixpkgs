@@ -1,11 +1,11 @@
-{
-  binutils-unwrapped,
-  coreutils,
-  fetchFromGitHub,
-  lib,
-  makeBinaryWrapper,
-  stdenv,
-  unstableGitUpdater,
+{ binutils-unwrapped
+, coreutils
+, fetchFromGitHub
+, lib
+, makeBinaryWrapper
+, stdenv
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

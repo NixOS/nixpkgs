@@ -1,7 +1,7 @@
-{
-  lammps,
-  mpi,
-  lowPrio,
+{ lammps
+, mpi
+, lowPrio
+,
 }:
 
 lowPrio (

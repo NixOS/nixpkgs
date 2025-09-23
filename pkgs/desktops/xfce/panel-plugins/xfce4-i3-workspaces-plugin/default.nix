@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  gettext,
-  pkg-config,
-  intltool,
-  gtk3,
-  libxfce4ui,
-  libxfce4util,
-  xfce4-dev-tools,
-  xfce4-panel,
-  i3ipc-glib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, gettext
+, pkg-config
+, intltool
+, gtk3
+, libxfce4ui
+, libxfce4util
+, xfce4-dev-tools
+, xfce4-panel
+, i3ipc-glib
+,
 }:
 
 stdenv.mkDerivation rec {

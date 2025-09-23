@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
-  scikit-learn,
-  pandas,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pytest-xdist,
-  pytz,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, scikit-learn
+, pandas
+, pytestCheckHook
+, pytest-cov-stub
+, pytest-xdist
+, pytz
+,
 }:
 
 buildPythonPackage rec {

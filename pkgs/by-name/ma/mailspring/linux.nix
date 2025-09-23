@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  pname,
-  version,
-  meta,
-  fetchurl,
-  autoPatchelfHook,
-  alsa-lib,
-  coreutils,
-  db,
-  dpkg,
-  glib,
-  gtk3,
-  wrapGAppsHook3,
-  libkrb5,
-  libsecret,
-  nss,
-  openssl,
-  udev,
-  xorg,
-  libgbm,
-  libdrm,
-  libappindicator,
+{ stdenv
+, lib
+, pname
+, version
+, meta
+, fetchurl
+, autoPatchelfHook
+, alsa-lib
+, coreutils
+, db
+, dpkg
+, glib
+, gtk3
+, wrapGAppsHook3
+, libkrb5
+, libsecret
+, nss
+, openssl
+, udev
+, xorg
+, libgbm
+, libdrm
+, libappindicator
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

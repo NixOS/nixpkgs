@@ -1,11 +1,11 @@
-{
-  lib,
-  mkKdeDerivation,
-  pkg-config,
-  gocryptfs,
-  fuse,
-  cryfs,
-  encfs,
+{ lib
+, mkKdeDerivation
+, pkg-config
+, gocryptfs
+, fuse
+, cryfs
+, encfs
+,
 }:
 mkKdeDerivation {
   pname = "plasma-vault";

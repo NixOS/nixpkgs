@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchCrate,
-  rustPlatform,
-  pkg-config,
-  openssl_3,
-  protobuf,
+{ lib
+, fetchCrate
+, rustPlatform
+, pkg-config
+, openssl_3
+, protobuf
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sgxs-tools";

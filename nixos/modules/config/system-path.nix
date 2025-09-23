@@ -1,10 +1,9 @@
 # This module defines the packages that appear in
 # /run/current-system/sw.
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -40,13 +39,15 @@ let
     "zstd"
   ];
   corePackages =
-    (map (
-      n:
-      let
-        pkg = pkgs.${n};
-      in
-      lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg
-    ) corePackageNames)
+    (map
+      (
+        n:
+        let
+          pkg = pkgs.${n};
+        in
+        lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg
+      )
+      corePackageNames)
     ++ [ pkgs.stdenv.cc.libc ];
   corePackagesText = "[ ${lib.concatMapStringsSep " " (n: "pkgs.${n}") corePackageNames} ]";
 
@@ -55,13 +56,15 @@ let
     "rsync"
     "strace"
   ];
-  defaultPackages = map (
-    n:
-    let
-      pkg = pkgs.${n};
-    in
-    lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg
-  ) defaultPackageNames;
+  defaultPackages = map
+    (
+      n:
+      let
+        pkg = pkgs.${n};
+      in
+      lib.setPrio ((pkg.meta.priority or lib.meta.defaultPriority) + 3) pkg
+    )
+    defaultPackageNames;
   defaultPackagesText = "[ ${lib.concatMapStringsSep " " (n: "pkgs.${n}") defaultPackageNames} ]";
 
 in

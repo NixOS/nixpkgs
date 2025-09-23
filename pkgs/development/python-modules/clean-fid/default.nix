@@ -1,16 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # dependencies
-  numpy,
-  pillow,
-  requests,
-  scipy,
-  torch,
-  torchvision,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # dependencies
+  numpy
+, pillow
+, requests
+, scipy
+, torch
+, torchvision
+, tqdm
+,
 }:
 
 buildPythonPackage {

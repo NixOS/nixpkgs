@@ -1,31 +1,31 @@
-{
-  resholve,
-  stdenv,
-  symlinkJoin,
-  lib,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  bash,
-  coreutils,
-  gnugrep,
-  gnused,
-  gnutls,
-  gsasl,
-  libidn2,
-  netcat-gnu,
-  texinfo,
-  which,
-  withKeyring ? true,
-  libsecret,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
-  withScripts ? true,
-  withLibnotify ? true,
-  libnotify,
-  gitUpdater,
-  binlore,
-  msmtp,
+{ resholve
+, stdenv
+, symlinkJoin
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, bash
+, coreutils
+, gnugrep
+, gnused
+, gnutls
+, gsasl
+, libidn2
+, netcat-gnu
+, texinfo
+, which
+, withKeyring ? true
+, libsecret
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemd
+, withScripts ? true
+, withLibnotify ? true
+, libnotify
+, gitUpdater
+, binlore
+, msmtp
+,
 }:
 
 let
@@ -157,7 +157,8 @@ let
 
 in
 if withScripts then
-  symlinkJoin {
+  symlinkJoin
+  {
     name = "msmtp-${version}";
     inherit version meta;
     paths = [

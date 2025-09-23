@@ -1,8 +1,7 @@
-{
-  lib,
-  config,
-  options,
-  ...
+{ lib
+, config
+, options
+, ...
 }:
 {
   imports = [ (import ./common.nix "nexus") ];
@@ -124,9 +123,10 @@
       cfg = config.services.libeufin.nexus;
     in
     lib.mkIf cfg.enable {
-      services.libeufin.nexus.settings.libeufin-nexusdb-postgres.CONFIG = lib.mkIf (
-        cfgMain.bank.enable && cfgMain.bank.createLocalDatabase
-      ) "postgresql:///libeufin-bank";
+      services.libeufin.nexus.settings.libeufin-nexusdb-postgres.CONFIG = lib.mkIf
+        (
+          cfgMain.bank.enable && cfgMain.bank.createLocalDatabase
+        ) "postgresql:///libeufin-bank";
 
       systemd.services.libeufin-nexus.documentation = [ "man:libeufin-nexus(1)" ];
     };

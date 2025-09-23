@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  asio,
-  boost,
-  cmake,
-  hwloc,
-  gperftools,
-  pkg-config,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, asio
+, boost
+, cmake
+, hwloc
+, gperftools
+, pkg-config
+, python3
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,11 +1,10 @@
 # Provide an initial copy of the NixOS channel so that the user
 # doesn't need to run "nix-channel --update" first.
 
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let

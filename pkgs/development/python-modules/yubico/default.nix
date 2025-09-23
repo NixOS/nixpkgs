@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pyusb,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pyusb
+,
 }:
 
 buildPythonPackage rec {

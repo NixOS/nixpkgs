@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  alsa-lib,
-  libjack2,
-  libpulseaudio,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, alsa-lib
+, libjack2
+, libpulseaudio
+,
 }:
 
 stdenv.mkDerivation rec {

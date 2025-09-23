@@ -1,13 +1,13 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  commandlines,
-  unittestCheckHook,
-  pexpect,
-  naked,
-  setuptools,
-  wheel,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, commandlines
+, unittestCheckHook
+, pexpect
+, naked
+, setuptools
+, wheel
+,
 }:
 
 buildPythonPackage rec {

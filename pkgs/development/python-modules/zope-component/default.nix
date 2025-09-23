@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  zope-event,
-  zope-hookable,
-  zope-interface,
-  persistent,
-  zope-configuration,
-  zope-i18nmessageid,
-  zope-location,
-  zope-proxy,
-  zope-security,
-  unittestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, zope-event
+, zope-hookable
+, zope-interface
+, persistent
+, zope-configuration
+, zope-i18nmessageid
+, zope-location
+, zope-proxy
+, zope-security
+, unittestCheckHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchpatch,
-  containerd,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, containerd
+,
 }:
 
 buildGoModule rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  nix-update-script,
-  stdenv,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, nix-update-script
+, stdenv
+,
 }:
 buildNpmPackage rec {
   pname = "eslint";

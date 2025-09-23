@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  qtdeclarative,
-  qttools,
-  kirigami,
+{ mkKdeDerivation
+, qtdeclarative
+, qttools
+, kirigami
+,
 }:
 mkKdeDerivation {
   pname = "qqc2-desktop-style";

@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  jre,
-  writeScript,
-  common-updater-scripts,
-  coreutils,
-  git,
-  gnused,
-  nix,
-  zlib,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, jre
+, writeScript
+, common-updater-scripts
+, coreutils
+, git
+, gnused
+, nix
+, zlib
+,
 }:
 
 let

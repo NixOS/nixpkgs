@@ -1,7 +1,7 @@
-{
-  lib,
-  fetchcvs,
-  version,
+{ lib
+, fetchcvs
+, version
+,
 }:
 
 fetchcvs {

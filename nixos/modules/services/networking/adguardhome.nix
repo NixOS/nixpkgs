@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   cfg = config.services.adguardhome;
@@ -161,8 +160,8 @@ in
         assertion =
           settings != null
           ->
-            cfg.mutableSettings
-            || lib.hasAttrByPath [ "dns" "bootstrap_dns" ] settings && lib.isList settings.dns.bootstrap_dns;
+          cfg.mutableSettings
+          || lib.hasAttrByPath [ "dns" "bootstrap_dns" ] settings && lib.isList settings.dns.bootstrap_dns;
         message = "AdGuard setting dns.bootstrap_dns needs to be a list";
       }
     ];

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  snakemake-interface-storage-plugins,
-  snakemake-interface-common,
-  sysrsync,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, snakemake-interface-storage-plugins
+, snakemake-interface-common
+, sysrsync
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  alsa-lib,
-  pipewire,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, alsa-lib
+, pipewire
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

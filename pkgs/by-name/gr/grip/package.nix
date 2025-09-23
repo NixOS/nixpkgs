@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gtk2,
-  pkg-config,
-  curl,
-  cdparanoia,
-  libid3tag,
-  libtool,
+{ lib
+, stdenv
+, fetchurl
+, gtk2
+, pkg-config
+, curl
+, cdparanoia
+, libid3tag
+, libtool
+,
 }:
 
 stdenv.mkDerivation rec {

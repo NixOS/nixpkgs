@@ -1,12 +1,12 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  pkg-config,
-  nodejs,
-  npmHooks,
-  lz4,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchNpmDeps
+, pkg-config
+, nodejs
+, npmHooks
+, lz4
+,
 }:
 
 buildGoModule rec {

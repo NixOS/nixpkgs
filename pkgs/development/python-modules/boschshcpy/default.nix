@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  cryptography,
-  fetchFromGitHub,
-  getmac,
-  pythonOlder,
-  requests,
-  setuptools,
-  zeroconf,
+{ lib
+, buildPythonPackage
+, cryptography
+, fetchFromGitHub
+, getmac
+, pythonOlder
+, requests
+, setuptools
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

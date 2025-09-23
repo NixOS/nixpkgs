@@ -1,12 +1,12 @@
-{
-  stdenvNoCC,
-  lib,
-  fetchzip,
-  dpkg,
-  patchelf,
-  buildFHSEnv,
-  writeShellScript,
-  makeBinaryWrapper,
+{ stdenvNoCC
+, lib
+, fetchzip
+, dpkg
+, patchelf
+, buildFHSEnv
+, writeShellScript
+, makeBinaryWrapper
+,
 }:
 
 let

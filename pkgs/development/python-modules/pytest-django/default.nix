@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  django,
-  setuptools,
-  setuptools-scm,
-  django-configurations,
-  pytest,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django
+, setuptools
+, setuptools-scm
+, django-configurations
+, pytest
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

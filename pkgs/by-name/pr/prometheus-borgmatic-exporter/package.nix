@@ -1,8 +1,8 @@
-{
-  lib,
-  borgmatic,
-  fetchFromGitHub,
-  python3Packages,
+{ lib
+, borgmatic
+, fetchFromGitHub
+, python3Packages
+,
 }:
 
 python3Packages.buildPythonApplication rec {

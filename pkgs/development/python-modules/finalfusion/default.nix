@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  isPy3k,
-  cython,
-  numpy,
-  toml,
-  pytest,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, isPy3k
+, cython
+, numpy
+, toml
+, pytest
+,
 }:
 
 buildPythonPackage rec {

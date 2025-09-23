@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  gcc,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchgit
+, gcc
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

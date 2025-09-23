@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  cocotb-bus,
-  find-libpython,
-  pytestCheckHook,
-  swig,
-  iverilog,
-  ghdl,
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, cocotb-bus
+, find-libpython
+, pytestCheckHook
+, swig
+, iverilog
+, ghdl
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

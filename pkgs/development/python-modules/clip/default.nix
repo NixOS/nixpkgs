@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  ftfy,
-  lib,
-  regex,
-  torch,
-  torchvision,
-  tqdm,
+{ buildPythonPackage
+, fetchFromGitHub
+, ftfy
+, lib
+, regex
+, torch
+, torchvision
+, tqdm
+,
 }:
 
 buildPythonPackage {

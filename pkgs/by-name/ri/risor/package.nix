@@ -1,9 +1,9 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  testers,
-  risor,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, risor
+,
 }:
 
 buildGoModule rec {

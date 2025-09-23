@@ -1,24 +1,24 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchpatch,
-  perlPackages,
-  gtk-doc,
-  intltool,
-  autoreconfHook,
-  pkg-config,
-  glib,
-  libxml2,
-  sqlite,
-  sg3_utils,
-  gdk-pixbuf,
-  taglib,
-  libimobiledevice,
-  monoSupport ? false,
-  mono,
-  udevCheckHook,
-  gtk-sharp-2_0,
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, perlPackages
+, gtk-doc
+, intltool
+, autoreconfHook
+, pkg-config
+, glib
+, libxml2
+, sqlite
+, sg3_utils
+, gdk-pixbuf
+, taglib
+, libimobiledevice
+, monoSupport ? false
+, mono
+, udevCheckHook
+, gtk-sharp-2_0
+,
 }:
 
 stdenv.mkDerivation rec {

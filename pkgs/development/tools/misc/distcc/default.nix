@@ -1,22 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  popt,
-  avahi,
-  pkg-config,
-  python3,
-  gtk3,
-  runCommand,
-  gcc,
-  autoconf,
-  automake,
-  which,
-  procps,
-  libiberty_static,
-  runtimeShell,
-  sysconfDir ? "", # set this parameter to override the default value $out/etc
-  static ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, popt
+, avahi
+, pkg-config
+, python3
+, gtk3
+, runCommand
+, gcc
+, autoconf
+, automake
+, which
+, procps
+, libiberty_static
+, runtimeShell
+, sysconfDir ? ""
+, # set this parameter to override the default value $out/etc
+  static ? false
+,
 }:
 
 let

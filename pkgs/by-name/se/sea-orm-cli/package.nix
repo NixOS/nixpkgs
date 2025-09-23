@@ -1,11 +1,11 @@
-{
-  lib,
-  rustPlatform,
-  fetchCrate,
-  pkg-config,
-  openssl,
-  nix-update-script,
-  versionCheckHook,
+{ lib
+, rustPlatform
+, fetchCrate
+, pkg-config
+, openssl
+, nix-update-script
+, versionCheckHook
+,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sea-orm-cli";

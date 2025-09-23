@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build dependencies
-  setuptools,
-
-  # dependencies
-  cbor2,
-  pyyaml,
-  regex,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build dependencies
+  setuptools
+, # dependencies
+  cbor2
+, pyyaml
+, regex
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchzip,
-  stdenv,
-  gettext,
-  libtool,
-  pkg-config,
+{ lib
+, fetchzip
+, stdenv
+, gettext
+, libtool
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

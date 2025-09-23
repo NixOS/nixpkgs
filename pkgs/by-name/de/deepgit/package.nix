@@ -1,14 +1,14 @@
-{
-  copyDesktopItems,
-  fetchurl,
-  glib,
-  adwaita-icon-theme,
-  gtk3,
-  jre,
-  lib,
-  makeDesktopItem,
-  stdenv,
-  wrapGAppsHook3,
+{ copyDesktopItems
+, fetchurl
+, glib
+, adwaita-icon-theme
+, gtk3
+, jre
+, lib
+, makeDesktopItem
+, stdenv
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

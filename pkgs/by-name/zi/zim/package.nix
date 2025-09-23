@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  python3Packages,
-  gtk3,
-  gobject-introspection,
-  wrapGAppsHook3,
-  adwaita-icon-theme,
-  writableTmpDirAsHomeHook,
-  xvfb-run,
+{ lib
+, stdenv
+, fetchurl
+, python3Packages
+, gtk3
+, gobject-introspection
+, wrapGAppsHook3
+, adwaita-icon-theme
+, writableTmpDirAsHomeHook
+, xvfb-run
+,
 }:
 
 # TODO: Declare configuration options for the following optional dependencies:

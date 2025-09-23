@@ -1,10 +1,10 @@
-{
-  stdenv,
-  lib,
-  buildPackages,
-  cmake,
-  # explicitly depending on openexr_2 because ilmbase doesn't exist for v3
-  openexr_2,
+{ stdenv
+, lib
+, buildPackages
+, cmake
+, # explicitly depending on openexr_2 because ilmbase doesn't exist for v3
+  openexr_2
+,
 }:
 
 stdenv.mkDerivation {

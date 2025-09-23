@@ -1,21 +1,21 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  protobuf,
-  bzip2,
-  openssl,
-  sqlite,
-  foundationdb,
-  zstd,
-  stdenv,
-  nix-update-script,
-  nixosTests,
-  rocksdb,
-  callPackage,
-  withFoundationdb ? false,
-  stalwartEnterprise ? false,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, protobuf
+, bzip2
+, openssl
+, sqlite
+, foundationdb
+, zstd
+, stdenv
+, nix-update-script
+, nixosTests
+, rocksdb
+, callPackage
+, withFoundationdb ? false
+, stalwartEnterprise ? false
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -66,11 +66,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
   }
   //
-    lib.optionalAttrs
-      (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isArmv7))
-      {
-        JEMALLOC_SYS_WITH_LG_PAGE = 16;
-      };
+  lib.optionalAttrs
+    (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isArmv7))
+    {
+      JEMALLOC_SYS_WITH_LG_PAGE = 16;
+    };
 
   postInstall = ''
     mkdir -p $out/etc/stalwart
@@ -160,7 +160,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     #   left: ElementEnd
     #  right: Bytes([...])
     "responses::tests::parse_responses"
-  ] (test: "--skip=${test}");
+  ]
+    (test: "--skip=${test}");
 
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 

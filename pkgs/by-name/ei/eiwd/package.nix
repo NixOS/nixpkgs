@@ -1,13 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  python3Packages, # for tests
-  openssl, # for tests
-  enableManpages ? true,
-  docutils, # for manpages
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, python3Packages
+, # for tests
+  openssl
+, # for tests
+  enableManpages ? true
+, docutils
+, # for manpages
 }:
 
 stdenv.mkDerivation (finalAttrs: {

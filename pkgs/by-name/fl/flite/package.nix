@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch,
-  alsa-lib,
-  libpulseaudio,
-  nix-update-script,
-  testers,
-  audioBackend ? "pulseaudio",
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, alsa-lib
+, libpulseaudio
+, nix-update-script
+, testers
+, audioBackend ? "pulseaudio"
+,
 }:
 assert lib.assertOneOf "audioBackend" audioBackend [
   "alsa"
@@ -51,8 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     {
       alsa = alsa-lib;
       pulseaudio = libpulseaudio;
-    }
-    .${audioBackend} or (throw "${audioBackend} is not a supported backend!")
+    }.${audioBackend} or (throw "${audioBackend} is not a supported backend!")
   );
 
   configureFlags = [

@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytest-cov-stub,
-  pytest,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest-cov-stub
+, pytest
+, pythonOlder
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

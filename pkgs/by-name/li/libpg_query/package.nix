@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  which,
-  squawk,
-  protobufc,
-  xxHash,
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, squawk
+, protobufc
+, xxHash
+,
 }:
 stdenv.mkDerivation rec {
   pname = "libpg_query";

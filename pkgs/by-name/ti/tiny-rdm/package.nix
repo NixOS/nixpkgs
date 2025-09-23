@@ -1,17 +1,17 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  npmHooks,
-  nodejs,
-  wails,
-  webkitgtk_4_1,
-  pkg-config,
-  copyDesktopItems,
-  makeDesktopItem,
-  autoPatchelfHook,
-  writeScript,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, fetchNpmDeps
+, npmHooks
+, nodejs
+, wails
+, webkitgtk_4_1
+, pkg-config
+, copyDesktopItems
+, makeDesktopItem
+, autoPatchelfHook
+, writeScript
+,
 }:
 
 buildGoModule (finalAttrs: {

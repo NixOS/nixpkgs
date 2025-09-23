@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  nodejs,
-  git,
-  haskellPackages,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeBinaryWrapper
+, nodejs
+, git
+, haskellPackages
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

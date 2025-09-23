@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
 
@@ -18,9 +17,10 @@ let
 
   # merge parameters from services.nfs.server
   nfsConfSettings =
-    lib.optionalAttrs (cfg.server.nproc != null) {
-      nfsd.threads = cfg.server.nproc;
-    }
+    lib.optionalAttrs (cfg.server.nproc != null)
+      {
+        nfsd.threads = cfg.server.nproc;
+      }
     // lib.optionalAttrs (cfg.server.hostName != null) {
       nfsd.host = cfg.server.hostName;
     }

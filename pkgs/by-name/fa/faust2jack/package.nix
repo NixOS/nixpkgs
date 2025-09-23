@@ -1,12 +1,12 @@
-{
-  bash,
-  faust,
-  gtk2,
-  jack2,
-  alsa-lib,
-  opencv,
-  libsndfile,
-  which,
+{ bash
+, faust
+, gtk2
+, jack2
+, alsa-lib
+, opencv
+, libsndfile
+, which
+,
 }:
 
 faust.wrapWithBuildEnv {

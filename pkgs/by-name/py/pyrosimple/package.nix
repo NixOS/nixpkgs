@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-  pyrosimple,
-  python3,
-  testers,
-  withInotify ? stdenv.hostPlatform.isLinux,
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pyrosimple
+, python3
+, testers
+, withInotify ? stdenv.hostPlatform.isLinux
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

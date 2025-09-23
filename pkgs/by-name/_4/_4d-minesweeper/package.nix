@@ -1,25 +1,25 @@
-{
-  lib,
-  fetchFromGitHub,
-  stdenv,
-  unzip,
-  alsa-lib,
-  gcc-unwrapped,
-  git,
-  godot3-export-templates,
-  godot3-headless,
-  libGLU,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
-  libglvnd,
-  libpulseaudio,
-  zlib,
+{ lib
+, fetchFromGitHub
+, stdenv
+, unzip
+, alsa-lib
+, gcc-unwrapped
+, git
+, godot3-export-templates
+, godot3-headless
+, libGLU
+, libX11
+, libXcursor
+, libXext
+, libXfixes
+, libXi
+, libXinerama
+, libXrandr
+, libXrender
+, libglvnd
+, libpulseaudio
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

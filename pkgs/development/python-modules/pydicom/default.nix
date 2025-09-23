@@ -1,18 +1,17 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  numpy,
-  pytestCheckHook,
-
-  # optional/test dependencies
-  gdcm,
-  pillow,
-  pyjpegls,
-  pylibjpeg-libjpeg,
-  writableTmpDirAsHomeHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, numpy
+, pytestCheckHook
+, # optional/test dependencies
+  gdcm
+, pillow
+, pyjpegls
+, pylibjpeg-libjpeg
+, writableTmpDirAsHomeHook
+,
 }:
 let
   # Pydicom needs pydicom-data to run some tests. If these files aren't downloaded

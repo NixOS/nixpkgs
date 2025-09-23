@@ -1,22 +1,22 @@
-{
-  appstream,
-  buildNpmPackage,
-  cargo,
-  desktop-file-utils,
-  fetchFromGitHub,
-  gtk4,
-  gtksourceview5,
-  lib,
-  libadwaita,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  rustPlatform,
-  rustc,
-  stdenv,
-  webkitgtk_6_0,
-  wrapGAppsHook4,
+{ appstream
+, buildNpmPackage
+, cargo
+, desktop-file-utils
+, fetchFromGitHub
+, gtk4
+, gtksourceview5
+, lib
+, libadwaita
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, rustPlatform
+, rustc
+, stdenv
+, webkitgtk_6_0
+, wrapGAppsHook4
+,
 }:
 let
   d3-graphviz = buildNpmPackage rec {

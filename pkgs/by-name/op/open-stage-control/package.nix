@@ -1,14 +1,14 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  makeDesktopItem,
-  copyDesktopItems,
-  nodejs_20,
-  electron,
-  python3,
-  nix-update-script,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, makeBinaryWrapper
+, makeDesktopItem
+, copyDesktopItems
+, nodejs_20
+, electron
+, python3
+, nix-update-script
+,
 }:
 
 buildNpmPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  clr,
-  gcc,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, clr
+, gcc
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

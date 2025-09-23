@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  python3,
-  perl,
-  fetchFromGitHub,
-  installShellFiles,
+{ lib
+, stdenv
+, python3
+, perl
+, fetchFromGitHub
+, installShellFiles
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-publish";

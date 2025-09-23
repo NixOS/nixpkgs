@@ -1,8 +1,8 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  writeShellScript,
+{ stdenv
+, lib
+, fetchurl
+, writeShellScript
+,
 }:
 let
   versionMetadata = import ./sysdig-cli-scanner.versions.nix;

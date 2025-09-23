@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  bison,
-  cmake,
-  doxygen,
-  flex,
-  graphviz,
-  python3,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, cmake
+, doxygen
+, flex
+, graphviz
+, python3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  linol,
-  lwt,
-  yojson,
+{ buildDunePackage
+, linol
+, lwt
+, yojson
+,
 }:
 
 buildDunePackage {

@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchYarnDeps,
-  fetchFromGitHub,
-  cargo-tauri,
-  glib-networking,
-  yarnConfigHook,
-  yarnBuildHook,
-  openssl,
-  pkg-config,
-  webkitgtk_4_1,
-  wrapGAppsHook4,
-  nix-update-script,
-  nodejs,
+{ lib
+, stdenv
+, rustPlatform
+, fetchYarnDeps
+, fetchFromGitHub
+, cargo-tauri
+, glib-networking
+, yarnConfigHook
+, yarnBuildHook
+, openssl
+, pkg-config
+, webkitgtk_4_1
+, wrapGAppsHook4
+, nix-update-script
+, nodejs
+,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

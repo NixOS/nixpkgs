@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  dbus-python,
-  fetchFromGitHub,
-  flask,
-  flask-cors,
-  poetry-core,
-  pythonOlder,
-  requests,
+{ lib
+, buildPythonPackage
+, dbus-python
+, fetchFromGitHub
+, flask
+, flask-cors
+, poetry-core
+, pythonOlder
+, requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  huggingface-hub,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, huggingface-hub
+, setuptools
+,
 }:
 buildPythonPackage rec {
   pname = "kernels";

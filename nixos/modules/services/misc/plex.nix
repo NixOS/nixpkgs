@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   cfg = config.services.plex;
@@ -156,9 +155,11 @@ in
         NoNewPrivileges = true;
         PrivateTmp = true;
         PrivateDevices = cfg.accelerationDevices == [ ];
-        DeviceAllow = lib.mkIf (
-          cfg.accelerationDevices != [ ] && !lib.elem "*" cfg.accelerationDevices
-        ) cfg.accelerationDevices;
+        DeviceAllow = lib.mkIf
+          (
+            cfg.accelerationDevices != [ ] && !lib.elem "*" cfg.accelerationDevices
+          )
+          cfg.accelerationDevices;
         ProtectSystem = true;
         ProtectHome = true;
         ProtectControlGroups = true;

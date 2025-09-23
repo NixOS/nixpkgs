@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  decorator,
-  fetchPypi,
-  hatchling,
-  importlib-metadata,
-  ipykernel,
-  ipython,
-  jupyter-client,
-  psutil,
-  python-dateutil,
-  pythonOlder,
-  pyzmq,
-  tornado,
-  tqdm,
-  traitlets,
+{ lib
+, buildPythonPackage
+, decorator
+, fetchPypi
+, hatchling
+, importlib-metadata
+, ipykernel
+, ipython
+, jupyter-client
+, psutil
+, python-dateutil
+, pythonOlder
+, pyzmq
+, tornado
+, tqdm
+, traitlets
+,
 }:
 
 buildPythonPackage rec {

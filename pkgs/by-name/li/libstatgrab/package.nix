@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  withSaidar ? true,
-  ncurses,
+{ lib
+, stdenv
+, fetchurl
+, withSaidar ? true
+, ncurses
+,
 }:
 
 stdenv.mkDerivation rec {

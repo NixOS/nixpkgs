@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  xz,
-  dpkg,
-  libxslt,
-  docbook_xsl,
-  makeWrapper,
-  writeShellScript,
-  python3Packages,
-  perlPackages,
-  curl,
-  gnupg,
-  diffutils,
-  nano,
-  pkg-config,
-  bash-completion,
-  help2man,
-  nix-update-script,
-  sendmailPath ? "/run/wrappers/bin/sendmail",
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, xz
+, dpkg
+, libxslt
+, docbook_xsl
+, makeWrapper
+, writeShellScript
+, python3Packages
+, perlPackages
+, curl
+, gnupg
+, diffutils
+, nano
+, pkg-config
+, bash-completion
+, help2man
+, nix-update-script
+, sendmailPath ? "/run/wrappers/bin/sendmail"
+,
 }:
 
 let
@@ -54,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs scripts
   ''
   +
-    # Remove man7 target to avoid missing *.7 file error
-    ''
-      substituteInPlace doc/Makefile \
-        --replace-fail " install_man7" ""
-    '';
+  # Remove man7 target to avoid missing *.7 file error
+  ''
+    substituteInPlace doc/Makefile \
+      --replace-fail " install_man7" ""
+  '';
 
   nativeBuildInputs = [
     makeWrapper

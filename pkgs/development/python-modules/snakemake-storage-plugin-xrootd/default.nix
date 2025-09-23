@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  hatch-vcs,
-  hatchling,
-  snakemake,
-  snakemake-interface-storage-plugins,
-  snakemake-interface-common,
-  xrootd,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatch-vcs
+, hatchling
+, snakemake
+, snakemake-interface-storage-plugins
+, snakemake-interface-common
+, xrootd
+,
 }:
 
 buildPythonPackage rec {

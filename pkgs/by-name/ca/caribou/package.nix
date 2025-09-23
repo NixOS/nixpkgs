@@ -1,26 +1,26 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  pkg-config,
-  gnome,
-  glib,
-  gtk3,
-  gobject-introspection,
-  clutter,
-  dbus,
-  python3,
-  libxml2,
-  libxklavier,
-  libXtst,
-  gtk2,
-  intltool,
-  libxslt,
-  at-spi2-core,
-  autoreconfHook,
-  wrapGAppsHook3,
-  libgee,
-  vala,
+{ fetchurl
+, lib
+, stdenv
+, pkg-config
+, gnome
+, glib
+, gtk3
+, gobject-introspection
+, clutter
+, dbus
+, python3
+, libxml2
+, libxklavier
+, libXtst
+, gtk2
+, intltool
+, libxslt
+, at-spi2-core
+, autoreconfHook
+, wrapGAppsHook3
+, libgee
+, vala
+,
 }:
 
 let

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  libpq,
-  openssl,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpq
+, openssl
+, nixosTests
+,
 }:
 stdenv.mkDerivation {
   pname = "pgmanage";

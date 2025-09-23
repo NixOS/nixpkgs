@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  glib,
-  dbus,
-  openobex,
-  bluez,
-  libical,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, dbus
+, openobex
+, bluez
+, libical
+,
 }:
 
 stdenv.mkDerivation rec {

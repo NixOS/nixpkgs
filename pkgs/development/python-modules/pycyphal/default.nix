@@ -1,24 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build system
-  setuptools,
-
-  # dependencies
-  numpy,
-  nunavut,
-
-  # optional dependencies
-  cobs,
-  libpcap,
-  pyserial,
-  python-can,
-
-  # tests
-  pytest-asyncio,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build system
+  setuptools
+, # dependencies
+  numpy
+, nunavut
+, # optional dependencies
+  cobs
+, libpcap
+, pyserial
+, python-can
+, # tests
+  pytest-asyncio
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

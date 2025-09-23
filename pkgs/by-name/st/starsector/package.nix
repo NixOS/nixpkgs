@@ -1,15 +1,15 @@
-{
-  lib,
-  fetchzip,
-  libGL,
-  makeWrapper,
-  openal,
-  openjdk17,
-  stdenv,
-  xorg,
-  copyDesktopItems,
-  makeDesktopItem,
-  writeScript,
+{ lib
+, fetchzip
+, libGL
+, makeWrapper
+, openal
+, openjdk17
+, stdenv
+, xorg
+, copyDesktopItems
+, makeDesktopItem
+, writeScript
+,
 }:
 let
   openjdk = openjdk17;

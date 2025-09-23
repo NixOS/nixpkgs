@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchpatch,
-  pkg-config,
-  smlnj,
-  rsync,
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, pkg-config
+, smlnj
+, rsync
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,59 +1,56 @@
-{
-  stdenv,
-  lib,
-  copyDesktopItems,
-  makeDesktopItem,
-  unzip,
-  libsecret,
-  libXScrnSaver,
-  libxshmfence,
-  buildPackages,
-  at-spi2-atk,
-  autoPatchelfHook,
-  alsa-lib,
-  libgbm,
-  nss,
-  nspr,
-  xorg,
-  systemdLibs,
-  fontconfig,
-  libdbusmenu,
-  glib,
-  buildFHSEnv,
-  wayland,
-  libglvnd,
-  libkrb5,
-  openssl,
-
-  # Populate passthru.tests
-  tests,
-
-  # needed to fix "Save as Root"
-  asar,
-  bash,
-
-  # Attributes inherit from specific versions
-  version,
-  vscodeVersion ? version,
-  src,
-  meta,
-  sourceRoot,
-  commandLineArgs,
-  executableName,
-  longName,
-  shortName,
-  pname,
-  libraryName ? "vscode",
-  iconName ? "vs${executableName}",
-  updateScript,
-  dontFixup ? false,
-  rev ? null,
-  vscodeServer ? null,
-  sourceExecutableName ? executableName,
-  useVSCodeRipgrep ? false,
-  ripgrep,
-  hasVsceSign ? false,
-  patchVSCodePath ? true,
+{ stdenv
+, lib
+, copyDesktopItems
+, makeDesktopItem
+, unzip
+, libsecret
+, libXScrnSaver
+, libxshmfence
+, buildPackages
+, at-spi2-atk
+, autoPatchelfHook
+, alsa-lib
+, libgbm
+, nss
+, nspr
+, xorg
+, systemdLibs
+, fontconfig
+, libdbusmenu
+, glib
+, buildFHSEnv
+, wayland
+, libglvnd
+, libkrb5
+, openssl
+, # Populate passthru.tests
+  tests
+, # needed to fix "Save as Root"
+  asar
+, bash
+, # Attributes inherit from specific versions
+  version
+, vscodeVersion ? version
+, src
+, meta
+, sourceRoot
+, commandLineArgs
+, executableName
+, longName
+, shortName
+, pname
+, libraryName ? "vscode"
+, iconName ? "vs${executableName}"
+, updateScript
+, dontFixup ? false
+, rev ? null
+, vscodeServer ? null
+, sourceExecutableName ? executableName
+, useVSCodeRipgrep ? false
+, ripgrep
+, hasVsceSign ? false
+, patchVSCodePath ? true
+,
 }:
 
 stdenv.mkDerivation (
@@ -70,8 +67,8 @@ stdenv.mkDerivation (
     # buildFHSEnv allows for users to use the existing vscode
     # extension tooling without significant pain.
     fhs =
-      {
-        additionalPkgs ? pkgs: [ ],
+      { additionalPkgs ? pkgs: [ ]
+      ,
       }:
       buildFHSEnv {
         # also determines the name of the wrapped command
@@ -323,24 +320,25 @@ stdenv.mkDerivation (
     # linux only because of https://github.com/NixOS/nixpkgs/issues/138729
     postPatch =
       # this is a fix for "save as root" functionality
-      lib.optionalString stdenv.hostPlatform.isLinux (
-        ''
-          packed="resources/app/node_modules.asar"
-          unpacked="resources/app/node_modules"
-          asar extract "$packed" "$unpacked"
-          substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
-            --replace-fail "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
-            --replace-fail "/bin/bash" "${bash}/bin/bash"
-          rm -rf "$packed"
-        ''
-        # without this symlink loading JsChardet, the library that is used for auto encoding detection when files.autoGuessEncoding is true,
-        # fails to load with: electron/js2c/renderer_init: Error: Cannot find module 'jschardet'
-        # and the window immediately closes which renders VSCode unusable
-        # see https://github.com/NixOS/nixpkgs/issues/152939 for full log
-        + ''
-          ln -rs "$unpacked" "$packed"
-        ''
-      )
+      lib.optionalString stdenv.hostPlatform.isLinux
+        (
+          ''
+            packed="resources/app/node_modules.asar"
+            unpacked="resources/app/node_modules"
+            asar extract "$packed" "$unpacked"
+            substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
+              --replace-fail "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
+              --replace-fail "/bin/bash" "${bash}/bin/bash"
+            rm -rf "$packed"
+          ''
+          # without this symlink loading JsChardet, the library that is used for auto encoding detection when files.autoGuessEncoding is true,
+          # fails to load with: electron/js2c/renderer_init: Error: Cannot find module 'jschardet'
+          # and the window immediately closes which renders VSCode unusable
+          # see https://github.com/NixOS/nixpkgs/issues/152939 for full log
+          + ''
+            ln -rs "$unpacked" "$packed"
+          ''
+        )
       + (
         let
           vscodeRipgrep =

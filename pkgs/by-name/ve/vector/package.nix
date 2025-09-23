@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  rustPlatform,
-  pkg-config,
-  openssl,
-  protobuf,
-  rdkafka,
-  oniguruma,
-  zstd,
-  rust-jemalloc-sys,
-  rust-jemalloc-sys-unprefixed,
-  libiconv,
-  coreutils,
-  tzdata,
-  cmake,
-  perl,
-  git,
-  nixosTests,
-  nix-update-script,
-  darwin,
-  zlib,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, rustPlatform
+, pkg-config
+, openssl
+, protobuf
+, rdkafka
+, oniguruma
+, zstd
+, rust-jemalloc-sys
+, rust-jemalloc-sys-unprefixed
+, libiconv
+, coreutils
+, tzdata
+, cmake
+, perl
+, git
+, nixosTests
+, nix-update-script
+, darwin
+, zlib
+,
 }:
 
 let

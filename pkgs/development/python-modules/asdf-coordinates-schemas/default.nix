@@ -1,12 +1,12 @@
-{
-  lib,
-  asdf-standard,
-  asdf,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools-scm,
-  setuptools,
+{ lib
+, asdf-standard
+, asdf
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools-scm
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

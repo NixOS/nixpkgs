@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  restish,
-  testers,
-  xorg,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, restish
+, testers
+, xorg
+,
 }:
 
 buildGoModule rec {

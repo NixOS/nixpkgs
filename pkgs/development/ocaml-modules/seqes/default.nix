@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  buildDunePackage,
-  qcheck,
-  qcheck-alcotest,
-  alcotest,
+{ lib
+, fetchurl
+, buildDunePackage
+, qcheck
+, qcheck-alcotest
+, alcotest
+,
 }:
 
 buildDunePackage rec {

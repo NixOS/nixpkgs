@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  poetry-core,
-  jsonschema,
-  peewee,
-  platformdirs,
-  iso8601,
-  rfc3339-validator,
-  strict-rfc3339,
-  tomlkit,
-  deprecation,
-  timeslot,
-  pytestCheckHook,
-  gitUpdater,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, poetry-core
+, jsonschema
+, peewee
+, platformdirs
+, iso8601
+, rfc3339-validator
+, strict-rfc3339
+, tomlkit
+, deprecation
+, timeslot
+, pytestCheckHook
+, gitUpdater
+,
 }:
 
 buildPythonPackage rec {

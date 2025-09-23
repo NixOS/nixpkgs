@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  desktop-file-utils,
-  fetchurl,
-  glib,
-  gettext,
-  gtk4,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  gnome,
+{ stdenv
+, lib
+, desktop-file-utils
+, fetchurl
+, glib
+, gettext
+, gtk4
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

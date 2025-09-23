@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  wrapGAppsHook3,
-  gtk3,
-  gdk-pixbuf,
-  glib,
-  sane-backends,
-  libnotify,
+{ lib
+, stdenv
+, buildDotnetModule
+, dotnetCorePackages
+, fetchFromGitHub
+, wrapGAppsHook3
+, gtk3
+, gdk-pixbuf
+, glib
+, sane-backends
+, libnotify
+,
 }:
 
 buildDotnetModule rec {

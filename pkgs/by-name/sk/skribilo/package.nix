@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fig2dev,
-  gettext,
-  ghostscript,
-  guile,
-  guile-lib,
-  guile-reader,
-  imagemagick,
-  makeWrapper,
-  pkg-config,
-  enableEmacs ? false,
-  emacs,
-  enableLout ? stdenv.hostPlatform.isLinux,
-  lout,
-  enablePloticus ? stdenv.hostPlatform.isLinux,
-  ploticus,
-  enableTex ? true,
-  texliveSmall,
+{ lib
+, stdenv
+, fetchurl
+, fig2dev
+, gettext
+, ghostscript
+, guile
+, guile-lib
+, guile-reader
+, imagemagick
+, makeWrapper
+, pkg-config
+, enableEmacs ? false
+, emacs
+, enableLout ? stdenv.hostPlatform.isLinux
+, lout
+, enablePloticus ? stdenv.hostPlatform.isLinux
+, ploticus
+, enableTex ? true
+, texliveSmall
+,
 }:
 
 let

@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  requests,
-  pycountry,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, pycountry
+,
 }:
 
 buildPythonPackage rec {

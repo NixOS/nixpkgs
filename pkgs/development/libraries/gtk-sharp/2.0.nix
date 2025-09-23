@@ -1,19 +1,19 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  pkg-config,
-  mono,
-  glib,
-  pango,
-  gtk2,
-  libxml2,
-  monoDLLFixer,
-  autoconf,
-  automake,
-  libtool,
-  which,
-  fetchpatch,
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, mono
+, glib
+, pango
+, gtk2
+, libxml2
+, monoDLLFixer
+, autoconf
+, automake
+, libtool
+, which
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  replaceVars,
-  git,
-  fetchFromGitLab,
-  buildGoModule,
-  wrapQtAppsHook,
-  python3,
-  python3Packages,
-  pkg-config,
-  openvpn,
-  cmake,
-  qmake,
-  which,
-  iproute2,
-  iptables,
-  procps,
-  qtbase,
-  qtdeclarative,
-  qtsvg,
-  qttools,
-  qtwayland,
-  provider ? "riseup",
+{ lib
+, stdenv
+, replaceVars
+, git
+, fetchFromGitLab
+, buildGoModule
+, wrapQtAppsHook
+, python3
+, python3Packages
+, pkg-config
+, openvpn
+, cmake
+, qmake
+, which
+, iproute2
+, iptables
+, procps
+, qtbase
+, qtdeclarative
+, qtsvg
+, qttools
+, qtwayland
+, provider ? "riseup"
+,
 }:
 let
   version = "0.24.8";

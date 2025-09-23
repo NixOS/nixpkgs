@@ -1,6 +1,6 @@
-{
-  testers,
-  log4brains,
+{ testers
+, log4brains
+,
 }:
 testers.runCommand {
   name = "log4brains-test-basic-scenario";

@@ -1,18 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchFromGitHub,
-  gitUpdater,
-  cmake,
-  functionalplus,
-  eigen,
-  nlohmann_json,
-  python3Packages,
-  buildTests ? false, # Needs tensorflow
+{ lib
+, stdenv
+, fetchpatch
+, fetchFromGitHub
+, gitUpdater
+, cmake
+, functionalplus
+, eigen
+, nlohmann_json
+, python3Packages
+, buildTests ? false
+, # Needs tensorflow
   # for tests
-  doctest,
-  rocmPackages,
+  doctest
+, rocmPackages
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

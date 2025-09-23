@@ -1,36 +1,36 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  coreutils,
-  gdk-pixbuf,
-  gdk-pixbuf-xlib,
-  gettext,
-  gle,
-  gtk3,
-  intltool,
-  libGL,
-  libGLU,
-  libX11,
-  libXext,
-  libXft,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXt,
-  libXxf86vm,
-  libxml2,
-  makeWrapper,
-  pam,
-  perlPackages,
-  xorg,
-  pkg-config,
-  systemd,
-  forceInstallAllHacks ? true,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  nixosTests,
-  replaceVars,
-  wrapperPrefix ? "/run/wrappers/bin",
+{ lib
+, stdenv
+, fetchurl
+, coreutils
+, gdk-pixbuf
+, gdk-pixbuf-xlib
+, gettext
+, gle
+, gtk3
+, intltool
+, libGL
+, libGLU
+, libX11
+, libXext
+, libXft
+, libXi
+, libXinerama
+, libXrandr
+, libXt
+, libXxf86vm
+, libxml2
+, makeWrapper
+, pam
+, perlPackages
+, xorg
+, pkg-config
+, systemd
+, forceInstallAllHacks ? true
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, nixosTests
+, replaceVars
+, wrapperPrefix ? "/run/wrappers/bin"
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

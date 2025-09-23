@@ -1,9 +1,9 @@
-{
-  buildPythonPackage,
-  gfortran,
-  meson-python,
-  numpy,
-  scikits-odes-core,
+{ buildPythonPackage
+, gfortran
+, meson-python
+, numpy
+, scikits-odes-core
+,
 }:
 
 buildPythonPackage rec {

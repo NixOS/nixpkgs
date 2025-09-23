@@ -1,17 +1,17 @@
-{
-  lib,
-  fetchFromGitHub,
-  makeBinaryWrapper,
-  installShellFiles,
-  rustPlatform,
-  testers,
-  cachix,
-  nixVersions,
-  openssl,
-  dbus,
-  pkg-config,
-  glibcLocalesUtf8,
-  devenv, # required to run version test
+{ lib
+, fetchFromGitHub
+, makeBinaryWrapper
+, installShellFiles
+, rustPlatform
+, testers
+, cachix
+, nixVersions
+, openssl
+, dbus
+, pkg-config
+, glibcLocalesUtf8
+, devenv
+, # required to run version test
 }:
 
 let

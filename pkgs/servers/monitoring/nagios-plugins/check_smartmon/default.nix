@@ -1,9 +1,9 @@
-{
-  fetchFromGitHub,
-  lib,
-  python3,
-  smartmontools,
-  stdenv,
+{ fetchFromGitHub
+, lib
+, python3
+, smartmontools
+, stdenv
+,
 }:
 
 stdenv.mkDerivation rec {

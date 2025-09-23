@@ -1,17 +1,17 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  cython,
-  poetry-core,
-  setuptools,
-  numpy,
-  pydicom,
-  pylibjpeg-data,
-  pylibjpeg,
-  libjpeg-tools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, cython
+, poetry-core
+, setuptools
+, numpy
+, pydicom
+, pylibjpeg-data
+, pylibjpeg
+, libjpeg-tools
+,
 }:
 
 let

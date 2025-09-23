@@ -1,12 +1,12 @@
-{
-  lib,
-  fetchFromGitHub,
-  installShellFiles,
-  makeBinaryWrapper,
-  nix,
-  nix-update-script,
-  rustPlatform,
-  versionCheckHook,
+{ lib
+, fetchFromGitHub
+, installShellFiles
+, makeBinaryWrapper
+, nix
+, nix-update-script
+, rustPlatform
+, versionCheckHook
+,
 }:
 
 rustPlatform.buildRustPackage rec {

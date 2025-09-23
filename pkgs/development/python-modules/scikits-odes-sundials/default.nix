@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  sundials,
-  cython,
-  numpy,
-  pkgconfig,
-  setuptools,
-  scikits-odes-core,
-  pytestCheckHook,
+{ buildPythonPackage
+, sundials
+, cython
+, numpy
+, pkgconfig
+, setuptools
+, scikits-odes-core
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

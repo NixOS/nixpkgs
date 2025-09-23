@@ -1,19 +1,16 @@
-{
-  buildPythonPackage,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  cirq-aqt,
-  cirq-core,
-  cirq-google,
-  cirq-ionq,
-  cirq-pasqal,
-  cirq-web,
-
-  # tests
-  pytestCheckHook,
+{ buildPythonPackage
+, # build-system
+  setuptools
+, # dependencies
+  cirq-aqt
+, cirq-core
+, cirq-google
+, cirq-ionq
+, cirq-pasqal
+, cirq-web
+, # tests
+  pytestCheckHook
+,
 }:
 
 buildPythonPackage {

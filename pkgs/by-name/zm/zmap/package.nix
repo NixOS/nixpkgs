@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  libjson,
-  json_c,
-  gengetopt,
-  flex,
-  byacc,
-  gmp,
-  libpcap,
-  libunistring,
-  judy,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libjson
+, json_c
+, gengetopt
+, flex
+, byacc
+, gmp
+, libpcap
+, libunistring
+, judy
+,
 }:
 
 stdenv.mkDerivation rec {

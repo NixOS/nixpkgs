@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  openssl,
-  getconf,
-  util-linux,
+{ lib
+, stdenv
+, fetchurl
+, openssl
+, getconf
+, util-linux
+,
 }:
 
 stdenv.mkDerivation rec {

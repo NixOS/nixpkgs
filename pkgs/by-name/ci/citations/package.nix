@@ -1,24 +1,24 @@
-{
-  cargo,
-  desktop-file-utils,
-  fetchFromGitLab,
-  gettext,
-  glib,
-  gtk4,
-  gtksourceview5,
-  lib,
-  libadwaita,
-  meson,
-  ninja,
-  pkg-config,
-  poppler,
-  rustPlatform,
-  rustc,
-  stdenv,
-  testers,
-  wrapGAppsHook4,
-  clippy,
-  nix-update-script,
+{ cargo
+, desktop-file-utils
+, fetchFromGitLab
+, gettext
+, glib
+, gtk4
+, gtksourceview5
+, lib
+, libadwaita
+, meson
+, ninja
+, pkg-config
+, poppler
+, rustPlatform
+, rustc
+, stdenv
+, testers
+, wrapGAppsHook4
+, clippy
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

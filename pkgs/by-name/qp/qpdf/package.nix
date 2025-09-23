@@ -1,20 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  libjpeg,
-  perl,
-  zlib,
-  ctestCheckHook,
-
-  # for passthru.tests
-  cups-filters,
-  pdfmixtool,
-  pdfslicer,
-  python3,
-  testers,
-  versionCheckHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, libjpeg
+, perl
+, zlib
+, ctestCheckHook
+, # for passthru.tests
+  cups-filters
+, pdfmixtool
+, pdfslicer
+, python3
+, testers
+, versionCheckHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

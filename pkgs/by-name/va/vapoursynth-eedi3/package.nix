@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  boost,
-  vapoursynth,
-  opencl-headers,
-  ocl-icd,
-  openclSupport ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, boost
+, vapoursynth
+, opencl-headers
+, ocl-icd
+, openclSupport ? true
+,
 }:
 
 stdenv.mkDerivation {

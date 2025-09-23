@@ -1,22 +1,22 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  writeShellScriptBin,
-  cmake,
-  ninja,
-  pkg-config,
-  makeWrapper,
-  zlib,
-  libpng,
-  SDL2,
-  SDL2_net,
-  hidapi,
-  qt6,
-  vulkan-loader,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, writeShellScriptBin
+, cmake
+, ninja
+, pkg-config
+, makeWrapper
+, zlib
+, libpng
+, SDL2
+, SDL2_net
+, hidapi
+, qt6
+, vulkan-loader
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 let

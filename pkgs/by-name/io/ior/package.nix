@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  mpi,
-  perl,
-  autoreconfHook,
-  pkg-config,
+{ lib
+, stdenv
+, fetchFromGitHub
+, mpi
+, perl
+, autoreconfHook
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

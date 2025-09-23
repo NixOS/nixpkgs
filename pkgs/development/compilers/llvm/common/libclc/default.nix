@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  version,
-  runCommand,
-  monorepoSrc,
-  llvm,
-  buildPackages,
-  buildLlvmTools,
-  ninja,
-  cmake,
-  python3,
-  release_version,
-  getVersionFile,
+{ lib
+, stdenv
+, version
+, runCommand
+, monorepoSrc
+, llvm
+, buildPackages
+, buildLlvmTools
+, ninja
+, cmake
+, python3
+, release_version
+, getVersionFile
+,
 }:
 let
   spirv-llvm-translator = buildPackages.spirv-llvm-translator.override {
@@ -30,11 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libclc";
   inherit version;
 
-  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } (''
-    mkdir -p "$out"
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/libclc "$out"
-  '');
+  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } (
+    ''
+      mkdir -p "$out"
+      cp -r ${monorepoSrc}/cmake "$out"
+      cp -r ${monorepoSrc}/libclc "$out"
+    ''
+  );
 
   sourceRoot = "${finalAttrs.src.name}/libclc";
 

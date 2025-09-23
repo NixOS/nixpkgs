@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  wlroots_0_19,
-  scdoc,
-  pkg-config,
-  wayland,
-  libdrm,
-  libxkbcommon,
-  pixman,
-  wayland-protocols,
-  libGL,
-  libgbm,
-  libxcb,
-  xcbutilwm,
-  validatePkgConfig,
-  testers,
-  wayland-scanner,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, wlroots_0_19
+, scdoc
+, pkg-config
+, wayland
+, libdrm
+, libxkbcommon
+, pixman
+, wayland-protocols
+, libGL
+, libgbm
+, libxcb
+, xcbutilwm
+, validatePkgConfig
+, testers
+, wayland-scanner
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,7 +1,7 @@
-{
-  callPackage,
-  authentik,
-  vendorHash ? authentik.proxy.vendorHash,
+{ callPackage
+, authentik
+, vendorHash ? authentik.proxy.vendorHash
+,
 }:
 {
   ldap = callPackage ./ldap.nix { inherit vendorHash; };

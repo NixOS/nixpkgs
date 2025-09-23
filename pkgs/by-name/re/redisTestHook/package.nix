@@ -1,12 +1,13 @@
-{
-  lib,
-  callPackage,
-  makeSetupHook,
-  valkey,
-  python3Packages,
+{ lib
+, callPackage
+, makeSetupHook
+, valkey
+, python3Packages
+,
 }:
 
-makeSetupHook {
+makeSetupHook
+{
   name = "redis-test-hook";
   substitutions = {
     cli = lib.getExe' valkey "redis-cli";

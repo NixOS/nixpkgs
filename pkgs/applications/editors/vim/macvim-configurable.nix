@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  vimUtils,
-  buildEnv,
-  makeWrapper,
+{ lib
+, stdenv
+, callPackage
+, vimUtils
+, buildEnv
+, makeWrapper
+,
 }:
 
 let

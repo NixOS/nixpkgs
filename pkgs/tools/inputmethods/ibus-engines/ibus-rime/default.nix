@@ -1,17 +1,17 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  gdk-pixbuf,
-  glib,
-  ibus,
-  libnotify,
-  librime,
-  pkg-config,
-  rime-data,
-  symlinkJoin,
-  rimeDataPkgs ? [ rime-data ],
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gdk-pixbuf
+, glib
+, ibus
+, libnotify
+, librime
+, pkg-config
+, rime-data
+, symlinkJoin
+, rimeDataPkgs ? [ rime-data ]
+,
 }:
 
 stdenv.mkDerivation rec {

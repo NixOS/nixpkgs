@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  numpy,
-  fluidsynth,
-  stdenv,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, numpy
+, fluidsynth
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

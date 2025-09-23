@@ -1,13 +1,13 @@
-{
-  lib,
-  liblsl,
-  fetchFromGitHub,
-  buildPythonPackage,
-  stdenv,
-  numpy,
-  setuptools,
-  setuptools-scm,
-  wheel,
+{ lib
+, liblsl
+, fetchFromGitHub
+, buildPythonPackage
+, stdenv
+, numpy
+, setuptools
+, setuptools-scm
+, wheel
+,
 }:
 
 buildPythonPackage rec {

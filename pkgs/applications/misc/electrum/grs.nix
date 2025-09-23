@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  wrapQtAppsHook,
-  python3,
-  zbar,
-  secp256k1,
-  enableQt ? true,
-  qtwayland,
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapQtAppsHook
+, python3
+, zbar
+, secp256k1
+, enableQt ? true
+, qtwayland
+,
 }:
 
 let

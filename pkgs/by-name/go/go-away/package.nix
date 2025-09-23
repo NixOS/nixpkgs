@@ -1,15 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitea,
-
-  # asset compression
-  brotli,
-  zopfli,
-
-  # wasm compilation
-  clang,
-  tinygo,
+{ lib
+, buildGoModule
+, fetchFromGitea
+, # asset compression
+  brotli
+, zopfli
+, # wasm compilation
+  clang
+, tinygo
+,
 }:
 
 buildGoModule (finalAttrs: {

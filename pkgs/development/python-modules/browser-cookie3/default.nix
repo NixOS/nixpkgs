@@ -1,14 +1,14 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-  setuptools,
-  lz4,
-  keyring,
-  pbkdf2,
-  pycryptodomex,
-  pyaes,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, setuptools
+, lz4
+, keyring
+, pbkdf2
+, pycryptodomex
+, pyaes
+,
 }:
 
 buildPythonPackage rec {

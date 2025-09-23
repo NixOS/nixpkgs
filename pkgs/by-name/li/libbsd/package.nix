@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoreconfHook,
-  libmd,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, libmd
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,9 +41,10 @@ stdenv.mkDerivation rec {
   };
 
   # Fix undefined reference errors with version script under LLVM.
-  configureFlags = lib.optionals (
-    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
-  ) [ "LDFLAGS=-Wl,--undefined-version" ];
+  configureFlags = lib.optionals
+    (
+      stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+    ) [ "LDFLAGS=-Wl,--undefined-version" ];
 
   meta = with lib; {
     description = "Common functions found on BSD systems";

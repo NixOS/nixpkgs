@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  docopt,
-  openstep-parser,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, docopt
+, openstep-parser
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

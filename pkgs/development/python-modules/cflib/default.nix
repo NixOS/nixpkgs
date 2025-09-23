@@ -1,18 +1,18 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
-  libusb-package,
-  numpy,
-  packaging,
-  pyserial,
-  pyusb,
-  scipy,
-  pytestCheckHook,
-  pyyaml,
-  udevCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, setuptools-scm
+, libusb-package
+, numpy
+, packaging
+, pyserial
+, pyusb
+, scipy
+, pytestCheckHook
+, pyyaml
+, udevCheckHook
+,
 }:
 
 buildPythonPackage rec {

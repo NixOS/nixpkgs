@@ -1,20 +1,20 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  gflanguages,
-  num2words,
-  protobuf,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools-scm,
-  setuptools,
-  strictyaml,
-  termcolor,
-  ufo2ft,
-  vharfbuzz,
-  youseedee,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gflanguages
+, num2words
+, protobuf
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, setuptools-scm
+, setuptools
+, strictyaml
+, termcolor
+, ufo2ft
+, vharfbuzz
+, youseedee
+,
 }:
 
 buildPythonPackage rec {

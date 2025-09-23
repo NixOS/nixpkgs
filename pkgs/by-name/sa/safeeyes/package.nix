@@ -1,17 +1,17 @@
-{
-  lib,
-  python3,
-  fetchPypi,
-  alsa-utils,
-  gobject-introspection,
-  libnotify,
-  wlrctl,
-  gtk3,
-  safeeyes,
-  testers,
-  xprintidle,
-  xprop,
-  wrapGAppsHook3,
+{ lib
+, python3
+, fetchPypi
+, alsa-utils
+, gobject-introspection
+, libnotify
+, wlrctl
+, gtk3
+, safeeyes
+, testers
+, xprintidle
+, xprop
+, wrapGAppsHook3
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

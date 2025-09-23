@@ -2,13 +2,13 @@
 # at https://www.x.org/releases/individual/.
 # That is why this expression is not inside pkgs.xorg
 
-{
-  lib,
-  stdenv,
-  fetchurl,
-  makeWrapper,
-  xorg,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, xorg
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation rec {

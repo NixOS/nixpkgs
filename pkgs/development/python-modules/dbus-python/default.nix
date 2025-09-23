@@ -1,19 +1,17 @@
-{
-  lib,
-  fetchPypi,
-  buildPythonPackage,
-  fetchpatch,
-  isPyPy,
-  python,
-
-  # build-system
-  meson,
-  meson-python,
-  pkg-config,
-
-  # native dependencies
-  dbus,
-  dbus-glib,
+{ lib
+, fetchPypi
+, buildPythonPackage
+, fetchpatch
+, isPyPy
+, python
+, # build-system
+  meson
+, meson-python
+, pkg-config
+, # native dependencies
+  dbus
+, dbus-glib
+,
 }:
 
 lib.fix (

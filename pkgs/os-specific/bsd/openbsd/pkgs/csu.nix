@@ -1,12 +1,12 @@
-{
-  lib,
-  mkDerivation,
-  fetchpatch,
-  bsdSetupHook,
-  openbsdSetupHook,
-  makeMinimal,
-  install,
-  include,
+{ lib
+, mkDerivation
+, fetchpatch
+, bsdSetupHook
+, openbsdSetupHook
+, makeMinimal
+, install
+, include
+,
 }:
 
 mkDerivation {

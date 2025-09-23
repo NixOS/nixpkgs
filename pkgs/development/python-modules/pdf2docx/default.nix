@@ -1,18 +1,18 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pip,
-  pytestCheckHook,
-  pymupdf,
-  fire,
-  fonttools,
-  numpy,
-  opencv-python-headless,
-  tkinter,
-  python-docx,
-  setuptools,
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildPythonPackage
+, pip
+, pytestCheckHook
+, pymupdf
+, fire
+, fonttools
+, numpy
+, opencv-python-headless
+, tkinter
+, python-docx
+, setuptools
+,
 }:
 let
   version = "0.5.8";

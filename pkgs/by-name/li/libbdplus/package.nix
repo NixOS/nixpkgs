@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libgcrypt,
-  libgpg-error,
-  gettext,
+{ lib
+, stdenv
+, fetchurl
+, libgcrypt
+, libgpg-error
+, gettext
+,
 }:
 
 # library that allows libbluray to play BDplus protected bluray disks

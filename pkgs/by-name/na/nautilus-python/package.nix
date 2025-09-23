@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  replaceVars,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_412,
-  python3,
-  nautilus,
-  gnome,
+{ stdenv
+, lib
+, replaceVars
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_412
+, python3
+, nautilus
+, gnome
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

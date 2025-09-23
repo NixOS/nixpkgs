@@ -1,13 +1,13 @@
-{
-  lib,
-  pkgs,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitLab,
-  setuptools,
-  cryptography,
-  pytestCheckHook,
-  pefile,
+{ lib
+, pkgs
+, stdenv
+, buildPythonPackage
+, fetchFromGitLab
+, setuptools
+, cryptography
+, pytestCheckHook
+, pefile
+,
 }:
 
 buildPythonPackage rec {

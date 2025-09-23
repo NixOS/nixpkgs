@@ -1,14 +1,13 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-
-  # test suite depends on dejagnu which cannot be used during bootstrapping
+{ lib
+, stdenv
+, fetchurl
+, # test suite depends on dejagnu which cannot be used during bootstrapping
   # dejagnu also requires tcl which can't be built statically at the moment
-  doCheck ? !(stdenv.hostPlatform.isStatic),
-  dejagnu,
-  nix-update-script,
-  testers,
+  doCheck ? !(stdenv.hostPlatform.isStatic)
+, dejagnu
+, nix-update-script
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

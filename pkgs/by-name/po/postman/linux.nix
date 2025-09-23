@@ -1,56 +1,56 @@
-{
-  lib,
-  stdenv,
-  copyDesktopItems,
-  makeWrapper,
-  alsa-lib,
-  at-spi2-atk,
-  at-spi2-core,
-  atk,
-  cairo,
-  cups,
-  curlWithGnuTls,
-  dbus,
-  expat,
-  fontconfig,
-  freetype,
-  gdk-pixbuf,
-  glib,
-  gtk3,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXScrnSaver,
-  libXtst,
-  libdrm,
-  libgbm,
-  libGL,
-  libsecret,
-  libuuid,
-  libxkbcommon,
-  nspr,
-  nss,
-  pango,
-  udev,
-  xorg,
-  bintools,
-  makeDesktopItem,
-  # It's unknown which version of openssl that postman expects but it seems that
+{ lib
+, stdenv
+, copyDesktopItems
+, makeWrapper
+, alsa-lib
+, at-spi2-atk
+, at-spi2-core
+, atk
+, cairo
+, cups
+, curlWithGnuTls
+, dbus
+, expat
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gtk3
+, libX11
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXext
+, libXfixes
+, libXi
+, libXrandr
+, libXrender
+, libXScrnSaver
+, libXtst
+, libdrm
+, libgbm
+, libGL
+, libsecret
+, libuuid
+, libxkbcommon
+, nspr
+, nss
+, pango
+, udev
+, xorg
+, bintools
+, makeDesktopItem
+, # It's unknown which version of openssl that postman expects but it seems that
   # OpenSSL 3+ seems to work fine (cf.
   # https://github.com/NixOS/nixpkgs/issues/254325). If postman breaks apparently
   # around OpenSSL stuff then try changing this dependency version.
-  openssl,
-  pname,
-  version,
-  src,
-  passthru,
-  meta,
+  openssl
+, pname
+, version
+, src
+, passthru
+, meta
+,
 }:
 
 stdenv.mkDerivation {

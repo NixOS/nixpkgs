@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  openssl,
-  curl,
-  avahi,
-  ndi,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoPatchelfHook
+, openssl
+, curl
+, avahi
+, ndi
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,11 +1,11 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  openssl,
-  liboqs,
-  lib,
-  nix-update-script,
+{ stdenv
+, fetchFromGitHub
+, cmake
+, openssl
+, liboqs
+, lib
+, nix-update-script
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "oqs-provider";

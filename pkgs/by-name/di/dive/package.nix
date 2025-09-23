@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenv,
-  buildGoModule,
-  fetchFromGitHub,
-  pkg-config,
-  installShellFiles,
-  btrfs-progs,
-  gpgme,
-  lvm2,
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
+, btrfs-progs
+, gpgme
+, lvm2
+,
 }:
 buildGoModule rec {
   pname = "dive";

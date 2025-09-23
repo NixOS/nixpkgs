@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  sane-backends,
-  sane-frontends,
-  libX11,
-  gtk2,
-  pkg-config,
-  libpng,
-  libusb-compat-0_1,
-  gimpSupport ? false,
-  gimp,
-  nix-update-script,
-  fetchpatch,
+{ lib
+, stdenv
+, fetchFromGitLab
+, sane-backends
+, sane-frontends
+, libX11
+, gtk2
+, pkg-config
+, libpng
+, libusb-compat-0_1
+, gimpSupport ? false
+, gimp
+, nix-update-script
+, fetchpatch
+,
 }:
 
 stdenv.mkDerivation rec {

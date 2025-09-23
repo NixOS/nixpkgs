@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenvNoCC,
-  qt5,
-  autoPatchelfHook,
-  fetchzip,
-  portaudio,
+{ lib
+, stdenvNoCC
+, qt5
+, autoPatchelfHook
+, fetchzip
+, portaudio
+,
 }:
 
 stdenvNoCC.mkDerivation {

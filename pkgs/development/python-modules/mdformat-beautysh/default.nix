@@ -1,14 +1,14 @@
-{
-  lib,
-  beautysh,
-  buildPythonPackage,
-  fetchFromGitHub,
-  mdformat,
-  mdformat-gfm,
-  mdit-py-plugins,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, beautysh
+, buildPythonPackage
+, fetchFromGitHub
+, mdformat
+, mdformat-gfm
+, mdit-py-plugins
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

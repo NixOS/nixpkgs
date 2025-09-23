@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  setuptools,
-  pyotp,
-  fido2,
-  qrcode,
-  python,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, setuptools
+, pyotp
+, fido2
+, qrcode
+, python
+,
 }:
 
 buildPythonPackage rec {

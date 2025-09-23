@@ -1,25 +1,25 @@
-{
-  lib,
-  argcomplete,
-  buildPythonPackage,
-  docstring-parser,
-  fetchFromGitHub,
-  fsspec,
-  jsonnet,
-  jsonschema,
-  omegaconf,
-  pytest-subtests,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  reconplogger,
-  requests,
-  ruyaml,
-  setuptools,
-  toml,
-  types-pyyaml,
-  types-requests,
-  typeshed-client,
+{ lib
+, argcomplete
+, buildPythonPackage
+, docstring-parser
+, fetchFromGitHub
+, fsspec
+, jsonnet
+, jsonschema
+, omegaconf
+, pytest-subtests
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, reconplogger
+, requests
+, ruyaml
+, setuptools
+, toml
+, types-pyyaml
+, types-requests
+, typeshed-client
+,
 }:
 
 buildPythonPackage rec {

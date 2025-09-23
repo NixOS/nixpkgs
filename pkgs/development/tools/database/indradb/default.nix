@@ -1,10 +1,10 @@
-{
-  stdenv,
-  fetchFromGitHub,
-  lib,
-  rustPlatform,
-  rustfmt,
-  protobuf,
+{ stdenv
+, fetchFromGitHub
+, lib
+, rustPlatform
+, rustfmt
+, protobuf
+,
 }:
 let
   src = fetchFromGitHub {

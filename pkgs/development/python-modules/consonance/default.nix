@@ -1,15 +1,15 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  fetchpatch,
-  setuptools,
-  dissononce,
-  python-axolotl-curve25519,
-  transitions,
-  protobuf,
-  pytestCheckHook,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, setuptools
+, dissononce
+, python-axolotl-curve25519
+, transitions
+, protobuf
+, pytestCheckHook
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

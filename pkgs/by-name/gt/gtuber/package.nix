@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  glib,
-  libsoup_3,
-  json-glib,
-  libxml2,
-  gst_all_1,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, glib
+, libsoup_3
+, json-glib
+, libxml2
+, gst_all_1
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

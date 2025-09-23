@@ -1,26 +1,25 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  rustc,
-  cargo,
-  rustPlatform,
-  vala,
-  gi-docgen,
-  libseccomp,
-  lcms2,
-  gtk4,
-  gobject-introspection,
-  gnome,
-  common-updater-scripts,
-  _experimental-update-script-combinators,
-  buildPackages,
-  withIntrospection ?
-    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
-    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, rustc
+, cargo
+, rustPlatform
+, vala
+, gi-docgen
+, libseccomp
+, lcms2
+, gtk4
+, gobject-introspection
+, gnome
+, common-updater-scripts
+, _experimental-update-script-combinators
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libglycin";

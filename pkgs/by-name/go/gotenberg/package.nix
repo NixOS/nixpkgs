@@ -1,20 +1,20 @@
-{
-  lib,
-  buildGo125Module,
-  chromium,
-  fetchFromGitHub,
-  libreoffice,
-  makeBinaryWrapper,
-  pdftk,
-  qpdf,
-  unoconv,
-  mktemp,
-  makeFontsConf,
-  liberation_ttf_v2,
-  exiftool,
-  pdfcpu,
-  nixosTests,
-  nix-update-script,
+{ lib
+, buildGo125Module
+, chromium
+, fetchFromGitHub
+, libreoffice
+, makeBinaryWrapper
+, pdftk
+, qpdf
+, unoconv
+, mktemp
+, makeFontsConf
+, liberation_ttf_v2
+, exiftool
+, pdfcpu
+, nixosTests
+, nix-update-script
+,
 }:
 let
   fontsConf = makeFontsConf { fontDirectories = [ liberation_ttf_v2 ]; };

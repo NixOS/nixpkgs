@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchpatch2,
-  pkg-config,
-  libglut,
-  gtk2,
-  gtkglext,
-  libjpeg_turbo,
-  libtheora,
-  libXmu,
-  lua,
-  libGLU,
-  libGL,
-  perl,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, pkg-config
+, libglut
+, gtk2
+, gtkglext
+, libjpeg_turbo
+, libtheora
+, libXmu
+, lua
+, libGLU
+, libGL
+, perl
+, autoreconfHook
+,
 }:
 
 stdenv.mkDerivation rec {

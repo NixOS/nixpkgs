@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  version ? null,
-  paco,
-  ExtLib,
+{ lib
+, mkCoqDerivation
+, coq
+, version ? null
+, paco
+, ExtLib
+,
 }:
 
 mkCoqDerivation {
@@ -20,7 +20,8 @@ mkCoqDerivation {
       (case (range "8.14" "9.1") "5.2.1")
       (case (isEq "8.13") "5.2.0+20241009")
       (case (range "8.10" "8.16") "4.0.0")
-    ] null;
+    ]
+      null;
   release."5.2.1".sha256 = "sha256-3ExKHXIA8EnzAPzSbdB9FTN2OcLCVS5WtmrHOiN9UiQ=";
   release."5.2.0+20241009".sha256 = "sha256-eg47YgnIonCq7XOUgh9uzoKsuFCvsOSTZhgFLNNcPD0=";
   release."5.2.0+20241009".rev = "abd1c7d3935cf03f02bf90e028e6cd3d3dce7713";

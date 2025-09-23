@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  fixtures,
-  pbr,
-  six,
-  subunit,
-  callPackage,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, fixtures
+, pbr
+, six
+, subunit
+, callPackage
+,
 }:
 
 buildPythonPackage rec {

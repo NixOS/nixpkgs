@@ -1,7 +1,7 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
+{ lib
+, stdenv
+, fetchFromGitea
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

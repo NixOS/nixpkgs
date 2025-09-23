@@ -1,16 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  pytest,
-
-  # tests
-  pytest7CheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  pytest
+, # tests
+  pytest7CheckHook
+,
 }:
 
 let

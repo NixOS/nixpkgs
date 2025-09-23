@@ -1,26 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  deprecated,
-  ipython,
-  matplotlib-inline,
-  nest-asyncio,
-  networkx,
-  numpy,
-  packaging,
-  poetry-core,
-  pytest-asyncio,
-  pytest-mock,
-  pytestCheckHook,
-  qcs-sdk-python,
-  respx,
-  rpcq,
-  scipy,
-  syrupy,
-  types-deprecated,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, deprecated
+, ipython
+, matplotlib-inline
+, nest-asyncio
+, networkx
+, numpy
+, packaging
+, poetry-core
+, pytest-asyncio
+, pytest-mock
+, pytestCheckHook
+, qcs-sdk-python
+, respx
+, rpcq
+, scipy
+, syrupy
+, types-deprecated
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

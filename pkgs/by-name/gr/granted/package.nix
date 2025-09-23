@@ -1,12 +1,11 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  nix-update-script,
-  versionCheckHook,
-
-  lib,
-  makeWrapper,
-  xdg-utils,
+{ buildGoModule
+, fetchFromGitHub
+, nix-update-script
+, versionCheckHook
+, lib
+, makeWrapper
+, xdg-utils
+,
 }:
 
 buildGoModule rec {

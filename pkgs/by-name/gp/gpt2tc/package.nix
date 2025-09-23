@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  python3,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, python3
+,
 }:
 
 stdenv.mkDerivation {

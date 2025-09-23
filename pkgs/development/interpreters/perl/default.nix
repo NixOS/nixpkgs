@@ -4,15 +4,15 @@ let
   # Common passthru for all perl interpreters.
   # copied from lua
   passthruFun =
-    {
-      overrides,
-      perlOnBuildForBuild,
-      perlOnBuildForHost,
-      perlOnBuildForTarget,
-      perlOnHostForHost,
-      perlOnTargetForTarget,
-      perlAttr ? null,
-      self, # is perlOnHostForTarget
+    { overrides
+    , perlOnBuildForBuild
+    , perlOnBuildForHost
+    , perlOnBuildForTarget
+    , perlOnHostForHost
+    , perlOnTargetForTarget
+    , perlAttr ? null
+    , self
+    , # is perlOnHostForTarget
     }:
     let
       perlPackages =
@@ -21,12 +21,12 @@ let
           # - imports perl-packages.nix
           # - adds spliced package sets to the package set
           (
-            {
-              stdenv,
-              pkgs,
-              perl,
-              callPackage,
-              makeScopeWithSplicing',
+            { stdenv
+            , pkgs
+            , perl
+            , callPackage
+            , makeScopeWithSplicing'
+            ,
             }:
             let
               perlPackagesFun = callPackage ../../../top-level/perl-packages.nix {

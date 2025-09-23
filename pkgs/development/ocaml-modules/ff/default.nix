@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  ff-pbt,
-  ff-sig,
-  zarith,
-  alcotest,
+{ buildDunePackage
+, ff-pbt
+, ff-sig
+, zarith
+, alcotest
+,
 }:
 
 buildDunePackage {

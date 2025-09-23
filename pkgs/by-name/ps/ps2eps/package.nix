@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  perlPackages,
-  replaceVars,
-  ghostscript,
-  installShellFiles,
+{ lib
+, fetchFromGitHub
+, perlPackages
+, replaceVars
+, ghostscript
+, installShellFiles
+,
 }:
 
 perlPackages.buildPerlPackage rec {

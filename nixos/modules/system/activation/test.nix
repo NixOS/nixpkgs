@@ -1,8 +1,8 @@
-{
-  lib,
-  nixos,
-  expect,
-  testers,
+{ lib
+, nixos
+, expect
+, testers
+,
 }:
 let
   node-forbiddenDependencies-fail = nixos (

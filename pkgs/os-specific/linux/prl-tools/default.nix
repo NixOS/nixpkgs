@@ -1,26 +1,26 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  bbe,
-  makeWrapper,
-  p7zip,
-  perl,
-  undmg,
-  dbus-glib,
-  fuse,
-  glib,
-  xorg,
-  zlib,
-  kernel,
-  bash,
-  cups,
-  gawk,
-  netcat,
-  timetrap,
-  util-linux,
-  wayland,
+{ lib
+, stdenv
+, fetchurl
+, autoPatchelfHook
+, bbe
+, makeWrapper
+, p7zip
+, perl
+, undmg
+, dbus-glib
+, fuse
+, glib
+, xorg
+, zlib
+, kernel
+, bash
+, cups
+, gawk
+, netcat
+, timetrap
+, util-linux
+, wayland
+,
 }:
 
 let

@@ -1,11 +1,11 @@
-{
-  lib,
-  devpi-server,
-  git,
-  glibcLocales,
-  python3,
-  fetchPypi,
-  nix-update-script,
+{ lib
+, devpi-server
+, git
+, glibcLocales
+, python3
+, fetchPypi
+, nix-update-script
+,
 }:
 
 python3.pkgs.buildPythonApplication rec {

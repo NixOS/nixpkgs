@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  openpam,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, openpam
+,
 }:
 
 stdenv.mkDerivation rec {

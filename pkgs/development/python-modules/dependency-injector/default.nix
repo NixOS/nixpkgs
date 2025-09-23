@@ -1,20 +1,20 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  fastapi,
-  fetchFromGitHub,
-  flask,
-  httpx,
-  mypy-boto3-s3,
-  numpy,
-  pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  scipy,
-  setuptools,
+{ lib
+, aiohttp
+, buildPythonPackage
+, fastapi
+, fetchFromGitHub
+, flask
+, httpx
+, mypy-boto3-s3
+, numpy
+, pydantic
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, scipy
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

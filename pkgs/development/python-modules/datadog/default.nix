@@ -1,24 +1,21 @@
-{
-  lib,
-  stdenvNoCC,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  requests,
-
-  # testing
-  click,
-  freezegun,
-  mock,
-  pytest-vcr,
-  pytestCheckHook,
-  python-dateutil,
-  vcrpy,
+{ lib
+, stdenvNoCC
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, # build-system
+  hatchling
+, # dependencies
+  requests
+, # testing
+  click
+, freezegun
+, mock
+, pytest-vcr
+, pytestCheckHook
+, python-dateutil
+, vcrpy
+,
 }:
 
 buildPythonPackage rec {

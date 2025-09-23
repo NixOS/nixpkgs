@@ -1,27 +1,27 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  desktop-file-utils,
-  docbook-xsl-nons,
-  gettext,
-  gobject-introspection,
-  gtk-doc,
-  itstool,
-  meson,
-  ninja,
-  pkg-config,
-  vala,
-  wrapGAppsHook3,
-  dconf,
-  glib,
-  gsettings-desktop-schemas,
-  gspell,
-  libgedit-amtk,
-  libgedit-gtksourceview,
-  libgedit-tepl,
-  libgee,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchFromGitLab
+, desktop-file-utils
+, docbook-xsl-nons
+, gettext
+, gobject-introspection
+, gtk-doc
+, itstool
+, meson
+, ninja
+, pkg-config
+, vala
+, wrapGAppsHook3
+, dconf
+, glib
+, gsettings-desktop-schemas
+, gspell
+, libgedit-amtk
+, libgedit-gtksourceview
+, libgedit-tepl
+, libgee
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

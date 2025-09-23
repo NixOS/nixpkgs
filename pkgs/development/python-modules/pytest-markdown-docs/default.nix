@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  pythonOlder,
-  fetchFromGitHub,
-  poetry-core,
-  markdown-it-py,
-  pytest,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, markdown-it-py
+, pytest
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

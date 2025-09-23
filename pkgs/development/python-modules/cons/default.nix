@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  logical-unification,
-  py,
-  pytestCheckHook,
-  pytest-html,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, logical-unification
+, py
+, pytestCheckHook
+, pytest-html
+, setuptools
+, setuptools-scm
+,
 }:
 
 buildPythonPackage rec {

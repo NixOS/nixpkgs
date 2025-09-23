@@ -1,9 +1,9 @@
-{
-  azure-cli,
-  bicep,
-  bicep-lsp,
-  lib,
-  vscode-utils,
+{ azure-cli
+, bicep
+, bicep-lsp
+, lib
+, vscode-utils
+,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {

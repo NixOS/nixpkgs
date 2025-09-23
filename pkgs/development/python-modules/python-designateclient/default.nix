@@ -1,23 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  debtcollector,
-  fetchFromGitHub,
-  jsonschema,
-  keystoneauth1,
-  openstackdocstheme,
-  osc-lib,
-  oslo-serialization,
-  oslo-utils,
-  oslotest,
-  pbr,
-  pythonOlder,
-  requests-mock,
-  requests,
-  setuptools,
-  sphinxHook,
-  sphinxcontrib-apidoc,
-  stestr,
+{ lib
+, buildPythonPackage
+, debtcollector
+, fetchFromGitHub
+, jsonschema
+, keystoneauth1
+, openstackdocstheme
+, osc-lib
+, oslo-serialization
+, oslo-utils
+, oslotest
+, pbr
+, pythonOlder
+, requests-mock
+, requests
+, setuptools
+, sphinxHook
+, sphinxcontrib-apidoc
+, stestr
+,
 }:
 
 buildPythonPackage rec {

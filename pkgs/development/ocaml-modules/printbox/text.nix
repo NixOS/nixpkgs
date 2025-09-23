@@ -1,11 +1,11 @@
-{
-  buildDunePackage,
-  lib,
-  ocaml,
-  printbox,
-  uucp,
-  uutf,
-  mdx,
+{ buildDunePackage
+, lib
+, ocaml
+, printbox
+, uucp
+, uutf
+, mdx
+,
 }:
 
 buildDunePackage {

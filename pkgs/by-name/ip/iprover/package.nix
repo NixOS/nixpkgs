@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  ocamlPackages,
-  eprover,
-  z3,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitLab
+, ocamlPackages
+, eprover
+, z3
+, zlib
+,
 }:
 
 stdenv.mkDerivation {

@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  callPackage,
-  fetchFromGitHub,
-  httpx,
-  pythonOlder,
-  sanic,
-  setuptools,
-  websockets,
+{ lib
+, buildPythonPackage
+, callPackage
+, fetchFromGitHub
+, httpx
+, pythonOlder
+, sanic
+, setuptools
+, websockets
+,
 }:
 
 buildPythonPackage rec {

@@ -1,25 +1,25 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  fetchzip,
-  python3,
-  glib-networking,
-  asciidoc,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  desktopToDarwinBundle,
-  libxml2,
-  libxslt,
-  withPdfReader ? true,
-  pipewireSupport ? stdenv.hostPlatform.isLinux,
-  pipewire,
-  qt6Packages,
-  enableWideVine ? false,
-  widevine-cdm,
-  # can cause issues on some graphics chips
-  enableVulkan ? false,
-  vulkan-loader,
+{ stdenv
+, lib
+, fetchurl
+, fetchzip
+, python3
+, glib-networking
+, asciidoc
+, docbook_xml_dtd_45
+, docbook_xsl
+, desktopToDarwinBundle
+, libxml2
+, libxslt
+, withPdfReader ? true
+, pipewireSupport ? stdenv.hostPlatform.isLinux
+, pipewire
+, qt6Packages
+, enableWideVine ? false
+, widevine-cdm
+, # can cause issues on some graphics chips
+  enableVulkan ? false
+, vulkan-loader
+,
 }:
 
 let

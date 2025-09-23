@@ -1,7 +1,7 @@
-{
-  mkDerivation,
-  compatIfNeeded,
-  libsbuf,
+{ mkDerivation
+, compatIfNeeded
+, libsbuf
+,
 }:
 mkDerivation {
   path = "usr.sbin/newsyslog";

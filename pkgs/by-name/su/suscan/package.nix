@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  fftwSinglePrec,
-  libsndfile,
-  sigutils,
-  soapysdr-with-plugins,
-  libxml2,
-  volk,
-  zlib,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, fftwSinglePrec
+, libsndfile
+, sigutils
+, soapysdr-with-plugins
+, libxml2
+, volk
+, zlib
+,
 }:
 
 stdenv.mkDerivation rec {

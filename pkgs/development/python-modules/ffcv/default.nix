@@ -1,23 +1,23 @@
-{
-  buildPythonPackage,
-  pythonAtLeast,
-  fetchFromGitHub,
-  setuptools,
-  lib,
-  libjpeg,
-  numba,
-  opencv-python,
-  pandas,
-  pkg-config,
-  pytorch-pfn-extras,
-  terminaltables,
-  tqdm,
-  pytestCheckHook,
-  assertpy,
-  psutil,
-  torchvision,
-  webdataset,
-  stdenv,
+{ buildPythonPackage
+, pythonAtLeast
+, fetchFromGitHub
+, setuptools
+, lib
+, libjpeg
+, numba
+, opencv-python
+, pandas
+, pkg-config
+, pytorch-pfn-extras
+, terminaltables
+, tqdm
+, pytestCheckHook
+, assertpy
+, psutil
+, torchvision
+, webdataset
+, stdenv
+,
 }:
 
 buildPythonPackage rec {

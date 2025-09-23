@@ -1,8 +1,8 @@
-{
-  fetchPypi,
-  lib,
-  python3Packages,
-  xorg,
+{ fetchPypi
+, lib
+, python3Packages
+, xorg
+,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "exegol";

@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  cmake,
-  flex,
-  cadical,
-  symfpu,
-  gmp,
-  python3,
-  gtest,
-  boost,
-  jdk,
-  libpoly,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, flex
+, cadical
+, symfpu
+, gmp
+, python3
+, gtest
+, boost
+, jdk
+, libpoly
+,
 }:
 
 stdenv.mkDerivation rec {

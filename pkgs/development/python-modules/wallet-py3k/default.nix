@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  replaceVars,
-  openssl,
-  setuptools,
-  six,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, replaceVars
+, openssl
+, setuptools
+, six
+,
 }:
 
 buildPythonPackage rec {

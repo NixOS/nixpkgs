@@ -1,18 +1,18 @@
-{
-  curl,
-  expat,
-  fetchFromGitHub,
-  fuse3,
-  gumbo,
-  help2man,
-  lib,
-  libuuid,
-  meson,
-  ninja,
-  nix-update-script,
-  pkg-config,
-  stdenv,
-  testers,
+{ curl
+, expat
+, fetchFromGitHub
+, fuse3
+, gumbo
+, help2man
+, lib
+, libuuid
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, stdenv
+, testers
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

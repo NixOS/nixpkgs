@@ -5,13 +5,13 @@
   Hashes and urls are retrieved from:
   https://dotnet.microsoft.com/download/dotnet
 */
-{
-  lib,
-  config,
-  recurseIntoAttrs,
-  generateSplicesForMkScope,
-  makeScopeWithSplicing',
-  writeScriptBin,
+{ lib
+, config
+, recurseIntoAttrs
+, generateSplicesForMkScope
+, makeScopeWithSplicing'
+, writeScriptBin
+,
 }:
 
 let
@@ -55,17 +55,18 @@ let
         };
 
       in
-      lib.optionalAttrs config.allowAliases (
-        {
-          # EOL
-          sdk_2_1 = throw "Dotnet SDK 2.1 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-          sdk_2_2 = throw "Dotnet SDK 2.2 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-          sdk_3_0 = throw "Dotnet SDK 3.0 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-          sdk_3_1 = throw "Dotnet SDK 3.1 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-          sdk_5_0 = throw "Dotnet SDK 5.0 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
-        }
-        // dotnet-bin
-      )
+      lib.optionalAttrs config.allowAliases
+        (
+          {
+            # EOL
+            sdk_2_1 = throw "Dotnet SDK 2.1 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
+            sdk_2_2 = throw "Dotnet SDK 2.2 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
+            sdk_3_0 = throw "Dotnet SDK 3.0 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
+            sdk_3_1 = throw "Dotnet SDK 3.1 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
+            sdk_5_0 = throw "Dotnet SDK 5.0 is EOL, please use 8.0 (LTS) or 9.0 (Current)";
+          }
+          // dotnet-bin
+        )
       // lib.mapAttrs' (k: v: lib.nameValuePair "${k}-bin" v) dotnet-bin
       // {
         inherit callPackage fetchNupkg buildDotnetSdk;
@@ -160,7 +161,7 @@ let
 
 in
 pkgs
-// rec {
+  // rec {
   # use binary SDK here to avoid downgrading feature band
   sdk_8_0_1xx = if !pkgs.dotnet_8.vmr.meta.broken then pkgs.dotnet_8.sdk else pkgs.sdk_8_0_1xx-bin;
   sdk_9_0_1xx = if !pkgs.dotnet_9.vmr.meta.broken then pkgs.dotnet_9.sdk else pkgs.sdk_9_0_1xx-bin;

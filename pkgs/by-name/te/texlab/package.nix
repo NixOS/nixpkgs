@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  help2man,
-  installShellFiles,
-  libiconv,
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, help2man
+, installShellFiles
+, libiconv
+, nix-update-script
+,
 }:
 
 let

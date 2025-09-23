@@ -1,13 +1,13 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  versionCheckHook,
-  nix-update-script,
-  makeWrapper,
-  runCommand,
-  age,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, versionCheckHook
+, nix-update-script
+, makeWrapper
+, runCommand
+, age
+,
 }:
 
 buildGoModule (final: {

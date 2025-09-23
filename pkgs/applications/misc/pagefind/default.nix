@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  fetchurl,
-  binaryen,
-  gzip,
-  nodejs,
-  npmHooks,
-  python3,
-  rustc,
-  versionCheckHook,
-  wasm-bindgen-cli_0_2_92,
-  wasm-pack,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchNpmDeps
+, fetchurl
+, binaryen
+, gzip
+, nodejs
+, npmHooks
+, python3
+, rustc
+, versionCheckHook
+, wasm-bindgen-cli_0_2_92
+, wasm-pack
+,
 }:
 
 # TODO: package python bindings

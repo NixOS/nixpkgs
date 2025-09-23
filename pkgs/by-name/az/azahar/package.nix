@@ -1,49 +1,50 @@
-{
-  boost,
-  catch2_3,
-  cmake,
-  cryptopp,
-  cpp-jwt,
-  doxygen,
-  dynarmic,
-  enet,
-  fetchzip,
-  fmt,
-  ffmpeg_6-headless,
-  glslang,
-  httplib,
-  inih,
-  lib,
-  libGL,
-  libunwind,
-  libusb1,
-  moltenvk,
-  nlohmann_json,
-  openal,
-  openssl,
-  pipewire,
-  pkg-config,
-  portaudio,
-  python3,
-  robin-map,
-  SDL2,
-  soundtouch,
-  stdenv,
-  vulkan-headers,
-  xbyak,
-  xorg,
-  enableQtTranslations ? true,
-  qt6,
-  enableCubeb ? true,
-  cubeb,
-  useDiscordRichPresence ? true,
-  rapidjson,
-  enableSSE42 ? true, # Disable if your hardware doesn't support SSE 4.2 (mainly CPUs before 2011)
-  gamemode,
-  enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
-  nix-update-script,
-  darwinMinVersionHook,
-  apple-sdk_12,
+{ boost
+, catch2_3
+, cmake
+, cryptopp
+, cpp-jwt
+, doxygen
+, dynarmic
+, enet
+, fetchzip
+, fmt
+, ffmpeg_6-headless
+, glslang
+, httplib
+, inih
+, lib
+, libGL
+, libunwind
+, libusb1
+, moltenvk
+, nlohmann_json
+, openal
+, openssl
+, pipewire
+, pkg-config
+, portaudio
+, python3
+, robin-map
+, SDL2
+, soundtouch
+, stdenv
+, vulkan-headers
+, xbyak
+, xorg
+, enableQtTranslations ? true
+, qt6
+, enableCubeb ? true
+, cubeb
+, useDiscordRichPresence ? true
+, rapidjson
+, enableSSE42 ? true
+, # Disable if your hardware doesn't support SSE 4.2 (mainly CPUs before 2011)
+  gamemode
+, enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode
+, nix-update-script
+, darwinMinVersionHook
+, apple-sdk_12
+,
 }:
 let
   inherit (lib)

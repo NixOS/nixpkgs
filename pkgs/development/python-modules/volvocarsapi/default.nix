@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  aiohttp,
-  yarl,
-  hatchling,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, aiohttp
+, yarl
+, hatchling
+,
 }:
 
 buildPythonPackage rec {

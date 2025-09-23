@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  SDL2,
-  SDL2_image,
-  libGLU,
-  libGL,
-  cmake,
-  physfs,
-  boost,
-  zip,
-  zlib,
-  unzip,
-  pkg-config,
+{ lib
+, stdenv
+, fetchurl
+, SDL2
+, SDL2_image
+, libGLU
+, libGL
+, cmake
+, physfs
+, boost
+, zip
+, zlib
+, unzip
+, pkg-config
+,
 }:
 
 stdenv.mkDerivation {

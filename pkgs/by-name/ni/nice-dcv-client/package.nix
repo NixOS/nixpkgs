@@ -1,27 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  glib,
-  libX11,
-  gst_all_1,
-  libepoxy,
-  pango,
-  cairo,
-  gdk-pixbuf,
-  e2fsprogs,
-  libkrb5,
-  libva,
-  openssl,
-  pcsclite,
-  gtk3,
-  libselinux,
-  libxml2,
-  libffi,
-  python3Packages,
-  cpio,
-  autoPatchelfHook,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, glib
+, libX11
+, gst_all_1
+, libepoxy
+, pango
+, cairo
+, gdk-pixbuf
+, e2fsprogs
+, libkrb5
+, libva
+, openssl
+, pcsclite
+, gtk3
+, libselinux
+, libxml2
+, libffi
+, python3Packages
+, cpio
+, autoPatchelfHook
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation rec {

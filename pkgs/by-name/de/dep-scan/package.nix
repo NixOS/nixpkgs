@@ -1,11 +1,11 @@
-{
-  lib,
-  fetchFromGitHub,
-  python3Packages,
-  writableTmpDirAsHomeHook,
-  makeWrapper,
-  cdxgen,
-  nixosTests,
+{ lib
+, fetchFromGitHub
+, python3Packages
+, writableTmpDirAsHomeHook
+, makeWrapper
+, cdxgen
+, nixosTests
+,
 }:
 
 python3Packages.buildPythonApplication rec {

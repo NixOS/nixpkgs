@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  meson,
-  ninja,
-  pkg-config,
-  gobject-introspection,
-  vala,
-  gtk-doc,
-  docbook_xsl,
-  docbook_xml_dtd_43,
-  gtk3,
-  gnome-desktop,
-  dbus,
-  xvfb-run,
-  libxml2,
-  hicolor-icon-theme,
+{ lib
+, stdenv
+, fetchFromGitLab
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_43
+, gtk3
+, gnome-desktop
+, dbus
+, xvfb-run
+, libxml2
+, hicolor-icon-theme
+,
 }:
 
 stdenv.mkDerivation rec {

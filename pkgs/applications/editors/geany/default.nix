@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  gtk3,
-  which,
-  pkg-config,
-  intltool,
-  file,
-  libintl,
-  hicolor-icon-theme,
-  python3,
-  wrapGAppsHook3,
+{ lib
+, stdenv
+, fetchurl
+, gtk3
+, which
+, pkg-config
+, intltool
+, file
+, libintl
+, hicolor-icon-theme
+, python3
+, wrapGAppsHook3
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

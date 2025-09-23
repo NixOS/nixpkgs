@@ -1,8 +1,8 @@
-{
-  lib,
-  rustPlatform,
-  writeText,
-  stdenv,
+{ lib
+, rustPlatform
+, writeText
+, stdenv
+,
 }:
 
 { version, src, ... }:
@@ -17,8 +17,7 @@ let
     cargoHash =
       {
         _0_2_2 = "sha256-Iw0AkHVjR1YmPe+C0YYBTDu5FsRk/ZpaRyBilcvqm6M=";
-      }
-      .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
+      }.${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
         Unsupported version of pub 'flutter_vodozemac': '${version}'
         Please add cargoHash here. If the cargoHash
         is the same with existing versions, add an alias here.

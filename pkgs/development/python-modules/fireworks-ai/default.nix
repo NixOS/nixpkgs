@@ -1,39 +1,35 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-
-  # build-system
-  pdm-backend,
-
-  # local dependencies
-  black,
-  mypy,
-
-  # dependencies
-  grpcio,
-  grpclib,
-  httpx-sse,
-  httpx-ws,
-  httpx,
-  mmh3,
-  openai,
-  pillow,
-  protobuf,
-  pydantic,
-  python-dateutil,
-  rich,
-  typing-extensions,
-
-  # optional dependencies
-  fastapi,
-  gitignore-parser,
-  openapi-spec-validator,
-  prance,
-  safetensors,
-  tabulate,
-  torch,
-  tqdm,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, # build-system
+  pdm-backend
+, # local dependencies
+  black
+, mypy
+, # dependencies
+  grpcio
+, grpclib
+, httpx-sse
+, httpx-ws
+, httpx
+, mmh3
+, openai
+, pillow
+, protobuf
+, pydantic
+, python-dateutil
+, rich
+, typing-extensions
+, # optional dependencies
+  fastapi
+, gitignore-parser
+, openapi-spec-validator
+, prance
+, safetensors
+, tabulate
+, torch
+, tqdm
+,
 }:
 
 let

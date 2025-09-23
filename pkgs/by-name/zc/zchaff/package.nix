@@ -1,7 +1,7 @@
-{
-  lib,
-  clangStdenv,
-  fetchzip,
+{ lib
+, clangStdenv
+, fetchzip
+,
 }:
 
 clangStdenv.mkDerivation rec {

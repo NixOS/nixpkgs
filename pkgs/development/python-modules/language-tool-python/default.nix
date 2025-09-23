@@ -1,13 +1,13 @@
-{
-  fetchFromGitHub,
-  buildPythonPackage,
-  lib,
-  setuptools,
-  requests,
-  tqdm,
-  psutil,
-  toml,
-  pip,
+{ fetchFromGitHub
+, buildPythonPackage
+, lib
+, setuptools
+, requests
+, tqdm
+, psutil
+, toml
+, pip
+,
 }:
 buildPythonPackage rec {
   pname = "language-tool-python";

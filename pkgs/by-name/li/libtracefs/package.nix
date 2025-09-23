@@ -1,19 +1,19 @@
-{
-  lib,
-  stdenv,
-  fetchzip,
-  pkg-config,
-  libtraceevent,
-  asciidoc,
-  xmlto,
-  docbook_xml_dtd_45,
-  docbook_xsl,
-  sourceHighlight,
-  meson,
-  flex,
-  bison,
-  ninja,
-  gitUpdater,
+{ lib
+, stdenv
+, fetchzip
+, pkg-config
+, libtraceevent
+, asciidoc
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, sourceHighlight
+, meson
+, flex
+, bison
+, ninja
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

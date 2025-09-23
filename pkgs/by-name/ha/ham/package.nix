@@ -1,9 +1,9 @@
-{
-  lib,
-  perlPackages,
-  fetchFromGitHub,
-  makeWrapper,
-  openssh,
+{ lib
+, perlPackages
+, fetchFromGitHub
+, makeWrapper
+, openssh
+,
 }:
 
 perlPackages.buildPerlPackage {

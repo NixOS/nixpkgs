@@ -1,12 +1,12 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  boto3,
-  moto,
-  poetry-core,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, boto3
+, moto
+, poetry-core
+,
 }:
 
 buildPythonPackage rec {

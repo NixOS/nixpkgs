@@ -1,10 +1,10 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  miraie-ac,
-  aiomqtt,
-  nix-update-script,
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, miraie-ac
+, aiomqtt
+, nix-update-script
+,
 }:
 
 buildHomeAssistantComponent rec {

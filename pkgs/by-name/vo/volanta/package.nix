@@ -1,11 +1,11 @@
-{
-  appimageTools,
-  fetchurl,
-  lib,
-  makeWrapper,
-  writeShellScript,
-  common-updater-scripts,
-  nix-update,
+{ appimageTools
+, fetchurl
+, lib
+, makeWrapper
+, writeShellScript
+, common-updater-scripts
+, nix-update
+,
 }:
 let
   pname = "volanta";

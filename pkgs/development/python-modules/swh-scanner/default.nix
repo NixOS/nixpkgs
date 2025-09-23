@@ -1,25 +1,25 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  fetchpatch,
-  setuptools,
-  setuptools-scm,
-  requests,
-  ndjson,
-  flask,
-  importlib-metadata,
-  swh-core,
-  swh-model,
-  swh-auth,
-  swh-web-client,
-  beautifulsoup4,
-  pytestCheckHook,
-  pytest-flask,
-  pytest-mock,
-  types-beautifulsoup4,
-  types-pyyaml,
-  types-requests,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, fetchpatch
+, setuptools
+, setuptools-scm
+, requests
+, ndjson
+, flask
+, importlib-metadata
+, swh-core
+, swh-model
+, swh-auth
+, swh-web-client
+, beautifulsoup4
+, pytestCheckHook
+, pytest-flask
+, pytest-mock
+, types-beautifulsoup4
+, types-pyyaml
+, types-requests
+,
 }:
 
 buildPythonPackage rec {

@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  xorgproto,
-  libfs,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, xorgproto
+, libfs
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfsinfo";

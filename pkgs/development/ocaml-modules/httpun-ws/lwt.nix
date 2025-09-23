@@ -1,10 +1,10 @@
-{
-  lib,
-  buildDunePackage,
-  lwt,
-  digestif,
-  httpun-ws,
-  gluten-lwt,
+{ lib
+, buildDunePackage
+, lwt
+, digestif
+, httpun-ws
+, gluten-lwt
+,
 }:
 
 buildDunePackage {

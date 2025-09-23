@@ -1,7 +1,7 @@
-{
-  lib,
-  bundlerApp,
-  bundlerUpdateScript,
+{ lib
+, bundlerApp
+, bundlerUpdateScript
+,
 }:
 bundlerApp {
   pname = "wayback_machine_downloader";

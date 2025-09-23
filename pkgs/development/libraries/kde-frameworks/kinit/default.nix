@@ -1,18 +1,18 @@
-{
-  mkDerivation,
-  lib,
-  stdenv,
-  writeScript,
-  extra-cmake-modules,
-  kdoctools,
-  kconfig,
-  kcrash,
-  ki18n,
-  kio,
-  kparts,
-  kservice,
-  kwindowsystem,
-  plasma-framework,
+{ mkDerivation
+, lib
+, stdenv
+, writeScript
+, extra-cmake-modules
+, kdoctools
+, kconfig
+, kcrash
+, ki18n
+, kio
+, kparts
+, kservice
+, kwindowsystem
+, plasma-framework
+,
 }:
 
 let

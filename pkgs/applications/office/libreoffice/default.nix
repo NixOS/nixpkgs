@@ -1,105 +1,104 @@
-{
-  stdenv,
-  runCommand,
-  fetchurl,
-  fetchgit,
-  fetchpatch2,
-  lib,
-  pam,
-  python311,
-  libxslt,
-  perl,
-  perlPackages,
-  box2d_2,
-  gettext,
-  zlib,
-  libjpeg,
-  liblangtag,
-  expat,
-  freetype,
-  libwpd,
-  libxml2,
-  db,
-  curl,
-  fontconfig,
-  libsndfile,
-  neon,
-  bison,
-  flex,
-  zip,
-  unzip,
-  gtk3,
-  libmspack,
-  getopt,
-  file,
-  cairo,
-  which,
-  icu,
-  jdk21,
-  ant,
-  cups,
-  xorg,
-  fontforge,
-  jre21_minimal,
-  openssl,
-  gperf,
-  cppunit,
-  poppler,
-  util-linux,
-  librsvg,
-  libGLU,
-  libGL,
-  bsh,
-  coinmp,
-  libwps,
-  libabw,
-  libargon2,
-  libmysqlclient,
-  autoconf,
-  automake,
-  openldap,
-  bash,
-  hunspell,
-  librdf_rasqal,
-  librdf_redland,
-  nss,
-  nspr,
-  libwpg,
-  dbus-glib,
-  clucene_core_2,
-  libcdr,
-  lcms2,
-  unixODBC,
-  sane-backends,
-  mythes,
-  libexttextcat,
-  libvisio,
-  pkg-config,
-  bluez5,
-  libtool,
-  libatomic_ops,
-  graphite2,
-  harfbuzz,
-  libodfgen,
-  libzmf,
-  librevenge,
-  libe-book,
-  libmwaw,
-  glm,
-  gst_all_1,
-  gdb,
-  adwaita-icon-theme,
-  glib,
-  ncurses,
-  libepoxy,
-  gpgme,
-  libwebp,
-  abseil-cpp,
-  libepubgen,
-  libetonyek,
-  libpng,
-  libxcrypt,
-  langs ? [
+{ stdenv
+, runCommand
+, fetchurl
+, fetchgit
+, fetchpatch2
+, lib
+, pam
+, python311
+, libxslt
+, perl
+, perlPackages
+, box2d_2
+, gettext
+, zlib
+, libjpeg
+, liblangtag
+, expat
+, freetype
+, libwpd
+, libxml2
+, db
+, curl
+, fontconfig
+, libsndfile
+, neon
+, bison
+, flex
+, zip
+, unzip
+, gtk3
+, libmspack
+, getopt
+, file
+, cairo
+, which
+, icu
+, jdk21
+, ant
+, cups
+, xorg
+, fontforge
+, jre21_minimal
+, openssl
+, gperf
+, cppunit
+, poppler
+, util-linux
+, librsvg
+, libGLU
+, libGL
+, bsh
+, coinmp
+, libwps
+, libabw
+, libargon2
+, libmysqlclient
+, autoconf
+, automake
+, openldap
+, bash
+, hunspell
+, librdf_rasqal
+, librdf_redland
+, nss
+, nspr
+, libwpg
+, dbus-glib
+, clucene_core_2
+, libcdr
+, lcms2
+, unixODBC
+, sane-backends
+, mythes
+, libexttextcat
+, libvisio
+, pkg-config
+, bluez5
+, libtool
+, libatomic_ops
+, graphite2
+, harfbuzz
+, libodfgen
+, libzmf
+, librevenge
+, libe-book
+, libmwaw
+, glm
+, gst_all_1
+, gdb
+, adwaita-icon-theme
+, glib
+, ncurses
+, libepoxy
+, gpgme
+, libwebp
+, abseil-cpp
+, libepubgen
+, libetonyek
+, libpng
+, libxcrypt
+, langs ? [
     "ar"
     "ca"
     "cs"
@@ -127,34 +126,35 @@
     "uk"
     "zh-CN"
     "zh-TW"
-  ],
-  withFonts ? false,
-  withHelp ? true,
-  kdeIntegration ? false,
-  variant ? "fresh",
-  debugLogging ? variant == "still",
-  qt6,
-  kdePackages,
-  symlinkJoin,
-  libpq,
-  makeFontsConf,
-  amiri,
-  caladea,
-  carlito,
-  culmus,
-  dejavu_fonts,
-  rubik,
-  liberation-sans-narrow,
-  liberation_ttf_v2,
-  libertine,
-  libertine-g,
-  noto-fonts,
-  noto-fonts-lgc-plus,
-  noto-fonts-cjk-sans,
-  rhino,
-  lp_solve,
-  xmlsec,
-  libcmis,
+  ]
+, withFonts ? false
+, withHelp ? true
+, kdeIntegration ? false
+, variant ? "fresh"
+, debugLogging ? variant == "still"
+, qt6
+, kdePackages
+, symlinkJoin
+, libpq
+, makeFontsConf
+, amiri
+, caladea
+, carlito
+, culmus
+, dejavu_fonts
+, rubik
+, liberation-sans-narrow
+, liberation_ttf_v2
+, libertine
+, libertine-g
+, noto-fonts
+, noto-fonts-lgc-plus
+, noto-fonts-cjk-sans
+, rhino
+, lp_solve
+, xmlsec
+, libcmis
+,
 }:
 
 assert builtins.elem variant [
@@ -232,15 +232,17 @@ let
     ];
   };
   srcs = {
-    third_party = map (
-      x:
-      (fetchurl {
-        inherit (x) url sha256 name;
-      })
-      // {
-        inherit (x) md5name md5;
-      }
-    ) srcsAttributes.deps;
+    third_party = map
+      (
+        x:
+        (fetchurl {
+          inherit (x) url sha256 name;
+        })
+        // {
+          inherit (x) md5name md5;
+        }
+      )
+      srcsAttributes.deps;
     translations = srcsAttributes.translations { inherit fetchurl fetchgit; };
     help = srcsAttributes.help { inherit fetchurl fetchgit; };
   };

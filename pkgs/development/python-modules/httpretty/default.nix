@@ -1,14 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-
-  # tests
-  freezegun,
-  mock,
-  pytestCheckHook,
-  sure,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, # tests
+  freezegun
+, mock
+, pytestCheckHook
+, sure
+,
 }:
 
 buildPythonPackage rec {

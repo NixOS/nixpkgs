@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  protobuf,
-  wrapQtAppsHook,
-  python3,
-  zbar,
-  enableQt ? true,
-  callPackage,
-  qtwayland,
+{ lib
+, stdenv
+, fetchurl
+, protobuf
+, wrapQtAppsHook
+, python3
+, zbar
+, enableQt ? true
+, callPackage
+, qtwayland
+,
 }:
 
 let

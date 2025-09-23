@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  docutils,
-  pkg-config,
-  glib,
-  libpthreadstubs,
-  libXau,
-  libXdmcp,
-  xcbutil,
-  nixosTests,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, docutils
+, pkg-config
+, glib
+, libpthreadstubs
+, libXau
+, libXdmcp
+, xcbutil
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation {

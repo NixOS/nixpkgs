@@ -1,11 +1,10 @@
-{
-  lib,
-  buildHomeAssistantComponent,
-  fetchFromGitHub,
-  zeroconf,
-  pytestCheckHook,
-  home-assistant,
-
+{ lib
+, buildHomeAssistantComponent
+, fetchFromGitHub
+, zeroconf
+, pytestCheckHook
+, home-assistant
+,
 }:
 buildHomeAssistantComponent rec {
   owner = "AlexxIT";

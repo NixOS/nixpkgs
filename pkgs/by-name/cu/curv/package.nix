@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitea,
-  cmake,
-  git,
-  pkg-config,
-  boost,
-  eigen_3_4_0,
-  glm,
-  libGL,
-  libpng,
-  openexr,
-  tbb,
-  xorg,
-  ilmbase,
-  llvmPackages,
-  unstableGitUpdater,
+{ lib
+, stdenv
+, fetchFromGitea
+, cmake
+, git
+, pkg-config
+, boost
+, eigen_3_4_0
+, glm
+, libGL
+, libpng
+, openexr
+, tbb
+, xorg
+, ilmbase
+, llvmPackages
+, unstableGitUpdater
+,
 }:
 
 stdenv.mkDerivation {

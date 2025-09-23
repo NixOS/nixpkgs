@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  openpyxl,
-  robotframework,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, openpyxl
+, robotframework
+,
 }:
 
 buildPythonPackage rec {

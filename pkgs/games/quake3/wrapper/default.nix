@@ -1,17 +1,17 @@
-{
-  stdenv,
-  buildEnv,
-  lib,
-  libGL,
-  ioquake3,
-  makeWrapper,
+{ stdenv
+, buildEnv
+, lib
+, libGL
+, ioquake3
+, makeWrapper
+,
 }:
 
-{
-  paks,
-  pname ? (lib.head paks).pname,
-  version ? (lib.head paks).version,
-  description ? "",
+{ paks
+, pname ? (lib.head paks).pname
+, version ? (lib.head paks).version
+, description ? ""
+,
 }:
 
 let

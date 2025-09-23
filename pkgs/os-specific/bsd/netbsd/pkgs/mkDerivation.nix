@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  stdenvNoCC,
-  stdenvNoLibc,
-  stdenvLibcMinimal,
-  runCommand,
-  rsync,
-  source,
-  bsdSetupHook,
-  netbsdSetupHook,
-  makeMinimal,
-  install,
-  tsort,
-  lorder,
-  mandoc,
-  groff,
-  statHook,
-  compatIfNeeded,
-  defaultMakeFlags,
-  version,
+{ lib
+, stdenv
+, stdenvNoCC
+, stdenvNoLibc
+, stdenvLibcMinimal
+, runCommand
+, rsync
+, source
+, bsdSetupHook
+, netbsdSetupHook
+, makeMinimal
+, install
+, tsort
+, lorder
+, mandoc
+, groff
+, statHook
+, compatIfNeeded
+, defaultMakeFlags
+, version
+,
 }:
 
 lib.makeOverridable (
@@ -72,8 +72,7 @@ lib.makeOverridable (
           i486 = "i386";
           i586 = "i386";
           i686 = "i386";
-        }
-        .${stdenv'.hostPlatform.parsed.cpu.name} or stdenv'.hostPlatform.parsed.cpu.name;
+        }.${stdenv'.hostPlatform.parsed.cpu.name} or stdenv'.hostPlatform.parsed.cpu.name;
 
       MACHINE =
         {
@@ -82,8 +81,7 @@ lib.makeOverridable (
           i486 = "i386";
           i586 = "i386";
           i686 = "i386";
-        }
-        .${stdenv'.hostPlatform.parsed.cpu.name} or stdenv'.hostPlatform.parsed.cpu.name;
+        }.${stdenv'.hostPlatform.parsed.cpu.name} or stdenv'.hostPlatform.parsed.cpu.name;
 
       COMPONENT_PATH = attrs.path;
 
@@ -117,7 +115,7 @@ lib.makeOverridable (
       dontBuild = true;
     }
     // attrs
-    // {
+      // {
       # Files that use NetBSD-specific macros need to have nbtool_config.h
       # included ahead of them on non-NetBSD platforms.
       postPatch =

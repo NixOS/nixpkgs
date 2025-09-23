@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  requests,
-  six,
-  tqdm,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, requests
+, six
+, tqdm
+,
 }:
 
 buildPythonPackage {

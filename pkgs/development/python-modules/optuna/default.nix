@@ -1,44 +1,40 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  alembic,
-  colorlog,
-  numpy,
-  packaging,
-  sqlalchemy,
-  tqdm,
-  pyyaml,
-
-  # optional-dependencies
-  boto3,
-  cmaes,
-  fvcore,
-  google-cloud-storage,
-  grpcio,
-  matplotlib,
-  pandas,
-  plotly,
-  protobuf,
-  redis,
-  scikit-learn,
-  scipy,
-
-  # tests
-  addBinToPathHook,
-  fakeredis,
-  kaleido,
-  moto,
-  pytest-xdist,
-  pytestCheckHook,
-  torch,
-  versionCheckHook,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, # dependencies
+  alembic
+, colorlog
+, numpy
+, packaging
+, sqlalchemy
+, tqdm
+, pyyaml
+, # optional-dependencies
+  boto3
+, cmaes
+, fvcore
+, google-cloud-storage
+, grpcio
+, matplotlib
+, pandas
+, plotly
+, protobuf
+, redis
+, scikit-learn
+, scipy
+, # tests
+  addBinToPathHook
+, fakeredis
+, kaleido
+, moto
+, pytest-xdist
+, pytestCheckHook
+, torch
+, versionCheckHook
+,
 }:
 
 buildPythonPackage rec {

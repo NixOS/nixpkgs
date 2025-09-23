@@ -1,12 +1,12 @@
-{
-  blasfeo,
-  cmake,
-  fetchFromGitHub,
-  lib,
-  llvmPackages,
-  python3Packages,
-  pythonSupport ? false,
-  stdenv,
+{ blasfeo
+, cmake
+, fetchFromGitHub
+, lib
+, llvmPackages
+, python3Packages
+, pythonSupport ? false
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

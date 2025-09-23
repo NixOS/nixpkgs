@@ -1,9 +1,9 @@
-{
-  buildDunePackage,
-  dune-configurator,
-  lablgtk3,
-  librsvg,
-  pkg-config,
+{ buildDunePackage
+, dune-configurator
+, lablgtk3
+, librsvg
+, pkg-config
+,
 }:
 
 buildDunePackage {

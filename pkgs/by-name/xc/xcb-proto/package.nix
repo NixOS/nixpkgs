@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  python3,
-  testers,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, python3
+, testers
+, writeScript
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcb-proto";

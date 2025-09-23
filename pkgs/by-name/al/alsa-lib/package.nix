@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  alsa-topology-conf,
-  alsa-ucm-conf,
-  testers,
-  directoryListingUpdater,
+{ lib
+, stdenv
+, fetchurl
+, alsa-topology-conf
+, alsa-ucm-conf
+, testers
+, directoryListingUpdater
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

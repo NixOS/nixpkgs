@@ -1,14 +1,14 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  zlib,
-  libX11,
-  libpng,
-  libjpeg,
-  gd,
-  freetype,
-  runCommand,
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, libX11
+, libpng
+, libjpeg
+, gd
+, freetype
+, runCommand
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

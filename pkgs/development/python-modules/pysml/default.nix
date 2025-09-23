@@ -1,12 +1,12 @@
-{
-  lib,
-  aiohttp,
-  bitstring,
-  buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pyserial-asyncio-fast,
-  pythonOlder,
+{ lib
+, aiohttp
+, bitstring
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pyserial-asyncio-fast
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

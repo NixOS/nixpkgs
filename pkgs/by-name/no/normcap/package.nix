@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  python3,
-  fetchFromGitHub,
-  tesseract4,
-  leptonica,
-  wl-clipboard,
-  libnotify,
-  xorg,
-  makeDesktopItem,
-  copyDesktopItems,
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+, tesseract4
+, leptonica
+, wl-clipboard
+, libnotify
+, xorg
+, makeDesktopItem
+, copyDesktopItems
+,
 }:
 
 let

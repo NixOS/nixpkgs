@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
-  poetry-core,
-  aenum,
-  aioconsole,
-  aiohttp,
-  inflection,
-  pydantic,
-  python-dateutil,
-  typing-extensions,
-  urllib3,
-  websockets,
-  zeroconf,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, poetry-core
+, aenum
+, aioconsole
+, aiohttp
+, inflection
+, pydantic
+, python-dateutil
+, typing-extensions
+, urllib3
+, websockets
+, zeroconf
+,
 }:
 
 buildPythonPackage rec {

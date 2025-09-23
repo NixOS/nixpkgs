@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchzip,
-  mercurial,
-  pytestCheckHook,
-  fetchpatch2,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchzip
+, mercurial
+, pytestCheckHook
+, fetchpatch2
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

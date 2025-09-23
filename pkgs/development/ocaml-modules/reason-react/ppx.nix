@@ -1,8 +1,8 @@
-{
-  buildDunePackage,
-  fetchurl,
-  lib,
-  ppxlib,
+{ buildDunePackage
+, fetchurl
+, lib
+, ppxlib
+,
 }:
 
 let

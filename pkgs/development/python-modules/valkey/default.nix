@@ -1,31 +1,27 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  buildPythonPackage,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  async-timeout,
-
-  # optional-dependencies
-  cryptography,
-  pyopenssl,
-  requests,
-
-  # tests
-  cachetools,
-  mock,
-  packaging,
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-timeout,
-  redisTestHook,
-  ujson,
-  uvloop,
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, # build-system
+  setuptools
+, # dependencies
+  async-timeout
+, # optional-dependencies
+  cryptography
+, pyopenssl
+, requests
+, # tests
+  cachetools
+, mock
+, packaging
+, pytestCheckHook
+, pytest-asyncio
+, pytest-timeout
+, redisTestHook
+, ujson
+, uvloop
+,
 }:
 
 buildPythonPackage rec {

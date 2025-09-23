@@ -1,7 +1,7 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+,
 }:
 
 buildGoModule rec {
@@ -9,12 +9,13 @@ buildGoModule rec {
   version = "0.19.0";
 
   src =
-    fetchFromGitHub {
-      owner = "kubernetes-sigs";
-      repo = "controller-runtime";
-      rev = "v${version}";
-      hash = "sha256-9AqZMiA+OIJD+inmeUc/lq57kV7L85jk1I4ywiSKirg=";
-    }
+    fetchFromGitHub
+      {
+        owner = "kubernetes-sigs";
+        repo = "controller-runtime";
+        rev = "v${version}";
+        hash = "sha256-9AqZMiA+OIJD+inmeUc/lq57kV7L85jk1I4ywiSKirg=";
+      }
     + "/tools/setup-envtest";
 
   vendorHash = "sha256-sn3HiKTpQzjrFTOVOGFJwoNpxU+XWgkWD2EOcPilePY=";

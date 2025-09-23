@@ -1,30 +1,29 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  appdirs,
-  asgiref,
-  attrs,
-  black,
-  click,
-  django,
-  djangorestframework,
-  entrypoints,
-  flake8,
-  mccabe,
-  mypy,
-  mypy-extensions,
-  pycodestyle,
-  pyflakes,
-  pytz,
-  sqlparse,
-  toml,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  pytest-django,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, appdirs
+, asgiref
+, attrs
+, black
+, click
+, django
+, djangorestframework
+, entrypoints
+, flake8
+, mccabe
+, mypy
+, mypy-extensions
+, pycodestyle
+, pyflakes
+, pytz
+, sqlparse
+, toml
+, typing-extensions
+, # tests
+  pytestCheckHook
+, pytest-django
+,
 }:
 
 buildPythonPackage rec {

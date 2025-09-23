@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   inherit (lib) literalExpression types;
@@ -198,10 +197,11 @@ in
           HSA_OVERRIDE_GFX_VERSION = cfg.rocmOverrideGfx;
         };
       serviceConfig =
-        lib.optionalAttrs staticUser {
-          User = cfg.user;
-          Group = cfg.group;
-        }
+        lib.optionalAttrs staticUser
+          {
+            User = cfg.user;
+            Group = cfg.group;
+          }
         // {
           Type = "exec";
           DynamicUser = true;

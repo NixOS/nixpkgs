@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  poetry-core,
-  aiohttp,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, poetry-core
+, aiohttp
+,
 }:
 
 buildPythonPackage rec {

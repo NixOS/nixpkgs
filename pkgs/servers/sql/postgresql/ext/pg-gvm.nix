@@ -1,15 +1,15 @@
-{
-  cmake,
-  fetchFromGitHub,
-  glib,
-  gvm-libs,
-  icu,
-  lib,
-  libical,
-  pcre2,
-  pkg-config,
-  postgresql,
-  postgresqlBuildExtension,
+{ cmake
+, fetchFromGitHub
+, glib
+, gvm-libs
+, icu
+, lib
+, libical
+, pcre2
+, pkg-config
+, postgresql
+, postgresqlBuildExtension
+,
 }:
 
 postgresqlBuildExtension (finalAttrs: {

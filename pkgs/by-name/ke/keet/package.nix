@@ -1,7 +1,7 @@
-{
-  lib,
-  appimageTools,
-  fetchzip,
+{ lib
+, appimageTools
+, fetchzip
+,
 }:
 
 let

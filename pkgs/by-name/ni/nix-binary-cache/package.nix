@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  coreutils,
-  findutils,
-  nix,
-  xz,
-  bzip2,
-  gnused,
-  gnugrep,
-  openssl,
-  lighttpd,
-  iproute2,
+{ lib
+, stdenv
+, coreutils
+, findutils
+, nix
+, xz
+, bzip2
+, gnused
+, gnugrep
+, openssl
+, lighttpd
+, iproute2
+,
 }:
 stdenv.mkDerivation {
   version = "2014-06-29-1";

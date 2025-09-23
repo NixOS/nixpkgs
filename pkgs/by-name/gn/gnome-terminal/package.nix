@@ -1,31 +1,31 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  meson,
-  ninja,
-  pkg-config,
-  python3,
-  libxml2,
-  gnome,
-  nautilus,
-  glib,
-  gtk4,
-  gtk3,
-  libhandy,
-  gsettings-desktop-schemas,
-  vte,
-  gettext,
-  which,
-  libuuid,
-  vala,
-  desktop-file-utils,
-  itstool,
-  wrapGAppsHook3,
-  pcre2,
-  libxslt,
-  docbook-xsl-nons,
-  nixosTests,
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, python3
+, libxml2
+, gnome
+, nautilus
+, glib
+, gtk4
+, gtk3
+, libhandy
+, gsettings-desktop-schemas
+, vte
+, gettext
+, which
+, libuuid
+, vala
+, desktop-file-utils
+, itstool
+, wrapGAppsHook3
+, pcre2
+, libxslt
+, docbook-xsl-nons
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

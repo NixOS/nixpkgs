@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  ffmpeg-headless,
-  libpng,
-  libjpeg,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, ffmpeg-headless
+, libpng
+, libjpeg
+,
 }:
 
 stdenv.mkDerivation {

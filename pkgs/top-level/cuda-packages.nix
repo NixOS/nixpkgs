@@ -20,14 +20,14 @@
 # extensions need to compute the attribute names, without relying on `final`.
 #
 # I've (@connorbaker) attempted to do that, though I'm unsure of how this will interact with overrides.
-{
-  config,
-  _cuda,
-  cudaMajorMinorVersion,
-  lib,
-  pkgs,
-  stdenv,
-  runCommand,
+{ config
+, _cuda
+, cudaMajorMinorVersion
+, lib
+, pkgs
+, stdenv
+, runCommand
+,
 }:
 let
   inherit (lib)
@@ -44,9 +44,11 @@ let
   # Since Jetson capabilities are never built by default, we can check if any of them were requested
   # through final.config.cudaCapabilities and use that to determine if we should change some manifest versions.
   # Copied from backendStdenv.
-  jetsonCudaCapabilities = lib.filter (
-    cudaCapability: _cuda.db.cudaCapabilityToInfo.${cudaCapability}.isJetson
-  ) _cuda.db.allSortedCudaCapabilities;
+  jetsonCudaCapabilities = lib.filter
+    (
+      cudaCapability: _cuda.db.cudaCapabilityToInfo.${cudaCapability}.isJetson
+    )
+    _cuda.db.allSortedCudaCapabilities;
   hasJetsonCudaCapability =
     lib.intersectLists jetsonCudaCapabilities (config.cudaCapabilities or [ ]) != [ ];
   redistSystem = _cuda.lib.getRedistSystem hasJetsonCudaCapability stdenv.hostPlatform.system;
@@ -64,7 +66,7 @@ let
       cudaPackagesMajorMinorVersionName = cudaLib.mkVersionedName cudaPackagesUnversionedName cudaMajorMinorVersion;
     in
     # If the CUDA version of pkgs matches our CUDA version, we are constructing the default package set and can use
-    # pkgs without modification.
+      # pkgs without modification.
     if pkgs.cudaPackages.cudaMajorMinorVersion == cudaMajorMinorVersion then
       pkgs
     else
@@ -102,10 +104,11 @@ let
     cudaAtLeast = strings.versionAtLeast cudaMajorMinorVersion;
 
     flags =
-      cudaLib.formatCapabilities {
-        inherit (final.backendStdenv) cudaCapabilities cudaForwardCompat;
-        inherit (_cuda.db) cudaCapabilityToInfo;
-      }
+      cudaLib.formatCapabilities
+        {
+          inherit (final.backendStdenv) cudaCapabilities cudaForwardCompat;
+          inherit (_cuda.db) cudaCapabilityToInfo;
+        }
       # TODO(@connorbaker): Enable the corresponding warnings in `../development/cuda-modules/aliases.nix` after some
       # time to allow users to migrate to cudaLib and backendStdenv.
       // {
@@ -136,10 +139,10 @@ let
           useTorchDefaultCuda = bools;
         };
         builder =
-          {
-            openCVFirst,
-            useOpenCVDefaultCuda,
-            useTorchDefaultCuda,
+          { openCVFirst
+          , useOpenCVDefaultCuda
+          , useTorchDefaultCuda
+          ,
           }@config:
           {
             name = strings.concatStringsSep "-" (
@@ -171,17 +174,17 @@ let
     [
       (
         final: _:
-        {
-          # Prevent missing attribute errors
-          # NOTE(@connorbaker): CUDA 12.3 does not have a cuda_compat package; indeed, none of the release supports
-          # Jetson devices. To avoid errors in the case that cuda_compat is not defined, we have a dummy package which
-          # is always defined, but does nothing, will not build successfully, and has no platforms.
-          cuda_compat = runCommand "cuda_compat" { meta.platforms = [ ]; } "false";
-        }
-        // lib.packagesFromDirectoryRecursive {
-          inherit (final) callPackage;
-          directory = ../development/cuda-modules/packages;
-        }
+          {
+            # Prevent missing attribute errors
+            # NOTE(@connorbaker): CUDA 12.3 does not have a cuda_compat package; indeed, none of the release supports
+            # Jetson devices. To avoid errors in the case that cuda_compat is not defined, we have a dummy package which
+            # is always defined, but does nothing, will not build successfully, and has no platforms.
+            cuda_compat = runCommand "cuda_compat" { meta.platforms = [ ]; } "false";
+          }
+          // lib.packagesFromDirectoryRecursive {
+            inherit (final) callPackage;
+            directory = ../development/cuda-modules/packages;
+          }
       )
       (import ../development/cuda-modules/cuda/extension.nix { inherit cudaMajorMinorVersion lib; })
       (import ../development/cuda-modules/generic-builders/multiplex.nix {

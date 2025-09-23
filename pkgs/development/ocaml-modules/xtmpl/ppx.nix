@@ -1,7 +1,7 @@
-{
-  buildDunePackage,
-  xtmpl,
-  ppxlib,
+{ buildDunePackage
+, xtmpl
+, ppxlib
+,
 }:
 
 buildDunePackage {

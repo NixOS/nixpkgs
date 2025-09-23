@@ -1,11 +1,11 @@
 # hyphen dictionaries
 
-{
-  hyphen,
-  stdenv,
-  lib,
-  fetchgit,
-  fetchurl,
+{ hyphen
+, stdenv
+, lib
+, fetchgit
+, fetchurl
+,
 }:
 
 let
@@ -14,12 +14,12 @@ let
   libreofficeSubdir = "de";
 
   mkDictFromLibreofficeGit =
-    {
-      subdir,
-      shortName,
-      shortDescription,
-      dictFileName,
-      readmeFileName,
+    { subdir
+    , shortName
+    , shortDescription
+    , dictFileName
+    , readmeFileName
+    ,
     }:
     stdenv.mkDerivation rec {
       version = "24.8";

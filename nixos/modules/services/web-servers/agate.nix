@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 with lib;
@@ -86,10 +85,12 @@ in
         let
           prefixKeyList =
             key: list:
-            concatMap (v: [
-              key
-              v
-            ]) list;
+            concatMap
+              (v: [
+                key
+                v
+              ])
+              list;
           addresses = prefixKeyList "--addr" cfg.addresses;
           hostnames = prefixKeyList "--hostname" cfg.hostnames;
         in

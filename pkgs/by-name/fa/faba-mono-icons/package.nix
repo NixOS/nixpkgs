@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  autoreconfHook,
-  gtk3,
-  moka-icon-theme,
-  faba-icon-theme,
-  gnome-icon-theme,
-  hicolor-icon-theme,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, autoreconfHook
+, gtk3
+, moka-icon-theme
+, faba-icon-theme
+, gnome-icon-theme
+, hicolor-icon-theme
+,
 }:
 
 stdenvNoCC.mkDerivation {

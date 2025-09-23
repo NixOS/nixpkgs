@@ -1,39 +1,38 @@
-{
-  lib,
-  buildDotnetModule,
-  dotnetCorePackages,
-  fetchFromGitHub,
-  wrapGAppsHook4,
-  iconConvTools,
-  copyDesktopItems,
-  makeDesktopItem,
-  libX11,
-  libICE,
-  libSM,
-  libXi,
-  libXcursor,
-  libXext,
-  libXrandr,
-  fontconfig,
-  glew,
-  SDL2,
-  glfw,
-  glibc,
-  libGL,
-  freetype,
-  openal,
-  fluidsynth,
-  gtk3,
-  pango,
-  atk,
-  cairo,
-  zlib,
-  glib,
-  gdk-pixbuf,
-  soundfont-fluid,
-
-  # Path to set ROBUST_SOUNDFONT_OVERRIDE to, essentially the default soundfont used.
-  soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2",
+{ lib
+, buildDotnetModule
+, dotnetCorePackages
+, fetchFromGitHub
+, wrapGAppsHook4
+, iconConvTools
+, copyDesktopItems
+, makeDesktopItem
+, libX11
+, libICE
+, libSM
+, libXi
+, libXcursor
+, libXext
+, libXrandr
+, fontconfig
+, glew
+, SDL2
+, glfw
+, glibc
+, libGL
+, freetype
+, openal
+, fluidsynth
+, gtk3
+, pango
+, atk
+, cairo
+, zlib
+, glib
+, gdk-pixbuf
+, soundfont-fluid
+, # Path to set ROBUST_SOUNDFONT_OVERRIDE to, essentially the default soundfont used.
+  soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
+,
 }:
 let
   version = "0.33.0";

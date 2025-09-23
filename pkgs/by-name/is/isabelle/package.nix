@@ -1,23 +1,23 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  fetchFromGitHub,
-  coreutils,
-  net-tools,
-  java,
-  scala_3,
-  polyml,
-  verit,
-  vampire,
-  eprover-ho,
-  rlwrap,
-  perl,
-  procps,
-  makeDesktopItem,
-  isabelle-components,
-  symlinkJoin,
-  fetchhg,
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, coreutils
+, net-tools
+, java
+, scala_3
+, polyml
+, verit
+, vampire
+, eprover-ho
+, rlwrap
+, perl
+, procps
+, makeDesktopItem
+, isabelle-components
+, symlinkJoin
+, fetchhg
+,
 }:
 
 let
@@ -62,15 +62,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if stdenv.hostPlatform.isDarwin then
-      fetchurl {
-        url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_macos.tar.gz";
-        hash = "sha256-6ldUwiiFf12dOuJU7JgUeX8kU+opDfILL23LLvDi5/g=";
-      }
+      fetchurl
+        {
+          url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_macos.tar.gz";
+          hash = "sha256-6ldUwiiFf12dOuJU7JgUeX8kU+opDfILL23LLvDi5/g=";
+        }
     else if stdenv.hostPlatform.isx86 then
-      fetchurl {
-        url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux.tar.gz";
-        hash = "sha256-PR1m3jcYI/4xqormZjj3NXW6wkTwCzGu4dy2LzgUfFY=";
-      }
+      fetchurl
+        {
+          url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux.tar.gz";
+          hash = "sha256-PR1m3jcYI/4xqormZjj3NXW6wkTwCzGu4dy2LzgUfFY=";
+        }
     else
       fetchurl {
         url = "https://isabelle.in.tum.de/website-${finalAttrs.dirname}/dist/${finalAttrs.dirname}_linux_arm.tar.gz";
@@ -273,8 +275,10 @@ stdenv.mkDerivation (finalAttrs: {
         bin/isabelle install $out/bin
         patchShebangs $out/bin
       ''
-      + lib.concatMapStringsSep "\n" (c: ''
-        echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
-      '') components;
+      + lib.concatMapStringsSep "\n"
+        (c: ''
+          echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
+        '')
+        components;
     };
 })

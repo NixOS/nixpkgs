@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  autoconf,
-  automake,
-  intltool,
-  libtool,
-  pkg-config,
-  encfs,
-  libsecret,
-  glib,
-  libgee,
-  gtk3,
-  vala,
-  wrapGAppsHook3,
-  xorg,
-  gobject-introspection,
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, automake
+, intltool
+, libtool
+, pkg-config
+, encfs
+, libsecret
+, glib
+, libgee
+, gtk3
+, vala
+, wrapGAppsHook3
+, xorg
+, gobject-introspection
+,
 }:
 
 stdenv.mkDerivation rec {

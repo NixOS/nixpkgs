@@ -1,18 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  runCommand,
-  writableTmpDirAsHomeHook,
-  nix-update-script,
-  libpng,
-  gsl,
-  libsndfile,
-  lzo,
-  libsForQt5,
-  withOpenCL ? true,
-  opencl-clhpp ? null,
-  ocl-icd ? null,
+{ lib
+, stdenv
+, fetchFromGitHub
+, runCommand
+, writableTmpDirAsHomeHook
+, nix-update-script
+, libpng
+, gsl
+, libsndfile
+, lzo
+, libsForQt5
+, withOpenCL ? true
+, opencl-clhpp ? null
+, ocl-icd ? null
+,
 }:
 
 assert withOpenCL -> opencl-clhpp != null;
@@ -56,12 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      test = runCommand "mandelbulber2-test" {
-        nativeBuildInputs = [
-          finalAttrs.finalPackage
-          writableTmpDirAsHomeHook
-        ];
-      } "mandelbulber2 --test && touch $out";
+      test = runCommand "mandelbulber2-test"
+        {
+          nativeBuildInputs = [
+            finalAttrs.finalPackage
+            writableTmpDirAsHomeHook
+          ];
+        } "mandelbulber2 --test && touch $out";
     };
     updateScript = nix-update-script { };
   };

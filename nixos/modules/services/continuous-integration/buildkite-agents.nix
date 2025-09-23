@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 
 let
@@ -25,10 +24,9 @@ let
       '';
 
   buildkiteOptions =
-    {
-      name ? "",
-      config,
-      ...
+    { name ? ""
+    , config
+    , ...
     }:
     {
       options = {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchurl,
-  makeBinaryWrapper,
-  jre,
+{ lib
+, stdenvNoCC
+, fetchurl
+, makeBinaryWrapper
+, jre
+,
 }:
 
 stdenvNoCC.mkDerivation rec {

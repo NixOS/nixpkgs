@@ -1,21 +1,21 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libpng,
-  libjpeg,
-  libtiff,
-  zlib,
-  bzip2,
-  libXcursor,
-  libXrandr,
-  libGLU,
-  libGL,
-  libXext,
-  libXft,
-  libXfixes,
-  mesa,
-  xinput,
+{ lib
+, stdenv
+, fetchurl
+, libpng
+, libjpeg
+, libtiff
+, zlib
+, bzip2
+, libXcursor
+, libXrandr
+, libGLU
+, libGL
+, libXext
+, libXft
+, libXfixes
+, mesa
+, xinput
+,
 }:
 
 stdenv.mkDerivation rec {

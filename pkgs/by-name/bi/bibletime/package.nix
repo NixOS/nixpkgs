@@ -1,18 +1,18 @@
-{
-  lib,
-  boost,
-  clucene_core_2,
-  cmake,
-  docbook_xml_dtd_45,
-  docbook_xsl_ns,
-  fetchFromGitHub,
-  gettext,
-  libxslt,
-  perlPackages,
-  pkg-config,
-  qt6,
-  stdenv,
-  sword,
+{ lib
+, boost
+, clucene_core_2
+, cmake
+, docbook_xml_dtd_45
+, docbook_xsl_ns
+, fetchFromGitHub
+, gettext
+, libxslt
+, perlPackages
+, pkg-config
+, qt6
+, stdenv
+, sword
+,
 }:
 
 let

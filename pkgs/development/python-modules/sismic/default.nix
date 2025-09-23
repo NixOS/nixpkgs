@@ -1,13 +1,13 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  setuptools,
-  behave,
-  ruamel-yaml,
-  schema,
-  pytestCheckHook,
-  pytest-mock,
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, setuptools
+, behave
+, ruamel-yaml
+, schema
+, pytestCheckHook
+, pytest-mock
+,
 }:
 
 let

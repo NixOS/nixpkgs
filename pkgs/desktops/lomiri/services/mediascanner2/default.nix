@@ -1,32 +1,32 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  gitUpdater,
-  nixosTests,
-  testers,
-  # dbus-cpp not compatible with Boost 1.87
+{ stdenv
+, lib
+, fetchFromGitLab
+, gitUpdater
+, nixosTests
+, testers
+, # dbus-cpp not compatible with Boost 1.87
   # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/8
-  boost186,
-  cmake,
-  cmake-extras,
-  dbus,
-  dbus-cpp,
-  gdk-pixbuf,
-  glib,
-  gst_all_1,
-  gtest,
-  libapparmor,
-  libexif,
-  pkg-config,
-  properties-cpp,
-  qtbase,
-  qtdeclarative,
-  shared-mime-info,
-  sqlite,
-  taglib,
-  udisks,
-  wrapQtAppsHook,
+  boost186
+, cmake
+, cmake-extras
+, dbus
+, dbus-cpp
+, gdk-pixbuf
+, glib
+, gst_all_1
+, gtest
+, libapparmor
+, libexif
+, pkg-config
+, properties-cpp
+, qtbase
+, qtdeclarative
+, shared-mime-info
+, sqlite
+, taglib
+, udisks
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

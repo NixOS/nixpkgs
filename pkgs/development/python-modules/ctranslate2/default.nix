@@ -1,23 +1,20 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-
-  # build-system
-  pybind11,
-  setuptools,
-
-  # dependencies
-  ctranslate2-cpp,
-  numpy,
-  pyyaml,
-
-  # tests
-  pytestCheckHook,
-  torch,
-  transformers,
-  writableTmpDirAsHomeHook,
-  wurlitzer,
+{ lib
+, stdenv
+, buildPythonPackage
+, # build-system
+  pybind11
+, setuptools
+, # dependencies
+  ctranslate2-cpp
+, numpy
+, pyyaml
+, # tests
+  pytestCheckHook
+, torch
+, transformers
+, writableTmpDirAsHomeHook
+, wurlitzer
+,
 }:
 
 buildPythonPackage rec {

@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  libplist,
-  libxml2,
-  openssl,
+{ lib
+, stdenv
+, fetchgit
+, libplist
+, libxml2
+, openssl
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

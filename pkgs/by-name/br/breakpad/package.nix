@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchgit,
-  zlib,
+{ lib
+, stdenv
+, fetchgit
+, zlib
+,
 }:
 let
   lss = fetchgit {

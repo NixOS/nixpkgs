@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  aiohttp,
-  async-timeout,
-  beautifulsoup4,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, aiohttp
+, async-timeout
+, beautifulsoup4
+,
 }:
 
 buildPythonPackage rec {

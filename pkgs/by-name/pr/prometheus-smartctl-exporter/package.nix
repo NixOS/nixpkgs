@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchFromGitHub,
-  buildGoModule,
-  nixosTests,
-  smartmontools,
+{ lib
+, fetchFromGitHub
+, buildGoModule
+, nixosTests
+, smartmontools
+,
 }:
 
 buildGoModule rec {

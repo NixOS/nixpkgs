@@ -1,34 +1,32 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  wheel,
-  versionCheckHook,
-  withCli ? false,
-
-  # dependencies
-  jsonschema,
-  numpy,
-  onnxruntime,
-  opencv-python-headless,
-  pillow,
-  pooch,
-  pymatting,
-  scikit-image,
-  scipy,
-  tqdm,
-
-  # optional-dependencies
-  aiohttp,
-  asyncer,
-  click,
-  fastapi,
-  filetype,
-  gradio,
-  python-multipart,
-  uvicorn,
-  watchdog,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, wheel
+, versionCheckHook
+, withCli ? false
+, # dependencies
+  jsonschema
+, numpy
+, onnxruntime
+, opencv-python-headless
+, pillow
+, pooch
+, pymatting
+, scikit-image
+, scipy
+, tqdm
+, # optional-dependencies
+  aiohttp
+, asyncer
+, click
+, fastapi
+, filetype
+, gradio
+, python-multipart
+, uvicorn
+, watchdog
+,
 }:
 
 buildPythonPackage rec {

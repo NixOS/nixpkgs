@@ -1,22 +1,22 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitLab,
-  fetchpatch,
-  gitUpdater,
-  nixosTests,
-  accounts-qml-module,
-  buteo-syncfw,
-  cmake,
-  gettext,
-  lomiri-content-hub,
-  lomiri-indicator-network,
-  lomiri-ui-toolkit,
-  qtbase,
-  qtdeclarative,
-  qtorganizer-mkcal,
-  qtpim,
-  wrapQtAppsHook,
+{ stdenv
+, lib
+, fetchFromGitLab
+, fetchpatch
+, gitUpdater
+, nixosTests
+, accounts-qml-module
+, buteo-syncfw
+, cmake
+, gettext
+, lomiri-content-hub
+, lomiri-indicator-network
+, lomiri-ui-toolkit
+, qtbase
+, qtdeclarative
+, qtorganizer-mkcal
+, qtpim
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

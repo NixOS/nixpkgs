@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchzip,
-  makeWrapper,
-  openjdk,
+{ lib
+, stdenvNoCC
+, fetchzip
+, makeWrapper
+, openjdk
+,
 }:
 
 stdenvNoCC.mkDerivation {

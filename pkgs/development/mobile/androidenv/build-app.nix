@@ -1,27 +1,26 @@
-{
-  composeAndroidPackages,
-  stdenv,
-  lib,
-  ant,
-  jdk,
-  gnumake,
-  gawk,
-  meta,
+{ composeAndroidPackages
+, stdenv
+, lib
+, ant
+, jdk
+, gnumake
+, gawk
+, meta
+,
 }:
 
-{
-  name,
-  release ? false,
-  keyStore ? null,
-  keyAlias ? null,
-  keyStorePassword ? null,
-  keyAliasPassword ? null,
-  antFlags ? "",
-  ...
+{ name
+, release ? false
+, keyStore ? null
+, keyAlias ? null
+, keyStorePassword ? null
+, keyAliasPassword ? null
+, antFlags ? ""
+, ...
 }@args:
 
 assert
-  release
+release
   -> keyStore != null && keyAlias != null && keyStorePassword != null && keyAliasPassword != null;
 
 let
@@ -68,5 +67,5 @@ stdenv.mkDerivation (
 
     inherit meta;
   }
-  // extraArgs
+    // extraArgs
 )

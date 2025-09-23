@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }:
 let
   inherit (lib)
@@ -172,12 +171,14 @@ in
 
     environment = {
       etc = listToAttrs (
-        map (rule: {
-          name = "xdg/pay-respects/rules/${rule.command}.toml";
-          value = {
-            source = generate "${rule.command}.toml" rule;
-          };
-        }) cfg.runtimeRules
+        map
+          (rule: {
+            name = "xdg/pay-respects/rules/${rule.command}.toml";
+            value = {
+              source = generate "${rule.command}.toml" rule;
+            };
+          })
+          cfg.runtimeRules
       );
 
       systemPackages = [ finalPackage ];

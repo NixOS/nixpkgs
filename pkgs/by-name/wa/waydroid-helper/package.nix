@@ -1,28 +1,28 @@
-{
-  lib,
-  python3Packages,
-  fetchFromGitHub,
-  appstream,
-  cmake,
-  desktop-file-utils,
-  glib,
-  gobject-introspection,
-  meson,
-  ninja,
-  pkg-config,
-  wrapGAppsHook4,
-  bash,
-  bindfs,
-  dbus,
-  android-tools,
-  e2fsprogs,
-  fakeroot,
-  fuse,
-  libadwaita,
-  libxml2,
-  systemd,
-  unzip,
-  nix-update-script,
+{ lib
+, python3Packages
+, fetchFromGitHub
+, appstream
+, cmake
+, desktop-file-utils
+, glib
+, gobject-introspection
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, bash
+, bindfs
+, dbus
+, android-tools
+, e2fsprogs
+, fakeroot
+, fuse
+, libadwaita
+, libxml2
+, systemd
+, unzip
+, nix-update-script
+,
 }:
 
 let

@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  meson,
-  ninja,
-  pkg-config,
-  libsForQt5,
-  libpng,
-  giflib,
-  libjpeg,
-  impy,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, libsForQt5
+, libpng
+, giflib
+, libjpeg
+, impy
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     broken =
       stdenv.hostPlatform.isDarwin
       ||
-        # https://github.com/bcampbell/evilpixie/issues/28
-        stdenv.hostPlatform.isAarch64;
+      # https://github.com/bcampbell/evilpixie/issues/28
+      stdenv.hostPlatform.isAarch64;
   };
 })

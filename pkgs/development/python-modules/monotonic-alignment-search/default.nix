@@ -1,15 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools,
-  cython,
-  numpy_2,
-
-  # dependencies
-  torch,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools
+, cython
+, numpy_2
+, # dependencies
+  torch
+,
 }:
 
 buildPythonPackage rec {

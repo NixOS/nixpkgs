@@ -1,10 +1,10 @@
-{
-  lib,
-  alsa-lib,
-  fetchFromGitHub,
-  mkLibretroCore,
-  python3,
-  rapidjson,
+{ lib
+, alsa-lib
+, fetchFromGitHub
+, mkLibretroCore
+, python3
+, rapidjson
+,
 }:
 mkLibretroCore {
   core = "mame2016";

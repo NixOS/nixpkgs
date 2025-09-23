@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  mesa,
-  wayland,
-  libglvnd,
-  libbsd,
-  libunwind,
-  libelf,
-  meson,
-  pkg-config,
-  ninja,
+{ lib
+, stdenv
+, fetchFromGitLab
+, mesa
+, wayland
+, libglvnd
+, libbsd
+, libunwind
+, libelf
+, meson
+, pkg-config
+, ninja
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

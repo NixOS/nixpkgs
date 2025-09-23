@@ -1,13 +1,13 @@
-{
-  lib,
-  buildNpmPackage,
-  fetchFromGitHub,
-  copyDesktopItems,
-  makeWrapper,
-  ffmpeg-headless,
-  yt-dlp,
-  makeDesktopItem,
-  electron,
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, copyDesktopItems
+, makeWrapper
+, ffmpeg-headless
+, yt-dlp
+, makeDesktopItem
+, electron
+,
 }:
 
 buildNpmPackage rec {

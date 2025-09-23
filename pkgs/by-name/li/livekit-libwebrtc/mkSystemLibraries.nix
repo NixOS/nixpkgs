@@ -1,16 +1,16 @@
-{
-  brotli,
-  fontconfig,
-  freetype,
-  harfbuzz,
-  icu,
-  jsoncpp,
-  libpng,
-  libwebp,
-  libxml2,
-  libxslt,
-  minizip,
-  ffmpeg_6,
+{ brotli
+, fontconfig
+, freetype
+, harfbuzz
+, icu
+, jsoncpp
+, libpng
+, libwebp
+, libxml2
+, libxslt
+, minizip
+, ffmpeg_6
+,
 }:
 {
   "brotli" = {

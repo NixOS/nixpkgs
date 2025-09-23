@@ -1,11 +1,11 @@
-{
-  stdenv,
-  jq,
-  lib,
-  moreutils,
-  typos-lsp,
-  vscode-utils,
-  vscode-extension-update-script,
+{ stdenv
+, jq
+, lib
+, moreutils
+, typos-lsp
+, vscode-utils
+, vscode-extension-update-script
+,
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -28,8 +28,7 @@ let
         arch = "darwin-arm64";
         hash = "sha256-u3H2+nz6lJtMXn38dDnshaJcnoC7cKJg2q2n0nCa0Dc=";
       };
-    }
-    .${system} or (throw "Unsupported system: ${system}");
+    }.${system} or (throw "Unsupported system: ${system}");
 in
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {

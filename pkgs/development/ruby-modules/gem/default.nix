@@ -18,75 +18,77 @@
 # Normal gem packages can be used outside of bundler; a binstub is created in
 # $out/bin.
 
-{
-  lib,
-  fetchurl,
-  fetchgit,
-  makeWrapper,
-  gitMinimal,
-  ruby,
-  bundler,
+{ lib
+, fetchurl
+, fetchgit
+, makeWrapper
+, gitMinimal
+, ruby
+, bundler
+,
 }@defs:
 
 lib.makeOverridable (
 
-  {
-    name ? null,
-    gemName,
-    version ? null,
-    type ? "gem",
-    document ? [ ], # e.g. [ "ri" "rdoc" ]
-    platform ? "ruby",
-    ruby ? defs.ruby,
-    stdenv ? ruby.stdenv,
-    namePrefix ? (
+  { name ? null
+  , gemName
+  , version ? null
+  , type ? "gem"
+  , document ? [ ]
+  , # e.g. [ "ri" "rdoc" ]
+    platform ? "ruby"
+  , ruby ? defs.ruby
+  , stdenv ? ruby.stdenv
+  , namePrefix ? (
       let
         rubyName = builtins.parseDrvName ruby.name;
       in
       "${rubyName.name}${lib.versions.majorMinor rubyName.version}-"
-    ),
-    nativeBuildInputs ? [ ],
-    buildInputs ? [ ],
-    meta ? { },
-    patches ? [ ],
-    gemPath ? [ ],
-    dontStrip ? false,
-    # Assume we don't have to build unless strictly necessary (e.g. the source is a
+    )
+  , nativeBuildInputs ? [ ]
+  , buildInputs ? [ ]
+  , meta ? { }
+  , patches ? [ ]
+  , gemPath ? [ ]
+  , dontStrip ? false
+  , # Assume we don't have to build unless strictly necessary (e.g. the source is a
     # git checkout).
     # If you need to apply patches, make sure to set `dontBuild = false`;
-    dontBuild ? true,
-    dontInstallManpages ? false,
-    propagatedBuildInputs ? [ ],
-    propagatedUserEnvPkgs ? [ ],
-    buildFlags ? [ ],
-    passthru ? { },
-    # bundler expects gems to be stored in the cache directory for certain actions
+    dontBuild ? true
+  , dontInstallManpages ? false
+  , propagatedBuildInputs ? [ ]
+  , propagatedUserEnvPkgs ? [ ]
+  , buildFlags ? [ ]
+  , passthru ? { }
+  , # bundler expects gems to be stored in the cache directory for certain actions
     # such as `bundler install --redownload`.
     # At the cost of increasing the store size, you can keep the gems to have closer
     # alignment with what Bundler expects.
-    keepGemCache ? false,
-    ...
+    keepGemCache ? false
+  , ...
   }@attrs:
 
   let
     src =
       attrs.src or (
         if type == "gem" then
-          fetchurl {
-            urls = map (remote: "${remote}/gems/${gemName}-${suffix}.gem") (
-              attrs.source.remotes or [ "https://rubygems.org" ]
-            );
-            inherit (attrs.source) sha256;
-          }
+          fetchurl
+            {
+              urls = map (remote: "${remote}/gems/${gemName}-${suffix}.gem") (
+                attrs.source.remotes or [ "https://rubygems.org" ]
+              );
+              inherit (attrs.source) sha256;
+            }
         else if type == "git" then
-          fetchgit {
-            inherit (attrs.source)
-              url
-              rev
-              sha256
-              fetchSubmodules
-              ;
-          }
+          fetchgit
+            {
+              inherit (attrs.source)
+                url
+                rev
+                sha256
+                fetchSubmodules
+                ;
+            }
         else if type == "url" then
           fetchurl attrs.source
         else
@@ -108,7 +110,7 @@ lib.makeOverridable (
 
   stdenv.mkDerivation (
     (builtins.removeAttrs attrs [ "source" ])
-    // {
+      // {
       inherit ruby;
       inherit dontBuild;
       inherit dontStrip;

@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPackages,
-  fetchFromGitHub,
-  buildNpmPackage,
-  fetchFromGitea,
-  nix-update-script,
+{ lib
+, buildPackages
+, fetchFromGitHub
+, buildNpmPackage
+, fetchFromGitea
+, nix-update-script
+,
 }:
 
 let

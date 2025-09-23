@@ -1,27 +1,27 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitLab,
-  babel,
-  html2text,
-  lxml,
-  packaging,
-  pillow,
-  prettytable,
-  pycountry,
-  pytestCheckHook,
-  python-dateutil,
-  python-jose,
-  pythonOlder,
-  pyyaml,
-  requests,
-  rich,
-  setuptools,
-  testers,
-  unidecode,
-  termcolor,
-  responses,
-  woob,
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, babel
+, html2text
+, lxml
+, packaging
+, pillow
+, prettytable
+, pycountry
+, pytestCheckHook
+, python-dateutil
+, python-jose
+, pythonOlder
+, pyyaml
+, requests
+, rich
+, setuptools
+, testers
+, unidecode
+, termcolor
+, responses
+, woob
+,
 }:
 
 buildPythonPackage rec {

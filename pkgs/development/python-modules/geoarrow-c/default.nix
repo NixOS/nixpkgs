@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  pyarrow,
-  cython,
-  numpy,
-  setuptools,
-  setuptools-scm,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
+, pyarrow
+, cython
+, numpy
+, setuptools
+, setuptools-scm
+,
 }:
 buildPythonPackage rec {
   pname = "geoarrow-c";

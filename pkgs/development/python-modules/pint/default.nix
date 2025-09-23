@@ -1,26 +1,23 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # dependencies
-  flexcache,
-  flexparser,
-  platformdirs,
-  typing-extensions,
-
-  # tests
-  pytestCheckHook,
-  pytest-subtests,
-  pytest-benchmark,
-  numpy,
-  matplotlib,
-  uncertainties,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, # build-system
+  setuptools
+, setuptools-scm
+, # dependencies
+  flexcache
+, flexparser
+, platformdirs
+, typing-extensions
+, # tests
+  pytestCheckHook
+, pytest-subtests
+, pytest-benchmark
+, numpy
+, matplotlib
+, uncertainties
+,
 }:
 
 buildPythonPackage rec {

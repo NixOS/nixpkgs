@@ -1,11 +1,11 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  zlib,
-  libxcrypt,
-  enableSCP ? false,
-  sftpPath ? "/run/current-system/sw/libexec/sftp-server",
+{ lib
+, stdenv
+, fetchurl
+, zlib
+, libxcrypt
+, enableSCP ? false
+, sftpPath ? "/run/current-system/sw/libexec/sftp-server"
+,
 }:
 
 let

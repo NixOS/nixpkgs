@@ -1,12 +1,12 @@
-{
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  setuptools,
-  pytest-xdist,
-  pytest-dependency,
-  pytest-mock,
-  pytestCheckHook,
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, setuptools
+, pytest-xdist
+, pytest-dependency
+, pytest-mock
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

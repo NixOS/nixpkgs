@@ -1,8 +1,8 @@
-{
-  lib,
-  wrapFirefox,
-  gpgme,
-  gnupg,
+{ lib
+, wrapFirefox
+, gpgme
+, gnupg
+,
 }:
 
 browser: args:
@@ -12,9 +12,7 @@ browser: args:
     libName = "thunderbird";
   }
   // args
-))
-
-.overrideAttrs
+)).overrideAttrs
   (old: {
     # Thunderbird's native GPG support does not yet support smartcards.
     # The official upstream recommendation is to configure fall back to gnupg

@@ -60,7 +60,7 @@ import ./make-test-python.nix (
         settings = {
           inherit host port;
 
-          stash = [ { path = "/srv"; } ];
+          stash = [{ path = "/srv"; }];
         };
       };
     };

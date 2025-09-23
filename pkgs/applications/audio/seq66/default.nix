@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoreconfHook,
-  pkg-config,
-  qttools,
-  which,
-  alsa-lib,
-  libjack2,
-  liblo,
-  qtbase,
-  wrapQtAppsHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, qttools
+, which
+, alsa-lib
+, libjack2
+, liblo
+, qtbase
+, wrapQtAppsHook
+,
 }:
 
 stdenv.mkDerivation rec {

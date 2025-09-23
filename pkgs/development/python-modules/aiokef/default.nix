@@ -1,12 +1,12 @@
-{
-  lib,
-  async-timeout,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pytestCheckHook,
-  pytest-cov-stub,
-  pythonOlder,
-  tenacity,
+{ lib
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pytest-cov-stub
+, pythonOlder
+, tenacity
+,
 }:
 
 buildPythonPackage rec {

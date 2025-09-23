@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  coq-elpi,
-  stdlib,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, coq-elpi
+, stdlib
+, version ? null
+,
 }:
 
 mkCoqDerivation {

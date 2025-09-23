@@ -1,8 +1,8 @@
-{
-  lib,
-  json-schema-catalog-rs,
-  runCommand,
-  jq,
+{ lib
+, json-schema-catalog-rs
+, runCommand
+, jq
+,
 }:
 let
 
@@ -29,13 +29,13 @@ let
     ```
   */
   newCatalog =
-    {
-      name,
-      displayName ? name,
-      groups,
-      version ? null,
-      extraDescription ? null,
-      meta ? { },
+    { name
+    , displayName ? name
+    , groups
+    , version ? null
+    , extraDescription ? null
+    , meta ? { }
+    ,
     }:
     let
       # lazyDerivation tidies up the package attributes
@@ -74,15 +74,19 @@ let
         pname = name;
         catalogJson = builtins.toJSON {
           name = displayName;
-          groups = lib.mapAttrsToList (name: group: {
-            inherit name;
-            # TODO dedup the longest common prefix by putting it in baseLocation
-            baseLocation = "/";
-            schemas = lib.mapAttrsToList (id: location: {
-              inherit id;
-              inherit location;
-            }) group;
-          }) groups;
+          groups = lib.mapAttrsToList
+            (name: group: {
+              inherit name;
+              # TODO dedup the longest common prefix by putting it in baseLocation
+              baseLocation = "/";
+              schemas = lib.mapAttrsToList
+                (id: location: {
+                  inherit id;
+                  inherit location;
+                })
+                group;
+            })
+            groups;
         };
         passAsFile = [ "catalogJson" ];
         passthru = {

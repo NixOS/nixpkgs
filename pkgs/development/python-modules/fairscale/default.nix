@@ -1,19 +1,19 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  # build inputs
-  torch,
-  numpy,
-  ninja,
-  # check inputs
-  pytestCheckHook,
-  parameterized,
-  pytest-cov-stub,
-  pytest-timeout,
-  remote-pdb,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, # build inputs
+  torch
+, numpy
+, ninja
+, # check inputs
+  pytestCheckHook
+, parameterized
+, pytest-cov-stub
+, pytest-timeout
+, remote-pdb
+,
 }:
 let
   pname = "fairscale";

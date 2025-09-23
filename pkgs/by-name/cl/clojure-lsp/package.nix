@@ -1,13 +1,13 @@
-{
-  lib,
-  stdenvNoCC,
-  buildGraalvmNativeImage,
-  fetchurl,
-  fetchFromGitHub,
-  writeScript,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
-  testers,
+{ lib
+, stdenvNoCC
+, buildGraalvmNativeImage
+, fetchurl
+, fetchFromGitHub
+, writeScript
+, writableTmpDirAsHomeHook
+, versionCheckHook
+, testers
+,
 }:
 
 buildGraalvmNativeImage (finalAttrs: {

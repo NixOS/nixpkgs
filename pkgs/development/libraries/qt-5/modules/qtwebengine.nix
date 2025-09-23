@@ -1,72 +1,70 @@
-{
-  qtModule,
-  qtdeclarative,
-  qtquickcontrols,
-  qtlocation,
-  qtwebchannel,
-  fetchpatch,
-  fetchpatch2,
-
-  bison,
-  flex,
-  gperf,
-  ninja,
-  pkg-config,
-  python,
-  which,
-  nodejs,
-  perl,
-  buildPackages,
-  pkgsBuildTarget,
-  pkgsBuildBuild,
-
-  xorg,
-  libXcursor,
-  libXScrnSaver,
-  libXrandr,
-  libXtst,
-  fontconfig,
-  freetype,
-  harfbuzz,
-  icu,
-  dbus,
-  libdrm,
-  zlib,
-  minizip,
-  libjpeg,
-  libpng,
-  libtiff,
-  libwebp,
-  libopus,
-  jsoncpp,
-  protobuf,
-  libvpx,
-  srtp,
-  snappy,
-  nss,
-  libevent,
-  alsa-lib,
-  pulseaudio,
-  libcap,
-  pciutils,
-  systemd,
-  enableProprietaryCodecs ? true,
-  gn,
-  cctools,
-  cups,
-  bootstrap_cmds,
-  xcbuild,
-  writeScriptBin,
-  ffmpeg ? null,
-  lib,
-  stdenv,
-  version ? null,
-  qtCompatVersion,
-  pipewireSupport ? stdenv.hostPlatform.isLinux,
-  pipewire,
-  postPatch ? "",
-  nspr,
-  lndir,
+{ qtModule
+, qtdeclarative
+, qtquickcontrols
+, qtlocation
+, qtwebchannel
+, fetchpatch
+, fetchpatch2
+, bison
+, flex
+, gperf
+, ninja
+, pkg-config
+, python
+, which
+, nodejs
+, perl
+, buildPackages
+, pkgsBuildTarget
+, pkgsBuildBuild
+, xorg
+, libXcursor
+, libXScrnSaver
+, libXrandr
+, libXtst
+, fontconfig
+, freetype
+, harfbuzz
+, icu
+, dbus
+, libdrm
+, zlib
+, minizip
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, libopus
+, jsoncpp
+, protobuf
+, libvpx
+, srtp
+, snappy
+, nss
+, libevent
+, alsa-lib
+, pulseaudio
+, libcap
+, pciutils
+, systemd
+, enableProprietaryCodecs ? true
+, gn
+, cctools
+, cups
+, bootstrap_cmds
+, xcbuild
+, writeScriptBin
+, ffmpeg ? null
+, lib
+, stdenv
+, version ? null
+, qtCompatVersion
+, pipewireSupport ? stdenv.hostPlatform.isLinux
+, pipewire
+, postPatch ? ""
+, nspr
+, lndir
+,
 }:
 
 let
@@ -267,14 +265,16 @@ qtModule (
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin (''
-      substituteInPlace src/buildtools/config/mac_osx.pri \
-        --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
+    + lib.optionalString stdenv.hostPlatform.isDarwin (
+      ''
+        substituteInPlace src/buildtools/config/mac_osx.pri \
+          --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
 
-      # Use system ffmpeg
-      echo "gn_args += use_system_ffmpeg=true" >> src/core/config/mac_osx.pri
-      echo "LIBS += -lavformat -lavcodec -lavutil" >> src/core/core_common.pri
-    '')
+        # Use system ffmpeg
+        echo "gn_args += use_system_ffmpeg=true" >> src/core/config/mac_osx.pri
+        echo "LIBS += -lavformat -lavcodec -lavutil" >> src/core/core_common.pri
+      ''
+    )
     + postPatch;
 
     env = {
@@ -325,9 +325,10 @@ qtModule (
       "--"
       "-system-ffmpeg"
     ]
-    ++ lib.optional (
-      pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform
-    ) "-webengine-webrtc-pipewire"
+    ++ lib.optional
+      (
+        pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform
+      ) "-webengine-webrtc-pipewire"
     ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
     propagatedBuildInputs = [
@@ -502,7 +503,7 @@ qtModule (
     };
 
   }
-  // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+    // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
     configurePlatforms = [ ];
     # to get progress output in `nix-build` and `nix build -L`
     preBuild = ''

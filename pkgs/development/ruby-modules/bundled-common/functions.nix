@@ -13,12 +13,11 @@ let
 in
 rec {
   bundlerFiles =
-    {
-      gemfile ? null,
-      lockfile ? null,
-      gemset ? null,
-      gemdir ? null,
-      ...
+    { gemfile ? null
+    , lockfile ? null
+    , gemset ? null
+    , gemdir ? null
+    , ...
     }:
     {
       inherit gemdir;
@@ -68,10 +67,12 @@ rec {
     (
       !(attrs ? platforms)
       || builtins.length attrs.platforms == 0
-      || builtins.any (
-        platform:
-        platform.engine == rubyEngine && (!(platform ? version) || platform.version == version.majMin)
-      ) attrs.platforms
+      || builtins.any
+        (
+          platform:
+          platform.engine == rubyEngine && (!(platform ? version) || platform.version == version.majMin)
+        )
+        attrs.platforms
     );
 
   groupMatches =
@@ -84,15 +85,14 @@ rec {
     attrs: (if gemConfig ? ${attrs.gemName} then attrs // gemConfig.${attrs.gemName} attrs else attrs);
 
   genStubsScript =
-    {
-      lib,
-      runCommand,
-      ruby,
-      confFiles,
-      bundler,
-      groups,
-      binPaths,
-      ...
+    { lib
+    , runCommand
+    , ruby
+    , confFiles
+    , bundler
+    , groups
+    , binPaths
+    , ...
     }:
     let
       genStubsScript =
@@ -118,11 +118,10 @@ rec {
     '';
 
   pathDerivation =
-    {
-      gemName,
-      version,
-      path,
-      ...
+    { gemName
+    , version
+    , path
+    , ...
     }:
     let
       res = {

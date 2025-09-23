@@ -1,23 +1,23 @@
-{
-  lib,
-  aiohttp,
-  buildPythonPackage,
-  certifi,
-  fetchFromGitHub,
-  mock,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  orjson,
-  pytest-asyncio,
-  pytest-cov-stub,
-  pytest-httpserver,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  respx,
-  setuptools,
-  trustme,
-  urllib3,
+{ lib
+, aiohttp
+, buildPythonPackage
+, certifi
+, fetchFromGitHub
+, mock
+, opentelemetry-api
+, opentelemetry-sdk
+, orjson
+, pytest-asyncio
+, pytest-cov-stub
+, pytest-httpserver
+, pytestCheckHook
+, pythonOlder
+, requests
+, respx
+, setuptools
+, trustme
+, urllib3
+,
 }:
 
 buildPythonPackage rec {

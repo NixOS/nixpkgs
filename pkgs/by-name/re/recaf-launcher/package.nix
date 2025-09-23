@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  buildFHSEnv,
+{ lib
+, stdenv
+, fetchurl
+, buildFHSEnv
+,
 }:
 let
   version = "0.8.1";

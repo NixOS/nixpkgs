@@ -12,9 +12,11 @@ let
     ;
 
   # Extract updateScript's from manually package emacs packages
-  hasScript = filterAttrs (
-    _: v: isDerivation v && hasAttr "updateScript" v
-  ) emacs.pkgs.manualPackages;
+  hasScript = filterAttrs
+    (
+      _: v: isDerivation v && hasAttr "updateScript" v
+    )
+    emacs.pkgs.manualPackages;
 
 in
 attrValues (mapAttrs (_: v: v.updateScript) hasScript)

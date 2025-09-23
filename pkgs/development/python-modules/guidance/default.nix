@@ -1,37 +1,33 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  pybind11,
-  setuptools,
-
-  # dependencies
-  diskcache,
-  guidance-stitch,
-  llguidance,
-  numpy,
-  ordered-set,
-  platformdirs,
-  psutil,
-  pydantic,
-  referencing,
-  requests,
-  tiktoken,
-
-  # optional-dependencies
-  openai,
-  jsonschema,
-  fastapi,
-  uvicorn,
-
-  # tests
-  huggingface-hub,
-  pytestCheckHook,
-  tokenizers,
-  torch,
-  writableTmpDirAsHomeHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  pybind11
+, setuptools
+, # dependencies
+  diskcache
+, guidance-stitch
+, llguidance
+, numpy
+, ordered-set
+, platformdirs
+, psutil
+, pydantic
+, referencing
+, requests
+, tiktoken
+, # optional-dependencies
+  openai
+, jsonschema
+, fastapi
+, uvicorn
+, # tests
+  huggingface-hub
+, pytestCheckHook
+, tokenizers
+, torch
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

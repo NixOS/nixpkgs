@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  azure-mgmt-core,
-  azure-common,
-  isodate,
-  pythonOlder,
-  setuptools,
-  typing-extensions,
-  azure-cli,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, azure-mgmt-core
+, azure-common
+, isodate
+, pythonOlder
+, setuptools
+, typing-extensions
+, azure-cli
+,
 }:
 
 buildPythonPackage rec {

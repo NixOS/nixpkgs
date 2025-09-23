@@ -1,9 +1,9 @@
-{
-  lib,
-  apple-sdk,
-  file_cmds,
-  mkAppleDerivation,
-  pkg-config,
+{ lib
+, apple-sdk
+, file_cmds
+, mkAppleDerivation
+, pkg-config
+,
 }:
 
 mkAppleDerivation {

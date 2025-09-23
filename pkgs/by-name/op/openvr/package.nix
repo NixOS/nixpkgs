@@ -1,12 +1,12 @@
-{
-  cmake,
-  fetchFromGitHub,
-  fetchpatch2,
-  jsoncpp,
-  lib,
-  libGL,
-  stdenv,
-  nix-update-script,
+{ cmake
+, fetchFromGitHub
+, fetchpatch2
+, jsoncpp
+, lib
+, libGL
+, stdenv
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

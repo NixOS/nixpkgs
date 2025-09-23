@@ -1,9 +1,9 @@
-{
-  lib,
-  fetchurl,
-  stdenv,
-  undmg,
-  versionCheckHook,
+{ lib
+, fetchurl
+, stdenv
+, undmg
+, versionCheckHook
+,
 }:
 
 let

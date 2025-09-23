@@ -1,10 +1,10 @@
-{
-  lib,
-  mkCoqDerivation,
-  coq,
-  ssreflect,
-  equations,
-  version ? null,
+{ lib
+, mkCoqDerivation
+, coq
+, ssreflect
+, equations
+, version ? null
+,
 }:
 
 mkCoqDerivation {
@@ -42,7 +42,8 @@ mkCoqDerivation {
         case = range "8.6" "8.7";
         out = "20180709";
       }
-    ] null;
+    ]
+      null;
 
   mlPlugin = true;
   propagatedBuildInputs = [

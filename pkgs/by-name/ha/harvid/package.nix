@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  which,
-  unixtools,
-  cctools,
-  ffmpeg,
-  libjpeg,
-  libpng,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, which
+, unixtools
+, cctools
+, ffmpeg
+, libjpeg
+, libpng
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

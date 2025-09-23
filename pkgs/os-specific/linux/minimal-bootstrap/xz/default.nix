@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPlatform,
-  hostPlatform,
-  fetchurl,
-  bash,
-  tinycc,
-  gnumake,
-  gnused,
-  gnugrep,
-  gawk,
-  gnutar,
-  gzip,
+{ lib
+, buildPlatform
+, hostPlatform
+, fetchurl
+, bash
+, tinycc
+, gnumake
+, gnused
+, gnugrep
+, gawk
+, gnutar
+, gzip
+,
 }:
 let
   pname = "xz";
@@ -22,37 +22,37 @@ let
   };
 in
 bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+{
+  inherit pname version;
 
-    nativeBuildInputs = [
-      tinycc.compiler
-      gnumake
-      gnused
-      gnugrep
-      gawk
-      gnutar
-      gzip
+  nativeBuildInputs = [
+    tinycc.compiler
+    gnumake
+    gnused
+    gnugrep
+    gawk
+    gnutar
+    gzip
+  ];
+
+  passthru.tests.get-version =
+    result:
+    bash.runCommand "${pname}-get-version-${version}" { } ''
+      ${result}/bin/xz --version
+      mkdir $out
+    '';
+
+  meta = with lib; {
+    description = "General-purpose data compression software, successor of LZMA";
+    homepage = "https://tukaani.org/xz";
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
     ];
-
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/xz --version
-        mkdir $out
-      '';
-
-    meta = with lib; {
-      description = "General-purpose data compression software, successor of LZMA";
-      homepage = "https://tukaani.org/xz";
-      license = with licenses; [
-        gpl2Plus
-        lgpl21Plus
-      ];
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
-  }
+    teams = [ teams.minimal-bootstrap ];
+    platforms = platforms.unix;
+  };
+}
   ''
     # Unpack
     tar xzf ${src}

@@ -1,15 +1,13 @@
-{
-  lib,
-  mkMesonLibrary,
+{ lib
+, mkMesonLibrary
+, nix-util
+, nix-store
+, nlohmann_json
+, libgit2
+, # Configuration Options
 
-  nix-util,
-  nix-store,
-  nlohmann_json,
-  libgit2,
-
-  # Configuration Options
-
-  version,
+  version
+,
 }:
 
 mkMesonLibrary (finalAttrs: {

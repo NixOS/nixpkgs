@@ -1,31 +1,31 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  extra-cmake-modules,
-  pkg-config,
-  fcitx5,
-  fcitx5-qt,
-  qtbase,
-  qtsvg,
-  qtwayland,
-  qtdeclarative,
-  qtx11extras ? null,
-  kitemviews,
-  kwidgetsaddons,
-  qtquickcontrols2 ? null,
-  kcoreaddons,
-  kdeclarative,
-  kirigami ? null,
-  kirigami2 ? null,
-  isocodes,
-  xkeyboardconfig,
-  libxkbfile,
-  libplasma ? null,
-  plasma-framework ? null,
-  wrapQtAppsHook,
-  kcmSupport ? true,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, pkg-config
+, fcitx5
+, fcitx5-qt
+, qtbase
+, qtsvg
+, qtwayland
+, qtdeclarative
+, qtx11extras ? null
+, kitemviews
+, kwidgetsaddons
+, qtquickcontrols2 ? null
+, kcoreaddons
+, kdeclarative
+, kirigami ? null
+, kirigami2 ? null
+, isocodes
+, xkeyboardconfig
+, libxkbfile
+, libplasma ? null
+, plasma-framework ? null
+, wrapQtAppsHook
+, kcmSupport ? true
+,
 }:
 
 stdenv.mkDerivation rec {

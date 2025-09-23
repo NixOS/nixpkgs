@@ -1,12 +1,12 @@
-{
-  stdenv,
-  lib,
-  fetchFromGitHub,
-  fetchpatch,
-  pkg-config,
-  python3,
-  libffi,
-  readline,
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, python3
+, libffi
+, readline
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -69,11 +69,12 @@ stdenv.mkDerivation rec {
   skippedTests =
     " -e select_poll_fd"
     +
-      lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-        " -e ffi_callback -e float_parse -e float_parse_doubleproc -e 'thread/stress_*' -e select_poll_eintr"
-    + lib.optionalString (
-      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
-    ) " -e float_parse";
+    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+      " -e ffi_callback -e float_parse -e float_parse_doubleproc -e 'thread/stress_*' -e select_poll_eintr"
+    + lib.optionalString
+      (
+        stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
+      ) " -e float_parse";
 
   checkPhase = ''
     runHook preCheck

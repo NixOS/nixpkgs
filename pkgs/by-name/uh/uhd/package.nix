@@ -1,37 +1,37 @@
-{
-  lib,
-  stdenv,
-  substitute,
-  fetchpatch,
-  fetchurl,
-  fetchFromGitHub,
-  cmake,
-  pkg-config,
-  # See https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html for dependencies explanations
-  boost,
-  ncurses,
-  enableCApi ? true,
-  enablePythonApi ? true,
-  python3,
-  enableExamples ? false,
-  enableUtils ? true,
-  libusb1,
-  # Disable dpdk for now due to compilation issues.
-  enableDpdk ? false,
-  dpdk,
-  # Devices
-  enableOctoClock ? true,
-  enableMpmd ? true,
-  enableB100 ? true,
-  enableB200 ? true,
-  enableUsrp1 ? true,
-  enableUsrp2 ? true,
-  enableX300 ? true,
-  enableX400 ? true,
-  enableN300 ? true,
-  enableN320 ? true,
-  enableE300 ? true,
-  enableE320 ? true,
+{ lib
+, stdenv
+, substitute
+, fetchpatch
+, fetchurl
+, fetchFromGitHub
+, cmake
+, pkg-config
+, # See https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html for dependencies explanations
+  boost
+, ncurses
+, enableCApi ? true
+, enablePythonApi ? true
+, python3
+, enableExamples ? false
+, enableUtils ? true
+, libusb1
+, # Disable dpdk for now due to compilation issues.
+  enableDpdk ? false
+, dpdk
+, # Devices
+  enableOctoClock ? true
+, enableMpmd ? true
+, enableB100 ? true
+, enableB200 ? true
+, enableUsrp1 ? true
+, enableUsrp2 ? true
+, enableX300 ? true
+, enableX400 ? true
+, enableN300 ? true
+, enableN320 ? true
+, enableE300 ? true
+, enableE320 ? true
+,
 }:
 
 let

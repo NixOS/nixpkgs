@@ -1,8 +1,7 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
+{ config
+, lib
+, pkgs
+, ...
 }:
 let
   CONTAINS_NEWLINE_RE = ".*\n.*";
@@ -17,29 +16,31 @@ let
 
   toConfMultiline =
     name: value:
-    assert lib.assertMsg (
-      (builtins.match UNESCAPABLE_RE value) == null
-    ) ''""" can't be on its own line in a minetest config.'';
-    "${name} = \"\"\"\n${value}\n\"\"\"\n";
+      assert lib.assertMsg
+        (
+          (builtins.match UNESCAPABLE_RE value) == null
+        ) ''""" can't be on its own line in a minetest config.'';
+      "${name} = \"\"\"\n${value}\n\"\"\"\n";
 
   toConf =
     values:
     lib.concatStrings (
-      lib.mapAttrsToList (
-        name: value:
-        {
-          bool = "${name} = ${toString value}\n";
-          int = "${name} = ${toString value}\n";
-          null = "";
-          set = "${name} = {\n${toConf value}}\n";
-          string =
-            if (builtins.match NEEDS_MULTILINE_RE value) != null then
-              toConfMultiline name value
-            else
-              "${name} = ${value}\n";
-        }
-        .${builtins.typeOf value}
-      ) values
+      lib.mapAttrsToList
+        (
+          name: value:
+          {
+            bool = "${name} = ${toString value}\n";
+            int = "${name} = ${toString value}\n";
+            null = "";
+            set = "${name} = {\n${toConf value}}\n";
+            string =
+              if (builtins.match NEEDS_MULTILINE_RE value) != null then
+                toConfMultiline name value
+              else
+                "${name} = ${value}\n";
+          }.${builtins.typeOf value}
+        )
+        values
     );
 
   cfg = config.services.minetest-server;

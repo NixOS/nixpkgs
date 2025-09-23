@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  appdirs,
-  geojson,
-  hatchling,
-  requests,
-  pytestCheckHook,
-  requests-mock,
-  versioningit,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, appdirs
+, geojson
+, hatchling
+, requests
+, pytestCheckHook
+, requests-mock
+, versioningit
+,
 }:
 
 buildPythonPackage rec {

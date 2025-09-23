@@ -1,11 +1,11 @@
-{
-  fetchurl,
-  lib,
-  stdenv,
-  buildEnv,
-  roundcube,
-  roundcubePlugins,
-  nixosTests,
+{ fetchurl
+, lib
+, stdenv
+, buildEnv
+, roundcube
+, roundcubePlugins
+, nixosTests
+,
 }:
 
 stdenv.mkDerivation rec {

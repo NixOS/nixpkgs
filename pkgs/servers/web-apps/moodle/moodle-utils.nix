@@ -2,15 +2,14 @@
 
 let
   buildMoodlePlugin =
-    a@{
-      name,
-      src,
-      pluginType,
-      configurePhase ? ":",
-      buildPhase ? ":",
-      buildInputs ? [ ],
-      nativeBuildInputs ? [ ],
-      ...
+    a@{ name
+    , src
+    , pluginType
+    , configurePhase ? ":"
+    , buildPhase ? ":"
+    , buildInputs ? [ ]
+    , nativeBuildInputs ? [ ]
+    , ...
     }:
     stdenv.mkDerivation (
       a

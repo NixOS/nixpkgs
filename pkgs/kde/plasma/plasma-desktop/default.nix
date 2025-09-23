@@ -1,23 +1,23 @@
-{
-  lib,
-  mkKdeDerivation,
-  runCommandLocal,
-  makeWrapper,
-  glib,
-  gsettings-desktop-schemas,
-  replaceVars,
-  util-linux,
-  pkg-config,
-  qtsvg,
-  qtwayland,
-  breeze,
-  SDL2,
-  xkeyboard_config,
-  xorg,
-  libcanberra,
-  libwacom,
-  libxkbfile,
-  ibus,
+{ lib
+, mkKdeDerivation
+, runCommandLocal
+, makeWrapper
+, glib
+, gsettings-desktop-schemas
+, replaceVars
+, util-linux
+, pkg-config
+, qtsvg
+, qtwayland
+, breeze
+, SDL2
+, xkeyboard_config
+, xorg
+, libcanberra
+, libwacom
+, libxkbfile
+, ibus
+,
 }:
 let
   # run gsettings with desktop schemas for using in "kcm_access" kcm

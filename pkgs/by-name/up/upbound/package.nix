@@ -1,10 +1,10 @@
-{
-  lib,
-  fetchurl,
-  installShellFiles,
-  versionCheckHook,
-  stdenvNoCC,
-  version-channel ? "stable",
+{ lib
+, fetchurl
+, installShellFiles
+, versionCheckHook
+, stdenvNoCC
+, version-channel ? "stable"
+,
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;

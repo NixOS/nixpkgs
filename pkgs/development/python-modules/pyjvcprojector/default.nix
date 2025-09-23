@@ -1,11 +1,11 @@
-{
-  aiodns,
-  buildPythonPackage,
-  fetchFromGitHub,
-  lib,
-  pytest-asyncio,
-  pytestCheckHook,
-  setuptools,
+{ aiodns
+, buildPythonPackage
+, fetchFromGitHub
+, lib
+, pytest-asyncio
+, pytestCheckHook
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

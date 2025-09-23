@@ -1,15 +1,15 @@
-{
-  stdenv,
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  makeWrapper,
-  coreutils,
-  runCommand,
-  runtimeShell,
-  writeText,
-  terraform-providers,
-  installShellFiles,
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, runCommand
+, runtimeShell
+, writeText
+, terraform-providers
+, installShellFiles
+,
 }:
 
 let
@@ -144,11 +144,12 @@ let
       };
     in
     # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
-    # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
+      # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
     if actualPlugins == [ ] then
-      package.overrideAttrs (orig: {
-        passthru = orig.passthru // passthru;
-      })
+      package.overrideAttrs
+        (orig: {
+          passthru = orig.passthru // passthru;
+        })
     else
       lib.appendToName "with-plugins" (
         stdenv.mkDerivation {

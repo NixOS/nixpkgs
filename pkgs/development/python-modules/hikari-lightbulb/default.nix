@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  flit-core,
-  hikari,
-  croniter,
-  typing-extensions,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
+, hikari
+, croniter
+, typing-extensions
+,
 }:
 
 buildPythonPackage rec {

@@ -1,9 +1,9 @@
-{
-  lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  mkfontdir,
-  mkfontscale,
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, mkfontdir
+, mkfontscale
+,
 }:
 
 stdenvNoCC.mkDerivation {

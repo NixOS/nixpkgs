@@ -1,10 +1,10 @@
-{
-  lib,
-  buildGoModule,
-  fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-  versionCheckHook,
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+, versionCheckHook
+,
 }:
 
 buildGoModule (finalAttrs: {
@@ -30,9 +30,9 @@ buildGoModule (finalAttrs: {
       goDefaultCmd = finalAttrs.pname;
     in
     # The official github released binary is renamed since v0.5.0,
-    # see: https://github.com/tfkhdyt/geminicommit/releases/tag/v0.5.0
-    # Here we link the old name (which is also the `go build` default name)
-    # for backward compatibility:
+      # see: https://github.com/tfkhdyt/geminicommit/releases/tag/v0.5.0
+      # Here we link the old name (which is also the `go build` default name)
+      # for backward compatibility:
     ''
       mv $out/bin/${goDefaultCmd} $out/bin/${cmd}
       ln -s $out/bin/${cmd} $out/bin/${goDefaultCmd}

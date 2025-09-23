@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  prometheus-client,
-  pytest-django,
-  pytestCheckHook,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, prometheus-client
+, pytest-django
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

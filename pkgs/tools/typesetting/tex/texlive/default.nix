@@ -3,48 +3,48 @@
   - source: ../../../../../doc/languages-frameworks/texlive.xml
   - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-{
-  lib,
-  stdenv,
-  fetchpatch,
-  fetchurl,
-  runCommand,
-  writeShellScript,
-  writeText,
-  buildEnv,
-  callPackage,
-  ghostscript_headless,
-  harfbuzz,
-  makeWrapper,
-  installShellFiles,
-  python3,
-  ruby,
-  perl,
-  tk,
-  jdk,
-  bash,
-  snobol4,
-  coreutils,
-  findutils,
-  gawk,
-  getopt,
-  gnugrep,
-  gnumake,
-  gnupg,
-  gnused,
-  gzip,
-  html-tidy,
-  ncurses,
-  zip,
-  libfaketime,
-  asymptote,
-  biber-ms,
-  makeFontsConf,
-  useFixedHashes ? true,
-  extraMirrors ? [ ],
-  recurseIntoAttrs,
-  nixfmt,
-  luajit,
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, runCommand
+, writeShellScript
+, writeText
+, buildEnv
+, callPackage
+, ghostscript_headless
+, harfbuzz
+, makeWrapper
+, installShellFiles
+, python3
+, ruby
+, perl
+, tk
+, jdk
+, bash
+, snobol4
+, coreutils
+, findutils
+, gawk
+, getopt
+, gnugrep
+, gnumake
+, gnupg
+, gnused
+, gzip
+, html-tidy
+, ncurses
+, zip
+, libfaketime
+, asymptote
+, biber-ms
+, makeFontsConf
+, useFixedHashes ? true
+, extraMirrors ? [ ]
+, recurseIntoAttrs
+, nixfmt
+, luajit
+,
 }:
 let
   # various binaries (compiled)
@@ -176,23 +176,24 @@ let
     texliveBinaries = bin;
   };
 
-  tl = lib.mapAttrs (
-    pname:
-    {
-      revision,
-      extraRevision ? "",
-      ...
-    }@args:
-    buildTeXLivePackage (
-      args
-      # NOTE: the fixed naming scheme must match generate-fixed-hashes.nix
-      // {
-        inherit mirrors pname;
-        fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { };
-      }
-      // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); }
+  tl = lib.mapAttrs
+    (
+      pname:
+      { revision
+      , extraRevision ? ""
+      , ...
+      }@args:
+      buildTeXLivePackage (
+        args
+        # NOTE: the fixed naming scheme must match generate-fixed-hashes.nix
+        // {
+          inherit mirrors pname;
+          fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { };
+        }
+        // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); }
+      )
     )
-  ) overriddenTlpdb;
+    overriddenTlpdb;
 
   # function for creating a working environment
   buildTeXEnv = import ./build-tex-env.nix {
@@ -283,12 +284,14 @@ let
   };
 
   assertions =
-    lib.assertMsg (
-      tlpdbVersion.year == version.texliveYear
-    ) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate"
-    && lib.assertMsg (
-      tlpdbVersion.frozen == version.final
-    ) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
+    lib.assertMsg
+      (
+        tlpdbVersion.year == version.texliveYear
+      ) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate"
+    && lib.assertMsg
+      (
+        tlpdbVersion.frozen == version.final
+      ) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
 
   # Pre-defined environment packages for TeX Live schemes,
   # to make nix-env usage more comfortable and build selected on Hydra.
@@ -600,7 +603,7 @@ let
 
 in
 allPkgLists
-// {
+  // {
   pkgs = tl;
 
   tlpdb = {

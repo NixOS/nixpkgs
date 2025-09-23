@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  django,
-  python,
-  pytest-django,
-  pytestCheckHook,
-  djangorestframework,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, python
+, pytest-django
+, pytestCheckHook
+, djangorestframework
+, setuptools
+,
 }:
 
 buildPythonPackage rec {

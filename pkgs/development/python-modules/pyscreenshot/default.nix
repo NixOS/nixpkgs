@@ -1,13 +1,13 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchPypi,
-  isPy3k,
-  easyprocess,
-  entrypoint2,
-  jeepney,
-  mss,
-  pillow,
+{ lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, easyprocess
+, entrypoint2
+, jeepney
+, mss
+, pillow
+,
 }:
 
 buildPythonPackage rec {

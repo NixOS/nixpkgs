@@ -1,9 +1,9 @@
-{
-  lib,
-  symlinkJoin,
-  pidgin,
-  makeWrapper,
-  plugins,
+{ lib
+, symlinkJoin
+, pidgin
+, makeWrapper
+, plugins
+,
 }:
 
 let

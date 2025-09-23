@@ -1,16 +1,16 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  rustPlatform,
-  dbus,
-  xorg,
-  pkg-config,
-  protobuf,
-  writableTmpDirAsHomeHook,
-  nix-update-script,
-  llvmPackages,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, rustPlatform
+, dbus
+, xorg
+, pkg-config
+, protobuf
+, writableTmpDirAsHomeHook
+, nix-update-script
+, llvmPackages
+,
 }:
 
 let

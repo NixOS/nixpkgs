@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  fetchurl,
-  perl,
-  autoreconfHook,
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, perl
+, autoreconfHook
+,
 }:
 
 let

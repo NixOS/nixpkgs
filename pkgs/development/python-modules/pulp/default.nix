@@ -1,12 +1,12 @@
-{
-  lib,
-  cbc,
-  amply,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pyparsing,
-  pythonOlder,
-  pytestCheckHook,
+{ lib
+, cbc
+, amply
+, buildPythonPackage
+, fetchFromGitHub
+, pyparsing
+, pythonOlder
+, pytestCheckHook
+,
 }:
 
 buildPythonPackage rec {

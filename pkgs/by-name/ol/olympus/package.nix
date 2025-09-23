@@ -1,11 +1,10 @@
-{
-  lib,
-  makeWrapper,
-  olympus-unwrapped,
-  symlinkJoin,
-  buildFHSEnv,
-  writeShellScript,
-  # These need overriding if you launch Celeste/Loenn/MiniInstaller from Olympus.
+{ lib
+, makeWrapper
+, olympus-unwrapped
+, symlinkJoin
+, buildFHSEnv
+, writeShellScript
+, # These need overriding if you launch Celeste/Loenn/MiniInstaller from Olympus.
   # Some examples:
   # - null: Use default wrapper.
   # - "": Do not use wrapper.
@@ -14,10 +13,11 @@
   # - writeShellScriptBin { ... }: Use a custom script.
   # - ./my-wrapper.sh: Use a custom script.
   # In any case, it can be overridden at runtime by OLYMPUS_{CELESTE,LOENN,MINIINSTALLER}_WRAPPER.
-  celesteWrapper ? null,
-  loennWrapper ? null,
-  miniinstallerWrapper ? null,
-  skipHandlerCheck ? false, # whether to skip olympus xdg-mime check, true will override it
+  celesteWrapper ? null
+, loennWrapper ? null
+, miniinstallerWrapper ? null
+, skipHandlerCheck ? false
+, # whether to skip olympus xdg-mime check, true will override it
 }:
 let
 

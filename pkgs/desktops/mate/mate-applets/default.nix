@@ -1,28 +1,28 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  pkg-config,
-  gettext,
-  itstool,
-  dbus-glib,
-  glib,
-  gtk3,
-  gucharmap,
-  libmateweather,
-  libnl,
-  libwnck,
-  libgtop,
-  libxml2,
-  libnotify,
-  mate-desktop,
-  mate-panel,
-  polkit,
-  upower,
-  wirelesstools,
-  hicolor-icon-theme,
-  wrapGAppsHook3,
-  mateUpdateScript,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, itstool
+, dbus-glib
+, glib
+, gtk3
+, gucharmap
+, libmateweather
+, libnl
+, libwnck
+, libgtop
+, libxml2
+, libnotify
+, mate-desktop
+, mate-panel
+, polkit
+, upower
+, wirelesstools
+, hicolor-icon-theme
+, wrapGAppsHook3
+, mateUpdateScript
+,
 }:
 
 stdenv.mkDerivation rec {

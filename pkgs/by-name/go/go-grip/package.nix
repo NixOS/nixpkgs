@@ -1,8 +1,8 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  gitUpdater,
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, gitUpdater
+,
 }:
 buildGoModule rec {
   pname = "go-grip";

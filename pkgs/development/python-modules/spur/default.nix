@@ -1,9 +1,9 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  paramiko,
-  pythonOlder,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, paramiko
+, pythonOlder
+,
 }:
 
 buildPythonPackage rec {

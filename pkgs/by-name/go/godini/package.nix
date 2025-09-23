@@ -1,10 +1,10 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  godini,
-  lib,
-  nix-update-script,
-  testers,
+{ buildGoModule
+, fetchFromGitHub
+, godini
+, lib
+, nix-update-script
+, testers
+,
 }:
 
 buildGoModule rec {

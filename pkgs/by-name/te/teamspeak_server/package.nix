@@ -1,10 +1,10 @@
-{
-  lib,
-  stdenv,
-  fetchurl,
-  libpq,
-  autoPatchelfHook,
-  writeScript,
+{ lib
+, stdenv
+, fetchurl
+, libpq
+, autoPatchelfHook
+, writeScript
+,
 }:
 
 let

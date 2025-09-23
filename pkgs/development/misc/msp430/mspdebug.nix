@@ -1,15 +1,15 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  autoPatchelfHook,
-  libusb-compat-0_1,
-  readline ? null,
-  enableReadline ? true,
-  hidapi ? null,
-  pkg-config ? null,
-  mspds ? null,
-  enableMspds ? false,
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoPatchelfHook
+, libusb-compat-0_1
+, readline ? null
+, enableReadline ? true
+, hidapi ? null
+, pkg-config ? null
+, mspds ? null
+, enableMspds ? false
+,
 }:
 
 assert stdenv.hostPlatform.isDarwin -> hidapi != null && pkg-config != null;

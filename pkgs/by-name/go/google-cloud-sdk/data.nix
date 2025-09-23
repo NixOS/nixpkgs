@@ -1,5 +1,5 @@
 # DO NOT EDIT! This file is generated automatically by update.sh
-{ }:
+{}:
 {
   version = "537.0.0";
   googleCloudSdkPkgs = {

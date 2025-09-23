@@ -1,20 +1,20 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  meson,
-  ninja,
-  vulkan-headers,
-  vulkan-loader,
-  libgbm,
-  wayland-protocols,
-  wayland,
-  glm,
-  assimp,
-  libxcb,
-  xcbutilwm,
-  nix-update-script,
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, meson
+, ninja
+, vulkan-headers
+, vulkan-loader
+, libgbm
+, wayland-protocols
+, wayland
+, glm
+, assimp
+, libxcb
+, xcbutilwm
+, nix-update-script
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,44 +1,39 @@
-{
-  lib,
-  stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-  pythonOlder,
-  replaceVars,
-
-  # build-system
-  setuptools,
-
-  # patched in
-  geos,
-  gdal,
-  withGdal ? false,
-
-  # dependencies
-  asgiref,
-  sqlparse,
-
-  # optional-dependencies
-  argon2-cffi,
-  bcrypt,
-
-  # tests
-  aiosmtpd,
-  docutils,
-  geoip2,
-  jinja2,
-  numpy,
-  pillow,
-  pylibmc,
-  pymemcache,
-  python,
-  pyyaml,
-  pytz,
-  redis,
-  selenium,
-  tblib,
-  tzdata,
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, pythonOlder
+, replaceVars
+, # build-system
+  setuptools
+, # patched in
+  geos
+, gdal
+, withGdal ? false
+, # dependencies
+  asgiref
+, sqlparse
+, # optional-dependencies
+  argon2-cffi
+, bcrypt
+, # tests
+  aiosmtpd
+, docutils
+, geoip2
+, jinja2
+, numpy
+, pillow
+, pylibmc
+, pymemcache
+, python
+, pyyaml
+, pytz
+, redis
+, selenium
+, tblib
+, tzdata
+,
 }:
 
 buildPythonPackage rec {

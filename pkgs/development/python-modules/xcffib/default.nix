@@ -1,11 +1,11 @@
-{
-  lib,
-  buildPythonPackage,
-  cffi,
-  fetchPypi,
-  pytestCheckHook,
-  pythonOlder,
-  xorg,
+{ lib
+, buildPythonPackage
+, cffi
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, xorg
+,
 }:
 
 buildPythonPackage rec {

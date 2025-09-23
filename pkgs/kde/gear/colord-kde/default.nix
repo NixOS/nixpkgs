@@ -1,8 +1,8 @@
-{
-  mkKdeDerivation,
-  pkg-config,
-  lcms2,
-  xorg,
+{ mkKdeDerivation
+, pkg-config
+, lcms2
+, xorg
+,
 }:
 mkKdeDerivation {
   pname = "colord-kde";

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonApplication,
-  fetchFromGitHub,
-  gtk3,
-  wrapGAppsHook3,
-  gst_all_1,
-  gobject-introspection,
-  gst-python,
-  pygobject3,
-  adwaita-icon-theme,
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, gtk3
+, wrapGAppsHook3
+, gst_all_1
+, gobject-introspection
+, gst-python
+, pygobject3
+, adwaita-icon-theme
+,
 }:
 
 buildPythonApplication {

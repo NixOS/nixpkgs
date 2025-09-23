@@ -1,12 +1,12 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  cmake,
-  eigen,
-  boost,
-  libnabo,
-  yaml-cpp,
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, eigen
+, boost
+, libnabo
+, yaml-cpp
+,
 }:
 
 stdenv.mkDerivation rec {

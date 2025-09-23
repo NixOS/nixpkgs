@@ -1,19 +1,18 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  cmake,
-
-  arpa2cm,
-  doxygen,
-  e2fsprogs,
-  graphviz,
-  libsodium,
-  lmdb,
-  krb5,
-  pkg-config,
-  ragel,
+{ lib
+, stdenv
+, fetchFromGitLab
+, fetchpatch
+, cmake
+, arpa2cm
+, doxygen
+, e2fsprogs
+, graphviz
+, libsodium
+, lmdb
+, krb5
+, pkg-config
+, ragel
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

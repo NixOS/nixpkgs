@@ -1,11 +1,11 @@
-{
-  buildPgrxExtension,
-  cargo-pgrx_0_12_6,
-  fetchFromGitHub,
-  lib,
-  nix-update-script,
-  postgresql,
-  util-linux,
+{ buildPgrxExtension
+, cargo-pgrx_0_12_6
+, fetchFromGitHub
+, lib
+, nix-update-script
+, postgresql
+, util-linux
+,
 }:
 buildPgrxExtension (finalAttrs: {
   inherit postgresql;
@@ -43,12 +43,12 @@ buildPgrxExtension (finalAttrs: {
     broken =
       lib.versionOlder postgresql.version "14"
       ||
-        # PostgreSQL 18 support issue upstream: https://github.com/pksunkara/pgx_ulid/issues/65
-        # Note: already fixed on `master` branch.
-        # Check after next package update.
-        lib.warnIf (finalAttrs.version != "0.2.0") "Is postgresql18Packages.pgx_ulid still broken?" (
-          lib.versionAtLeast postgresql.version "18"
-        );
+      # PostgreSQL 18 support issue upstream: https://github.com/pksunkara/pgx_ulid/issues/65
+      # Note: already fixed on `master` branch.
+      # Check after next package update.
+      lib.warnIf (finalAttrs.version != "0.2.0") "Is postgresql18Packages.pgx_ulid still broken?" (
+        lib.versionAtLeast postgresql.version "18"
+      );
     description = "ULID Postgres extension written in Rust";
     homepage = "https://github.com/pksunkara/pgx_ulid";
     changelog = "https://github.com/pksunkara/pgx_ulid/blob/v${finalAttrs.version}/CHANGELOG.md";

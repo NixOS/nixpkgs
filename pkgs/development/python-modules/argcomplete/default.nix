@@ -1,10 +1,10 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  hatchling,
-  hatch-vcs,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, hatchling
+, hatch-vcs
+,
 }:
 
 buildPythonPackage rec {

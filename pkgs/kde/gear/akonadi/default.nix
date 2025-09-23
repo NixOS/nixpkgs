@@ -1,15 +1,15 @@
-{
-  lib,
-  mkKdeDerivation,
-  qttools,
-  accounts-qt,
-  kaccounts-integration,
-  shared-mime-info,
-  xz,
-  mariadb,
-  libpq,
-  sqlite,
-  backend ? "mysql",
+{ lib
+, mkKdeDerivation
+, qttools
+, accounts-qt
+, kaccounts-integration
+, shared-mime-info
+, xz
+, mariadb
+, libpq
+, sqlite
+, backend ? "mysql"
+,
 }:
 
 assert lib.assertOneOf "backend" backend [

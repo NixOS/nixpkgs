@@ -1,8 +1,8 @@
-{
-  list,
-  baseRid,
-  otherRids,
-  pkgs ? import ../../../.. { },
+{ list
+, baseRid
+, otherRids
+, pkgs ? import ../../../.. { }
+,
 }:
 let
   inherit (pkgs) writeText;
@@ -40,10 +40,12 @@ let
       map (changePackageRid package) otherRids
     );
 
-  allPackages = sortOn (package: [
-    package.pname
-    package.version
-  ]) (concatMap expandPackage packages);
+  allPackages = sortOn
+    (package: [
+      package.pname
+      package.version
+    ])
+    (concatMap expandPackage packages);
 
 in
 writeText "deps.json" (builtins.toJSON allPackages)

@@ -1,17 +1,17 @@
-{
-  stdenv,
-  lib,
-  fetchurl,
-  pkg-config,
-  meson,
-  ninja,
-  docutils,
-  libpthreadstubs,
-  withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess,
-  libpciaccess,
-  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
-  valgrind-light,
-  gitUpdater,
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, docutils
+, libpthreadstubs
+, withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess
+, libpciaccess
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light
+, valgrind-light
+, gitUpdater
+,
 }:
 
 stdenv.mkDerivation rec {

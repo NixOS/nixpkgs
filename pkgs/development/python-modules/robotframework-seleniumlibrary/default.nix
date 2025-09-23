@@ -1,16 +1,16 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  click,
-  robotframework,
-  robotframework-pythonlibcore,
-  selenium,
-  approvaltests,
-  pytest-mockito,
-  pytestCheckHook,
-  robotstatuschecker,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools
+, click
+, robotframework
+, robotframework-pythonlibcore
+, selenium
+, approvaltests
+, pytest-mockito
+, pytestCheckHook
+, robotstatuschecker
+,
 }:
 
 buildPythonPackage rec {

@@ -1,14 +1,14 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  cython,
-  numpy,
-  scipy,
-  scikit-learn,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cython
+, numpy
+, scipy
+, scikit-learn
+, pytestCheckHook
+, pythonOlder
+, setuptools
+,
 }:
 
 let

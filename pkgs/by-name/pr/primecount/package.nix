@@ -1,10 +1,10 @@
-{
-  lib,
-  cmake,
-  fetchFromGitHub,
-  gitUpdater,
-  primesieve,
-  stdenv,
+{ lib
+, cmake
+, fetchFromGitHub
+, gitUpdater
+, primesieve
+, stdenv
+,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

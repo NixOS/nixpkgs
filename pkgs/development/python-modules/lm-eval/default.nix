@@ -1,65 +1,61 @@
-{
-  lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  setuptools-scm,
-
-  # dependencies
-  accelerate,
-  datasets,
-  dill,
-  evaluate,
-  jsonlines,
-  more-itertools,
-  numexpr,
-  peft,
-  pybind11,
-  pytablewriter,
-  rouge-score,
-  sacrebleu,
-  scikit-learn,
-  sqlitedict,
-  torch,
-  tqdm-multiprocess,
-  transformers,
-  word2number,
-  zstandard,
-
-  # optional-dependencies
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, # build-system
+  setuptools-scm
+, # dependencies
+  accelerate
+, datasets
+, dill
+, evaluate
+, jsonlines
+, more-itertools
+, numexpr
+, peft
+, pybind11
+, pytablewriter
+, rouge-score
+, sacrebleu
+, scikit-learn
+, sqlitedict
+, torch
+, tqdm-multiprocess
+, transformers
+, word2number
+, zstandard
+, # optional-dependencies
   # api
-  aiohttp,
-  requests,
-  tenacity,
-  tiktoken,
-  tqdm,
-  # hf_transfer
-  hf-transfer,
-  # ifeval
-  immutabledict,
-  langdetect,
-  nltk,
-  # neuronx
-  optimum,
-  # mamba
-  causal-conv1d,
-  mamba-ssm,
-  # math
-  antlr4-python3-runtime,
-  sympy,
-  # sentencepiece
-  sentencepiece,
-  # vllm
-  vllm,
-  # wandb
-  numpy,
-  pandas,
-  wandb,
-
-  # tests
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
+  aiohttp
+, requests
+, tenacity
+, tiktoken
+, tqdm
+, # hf_transfer
+  hf-transfer
+, # ifeval
+  immutabledict
+, langdetect
+, nltk
+, # neuronx
+  optimum
+, # mamba
+  causal-conv1d
+, mamba-ssm
+, # math
+  antlr4-python3-runtime
+, sympy
+, # sentencepiece
+  sentencepiece
+, # vllm
+  vllm
+, # wandb
+  numpy
+, pandas
+, wandb
+, # tests
+  pytestCheckHook
+, writableTmpDirAsHomeHook
+,
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,7 @@
-{
-  serious-sam-classic,
-  vulkan-headers,
-  vulkan-loader,
+{ serious-sam-classic
+, vulkan-headers
+, vulkan-loader
+,
 }:
 serious-sam-classic.overrideAttrs (oldAttrs: {
   pname = "serious-sam-classic-vulkan";
