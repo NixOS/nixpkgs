@@ -15491,6 +15491,11 @@
     githubId = 1809783;
     name = "Marco Maggesi";
   };
+  magicquark = {
+    name = "magicquark";
+    github = "magicquark";
+    githubId = 198001825;
+  };
   magistau = {
     name = "Mg. Tau";
     email = "nix@alice-carroll.pet";

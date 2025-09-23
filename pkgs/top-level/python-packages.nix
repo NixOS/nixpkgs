@@ -8752,6 +8752,8 @@ self: super: with self; {
 
   locust = callPackage ../development/python-modules/locust { };
 
+  locust-cloud = callPackage ../development/python-modules/locust-cloud { };
+
   log-symbols = callPackage ../development/python-modules/log-symbols { };
 
   logbook = callPackage ../development/python-modules/logbook { };
