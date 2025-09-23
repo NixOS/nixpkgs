@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  cpio,
+  libarchive,
   xar,
   undmg,
   nix-update-script,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    cpio
+    libarchive
     xar
     undmg
   ];
@@ -32,9 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     undmg $src
     xar -xf Karabiner-Elements.pkg
     cd Installer.pkg
-    zcat Payload | cpio -i
+    zcat Payload | bsdcpio -i
     cd ../Karabiner-DriverKit-VirtualHIDDevice.pkg
-    zcat Payload | cpio -i
+    zcat Payload | bsdcpio -i
     cd ..
   '';
 
@@ -54,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R Karabiner-DriverKit-VirtualHIDDevice.pkg/Applications Karabiner-DriverKit-VirtualHIDDevice.pkg/Library $driver
 
     cp "$out/Library/Application Support/org.pqrs/Karabiner-Elements/package-version" "$out/Library/Application Support/org.pqrs/Karabiner-Elements/version"
+    runHook postInstall
   '';
+
+  dontFixup = true; # notarization breaks if fixup is enabled
 
   passthru.updateScript = nix-update-script { };
 
