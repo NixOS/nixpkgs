@@ -1,13 +1,10 @@
 {
   lib,
   stdenv,
-  writeShellApplication,
+  writeScriptBin,
   fetchFromGitHub,
   cjson,
   cmake,
-  git,
-  makeBinaryWrapper,
-  unzip,
   curl,
   freetype,
   glew,
@@ -25,15 +22,11 @@
 }:
 let
   version = "2.83.2";
-  fakeGit = writeShellApplication {
-    name = "git";
-
-    text = ''
-      if [ "$1" = "describe" ]; then
-        echo "${version}"
-      fi
-    '';
-  };
+  fakeGit = writeScriptBin "git" ''
+    if [ "$1" = "describe" ]; then
+      echo "${version}"
+    fi
+  '';
 in
 stdenv.mkDerivation {
   pname = "etlegacy-unwrapped";
@@ -51,9 +44,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     fakeGit
-    git
-    makeBinaryWrapper
-    unzip
   ];
 
   buildInputs = [
@@ -101,8 +91,6 @@ stdenv.mkDerivation {
     (lib.cmakeFeature "INSTALL_DEFAULT_BASEDIR" "${placeholder "out"}/lib/etlegacy")
     (lib.cmakeFeature "INSTALL_DEFAULT_BINDIR" "${placeholder "out"}/bin")
   ];
-
-  hardeningDisable = [ "fortify" ];
 
   meta = {
     description = "ET: Legacy is an open source project based on the code of Wolfenstein: Enemy Territory which was released in 2010 under the terms of the GPLv3 license";
