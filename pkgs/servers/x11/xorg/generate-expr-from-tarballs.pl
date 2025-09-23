@@ -338,7 +338,12 @@ print OUT <<EOF;
   font-bh-lucidatypewriter-75dpi,
   font-bh-ttf,
   font-bh-type1,
+  font-cronyx-cyrillic,
   font-encodings,
+  font-isas-misc,
+  font-micro-misc,
+  font-misc-cyrillic,
+  font-misc-ethiopic,
   font-mutt-misc,
   font-util,
   gccmakedep,
@@ -509,6 +514,11 @@ self: with self; {
   fontbhlucidatypewriter75dpi = font-bh-lucidatypewriter-75dpi;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
+  fontcronyxcyrillic = font-cronyx-cyrillic;
+  fontisasmisc = font-isas-misc;
+  fontmicromisc = font-micro-misc;
+  fontmisccyrillic = font-misc-cyrillic;
+  fontmiscethiopic = font-misc-ethiopic;
   fontmuttmisc = font-mutt-misc;
   fontutil = font-util;
   libAppleWM = libapplewm;
