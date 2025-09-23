@@ -2,25 +2,25 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule rec {
   pname = "scaleway-cli";
-  version = "2.42.0";
+  version = "2.43.0";
 
   src = fetchFromGitHub {
     owner = "scaleway";
     repo = "scaleway-cli";
     rev = "v${version}";
-    sha256 = "sha256-bLttAE8IXTeIZ70wxBGxwozI2DVrdFnHdrCS3PL9UHA=";
+    sha256 = "sha256-pUHsaHPNYT+pKn/Qh+AUyYBFkTmWELMoa69jHR52cYw=";
   };
 
-  vendorHash = "sha256-ivjTL/eiQmj8228VYlgoRzjw9pt6QiwnsXKyjIXfc3M=";
+  vendorHash = "sha256-6pxpUO3ead5gzmv7YiBP2+bcxF88QxPTzCLGsHDM4fA=";
 
   ldflags = [
     "-w"
-    "-extldflags"
-    "-static"
+    "-s"
     "-X main.Version=${version}"
     "-X main.GitCommit=ref/tags/${version}"
     "-X main.GitBranch=HEAD"
@@ -45,6 +45,8 @@ buildGoModule rec {
     substituteInPlace internal/e2e/sdk_errors_test.go \
       --replace-warn "TestSdkStandardErrors" "SkipSdkStandardErrors"
   '';
+
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   doInstallCheck = true;
 
