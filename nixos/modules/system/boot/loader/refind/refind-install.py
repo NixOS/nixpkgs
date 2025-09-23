@@ -141,7 +141,7 @@ def config_entry(is_sub: bool, bootspec: BootSpec, label: str, time: str) -> str
 
 
 def generate_config_entry(profile: str, gen: str, special: bool, group_name: str) -> str:
-    time = datetime.datetime.fromtimestamp(os.stat(get_system_path(profile,gen), follow_symlinks=False).st_mtime).strftime("%F %H:%M:%S")
+    time = datetime.datetime.fromtimestamp(os.stat(get_system_path(profile,gen), follow_symlinks=False).st_mtime).strftime("@timestampFormat@")
     boot_json = json.load(open(os.path.join(get_system_path(profile, gen), 'boot.json'), 'r'))
     boot_spec = bootjson_to_bootspec(boot_json)
 
