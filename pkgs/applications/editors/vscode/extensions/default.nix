@@ -1256,10 +1256,6 @@ let
 
       dendron.dendron = callPackage ./dendron.dendron { };
 
-      dendron.dendron-markdown-preview-enhanced =
-        callPackage ./dendron.dendron-markdown-preview-enhanced
-          { };
-
       dendron.dendron-paste-image = callPackage ./dendron.dendron-paste-image { };
 
       dendron.dendron-snippet-maker = callPackage ./dendron.dendron-snippet-maker { };
@@ -5526,6 +5522,7 @@ let
     _2gua = throw "_2gua is deprecated in favor of 2gua"; # Added 2024-05-29
     _4ops = throw "_4ops is deprecated in favor of 4ops"; # Added 2024-05-29
     Arjun.swagger-viewer = throw "Arjun.swagger-viewer is deprecated in favor of arjun.swagger-viewer"; # Added 2024-05-29
+    dendron.dendron-markdown-preview-enhanced = throw "dendron.dendron-markdown-preview-enhanced has been removed from the VSCode marketplace."; # Added 2025-08-21
     equinusocio.vsc-material-theme = throw "'equinusocio.vsc-material-theme' has been removed due to security concerns. The extension contained potentially malicious code and was taken down."; # Added 2025-02-28
     equinusocio.vsc-material-theme-icons = throw "'equinusocio.vsc-material-theme-icons' has been removed due to security concerns. The extension contained potentially malicious code and was taken down."; # Added 2025-02-28
     jakebecker.elixir-ls = throw "jakebecker.elixir-ls is deprecated in favor of elixir-lsp.vscode-elixir-ls"; # Added 2024-05-29
