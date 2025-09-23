@@ -57,7 +57,10 @@ let
       changelog = "https://github.com/OpenAPITools/openapi-generator/releases/tag/v${version}";
       sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ shou ];
+      maintainers = with lib.maintainers; [
+        booxter
+        shou
+      ];
       inherit mainProgram;
     };
   };
