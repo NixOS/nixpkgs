@@ -65,21 +65,20 @@ stdenv.mkDerivation (finalAttrs: {
   # this line is left so those who force installation on x86_64-darwin can still build
   doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
-  preConfigure = ''
-    cmakeFlagsArray+=(
-      -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF
-      -DLAPACK_LIBRARIES="-llapack"
-      -DBLAS_LIBRARIES="-lblas"
-      -DCMAKE_Fortran_COMPILER=${lib.getDev mpi}/bin/mpif90
-      -DCMAKE_C_FLAGS="${
-        lib.concatStringsSep " " [
-          "-Wno-implicit-function-declaration"
-          (lib.optionalString finalAttrs.passthru.isILP64 "-DInt=long")
-        ]
-      }"
-      ${lib.optionalString finalAttrs.passthru.isILP64 ''-DCMAKE_Fortran_FLAGS="-fdefault-integer-8"''}
-      )
-  '';
+  cmakeFlagsArray = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+    (lib.cmakeFeature "LAPACK_LIBRARIES" "-llapack")
+    (lib.cmakeFeature "BLAS_LIBRARIES" "-lblas")
+    (lib.cmakeFeature "CMAKE_Fortran_COMPILER" "${lib.getDev mpi}/bin/mpif90")
+    (lib.cmakeFeature "CMAKE_C_FLAGS" "${lib.concatStringsSep " " [
+      "-Wno-implicit-function-declaration"
+      (lib.optionalString finalAttrs.passthru.isILP64 "-DInt=long")
+    ]}")
+  ]
+  ++ lib.optionals finalAttrs.passthru.isILP64 [
+    (lib.cmakeFeature "CMAKE_Fortran_FLAGS" "-fdefault-integer-8")
+  ];
 
   # Increase individual test timeout from 1500s to 10000s because hydra's builds
   # sometimes fail due to this
