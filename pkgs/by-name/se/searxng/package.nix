@@ -32,6 +32,7 @@ python.pkgs.toPythonModule (
       "httpx-socks"
       "lxml"
       "typer-slim"
+      "setproctitle"
     ];
 
     preBuild =
