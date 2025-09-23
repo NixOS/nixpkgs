@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -32,7 +33,7 @@ buildGoModule rec {
 
   subPackages = [ "./cmd/copilot" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd copilot \
       --bash <($out/bin/copilot completion bash) \
       --fish <($out/bin/copilot completion fish) \

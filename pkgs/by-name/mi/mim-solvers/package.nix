@@ -9,17 +9,18 @@
   python3Packages,
   pythonSupport ? false,
   stdenv,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mim-solvers";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "machines-in-motion";
     repo = "mim_solvers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jUL/kyXKODpcCURG7e7/qNarvwm4+EnzZRL2Wix5Jbs=";
+    hash = "sha256-1Mqu9Hfy65HUIOVG/gJBpSMlOwDWVcH+LrR8CaWz0BE=";
   };
 
   # eigenpy is not used without python support
@@ -60,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   pythonImportsCheck = [ "mim_solvers" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Numerical solvers used in the Machines in Motion Laboratory";

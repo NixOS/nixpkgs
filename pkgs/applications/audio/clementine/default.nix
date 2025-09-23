@@ -32,7 +32,7 @@
   config,
   wrapQtAppsHook,
   gst_plugins,
-  util-linux,
+  util-linuxMinimal,
   libunwind,
   libselinux,
   elfutils,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     wrapQtAppsHook
-    util-linux
+    util-linuxMinimal
     libunwind
     libselinux
     elfutils
@@ -96,14 +96,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # gst_plugins needed for setup-hooks
   ++ gst_plugins
-  ++ lib.optionals (withIpod) [
+  ++ lib.optionals withIpod [
     libgpod
     libplist
     usbmuxd
   ]
-  ++ lib.optionals (withMTP) [ libmtp ]
-  ++ lib.optionals (withCD) [ libcdio ]
-  ++ lib.optionals (withCloud) [ sparsehash ];
+  ++ lib.optionals withMTP [ libmtp ]
+  ++ lib.optionals withCD [ libcdio ]
+  ++ lib.optionals withCloud [ sparsehash ];
 
   postPatch = ''
     sed -i src/CMakeLists.txt \
@@ -119,9 +119,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DFORCE_GIT_REVISION=1.3.1"
-    "-DUSE_SYSTEM_PROJECTM=ON"
-    "-DSPOTIFY_BLOB=OFF"
+    (lib.cmakeFeature "FORCE_GIT_REVISION" "1.3.1")
+    (lib.cmakeBool "USE_SYSTEM_PROJECTM" true)
+    (lib.cmakeBool "SPOTIFY_BLOB" false)
   ];
 
   dontWrapQtApps = true;
@@ -136,6 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multiplatform music player";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
+    mainProgram = "clementine";
     maintainers = with lib.maintainers; [ ttuegel ];
   };
 })
