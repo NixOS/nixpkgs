@@ -6,14 +6,14 @@
   lib,
 }:
 
-buildPythonApplication {
+buildPythonApplication rec {
   pname = "kitti3";
   version = "unstable-2021-09-11";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "LandingEllipse";
-    repo = "kitti3";
+    repo = pname;
     rev = "f9f94c8b9f8b61a9d085206ada470cfe755a2a92";
     hash = "sha256-bcIzbDpIe2GKS9EcVqpjwz0IG2ixNMn06OIQpZ7PeH0=";
   };

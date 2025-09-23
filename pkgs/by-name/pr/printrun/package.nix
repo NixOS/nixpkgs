@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   python3Packages,
   fetchFromGitHub,
   glib,
@@ -10,7 +9,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "printrun";
   version = "2.2.0";
-  pyproject = true;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kliment";
@@ -19,41 +18,46 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-INJNGAmghoPIiivQp6AV1XmhyIu8SjfKqL8PTpi/tkY=";
   };
 
+  postPatch = ''
+    sed -i -r "s|/usr(/local)?/share/|$out/share/|g" printrun/utils.py
+  '';
+
+  pythonRelaxDeps = [
+    "pyglet"
+    "cairosvg"
+  ];
+
   nativeBuildInputs = [
     glib
     wrapGAppsHook3
   ];
 
-  build-system = with python3Packages; [
-    setuptools
+  propagatedBuildInputs = with python3Packages; [
+    appdirs
     cython
+    dbus-python
+    numpy
+    six
+    wxpython
+    psutil
+    pyglet
+    pyopengl
+    pyserial
+    cffi
+    cairosvg
+    lxml
+    puremagic
   ];
-
-  dependencies =
-    with python3Packages;
-    [
-      pyserial
-      wxpython
-      numpy
-      pyglet
-      psutil
-      lxml
-      platformdirs
-      puremagic
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux dbus-python
-    ++ lib.optional stdenv.hostPlatform.isDarwin pyobjc-framework-Cocoa;
-
-  pythonRelaxDeps = [ "pyglet" ];
 
   # pyglet.canvas.xlib.NoSuchDisplayException: Cannot connect to "None"
   doCheck = false;
 
+  setupPyBuildFlags = [ "-i" ];
+
   postInstall = ''
-    substituteInPlace $out/share/applications/*.desktop \
-      --replace-fail /usr/bin/ ""
-    substituteInPlace $out/share/applications/pronterface.desktop \
-      --replace-fail "Path=/usr/share/pronterface/" ""
+    for f in $out/share/applications/*.desktop; do
+      sed -i -e "s|/usr/|$out/|g" "$f"
+    done
   '';
 
   dontWrapGApps = true;
@@ -66,6 +70,6 @@ python3Packages.buildPythonApplication rec {
     description = "Pronterface, Pronsole, and Printcore - Pure Python 3d printing host software";
     homepage = "https://github.com/kliment/Printrun";
     license = licenses.gpl3Plus;
-    changelog = "https://github.com/kliment/Printrun/releases/tag/${src.tag}";
+    platforms = platforms.linux;
   };
 }

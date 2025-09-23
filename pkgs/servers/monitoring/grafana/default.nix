@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  fetchpatch,
   removeReferencesTo,
   tzdata,
   wire,
@@ -17,9 +18,31 @@
   nodejs,
 }:
 
-buildGoModule (finalAttrs: {
+let
+  # Grafana seems to just set it to the latest version available
+  # nowadays.
+  # NOTE: I(Ma27) leave this in, even if it's technically dead code because
+  # it doesn't make sense to pull this out of the history on every other release.
+  #
+  # Please make sure to always set a Go version to `.0`: it may happen that
+  # stable is on an older patch-release of Go and then the build would fail
+  # after a backport.
+  patchGoVersion = ''
+    find . -name go.mod -not -path "./.bingo/*" -and -not -path "./hack/*" -and -not -path "./.citools/*" -print0 | while IFS= read -r -d ''' line; do
+      substituteInPlace "$line" \
+        --replace-fail "go 1.24.6" "go 1.24.0"
+    done
+    find . -name go.work -print0 | while IFS= read -r -d ''' line; do
+      substituteInPlace "$line" \
+        --replace-fail "go 1.24.6" "go 1.24.0"
+    done
+    substituteInPlace Makefile \
+      --replace-fail "GO_VERSION = 1.24.6" "GO_VERSION = 1.24.0"
+  '';
+in
+buildGoModule rec {
   pname = "grafana";
-  version = "12.2.0";
+  version = "12.1.1";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -30,9 +53,18 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-EFqR+du+ZeWih7+s4iVVAiwOvTwbF1pNg1TntkoGCEQ=";
+    rev = "v${version}";
+    hash = "sha256-41OqvOTHlP66UtAecrpeArKldj0DNxK1oxTtQEihbo8=";
   };
+
+  # Fix build
+  # FIXME: remove in next update
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/grafana/grafana/commit/21f305c6a0e242463f5219cc6944fb880ea809f0.patch";
+      hash = "sha256-sXooRlnKY5ax0+1CPhy4zxDQtDGspbSdOoHHciqLTD8=";
+    })
+  ];
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
@@ -45,27 +77,15 @@ buildGoModule (finalAttrs: {
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-BqlkFgWiU5gruDHjkazNy6GKL2KgpcrwaHXDYNBF9EY=";
+    inherit src missingHashes;
+    hash = "sha256-51jCwnfWJoBICesM3SKiEvRC/Q1qUD310q59DucPdMs=";
   };
 
-  disallowedRequisites = [ finalAttrs.offlineCache ];
+  disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-yoOs9MngUCfvvK9rPUsXCoSc5LiRs0g66KdINLQzO8Q=";
+  postPatch = patchGoVersion;
 
-  # Grafana seems to just set it to the latest version available
-  # nowadays.
-  # However, while `substituteInPlace --replace-fail` is desirable to keep
-  # the section up-to-date, this gets increasingly annoying since there's
-  # an inconsistent 1% with a different version. So we now blindly set all
-  # `go` directives to whatever nixpkgs provides and make it the maintainer's
-  # duty to ensure that the mandated
-  # Go version is compatible with what we provide.
-  # This is still better than maintaining some list of go.mod files (or exclusions of that)
-  # where to patch the go version (and where to not do that).
-  postPatch = ''
-    find . -name go.mod -or -name "go.work" -type f -exec sed -i -e 's/^go .*/go ${finalAttrs.passthru.go.version}/g' {} \;
-  '';
+  vendorHash = "sha256-9z3HqheXLNh3zfmp1A620vzzf5yZBUJsbj/cc6J+xTg=";
 
   proxyVendor = true;
 
@@ -115,7 +135,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${finalAttrs.version}"
+    "-X main.version=${version}"
   ];
 
   # Tests start http servers which need to bind to local addresses:
@@ -164,4 +184,4 @@ buildGoModule (finalAttrs: {
     ];
     mainProgram = "grafana-server";
   };
-})
+}

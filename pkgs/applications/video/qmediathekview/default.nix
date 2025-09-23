@@ -16,13 +16,13 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "adamreichold";
-    repo = "QMediathekView";
+    repo = pname;
     rev = "v${version}";
     sha256 = "0i9hac9alaajbra3lx23m0iiq6ww4is00lpbzg5x70agjrwj0nd6";
   };
 
   postPatch = ''
-    substituteInPlace QMediathekView.pro \
+    substituteInPlace ${pname}.pro \
       --replace /usr ""
   '';
 

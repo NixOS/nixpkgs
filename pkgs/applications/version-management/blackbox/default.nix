@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "stackexchange";
-    repo = "blackbox";
+    repo = pname;
     rev = "v${version}";
     hash = "sha256-g0oNV7Nj7ZMmsVQFVTDwbKtF4a/Fb3WDB+NRx9IGSWA=";
   };

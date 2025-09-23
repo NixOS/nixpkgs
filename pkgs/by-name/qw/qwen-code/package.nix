@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nix-update-script,
   jq,
-  git,
   ripgrep,
 }:
 
@@ -31,10 +30,7 @@ buildNpmPackage (finalAttrs: {
     jq
   ];
 
-  buildInputs = [
-    git
-    ripgrep
-  ];
+  buildInputs = [ ripgrep ];
 
   postPatch = ''
     # Remove @lvce-editor/ripgrep dependency (no network on buildPhase
@@ -80,7 +76,6 @@ buildNpmPackage (finalAttrs: {
 
     mkdir -p $out/bin $out/share/qwen-code
     cp -r bundle/* $out/share/qwen-code/
-    cp node_modules/tiktoken/tiktoken_bg.wasm $out/share/qwen-code/
     patchShebangs $out/share/qwen-code
     ln -s $out/share/qwen-code/gemini.js $out/bin/qwen
 

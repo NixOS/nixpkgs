@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "unionfs-fuse";
-  version = "3.7";
+  version = "3.6";
 
   src = fetchFromGitHub {
     owner = "rpodgorny";
     repo = "unionfs-fuse";
     tag = "v${version}";
-    hash = "sha256-wha1AMwJMbC5rZBE4ybeOmH7Dq4p5YdMJDCT/a3B6cI=";
+    hash = "sha256-1Fy3evatfEplgJjAVeXgdq1CkGgIi+iZjsO0WBHmmBM=";
   };
 
   patches = [

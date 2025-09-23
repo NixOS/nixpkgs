@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "ledgerwallet";
-  version = "0.5.3";
+  version = "0.5.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "LedgerHQ";
     repo = "ledgerctl";
     rev = "v${version}";
-    hash = "sha256-roDfj+igDBS+sTJL4hwYNg5vZzaq+F8QvDA9NucnrMA=";
+    hash = "sha256-PBULYvyO3+YaW+a1/enJtKB/DR4ndL/o/WdpETbWyZ0=";
   };
 
   buildInputs = [

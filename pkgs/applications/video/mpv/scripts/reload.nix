@@ -5,13 +5,13 @@
   buildLua,
 }:
 
-buildLua {
+buildLua rec {
   pname = "mpv-reload";
 
   version = "0-unstable-2024-03-22";
   src = fetchFromGitHub {
     owner = "4e6";
-    repo = "mpv-reload";
+    repo = pname;
     rev = "1a6a9383ba1774708fddbd976e7a9b72c3eec938";
     hash = "sha256-BshxCjec/UNGyiC0/g1Rai2NvG2qOIHXDDEUYwwdij0=";
   };

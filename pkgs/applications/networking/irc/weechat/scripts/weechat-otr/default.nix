@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   version = "1.9.2";
 
   src = fetchFromGitHub {
-    repo = "weechat-otr";
+    repo = pname;
     owner = "mmb";
     rev = "v${version}";
     sha256 = "1lngv98y6883vk8z2628cl4d5y8jxy39w8245gjdvshl8g18k5s2";

@@ -9,7 +9,7 @@
 
 buildMozillaMach rec {
   pname = "firefox-beta";
-  binaryName = "firefox-beta";
+  binaryName = pname;
   version = "144.0b4";
   applicationName = "Firefox Beta";
   src = fetchurl {

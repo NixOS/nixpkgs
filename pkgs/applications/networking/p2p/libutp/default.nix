@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libutp";
   version = "unstable-2017-01-02";
 
   src = fetchFromGitHub {
     # Use transmission fork from post-3.3-transmission branch
     owner = "transmission";
-    repo = "libutp";
+    repo = pname;
     rev = "fda9f4b3db97ccb243fcbed2ce280eb4135d705b";
     sha256 = "CvuZLOBksIl/lS6LaqOIuzNvX3ihlIPjI3Eqwo7YJH0=";
   };

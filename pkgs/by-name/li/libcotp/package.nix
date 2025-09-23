@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcotp";
-  version = "3.1.1";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = "libcotp";
     rev = "v${version}";
-    sha256 = "sha256-5Jjk8uby1QjvU7TraTTTp+29Yh5lzbCvlorfPbGvciM=";
+    sha256 = "sha256-Ol/vWaXcbDcy+d8V//fK4SYUpnYmwuYJxkO3/+kqgdM=";
   };
 
   postPatch = lib.optionalString stdenv.cc.isClang ''

@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
   version = "3.0.6";
 
   src = fetchFromGitHub {
-    owner = "zynaddsubfx";
-    repo = "zynaddsubfx";
+    owner = pname;
+    repo = pname;
     tag = version;
     fetchSubmodules = true;
     hash = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";

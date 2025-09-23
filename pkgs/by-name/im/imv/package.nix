@@ -33,7 +33,7 @@
   libjxl,
   libpng,
   librsvg,
-  libnsgif,
+  netsurf,
   libheif,
 }:
 
@@ -56,9 +56,9 @@ let
       librsvg
       libheif
       libjxl
-      libnsgif
       ;
     libjpeg = libjpeg_turbo;
+    inherit (netsurf) libnsgif;
   };
 
   backendFlags = builtins.map (
