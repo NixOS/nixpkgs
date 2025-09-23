@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "daniruiz";
     repo = "flat-remix-gnome";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-6K/BQqVOeDeJuUi0+NgCFeerX5sSy+nKapYxIQfbKFQ=";
   };
 
