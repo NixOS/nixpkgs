@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "adapta-project";
     repo = "adapta-gtk-theme";
     tag = finalAttrs.version;
-    sha256 = "19skrhp10xx07hbd0lr3d619vj2im35d8p9rmb4v4zacci804q04";
+    hash = "sha256-BGACUGRMfbLJqjld1MqoUcidgmkjU9AWPKB3EC7MU6c=";
   };
 
   preferLocalBuild = true;
