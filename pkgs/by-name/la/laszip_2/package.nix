@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TXzse4oLjNX5R2xDR721iV+gW/rP5z3Zciv4OgxfeqA=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = {
     description = "Turn quickly bulky LAS files into compact LAZ files without information loss";
