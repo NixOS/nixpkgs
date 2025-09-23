@@ -66,5 +66,18 @@
         minMajorVersion = "6";
       };
     };
+
+    # 12.9 to 13.0 adds support for GCC 15 and Clang 20
+    # https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#host-compiler-support-policy
+    "13.0" = {
+      clang = {
+        maxMajorVersion = "20";
+        minMajorVersion = "7";
+      };
+      gcc = {
+        maxMajorVersion = "15";
+        minMajorVersion = "6";
+      };
+    };
   };
 }

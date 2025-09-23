@@ -52,4 +52,14 @@ in
       tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
     };
   };
+
+  cudaPackages_13_0 = callPackage ../development/cuda-modules {
+    manifests = selectManifests {
+      cuda = "13.0.1";
+      cudnn = "9.8.0";
+      cusparselt = "0.7.1";
+      cutensor = "2.2.0";
+      tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
+    };
+  };
 }
