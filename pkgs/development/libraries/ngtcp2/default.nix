@@ -36,9 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withJemalloc jemalloc;
 
-  cmakeFlags = [
-    (lib.cmakeBool "ENABLE_STATIC_LIB" false)
-  ];
+  cmakeFlags =
+    if stdenv.hostPlatform.isStatic then
+      [
+        # The examples try to link against `ngtcp2_crypto_ossl` and `ngtcp2` libraries.
+        # This works in the dynamic case where the targets have the same name, but not here where they're suffixed with `_static`.
+        (lib.cmakeBool "ENABLE_LIB_ONLY" true)
+        (lib.cmakeBool "ENABLE_SHARED_LIB" false)
+        (lib.cmakeBool "ENABLE_STATIC_LIB" true)
+      ]
+    else
+      [
+        (lib.cmakeBool "ENABLE_STATIC_LIB" false)
+      ];
 
   doCheck = true;
 
