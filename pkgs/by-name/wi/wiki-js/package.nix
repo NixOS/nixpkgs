@@ -1,49 +1,81 @@
 {
-  stdenv,
-  fetchurl,
   lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  yarnInstallHook,
+  nodejs,
+  jq,
   nixosTests,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+let
+  packageBin = builtins.toJSON {
+    bin.wiki-js = "server";
+  };
+  extractFilesPackageFix = builtins.toJSON {
+    exports = {
+      "./public/extractFiles" = "./public/extractFiles.js";
+      "./public/isExtractableFile" = "./public/isExtractableFile.js";
+      "./public/ReactNativeFile" = "./public/ReactNativeFile.js";
+    };
+  };
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "wiki-js";
   version = "2.5.308";
 
-  src = fetchurl {
-    url = "https://github.com/Requarks/wiki/releases/download/v${version}/${pname}.tar.gz";
-    sha256 = "sha256-DvMkzGET5UcnmWcBmhiFk4MictkE3LYa621QWxBu190=";
+  src = fetchFromGitHub {
+    owner = "requarks";
+    repo = "wiki";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WD5R9ujoUR5K1p460tuFp/ZKvJxNSh0/B/S7R2VV5hI=";
   };
 
-  # Unpack the tarball into a subdir. All the contents are copied into `$out`.
-  # Unpacking into the parent directory would also copy `env-vars` into `$out`
-  # in the `installPhase` which ultimately means that the package retains
-  # references to build tools and the tarball.
-  preUnpack = ''
-    mkdir source
-    cd source
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    hash = "sha256-iFQXQV0uqIi2MfSNOHwY8YvBSb9mMGEY8bZ5CzGbiqE=";
+  };
+
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    yarnInstallHook
+    nodejs
+    jq
+  ];
+
+  # As so often with node projects, this ends up taking ages for no benefit in size.
+  dontStrip = true;
+
+  # The yarnInstallHook takes care of wrapping for us, but only if package.json defines binaries.
+  preInstall = ''
+    mv package.json{,.orig}
+    jq '. + ${packageBin}' package.json.orig > package.json
   '';
 
-  sourceRoot = ".";
-
-  dontBuild = true;
-  installPhase = ''
-    runHook preInstall
-
-    mkdir $out
-    cp -r . $out
-
-    runHook postInstall
+  # See https://github.com/requarks/wiki/discussions/5113
+  postFixup = ''
+    pushd $out/lib/node_modules/wiki/node_modules/extract-files
+    mv package.json{,.orig}
+    jq '. * ${extractFilesPackageFix}' package.json.orig > package.json
+    popd
   '';
 
   passthru = {
     tests = { inherit (nixosTests) wiki-js; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://js.wiki/";
     description = "Modern and powerful wiki app built on Node.js";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ];
+    mainProgram = "wiki-js";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ niklaskorz ];
   };
-}
+})

@@ -9,6 +9,7 @@ with lib;
 
 let
   cfg = config.services.wiki-js;
+  opt = options.services.wiki-js;
 
   format = pkgs.formats.json { };
 
@@ -53,6 +54,14 @@ in
             type = types.str;
             description = ''
               IPs the service should listen to.
+            '';
+          };
+
+          dataPath = mkOption {
+            type = lib.types.path;
+            default = "/var/lib/${cfg.stateDirectoryName}/data";
+            defaultText = lib.literalExpression ''
+              "/var/lib/''${config.${opt.stateDirectoryName}}/data"
             '';
           };
 
@@ -131,6 +140,8 @@ in
       documentation = [ "https://docs.requarks.io/" ];
       wantedBy = [ "multi-user.target" ];
 
+      environment.CONFIG_FILE = configFile;
+
       path = with pkgs; [
         # Needed for git storage.
         git
@@ -138,20 +149,13 @@ in
         openssh
       ];
 
-      preStart = ''
-        ln -sf ${configFile} /var/lib/${cfg.stateDirectoryName}/config.yml
-        ln -sf ${pkgs.wiki-js}/server /var/lib/${cfg.stateDirectoryName}
-        ln -sf ${pkgs.wiki-js}/assets /var/lib/${cfg.stateDirectoryName}
-        ln -sf ${pkgs.wiki-js}/package.json /var/lib/${cfg.stateDirectoryName}/package.json
-      '';
-
       serviceConfig = {
         EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
         StateDirectory = cfg.stateDirectoryName;
-        WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";
+        WorkingDirectory = "${pkgs.wiki-js}/lib/node_modules/wiki";
         DynamicUser = true;
         PrivateTmp = true;
-        ExecStart = "${pkgs.nodejs_20}/bin/node ${pkgs.wiki-js}/server";
+        ExecStart = lib.getExe pkgs.wiki-js;
       };
     };
   };
