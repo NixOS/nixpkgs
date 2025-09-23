@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "py-datastruct";
-  version = "1.1.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kuba2k2";
     repo = "datastruct";
     tag = "v${version}";
-    hash = "sha256-KEIvibGnQnIDMpmodWN2Az/ypc37ZyGvgVPC7voFmlA=";
+    hash = "sha256-oGgvEYfDVxSTrq5ymWyZx6WiTKsofNzQqUr6YBtfV2I=";
   };
 
   build-system = [ poetry-core ];
