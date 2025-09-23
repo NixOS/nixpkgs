@@ -173,9 +173,7 @@ in
         # https://github.com/xattr/xattr/issues/44 and
         # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # 2023-01-15: Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
+        inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc910 = compiler.ghc9103;
       ghc9121 = callPackage ../development/compilers/ghc/9.12.1.nix {
