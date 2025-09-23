@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "6.9.0";
+  version = "6.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "evansd";
     repo = "whitenoise";
     tag = version;
-    hash = "sha256-UmM8Az22ql3uUpyY6jj7ky3LelmttFBqGMYlzlNRAHg=";
+    hash = "sha256-sc8UAeLTK3lLs16woGW/2gn0ECTARNW4tF4vlTGmIuU=";
   };
 
   build-system = [ setuptools ];
