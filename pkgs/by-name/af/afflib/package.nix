@@ -5,7 +5,7 @@
   zlib,
   curl,
   expat,
-  fuse,
+  fuse3,
   openssl,
   autoreconfHook,
   python3,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     openssl
     python3
   ]
-  ++ lib.optionals (with stdenv; isLinux || isDarwin) [ fuse ]
+  ++ lib.optionals (with stdenv; isLinux || isDarwin) [ fuse3 ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   meta = {
