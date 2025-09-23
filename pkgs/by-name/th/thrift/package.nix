@@ -80,7 +80,28 @@ stdenv.mkDerivation (finalAttrs: {
   disabledTests = [
     "UnitTests" # getaddrinfo() -> -3; Temporary failure in name resolution
     "python_test" # many failures about python 2 or network things
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tests that hang up in the Darwin sandbox
+    "SecurityTest"
+    "SecurityFromBufferTest"
+    "python_test"
+
+    # fails on hydra, passes locally
+    "concurrency_test"
+
+    # Tests that fail in the Darwin sandbox when trying to use network
+    "UnitTests"
+    "TInterruptTest"
+    "TServerIntegrationTest"
+    "processor"
+    "TNonblockingServerTest"
+    "TNonblockingSSLServerTest"
+    "StressTest"
+    "StressTestConcurrent"
+    "StressTestNonBlocking"
   ];
+
   doCheck = !static;
 
   enableParallelChecking = false;
