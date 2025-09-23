@@ -85,6 +85,7 @@ python.pkgs.buildPythonApplication rec {
     "celery"
     "css-inline"
     "django-bootstrap3"
+    "django-i18nfield"
     "django-localflavor"
     "django-phonenumber-field"
     "dnspython"

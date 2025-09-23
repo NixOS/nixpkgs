@@ -1803,6 +1803,7 @@
   ./system/activation/activatable-system.nix
   ./system/activation/activation-script.nix
   ./system/activation/bootspec.nix
+  ./system/activation/nixos-init.nix
   ./system/activation/pre-switch-check.nix
   ./system/activation/specialisation.nix
   ./system/activation/switchable-system.nix
