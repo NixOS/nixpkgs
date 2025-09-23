@@ -15,7 +15,7 @@
 }:
 
 let
-  version = "5.9.15";
+  version = "5.10.15";
 
   src = fetchFromGitHub {
     owner = "d99kris";
