@@ -3124,6 +3124,8 @@ self: super: with self; {
 
   crownstone-uart = callPackage ../development/python-modules/crownstone-uart { };
 
+  crypt4gh = callPackage ../development/python-modules/crypt4gh { };
+
   cryptg = callPackage ../development/python-modules/cryptg { };
 
   cryptodatahub = callPackage ../development/python-modules/cryptodatahub { };
