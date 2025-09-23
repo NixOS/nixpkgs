@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ec2-instance-selector";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-ec2-instance-selector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4J66/LiFFeUW20du2clqjz9ozLV+Sn2VVqF9VISXpb0=";
+    hash = "sha256-8tSZkh2ngOgfwup2nCiNXHFX2GhIVVW9PtLuGNP5yoo=";
   };
 
-  vendorHash = "sha256-ocysHrbkmFQ96dEVJvc5YuuBiaXToAcMUUPFiLpMCpU=";
+  vendorHash = "sha256-qrxYLnj8DEGNtIq6sC7xvNBLgguG/lj9YLqgLFumQtE=";
 
   ldflags = [
     "-s"
