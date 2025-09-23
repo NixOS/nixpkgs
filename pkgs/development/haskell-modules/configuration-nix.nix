@@ -1084,7 +1084,7 @@ builtins.intersectAttrs super {
     addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.pango
   );
 
-  spago =
+  spago-legacy =
     let
       docsSearchApp_0_0_10 = pkgs.fetchurl {
         url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.10/docs-search-app.js";
@@ -1106,49 +1106,43 @@ builtins.intersectAttrs super {
         sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
       };
     in
-    lib.pipe
-      (super.spago.override {
-        # base <4.19, text <2.1
-        versions = doJailbreak self.versions_5_0_5;
-        fsnotify = self.fsnotify_0_3_0_1;
-      })
-      [
-        (overrideCabal (drv: {
-          postUnpack = (drv.postUnpack or "") + ''
-            # Spago includes the following two files directly into the binary
-            # with Template Haskell.  They are fetched at build-time from the
-            # `purescript-docs-search` repo above.  If they cannot be fetched at
-            # build-time, they are pulled in from the `templates/` directory in
-            # the spago source.
-            #
-            # However, they are not actually available in the spago source, so they
-            # need to fetched with nix and put in the correct place.
-            # https://github.com/spacchetti/spago/issues/510
-            cp ${docsSearchApp_0_0_10} "$sourceRoot/templates/docs-search-app-0.0.10.js"
-            cp ${docsSearchApp_0_0_11} "$sourceRoot/templates/docs-search-app-0.0.11.js"
-            cp ${purescriptDocsSearch_0_0_10} "$sourceRoot/templates/purescript-docs-search-0.0.10"
-            cp ${purescriptDocsSearch_0_0_11} "$sourceRoot/templates/purescript-docs-search-0.0.11"
+    lib.pipe super.spago-legacy [
+      (overrideCabal (drv: {
+        postUnpack = (drv.postUnpack or "") + ''
+          # Spago includes the following two files directly into the binary
+          # with Template Haskell.  They are fetched at build-time from the
+          # `purescript-docs-search` repo above.  If they cannot be fetched at
+          # build-time, they are pulled in from the `templates/` directory in
+          # the spago source.
+          #
+          # However, they are not actually available in the spago source, so they
+          # need to fetched with nix and put in the correct place.
+          # https://github.com/spacchetti/spago/issues/510
+          cp ${docsSearchApp_0_0_10} "$sourceRoot/templates/docs-search-app-0.0.10.js"
+          cp ${docsSearchApp_0_0_11} "$sourceRoot/templates/docs-search-app-0.0.11.js"
+          cp ${purescriptDocsSearch_0_0_10} "$sourceRoot/templates/purescript-docs-search-0.0.10"
+          cp ${purescriptDocsSearch_0_0_11} "$sourceRoot/templates/purescript-docs-search-0.0.11"
 
-            # For some weird reason, on Darwin, the open(2) call to embed these files
-            # requires write permissions. The easiest resolution is just to permit that
-            # (doesn't cause any harm on other systems).
-            chmod u+w \
-              "$sourceRoot/templates/docs-search-app-0.0.10.js" \
-              "$sourceRoot/templates/purescript-docs-search-0.0.10" \
-              "$sourceRoot/templates/docs-search-app-0.0.11.js" \
-              "$sourceRoot/templates/purescript-docs-search-0.0.11"
-          '';
-        }))
+          # For some weird reason, on Darwin, the open(2) call to embed these files
+          # requires write permissions. The easiest resolution is just to permit that
+          # (doesn't cause any harm on other systems).
+          chmod u+w \
+            "$sourceRoot/templates/docs-search-app-0.0.10.js" \
+            "$sourceRoot/templates/purescript-docs-search-0.0.10" \
+            "$sourceRoot/templates/docs-search-app-0.0.11.js" \
+            "$sourceRoot/templates/purescript-docs-search-0.0.11"
+        '';
+      }))
 
-        # Tests require network access.
-        dontCheck
+      # Tests require network access.
+      dontCheck
 
-        # Overly strict upper bound on text
-        doJailbreak
+      # Overly strict upper bound on text (<1.3)
+      doJailbreak
 
-        # Generate shell completion for spago
-        (self.generateOptparseApplicativeCompletions [ "spago" ])
-      ];
+      # Generate shell completion for spago
+      (self.generateOptparseApplicativeCompletions [ "spago" ])
+    ];
 
   # checks SQL statements at compile time, and so requires a running PostgreSQL
   # database to run it's test suite
