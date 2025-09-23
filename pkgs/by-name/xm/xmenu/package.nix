@@ -36,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Menu utility for X";
     homepage = "https://github.com/phillbush/xmenu";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ neonfuz ];
     platforms = lib.platforms.all;
     mainProgram = "xmenu";
   };
