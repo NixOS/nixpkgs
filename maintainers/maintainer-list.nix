@@ -4769,6 +4769,12 @@
     name = "Alex Zero";
     keys = [ { fingerprint = "A0AA 4646 B8F6 9D45 4553  5A88 A515 50ED B450 302C"; } ];
   };
+  cizniarova = {
+    email = "gabriel.hosquet@epitech.eu";
+    github = "Ciznia";
+    githubId = 114656678;
+    name = "Gabriel Hosquet";
+  };
   cizra = {
     email = "todurov+nix@gmail.com";
     github = "cizra";
