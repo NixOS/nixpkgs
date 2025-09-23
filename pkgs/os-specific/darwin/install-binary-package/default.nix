@@ -6,56 +6,63 @@
   libarchive,
 }:
 
-{
-  appName ? ".",
-  nativeBuildInputs ? [ ],
-  sourceRoot ? ".",
-  ...
-}@args:
+lib.extendMkDerivation {
+  constructDrv = stdenvNoCC.mkDerivation;
 
-let
-  unpackDmgPkg = makeSetupHook {
-    name = "unpack-dmg-pkg";
-    propagatedBuildInputs = [
-      _7zz
-      libarchive
-    ];
-  } ./unpack-dmg-pkg.sh;
-  hasPhase = args: phase: if args ? "${phase}" then false else true;
-in
-stdenvNoCC.mkDerivation (
-  args
-  // {
-    dontMakeSourcesWritable = args.dontMakeSourcesWritable or true;
-    dontPatch = args.dontPatch or hasPhase args "patchPhase";
-    dontConfigure = args.dontConfigure or hasPhase args "configurePhase";
-    dontBuild = args.dontBuild or hasPhase args "buildPhase";
-    dontStrip = args.dontStrip or hasPhase args "stringPhase";
-    dontFixup = args.dontFixup or hasPhase args "fixupPhase";
-    dontCheck = args.dontCheck or hasPhase args "checkPhase";
-    doInstallCheck = args.doInstallCheck or false;
+  excludeDrvArgNames = [
+    "appName"
+    "sourceRoot"
+  ];
 
-    sourceRoot = if sourceRoot == "" then "" else "${args.pname}/${sourceRoot}";
+  extendDrvArgs =
+    finalAttrs:
+    {
+      appName ? ".",
+      nativeBuildInputs ? [ ],
+      sourceRoot ? ".",
+      ...
+    }@attrs:
+    let
+      unpackDmgPkg = makeSetupHook {
+        name = "unpack-dmg-pkg";
+        propagatedBuildInputs = [
+          _7zz
+          libarchive
+        ];
+      } ./unpack-dmg-pkg.sh;
+      hasPhase = args: phase: if args ? "${phase}" then false else true;
+    in
+    {
+      dontMakeSourcesWritable = attrs.dontMakeSourcesWritable or true;
+      dontPatch = attrs.dontPatch or hasPhase attrs "patchPhase";
+      dontConfigure = attrs.dontConfigure or hasPhase attrs "configurePhase";
+      dontBuild = attrs.dontBuild or hasPhase attrs "buildPhase";
+      dontStrip = attrs.dontStrip or hasPhase attrs "stringPhase";
+      dontFixup = attrs.dontFixup or hasPhase attrs "fixupPhase";
+      dontCheck = attrs.dontCheck or hasPhase attrs "checkPhase";
+      doInstallCheck = attrs.doInstallCheck or false;
 
-    nativeBuildInputs = [ unpackDmgPkg ] ++ nativeBuildInputs;
+      sourceRoot = if sourceRoot == "" then "" else "${attrs.pname}/${sourceRoot}";
 
-    installPhase =
-      args.installPhase or ''
-        runHook preInstall
+      nativeBuildInputs = [ unpackDmgPkg ] ++ nativeBuildInputs;
 
-        mkdir -p $out/Applications
-        cp -R "${appName}" $out/Applications \
-          || (echo "ERROR: Missing ${appName} directory:"; find . -depth 2 | head -100)
+      installPhase =
+        attrs.installPhase or ''
+          runHook preInstall
 
-        runHook postInstall
-      '';
+          mkdir -p $out/Applications
+          cp -R "${appName}" $out/Applications \
+            || (echo "ERROR: Missing ${appName} directory:"; find . -depth 2 | head -100)
 
-    installCheckPhase = args.installCheckPhase or null;
+          runHook postInstall
+        '';
 
-    meta = {
-      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-      platforms = lib.platforms.darwin;
-    }
-    // (args.meta or { });
-  }
-)
+      installCheckPhase = attrs.installCheckPhase or null;
+
+      meta = {
+        sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+        platforms = lib.platforms.darwin;
+      }
+      // (attrs.meta or { });
+    };
+}
