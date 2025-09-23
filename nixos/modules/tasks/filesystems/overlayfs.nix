@@ -30,8 +30,8 @@ let
       escapedMountpoint = utils.escapeSystemdPath (prefix + fs.mountPoint);
       mountUnit = "${escapedMountpoint}.mount";
 
-      upperdir = prefix + fs.overlay.upperdir;
-      workdir = prefix + fs.overlay.workdir;
+      upperdir = if config.overlay.upperdir != null then prefix + config.overlay.upperdir else null;;
+      workdir =  if config.overlay.workdir != null then prefix + config.overlay.workdir else null;;
     in
     lib.mkIf (fs.overlay.upperdir != null) {
       "rw-${escapedMountpoint}" = {
