@@ -84,12 +84,6 @@ mirror://xorg/individual/font/font-ibm-type1-1.0.4.tar.xz
 mirror://xorg/individual/font/font-jis-misc-1.0.4.tar.xz
 mirror://xorg/individual/font/font-misc-meltho-1.0.4.tar.xz
 mirror://xorg/individual/font/font-misc-misc-1.1.3.tar.xz
-mirror://xorg/individual/font/font-schumacher-misc-1.1.3.tar.xz
-mirror://xorg/individual/font/font-screen-cyrillic-1.0.5.tar.xz
-mirror://xorg/individual/font/font-sony-misc-1.0.4.tar.xz
-mirror://xorg/individual/font/font-sun-misc-1.0.4.tar.xz
-mirror://xorg/individual/font/font-winitzki-cyrillic-1.0.4.tar.xz
-mirror://xorg/individual/font/font-xfree86-type1-1.0.5.tar.xz
 mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2
 mirror://xorg/individual/lib/libXinerama-1.1.5.tar.xz
 mirror://xorg/individual/lib/libxkbfile-1.1.3.tar.xz
