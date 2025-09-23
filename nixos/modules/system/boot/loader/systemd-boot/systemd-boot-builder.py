@@ -65,9 +65,10 @@ class SystemIdentifier(NamedTuple):
 
 def copy_if_not_exists(source: Path, dest: Path) -> None:
     if not dest.exists():
-        _hdl, tmpfile = tempfile.mkstemp(dir=dest.parent, prefix=dest.name)
-        shutil.copyfile(source, tmpfile)
-        shutil.move(tmpfile, dest)
+        tmpfd, tmppath = tempfile.mkstemp(dir=dest.parent, prefix=dest.name, suffix='.tmp.')
+        shutil.copyfile(source, tmppath)
+        os.fsync(tmpfd)
+        shutil.move(tmppath, dest)
 
 
 def generation_dir(profile: str | None, generation: int) -> Path:
