@@ -39,8 +39,15 @@ function get_vsixpkg() {
 
     URL="https://$1.gallery.vsassets.io/_apis/public/gallery/publisher/$1/extension/$2/latest/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
 
-    # Quietly but delicately curl down the file, blowing up at the first sign of trouble.
-    curl --silent --show-error --retry 3 --fail -X GET -o "$EXTTMP/$N.zip" "$URL" || {
+    # Download the file. If curl exits from a signal, bail. If curl exits with its own status code, report the error and move on.
+    # --fail is needed to treat 404 as an actual error instead of downloading the 404 error itself
+    curl \
+        --silent --show-error \
+        --retry 3 \
+        --fail \
+        -X GET \
+        -o "$EXTTMP/$N.zip" "$URL" \
+    || {
         if (($? > 128))
         then exit $?
         fi
