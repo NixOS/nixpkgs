@@ -18,6 +18,9 @@
     allowUnfreeCudaPredicate
     ;
 
+  # See ./licenses.nix for documentation.
+  licenses = import ./licenses.nix;
+
   # See ./meta.nix for documentation.
   inherit (import ./meta.nix { inherit _cuda lib; })
     _mkMetaBadPlatforms
