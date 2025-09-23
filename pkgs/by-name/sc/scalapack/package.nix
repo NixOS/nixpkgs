@@ -57,12 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ cmake ];
+
   nativeCheckInputs = [ mpiCheckPhaseHook ];
-  buildInputs = [
+
+  propagatedBuildInputs = [
     blas
     lapack
+    mpi
   ];
-  propagatedBuildInputs = [ mpi ];
 
   # xslu and xsllt tests seem to time out on x86_64-darwin.
   # this line is left so those who force installation on x86_64-darwin can still build
