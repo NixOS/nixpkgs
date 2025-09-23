@@ -36,6 +36,9 @@
   graphviz,
   # tensorflow-testing
   keras,
+
+  # tests
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -100,8 +103,10 @@ buildPythonPackage rec {
     ];
   };
 
-  # Tests require network access.
-  doCheck = false;
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "huggingface_hub" ];
 
