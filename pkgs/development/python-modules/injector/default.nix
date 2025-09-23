@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "injector";
-  version = "0.21.0";
+  version = "0.22.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "python-injector";
     repo = "injector";
     tag = version;
-    hash = "sha256-5O4vJSXfYNTrUzmv5XuT9pSUndNSvTZTxfVwiAd+0ck=";
+    hash = "sha256-FRO/stQDTa4W1f6mLPDCJslYFfIvgS0EgoEhuh0rxwA=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ typing-extensions ];
