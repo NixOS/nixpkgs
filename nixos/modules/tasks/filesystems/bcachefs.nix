@@ -231,6 +231,10 @@ in
     lib.mkMerge [
       {
         inherit assertions;
+
+        # Bcachefs upstream recommends using the latest kernel
+        boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+
         # needed for systemd-remount-fs
         system.fsPackages = [ cfg.package ];
         services.udev.packages = [ cfg.package ];
