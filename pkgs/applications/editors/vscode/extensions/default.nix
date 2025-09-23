@@ -3893,6 +3893,8 @@ let
 
       reditorsupport.r = callPackage ./reditorsupport.r { };
 
+      reditorsupport.r-syntax = callPackage ./reditorsupport.r-syntax { };
+
       release-candidate.vscode-scheme-repl = callPackage ./release-candidate.vscode-scheme-repl { };
 
       reloadedextensions.reloaded-cpp = buildVscodeMarketplaceExtension {
