@@ -67,7 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlagsArray = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-    (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
     (lib.cmakeFeature "LAPACK_LIBRARIES" "-llapack")
     (lib.cmakeFeature "BLAS_LIBRARIES" "-lblas")
     (lib.cmakeFeature "CMAKE_Fortran_COMPILER" "${lib.getDev mpi}/bin/mpif90")
