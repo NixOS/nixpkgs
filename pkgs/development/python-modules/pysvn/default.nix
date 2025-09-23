@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchurl,
   python,
-  pythonAtLeast,
   apr,
   aprutil,
   bash,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "pysvn";
   version = "1.9.23";
   pyproject = false;
-
-  disabled = pythonAtLeast "3.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
