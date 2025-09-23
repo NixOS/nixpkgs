@@ -1584,8 +1584,8 @@ let
         mktplcRef = {
           name = "vscode-great-icons";
           publisher = "emmanuelbeziat";
-          version = "2.1.120";
-          hash = "sha256-m5CPmilGF1jguhTZhPAUMrfzU4HU5SkiWeGOMAD+D/Y=";
+          version = "2.1.119";
+          hash = "sha256-mE9VU5K/+NLjHk/XQ7fb+wZ9FNAfsIwmPu7IAoei8Iw=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3858,8 +3858,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.45.0";
-          hash = "sha256-aLyAU5J+65Cw3UsYey9Y2/bSMWFiz3TNOwBBvjev8dY=";
+          version = "1.44.0";
+          hash = "sha256-KlB0YlAIdVMuLzBv5S9DbANBBDQoTog1FC8ykFeTvnM=";
         };
         buildInputs = [ jdk ];
         meta = {

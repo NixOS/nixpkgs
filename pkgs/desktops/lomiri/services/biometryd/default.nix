@@ -13,7 +13,6 @@
   gtest,
   libapparmor,
   libelf,
-  nlohmann_json,
   pkg-config,
   process-cpp,
   properties-cpp,
@@ -25,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "biometryd";
-  version = "0.3.2";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/biometryd";
     rev = finalAttrs.version;
-    hash = "sha256-OTK+JAm8MnlQGZwcKJPh+N1OfUOko24G+IU9GUBjOjI=";
+    hash = "sha256-derU7pKdNf6pwhskaW7gCLcU9ixBG3U0EI/qtANmmTs=";
   };
 
   outputs = [
@@ -40,12 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # GTest needs C++17
+    # Remove when https://gitlab.com/ubports/development/core/biometryd/-/merge_requests/39 merged & in release
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'std=c++14' 'std=c++17'
+
     # Substitute systemd's prefix in pkg-config call
     substituteInPlace data/CMakeLists.txt \
       --replace-fail 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)' 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
     substituteInPlace src/biometry/qml/Biometryd/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # For our automatic pkg-config output patcher to work, prefix must be used here
     substituteInPlace data/biometryd.pc.in \
@@ -72,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-cpp
     libapparmor
     libelf
-    nlohmann_json
     process-cpp
     properties-cpp
     qtbase
@@ -104,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = {
+  meta = with lib; {
     description = "Mediates/multiplexes access to biometric devices";
     longDescription = ''
       biometryd mediates and multiplexes access to biometric devices present
@@ -112,11 +115,11 @@ stdenv.mkDerivation (finalAttrs: {
       them for identification and verification of users.
     '';
     homepage = "https://gitlab.com/ubports/development/core/biometryd";
-    changelog = "https://gitlab.com/ubports/development/core/biometryd/-/blob/${finalAttrs.version}/ChangeLog";
-    license = lib.licenses.lgpl3Only;
-    teams = [ lib.teams.lomiri ];
+    changelog = "https://gitlab.com/ubports/development/core/biometryd/-/${finalAttrs.version}/ChangeLog";
+    license = licenses.lgpl3Only;
+    teams = [ teams.lomiri ];
     mainProgram = "biometryd";
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
     pkgConfigModules = [
       "biometryd"
     ];
