@@ -1,19 +1,19 @@
 {
   autoAddDriverRunpath,
+  backendStdenv,
   catch2_3,
   cmake,
+  cuda_cccl,
+  cuda_cudart,
+  cuda_nvcc,
+  cuda_nvrtc,
+  cudnn,
   fetchFromGitHub,
   gitUpdater,
   lib,
+  libcublas,
   ninja,
   nlohmann_json,
-  stdenv,
-  cuda_cccl ? null,
-  cuda_cudart ? null,
-  cuda_nvcc ? null,
-  cuda_nvrtc ? null,
-  cudnn ? null,
-  libcublas ? null,
 }:
 let
   inherit (lib.lists) optionals;
@@ -23,9 +23,8 @@ let
     optionalString
     ;
 in
-
 # TODO(@connorbaker): This should be a hybrid C++/Python package.
-stdenv.mkDerivation (finalAttrs: {
+backendStdenv.mkDerivation (finalAttrs: {
   pname = "cudnn-frontend";
   version = "1.9.0";
 
@@ -121,7 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A c++ wrapper for the cudnn backend API";
     homepage = "https://github.com/NVIDIA/cudnn-frontend";
     license = lib.licenses.mit;
-    badPlatforms = optionals (cudnn == null) finalAttrs.meta.platforms;
+    # TODO(@connorbaker): How tightly coupled is this library to specific cuDNN versions?
+    # Should it be marked as broken if it doesn't match our expected version?
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

@@ -2565,10 +2565,13 @@ with pkgs;
   # Top-level fix-point used in `cudaPackages`' internals
   _cuda = import ../development/cuda-modules/_cuda;
 
-  cudaPackages_12_6 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.6"; };
-  cudaPackages_12_8 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.8"; };
-  cudaPackages_12_9 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.9"; };
-  cudaPackages_12 = cudaPackages_12_8; # Latest supported by cudnn
+  inherit (callPackages ./cuda-packages.nix { })
+    cudaPackages_12_6
+    cudaPackages_12_8
+    cudaPackages_12_9
+    ;
+
+  cudaPackages_12 = cudaPackages_12_8;
 
   cudaPackages = recurseIntoAttrs cudaPackages_12;
 
