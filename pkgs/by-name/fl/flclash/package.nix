@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter332,
+  flutter335,
   keybinder3,
   libayatana-appindicator,
   buildGoModule,
@@ -12,14 +12,14 @@
 
 let
   pname = "flclash";
-  version = "0.8.87";
+  version = "0.8.88";
 
   src =
     (fetchFromGitHub {
       owner = "chen08209";
       repo = "FlClash";
       tag = "v${version}";
-      hash = "sha256-vGRq9Kc6XU6r3huIGAKoh5x46fFS8jmXgus9WgpvG3A=";
+      hash = "sha256-yhIaYIlAyc2+oHkMRA9ybBQ+14URBY2kUp9wqTgFrwI=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
@@ -41,7 +41,7 @@ let
 
     modRoot = "core";
 
-    vendorHash = "sha256-Uc+RvpW3vndPFnM7yhqrNTEexAPaolCk8YK8u/+55RQ=";
+    vendorHash = "sha256-ekNuZ3Uv6TDfyZ4hVvXA3Wft4fetaXzddKIpis4ER1g=";
 
     env.CGO_ENABLED = 0;
 
@@ -57,7 +57,7 @@ let
     meta = metaCommon;
   };
 in
-flutter332.buildFlutterApplication {
+flutter335.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
