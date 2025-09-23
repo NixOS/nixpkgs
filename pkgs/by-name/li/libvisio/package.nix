@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libvisio";
-  version = "0.1.8";
+  version = "0.1.9";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dev-www.libreoffice.org/src/libvisio/${pname}-${version}.tar.xz";
-    hash = "sha256-tAmP+/TcuecSE/oKzdvZKPJ77TDbLYAjSBOxXVPQQFs=";
+    hash = "sha256-SmHQhtqj9cnbij/Rttv8Kbp1YFeqazzCOHj9SFQ2Kvk=";
   };
 
   strictDeps = true;
