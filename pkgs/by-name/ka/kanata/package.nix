@@ -4,20 +4,22 @@
   apple-sdk_13,
   darwinMinVersionHook,
   rustPlatform,
+  karabiner-dk,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
   writeShellScriptBin,
   withCmd ? false,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanata";
   version = "1.9.0";
+  darwinDriverVersion = "5.0.0"; # needs to be updated if karabiner-driverkit changes
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = "kanata";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xxAIwiwCQugDXpWga9bQ9ZGfem46rwDlmf64dX/tw7g=";
   };
 
@@ -47,14 +49,22 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    darwinDriver = lib.optional stdenv.hostPlatform.isDarwin (
+      karabiner-dk.override {
+        driver-version = finalAttrs.darwinDriverVersion;
+      }
+    );
   };
 
   meta = with lib; {
     description = "Tool to improve keyboard comfort and usability with advanced customization";
     homepage = "https://github.com/jtroo/kanata";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ linj ];
+    maintainers = with maintainers; [
+      linj
+      auscyber
+    ];
     platforms = platforms.unix;
     mainProgram = "kanata";
   };
-}
+})
