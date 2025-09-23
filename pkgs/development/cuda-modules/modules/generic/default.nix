@@ -1,7 +1,0 @@
-{
-  imports = [
-    ./types
-    ./manifests
-    ./releases
-  ];
-}
