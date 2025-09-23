@@ -894,13 +894,6 @@ self: super:
     # unfree but redistributable
     redist = [
       "fontibmtype1"
-      "fontbh100dpi"
-      "fontbh75dpi"
-
-      # Bigelow & Holmes fonts
-      # https://www.x.org/releases/current/doc/xorg-docs/License.html#Bigelow_Holmes_Inc_and_URW_GmbH_Luxi_font_license
-      "fontbhlucidatypewriter100dpi"
-      "fontbhlucidatypewriter75dpi"
     ];
 
     # unfree, possibly not redistributable
