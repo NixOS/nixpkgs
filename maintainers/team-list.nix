@@ -817,8 +817,12 @@ with lib.maintainers;
 
   marketing = {
     members = [
+      djacu
+      flyfloh
+      thilobillerbeck
       tomberek
     ];
+    githubTeams = [ "marketing-team" ];
     scope = "Marketing of Nix/NixOS/nixpkgs.";
     shortName = "Marketing";
     enableFeatureFreezePing = true;
