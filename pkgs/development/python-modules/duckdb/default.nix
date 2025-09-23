@@ -2,14 +2,21 @@
   lib,
   stdenv,
   buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  cmake,
+  ninja,
   duckdb,
   fsspec,
   google-cloud-storage,
+  ipython,
   numpy,
   openssl,
   pandas,
   psutil,
+  pyarrow,
   pybind11,
+  scikit-build-core,
   setuptools-scm,
   pytest-reraise,
   pytestCheckHook,
@@ -17,44 +24,77 @@
 
 buildPythonPackage rec {
   inherit (duckdb)
-    patches
     pname
-    rev
-    src
     version
     ;
   pyproject = true;
 
-  postPatch = (duckdb.postPatch or "") + ''
-    # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
-    cd tools/pythonpkg
+  src = fetchFromGitHub {
+    owner = "duckdb";
+    repo = "duckdb-python";
+    rev = "v${version}";
+    hash = "sha256-JovTykaAUGY07LFXRbVwlYR8kfgV/0RHhcplmM+k10U=";
+  };
 
-    # 1. let nix control build cores
-    # 2. default to extension autoload & autoinstall disabled
-    substituteInPlace setup.py \
-      --replace-fail "ParallelCompile()" 'ParallelCompile("NIX_BUILD_CORES")' \
-      --replace-fail "define_macros.extend([('DUCKDB_EXTENSION_AUTOLOAD_DEFAULT', '1'), ('DUCKDB_EXTENSION_AUTOINSTALL_DEFAULT', '1')])" "pass"
+  postPatch = ''
+    # patch cmake to ignore absence of git submodule copy of duckdb
+    substituteInPlace cmake/duckdb_loader.cmake \
+      --replace-fail '_duckdb_set_default(DUCKDB_SOURCE_PATH "''${CMAKE_CURRENT_SOURCE_DIR}/external/duckdb")' \
+                     '_duckdb_set_default(DUCKDB_SOURCE_PATH "${duckdb.src}")'
 
+    # replace pybind11[global] with pybind11
     substituteInPlace pyproject.toml \
-      --replace-fail 'setuptools_scm>=6.4,<8.0' 'setuptools_scm'
+      --replace-fail "pybind11[global]" "pybind11"
+
+    # replace custom build backend with standard scikit-build-core
+    substituteInPlace pyproject.toml \
+      --replace-fail 'build-backend = "duckdb_packaging.build_backend"' \
+                     'build-backend = "scikit_build_core.build"' \
+      --replace-fail 'backend-path = ["./"]' \
+                     '# backend-path removed'
   '';
 
-  env = {
-    DUCKDB_BUILD_UNITY = 1;
-    OVERRIDE_GIT_DESCRIBE = "v${version}-0-g${rev}";
-  };
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+
+  dontUseCmakeConfigure = true;
 
   build-system = [
     pybind11
+    scikit-build-core
     setuptools-scm
   ];
 
-  buildInputs = [ openssl ];
-
-  dependencies = [
-    numpy
-    pandas
+  buildInputs = [
+    duckdb
+    openssl
   ];
+
+  optional-dependencies = {
+    # Note: ipython and adbc_driver_manager currently excluded despite inclusion in upstream
+    # https://github.com/duckdb/duckdb-python/blob/v1.4.0/pyproject.toml#L44-L52
+    all = [
+      ipython
+      fsspec
+      numpy
+    ]
+    ++ lib.optionals (pythonOlder "3.14") [
+      # https://github.com/duckdb/duckdb-python/blob/0ee500cfa35fc07bf81ed02e8ab6984ea1f665fd/pyproject.toml#L49-L51
+      # adbc_driver_manager noted for migration to duckdb C source
+      pandas
+      pyarrow
+    ];
+  };
+
+  env = {
+    DUCKDB_BUILD_UNITY = 1;
+    # default to disabled extension autoload/autoinstall
+    CMAKE_DEFINE_DUCKDB_EXTENSION_AUTOLOAD_DEFAULT = "0";
+    CMAKE_DEFINE_DUCKDB_EXTENSION_AUTOINSTALL_DEFAULT = "0";
+    OVERRIDE_GIT_DESCRIBE = "v${version}-0-g${duckdb.rev}";
+  };
 
   nativeCheckInputs = [
     fsspec
@@ -62,7 +102,8 @@ buildPythonPackage rec {
     psutil
     pytest-reraise
     pytestCheckHook
-  ];
+  ]
+  ++ optional-dependencies.all;
 
   pytestFlags = [ "--verbose" ];
 
@@ -73,6 +114,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # avoid dependency on mypy
     "tests/stubs/test_stubs.py"
+    # avoid dependency on pyotp
+    "tests/fast/test_pypi_cleanup.py"
+    # avoid test data download requiring network access
+    "tests/slow/test_h2oai_arrow.py"
   ];
 
   disabledTests = [
