@@ -7,6 +7,7 @@
 }:
 let
   cfg = config.services.scx_loader;
+  tomlFormat = pkgs.formats.toml { };
 in
 {
   options.services.scx_loader = {
@@ -63,44 +64,79 @@ in
     };
 
     scheduler_config = lib.mkOption {
-      type = lib.types.lines;
-      default = "";
-      example = ''
-        [scheds.scx_rustland]
-        auto_mode = []
-        gaming_mode = []
-        lowlatency_mode = []
-        powersave_mode = []
-        server_mode = []
-
-        [scheds.scx_lavd]
-        auto_mode = []
-        gaming_mode = ["--performance"]
-        lowlatency_mode = ["--performance"]
-        powersave_mode = ["--powersave"]
-        server_mode = []
-
-        [scheds.scx_flash]
-        auto_mode = []
-        gaming_mode = ["-m", "all"]
-        lowlatency_mode = ["-m", "performance", "-w", "-C", "0"]
-        powersave_mode = ["-m", "powersave", "-I", "10000", "-t", "10000", "-s", "10000", "-S", "1000"]
-        server_mode = ["-m", "all", "-s", "20000", "-S", "1000", "-I", "-1", "-D", "-L"]
-      '';
+      type = tomlFormat.type;
+      default = { };
+      example = {
+        scheds = {
+          scx_rustland = {
+            auto_mode = [ ];
+            gaming_mode = [ ];
+            lowlatency_mode = [ ];
+            powersave_mode = [ ];
+            server_mode = [ ];
+          };
+          scx_lavd = {
+            auto_mode = [ ];
+            gaming_mode = [ "--performance" ];
+            lowlatency_mode = [ "--performance" ];
+            powersave_mode = [ "--powersave" ];
+            server_mode = [ ];
+          };
+          scx_flash = {
+            auto_mode = [ ];
+            gaming_mode = [
+              "-m"
+              "all"
+            ];
+            lowlatency_mode = [
+              "-m"
+              "performance"
+              "-w"
+              "-C"
+              "0"
+            ];
+            powersave_mode = [
+              "-m"
+              "powersave"
+              "-I"
+              "10000"
+              "-t"
+              "10000"
+              "-s"
+              "10000"
+              "-S"
+              "1000"
+            ];
+            server_mode = [
+              "-m"
+              "all"
+              "-s"
+              "20000"
+              "-S"
+              "1000"
+              "-I"
+              "-1"
+              "-D"
+              "-L"
+            ];
+          };
+        };
+      };
       description = ''
-        Scheduler configuration in TOML format. This will be added to the generated config file
+        Scheduler configuration. This will be added to the generated TOML config file
         after the default_sched and default_mode settings.
       '';
     };
   };
 
   config = lib.mkIf cfg.enable {
-    environment.etc."scx_loader/config.toml".text = ''
-      default_sched = "${cfg.default_sched}"
-      default_mode = "${cfg.default_mode}"
-
-      ${cfg.scheduler_config}
-    '';
+    environment.etc."scx_loader/config.toml".source = tomlFormat.generate "config.toml" (
+      cfg.scheduler_config
+      // {
+        default_sched = cfg.default_sched;
+        default_mode = cfg.default_mode;
+      }
+    );
 
     systemd.services.scx_loader = {
       description = "DBUS on-demand loader of sched_ext schedulers";
