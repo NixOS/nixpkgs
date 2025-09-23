@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  gfortran,
   mpiCheckPhaseHook,
   mpi,
   blas,
@@ -56,7 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+  ];
 
   nativeCheckInputs = [ mpiCheckPhaseHook ];
 
@@ -74,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeFeature "LAPACK_LIBRARIES" "-llapack")
     (lib.cmakeFeature "BLAS_LIBRARIES" "-lblas")
-    (lib.cmakeFeature "CMAKE_Fortran_COMPILER" "${lib.getDev mpi}/bin/mpif90")
     (lib.cmakeFeature "CMAKE_C_FLAGS" "${lib.concatStringsSep " " [
       "-Wno-implicit-function-declaration"
       (lib.optionalString finalAttrs.passthru.isILP64 "-DInt=long")
