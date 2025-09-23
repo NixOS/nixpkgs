@@ -20,6 +20,7 @@ BOOT_MOUNT_POINT = Path("@bootMountPoint@")
 LOADER_CONF = EFI_SYS_MOUNT_POINT / "loader/loader.conf"  # Always stored on the ESP
 NIXOS_DIR = Path("@nixosDir@".strip("/")) # Path relative to the XBOOTLDR or ESP mount point
 TIMEOUT = "@timeout@"
+TIMESTAMP_FORMAT = "@timestampFormat@"
 EDITOR = "@editor@" == "1" # noqa: PLR0133
 CONSOLE_MODE = "@consoleMode@"
 BOOTSPEC_TOOLS = "@bootspecTools@"
@@ -205,7 +206,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
 
     kernel_params = kernel_params + " ".join(bootspec.kernelParams)
     build_time = int(system_dir(profile, generation, specialisation).stat().st_ctime)
-    build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F')
+    build_date = datetime.datetime.fromtimestamp(build_time).strftime(TIMESTAMP_FORMAT)
 
     with tmp_path.open("w") as f:
         f.write(BOOT_ENTRY.format(title=title,

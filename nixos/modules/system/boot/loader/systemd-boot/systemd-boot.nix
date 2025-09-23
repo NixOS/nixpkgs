@@ -53,6 +53,8 @@ let
 
       timeout = if config.boot.loader.timeout == null then "menu-force" else config.boot.loader.timeout;
 
+      inherit (config.boot.loader) timestampFormat;
+
       configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
       inherit (cfg)
