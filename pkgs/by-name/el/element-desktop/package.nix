@@ -111,11 +111,10 @@ stdenv.mkDerivation (
       cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
       ln -s $out/share/element/electron/lib/i18n/strings/en{-us,}.json
 
-      # icons
-      for icon in $out/share/element/electron/build/icons/*.png; do
-        mkdir -p "$out/share/icons/hicolor/$(basename $icon .png)/apps"
-        ln -s "$icon" "$out/share/icons/hicolor/$(basename $icon .png)/apps/element.png"
-      done
+      # icon
+      icon=$out/share/element/electron/build/icon.png
+      mkdir -p "$out/share/icons/hicolor/512x512/apps"
+      ln -s "$icon" "$out/share/icons/hicolor/512x512/apps/element.png"
 
       # desktop item
       mkdir -p "$out/share"
