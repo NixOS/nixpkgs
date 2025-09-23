@@ -11407,6 +11407,8 @@ self: super: with self; {
 
   panphon = callPackage ../development/python-modules/panphon { };
 
+  panzi-json-logic = callPackage ../development/python-modules/panzi-json-logic { };
+
   paperbush = callPackage ../development/python-modules/paperbush { };
 
   papermill = callPackage ../development/python-modules/papermill { };
