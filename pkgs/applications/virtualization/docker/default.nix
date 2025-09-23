@@ -113,7 +113,7 @@ let
       });
 
       docker-tini = tini.overrideAttrs {
-        pname = "docker-init";
+        pname = "docker-tini";
         inherit version;
 
         src = fetchFromGitHub {
