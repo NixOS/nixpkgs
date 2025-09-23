@@ -65,6 +65,11 @@ finish() {
 
     if [ -z "$skipPostFetch" ]; then
         runHook postFetch
+    else
+        if [ -n "$downloadToTemp" ]; then
+            # We still have to copy the file to $out, even if we're skipping postFetch
+            cp "$downloadedFile" "$out"
+        fi
     fi
 
     exit 0
