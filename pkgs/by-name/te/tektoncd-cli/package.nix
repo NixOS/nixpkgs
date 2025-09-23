@@ -36,7 +36,13 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  subPackages = [ "cmd/tkn" ];
+  subPackages = [
+    "cmd/tkn"
+  ];
+
+  excludedPackages = [
+    "test/e2e"
+  ];
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
