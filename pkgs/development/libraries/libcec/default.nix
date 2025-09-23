@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   # Fix dlopen path
   postPatch = ''
-    substituteInPlace include/cecloader.h --replace "libcec.so" "$out/lib/libcec.so"
+    substituteInPlace include/cecloader.h --replace "\"libcec." "\"$out/lib/libcec."
   '';
 
   nativeBuildInputs = [
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
     cmake
   ];
   buildInputs = [
-    udev
     libcec_platform
   ]
+  ++ lib.optional stdenv.hostPlatform.isLinux udev
   ++ lib.optional withLibraspberrypi libraspberrypi;
 
   cmakeFlags = [
