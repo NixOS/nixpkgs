@@ -67,7 +67,7 @@ let
     systemd
   ];
 
-  version = "2025.7";
+  version = "2025.9";
 
   selectSystem =
     attrs:
@@ -79,8 +79,8 @@ let
   };
 
   hash = selectSystem {
-    x86_64-linux = "sha256-wKmwCLF+H/ByZFYGQMEJT6gmAt2Aa0vZalqaMptPjhU=";
-    aarch64-linux = "sha256-lsHpbxVxThxi+eKY+9c7VcXlDdxBTds6NQKrS0rxt34=";
+    x86_64-linux = "sha256-ao/NuZB4b6eS+/+Di+2SdymC/wEVYoqFwQ9iXx4n0Pg=";
+    aarch64-linux = "sha256-mzQrFoX5jRvvSoeXSw4YBmv1dNg5wgOBidR5Fm8Sb2k=";
   };
 in
 
@@ -155,6 +155,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
+    mainProgram = "mullvad-vpn";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl3Only;
