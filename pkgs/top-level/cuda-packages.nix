@@ -35,6 +35,7 @@ in
       cutensor = "2.3.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
+      nvjpeg2000 = "0.9.0";
       nvpl = "25.5";
       tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
     };
@@ -52,6 +53,7 @@ in
       cutensor = "2.3.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
+      nvjpeg2000 = "0.9.0";
       nvpl = "25.5";
       tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
     };
@@ -69,6 +71,7 @@ in
       cutensor = "2.3.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
+      nvjpeg2000 = "0.9.0";
       nvpl = "25.5";
       tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
     };
@@ -86,6 +89,7 @@ in
       cutensor = "2.3.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
+      nvjpeg2000 = "0.9.0";
       nvpl = "25.5";
       tensorrt = if hasJetsonCudaCapability then "10.7.0" else "10.9.0";
     };
