@@ -19993,12 +19993,6 @@
     githubId = 63069986;
     name = "Per Stark";
   };
-  petee = {
-    name = "Pete Erickson";
-    email = "pete.perickson@gmail.com";
-    github = "petee";
-    githubId = 89916;
-  };
   Peter3579 = {
     github = "Peter3579";
     githubId = 170885528;
