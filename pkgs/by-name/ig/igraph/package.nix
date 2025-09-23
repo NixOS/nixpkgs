@@ -25,13 +25,13 @@ assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !bla
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "0.10.17";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "igraph";
-    rev = finalAttrs.version;
-    hash = "sha256-NzLn2GXpMgwE8fY1vp5SU0Y7EfyVpQfphGdqU6sQGW4=";
+    tag = finalAttrs.version;
+    hash = "sha256-SwcihzISSmeVhpMrysOhWrUzVVuB4ZBVEjC0vHJwrdw=";
   };
 
   postPatch = ''
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
-    changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [
