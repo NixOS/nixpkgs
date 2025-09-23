@@ -516,13 +516,13 @@
     "vendorHash": null
   },
   "gitlab": {
-    "hash": "sha256-BMXxg6yz0b33yZK/Q8tkqDqPbYlrJWMvMenucDs+qUo=",
+    "hash": "sha256-wggQtY+E4O/iWo0OrjPlxK8j2aLavRAG31RpOOC08AY=",
     "homepage": "https://registry.terraform.io/providers/gitlabhq/gitlab",
     "owner": "gitlabhq",
     "repo": "terraform-provider-gitlab",
-    "rev": "v18.3.0",
+    "rev": "v18.4.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-v0nYsQinopJ9DXtkGFe3bIYXMBMsPDafn71Xfmvi2mo="
+    "vendorHash": "sha256-29uvPCepGHRPohGY7viaPD9VQPPj9XB/plragACC4e4="
   },
   "google": {
     "hash": "sha256-BDMOYw/NPCBb5VuJZGNbACJ/dq2uh+wx/y0w6LGWgwE=",
