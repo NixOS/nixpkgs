@@ -12,13 +12,13 @@
 
 mkHyprlandPlugin {
   pluginName = "hyprgrass";
-  version = "0.8.2-unstable-2025-05-08";
+  version = "0.8.2-unstable-2025-09-02";
 
   src = fetchFromGitHub {
     owner = "horriblename";
     repo = "hyprgrass";
-    rev = "7cf3779b5cdc6fa62fdc733b30c31a5b8e48609c";
-    hash = "sha256-8Sl2V23EYcZMniBLmKenxH7bMLTGC6Q84ntyFvOUkWU=";
+    rev = "9b341353a91c23ced96e5ed996dda62fbe426a32";
+    hash = "sha256-Nwd8JwGEEdGBJthxiopK51Fwva5TbM1PEOQDe+NAZEw=";
   };
 
   nativeBuildInputs = [
