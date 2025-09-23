@@ -13670,6 +13670,8 @@ self: super: with self; {
 
   pyosmium = callPackage ../development/python-modules/pyosmium { inherit (pkgs) lz4; };
 
+  pyosmocom = callPackage ../development/python-modules/pyosmocom { };
+
   pyosoenergyapi = callPackage ../development/python-modules/pyosoenergyapi { };
 
   pyosohotwaterapi = callPackage ../development/python-modules/pyosohotwaterapi { };
