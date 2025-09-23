@@ -193,7 +193,7 @@ in
                   default = [ "bootstrap.veilid.net" ];
                   description = "Host name of existing well-known Veilid bootstrap servers for the network to connect to.";
                 };
-                node_id = lib.mkOption {
+                public_keys = lib.mkOption {
                   type = lib.types.nullOr lib.types.str;
                   default = null;
                   description = "Base64-encoded public key for the node, used as the node's ID.";
