@@ -17,10 +17,10 @@
 }:
 stdenv.mkDerivation rec {
   pname = "spice-vdagent";
-  version = "0.22.1";
+  version = "0.23.0";
   src = fetchurl {
     url = "https://www.spice-space.org/download/releases/${pname}-${version}.tar.bz2";
-    hash = "sha256-k7DRWspHYsx9N5sXmnEBFJ267WK3IRL/+ys+kLEWh6A=";
+    hash = "sha256-Y+D5vVWXxGOKz9bxDXojVPWZvZ31sx5EMnDKzwfhakA=";
   };
 
   postPatch = ''
