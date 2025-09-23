@@ -13822,6 +13822,8 @@ self: super: with self; {
 
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
 
+  pyppeteer-ng = callPackage ../development/python-modules/pyppeteer-ng { };
+
   pyppmd = callPackage ../development/python-modules/pyppmd { };
 
   pyprecice = callPackage ../development/python-modules/pyprecice {
