@@ -28,6 +28,7 @@ in
       cublasmp = "0.6.0";
       cuda = "12.6.3";
       cudnn = "9.13.0";
+      cudss = "0.6.0";
       cusparselt = "0.6.3";
       cutensor = "2.3.1";
       nppplus = "0.10.0";
@@ -41,6 +42,7 @@ in
       cublasmp = "0.6.0";
       cuda = "12.8.1";
       cudnn = "9.13.0";
+      cudss = "0.6.0";
       cusparselt = "0.8.1";
       cutensor = "2.3.1";
       nppplus = "0.10.0";
@@ -54,6 +56,7 @@ in
       cublasmp = "0.6.0";
       cuda = "12.9.1";
       cudnn = "9.13.0";
+      cudss = "0.6.0";
       cusparselt = "0.8.1";
       cutensor = "2.3.1";
       nppplus = "0.10.0";
@@ -67,6 +70,7 @@ in
       cublasmp = "0.6.0";
       cuda = "13.0.1";
       cudnn = "9.13.0";
+      cudss = "0.6.0";
       cusparselt = "0.8.1";
       cutensor = "2.3.1";
       nppplus = "0.10.0";
