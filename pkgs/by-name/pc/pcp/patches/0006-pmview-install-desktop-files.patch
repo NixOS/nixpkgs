@@ -1,0 +1,28 @@
+From 72571da0553f1b379da6e540dd7ce7d13760de2d Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Tue, 3 Jun 2025 12:09:06 +0400
+Subject: [PATCH 6/8] pmview: install desktop files
+
+---
+ src/pmview/GNUmakefile | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/src/pmview/GNUmakefile b/src/pmview/GNUmakefile
+index f9412f7cb4..220c44c618 100644
+--- a/src/pmview/GNUmakefile
++++ b/src/pmview/GNUmakefile
+@@ -66,11 +66,6 @@ $(XMLFILE): $(XMLFILE).in
+ 
+ install: default $(SUBDIRS)
+ 	$(SUBDIRS_MAKERULE)
+-	$(INSTALL) -m 755 $(BINARY) $(PCP_BIN_DIR)/$(COMMAND)
+-
+-# skip this stuff for the moment
+-futures: default
+-	$(SUBDIRS_MAKERULE)
+ ifeq ($(WINDOW),win)
+ 	$(INSTALL) -m 755 $(BINARY) $(PCP_BIN_DIR)/$(COMMAND)
+ endif
+-- 
+2.50.0
+

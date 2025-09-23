@@ -1,0 +1,81 @@
+From fd641315115db5ca5bb7dadc70b410fdaf8c0b20 Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Thu, 14 Aug 2025 11:23:50 +0000
+Subject: [PATCH 8/8] Install macOS applications to bin dir
+
+---
+ src/pmchart/GNUmakefile   | 2 +-
+ src/pmgadgets/GNUmakefile | 2 +-
+ src/pmquery/GNUmakefile   | 2 +-
+ src/pmtime/GNUmakefile    | 2 +-
+ src/pmview/GNUmakefile    | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/pmchart/GNUmakefile b/src/pmchart/GNUmakefile
+index 529d8640b0..3312f45e70 100644
+--- a/src/pmchart/GNUmakefile
++++ b/src/pmchart/GNUmakefile
+@@ -37,7 +37,7 @@ build-me:: $(SUBDIRS)
+ 	$(SUBDIRS_MAKERULE)
+ 
+ ifeq ($(WINDOW),mac)
+-PKG_MAC_DIR = /usr/local/Cellar/pcp/$(PACKAGE_VERSION)/$(COMMAND).app/Contents
++PKG_MAC_DIR = $(PCP_BIN_DIR)/../Applications/$(COMMAND).app/Contents
+ wrappers: $(WRAPPER) $(XMLFILE)
+ else
+ wrappers:
+diff --git a/src/pmgadgets/GNUmakefile b/src/pmgadgets/GNUmakefile
+index 2bbb62dd8e..2d8d21966c 100644
+--- a/src/pmgadgets/GNUmakefile
++++ b/src/pmgadgets/GNUmakefile
+@@ -25,7 +25,7 @@ build-me:: $(SUBDIRS)
+ 	$(SUBDIRS_MAKERULE)
+ 
+ ifeq ($(WINDOW),mac)
+-PKG_MAC_DIR = /Library/PCP/$(COMMAND).app/Contents
++PKG_MAC_DIR = $(PCP_BIN_DIR)/../Applications/$(COMMAND).app/Contents
+ PKG_SUB_DIR = $(PKG_MAC_DIR)/MacOS
+ wrappers: $(WRAPPER) $(SCRIPTS)
+ else
+diff --git a/src/pmquery/GNUmakefile b/src/pmquery/GNUmakefile
+index d5a316682b..63a5519a90 100644
+--- a/src/pmquery/GNUmakefile
++++ b/src/pmquery/GNUmakefile
+@@ -24,7 +24,7 @@ build-me:: images wrappers
+ 	$(LNMAKE)
+ 
+ ifeq ($(WINDOW),mac)
+-PKG_MAC_DIR = /usr/local/Cellar/pcp/$(PACKAGE_VERSION)/$(COMMAND).app/Contents
++PKG_MAC_DIR = $(PCP_BIN_DIR)/../Applications/$(COMMAND).app/Contents
+ PKG_SUB_DIR = $(PKG_MAC_DIR)/MacOS
+ wrappers: $(WRAPPER) $(SCRIPTS) $(XMLFILE)
+ else
+diff --git a/src/pmtime/GNUmakefile b/src/pmtime/GNUmakefile
+index 8287e3be7f..264299fd22 100644
+--- a/src/pmtime/GNUmakefile
++++ b/src/pmtime/GNUmakefile
+@@ -26,7 +26,7 @@ build-me: images wrappers
+ 	$(LNMAKE)
+ 
+ ifeq ($(WINDOW),mac)
+-PKG_MAC_DIR = /usr/local/Cellar/pcp/$(PACKAGE_VERSION)/$(COMMAND).app/Contents
++PKG_MAC_DIR = $(PCP_BIN_DIR)/../Applications/$(COMMAND).app/Contents
+ wrappers: $(WRAPPER) $(XMLFILE)
+ else
+ wrappers:
+diff --git a/src/pmview/GNUmakefile b/src/pmview/GNUmakefile
+index 220c44c618..3323699803 100644
+--- a/src/pmview/GNUmakefile
++++ b/src/pmview/GNUmakefile
+@@ -53,7 +53,7 @@ lex.o:	gram.h
+ 
+ ifeq ($(WINDOW),mac)
+ MACBUILD = $(COMMAND).app/Contents
+-PKG_MAC_DIR = /usr/local/Cellar/pcp/$(PACKAGE_VERSION)/$(COMMAND).app/Contents
++PKG_MAC_DIR = $(PCP_BIN_DIR)/../Applications/$(COMMAND).app/Contents
+ wrappers: $(WRAPPER)
+ else
+ wrappers:
+-- 
+2.50.0
+

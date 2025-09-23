@@ -1,0 +1,111 @@
+From f8ae3c44a6c5491e8d7617166b915626dee47cd2 Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Sun, 1 Jun 2025 19:09:27 +0400
+Subject: [PATCH 4/8] Replace `find_library` with variables for library paths
+
+---
+ src/python/pcp/mmv.py   | 2 +-
+ src/python/pcp/pmapi.py | 6 ++----
+ src/python/pcp/pmda.py  | 3 +--
+ src/python/pcp/pmgui.py | 5 ++---
+ src/python/pcp/pmi.py   | 3 +--
+ 5 files changed, 7 insertions(+), 12 deletions(-)
+
+diff --git a/src/python/pcp/mmv.py b/src/python/pcp/mmv.py
+index 57bb7e2292..0d76a37176 100644
+--- a/src/python/pcp/mmv.py
++++ b/src/python/pcp/mmv.py
+@@ -78,7 +78,7 @@ from ctypes import Structure, POINTER
+ from ctypes import c_int, c_uint, c_long, c_char, c_char_p, c_double, c_void_p
+ 
+ # Performance Co-Pilot MMV library (C)
+-LIBPCP_MMV = ctypes.CDLL(ctypes.util.find_library("pcp_mmv"))
++LIBPCP_MMV = ctypes.CDLL("@pcp_mmv@")
+ 
+ ##############################################################################
+ #
+diff --git a/src/python/pcp/pmapi.py b/src/python/pcp/pmapi.py
+index c2e88760f4..3051fbbd95 100644
+--- a/src/python/pcp/pmapi.py
++++ b/src/python/pcp/pmapi.py
+@@ -109,16 +109,14 @@ from ctypes import c_char, c_int, c_uint, c_long, c_char_p, c_void_p
+ from ctypes import c_float, c_double, c_int32, c_uint32, c_int64, c_uint64
+ from ctypes import CDLL, POINTER, CFUNCTYPE, Structure, Union
+ from ctypes import addressof, pointer, sizeof, cast, byref
+-from ctypes.util import find_library
+ 
+ 
+ ##############################################################################
+ #
+ # dynamic library loads
+ #
+-LIBPCP = CDLL(find_library("pcp"))
+-libc_name = "c" if sys.platform != "win32" else "msvcrt"
+-LIBC = CDLL(find_library(libc_name))
++LIBPCP = CDLL("@pcp@")
++LIBC = CDLL("@c@")
+ 
+ 
+ ##############################################################################
+diff --git a/src/python/pcp/pmda.py b/src/python/pcp/pmda.py
+index 70b5a23a83..a094896ffe 100644
+--- a/src/python/pcp/pmda.py
++++ b/src/python/pcp/pmda.py
+@@ -28,12 +28,11 @@ import cpmda
+ from pcp.pmapi import pmContext as PCP
+ from pcp.pmapi import pmInDom, pmDesc, pmUnits, pmErr, pmLabelSet
+ 
+-from ctypes.util import find_library
+ from ctypes import CDLL, c_int, c_long, c_char_p, c_void_p
+ from ctypes import addressof, byref, POINTER, Structure
+ 
+ ## Performance Co-Pilot PMDA library (C)
+-LIBPCP_PMDA = CDLL(find_library("pcp_pmda"))
++LIBPCP_PMDA = CDLL("@pcp_pmda@")
+ 
+ 
+ ###
+diff --git a/src/python/pcp/pmgui.py b/src/python/pcp/pmgui.py
+index c4f58ed0f1..0c0bd7b56d 100644
+--- a/src/python/pcp/pmgui.py
++++ b/src/python/pcp/pmgui.py
+@@ -30,7 +30,6 @@ from cpmapi import PM_ERR_IPC
+ # for interfacing with libpcp - the client-side C API
+ from ctypes import CDLL, Structure, POINTER, cast, byref
+ from ctypes import c_void_p, c_char_p, c_int, c_long
+-from ctypes.util import find_library
+ 
+ 
+ ##############################################################################
+@@ -38,8 +37,8 @@ from ctypes.util import find_library
+ # dynamic library loads
+ #
+ 
+-LIBPCP_GUI = CDLL(find_library("pcp_gui"))
+-LIBC = CDLL(find_library("c"))
++LIBPCP_GUI = CDLL("@pcp_gui@")
++LIBC = CDLL("@c@")
+ 
+ 
+ ##############################################################################
+diff --git a/src/python/pcp/pmi.py b/src/python/pcp/pmi.py
+index 7b884c6e50..2ce358430e 100644
+--- a/src/python/pcp/pmi.py
++++ b/src/python/pcp/pmi.py
+@@ -52,12 +52,11 @@ from pcp.pmapi import pmID, pmInDom, pmUnits, pmResult, pmResult_v2
+ from cpmi import pmiErrSymDict, PMI_MAXERRMSGLEN
+ from ctypes import c_int, c_uint, c_longlong, c_char_p
+ from ctypes import cast, create_string_buffer, POINTER, CDLL
+-from ctypes.util import find_library
+ from datetime import datetime, timedelta, tzinfo
+ from math import modf
+ 
+ # Performance Co-Pilot PMI library (C)
+-LIBPCP_IMPORT = CDLL(find_library("pcp_import"))
++LIBPCP_IMPORT = CDLL("@pcp_import@")
+ 
+ ##
+ # PMI Log Import Services
+-- 
+2.50.0
+
