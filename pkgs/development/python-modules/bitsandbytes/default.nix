@@ -16,7 +16,7 @@
 
 let
   pname = "bitsandbytes";
-  version = "0.47.0";
+  version = "continuous-release_main";
 
   inherit (torch) cudaPackages cudaSupport;
   inherit (cudaPackages) cudaMajorMinorVersion;
@@ -62,7 +62,7 @@ buildPythonPackage {
     owner = "bitsandbytes-foundation";
     repo = "bitsandbytes";
     tag = version;
-    hash = "sha256-iUAeiNbPa3Q5jJ4lK2G0WvTKuipb0zO1mNe+wcRdnqs=";
+    hash = "sha256-Ob4pr6GLZQZV+JNQCtXEQrQG1WHHVwhG6QYK54NMrHY=";
   };
 
   # By default, which library is loaded depends on the result of `torch.cuda.is_available()`.
