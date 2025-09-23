@@ -44,7 +44,6 @@ function get_vsixpkg() {
     curl \
         --silent --show-error \
         --fail \
-        -X GET \
         -o "$EXTTMP/$N.zip" "$URL" \
     || {
         if (($? > 128))
