@@ -43,7 +43,6 @@ function get_vsixpkg() {
     # --fail is needed to treat 404 as an actual error instead of downloading the 404 error itself
     curl \
         --silent --show-error \
-        --retry 3 \
         --fail \
         -X GET \
         -o "$EXTTMP/$N.zip" "$URL" \
