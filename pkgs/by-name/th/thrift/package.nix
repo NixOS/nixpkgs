@@ -11,6 +11,7 @@
   pkg-config,
   bison,
   flex,
+  ctestCheckHook,
   static ? stdenv.hostPlatform.isStatic,
 }:
 
@@ -59,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  nativeCheckInputs = [ ctestCheckHook ];
+
   preConfigure = ''
     export PY_PREFIX=$out
   '';
@@ -74,15 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_TESTING" (!static))
   ];
 
+  disabledTests = [
+    "UnitTests" # getaddrinfo() -> -3; Temporary failure in name resolution
+    "python_test" # many failures about python 2 or network things
+  ];
   doCheck = !static;
-
-  checkPhase = ''
-    runHook preCheck
-
-    ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/lib ctest -E "($(echo "$disabledTests" | tr " " "|"))"
-
-    runHook postCheck
-  '';
 
   enableParallelChecking = false;
 
