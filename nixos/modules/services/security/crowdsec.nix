@@ -594,7 +594,7 @@ in
       ]
       ++ lib.optionals (cfg.settings.capi.credentialsFile != null) [
         ''
-          if ! grep -q password "${cfg.settings.capi.credentialsFile}" ]; then
+          if ! ${lib.getExe pkgs.gnugrep} -q password "${cfg.settings.capi.credentialsFile}" ]; then
             ${lib.getExe cscli} capi register
           fi
         ''
