@@ -43,13 +43,13 @@ assert lib.warnIf (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
-  version = "20250905";
+  version = "20250510";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     tag = finalAttrs.version;
-    hash = "sha256-RLyszU2u5jV/o6LrmZFkLx/Wu94Yq3JlXNgpe4agOZI=";
+    hash = "sha256-62J7qyHC3hSgEgTA2zB+BQtZb+5BUXjQEOB3vGZGSNw=";
   };
 
   buildInputs = [

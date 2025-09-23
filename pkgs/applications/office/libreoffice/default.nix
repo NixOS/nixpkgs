@@ -130,7 +130,6 @@
   ],
   withFonts ? false,
   withHelp ? true,
-  withJava ? true,
   kdeIntegration ? false,
   variant ? "fresh",
   debugLogging ? variant == "still",
@@ -350,6 +349,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    ant
     autoconf
     automake
     bison
@@ -359,6 +359,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     gperf
     icu
+    jdk21
     libmysqlclient
     libtool
     libxml2
@@ -373,10 +374,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals kdeIntegration [
     qt6.qtbase
-  ]
-  ++ optionals withJava [
-    ant
-    jdk21
   ];
 
   buildInputs =
@@ -412,6 +409,7 @@ stdenv.mkDerivation (finalAttrs: {
       (harfbuzz.override { withIcu = true; })
       hunspell
       icu
+      jre'
       lcms2
       libGL
       libGLU
@@ -476,9 +474,6 @@ stdenv.mkDerivation (finalAttrs: {
       qt6.qtbase
       kdePackages.kcoreaddons
       kdePackages.kio
-    ]
-    ++ optionals withJava [
-      jre'
     ];
 
   preConfigure = ''
@@ -521,6 +516,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-buildconfig-recorded"
 
     (lib.withFeature withHelp "help")
+    "--with-beanshell-jar=${bsh}"
     "--with-vendor=NixOS"
     "--disable-report-builder"
     "--disable-online-update"
@@ -528,7 +524,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-dbus"
     "--enable-release-build"
     "--enable-epm"
-    (lib.withFeature withJava "java")
+    "--with-ant-home=${ant.home}"
 
     # Without these, configure does not finish
     "--without-junit"
@@ -547,6 +543,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature withFonts "fonts")
     "--without-doxygen"
 
+    "--with-system-beanshell"
     "--with-system-cairo"
     "--with-system-coinmp"
     "--with-system-headers"
@@ -598,11 +595,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals kdeIntegration [
     "--enable-kf6"
     "--enable-qt6"
-  ]
-  ++ optionals withJava [
-    "--with-system-beanshell"
-    "--with-ant-home=${ant.home}"
-    "--with-beanshell-jar=${bsh}"
   ]
   ++ (
     if variant == "fresh" || variant == "collabora" then
@@ -678,7 +670,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit srcs;
-    jdk = if withJava then jre' else null;
+    jdk = jre';
     python = python311; # for unoconv
     updateScript = [
       ./update.sh

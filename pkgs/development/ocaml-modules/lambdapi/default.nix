@@ -4,6 +4,7 @@
   buildDunePackage,
   alcotest,
   dedukti,
+  bindlib,
   camlp-streams,
   cmdliner,
   dream,
@@ -19,13 +20,13 @@
 
 buildDunePackage rec {
   pname = "lambdapi";
-  version = "3.0.0";
+  version = "2.6.0";
 
-  minimalOCamlVersion = "4.14";
+  minimalOCamlVersion = "4.12";
 
   src = fetchurl {
     url = "https://github.com/Deducteam/lambdapi/releases/download/${version}/lambdapi-${version}.tbz";
-    hash = "sha256-EGau0mGP2OakAMUUfb9V6pd86NP+LlGKxnhcZ3WhuL4=";
+    hash = "sha256-0B5fE9suq6bk/jMGZxSeAFnUiGxlH/nWtnLbLfyXZe0=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ buildDunePackage rec {
   ];
   buildInputs = [ lwt_ppx ];
   propagatedBuildInputs = [
+    bindlib
     camlp-streams
     cmdliner
     dream

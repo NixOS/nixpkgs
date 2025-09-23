@@ -5,13 +5,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.4";
+  version = "1.0.3";
   format = "setuptools";
   pname = "pyfiglet";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-25yZQO0b8wSN7/U07VL/La+7ws12ELF7teyh321CeO8=";
+    hash = "sha256-utO1XS7Msw1Gk8z9lFc8KjR33XX4ag5UZc6lG9v+KHU=";
   };
 
   doCheck = false;

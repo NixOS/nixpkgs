@@ -1,10 +1,8 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
-  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -28,19 +26,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'version = "0.0.0-dev"' 'version = "${finalAttrs.version}"'
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd tombi \
-      --bash <($out/bin/tombi completion bash) \
-      --fish <($out/bin/tombi completion fish) \
-      --zsh <($out/bin/tombi completion zsh)
-  '';
-
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-
   doInstallCheck = true;
 
   meta = {
