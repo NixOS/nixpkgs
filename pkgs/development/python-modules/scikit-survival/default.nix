@@ -51,9 +51,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pythonRelaxDeps = [
-    "osqp"
-  ];
   dependencies = [
     ecos
     joblib

@@ -1,20 +1,19 @@
 {
   lib,
   python3Packages,
-  piper-tts,
   fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "wyoming-piper";
-  version = "2.0.0";
+  version = "1.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "wyoming-piper";
-    rev = "a9bedf7947b6813807caa9eba22c745cad68e5c1";
-    hash = "sha256-Ld+UZguvtVig+g4hepLnC0PEYU/yST4cpI5bLfeTVkw=";
+    tag = "v${version}";
+    hash = "sha256-Opnv4PtLZpG2kBAuJ8xWsQpJ2y9G9zYFsHQm7nwjUKk=";
   };
 
   build-system = with python3Packages; [
@@ -23,22 +22,17 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "regex"
-    "sentence-stream"
     "wyoming"
   ];
 
   dependencies = with python3Packages; [
     regex
-    piper-tts
-    sentence-stream
     wyoming
   ];
 
   pythonImportsCheck = [
     "wyoming_piper"
   ];
-
-  doCheck = false; # only test requires network
 
   nativeCheckInputs = with python3Packages; [
     numpy
@@ -53,7 +47,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/rhasspy/wyoming-piper/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/rhasspy/wyoming-piper/blob/${src.tag}/CHANGELOG.md";
     description = "Wyoming Server for Piper";
     mainProgram = "wyoming-piper";
     homepage = "https://github.com/rhasspy/wyoming-piper";

@@ -22,7 +22,7 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "ArduPilot";
-    repo = "MAVProxy";
+    repo = pname;
     tag = "v${version}";
     hash = "sha256-1/bp3vlCXt4Hg36zwMKSzPSxW7xlxpfx2o+2uQixdos=";
   };
